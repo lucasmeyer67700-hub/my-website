@@ -2,132 +2,122 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Veux-tu être ma Valentine ?</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-
-<style>
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(#ff9a9e, #fad0c4);
-    overflow: hidden;
-    font-family: 'Pacifico', cursive;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Cœurs animés */
-.heart {
-    position: absolute;
-    color: red;
-    font-size: 20px;
-    animation: fall 6s linear infinite;
-}
-
-@keyframes fall {
-    0% { transform: translateY(-10vh); opacity: 1; }
-    100% { transform: translateY(110vh); opacity: 0; }
-}
-
-.container {
-    background: rgba(255,255,255,0.92);
-    padding: 40px;
-    border-radius: 30px;
-    text-align: center;
-    box-shadow: 0 0 30px pink;
-    max-width: 500px;
-}
-
-h1 {
-    color: #ff3366;
-    font-size: 38px;
-}
-
-/* GIF ours */
-.bear-gif {
-    width: 180px;
-    margin: 20px 0;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
-}
-
-.buttons {
-    margin-top: 20px;
-}
-
-button {
-    font-family: 'Pacifico', cursive;
-    font-size: 24px;
-    padding: 12px 30px;
-    border-radius: 25px;
-    border: none;
-    margin: 15px;
-    cursor: pointer;
-}
-
-#yes {
-    background: #ff3366;
-    color: white;
-}
-
-#no {
-    background: #999;
-    color: white;
-    position: absolute;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA — Boutique en ligne</title>
+<meta name="description" content="AURA, boutique en ligne de vêtements et accessoires au design épuré.">
+<link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<div class="container">
-    <h1>Veux-tu être ma Valentine ? 💖</h1>
-
-    <img src="ours.gif" alt="ours mignon" class="bear-gif">
-
-    <div class="buttons">
-        <button id="yes" onclick="yesClick()">Oui 💘</button>
-        <button id="no">Non 😅</button>
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo">AURA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="boutique.html">Boutique</a></li>
+      <li><a href="boutique.html?category=V%C3%AAtements">Vêtements</a></li>
+      <li><a href="boutique.html?category=Accessoires">Accessoires</a></li>
+      <li><a href="boutique.html?category=Chaussures">Chaussures</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="panier.html" class="cart-link">
+        🛍️ Panier <span class="cart-badge" data-cart-count>0</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
     </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">Nouvelle collection</span>
+  <h1>Des essentiels intemporels, pensés pour durer</h1>
+  <p>Vêtements, accessoires et chaussures sélectionnés avec soin. Matières nobles, coupes simples, livraison rapide.</p>
+  <a href="boutique.html" class="btn btn-primary">Découvrir la boutique</a>
+</section>
+
+<div class="categories">
+  <a class="category-card" href="boutique.html?category=V%C3%AAtements">
+    <div class="emoji">🧥</div>
+    <span>Vêtements</span>
+  </a>
+  <a class="category-card" href="boutique.html?category=Accessoires">
+    <div class="emoji">👜</div>
+    <span>Accessoires</span>
+  </a>
+  <a class="category-card" href="boutique.html?category=Chaussures">
+    <div class="emoji">👟</div>
+    <span>Chaussures</span>
+  </a>
 </div>
 
+<div class="section-title">
+  <h2>Nos best-sellers</h2>
+  <a href="boutique.html">Voir tout →</a>
+</div>
+<div class="product-grid" id="featured-grid"></div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <h4>AURA</h4>
+      <p>Boutique en ligne d'essentiels intemporels. Design épuré, matières nobles.</p>
+    </div>
+    <div>
+      <h4>Boutique</h4>
+      <ul>
+        <li><a href="boutique.html">Tous les produits</a></li>
+        <li><a href="boutique.html?category=V%C3%AAtements">Vêtements</a></li>
+        <li><a href="boutique.html?category=Accessoires">Accessoires</a></li>
+        <li><a href="boutique.html?category=Chaussures">Chaussures</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Aide</h4>
+      <ul>
+        <li><a href="panier.html">Mon panier</a></li>
+        <li><a href="#">Livraison</a></li>
+        <li><a href="#">Retours</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:contact@aura-boutique.fr">contact@aura-boutique.fr</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AURA. Tous droits réservés.</span>
+    <span class="payment-icons">💳 🏦 📱</span>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
 <script>
-/* Bouton NON qui fuit */
-const noBtn = document.getElementById("no");
-noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-});
+  const featured = PRODUCTS.filter(p => p.badge === "Best-seller").concat(
+    PRODUCTS.filter(p => p.badge !== "Best-seller")
+  ).slice(0, 6);
 
-/* Redirection */
-function yesClick() {
-    window.location.href = "yes.html";
-}
-
-/* Création des cœurs */
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 20 + 15 + "px";
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
-}
-
-setInterval(createHeart, 300);
+  document.getElementById("featured-grid").innerHTML = featured.map(p => `
+    <div class="product-card">
+      <a href="produit.html?id=${p.id}">
+        <div class="product-thumb" style="background: linear-gradient(135deg, ${p.color1}, ${p.color2});">
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          ${p.emoji}
+        </div>
+      </a>
+      <div class="product-info">
+        <div class="product-category">${p.category}</div>
+        <a href="produit.html?id=${p.id}"><div class="product-name">${p.name}</div></a>
+        <div class="product-price">${formatPrice(p.price)}</div>
+      </div>
+      <div class="product-actions">
+        <button class="btn btn-primary btn-block btn-sm" onclick="addToCart(${p.id}); showToast('${p.name.replace(/'/g, "\\'")} ajouté au panier');">Ajouter au panier</button>
+      </div>
+    </div>
+  `).join("");
 </script>
 
 </body>

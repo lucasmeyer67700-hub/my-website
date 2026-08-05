@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merci pour votre commande — AURA</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo">AURA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="boutique.html">Boutique</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="panier.html" class="cart-link">
+        🛍️ Panier <span class="cart-badge" data-cart-count>0</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<div id="confirmation-root"></div>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <span>© 2026 AURA. Tous droits réservés.</span>
+    <span class="payment-icons">💳 🏦 📱</span>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const root = document.getElementById("confirmation-root");
+  const raw = sessionStorage.getItem("aura_last_order");
+
+  if (!raw) {
+    root.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">🧾</div>
+        <h2>Aucune commande récente</h2>
+        <a href="boutique.html" class="btn btn-primary">Retour à la boutique</a>
+      </div>
+    `;
+  } else {
+    const order = JSON.parse(raw);
+    root.innerHTML = `
+      <div class="confirmation">
+        <div class="check">✓</div>
+        <h1>Merci, ${order.customer.firstname} !</h1>
+        <p>Votre commande <strong>${order.orderNumber}</strong> a bien été confirmée. Un e-mail de confirmation a été envoyé à ${order.customer.email}.</p>
+
+        <div class="order-summary-box">
+          ${order.items.map(item => `
+            <div class="order-line">
+              <span>${item.name} × ${item.qty}</span>
+              <strong>${formatPrice(item.lineTotal)}</strong>
+            </div>
+          `).join("")}
+          <div class="summary-row" style="margin-top:16px;"><span>Sous-total</span><span>${formatPrice(order.subtotal)}</span></div>
+          <div class="summary-row"><span>Livraison</span><span>${order.shipping === 0 ? "Offerte" : formatPrice(order.shipping)}</span></div>
+          <div class="summary-row total"><span>Total payé</span><span>${formatPrice(order.total)}</span></div>
+        </div>
+
+        <p style="font-size:13px;">Livraison à : ${order.customer.address}, ${order.customer.zip} ${order.customer.city}, ${order.customer.country}</p>
+
+        <a href="boutique.html" class="btn btn-primary">Continuer mes achats</a>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>

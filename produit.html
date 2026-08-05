@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="page-title">Produit — AURA</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo">AURA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="boutique.html">Boutique</a></li>
+      <li><a href="boutique.html?category=V%C3%AAtements">Vêtements</a></li>
+      <li><a href="boutique.html?category=Accessoires">Accessoires</a></li>
+      <li><a href="boutique.html?category=Chaussures">Chaussures</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="panier.html" class="cart-link">
+        🛍️ Panier <span class="cart-badge" data-cart-count>0</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<div class="breadcrumb" id="breadcrumb"></div>
+
+<div id="detail-root"></div>
+
+<div class="section-title">
+  <h2>Vous aimerez aussi</h2>
+</div>
+<div class="product-grid" id="related-grid"></div>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <span>© 2026 AURA. Tous droits réservés.</span>
+    <span class="payment-icons">💳 🏦 📱</span>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const product = getProductById(params.get("id"));
+  const root = document.getElementById("detail-root");
+  const breadcrumb = document.getElementById("breadcrumb");
+
+  if (!product) {
+    root.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div><h2>Produit introuvable</h2><a href="boutique.html" class="btn btn-primary">Retour à la boutique</a></div>`;
+  } else {
+    document.getElementById("page-title").textContent = product.name + " — AURA";
+    breadcrumb.innerHTML = `<a href="index.html">Accueil</a> / <a href="boutique.html">Boutique</a> / <a href="boutique.html?category=${encodeURIComponent(product.category)}">${product.category}</a> / ${product.name}`;
+
+    root.innerHTML = `
+      <div class="product-detail">
+        <div class="product-detail-image" style="background: linear-gradient(135deg, ${product.color1}, ${product.color2});">
+          ${product.emoji}
+        </div>
+        <div>
+          <div class="product-category">${product.category}</div>
+          <h1>${product.name}</h1>
+          <div class="detail-price">${formatPrice(product.price)}</div>
+          <p>${product.description}</p>
+
+          <div class="qty-selector">
+            <button id="qty-minus" aria-label="Diminuer">−</button>
+            <span id="qty-value">1</span>
+            <button id="qty-plus" aria-label="Augmenter">+</button>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn btn-primary" id="add-btn">Ajouter au panier</button>
+            <a href="panier.html" class="btn btn-outline" id="buy-btn">Voir le panier</a>
+          </div>
+
+          <div class="detail-meta">
+            <div>🚚 Livraison offerte dès 80€ d'achat</div>
+            <div>↩️ Retours gratuits sous 30 jours</div>
+            <div>🔒 Paiement sécurisé</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    let qty = 1;
+    const qtyValue = document.getElementById("qty-value");
+    document.getElementById("qty-minus").addEventListener("click", () => {
+      qty = Math.max(1, qty - 1);
+      qtyValue.textContent = qty;
+    });
+    document.getElementById("qty-plus").addEventListener("click", () => {
+      qty = Math.min(10, qty + 1);
+      qtyValue.textContent = qty;
+    });
+    document.getElementById("add-btn").addEventListener("click", () => {
+      addToCart(product.id, qty);
+      showToast(`${product.name} ajouté au panier`);
+    });
+
+    const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
+    document.getElementById("related-grid").innerHTML = related.map(p => `
+      <div class="product-card">
+        <a href="produit.html?id=${p.id}">
+          <div class="product-thumb" style="background: linear-gradient(135deg, ${p.color1}, ${p.color2});">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+            ${p.emoji}
+          </div>
+        </a>
+        <div class="product-info">
+          <div class="product-category">${p.category}</div>
+          <a href="produit.html?id=${p.id}"><div class="product-name">${p.name}</div></a>
+          <div class="product-price">${formatPrice(p.price)}</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-primary btn-block btn-sm" onclick="addToCart(${p.id}); showToast('${p.name.replace(/'/g, "\\'")} ajouté au panier');">Ajouter au panier</button>
+        </div>
+      </div>
+    `).join("");
+  }
+</script>
+
+</body>
+</html>

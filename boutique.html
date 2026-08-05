@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boutique — AURA</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo">AURA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="boutique.html">Boutique</a></li>
+      <li><a href="boutique.html?category=V%C3%AAtements">Vêtements</a></li>
+      <li><a href="boutique.html?category=Accessoires">Accessoires</a></li>
+      <li><a href="boutique.html?category=Chaussures">Chaussures</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="panier.html" class="cart-link">
+        🛍️ Panier <span class="cart-badge" data-cart-count>0</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<div class="section-title" style="margin-top:40px;">
+  <h2>Toute la boutique</h2>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-category="Tout">Tout</button>
+  <button class="filter-btn" data-category="Vêtements">Vêtements</button>
+  <button class="filter-btn" data-category="Accessoires">Accessoires</button>
+  <button class="filter-btn" data-category="Chaussures">Chaussures</button>
+  <input type="search" class="search-input" id="search-input" placeholder="Rechercher un produit...">
+</div>
+
+<div class="product-grid" id="product-grid"></div>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <span>© 2026 AURA. Tous droits réservés.</span>
+    <span class="payment-icons">💳 🏦 📱</span>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const grid = document.getElementById("product-grid");
+  const searchInput = document.getElementById("search-input");
+  const filterBtns = document.querySelectorAll(".filter-btn");
+
+  const params = new URLSearchParams(window.location.search);
+  let activeCategory = params.get("category") || "Tout";
+
+  function render() {
+    const query = searchInput.value.trim().toLowerCase();
+    const items = PRODUCTS.filter(p => {
+      const matchCategory = activeCategory === "Tout" || p.category === activeCategory;
+      const matchQuery = !query || p.name.toLowerCase().includes(query);
+      return matchCategory && matchQuery;
+    });
+
+    grid.innerHTML = items.length ? items.map(p => `
+      <div class="product-card">
+        <a href="produit.html?id=${p.id}">
+          <div class="product-thumb" style="background: linear-gradient(135deg, ${p.color1}, ${p.color2});">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+            ${p.emoji}
+          </div>
+        </a>
+        <div class="product-info">
+          <div class="product-category">${p.category}</div>
+          <a href="produit.html?id=${p.id}"><div class="product-name">${p.name}</div></a>
+          <div class="product-price">${formatPrice(p.price)}</div>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-primary btn-block btn-sm" onclick="addToCart(${p.id}); showToast('${p.name.replace(/'/g, "\\'")} ajouté au panier');">Ajouter au panier</button>
+        </div>
+      </div>
+    `).join("") : `<p style="grid-column: 1/-1; text-align:center; padding: 60px 0;">Aucun produit trouvé.</p>`;
+  }
+
+  filterBtns.forEach(btn => {
+    if (btn.dataset.category === activeCategory) btn.classList.add("active");
+    else btn.classList.remove("active");
+    btn.addEventListener("click", () => {
+      activeCategory = btn.dataset.category;
+      filterBtns.forEach(b => b.classList.toggle("active", b === btn));
+      render();
+    });
+  });
+
+  searchInput.addEventListener("input", render);
+
+  render();
+</script>
+
+</body>
+</html>
