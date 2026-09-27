@@ -150,3 +150,10 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   pas aux clientes. Coller les vrais liens de profil dans l'éditeur (Pied de page → Réseaux sociaux) pour les afficher.
 - À faire par le propriétaire : Paramètres → Coordonnées de la boutique → e-mail client = velea.officiel@gmail.com
   (adresse de réponse des e-mails de commande).
+
+## v10 – réseaux reliés (27/09/2026)
+
+- Thème brouillon « 💗 VELEA v10 – réseaux reliés (à publier) » (gid://shopify/OnlineStoreTheme/207372681561), copie de v9 (publié).
+- Icônes du pied de page reliées aux vrais comptes : Instagram https://www.instagram.com/velea.officiel/ ,
+  Pinterest https://www.pinterest.com/veleaofficiel/ (visibles par les clientes).
+- Facebook et TikTok : liens génériques (masqués pour les clientes) en attendant l'adresse de la page Facebook.
