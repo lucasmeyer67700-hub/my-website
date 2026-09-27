@@ -158,11 +158,9 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   Pinterest https://www.pinterest.com/veleaofficiel/ (visibles par les clientes).
 - Facebook et TikTok : liens génériques (masqués pour les clientes) en attendant l'adresse de la page Facebook.
 
-## v11 – logo visage (27/09/2026)
+## v11 – fleur dorée (27/09/2026)
 
-- Thème brouillon « 💗 VELEA v11 – logo visage (à publier) » (gid://shopify/OnlineStoreTheme/207373500761), copie de v10 (publié).
-- Nouveau logo choisi par le propriétaire : visage de femme yeux fermés, coupé en deux par un fil doré
-  (gauche : rougeurs + cernes ; droite : peau lumineuse + étincelle dorée) + « VELEA ». Fichier `theme/snippets/velea-logo.liquid`,
-  aperçu `velea-logo-apercu.png`. La fleur est abandonnée. 3 autres propositions refusées : `velea-logo-propositions.png`.
-- Risque signalé au propriétaire : image de type « avant / après » (Google Ads peut refuser les annonces ; ne pas
-  l'accompagner de texte qui promet un résultat).
+- Thème brouillon « 💗 VELEA v11 – fleur dorée (à publier) » (gid://shopify/OnlineStoreTheme/207373500761), copie de v10 (publié).
+- Logo visage essayé puis refusé par le propriétaire (« pas pro »). Retour à la fleur, en version pro :
+  5 pétales pointus à trait fin doré, intérieur rose poudré, cœur doré + « VELEA » en Cormorant Garamond 500
+  très espacé. Au survol, la fleur tourne d'un pétale. Fichier `theme/snippets/velea-logo.liquid`, aperçu `velea-logo-apercu.png`.
