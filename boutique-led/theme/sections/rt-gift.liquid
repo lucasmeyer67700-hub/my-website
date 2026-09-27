@@ -1,0 +1,40 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
+{%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
+{%- assign gs = all_products['rouleau-de-jade-amp-gua-sha'] -%}
+{%- if m.url != blank -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if pk.url != blank -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if gs.url != blank -%}{%- assign gs_url = gs.url -%}{%- else -%}{%- assign gs_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if m.price -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
+{%- if pk.price -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
+{%- if gs.price -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
+
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt"><section class="rt-wrap rt-gift">
+<div>
+<p class="rt-eyebrow">Spécial Noël</p>
+<h2>Le coffret <em>Rituel Éclat</em>, le cadeau qui fait du bien</h2>
+<p class="rt-lead">Le masque LED visage &amp; cou et les lunettes LED pour le regard, réunis pour une routine spa complète. À offrir… ou à s'offrir.</p>
+<ul><li>Masque LED visage &amp; cou en silicone souple</li><li>Lunettes LED pour chouchouter le contour des yeux</li><li>Deux gestes, un seul rituel du soir</li></ul>
+<div class="rt-price"><b>{{ pk_price }}</b><span>Le coffret complet</span></div>
+<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ pk_url }}">J'offre le coffret</a></div>
+<p class="rt-small">Pour une livraison avant Noël, commandez avant le 12 décembre. Le coffret peut arriver en 2 colis.</p>
+</div>
+<div class="rt-gift__vis">
+{%- if pk.featured_image -%}<img src="{{ pk.featured_image | image_url: width: 900 }}" alt="{{ pk.title | escape }}" loading="lazy" width="900" height="900">
+{%- else -%}<svg viewBox="0 0 200 200" width="58%" fill="none" aria-hidden="true"><rect x="30" y="80" width="140" height="100" rx="10" fill="#fff"/><rect x="22" y="60" width="156" height="30" rx="8" fill="#FBEFEC"/><rect x="92" y="60" width="16" height="120" fill="#C47A86"/><path d="M100 60c-10-22-38-26-40-10-2 12 22 12 40 10zM100 60c10-22 38-26 40-10 2 12-22 12-40 10z" fill="#C47A86"/></svg>{%- endif -%}
+<span class="rt-gift__badge">Idée cadeau</span>
+</div>
+</section></div>
+</div>
+{% schema %}
+{
+  "name": "RT · Coffret Noël",
+  "settings": [],
+  "presets": [
+    {
+      "name": "RT · Coffret Noël"
+    }
+  ]
+}
+{% endschema %}

@@ -54,3 +54,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   4 points forts ; visuel = photo principale du masque dès qu'il est actif avec une photo, sinon illustration vert/blanc.
 - Menu principal : Accueil · Le Rituel Éclat · Contact.
 - Rappel : Claude ne peut pas modifier le thème publié → toujours travailler sur un brouillon, puis publier à la main.
+
+## Boutique complète – univers rose (27/09/2026)
+
+- Thème brouillon « 💗 ROSE – boutique complète (à publier) » (gid://shopify/OnlineStoreTheme/207338176857).
+- Couleurs : blanc crème #FFFBFA, rose poudré #F8E3E1, vieux rose #C47A86 (boutons), texte prune #3D2B2F.
+  Titres en Cormorant Garamond (serif élégante).
+- Page d'accueil = 10 sections sur mesure (`theme/sections/rt-*.liquid`, style `theme/rituel.css`) :
+  bannière masque LED → réassurance → pourquoi en hiver → le masque en détail → rituel 3 étapes →
+  pensé pour vous → coffret Noël → nos produits → FAQ → appel final.
+- Les photos produits remplacent automatiquement les illustrations dès que les produits sont actifs avec des images.
+- À venir : avis clients, page produit détaillée, pages légales.

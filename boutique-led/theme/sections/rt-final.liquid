@@ -1,0 +1,28 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
+{%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
+{%- assign gs = all_products['rouleau-de-jade-amp-gua-sha'] -%}
+{%- if m.url != blank -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if pk.url != blank -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if gs.url != blank -%}{%- assign gs_url = gs.url -%}{%- else -%}{%- assign gs_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if m.price -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
+{%- if pk.price -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
+{%- if gs.price -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
+
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt"><section class="rt-wrap rt-final">
+<div class="rt-center"><p class="rt-eyebrow">Votre moment à vous</p><h2>Cet hiver, <em>prenez soin de vous</em></h2><p class="rt-lead">Un teint plus lumineux, un moment de calme chaque soir, et l'esprit spa sans quitter la maison.</p></div>
+<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Je découvre le masque LED</a><a class="rt-btn rt-btn--s" href="{{ pk_url }}">Voir le coffret cadeau</a></div>
+</section></div>
+</div>
+{% schema %}
+{
+  "name": "RT · Appel final",
+  "settings": [],
+  "presets": [
+    {
+      "name": "RT · Appel final"
+    }
+  ]
+}
+{% endschema %}

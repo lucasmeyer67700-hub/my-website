@@ -1,0 +1,23 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt"><section class="rt-wrap rt-steps">
+<div class="rt-center"><p class="rt-eyebrow">Simple comme bonsoir</p><h2>Votre rituel <em>en 3 étapes</em></h2><p class="rt-lead">Pas besoin d'y penser pendant des heures : votre moment beauté tient en 10 minutes.</p></div>
+<div class="rt-grid rt-3" style="margin-top:56px">
+<div class="rt-card rt-step"><h3>Préparez votre peau</h3><p>Nettoyez et séchez votre visage et votre cou, sans crème.</p></div>
+<div class="rt-card rt-step"><h3>Installez-vous</h3><p>Posez le masque, fermez les yeux et choisissez votre couleur de lumière.</p></div>
+<div class="rt-card rt-step"><h3>Détendez-vous 10 minutes</h3><p>Le masque s'éteint tout seul. Terminez par votre soin habituel.</p></div>
+</div>
+<p class="rt-note" style="font-size:20px">À utiliser 3 à 5 fois par semaine pour en faire un vrai rituel.</p>
+</section></div>
+</div>
+{% schema %}
+{
+  "name": "RT · Rituel en 3 étapes",
+  "settings": [],
+  "presets": [
+    {
+      "name": "RT · Rituel en 3 étapes"
+    }
+  ]
+}
+{% endschema %}
