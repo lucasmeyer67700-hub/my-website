@@ -87,3 +87,6 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   expédié depuis la France. Allégations du fournisseur (« anti-âge », « rajeunissement », « réparation ») NON reprises.
 - Description produit Shopify mise à jour (utilisée par Google Shopping).
 - Le fournisseur propose aussi un coloris NOIR : variante possible plus tard.
+- Correctif v3 : l'apparition au défilement en JavaScript laissait les blocs invisibles dans certains navigateurs
+  (sections blanches). Remplacée par une animation 100 % CSS (`animation-timeline: view()`) : si le navigateur ne la
+  gère pas, les blocs restent simplement visibles. `rituel.js` est désormais vide. Testé en local (Chromium, ordi + mobile).
