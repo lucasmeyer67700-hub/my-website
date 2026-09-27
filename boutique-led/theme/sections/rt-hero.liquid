@@ -15,7 +15,8 @@
 </div>
 <div class="rt-viscol">
 <div class="rt-vis">
-{%- if m_ok and m.featured_image -%}<img src="{{ m.featured_image | image_url: width: 1100 }}" alt="{{ m.featured_image.alt | default: m.title | escape }}" width="1100" height="1100" loading="eager" fetchpriority="high">
+{%- if section.settings.photo != blank -%}<img src="{{ section.settings.photo | image_url: width: 1100 }}" alt="{{ section.settings.photo.alt | escape }}" width="1100" height="1100" loading="eager" fetchpriority="high">
+{%- elsif m_ok and m.featured_image -%}<img src="{{ m.featured_image | image_url: width: 1100 }}" alt="{{ m.featured_image.alt | default: m.title | escape }}" width="1100" height="1100" loading="eager" fetchpriority="high">
 {%- else -%}<div class="rt-halo"></div><div class="rt-ring r1"></div><div class="rt-ring r2"></div><div class="rt-ring r3"></div><svg class="rt-maskart" viewBox="0 0 200 240" fill="none" aria-hidden="true"><path d="M100 8c48 0 82 36 82 92 0 62-36 124-82 124S18 162 18 100C18 44 52 8 100 8z" fill="#fff" stroke="#E7B7BD" stroke-width="3"/><ellipse cx="68" cy="96" rx="20" ry="11" fill="#FBEFEC" stroke="#E7B7BD" stroke-width="2"/><ellipse cx="132" cy="96" rx="20" ry="11" fill="#FBEFEC" stroke="#E7B7BD" stroke-width="2"/><path d="M84 176c10 7 22 7 32 0" stroke="#E7B7BD" stroke-width="3" stroke-linecap="round"/><g fill="#E0707E" opacity=".8"><circle cx="60" cy="50" r="3.2"/><circle cx="80" cy="42" r="3.2"/><circle cx="100" cy="40" r="3.2"/><circle cx="120" cy="42" r="3.2"/><circle cx="140" cy="50" r="3.2"/><circle cx="48" cy="128" r="3.2"/><circle cx="62" cy="142" r="3.2"/><circle cx="138" cy="142" r="3.2"/><circle cx="152" cy="128" r="3.2"/><circle cx="70" cy="196" r="3.2"/><circle cx="100" cy="206" r="3.2"/><circle cx="130" cy="196" r="3.2"/><circle cx="100" cy="130" r="3.2"/><circle cx="100" cy="150" r="3.2"/></g></svg>{%- endif -%}
 </div>
 </div>
@@ -24,5 +25,5 @@
 </div>
 </div>
 {% schema %}
-{"name": "RT · Bannière masque LED", "settings": [], "presets": [{"name": "RT · Bannière masque LED"}]}
+{"name": "RT · Bannière masque LED", "settings": [{"type": "image_picker", "id": "photo", "label": "Photo de la bannière", "info": "Vide = photo principale du masque"}], "presets": [{"name": "RT · Bannière masque LED"}]}
 {% endschema %}

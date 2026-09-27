@@ -194,3 +194,11 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   mais seulement quand le produit est actif. Produit encore en BROUILLON et absent du canal « Boutique en ligne » :
   activation refusée à Claude, à faire par le propriétaire (Produits → masque → Statut : Actif + canal Boutique en ligne).
   Boutique toujours protégée par mot de passe. Stock non suivi (pas de mention « Épuisé »).
+
+## v13 – bannière femme (27/09/2026)
+
+- Thème brouillon « 💗 VELEA v13 – bannière femme (à publier) » (gid://shopify/OnlineStoreTheme/207384871257), copie de v12 (publié).
+- Bannière d'accueil (rt-hero) : nouveau réglage « Photo de la bannière » (sélecteur d'image). Réglé sur la photo
+  « femme portant le masque » (Fichiers Shopify : velea-banniere-femme.jpg, copie `photos-banniere-femme.jpg`).
+  Si le réglage est vidé, la bannière reprend la photo principale du masque. Rien d'autre n'a changé.
+- Le masque est maintenant ACTIF (fait par le propriétaire) ; il doit aussi être publié sur le canal « Boutique en ligne ».
