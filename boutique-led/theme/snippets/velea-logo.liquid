@@ -1,0 +1,23 @@
+<span class="vl-logo" aria-label="VELEA">
+  <svg class="vl-flower" viewBox="0 0 32 32" aria-hidden="true">
+    <defs><linearGradient id="vlGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E6CF9E"/><stop offset=".5" stop-color="#C9A461"/><stop offset="1" stop-color="#A87F3E"/></linearGradient></defs>
+    <g transform="translate(16 16)">
+      <ellipse rx="4" ry="6.6" cy="-8" fill="#F8E3E1" stroke="#C47A86" stroke-width="1.1"/>
+      <ellipse rx="4" ry="6.6" cy="-8" fill="#F8E3E1" stroke="#C47A86" stroke-width="1.1" transform="rotate(72)"/>
+      <ellipse rx="4" ry="6.6" cy="-8" fill="#F8E3E1" stroke="#C47A86" stroke-width="1.1" transform="rotate(144)"/>
+      <ellipse rx="4" ry="6.6" cy="-8" fill="#F8E3E1" stroke="#C47A86" stroke-width="1.1" transform="rotate(216)"/>
+      <ellipse rx="4" ry="6.6" cy="-8" fill="#F8E3E1" stroke="#C47A86" stroke-width="1.1" transform="rotate(288)"/>
+      <circle r="3" fill="url(#vlGold)"/>
+    </g>
+  </svg>
+  <span class="vl-word">VELEA</span>
+</span>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap');
+  .vl-logo{display:inline-flex;align-items:center;gap:10px;line-height:1;color:#3D2B2F}
+  .vl-flower{width:30px;height:30px;flex:none;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .header-logo:hover .vl-flower{transform:rotate(72deg)}
+  .vl-word{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:27px;letter-spacing:.3em;margin-right:-.3em}
+  @media screen and (max-width:749px){.vl-flower{width:24px;height:24px}.vl-word{font-size:22px;letter-spacing:.24em;margin-right:-.24em}.vl-logo{gap:8px}}
+  @media (prefers-reduced-motion:reduce){.vl-flower{transition:none}}
+</style>

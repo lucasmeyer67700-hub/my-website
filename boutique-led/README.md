@@ -127,3 +127,15 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Logo Google + « Avis Google · voir tous les avis » affichés UNIQUEMENT si un lien de fiche Google est renseigné
   (réglage de la section) : à n'utiliser que pour de vrais avis Google.
 - Toujours : aucun avis fictif visible par les clientes (exemples seulement dans l'éditeur).
+
+## v8 – marque VELEA + logo (27/09/2026)
+
+- Nom de marque : **VELEA**. Thème brouillon « 💗 VELEA v8 – logo (à publier) » (gid://shopify/OnlineStoreTheme/207370191193).
+- Logo dessiné en haut de toutes les pages : fleur à 5 pétales rose poudré bordés de vieux rose, cœur doré + « VELEA »
+  en Cormorant Garamond espacé (prune). Fichier `theme/snippets/velea-logo.liquid` ; le bloc `blocks/_header-logo.liquid`
+  l'affiche tant qu'aucune image de logo n'est choisie dans le thème (extrait modifié dans `theme/blocks/`).
+  Aperçu : `velea-logo-apercu.png`.
+- Marque (« vendor ») des 4 produits : « Ma boutique » → « VELEA ».
+- À faire par le propriétaire : renommer la boutique (Paramètres → Général → Nom de la boutique → VELEA),
+  vérifier le nom sur l'INPI, choisir un domaine (velea.com pris ; velea.org libre ; vérifier velea.fr),
+  puis adresse contact@ + domaine et Instagram @velea.

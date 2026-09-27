@@ -1,0 +1,23 @@
+{% comment %}
+  Copie locale du bloc Horizon « blocks/_header-logo.liquid » (thème v8).
+  Seul changement par rapport à l'original : si aucune image de logo n'est choisie
+  dans les réglages du thème, on affiche le logo dessiné VELEA (snippets/velea-logo.liquid).
+  Le reste du fichier (styles, réglages) est celui d'Horizon, inchangé.
+{% endcomment %}
+<span
+  class="header-logo__image-container header-logo__image-container--original"
+  data-testid="header-logo"
+>
+  {%- if settings.logo != blank -%}
+  {% render 'image',
+    image: settings.logo,
+    class: 'header-logo__image',
+    height: settings.logo_height,
+    alt_text_fallback: alt_text_fallback,
+    text_fallback: shop.name,
+    style: logo_style
+  %}
+  {%- else -%}
+    {% render 'velea-logo' %}
+  {%- endif -%}
+</span>
