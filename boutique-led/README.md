@@ -99,3 +99,12 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Doré ajouté avec parcimonie (voir STYLE.md). Bannière : les 2 pastilles « 10 min » et « 202 g » supprimées ;
   sous le visuel, bouton « Voir le masque en détail → » (flèche dorée animée) qui fait défiler en douceur
   jusqu'à la section « Le masque en détail » (ancre `#rt-masque`). Testé en local (clic → section atteinte).
+
+## v5 – offre premium (27/09/2026)
+
+- Thème brouillon « 💗 ROSE v5 – offre premium (à publier) » (gid://shopify/OnlineStoreTheme/207367799129).
+- Badge du coffret : « Offre premium ». Bouton « Voir le masque en détail » retiré de la bannière.
+  Bannière : garanties en colonne (Expédié depuis la France / Paiement sécurisé / Retours sous 14 jours).
+- CORRECTIF : pour un produit en brouillon, `all_products` renvoie un objet vide mais « vrai » → images cassées (« ? »)
+  et prix vides. Chaque section vérifie désormais `produit.handle == '…'` (variables `m_ok`, `pk_ok`, `ey_ok`, `gs_ok`)
+  avant d'utiliser l'image, le prix ou le lien ; sinon illustration + prix de secours.

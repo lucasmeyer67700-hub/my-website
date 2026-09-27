@@ -40,6 +40,6 @@ Le masque LED reste toujours le produit n°1, en haut.
 
 ## Où mettre le doré (et nulle part ailleurs)
 Petit trait devant les accroches, cercles fins autour du visuel de la bannière, étoiles ✦ du bandeau défilant,
-numéros des 3 étapes, badges « Le plus complet » et « Routine complète », détails du bloc coffret,
-« + » de la FAQ, phrase en italique des sections, bouton « Voir le masque en détail ».
+numéros des 3 étapes, badges « Offre premium » et « Routine complète », détails du bloc coffret,
+« + » de la FAQ, phrase en italique des sections.
 Les boutons d'achat restent en vieux rose.

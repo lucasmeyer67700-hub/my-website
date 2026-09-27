@@ -1,14 +1,16 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'rituel.js' | asset_url }}"></script>
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
+{%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
+{%- assign pk_ok = false -%}{%- if pk.handle == 'pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard' -%}{%- assign pk_ok = true -%}{%- endif -%}
 {%- assign gs = all_products['rouleau-de-jade-amp-gua-sha'] -%}
-{%- if m.url != blank -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if pk.url != blank -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if gs.url != blank -%}{%- assign gs_url = gs.url -%}{%- else -%}{%- assign gs_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if m.price -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
-{%- if pk.price -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
-{%- if gs.price -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
+{%- assign gs_ok = false -%}{%- if gs.handle == 'rouleau-de-jade-amp-gua-sha' -%}{%- assign gs_ok = true -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if pk_ok -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if gs_ok -%}{%- assign gs_url = gs.url -%}{%- else -%}{%- assign gs_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
+{%- if pk_ok -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
+{%- if gs_ok -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
 
 <div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
 <div class="rt rt-anim"><section class="rt-wrap rt-final">
