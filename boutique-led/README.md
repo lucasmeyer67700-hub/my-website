@@ -118,3 +118,12 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   Tant qu'aucun vrai avis n'est saisi : section INVISIBLE pour les clientes ; dans l'éditeur seulement, aperçu avec
   8 avis fictifs + « 4,8 · 328 avis » et la mention « avis fictifs ». Faux avis publics refusés (pratique commerciale
   trompeuse, règles Google Merchant Center).
+
+## v7 – avis style Google (27/09/2026)
+
+- Thème brouillon « 💗 ROSE v7 – avis style Google (à publier) » (gid://shopify/OnlineStoreTheme/207368618329).
+- Section avis restylée façon Google : résumé (note + étoiles jaunes + « Basé sur N avis »), cartes blanches avec
+  avatar coloré à l'initiale, « Prénom N. », date relative, étoiles #FBBC04, « Avis vérifié ». Défilement continu.
+- Logo Google + « Avis Google · voir tous les avis » affichés UNIQUEMENT si un lien de fiche Google est renseigné
+  (réglage de la section) : à n'utiliser que pour de vrais avis Google.
+- Toujours : aucun avis fictif visible par les clientes (exemples seulement dans l'éditeur).
