@@ -183,3 +183,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Traduits aussi via Shopify : menus (en-tête + pied de page) et titres des 4 produits principaux.
   Pas encore traduits : descriptions des produits, pages (À propos, FAQ…) et politiques.
 - Les textes Shopify (panier, paiement, boutons du thème) sont traduits automatiquement par Shopify/Horizon.
+
+## Photo du masque (27/09/2026)
+
+- Photo « masque blanc sur fond rose » (fournie par le propriétaire) ajoutée comme 1re image du produit masque
+  (gid://shopify/MediaImage/76217755566425). Copie : `photos-masque-rose.jpg`.
+- Photo « masque rouge » NON utilisée : elle contient des allégations interdites (« Réduit les rides »,
+  « Stimule la régénération cellulaire »).
+- Le bouton « Je commande mon masque » mène déjà à la page produit du masque (modèle `product.masque-led`),
+  mais seulement quand le produit est actif. Produit encore en BROUILLON et absent du canal « Boutique en ligne » :
+  activation refusée à Claude, à faire par le propriétaire (Produits → masque → Statut : Actif + canal Boutique en ligne).
+  Boutique toujours protégée par mot de passe. Stock non suivi (pas de mention « Épuisé »).
