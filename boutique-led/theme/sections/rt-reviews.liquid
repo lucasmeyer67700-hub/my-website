@@ -1,0 +1,46 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- assign real = section.blocks.size -%}
+{%- if real > 0 or request.design_mode -%}
+<style>
+.rv{--gold:#B8914F;--gold-l:#D9BC85;--gold-g:linear-gradient(135deg,#E6CF9E 0%,#C9A461 45%,#A87F3E 100%)}
+.rv-head{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.rv-score{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #EFD6D6;border-radius:999px;padding:10px 22px;box-shadow:0 14px 30px -22px rgba(61,43,47,.4)}
+.rv-score b{font-family:'Cormorant Garamond',Georgia,serif;font-size:32px;line-height:1;color:#3D2B2F}
+.rv-score small{color:#7A5E63;font-size:14px}
+.rv-stars{display:inline-flex;gap:2px;font-size:17px;line-height:1}
+.rv-stars i{font-style:normal;color:#E8D9C4}
+.rv-stars i.on{background:var(--gold-g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rv-demo{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#A95F6C;background:#FBEFEC;border:1px dashed #C47A86;border-radius:999px;padding:5px 12px}
+.rv-rail{overflow:hidden;margin:34px -56px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.rv-track{display:flex;width:max-content;gap:20px;padding:10px 0 18px;animation:rv-scroll 60s linear infinite}
+.rv-track.rv-rev{animation-direction:reverse;animation-duration:70s}
+.rv-rail:hover .rv-track{animation-play-state:paused}
+@keyframes rv-scroll{to{transform:translateX(calc(-50% - 10px))}}
+.rv-card{margin:0;flex:none;width:320px;background:#fff;border:1px solid #EFD6D6;border-radius:22px;padding:22px 22px 18px;box-shadow:0 18px 36px -30px rgba(61,43,47,.5);transition:transform .3s ease,border-color .3s ease}
+.rv-card:hover{transform:translateY(-4px) scale(1.02);border-color:var(--gold-l)}
+.rv-top{display:flex;align-items:center;gap:12px}
+.rv-top>div{flex:1;line-height:1.2}
+.rv-top b{display:block;font-size:15px;color:#3D2B2F}
+.rv-top small{color:#7A5E63;font-size:12.5px}
+.rv-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--gold-g);color:#fff;font-weight:700;font-family:'Cormorant Garamond',Georgia,serif;font-size:20px}
+.rv-card blockquote{margin:14px 0 12px;font-size:15px;line-height:1.55;color:#3D2B2F}
+.rv-card figcaption{font-size:12.5px;color:#A95F6C;font-weight:600}
+.rv-card figcaption:before{content:"✓ Achat : ";color:#7A5E63;font-weight:400}
+@media (max-width:989px){.rv-rail{margin:26px -18px 0}.rv-card{width:270px;padding:18px}.rv-card blockquote{font-size:14px}.rv-track{animation-duration:45s}.rv-track.rv-rev{animation-duration:52s}}
+@media (prefers-reduced-motion:reduce){.rv-track{animation:none}.rv-rail{overflow-x:auto}}
+</style>
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt rt-anim rv"><section class="rt-wrap" style="padding-left:0;padding-right:0">
+<div class="rt-center"><p class="rt-eyebrow">Elles ont adopté le rituel</p><h2>Ce que disent <em>nos clientes</em></h2>
+<div class="rv-head">
+{%- if real > 0 -%}{%- if section.settings.show_score and section.settings.note != blank -%}<div class="rv-score"><b>{{ section.settings.note }}</b><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span><small>{{ section.settings.nombre }} avis vérifiés</small></div>{%- endif -%}
+{%- else -%}<div class="rv-score"><b>4,8</b><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span><small>328 avis</small></div><span class="rv-demo">Aperçu avec des avis fictifs : visible uniquement dans l'éditeur, jamais par vos clientes</span>{%- endif -%}
+</div></div>
+{%- capture cards -%}{%- if real > 0 -%}{%- for b in section.blocks -%}<figure class="rv-card" {{ b.shopify_attributes }}><div class="rv-top"><span class="rv-av">{{ b.settings.nom | slice: 0 }}</span><div><b>{{ b.settings.nom }}</b><small>{{ b.settings.ville }}</small></div><span class="rv-stars" aria-label="{{ b.settings.note }} sur 5">{%- for i in (1..5) -%}<i{% if i <= b.settings.note %} class="on"{% endif %}>★</i>{%- endfor -%}</span></div><blockquote>« {{ b.settings.texte }} »</blockquote>{%- if b.settings.produit != blank -%}<figcaption>{{ b.settings.produit }}</figcaption>{%- endif -%}</figure>{%- endfor -%}{%- else -%}<figure class="rv-card"><div class="rv-top"><span class="rv-av">S</span><div><b>Sophie</b><small>Lyon</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Je l'utilise le soir devant ma série, c'est devenu mon petit rituel. Le silicone est vraiment souple, on l'oublie. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">N</span><div><b>Nadia</b><small>Marseille</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Très léger et sans fil, je peux enfin l'utiliser au lit. Mon teint paraît plus frais le matin. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">C</span><div><b>Claire</b><small>Bordeaux</small></div><span class="rv-stars" aria-label="4 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i>★</i></span></div><blockquote>« Joli produit, bien emballé et arrivé vite. La pièce pour le cou est un vrai plus. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">É</span><div><b>Émilie</b><small>Lille</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Offert à ma mère, elle l'adore ! Elle a pris le coffret avec les lunettes. »</blockquote><figcaption>Coffret masque + lunettes</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">J</span><div><b>Julie</b><small>Nantes</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Simple à utiliser : on le pose, on choisit la lumière et il s'arrête tout seul après 10 minutes. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">K</span><div><b>Karima</b><small>Toulouse</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Mon moment à moi chaque soir. Le service client a répondu rapidement à ma question. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">L</span><div><b>Laura</b><small>Paris</small></div><span class="rv-stars" aria-label="4 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i>★</i></span></div><blockquote>« Confortable et agréable, j'aurais aimé plus de coloris mais le blanc est très joli. »</blockquote><figcaption>Masque LED visage & cou</figcaption></figure><figure class="rv-card"><div class="rv-top"><span class="rv-av">C</span><div><b>Céline</b><small>Nice</small></div><span class="rv-stars" aria-label="5 sur 5"><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i><i class="on">★</i></span></div><blockquote>« Les lunettes pour le regard sont top en complément. Petit coup d'éclat avant de sortir. »</blockquote><figcaption>Lunettes LED regard</figcaption></figure>{%- endif -%}{%- endcapture -%}
+<div class="rv-rail"><div class="rv-track">{{ cards }}<div aria-hidden="true" style="display:contents">{{ cards }}</div></div></div>
+</section></div>
+</div>
+{%- endif -%}
+{% schema %}
+{"name": "RT · Avis clientes", "settings": [{"type": "paragraph", "content": "Ajoutez uniquement de VRAIS avis (reçus par e-mail, via une appli d'avis…). Tant qu'aucun avis n'est ajouté, la section est invisible pour les clientes ; dans l'éditeur, des exemples fictifs s'affichent pour visualiser le rendu."}, {"type": "checkbox", "id": "show_score", "label": "Afficher la note moyenne", "default": true}, {"type": "text", "id": "note", "label": "Note moyenne réelle (ex. 4,7)"}, {"type": "text", "id": "nombre", "label": "Nombre réel d'avis"}], "blocks": [{"type": "avis", "name": "Avis", "settings": [{"type": "text", "id": "nom", "label": "Prénom", "default": "Prénom"}, {"type": "text", "id": "ville", "label": "Ville"}, {"type": "range", "id": "note", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5}, {"type": "textarea", "id": "texte", "label": "Texte de l'avis"}, {"type": "text", "id": "produit", "label": "Produit acheté"}]}], "presets": [{"name": "RT · Avis clientes"}]}
+{% endschema %}

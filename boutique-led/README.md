@@ -108,3 +108,13 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - CORRECTIF : pour un produit en brouillon, `all_products` renvoie un objet vide mais « vrai » → images cassées (« ? »)
   et prix vides. Chaque section vérifie désormais `produit.handle == '…'` (variables `m_ok`, `pk_ok`, `ey_ok`, `gs_ok`)
   avant d'utiliser l'image, le prix ou le lien ; sinon illustration + prix de secours.
+
+## v6 – avis + livraison (27/09/2026)
+
+- Le thème v5 (non publié) a été renommé « 💗 ROSE v6 – avis + livraison (à publier) » (gid://shopify/OnlineStoreTheme/207367799129).
+- « Livraison sous 7 jours ouvrés » : bannière (sous le prix), bandeau défilant, réassurance, FAQ.
+- Nouvelle section `rt-reviews` (« RT · Avis clientes », avant l'appel final) : note moyenne + carrousel d'avis qui défile
+  en continu (pause au survol). Avis ajoutés via l'éditeur (blocs « Avis » + note/nombre réels dans les réglages).
+  Tant qu'aucun vrai avis n'est saisi : section INVISIBLE pour les clientes ; dans l'éditeur seulement, aperçu avec
+  8 avis fictifs + « 4,8 · 328 avis » et la mention « avis fictifs ». Faux avis publics refusés (pratique commerciale
+  trompeuse, règles Google Merchant Center).
