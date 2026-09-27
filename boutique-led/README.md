@@ -45,3 +45,12 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   bordures #d6e6da, bandeaux vert pâle #e8f2eb et #f3f8f4.
 - Page d'accueil : bandeau d'accroche → collection « Rituel Éclat » (3 produits) → bandeau réassurance.
 - Le thème actuel « Horizon » n'a pas été modifié.
+
+## Nouveau haut de page (27/09/2026)
+
+- Thème brouillon « ✅ Rituel Éclat – NOUVEAU haut de page (à publier) » (gid://shopify/OnlineStoreTheme/207338176857).
+- Bandeau d'annonce vert pâle, avec 2 messages : « Livraison suivie en France · Retours sous 14 jours » / « Idée cadeau de Noël ».
+- Bannière sur mesure (section « Liquid personnalisé », code dans `theme-hero.liquid`) : titre, 2 boutons (masque / pack),
+  4 points forts ; visuel = photo principale du masque dès qu'il est actif avec une photo, sinon illustration vert/blanc.
+- Menu principal : Accueil · Le Rituel Éclat · Contact.
+- Rappel : Claude ne peut pas modifier le thème publié → toujours travailler sur un brouillon, puis publier à la main.
