@@ -65,3 +65,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   pensé pour vous → coffret Noël → nos produits → FAQ → appel final.
 - Les photos produits remplacent automatiquement les illustrations dès que les produits sont actifs avec des images.
 - À venir : avis clients, page produit détaillée, pages légales.
+
+## v2 – automne + mobile + page produit (27/09/2026)
+
+- Thème brouillon « 💗 ROSE v2 – automne + mobile (à publier) » (gid://shopify/OnlineStoreTheme/207356723545).
+- Noël retiré partout → thème automne. Bandeau : « 🍂 Nouveau : votre rituel beauté d'automne ».
+- Mobile : titres plus compacts, boutons pleine largeur, barre d'achat fixe en bas, compléments en carrousel.
+- Nouveau produit brouillon : Lunettes LED Regard 53,90 € (gid://shopify/Product/16648100544857, SKU LED-EYES-BLANC),
+  ajouté à la collection Rituel Éclat. Rend légitime le prix de référence du coffret (107,90 + 53,90 = 161,80 €),
+  affiché automatiquement seulement quand les 3 produits sont actifs.
+- Page produit du masque : modèle `product.masque-led` (templateSuffix attribué au produit).
+- Catalogue : 4 produits (masque, coffret, lunettes, gua sha) — décision du propriétaire.

@@ -1,40 +1,27 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
-{%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
-{%- assign gs = all_products['rouleau-de-jade-amp-gua-sha'] -%}
 {%- if m.url != blank -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if pk.url != blank -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if gs.url != blank -%}{%- assign gs_url = gs.url -%}{%- else -%}{%- assign gs_url = '/collections/rituel-eclat' -%}{%- endif -%}
 {%- if m.price -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
-{%- if pk.price -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
-{%- if gs.price -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
-
-<div class="section section--page-width" style="padding-top:16px;padding-bottom:8px">
+<div class="section section--page-width" style="padding-top:12px;padding-bottom:8px">
 <div class="rt"><section class="rt-wrap rt-hero"><div class="rt-hero__in">
 <div>
-<p class="rt-eyebrow">Rituel beauté d'hiver</p>
-<h1>Offrez à votre peau <em>l'éclat</em> qu'elle mérite cet hiver</h1>
-<p class="rt-lead">Le masque LED visage &amp; cou en silicone souple. 10 minutes de lumière douce le soir, chez vous, pour retrouver un teint plus lumineux et un vrai moment rien qu'à vous.</p>
+<p class="rt-eyebrow">Rituel beauté d'automne</p>
+<h1>Quand les jours raccourcissent, offrez à votre peau <em>l'éclat</em> qu'elle mérite</h1>
+<p class="rt-lead">Le masque LED visage &amp; cou en silicone souple. 10 minutes de lumière douce le soir, chez vous, pour un teint plus lumineux et un vrai moment rien qu'à vous.</p>
 <div class="rt-price"><b>{{ m_price }}</b><span>Visage + cou · Livraison suivie</span></div>
-<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Je découvre mon masque</a><a class="rt-btn rt-btn--s" href="{{ pk_url }}">Le coffret cadeau ✦</a></div>
+<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Je découvre mon masque</a><a class="rt-btn rt-btn--s" href="#rt-rituel">Composer mon rituel</a></div>
 <ul class="rt-checks"><li>Retours sous 14 jours</li><li>Paiement sécurisé</li><li>Livraison suivie</li></ul>
 </div>
 <div class="rt-vis">
-{%- if m.featured_image -%}<img src="{{ m.featured_image | image_url: width: 1100 }}" alt="{{ m.featured_image.alt | default: m.title | escape }}" width="1100" height="1100" loading="eager">
+{%- if m.featured_image -%}<img src="{{ m.featured_image | image_url: width: 1100 }}" alt="{{ m.featured_image.alt | default: m.title | escape }}" width="1100" height="1100" loading="eager" fetchpriority="high">
 {%- else -%}<div class="rt-halo"></div><div class="rt-ring r1"></div><div class="rt-ring r2"></div><div class="rt-ring r3"></div><svg class="rt-maskart" viewBox="0 0 200 240" fill="none" aria-hidden="true"><path d="M100 8c48 0 82 36 82 92 0 62-36 124-82 124S18 162 18 100C18 44 52 8 100 8z" fill="#fff" stroke="#E7B7BD" stroke-width="3"/><ellipse cx="68" cy="96" rx="20" ry="11" fill="#FBEFEC" stroke="#E7B7BD" stroke-width="2"/><ellipse cx="132" cy="96" rx="20" ry="11" fill="#FBEFEC" stroke="#E7B7BD" stroke-width="2"/><path d="M84 176c10 7 22 7 32 0" stroke="#E7B7BD" stroke-width="3" stroke-linecap="round"/><g fill="#E0707E" opacity=".8"><circle cx="60" cy="50" r="3.2"/><circle cx="80" cy="42" r="3.2"/><circle cx="100" cy="40" r="3.2"/><circle cx="120" cy="42" r="3.2"/><circle cx="140" cy="50" r="3.2"/><circle cx="48" cy="128" r="3.2"/><circle cx="62" cy="142" r="3.2"/><circle cx="138" cy="142" r="3.2"/><circle cx="152" cy="128" r="3.2"/><circle cx="70" cy="196" r="3.2"/><circle cx="100" cy="206" r="3.2"/><circle cx="130" cy="196" r="3.2"/><circle cx="100" cy="130" r="3.2"/><circle cx="100" cy="150" r="3.2"/></g></svg>{%- endif -%}
 <div class="rt-tag t1"><b>10 min</b>par séance</div>
 <div class="rt-tag t2"><b>Visage + cou</b>2 pièces incluses</div>
 </div>
-</div></section></div>
+</div></section>
+<div class="rt-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn rt-btn--p" href="{{ m_url }}">Je le découvre</a></div>
+</div>
 </div>
 {% schema %}
-{
-  "name": "RT · Bannière masque LED",
-  "settings": [],
-  "presets": [
-    {
-      "name": "RT · Bannière masque LED"
-    }
-  ]
-}
+{"name": "RT · Bannière masque LED", "settings": [], "presets": [{"name": "RT · Bannière masque LED"}]}
 {% endschema %}

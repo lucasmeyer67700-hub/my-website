@@ -1,7 +1,8 @@
 # Charte de la boutique (validée le 27/09/2026)
 
 ## Cible
-Femmes de 25 à 55 ans qui prennent soin d'elles à la maison. Période : hiver, cadeaux de Noël.
+Femmes de 20 à 60 ans qui prennent soin d'elles à la maison. Période : AUTOMNE (pas de thème Noël pour l'instant).
+Trafic : Google Ads, majoritairement sur téléphone → toujours penser mobile d'abord.
 Ton : doux, rassurant, féminin, vouvoiement. Phrases courtes.
 
 ## Couleurs (ne pas en ajouter d'autres)
@@ -22,7 +23,9 @@ Ton : doux, rassurant, féminin, vouvoiement. Phrases courtes.
 ## Structure de la page d'accueil
 Sections « RT · … » dans `theme/sections/`, style commun `theme/rituel.css` (asset `rituel.css` du thème).
 Ordre : bannière masque LED → réassurance → pourquoi en hiver → masque en détail → rituel 3 étapes →
-pensé pour vous → coffret Noël → nos produits → FAQ → appel final.
+produits complémentaires (lunettes | coffret au centre | gua sha) → rituel 3 étapes → pensé pour vous → coffret → FAQ → appel final.
+Page produit du masque : modèle `product.masque-led` (achat + points clés, réassurance, points forts, 3 étapes, caractéristiques, compléments, FAQ).
+Sur mobile : barre d'achat fixe en bas, compléments en carrousel à faire glisser.
 Le masque LED reste toujours le produit n°1, en haut.
 
 ## Règles de contenu (non négociables)
@@ -31,3 +34,5 @@ Le masque LED reste toujours le produit n°1, en haut.
 - Pas de faux avis, pas de fausses notes, pas de « best-seller » sans ventes, pas de prix barré fictif.
 - Pas de photos avant/après.
 - Ne pas promettre ce qui n'est pas confirmé (livraison offerte, notice FR, stock France) tant que ce n'est pas vérifié.
+
+- Noms de sections du thème : 25 caractères maximum.
