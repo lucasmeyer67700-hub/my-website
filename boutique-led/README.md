@@ -90,3 +90,5 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Correctif v3 : l'apparition au défilement en JavaScript laissait les blocs invisibles dans certains navigateurs
   (sections blanches). Remplacée par une animation 100 % CSS (`animation-timeline: view()`) : si le navigateur ne la
   gère pas, les blocs restent simplement visibles. `rituel.js` est désormais vide. Testé en local (Chromium, ordi + mobile).
+- Compléments : les 3 cartes ont la même taille ; au survol la carte grandit (×1,05), l'image zoome, la bordure passe
+  en vieux rose et les 2 autres cartes s'estompent légèrement. Sur mobile, léger agrandissement au toucher.
