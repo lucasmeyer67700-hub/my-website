@@ -12,7 +12,7 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 | 3. Nom de marque + domaine | Pistes dans `nom-de-marque.md`, choix à faire |
 | 4. Fiche pack masque + lunettes | ✅ Créée en brouillon, 144,90 €, SKU `LED-PACK-MASK-EYES` (gid://shopify/Product/16647453475161) |
 | 5. Pages légales | Brouillons dans `pages/` avec des `[À COMPLÉTER]` |
-| 6. Thème + photos | À faire après réception des échantillons |
+| 6. Thème + photos | Thème « Rituel Éclat – Vert & Blanc » créé (copie de Horizon, NON publié) : palette blanc/vert sauge, page d'accueil en français, collection « Rituel Éclat ». Reste : photos, puis publication par toi |
 | 7. Merchant Center + Shopping | À faire (objectif : début octobre) |
 
 ## Catalogue actif prévu (3 produits max)
@@ -36,3 +36,12 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 4. **Rouleau de Jade et Gua Sha** : vérifier que le jade est réel (sinon écrire « pierre » ou « quartz ») et
    que la description ne contient aucune allégation (« drainant », « anti-âge »…).
 5. **Coût du gua sha au prix de 34 €** : la règle ×3 impose un coût d'achat ≤ 11,33 €.
+
+## Thème vert & blanc (27/09/2026)
+
+- Thème : « Rituel Éclat – Vert & Blanc » (gid://shopify/OnlineStoreTheme/207338176857), non publié.
+- Aperçu : https://sd031r-ei.myshopify.com/?preview_theme_id=207338176857
+- Couleurs : fond #ffffff, texte et boutons vert profond #1f3a2e, texte secondaire #4a6b5a,
+  bordures #d6e6da, bandeaux vert pâle #e8f2eb et #f3f8f4.
+- Page d'accueil : bandeau d'accroche → collection « Rituel Éclat » (3 produits) → bandeau réassurance.
+- Le thème actuel « Horizon » n'a pas été modifié.
