@@ -1,0 +1,37 @@
+{%- comment -%} Sélecteur de langue du pied de page VELEA (visible dès que 2 langues ou plus sont publiées) {%- endcomment -%}
+{%- if localization.available_languages.size > 1 -%}
+<div class="section section--page-width vl-lang-wrap">
+  {%- form 'localization', id: 'VeleaLangForm', class: 'vl-lang' -%}
+    <label for="VeleaLang" class="vl-lang__lbl"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg><span>Langue</span></label>
+    <span class="vl-lang__sel">
+      <select id="VeleaLang" name="language_code" onchange="this.form.submit()">
+        {%- for language in localization.available_languages -%}
+          {%- case language.iso_code -%}
+            {%- when 'fr' -%}{%- assign flag = '🇫🇷' -%}
+            {%- when 'en' -%}{%- assign flag = '🇬🇧' -%}
+            {%- when 'de' -%}{%- assign flag = '🇩🇪' -%}
+            {%- when 'es' -%}{%- assign flag = '🇪🇸' -%}
+            {%- when 'it' -%}{%- assign flag = '🇮🇹' -%}
+            {%- else -%}{%- assign flag = '' -%}
+          {%- endcase -%}
+          <option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ flag }} {{ language.endonym_name | capitalize }}</option>
+        {%- endfor -%}
+      </select>
+    </span>
+    <noscript><button type="submit" class="vl-lang__ok">OK</button></noscript>
+  {%- endform -%}
+</div>
+{%- endif -%}
+<style>
+  .vl-lang-wrap{display:flex;justify-content:center;padding-top:6px;padding-bottom:6px}
+  .vl-lang{display:inline-flex;align-items:center;gap:12px;color:#7A5E63;font-size:14px}
+  .vl-lang__lbl{display:inline-flex;align-items:center;gap:6px;color:#94702F;letter-spacing:.08em;text-transform:uppercase;font-size:12px;font-weight:600}
+  .vl-lang__sel{position:relative;display:inline-block}
+  .vl-lang__sel::after{content:"";position:absolute;right:16px;top:50%;width:7px;height:7px;border-right:1.5px solid #C47A86;border-bottom:1.5px solid #C47A86;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+  .vl-lang select{appearance:none;-webkit-appearance:none;background:#FFFBFA;color:#3D2B2F;border:1px solid #EFD6D6;border-radius:999px;padding:10px 40px 10px 18px;font:inherit;font-size:15px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+  .vl-lang select:hover,.vl-lang select:focus{border-color:#C47A86;box-shadow:0 0 0 3px rgba(196,122,134,.15);outline:none}
+  .vl-lang__ok{margin-left:8px;border:0;background:#C47A86;color:#fff;border-radius:999px;padding:8px 14px}
+</style>
+{% schema %}
+{"name": "VELEA · Langues", "tag": "div", "enabled_on": {"groups": ["footer"]}, "settings": [], "presets": [{"name": "VELEA · Langues"}]}
+{% endschema %}

@@ -164,3 +164,22 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Logo visage essayé puis refusé par le propriétaire (« pas pro »). Retour à la fleur, en version pro :
   5 pétales pointus à trait fin doré, intérieur rose poudré, cœur doré + « VELEA » en Cormorant Garamond 500
   très espacé. Au survol, la fleur tourne d'un pétale. Fichier `theme/snippets/velea-logo.liquid`, aperçu `velea-logo-apercu.png`.
+
+## v12 – langues (27/09/2026)
+
+- Thème brouillon « 💗 VELEA v12 – langues (à publier) » (gid://shopify/OnlineStoreTheme/207382282585), copie de v11 (publié).
+- Langues activées et publiées dans Shopify : français (principale), anglais, allemand, espagnol, italien
+  (adresses /en, /de, /es, /it).
+- Sélecteur de langue en bas de page : section `theme/sections/velea-langues.liquid` (« VELEA · Langues »,
+  drapeaux + nom de la langue, style pilule rose), placée entre le pied de page et la ligne du bas.
+- Traduction des textes des sections RT : un seul point de traduction dans `layout/theme.liquid`
+  (copie : `theme/layout/theme.liquid`). Hors français, le HTML de l'en-tête, de la page et du pied de page passe
+  dans `snippets/velea-i18n.liquid`, qui remplace chaque phrase française par sa traduction
+  (`snippets/velea-i18n-en|de|es|it.liquid`).
+- Les traductions se modifient dans `theme/i18n/traductions.py`, puis `python3 theme/i18n/generer.py`
+  régénère les 4 fichiers (à renvoyer sur le thème). 169 phrases, toutes vérifiées contre les pages.
+- ⚠️ Si on change un texte français d'une section, il faut aussi changer la ligne correspondante dans
+  `traductions.py`, sinon ce texte restera en français dans les autres langues.
+- Traduits aussi via Shopify : menus (en-tête + pied de page) et titres des 4 produits principaux.
+  Pas encore traduits : descriptions des produits, pages (À propos, FAQ…) et politiques.
+- Les textes Shopify (panier, paiement, boutons du thème) sont traduits automatiquement par Shopify/Horizon.

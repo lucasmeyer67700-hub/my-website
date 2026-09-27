@@ -1,0 +1,8 @@
+{%- comment -%} Aiguillage de traduction VELEA : renvoie le HTML traduit selon la langue choisie (français = inchangé) {%- endcomment -%}
+{%- case request.locale.iso_code -%}
+  {%- when 'en' -%}{%- render 'velea-i18n-en', html: html -%}
+  {%- when 'de' -%}{%- render 'velea-i18n-de', html: html -%}
+  {%- when 'es' -%}{%- render 'velea-i18n-es', html: html -%}
+  {%- when 'it' -%}{%- render 'velea-i18n-it', html: html -%}
+  {%- else -%}{{- html -}}
+{%- endcase -%}

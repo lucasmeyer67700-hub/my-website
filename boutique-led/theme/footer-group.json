@@ -270,10 +270,15 @@
         "padding-block-start": 20,
         "padding-block-end": 48
       }
+    },
+    "velea_langues": {
+      "type": "velea-langues",
+      "settings": {}
     }
   },
   "order": [
     "footer_m9NzUG",
+    "velea_langues",
     "footer_utilities_jLGE8U"
   ]
 }
