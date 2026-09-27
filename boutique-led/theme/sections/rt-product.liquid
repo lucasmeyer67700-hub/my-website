@@ -1,5 +1,4 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'rituel.js' | asset_url }}"></script>
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
 {%- assign gs = all_products['rouleau-de-jade-amp-gua-sha'] -%}
@@ -11,7 +10,7 @@
 {%- if gs.price -%}{%- assign gs_price = gs.price | money -%}{%- else -%}{%- assign gs_price = '34,00 €' -%}{%- endif -%}
 
 <div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
-<div class="rt rt-anim"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod">
+<div class="rt rt-anim" id="rt-masque"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod">
 <div class="rt-prod__img">
 {%- if m.images[1] -%}<img src="{{ m.images[1] | image_url: width: 1000 }}" alt="{{ m.images[1].alt | default: m.title | escape }}" loading="lazy" width="1000" height="1250">
 {%- elsif m.featured_image -%}<img src="{{ m.featured_image | image_url: width: 1000 }}" alt="{{ m.title | escape }}" loading="lazy" width="1000" height="1250">

@@ -13,7 +13,8 @@ Ton : doux, rassurant, féminin, vouvoiement. Phrases courtes.
 | Boutons, mots mis en avant | Vieux rose `#C47A86` (survol `#A95F6C`) |
 | Texte | Prune `#3D2B2F`, texte secondaire `#7A5E63` |
 | Bordures | `#EFD6D6` |
-| Bloc chic (coffret Noël) | Fond prune `#3D2B2F`, accents `#F3C9CB` |
+| Bloc chic (coffret) | Fond prune `#3D2B2F`, accents dorés `#D9BC85` |
+| **Touches dorées (premium, avec parcimonie)** | Dégradé or `#E6CF9E → #C9A461 → #A87F3E`, or `#B8914F`, texte or `#94702F` |
 
 ## Typographie et formes
 - Titres : Cormorant Garamond (serif), un mot clé en *italique vieux rose*.
@@ -36,3 +37,9 @@ Le masque LED reste toujours le produit n°1, en haut.
 - Ne pas promettre ce qui n'est pas confirmé (livraison offerte, notice FR, stock France) tant que ce n'est pas vérifié.
 
 - Noms de sections du thème : 25 caractères maximum.
+
+## Où mettre le doré (et nulle part ailleurs)
+Petit trait devant les accroches, cercles fins autour du visuel de la bannière, étoiles ✦ du bandeau défilant,
+numéros des 3 étapes, badges « Le plus complet » et « Routine complète », détails du bloc coffret,
+« + » de la FAQ, phrase en italique des sections, bouton « Voir le masque en détail ».
+Les boutons d'achat restent en vieux rose.

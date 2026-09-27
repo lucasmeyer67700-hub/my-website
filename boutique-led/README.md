@@ -92,3 +92,10 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   gère pas, les blocs restent simplement visibles. `rituel.js` est désormais vide. Testé en local (Chromium, ordi + mobile).
 - Compléments : les 3 cartes ont la même taille ; au survol la carte grandit (×1,05), l'image zoome, la bordure passe
   en vieux rose et les 2 autres cartes s'estompent légèrement. Sur mobile, léger agrandissement au toucher.
+
+## v4 – touches dorées (27/09/2026)
+
+- Thème brouillon « 💗 ROSE v4 – touches dorées (à publier) » (gid://shopify/OnlineStoreTheme/207367078233).
+- Doré ajouté avec parcimonie (voir STYLE.md). Bannière : les 2 pastilles « 10 min » et « 202 g » supprimées ;
+  sous le visuel, bouton « Voir le masque en détail → » (flèche dorée animée) qui fait défiler en douceur
+  jusqu'à la section « Le masque en détail » (ancre `#rt-masque`). Testé en local (clic → section atteinte).
