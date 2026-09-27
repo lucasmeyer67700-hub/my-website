@@ -139,3 +139,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - À faire par le propriétaire : renommer la boutique (Paramètres → Général → Nom de la boutique → VELEA),
   vérifier le nom sur l'INPI, choisir un domaine (velea.com pris ; velea.org libre ; vérifier velea.fr),
   puis adresse contact@ + domaine et Instagram @velea.
+
+## v9 – contact + réseaux (27/09/2026)
+
+- Thème brouillon « 💗 VELEA v9 – contact + réseaux (à publier) » (gid://shopify/OnlineStoreTheme/207371993433), copie de v8 (publié).
+- Pied de page (`theme/footer-group.json`) : nouveau bloc « Nous contacter » avec l'e-mail cliquable
+  **velea.officiel@gmail.com** ; textes de l'inscription e-mail traduits en français (« Restez informée », « S'inscrire »).
+- Réseaux sociaux : YouTube et X retirés, Pinterest ajouté (Facebook, Instagram, TikTok gardés).
+  Les liens sont encore génériques (sans nom de compte) : Horizon ne montre alors les icônes que dans l'éditeur,
+  pas aux clientes. Coller les vrais liens de profil dans l'éditeur (Pied de page → Réseaux sociaux) pour les afficher.
+- À faire par le propriétaire : Paramètres → Coordonnées de la boutique → e-mail client = velea.officiel@gmail.com
+  (adresse de réponse des e-mails de commande).
