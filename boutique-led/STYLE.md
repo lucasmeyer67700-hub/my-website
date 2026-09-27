@@ -22,7 +22,7 @@ Ton : doux, rassurant, féminin, vouvoiement. Phrases courtes.
 
 ## Structure de la page d'accueil
 Sections « RT · … » dans `theme/sections/`, style commun `theme/rituel.css` (asset `rituel.css` du thème).
-Ordre : bannière masque LED → réassurance → pourquoi en hiver → masque en détail → rituel 3 étapes →
+Ordre : bannière masque LED → réassurance → pourquoi en automne → masque en détail →
 produits complémentaires (lunettes | coffret au centre | gua sha) → rituel 3 étapes → pensé pour vous → coffret → FAQ → appel final.
 Page produit du masque : modèle `product.masque-led` (achat + points clés, réassurance, points forts, 3 étapes, caractéristiques, compléments, FAQ).
 Sur mobile : barre d'achat fixe en bas, compléments en carrousel à faire glisser.
