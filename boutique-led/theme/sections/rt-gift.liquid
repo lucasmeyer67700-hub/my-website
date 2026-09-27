@@ -1,4 +1,5 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'rituel.js' | asset_url }}"></script>
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- if m.url != blank -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
 {%- if m.price -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
@@ -9,7 +10,7 @@
 {%- if ey.url != blank -%}{%- assign ey_url = ey.url -%}{%- else -%}{%- assign ey_url = '/collections/rituel-eclat' -%}{%- endif -%}
 {%- if ey.price -%}{%- assign ey_price = ey.price | money -%}{%- else -%}{%- assign ey_price = '53,90 €' -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
-<div class="rt"><section class="rt-wrap rt-gift">
+<div class="rt rt-anim"><section class="rt-wrap rt-gift">
 <div>
 <p class="rt-eyebrow">Le coffret</p>
 <h2>Le coffret <em>Rituel Éclat</em> : visage, cou et regard</h2>

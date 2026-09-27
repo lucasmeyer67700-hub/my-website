@@ -16,8 +16,8 @@
 .rt-center .rt-lead{margin:14px auto 0}
 .rt-btns{display:flex;flex-wrap:wrap;gap:12px}
 .rt-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 30px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none!important;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
-.rt-btn--p{background:var(--rose);color:#fff!important;box-shadow:0 12px 26px -12px rgba(169,95,108,.7)}
-.rt-btn--p:hover{background:var(--rose-d);transform:translateY(-1px)}
+.rt-btn--p{background-color:var(--rose);color:#fff!important;box-shadow:0 12px 26px -12px rgba(169,95,108,.7)}
+.rt-btn--p:hover{background-color:var(--rose-d);transform:translateY(-1px)}
 .rt-btn--s{background:#fff;color:var(--ink)!important;border:1px solid var(--line)}
 .rt-btn--s:hover{border-color:var(--rose)}
 .rt-small{font-size:13px;color:var(--muted)}
@@ -123,7 +123,8 @@
 .rt-pc--hl{border:2px solid var(--rose);box-shadow:0 26px 50px -30px rgba(169,95,108,.6)}
 .rt-pc--hl .rt-pc__img{aspect-ratio:1/1.08}
 .rt-pc__cta{display:inline-flex;margin-top:14px;font-size:14px;font-weight:600;color:var(--rose-d)}
-.rt-pc__cta:after{content:"→";margin-left:6px}
+.rt-pc__cta:after{content:"→";margin-left:6px;transition:transform .2s ease}
+.rt-pc:hover .rt-pc__cta:after{transform:translateX(4px)}
 .rt-pc__old{font-weight:400;color:var(--muted);font-size:14px;margin-left:8px;text-decoration:line-through}
 /* SPECS */
 .rt-specs{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:32px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px 28px}
@@ -186,3 +187,46 @@
  .rt-sticky .rt-btn{flex:0 0 auto;min-height:46px;padding:12px 20px;font-size:14px}
  body:has(.rt-sticky){padding-bottom:76px}
 }
+/* ===== ANIMATIONS ===== */
+/* apparition au défilement */
+.rt-js .rt-anim :is(.rt-card,.rt-pc,.rt-center,.rt-specs,.rt-faq details,.rt-note,.rt-prod>div,.rt-gift>div,.rt-trust>div){opacity:0;transform:translateY(26px);transition:opacity .7s ease var(--rt-d,0s),transform .8s cubic-bezier(.2,.7,.2,1) var(--rt-d,0s),box-shadow .2s ease}
+.rt-js .rt-anim .is-in{opacity:1;transform:none}
+.rt-js .rt-anim .rt-pc.is-in:hover{transform:translateY(-4px);transition-delay:0s}
+/* boutons : reflet lumineux + relief */
+@keyframes rt-shine{0%{background-position:160% 0}55%,100%{background-position:-60% 0}}
+@keyframes rt-pulse{0%{box-shadow:0 0 0 0 rgba(196,122,134,.5)}70%{box-shadow:0 0 0 14px rgba(196,122,134,0)}100%{box-shadow:0 0 0 0 rgba(196,122,134,0)}}
+.rt-btn--p,.add-to-cart-button,button[name="add"]{background-image:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.38) 50%,transparent 65%)!important;background-size:250% 100%!important;background-repeat:no-repeat!important;animation:rt-shine 3.4s ease-in-out infinite}
+.rt-btn--p:hover{transform:translateY(-2px) scale(1.02)}
+.rt-btn:active,.add-to-cart-button:active,button[name="add"]:active{transform:scale(.97)}
+.rt-btn--s{transition:transform .15s ease,border-color .2s ease,background .2s ease}
+.rt-btn--s:hover{background:var(--blush2);transform:translateY(-2px)}
+.rt-sticky .rt-btn--p{animation:rt-shine 3.4s ease-in-out infinite,rt-pulse 2.4s ease-out infinite}
+/* visuel qui flotte doucement */
+@keyframes rt-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.rt-maskart,.rt-vis img{animation:rt-float 6.5s ease-in-out infinite}
+@keyframes rt-pop{from{opacity:0;transform:scale(.85) translateY(8px)}to{opacity:1;transform:none}}
+.rt-tag{animation:rt-pop .6s cubic-bezier(.2,.8,.2,1.2) both}
+.rt-tag.t1{animation-delay:.5s}.rt-tag.t2{animation-delay:.8s}
+@keyframes rt-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.rt-hero__in>div:first-child>*{animation:rt-in .8s cubic-bezier(.2,.7,.2,1) both}
+.rt-hero__in>div:first-child>*:nth-child(2){animation-delay:.08s}
+.rt-hero__in>div:first-child>*:nth-child(3){animation-delay:.16s}
+.rt-hero__in>div:first-child>*:nth-child(4){animation-delay:.24s}
+.rt-hero__in>div:first-child>*:nth-child(5){animation-delay:.32s}
+.rt-hero__in>div:first-child>*:nth-child(6){animation-delay:.4s}
+/* barre mobile qui glisse depuis le bas */
+@keyframes rt-up{from{transform:translateY(110%)}to{transform:none}}
+.rt-sticky{animation:rt-up .5s cubic-bezier(.2,.7,.2,1) .8s both}
+/* icônes au survol */
+.rt-card .rt-ico{transition:transform .3s ease,background .3s ease}
+.rt-card:hover .rt-ico{transform:rotate(-8deg) scale(1.08);background:#F3C9CB}
+/* bandeau défilant (livraison, garanties…) */
+.rt-marquee{overflow:hidden;background:var(--ink);color:#fff;border-radius:999px;padding:14px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.rt-marquee__track{display:flex;width:max-content;animation:rt-scroll 38s linear infinite}
+.rt-marquee:hover .rt-marquee__track{animation-play-state:paused}
+.rt-marquee__g{display:flex;gap:44px;padding-right:44px;flex:none}
+.rt-marquee__g span{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:600;white-space:nowrap;letter-spacing:.01em}
+.rt-marquee__g span:before{content:"\2726";color:#F3C9CB}
+@keyframes rt-scroll{to{transform:translateX(-50%)}}
+@media (max-width:989px){.rt-marquee{border-radius:14px;padding:11px 0}.rt-marquee__g{gap:30px;padding-right:30px}.rt-marquee__g span{font-size:13px}.rt-marquee__track{animation-duration:28s}}
+@media (prefers-reduced-motion:reduce){.rt-marquee__track,.rt-maskart,.rt-vis img,.rt-btn--p,.add-to-cart-button,button[name="add"],.rt-sticky,.rt-tag,.rt-hero__in>div:first-child>*{animation:none!important}}

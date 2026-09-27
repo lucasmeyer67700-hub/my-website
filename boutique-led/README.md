@@ -76,3 +76,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   affiché automatiquement seulement quand les 3 produits sont actifs.
 - Page produit du masque : modèle `product.masque-led` (templateSuffix attribué au produit).
 - Catalogue : 4 produits (masque, coffret, lunettes, gua sha) — décision du propriétaire.
+
+## v3 – animations (27/09/2026)
+
+- Thème brouillon « 💗 ROSE v3 – animations (à publier) » (gid://shopify/OnlineStoreTheme/207357444441).
+- Animations : bandeau défilant (livraison, retours, garanties…), reflet lumineux sur les boutons d'achat
+  (y compris « Ajouter au panier » du thème), barre mobile qui glisse + pulsation, apparition des blocs au défilement
+  (`theme/rituel.js`), visuel qui flotte, étiquettes qui apparaissent. Tout est coupé si l'appareil demande « moins d'animations ».
+- Caractéristiques réelles du masque (fiche fournisseur) : 202 g, 0,35 cm, silicone qualité alimentaire, 103 × 3 LED,
+  expédié depuis la France. Allégations du fournisseur (« anti-âge », « rajeunissement », « réparation ») NON reprises.
+- Description produit Shopify mise à jour (utilisée par Google Shopping).
+- Le fournisseur propose aussi un coloris NOIR : variante possible plus tard.
