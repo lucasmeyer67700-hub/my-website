@@ -202,3 +202,17 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   « femme portant le masque » (Fichiers Shopify : velea-banniere-femme.jpg, copie `photos-banniere-femme.jpg`).
   Si le réglage est vidé, la bannière reprend la photo principale du masque. Rien d'autre n'a changé.
 - Le masque est maintenant ACTIF (fait par le propriétaire) ; il doit aussi être publié sur le canal « Boutique en ligne ».
+
+## Assistance IA (chat) – 28/09/2026
+
+- Solution retenue : Shopify Inbox (gratuit), déjà prévu par le thème Horizon (snippet `chat-drawer` : bulle en bas à droite
+  dès que l'appli est installée). Son « agent Inbox » (IA) répond à partir des produits, politiques, pages et base de connaissances.
+- Claude ne peut pas installer d'application : installation + réglages à faire par le propriétaire.
+- Pour que l'IA ne donne pas de fausses infos, pages corrigées :
+  - « Livraison » : l'ancien texte (Colissimo 4,90 €, 2 à 4 jours, offerte dès 60 €, Europe) n'était pas confirmé.
+    Remplacé par : expédié depuis la France, sous 7 jours ouvrés, frais affichés au paiement, suivi, plusieurs colis possibles.
+  - « FAQ » : réécrite (questions sur le masque ; plus de liste de moyens de paiement, de « livraison offerte » ni de « carte cadeau »).
+- Politique de remboursement : contient encore des [crochets], mais pas d'accès API (write_legal_policies).
+  Texte prêt à coller : `politique-retours-a-coller.txt`.
+- Restent aussi à compléter par le propriétaire : conditions de vente ([nom de domaine], [médiateur]) et mentions légales.
+  La politique de confidentialité affiche l'e-mail perso et l'adresse perso, à remplacer par velea.officiel@gmail.com.
