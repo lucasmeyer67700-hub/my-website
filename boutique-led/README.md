@@ -216,3 +216,16 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   Texte prêt à coller : `politique-retours-a-coller.txt`.
 - Restent aussi à compléter par le propriétaire : conditions de vente ([nom de domaine], [médiateur]) et mentions légales.
   La politique de confidentialité affiche l'e-mail perso et l'adresse perso, à remplacer par velea.officiel@gmail.com.
+
+## v14 – chat fleuri + recherche beauté (28/09/2026)
+
+- Thème brouillon « 💗 VELEA v14 – chat fleuri (à publier) » (gid://shopify/OnlineStoreTheme/207459615065), copie de v13 (publié).
+- Chat Shopify Inbox (app embed dans config/settings_data.json) : bouton vieux rose #a95f6c, icône bulle,
+  libellé « no_text » (valeur supposée pour « sans texte » : si « Chat » reste affiché, choisir le libellé vide dans
+  l'éditeur → Intégrations d'applications → Chat → Déclencheur/Libellé), produit mis en avant = masque LED, message d'accueil 🌸.
+- Petite fleur dorée animée posée sur la bulle : `theme/snippets/velea-chat-fleur.liquid`, appelée dans `layout/theme.liquid`
+  juste après `chat-drawer`. Position réglable (--vl-fleur-right / --vl-fleur-bottom, 58px / 60px par défaut) : à caler
+  sur une capture réelle. Cachée quand le chat est ouvert.
+- Recherche : seuls les produits actifs apparaissent (les anciens produits d'exemple sont archivés). Mots-clés beauté
+  ajoutés au masque (beauté, soin visage, skincare, luminothérapie, lumière rouge, éclat, teint, spa…). Chaque nouveau
+  produit devra recevoir ses mots-clés.

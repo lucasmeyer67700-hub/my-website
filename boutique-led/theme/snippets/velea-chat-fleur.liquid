@@ -1,0 +1,10 @@
+{%- comment -%} Petite fleur VELEA posée sur la bulle du chat (Inbox), en bas à droite. Cachée quand le chat est ouvert.
+  Position réglable : --vl-fleur-right / --vl-fleur-bottom. {%- endcomment -%}
+<span class="vl-chat-fleur" aria-hidden="true"><svg viewBox="0 0 48 48"><g transform="translate(24 25.5)"><g fill="#FBEFEC" stroke="#C9A461" stroke-width="2" stroke-linejoin="round"><path d="M0 -2.5C4.6 -7 5.2 -14.5 0 -20.5C-5.2 -14.5 -4.6 -7 0 -2.5Z"/><path d="M0 -2.5C4.6 -7 5.2 -14.5 0 -20.5C-5.2 -14.5 -4.6 -7 0 -2.5Z" transform="rotate(72)"/><path d="M0 -2.5C4.6 -7 5.2 -14.5 0 -20.5C-5.2 -14.5 -4.6 -7 0 -2.5Z" transform="rotate(144)"/><path d="M0 -2.5C4.6 -7 5.2 -14.5 0 -20.5C-5.2 -14.5 -4.6 -7 0 -2.5Z" transform="rotate(216)"/><path d="M0 -2.5C4.6 -7 5.2 -14.5 0 -20.5C-5.2 -14.5 -4.6 -7 0 -2.5Z" transform="rotate(288)"/></g><circle r="3" fill="#C9A461"/></g></svg></span>
+<style>
+  .vl-chat-fleur{position:fixed;right:var(--vl-fleur-right,58px);bottom:var(--vl-fleur-bottom,60px);width:26px;height:26px;z-index:2147483647;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(61,43,47,.25));animation:vlFleur 6s ease-in-out infinite}
+  .vl-chat-fleur svg{width:100%;height:100%;display:block}
+  body:has(shopify-chat[open]) .vl-chat-fleur,body:has(.theme-drawer__dialog.chat-drawer[open]) .vl-chat-fleur{display:none}
+  @keyframes vlFleur{0%,100%{transform:rotate(0)}50%{transform:rotate(18deg)}}
+  @media (prefers-reduced-motion:reduce){.vl-chat-fleur{animation:none}}
+</style>
