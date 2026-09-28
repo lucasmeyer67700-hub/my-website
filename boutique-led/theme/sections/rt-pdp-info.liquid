@@ -1,0 +1,106 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Page de vente générique VELEA (lunettes, stylo haute fréquence, coffret…).
+  Tout se remplit dans l'éditeur : blocs « Point fort », « Étape », « Caractéristique » + précautions.
+{%- endcomment -%}
+{%- assign bens = section.blocks | where: 'type', 'ben' -%}
+{%- assign steps = section.blocks | where: 'type', 'step' -%}
+{%- assign specs = section.blocks | where: 'type', 'spec' -%}
+
+{%- if bens.size > 0 -%}
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt rt-anim"><section class="rt-wrap rt-winter">
+<div class="rt-center"><p class="rt-eyebrow">{{ section.settings.ben_eyebrow }}</p><h2>{{ section.settings.ben_title }}</h2>{%- if section.settings.ben_lead != blank -%}<p class="rt-lead">{{ section.settings.ben_lead }}</p>{%- endif -%}</div>
+<div class="rt-ben vl-ben2">
+{%- for b in bens -%}
+<div class="rt-card" {{ b.shopify_attributes }}><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+{%- case b.settings.icon -%}
+{%- when 'eye' -%}<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/>
+{%- when 'wave' -%}<path d="M3 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>
+{%- when 'light' -%}<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+{%- when 'hands' -%}<path d="M7 11V6a1.5 1.5 0 0 1 3 0v4M10 10V4.5a1.5 1.5 0 0 1 3 0V10M13 10V5.5a1.5 1.5 0 0 1 3 0V12M16 12V8.5a1.5 1.5 0 0 1 3 0V14c0 4-3 7-7 7s-6-2-7.5-4.5L3 13.5a1.5 1.5 0 0 1 2.5-1.5L7 14"/>
+{%- when 'battery' -%}<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M10 2h4M11 9l-2 4h4l-2 4"/>
+{%- when 'clock' -%}<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+{%- when 'wand' -%}<path d="M4 20L15 9M15 9l2-2 3 3-2 2M13 5l1-2M19 11l2-1M17 3l.5 2M21 7l-2 .5"/>
+{%- when 'drop' -%}<path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z"/>
+{%- when 'gift' -%}<rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1 0 1.5 3 1 6 1zM12 9c2-4 6-4 6-1 0 1.5-3 1-6 1z"/>
+{%- when 'heart' -%}<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
+{%- else -%}<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>
+{%- endcase -%}
+</svg></span><h3>{{ b.settings.title }}</h3><p>{{ b.settings.text }}</p></div>
+{%- endfor -%}
+</div>
+</section></div>
+</div>
+{%- endif -%}
+
+{%- if steps.size > 0 -%}
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt rt-anim"><section class="rt-wrap rt-steps">
+<div class="rt-center"><p class="rt-eyebrow">{{ section.settings.steps_eyebrow }}</p><h2>{{ section.settings.steps_title }}</h2></div>
+<div class="rt-grid rt-3" style="margin-top:56px">
+{%- for s in steps -%}<div class="rt-card rt-step" {{ s.shopify_attributes }}><h3>{{ s.settings.title }}</h3><p>{{ s.settings.text }}</p></div>{%- endfor -%}
+</div>
+{%- if section.settings.steps_note != blank -%}<p class="rt-note" style="font-size:20px">{{ section.settings.steps_note }}</p>{%- endif -%}
+</section></div>
+</div>
+{%- endif -%}
+
+{%- if specs.size > 0 or section.settings.precautions != blank -%}
+<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="rt rt-anim"><section class="rt-wrap" style="padding-left:0;padding-right:0">
+{%- if specs.size > 0 -%}
+<div class="rt-center"><p class="rt-eyebrow">{{ section.settings.specs_eyebrow }}</p><h2>{{ section.settings.specs_title }}</h2></div>
+<div class="rt-specs">{%- for c in specs -%}<div {{ c.shopify_attributes }}><span>{{ c.settings.label }}</span><b>{{ c.settings.value }}</b></div>{%- endfor -%}</div>
+{%- endif -%}
+{%- if section.settings.precautions != blank -%}
+<div class="rt-box vl-precautions" style="margin:22px auto 0;max-width:860px"><b>Précautions d'emploi</b>{{ section.settings.precautions }}</div>
+{%- endif -%}
+</section></div>
+</div>
+{%- endif -%}
+<style>
+  .vl-precautions p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+  .vl-precautions b{color:#3D2B2F}
+  @media (max-width:749px){.vl-ben2{grid-template-columns:1fr 1fr!important;gap:10px!important}.vl-ben2 .rt-card{padding:16px 12px}.vl-ben2 .rt-card h3{font-size:17px!important;line-height:1.2}.vl-ben2 .rt-card p{font-size:13px!important;line-height:1.45}.vl-ben2 .rt-ico{width:38px;height:38px}}
+</style>
+
+{% schema %}
+{
+  "name": "RT · Page produit",
+  "settings": [
+    {"type": "header", "content": "Points forts"},
+    {"type": "text", "id": "ben_eyebrow", "label": "Accroche", "default": "Les points forts"},
+    {"type": "inline_richtext", "id": "ben_title", "label": "Titre", "default": "Pourquoi vous allez <em>l'adorer</em>"},
+    {"type": "text", "id": "ben_lead", "label": "Sous-titre"},
+    {"type": "header", "content": "Étapes"},
+    {"type": "text", "id": "steps_eyebrow", "label": "Accroche", "default": "Simple comme bonsoir"},
+    {"type": "inline_richtext", "id": "steps_title", "label": "Titre", "default": "Votre rituel <em>en 3 étapes</em>"},
+    {"type": "text", "id": "steps_note", "label": "Phrase sous les étapes"},
+    {"type": "header", "content": "Caractéristiques"},
+    {"type": "text", "id": "specs_eyebrow", "label": "Accroche", "default": "En détail"},
+    {"type": "inline_richtext", "id": "specs_title", "label": "Titre", "default": "Caractéristiques &amp; <em>contenu</em>"},
+    {"type": "richtext", "id": "precautions", "label": "Précautions d'emploi"}
+  ],
+  "blocks": [
+    {"type": "ben", "name": "Point fort", "settings": [
+      {"type": "select", "id": "icon", "label": "Icône", "default": "sparkle", "options": [
+        {"value": "sparkle", "label": "Éclat"}, {"value": "eye", "label": "Regard"}, {"value": "wave", "label": "Massage"},
+        {"value": "light", "label": "Lumière"}, {"value": "hands", "label": "Mains libres"}, {"value": "battery", "label": "Batterie"},
+        {"value": "clock", "label": "Minuteur"}, {"value": "wand", "label": "Stylo"}, {"value": "drop", "label": "Goutte"},
+        {"value": "gift", "label": "Cadeau"}, {"value": "heart", "label": "Cœur"}]},
+      {"type": "text", "id": "title", "label": "Titre"},
+      {"type": "textarea", "id": "text", "label": "Texte"}
+    ]},
+    {"type": "step", "name": "Étape", "settings": [
+      {"type": "text", "id": "title", "label": "Titre"},
+      {"type": "textarea", "id": "text", "label": "Texte"}
+    ]},
+    {"type": "spec", "name": "Caractéristique", "settings": [
+      {"type": "text", "id": "label", "label": "Nom"},
+      {"type": "text", "id": "value", "label": "Valeur"}
+    ]}
+  ],
+  "presets": [{"name": "RT · Page produit"}]
+}
+{% endschema %}

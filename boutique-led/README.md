@@ -229,3 +229,21 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Recherche : seuls les produits actifs apparaissent (les anciens produits d'exemple sont archivés). Mots-clés beauté
   ajoutés au masque (beauté, soin visage, skincare, luminothérapie, lumière rouge, éclat, teint, spa…). Chaque nouveau
   produit devra recevoir ses mots-clés.
+
+## v15 – pages produits (28/09/2026)
+
+- Thème brouillon « 💗 VELEA v15 – pages produits (à publier) » (gid://shopify/OnlineStoreTheme/207467086169), copie de v14 (publié).
+- Nouvelle section générique `theme/sections/rt-pdp-info.liquid` (« RT · Page produit ») : points forts (blocs, icônes au choix),
+  3 étapes, caractéristiques, précautions. Sur mobile, points forts sur 2 colonnes. Tout est modifiable dans l'éditeur.
+- Nouveaux modèles de page produit (générés par `theme/modeles/generer.py` à partir de product.masque-led.json) :
+  `product.lunettes`, `product.haute-frequence`, `product.coffret` → bloc achat + bandeau + RT · Page produit + compléments + réassurance.
+- Nouveau produit « Stylo Visage Haute Fréquence – 4 Embouts en Verre » (gid://shopify/Product/16650549068121,
+  handle stylo-visage-haute-frequence), 49,90 € (coût 24,39 €), variante « Prise : Européenne », BROUILLON (en attente des photos),
+  collection Rituel Éclat, modèle haute-frequence. Aucune allégation médicale ; précautions complètes (dont alcool, bijoux, yeux).
+  ⚠️ Fournisseur AliExpress : commander la version prise EU ; la notice fournie est en anglais → prévoir une notice FR.
+- Lunettes : le vrai produit est un masseur oculaire micro-courants (EMS) + lumière rouge (4 modes, 3 intensités, USB-C,
+  ~90 min, minuteur 10 min). Description réécrite en conséquence (sans « cernes/rides »), modèle lunettes.
+- Coffret : description réécrite (lunettes = micro-massage + lumière rouge ; « idée cadeau de Noël » retirée), modèle coffret.
+- Compléments (rt-shop) : gua sha retiré, remplacé à droite par le stylo haute fréquence ; images en srcset (net sur mobile).
+  Le gua sha reste en brouillon.
+- À faire : traductions EN/DE/ES/IT des nouveaux textes (cartes compléments + pages produits) ; photos des 3 produits.
