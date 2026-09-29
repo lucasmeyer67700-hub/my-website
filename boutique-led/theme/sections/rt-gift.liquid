@@ -10,21 +10,23 @@
 {%- assign hf = all_products['stylo-visage-haute-frequence'] -%}
 {%- assign hf_ok = false -%}{%- if hf.handle == 'stylo-visage-haute-frequence' -%}{%- assign hf_ok = true -%}{%- endif -%}
 {%- comment -%} Économie réelle maximale (masque + complément achetés séparément − variante du coffret). {%- endcomment -%}
-{%- assign sep = 0 -%}
+{%- assign sep = 0 -%}{%- assign ref = 0 -%}{%- assign vmin = 999999999 -%}
 {%- if pk_ok and m_ok -%}{%- for v in pk.variants -%}
 {%- assign sv = 0 -%}
-{%- if ey_ok and v.title contains 'Lunettes' -%}{%- assign sv = m.price | plus: ey.price | minus: v.price -%}{%- endif -%}
-{%- if hf_ok and v.title contains 'Stylo' -%}{%- assign sv = m.price | plus: hf.price | minus: v.price -%}{%- endif -%}
+{%- assign st = 0 -%}
+{%- if ey_ok and v.title contains 'Lunettes' -%}{%- assign st = m.price | plus: ey.price -%}{%- endif -%}
+{%- if hf_ok and v.title contains 'Stylo' -%}{%- assign st = m.price | plus: hf.price -%}{%- endif -%}
+{%- if st > 0 -%}{%- assign sv = st | minus: v.price -%}{%- if v.price < vmin -%}{%- assign vmin = v.price -%}{%- assign ref = st -%}{%- endif -%}{%- endif -%}
 {%- if sv > sep -%}{%- assign sep = sv -%}{%- endif -%}
 {%- endfor -%}{%- endif -%}
-<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt rt-anim"><section class="rt-wrap rt-gift">
 <div>
 <p class="rt-eyebrow">Le coffret</p>
 <h2>Le coffret <em>Rituel Éclat</em> : composez votre duo</h2>
 <p class="rt-lead">Le masque LED visage &amp; cou, plus le complément de votre choix. Moins cher qu'achetés séparément. À s'offrir… ou à offrir.</p>
 <ul><li>Masque LED visage &amp; cou en silicone souple, dans tous les coffrets</li><li>Au choix : les lunettes regard, micro-massage doux + lumière rouge</li><li>Ou le stylo visage haute fréquence, 4 embouts en verre</li></ul>
-<div class="rt-price"><b>dès {{ pk_price }}</b><span>{%- if sep > 0 -%}Jusqu'à {{ sep | money }} d'économie par rapport à l'achat séparé{%- else -%}Deux choix de coffret{%- endif -%}</span></div>
+<div class="rt-price"><b>dès {{ pk_price }}{%- if ref > vmin -%} <s style="font-size:.6em;font-weight:500;color:#E8D9D5;opacity:.8">{{ ref | money }}</s>{%- endif -%}</b><span>{%- if sep > 0 -%}Prix barré = masque + complément achetés séparément · jusqu'à {{ sep | money }} d'économie{%- else -%}Deux choix de coffret{%- endif -%}</span></div>
 <div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ pk_url }}">Je compose mon coffret</a></div>
 <p class="rt-small">Le coffret peut arriver en 2 colis, chacun avec son numéro de suivi.</p>
 </div>

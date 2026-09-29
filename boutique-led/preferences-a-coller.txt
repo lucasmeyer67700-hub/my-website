@@ -1,0 +1,12 @@
+À COLLER DANS SHOPIFY (je n'ai pas accès à ces réglages)
+
+1) Paramètres → Détails de la boutique → Nom de la boutique :
+VELEA
+
+2) Boutique en ligne → Préférences → Titre de la page d'accueil (70 caractères max) :
+VELEA · Masque LED visage & cou – votre rituel éclat à la maison
+
+3) Boutique en ligne → Préférences → Méta-description (160 caractères max) :
+Masque LED visage & cou en silicone souple, sans fil. 10 minutes le soir pour un vrai moment rien qu'à vous. Livraison suivie, satisfaite ou remboursée 30 jours.
+
+4) Nom de domaine : Paramètres → Domaines → Acheter un domaine (ex. velea.fr ou velea-beaute.fr), puis « Définir comme domaine principal ».

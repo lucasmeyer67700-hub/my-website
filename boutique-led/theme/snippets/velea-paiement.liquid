@@ -1,0 +1,15 @@
+{%- comment -%} Logos des moyens de paiement réellement activés dans la boutique (Paramètres → Paiements). {%- endcomment -%}
+<div class="vl-pay">
+  <p class="vl-pay__t"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Paiement 100 % sécurisé</p>
+  {%- if shop.enabled_payment_types.size > 0 -%}
+  <ul class="vl-pay__l" aria-label="Moyens de paiement acceptés">
+    {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'vl-pay__i' }}</li>{%- endfor -%}
+  </ul>
+  {%- endif -%}
+</div>
+<style>
+  .vl-pay{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+  .vl-pay__t{margin:0;display:flex;align-items:center;gap:6px;font-size:13px;color:#7A5E63}
+  .vl-pay__l{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .vl-pay__i{width:38px;height:24px;display:block}
+</style>

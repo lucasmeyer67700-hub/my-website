@@ -1,0 +1,21 @@
+{%- comment -%}
+  Étoiles d'avis RÉELS : lit les métachamps standard « reviews.rating » et « reviews.rating_count »,
+  remplis automatiquement par l'application d'avis (Judge.me, Loox…). Rien ne s'affiche tant qu'il n'y a pas d'avis.
+  Paramètres : product (obligatoire), link (facultatif).
+{%- endcomment -%}
+{%- assign vl_rt = product.metafields.reviews.rating.value -%}
+{%- assign vl_rc = product.metafields.reviews.rating_count.value | plus: 0 -%}
+{%- if vl_rt != blank and vl_rc > 0 -%}
+  {%- assign vl_rv = vl_rt.rating | plus: 0 -%}
+  {%- assign vl_max = vl_rt.scale_max | default: 5 | plus: 0 -%}
+  {%- assign vl_pct = vl_rv | times: 100 | divided_by: vl_max -%}
+  <a class="vl-stars" href="{{ link | default: '#avis' }}" aria-label="Note {{ vl_rv | round: 1 }} sur {{ vl_max }}, {{ vl_rc }} avis">
+    <span class="vl-stars__s" style="--p:{{ vl_pct }}%" aria-hidden="true">★★★★★</span>
+    <b>{{ vl_rv | round: 1 | replace: '.', ',' }}</b><span>· {{ vl_rc }} avis</span>
+  </a>
+  <style>
+    .vl-stars{display:inline-flex;align-items:center;gap:6px;text-decoration:none!important;color:#3D2B2F;font-size:14px;margin-top:10px}
+    .vl-stars__s{font-size:17px;letter-spacing:1px;background:linear-gradient(90deg,#C9A461 var(--p),#E6D6CF var(--p));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .vl-stars b{font-weight:700}.vl-stars span:last-child{color:#7A5E63}
+  </style>
+{%- endif -%}

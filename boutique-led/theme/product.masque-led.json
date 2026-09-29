@@ -270,7 +270,7 @@
               "type": "text",
               "name": "Réassurance",
               "settings": {
-                "text": "<p>🇫🇷 Expédié depuis la France · 🚚 Livraison suivie<br>↩️ Retours sous 14 jours · 🔒 Paiement sécurisé</p>",
+                "text": "<p>🚚 Livraison suivie en 5 à 10 jours ouvrés<br>↩️ Satisfaite ou remboursée 30 jours · 🔒 Paiement sécurisé</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -291,15 +291,25 @@
                 "padding-inline-end": 14
               },
               "blocks": {}
+            },
+            "etoiles": {
+              "type": "velea-etoiles",
+              "settings": {}
+            },
+            "paiement": {
+              "type": "velea-paiement",
+              "settings": {}
             }
           },
           "block_order": [
             "eyebrow",
             "title",
+            "etoiles",
             "price",
             "pitch",
             "variant_picker",
             "buy_buttons",
+            "paiement",
             "bullets",
             "reassure"
           ]

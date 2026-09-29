@@ -290,3 +290,33 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   ① « Masque LED visage & cou – Inclus 🔒 » (non modifiable) ② « Choisissez votre complément » (lunettes / stylo).
   3 photos (`photos-coffret/`) : principale « masque + au choix », et une photo par choix reliée à la variante
   (l'image change quand on choisit lunettes ou stylo). Bloc « Toutes les infos » (contenu, prix, précautions, livraison).
+
+## v18 – confiance (29/09/2026)
+
+- Thème brouillon « 💗 VELEA v18 – confiance (à publier) » (gid://shopify/OnlineStoreTheme/207529836889), copie de v17 (publié).
+  Envoi des fichiers : via fichiers « staged uploads » (text/plain) + themeFilesUpsert en type URL (voir scratchpad), vérifié.
+- Photos : texte fournisseur « Face mask Photon skin rejuvenation… » effacé (retouche OpenCV) sur la photo du masque
+  (produit) et la bannière (fichier velea-banniere-femme-v2.jpg) ; 3 photos du coffret refaites. Originaux + retouches
+  dans `photos-retouchees/`.
+- Livraison : plus aucun « Expédié depuis la France » ; partout « Livraison suivie en 5 à 10 jours ouvrés »
+  (bannière, bandeau, réassurance, FAQ, pages Livraison/FAQ, descriptions produits, bandeau d'annonce).
+- Retours : « Satisfaite ou remboursée 30 jours » partout (sections, modèles, descriptions, page Retours renommée,
+  menu pied de page). ⚠️ La politique de remboursement Shopify doit être collée par le propriétaire
+  (`politique-retours-a-coller.txt`) — je n'ai pas le droit de la modifier.
+- Avis : snippet `velea-etoiles` (étoiles sous le titre de la bannière, du bloc masque et des pages produit via le bloc
+  `velea-etoiles`) lit les métachamps standard reviews.rating / reviews.rating_count → n'apparaît qu'avec de VRAIS avis
+  (application Judge.me ou Loox à installer). Section « Avis clientes » : ancre #avis + photo par avis (avec accord).
+- Paiement : snippet/bloc `velea-paiement` (logos des moyens de paiement réellement activés) sous les boutons d'achat
+  (bannière, bloc masque, 4 pages produit). Barre d'achat collante mobile : déjà présente (accueil + pages produit).
+- Coffret : prix barré = masque + complément achetés séparément, calculé en direct (« dès 139,90 € ~~157,80 €~~ »,
+  jusqu'à 17,90 € d'économie ; lunettes 144,90 € au lieu de 161,80 €), avec mention explicative.
+- Bugs : carte stylo (image recadrée en absolu, visage visible), fleur flottante du chat retirée (seul le chat reste),
+  espaces entre sections réduits (.rt-wrap 72→52 px, sections 20→10 px), titre de la bannière raccourci
+  (« Offrez à votre peau l'éclat qu'elle mérite », 2 lignes sur mobile).
+- FAQ (section + page) : yeux, résultats (sans promesse), contre-indications, batterie, livraison, 30 jours.
+  Autonomie exacte du masque et marquage CE : NON indiqués (à confirmer par le fournisseur).
+- Menu principal : Accueil · Le Rituel Éclat · Notre histoire · FAQ · Contact. Page « À propos » → « Notre histoire »
+  (texte honnête, sans fausses affirmations).
+- Traductions EN/DE/ES/IT ajoutées pour les nouveaux textes (i18n/traductions.py).
+- À faire par le propriétaire : nom de boutique + préférences + domaine (`preferences-a-coller.txt`), politique de
+  remboursement, installer Judge.me (avis réels), Alma/Klarna (paiement en 3x/4x) si souhaité.

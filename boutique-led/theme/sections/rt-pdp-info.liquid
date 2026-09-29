@@ -8,7 +8,7 @@
 {%- assign specs = section.blocks | where: 'type', 'spec' -%}
 
 {%- if bens.size > 0 -%}
-<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt rt-anim"><section class="rt-wrap rt-winter">
 <div class="rt-center"><p class="rt-eyebrow">{{ section.settings.ben_eyebrow }}</p><h2>{{ section.settings.ben_title }}</h2>{%- if section.settings.ben_lead != blank -%}<p class="rt-lead">{{ section.settings.ben_lead }}</p>{%- endif -%}</div>
 <div class="rt-ben vl-ben2">
@@ -35,7 +35,7 @@
 {%- endif -%}
 
 {%- if steps.size > 0 -%}
-<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt rt-anim"><section class="rt-wrap rt-steps">
 <div class="rt-center"><p class="rt-eyebrow">{{ section.settings.steps_eyebrow }}</p><h2>{{ section.settings.steps_title }}</h2></div>
 <div class="rt-grid rt-3" style="margin-top:56px">
@@ -47,7 +47,7 @@
 {%- endif -%}
 
 {%- if specs.size > 0 or section.settings.precautions != blank -%}
-<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt rt-anim"><section class="rt-wrap" style="padding-left:0;padding-right:0">
 {%- if specs.size > 0 -%}
 <div class="rt-center"><p class="rt-eyebrow">{{ section.settings.specs_eyebrow }}</p><h2>{{ section.settings.specs_title }}</h2></div>

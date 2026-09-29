@@ -7,11 +7,13 @@
 <div class="rt"><section class="rt-wrap rt-hero"><div class="rt-hero__in">
 <div>
 <p class="rt-eyebrow">Rituel beauté d'automne</p>
-<h1>Quand les jours raccourcissent, offrez à votre peau <em>l'éclat</em> qu'elle mérite</h1>
+<h1>Offrez à votre peau <em>l'éclat</em> qu'elle mérite</h1>
+{%- if m_ok -%}{% render 'velea-etoiles', product: m, link: '#avis' %}{%- endif -%}
 <p class="rt-lead">Le masque LED visage &amp; cou en silicone souple. 10 minutes de lumière douce le soir, chez vous, pour un teint plus lumineux et un vrai moment rien qu'à vous.</p>
-<div class="rt-price"><b>{{ m_price }}</b><span>Visage + cou · Livraison sous 7 jours ouvrés</span></div>
+<div class="rt-price"><b>{{ m_price }}</b><span>Visage + cou · Livraison suivie en 5 à 10 jours ouvrés</span></div>
 <div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Je découvre mon masque</a><a class="rt-btn rt-btn--s" href="#rt-rituel">Composer mon rituel</a></div>
-<ul class="rt-checks" style="flex-direction:column;gap:8px"><li>Expédié depuis la France</li><li>Paiement sécurisé</li><li>Retours sous 14 jours</li></ul>
+{% render 'velea-paiement' %}
+<ul class="rt-checks" style="flex-direction:column;gap:8px"><li>Satisfaite ou remboursée 30 jours</li><li>Livraison suivie</li><li>Garantie légale 2 ans</li></ul>
 </div>
 <div class="rt-viscol">
 <div class="rt-vis">

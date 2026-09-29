@@ -1,5 +1,6 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
+<script src="{{ 'rituel.js' | asset_url }}"></script>
+<div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt rt-anim"><section class="rt-wrap rt-steps">
 <div class="rt-center"><p class="rt-eyebrow">Simple comme bonsoir</p><h2>Votre rituel <em>en 3 étapes</em></h2><p class="rt-lead">Pas besoin d'y penser pendant des heures : votre moment beauté tient en 10 minutes.</p></div>
 <div class="rt-grid rt-3" style="margin-top:56px">
@@ -11,13 +12,5 @@
 </section></div>
 </div>
 {% schema %}
-{
-  "name": "RT · Rituel en 3 étapes",
-  "settings": [],
-  "presets": [
-    {
-      "name": "RT · Rituel en 3 étapes"
-    }
-  ]
-}
+{"name": "RT · Rituel en 3 étapes", "settings": [], "presets": [{"name": "RT · Rituel en 3 étapes"}]}
 {% endschema %}
