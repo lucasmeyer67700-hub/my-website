@@ -1,8 +1,9 @@
 # Charte de la boutique (validée le 27/09/2026)
 
 ## Marque
-Nom : **VELEA** (en capitales). Logo : fleur à 5 pétales pointus, trait fin doré (dégradé or), intérieur rose poudré,
-cœur doré, suivie de « VELEA » en Cormorant Garamond 500, lettres très espacées, couleur prune `#3D2B2F`.
+Nom : **VELEA** (en capitales). Logo (v16) : « fleur en V » — deux pétales fins au trait doré (dégradé or) qui forment
+le V de VELEA, avec un petit bouton rose #C47A86 au-dessus ; nom en Montserrat 400, lettres très espacées, prune `#3D2B2F`.
+Même fleur en petit sur la bulle du chat.
 Fichier : `theme/snippets/velea-logo.liquid`. Aperçu : `velea-logo-apercu.png`.
 
 ## Cible
@@ -44,7 +45,7 @@ Le masque LED reste toujours le produit n°1, en haut.
 - Noms de sections du thème : 25 caractères maximum.
 
 ## Où mettre le doré (et nulle part ailleurs)
-Contour et cœur de la fleur du logo, petit trait devant les accroches, cercles fins autour du visuel de la bannière, étoiles ✦ du bandeau défilant,
+Pétales de la fleur du logo, petit trait devant les accroches, cercles fins autour du visuel de la bannière, étoiles ✦ du bandeau défilant,
 numéros des 3 étapes, badges « Offre premium » et « Routine complète », détails du bloc coffret,
 « + » de la FAQ, phrase en italique des sections.
 Les boutons d'achat restent en vieux rose.

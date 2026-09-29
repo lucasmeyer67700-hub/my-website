@@ -1,29 +1,34 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
 {%- assign pk_ok = false -%}{%- if pk.handle == 'pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard' -%}{%- assign pk_ok = true -%}{%- endif -%}
 {%- if pk_ok -%}{%- assign pk_url = pk.url -%}{%- else -%}{%- assign pk_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if pk_ok -%}{%- assign pk_price = pk.price | money -%}{%- else -%}{%- assign pk_price = '144,90 €' -%}{%- endif -%}
+{%- if pk_ok -%}{%- assign pk_price = pk.price_min | money -%}{%- else -%}{%- assign pk_price = '139,90 €' -%}{%- endif -%}
 {%- assign ey = all_products['lunettes-led-regard-lumiere-rouge-contour-des-yeux'] -%}
 {%- assign ey_ok = false -%}{%- if ey.handle == 'lunettes-led-regard-lumiere-rouge-contour-des-yeux' -%}{%- assign ey_ok = true -%}{%- endif -%}
-{%- if ey_ok -%}{%- assign ey_url = ey.url -%}{%- else -%}{%- assign ey_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if ey_ok -%}{%- assign ey_price = ey.price | money -%}{%- else -%}{%- assign ey_price = '53,90 €' -%}{%- endif -%}
-{%- assign sep = 0 -%}{%- if m_ok and ey_ok and pk_ok -%}{%- assign sep = m.price | plus: ey.price | minus: pk.price -%}{%- endif -%}
+{%- assign hf = all_products['stylo-visage-haute-frequence'] -%}
+{%- assign hf_ok = false -%}{%- if hf.handle == 'stylo-visage-haute-frequence' -%}{%- assign hf_ok = true -%}{%- endif -%}
+{%- comment -%} Économie réelle maximale (masque + complément achetés séparément − variante du coffret). {%- endcomment -%}
+{%- assign sep = 0 -%}
+{%- if pk_ok and m_ok -%}{%- for v in pk.variants -%}
+{%- assign sv = 0 -%}
+{%- if ey_ok and v.title contains 'Lunettes' -%}{%- assign sv = m.price | plus: ey.price | minus: v.price -%}{%- endif -%}
+{%- if hf_ok and v.title contains 'Stylo' -%}{%- assign sv = m.price | plus: hf.price | minus: v.price -%}{%- endif -%}
+{%- if sv > sep -%}{%- assign sep = sv -%}{%- endif -%}
+{%- endfor -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:20px;padding-bottom:20px">
 <div class="rt rt-anim"><section class="rt-wrap rt-gift">
 <div>
 <p class="rt-eyebrow">Le coffret</p>
-<h2>Le coffret <em>Rituel Éclat</em> : visage, cou et regard</h2>
-<p class="rt-lead">Le masque LED visage &amp; cou et les lunettes LED pour le regard, réunis pour une routine spa complète. À s'offrir… ou à offrir.</p>
-<ul><li>Masque LED visage &amp; cou en silicone souple</li><li>Lunettes LED pour chouchouter le contour des yeux</li><li>Deux gestes, un seul rituel du soir</li></ul>
-<div class="rt-price"><b>{{ pk_price }}</b><span>{%- if sep > 0 -%}Vous économisez {{ sep | money }} par rapport à l'achat séparé{%- else -%}Le coffret complet{%- endif -%}</span></div>
-<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ pk_url }}">Je découvre le coffret</a></div>
+<h2>Le coffret <em>Rituel Éclat</em> : composez votre duo</h2>
+<p class="rt-lead">Le masque LED visage &amp; cou, plus le complément de votre choix. Moins cher qu'achetés séparément. À s'offrir… ou à offrir.</p>
+<ul><li>Masque LED visage &amp; cou en silicone souple, dans tous les coffrets</li><li>Au choix : les lunettes regard, micro-massage doux + lumière rouge</li><li>Ou le stylo visage haute fréquence, 4 embouts en verre</li></ul>
+<div class="rt-price"><b>dès {{ pk_price }}</b><span>{%- if sep > 0 -%}Jusqu'à {{ sep | money }} d'économie par rapport à l'achat séparé{%- else -%}Deux choix de coffret{%- endif -%}</span></div>
+<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ pk_url }}">Je compose mon coffret</a></div>
 <p class="rt-small">Le coffret peut arriver en 2 colis, chacun avec son numéro de suivi.</p>
 </div>
-<div class="rt-gift__vis">{%- if pk_ok and pk.featured_image -%}<img src="{{ pk.featured_image | image_url: width: 900 }}" alt="{{ pk.title | escape }}" loading="lazy" width="900" height="900">{%- else -%}<svg viewBox="0 0 200 200" width="58%" fill="none" aria-hidden="true"><rect x="30" y="80" width="140" height="100" rx="10" fill="#fff"/><rect x="22" y="60" width="156" height="30" rx="8" fill="#FBEFEC"/><rect x="92" y="60" width="16" height="120" fill="#C47A86"/><path d="M100 60c-10-22-38-26-40-10-2 12 22 12 40 10zM100 60c10-22 38-26 40-10 2 12-22 12-40 10z" fill="#C47A86"/></svg>{%- endif -%}<span class="rt-gift__badge">Routine complète</span></div>
+<div class="rt-gift__vis">{%- if pk_ok and pk.featured_image -%}<img src="{{ pk.featured_image | image_url: width: 900 }}" srcset="{{ pk.featured_image | image_url: width: 600 }} 600w, {{ pk.featured_image | image_url: width: 1100 }} 1100w" sizes="(max-width: 989px) 92vw, 45vw" alt="{{ pk.title | escape }}" loading="lazy" width="900" height="900">{%- else -%}<svg viewBox="0 0 200 200" width="58%" fill="none" aria-hidden="true"><rect x="30" y="80" width="140" height="100" rx="10" fill="#fff"/><rect x="22" y="60" width="156" height="30" rx="8" fill="#FBEFEC"/><rect x="92" y="60" width="16" height="120" fill="#C47A86"/><path d="M100 60c-10-22-38-26-40-10-2 12 22 12 40 10zM100 60c10-22 38-26 40-10 2 12-22 12-40 10z" fill="#C47A86"/></svg>{%- endif -%}<span class="rt-gift__badge">Au choix</span></div>
 </section></div>
 </div>
 {% schema %}

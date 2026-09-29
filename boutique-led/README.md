@@ -247,3 +247,17 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Compléments (rt-shop) : gua sha retiré, remplacé à droite par le stylo haute fréquence ; images en srcset (net sur mobile).
   Le gua sha reste en brouillon.
 - À faire : traductions EN/DE/ES/IT des nouveaux textes (cartes compléments + pages produits) ; photos des 3 produits.
+
+## v16 – logo moderne + coffret au choix (29/09/2026)
+
+- Thème brouillon « 💗 VELEA v16 – logo + coffret (à publier) » (gid://shopify/OnlineStoreTheme/207485534553), copie de v15 (publié).
+- Logo « fleur en V » (voir STYLE.md), aperçu `velea-logo-apercu.png` ; même fleur sur la bulle du chat.
+- Coffret (même produit gid://shopify/Product/16647453475161, même adresse) renommé
+  « Coffret Rituel Éclat – Masque LED + Complément au Choix », option « Complément » :
+  - Lunettes LED regard : 144,90 € (masque 107,90 + lunettes 53,90 = 161,80 → 16,90 € d'économie) ;
+  - Stylo visage haute fréquence : 139,90 € (107,90 + 49,90 = 157,80 → 17,90 € d'économie).
+  Description, page (product.coffret) et titres traduits mis à jour. Toujours en brouillon (photos).
+- Accueil : carte centrale « Coffret masque + au choix », « dès 139,90 € », « Jusqu'à X € d'économie » (calculé en direct à
+  partir des vrais prix, seulement si tous les produits sont actifs) ; section « RT · Coffret » réécrite (composez votre duo,
+  badge « Au choix », bouton « Je compose mon coffret »).
+- Traductions EN/DE/ES/IT à refaire pour : cartes compléments, section coffret, pages lunettes/stylo/coffret.
