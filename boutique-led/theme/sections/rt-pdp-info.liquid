@@ -24,6 +24,7 @@
 {%- when 'wand' -%}<path d="M4 20L15 9M15 9l2-2 3 3-2 2M13 5l1-2M19 11l2-1M17 3l.5 2M21 7l-2 .5"/>
 {%- when 'drop' -%}<path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z"/>
 {%- when 'gift' -%}<rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1 0 1.5 3 1 6 1zM12 9c2-4 6-4 6-1 0 1.5-3 1-6 1z"/>
+{%- when 'plug' -%}<path d="M9 3v5M15 3v5M6 8h12v4a6 6 0 0 1-12 0zM12 18v3"/>
 {%- when 'heart' -%}<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
 {%- else -%}<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>
 {%- endcase -%}
@@ -88,7 +89,7 @@
         {"value": "sparkle", "label": "Éclat"}, {"value": "eye", "label": "Regard"}, {"value": "wave", "label": "Massage"},
         {"value": "light", "label": "Lumière"}, {"value": "hands", "label": "Mains libres"}, {"value": "battery", "label": "Batterie"},
         {"value": "clock", "label": "Minuteur"}, {"value": "wand", "label": "Stylo"}, {"value": "drop", "label": "Goutte"},
-        {"value": "gift", "label": "Cadeau"}, {"value": "heart", "label": "Cœur"}]},
+        {"value": "gift", "label": "Cadeau"}, {"value": "heart", "label": "Cœur"}, {"value": "plug", "label": "Prise"}]},
       {"type": "text", "id": "title", "label": "Titre"},
       {"type": "textarea", "id": "text", "label": "Texte"}
     ]},

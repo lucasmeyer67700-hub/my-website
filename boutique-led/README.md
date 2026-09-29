@@ -320,3 +320,20 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Traductions EN/DE/ES/IT ajoutées pour les nouveaux textes (i18n/traductions.py).
 - À faire par le propriétaire : nom de boutique + préférences + domaine (`preferences-a-coller.txt`), politique de
   remboursement, installer Judge.me (avis réels), Alma/Klarna (paiement en 3x/4x) si souhaité.
+
+## v19 – épuré, moins « IA », plus court sur mobile (29/09/2026)
+
+- Thème brouillon « 💗 VELEA v19 – épuré mobile (à publier) » (gid://shopify/OnlineStoreTheme/207537471833), copie de v18 (publié).
+- Logo : nom « VELEA » seul, petit (15 px mobile), sans la fleur.
+- Photos : TOUTES les photos produits supprimées (masque, coffret, lunettes, stylo) à la demande du propriétaire
+  (images IA + visuels générés). Copies conservées dans `photos-*` du dépôt. À la place : cadres roses vides
+  (`.vl-frame`, et galerie produit vide = carré rose via CSS). Bannière : plus de photo (réglage vidé).
+- Accueil raccourci : bannière → réassurance → le masque en détail → coffret/compléments → utilisation → FAQ → avis
+  (sections retirées : bandeau défilant, automne, « pensé pour vous », coffret, appel final). Hauteur mobile ~3 900 px
+  au lieu de ~8 700 px.
+- Mobile : accès rapide en pastilles (Masque · Coffret · Lunettes · Stylo · Questions), étapes en carrousel, 
+  caractéristiques en 2 colonnes, FAQ fermée, visuel de la bannière sous le texte, barre d'achat fixe conservée.
+- « Moins IA » : accroches (eyebrows) masquées, plus de mot en italique rose, plus d'animations ni d'effets de survol,
+  plus d'emojis ni de ✦, textes réécrits courts et factuels (accueil + pages produits), titres simples
+  (« Points forts », « Utilisation », « Caractéristiques », « Questions fréquentes »).
+- Page masque : bandeau défilant et « points forts » retirés (doublons). Traductions EN/DE/ES/IT des nouveaux textes.

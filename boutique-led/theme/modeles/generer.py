@@ -8,16 +8,16 @@ def text_block(b, html): b = copy.deepcopy(b); b['settings']['text'] = html; ret
 PAGES = {
  'lunettes': dict(
   eyebrow='✦ LE SOIN DU REGARD',
-  pitch="<p>Un vrai moment de détente pour votre regard : <strong>micro-massage doux et lumière rouge</strong>, les mains libres, en 10 minutes.</p>",
+  pitch="<p>Micro-massage EMS et lumière rouge pour le contour des yeux. 10 minutes, mains libres, rechargeables en USB-C.</p>",
   bullets="<p>✓ <strong>Micro-massage doux</strong> (micro-courants) + <strong>lumière rouge</strong><br>✓ <strong>4 modes, 3 intensités</strong> au choix<br>✓ <strong>Mains libres</strong> : se porte comme des lunettes<br>✓ <strong>Rechargeable USB-C</strong> : environ 90 min d'utilisation<br>✓ <strong>Minuteur 10 min</strong>, arrêt automatique<br>✓ <strong>Léger</strong>, facile à emporter</p>",
   ben_title="Un regard <em>tout en douceur</em>", ben_lead="Un moment de douceur rien que pour le contour des yeux.",
-  bens=[('eye','Un regard reposé','Un geste doux pour détendre le contour des yeux et retrouver un regard qui paraît plus frais.'),
-        ('wave','Micro-massage doux','De légères impulsions massent délicatement la zone du regard. Vous réglez l\'intensité.'),
-        ('light','Lumière rouge douce','Une lumière chaude et apaisante, pour un vrai moment cocooning.'),
-        ('hands','Les mains libres','Elles se posent comme une paire de lunettes : lisez, regardez votre série ou détendez-vous.'),
+  bens=[('eye','Contour des yeux','Se posent comme des lunettes, sur la zone du regard.'),
+        ('wave','Micro-massage EMS','De légères impulsions, 3 intensités au choix.'),
+        ('light','Lumière rouge','Chaleur douce pendant la séance.'),
+        ('hands','Mains libres','Vous pouvez lire ou regarder un écran.'),
         ('battery','Rechargeable USB-C','Environ 30 minutes de charge pour près de 90 minutes d\'utilisation.'),
         ('clock','10 minutes, c\'est tout','Minuteur intégré et arrêt automatique. Rien à surveiller.')],
-  steps=[('Préparez votre regard','Nettoyez et séchez le contour des yeux, sans crème.'),
+  steps=[('Peau propre','Contour des yeux nettoyé et sec, sans crème.'),
          ('Installez-vous','Posez les lunettes, choisissez le mode et commencez par l\'intensité la plus faible.'),
          ('Détendez-vous 10 minutes','Les lunettes s\'arrêtent toutes seules. Terminez par votre soin habituel.')],
   steps_note="À utiliser 3 à 5 fois par semaine, idéalement le soir.",
@@ -33,17 +33,17 @@ PAGES = {
   precautions="<p>Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de problème oculaire ou de peau lésée autour des yeux. Commencez toujours par l'intensité la plus faible. Demandez l'avis d'un médecin en cas de doute. Lisez la notice avant la première utilisation. Tenir hors de portée des enfants. Appareil de bien-être à usage cosmétique, non médical.</p>"),
  'haute-frequence': dict(
   eyebrow='✦ LE GESTE INSTITUT À LA MAISON',
-  pitch="<p>Un stylo léger et maniable avec <strong>4 embouts en verre</strong> pour un moment de soin ciblé du visage, en quelques minutes, comme en institut.</p>",
+  pitch="<p>Stylo haute fréquence avec <strong>4 embouts en verre</strong> interchangeables. Poignée de 21,2 cm, prise européenne.</p>",
   bullets="<p>✓ <strong>4 embouts en verre</strong> : champignon, cuillère, courbé, droit<br>✓ <strong>Léger et maniable</strong> : poignée de 21,2 cm<br>✓ <strong>Prise européenne</strong>, se branche sur le secteur<br>✓ <strong>Séances courtes</strong> : quelques minutes suffisent<br>✓ Se glisse facilement dans votre <strong>rituel du soir</strong></p>",
   reassure="<p>🚚 Livraison suivie · ↩️ Satisfaite ou remboursée 30 jours<br>🔒 Paiement sécurisé · ✅ Garantie légale 2 ans</p>",
   ben_title="Le soin ciblé, <em>tout simplement</em>", ben_lead="Un geste beauté précis, comme en institut.",
-  bens=[('sparkle','Une peau qui paraît plus nette','Un moment de soin ciblé pour une peau qui paraît plus nette et plus lumineuse.'),
+  bens=[('sparkle','Soin ciblé','Pour travailler une zone précise du visage.'),
         ('wand','4 embouts en verre','Champignon, cuillère, courbé, droit : une forme pour chaque zone.'),
         ('hands','Léger et maniable','Une poignée de 21,2 cm : il se tient comme un stylo.'),
-        ('clock','Quelques minutes suffisent','Un geste rapide à glisser dans votre routine du soir.'),
-        ('heart','Un moment pour vous','Quelques minutes de soin rien qu\'à vous, le soir.'),
-        ('light','Lueur néon','L\'embout s\'illumine d\'une douce lueur orangée au contact de la peau.')],
-  steps=[('Préparez votre peau','Visage propre et sec, sans produit à l\'alcool. Retirez vos bijoux.'),
+        ('clock','5 minutes','Séances courtes, 2 à 3 fois par semaine.'),
+        ('plug','Prise européenne','Se branche directement sur le secteur.'),
+        ('light','Lueur orangée','L\'embout s\'illumine au contact de la peau.')],
+  steps=[('Peau propre','Visage sec, sans produit à l\'alcool, bijoux retirés.'),
          ('Choisissez l\'embout','Fixez-le au stylo, allumez et commencez à l\'intensité la plus faible.'),
          ('Quelques minutes de soin','Petits mouvements doux, puis appliquez votre soin habituel.')],
   steps_note="À utiliser 2 à 3 fois par semaine.",
@@ -62,13 +62,13 @@ PAGES = {
   pitch="<p>Le <strong>masque LED visage &amp; cou</strong> + le complément de votre choix : <strong>lunettes regard</strong> ou <strong>stylo visage</strong>. Moins cher qu'achetés séparément.</p>",
   bullets="<p>✓ <strong>Masque LED visage &amp; cou</strong> dans tous les coffrets<br>✓ Au choix : <strong>lunettes regard</strong> (micro-massage + lumière rouge)<br>✓ ou <strong>stylo visage haute fréquence</strong> (4 embouts en verre)<br>✓ <strong>Moins cher</strong> qu'achetés séparément<br>✓ Idée cadeau pour une personne qui aime prendre soin d'elle<br>✓ Peut arriver en <strong>2 colis</strong>, chacun avec son suivi</p>",
   ben_title="Votre rituel, <em>à votre façon</em>", ben_lead="Le masque LED, plus le complément qui vous ressemble.",
-  bens=[('sparkle','Le masque LED inclus','10 minutes de lumière douce pour le visage et le cou, dans tous les coffrets.'),
-        ('eye','Option lunettes regard','Micro-massage doux et lumière rouge pour le contour des yeux, les mains libres.'),
-        ('wand','Option stylo visage','Un soin ciblé avec 4 embouts en verre, en quelques minutes.'),
+  bens=[('sparkle','Masque LED inclus','Visage et cou, dans tous les coffrets.'),
+        ('eye','Ou les lunettes','Massage EMS et lumière rouge, contour des yeux.'),
+        ('wand','Ou le stylo','Haute fréquence, 4 embouts en verre.'),
         ('gift','L\'idée cadeau','Un coffret bien-être à offrir… ou à s\'offrir.'),
         ('heart','Moins cher','Le coffret coûte moins cher que les deux produits achetés séparément.'),
-        ('clock','Un vrai rituel du soir','Deux gestes simples pour finir la journée en prenant soin de vous.')],
-  steps=[('Choisissez votre duo','Masque + lunettes regard, ou masque + stylo visage : sélectionnez votre complément.'),
+        ('clock','10 minutes le soir','Le masque, puis le second appareil.')],
+  steps=[('Choisissez','Lunettes ou stylo, avec le masque.'),
          ('Le masque LED','Sur une peau propre et sèche, installez le masque 10 minutes, les yeux fermés.'),
          ('Votre complément','Les lunettes 10 minutes, ou le stylo quelques minutes, puis votre soin habituel.')],
   steps_note="À utiliser 3 à 5 fois par semaine, idéalement le soir.",
@@ -86,10 +86,10 @@ PAGES = {
 for name, c in PAGES.items():
     t = copy.deepcopy(base)
     blocks = t['sections']['main']['blocks']['product-details']['blocks']
-    blocks['eyebrow']['settings']['text'] = '<p><strong>%s</strong></p>' % c['eyebrow']
     blocks['pitch']['settings']['text'] = c['pitch']
     blocks['bullets']['settings']['text'] = c['bullets']
-    if 'reassure' in c: blocks['reassure']['settings']['text'] = c['reassure']
+    blocks['reassure']['settings']['text'] = "<p>Livraison suivie en 5 à 10 jours ouvrés<br>30 jours pour changer d'avis · Paiement sécurisé</p>"
+    blocks.pop('eyebrow', None)
     if 'infos' in c:
         rows, rorder = {}, []
         for i, (ic, he, tx) in enumerate(c['infos']):
@@ -104,9 +104,9 @@ for name, c in PAGES.items():
     # Étoiles d'avis réels sous le titre, logos de paiement sous le bouton d'achat.
     order = t['sections']['main']['blocks']['product-details']['block_order']
     blocks['etoiles'] = {'type': 'velea-etoiles', 'settings': {}}
-    order.insert(order.index('title') + 1, 'etoiles')
+    if 'etoiles' not in order: order.insert(order.index('title') + 1, 'etoiles')
     blocks['paiement'] = {'type': 'velea-paiement', 'settings': {}}
-    order.insert(order.index('buy_buttons') + 1, 'paiement')
+    if 'paiement' not in order: order.insert(order.index('buy_buttons') + 1, 'paiement')
     if c.get('inclus'):
         blocks['inclus'] = {'type': 'velea-coffret-inclus', 'settings': {'step1': 'Inclus dans votre coffret', 'item': 'Masque LED visage & cou',
             'note': 'Toujours inclus, ne peut pas être retiré', 'step2': 'Choisissez votre complément'}}
@@ -120,9 +120,9 @@ for name, c in PAGES.items():
     for i, (la, va) in enumerate(c['specs']):
         k = 'spec%d' % i; info_blocks[k] = {'type': 'spec', 'settings': {'label': la, 'value': va}}; order.append(k)
     t['sections']['rt_info'] = {'type': 'rt-pdp-info', 'blocks': info_blocks, 'block_order': order, 'settings': {
-        'ben_eyebrow': 'Les points forts', 'ben_title': c['ben_title'], 'ben_lead': c['ben_lead'],
-        'steps_eyebrow': 'Simple comme bonsoir', 'steps_title': 'Votre rituel <em>en 3 étapes</em>', 'steps_note': c['steps_note'],
-        'specs_eyebrow': 'En détail', 'specs_title': 'Caractéristiques &amp; <em>contenu</em>', 'precautions': c['precautions']}}
+        'ben_eyebrow': '', 'ben_title': 'Points forts', 'ben_lead': '',
+        'steps_eyebrow': '', 'steps_title': 'Utilisation', 'steps_note': c['steps_note'],
+        'specs_eyebrow': '', 'specs_title': 'Caractéristiques', 'precautions': c['precautions']}}
     for k in ('rt_pdp_ben', 'rt_steps', 'rt_pdp_specs', 'rt_faq', 'rt_shop', 'rt_marquee'):
         t['sections'].pop(k, None)
     # Aucune autre offre sur une page produit : pas de bandeau du masque ni de compléments.

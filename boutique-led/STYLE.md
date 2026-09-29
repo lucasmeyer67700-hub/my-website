@@ -1,10 +1,16 @@
 # Charte de la boutique (validée le 27/09/2026)
 
 ## Marque
-Nom : **VELEA** (en capitales). Logo (v16) : « fleur en V » — deux pétales fins au trait doré (dégradé or) qui forment
-le V de VELEA, avec un petit bouton rose #C47A86 au-dessus ; nom en Montserrat 400, lettres très espacées, prune `#3D2B2F`.
-Même fleur en petit sur la bulle du chat.
-Fichier : `theme/snippets/velea-logo.liquid`. Aperçu : `velea-logo-apercu.png`.
+Nom : **VELEA** (en capitales). Logo (v19) : le nom seul, police du thème, lettres espacées, prune `#3D2B2F`,
+sans pictogramme (l'ancienne « fleur en V » est abandonnée : trop chargée sur mobile).
+Fichier : `theme/snippets/velea-logo.liquid`.
+
+## Ton « pas IA » (v19)
+- Phrases courtes et concrètes, des faits (poids, durée, contenu) plutôt que des promesses.
+- Éviter : « rituel », « moment rien qu'à vous », « comme au spa », « éclat » à répétition, les triplets d'adjectifs,
+  les accroches en capitales au-dessus des titres, le mot en italique rose dans chaque titre, les ✦ et les emojis.
+- Pas d'animations décoratives (apparition au défilement, boutons qui pulsent, cartes qui grossissent).
+- Photos : uniquement de vraies photos du produit (pas d'images générées par IA). Tant qu'il n'y en a pas, un cadre rose vide.
 
 ## Cible
 Femmes de 20 à 60 ans qui prennent soin d'elles à la maison. Période : AUTOMNE (pas de thème Noël pour l'instant).
