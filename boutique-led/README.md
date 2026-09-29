@@ -276,3 +276,17 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   « Toutes les infos » sous le bouton d'achat (menus dépliants : dans la boîte, caractéristiques, quel embout pour quelle zone,
   comment l'utiliser, précautions, livraison et retours). Réassurance sans « Expédié depuis la France » (non vérifié).
 - Toujours en brouillon : le propriétaire le passe en Actif quand il veut.
+
+### v17 (suite) – pages lunettes et coffret, plus aucun autre produit sur les pages produit
+
+- Thème renommé « 💗 VELEA v17 – pages produits (à publier) ».
+- Pages produit (masque, stylo, lunettes, coffret) : section « Compléments » retirée ; bandeau défilant (spécifique au masque)
+  retiré des pages stylo/lunettes/coffret ; textes stylo/lunettes sans mention du masque.
+- Lunettes (Foreverlily LC Store, coût 23,19 €) : photo principale = lunettes blanches sur fond blanc (recadrée depuis la capture
+  AliExpress, ~470 px d'origine agrandie → demander l'image originale pour plus de netteté) + 5 visuels (`photos-lunettes/`).
+  Bloc « Toutes les infos » sous le bouton d'achat. Description sans « Expédié depuis la France ».
+- Stylo : 6ᵉ photo refaite sans « Avec votre masque » (`photos-stylo/velea-stylo-5b.jpg`).
+- Coffret : nouveau bloc de thème `blocks/velea-coffret-inclus.liquid` placé juste avant le choix de variante :
+  ① « Masque LED visage & cou – Inclus 🔒 » (non modifiable) ② « Choisissez votre complément » (lunettes / stylo).
+  3 photos (`photos-coffret/`) : principale « masque + au choix », et une photo par choix reliée à la variante
+  (l'image change quand on choisit lunettes ou stylo). Bloc « Toutes les infos » (contenu, prix, précautions, livraison).

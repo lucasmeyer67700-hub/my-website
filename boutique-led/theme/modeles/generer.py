@@ -10,7 +10,7 @@ PAGES = {
   eyebrow='✦ LE SOIN DU REGARD',
   pitch="<p>Un vrai moment de détente pour votre regard : <strong>micro-massage doux et lumière rouge</strong>, les mains libres, en 10 minutes.</p>",
   bullets="<p>✓ <strong>Micro-massage doux</strong> (micro-courants) + <strong>lumière rouge</strong><br>✓ <strong>4 modes, 3 intensités</strong> au choix<br>✓ <strong>Mains libres</strong> : se porte comme des lunettes<br>✓ <strong>Rechargeable USB-C</strong> : environ 90 min d'utilisation<br>✓ <strong>Minuteur 10 min</strong>, arrêt automatique<br>✓ <strong>Léger</strong>, facile à emporter</p>",
-  ben_title="Un regard <em>tout en douceur</em>", ben_lead="Le complément idéal du masque LED pour prendre soin du contour des yeux.",
+  ben_title="Un regard <em>tout en douceur</em>", ben_lead="Un moment de douceur rien que pour le contour des yeux.",
   bens=[('eye','Un regard reposé','Un geste doux pour détendre le contour des yeux et retrouver un regard qui paraît plus frais.'),
         ('wave','Micro-massage doux','De légères impulsions massent délicatement la zone du regard. Vous réglez l\'intensité.'),
         ('light','Lumière rouge douce','Une lumière chaude et apaisante, pour un vrai moment cocooning.'),
@@ -20,27 +20,33 @@ PAGES = {
   steps=[('Préparez votre regard','Nettoyez et séchez le contour des yeux, sans crème.'),
          ('Installez-vous','Posez les lunettes, choisissez le mode et commencez par l\'intensité la plus faible.'),
          ('Détendez-vous 10 minutes','Les lunettes s\'arrêtent toutes seules. Terminez par votre soin habituel.')],
-  steps_note="Le complément parfait de votre masque LED, le soir.",
+  steps_note="À utiliser 3 à 5 fois par semaine, idéalement le soir.",
   specs=[('Type','Lunettes de massage contour des yeux'),('Technologies','Micro-courants + lumière rouge'),('Réglages','4 modes, 3 intensités'),
          ('Batterie','Rechargeable USB-C'),('Autonomie','Environ 90 min (charge ~30 min)'),('Séance','10 min, arrêt automatique'),
          ('Coloris','Blanc'),('Dans la boîte','Lunettes, câble USB-C, notice'),('Garanties','Retours 14 jours · Garantie légale 2 ans'),('Utilisation','Bien-être, usage cosmétique')],
+  reassure="<p>🚚 Livraison suivie · ↩️ Retours sous 14 jours<br>🔒 Paiement sécurisé · ✅ Garantie légale 2 ans</p>",
+  infos=[('box','Dans la boîte',"<p>1 paire de lunettes de massage<br>1 câble de charge USB-C<br>1 notice d'utilisation</p>"),
+         ('ruler','Caractéristiques',"<p>Technologies : micro-courants EMS + lumière rouge<br>Réglages : 4 modes, 3 intensités<br>Batterie : rechargeable USB-C (charge ~30 min, autonomie ~90 min)<br>Séance : 10 min, arrêt automatique<br>Coloris : blanc</p>"),
+         ('stopwatch','Comment les utiliser',"<p>1. Contour des yeux propre et sec, sans crème.<br>2. Posez les lunettes, choisissez le mode, commencez à l'intensité la plus faible.<br>3. Détendez-vous 10 minutes, elles s'arrêtent toutes seules.<br>3 à 5 fois par semaine.</p>"),
+         ('check_box','Précautions',"<p>Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de problème oculaire ou de peau lésée autour des yeux. Retirez vos lentilles. Commencez toujours au plus doux. En cas de doute, demandez l'avis d'un médecin. Appareil de bien-être, non médical.</p>"),
+         ('truck','Livraison et retours',"<p>Livraison suivie, en général sous 5 à 10 jours ouvrés. Retours possibles sous 14 jours. Garantie légale de conformité de 2 ans. Une question ? velea.officiel@gmail.com</p>")],
   precautions="<p>Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de problème oculaire ou de peau lésée autour des yeux. Commencez toujours par l'intensité la plus faible. Demandez l'avis d'un médecin en cas de doute. Lisez la notice avant la première utilisation. Tenir hors de portée des enfants. Appareil de bien-être à usage cosmétique, non médical.</p>"),
  'haute-frequence': dict(
   eyebrow='✦ LE GESTE INSTITUT À LA MAISON',
   pitch="<p>Un stylo léger et maniable avec <strong>4 embouts en verre</strong> pour un moment de soin ciblé du visage, en quelques minutes, comme en institut.</p>",
   bullets="<p>✓ <strong>4 embouts en verre</strong> : champignon, cuillère, courbé, droit<br>✓ <strong>Léger et maniable</strong> : poignée de 21,2 cm<br>✓ <strong>Prise européenne</strong>, se branche sur le secteur<br>✓ <strong>Séances courtes</strong> : quelques minutes suffisent<br>✓ Se glisse facilement dans votre <strong>rituel du soir</strong></p>",
   reassure="<p>🚚 Livraison suivie · ↩️ Retours sous 14 jours<br>🔒 Paiement sécurisé · ✅ Garantie légale 2 ans</p>",
-  ben_title="Le soin ciblé, <em>tout simplement</em>", ben_lead="Un geste beauté précis pour compléter votre rituel masque LED.",
+  ben_title="Le soin ciblé, <em>tout simplement</em>", ben_lead="Un geste beauté précis, comme en institut.",
   bens=[('sparkle','Une peau qui paraît plus nette','Un moment de soin ciblé pour une peau qui paraît plus nette et plus lumineuse.'),
         ('wand','4 embouts en verre','Champignon, cuillère, courbé, droit : une forme pour chaque zone.'),
         ('hands','Léger et maniable','Une poignée de 21,2 cm : il se tient comme un stylo.'),
         ('clock','Quelques minutes suffisent','Un geste rapide à glisser dans votre routine du soir.'),
-        ('heart','Un rituel complet','Il complète parfaitement votre masque LED visage & cou.'),
+        ('heart','Un moment pour vous','Quelques minutes de soin rien qu\'à vous, le soir.'),
         ('light','Lueur néon','L\'embout s\'illumine d\'une douce lueur orangée au contact de la peau.')],
   steps=[('Préparez votre peau','Visage propre et sec, sans produit à l\'alcool. Retirez vos bijoux.'),
          ('Choisissez l\'embout','Fixez-le au stylo, allumez et commencez à l\'intensité la plus faible.'),
          ('Quelques minutes de soin','Petits mouvements doux, puis appliquez votre soin habituel.')],
-  steps_note="À utiliser 2 à 3 fois par semaine, en complément de votre masque LED.",
+  steps_note="À utiliser 2 à 3 fois par semaine.",
   specs=[('Type','Stylo visage haute fréquence'),('Embouts','4 en verre : champignon, cuillère, courbé, droit'),('Poignée','21,2 cm, isolée, avec câble'),
          ('Longueur des embouts','14 à 16 cm'),('Prise','Européenne'),('Dans la boîte','Stylo, 4 embouts, notice'),
          ('Garanties','Retours 14 jours · Garantie légale 2 ans'),('Utilisation','Bien-être, usage cosmétique')],
@@ -68,6 +74,12 @@ PAGES = {
   steps_note="À utiliser 3 à 5 fois par semaine, idéalement le soir.",
   specs=[('Dans tous les coffrets','Masque LED visage & cou'),('Complément au choix','Lunettes regard ou stylo visage'),('Masque','Silicone souple, 7 couleurs, 10 min'),
          ('Lunettes','Micro-massage + lumière rouge, 4 modes'),('Stylo','4 embouts en verre, prise européenne'),('Livraison','Sous 7 jours ouvrés, 1 ou 2 colis'),('Garanties','Retours 14 jours · Garantie légale 2 ans')],
+  reassure="<p>🚚 Livraison suivie · ↩️ Retours sous 14 jours<br>🔒 Paiement sécurisé · ✅ Garantie légale 2 ans</p>",
+  inclus=True,
+  infos=[('box','Dans le coffret',"<p><strong>Toujours inclus :</strong> le masque LED visage &amp; cou (masque, pièce cou, boîtier rechargeable, câble USB, notice).<br><strong>Au choix :</strong> les lunettes LED regard (avec câble USB-C et notice) ou le stylo visage haute fréquence (4 embouts en verre, prise européenne, notice).</p>"),
+         ('price_tag','Prix du coffret',"<p>Masque + lunettes regard : 144,90 €<br>Masque + stylo visage : 139,90 €<br>Moins cher que les deux produits achetés séparément.</p>"),
+         ('check_box','Précautions',"<p>Masque : gardez les yeux fermés. Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de photosensibilité, de problème oculaire ou de peau lésée. Stylo : jamais près des yeux ni après un produit contenant de l'alcool. En cas de doute, demandez l'avis d'un médecin. Appareils de bien-être, non médicaux.</p>"),
+         ('truck','Livraison et retours',"<p>Le coffret peut arriver en 2 colis, chacun avec son numéro de suivi, en général sous 5 à 10 jours ouvrés. Retours possibles sous 14 jours. Garantie légale de conformité de 2 ans.</p>")],
   precautions="<p>Gardez les yeux fermés pendant l'utilisation du masque. Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de photosensibilité, de problème oculaire ou de peau lésée. Stylo : ne pas utiliser près des yeux ni après un produit contenant de l'alcool. Demandez l'avis d'un médecin en cas de doute et lisez les notices avant la première utilisation. Tenir hors de portée des enfants. Appareils de bien-être à usage cosmétique, non médicaux.</p>"),
 }
 
@@ -89,6 +101,11 @@ for name, c in PAGES.items():
             'border': 'none', 'border_radius': 0, 'padding-block-start': 4, 'padding-block-end': 0, 'padding-inline-start': 0, 'padding-inline-end': 0}, 'blocks': rows, 'block_order': rorder}
         order = t['sections']['main']['blocks']['product-details']['block_order']
         order.insert(order.index('reassure') + 1, 'infos')
+    if c.get('inclus'):
+        blocks['inclus'] = {'type': 'velea-coffret-inclus', 'settings': {'step1': 'Inclus dans votre coffret', 'item': 'Masque LED visage & cou',
+            'note': 'Toujours inclus, ne peut pas être retiré', 'step2': 'Choisissez votre complément'}}
+        order = t['sections']['main']['blocks']['product-details']['block_order']
+        order.insert(order.index('variant_picker'), 'inclus')
     info_blocks, order = {}, []
     for i, (ic, ti, tx) in enumerate(c['bens']):
         k = 'ben%d' % i; info_blocks[k] = {'type': 'ben', 'settings': {'icon': ic, 'title': ti, 'text': tx}}; order.append(k)
@@ -100,8 +117,9 @@ for name, c in PAGES.items():
         'ben_eyebrow': 'Les points forts', 'ben_title': c['ben_title'], 'ben_lead': c['ben_lead'],
         'steps_eyebrow': 'Simple comme bonsoir', 'steps_title': 'Votre rituel <em>en 3 étapes</em>', 'steps_note': c['steps_note'],
         'specs_eyebrow': 'En détail', 'specs_title': 'Caractéristiques &amp; <em>contenu</em>', 'precautions': c['precautions']}}
-    for k in ('rt_pdp_ben', 'rt_steps', 'rt_pdp_specs', 'rt_faq'):
+    for k in ('rt_pdp_ben', 'rt_steps', 'rt_pdp_specs', 'rt_faq', 'rt_shop', 'rt_marquee'):
         t['sections'].pop(k, None)
-    t['order'] = ['main', 'rt_marquee', 'rt_info', 'rt_shop', 'rt_trust']
+    # Aucune autre offre sur une page produit : pas de bandeau du masque ni de compléments.
+    t['order'] = ['main', 'rt_info', 'rt_trust']
     open(os.path.join(here, 'product.%s.json' % name), 'w').write(json.dumps(t, ensure_ascii=False, separators=(',', ':')))
     print(name, 'ok')

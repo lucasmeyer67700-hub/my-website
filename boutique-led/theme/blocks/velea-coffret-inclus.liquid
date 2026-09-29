@@ -1,0 +1,43 @@
+{%- comment -%}
+  Coffret : affiche le masque LED comme article inclus (non modifiable), puis l'intitulé
+  de l'étape 2 juste au-dessus du sélecteur de variante (le complément au choix).
+{%- endcomment -%}
+{%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
+{%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
+<div class="vl-cof" {{ block.shopify_attributes }}>
+  <p class="vl-cof__step"><span>1</span>{{ block.settings.step1 }}</p>
+  <div class="vl-cof__card">
+    <div class="vl-cof__img">
+      {%- if m_ok and m.featured_image -%}
+        <img src="{{ m.featured_image | image_url: width: 160 }}" srcset="{{ m.featured_image | image_url: width: 160 }} 1x, {{ m.featured_image | image_url: width: 320 }} 2x" alt="{{ block.settings.item | escape }}" width="80" height="80" loading="lazy">
+      {%- endif -%}
+    </div>
+    <div class="vl-cof__txt"><b>{{ block.settings.item }}</b><small>{{ block.settings.note }}</small></div>
+    <span class="vl-cof__lock"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Inclus</span>
+  </div>
+  <p class="vl-cof__step"><span>2</span>{{ block.settings.step2 }}</p>
+</div>
+<style>
+  .vl-cof{display:flex;flex-direction:column;gap:10px;width:100%}
+  .vl-cof__step{margin:0;display:flex;align-items:center;gap:10px;font-weight:600;color:#3D2B2F;font-size:15px}
+  .vl-cof__step span{flex:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#E6CF9E,#C9A461 55%,#A87F3E);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .vl-cof__card{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1.5px solid #C47A86;border-radius:16px;background:#FBEFEC}
+  .vl-cof__img{flex:none;width:64px;height:64px;border-radius:12px;overflow:hidden;background:#F8E3E1}
+  .vl-cof__img img{width:100%;height:100%;object-fit:cover;display:block}
+  .vl-cof__txt{flex:1;display:flex;flex-direction:column;gap:2px;line-height:1.3}
+  .vl-cof__txt b{color:#3D2B2F;font-size:15px}
+  .vl-cof__txt small{color:#7A5E63;font-size:13px}
+  .vl-cof__lock{flex:none;display:inline-flex;align-items:center;gap:5px;background:#C47A86;color:#fff;border-radius:40px;padding:5px 11px;font-size:12px;font-weight:600}
+</style>
+{% schema %}
+{
+  "name": "Coffret · masque inclus",
+  "settings": [
+    {"type": "text", "id": "step1", "label": "Étape 1", "default": "Inclus dans votre coffret"},
+    {"type": "text", "id": "item", "label": "Article inclus", "default": "Masque LED visage & cou"},
+    {"type": "text", "id": "note", "label": "Petite phrase", "default": "Toujours inclus, ne peut pas être retiré"},
+    {"type": "text", "id": "step2", "label": "Étape 2", "default": "Choisissez votre complément"}
+  ],
+  "presets": [{"name": "Coffret · masque inclus"}]
+}
+{% endschema %}

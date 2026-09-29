@@ -31,7 +31,10 @@ Ton : doux, rassurant, féminin, vouvoiement. Phrases courtes.
 Sections « RT · … » dans `theme/sections/`, style commun `theme/rituel.css` (asset `rituel.css` du thème).
 Ordre : bannière masque LED → réassurance → pourquoi en automne → masque en détail →
 produits complémentaires (lunettes | coffret au centre | gua sha) → rituel 3 étapes → pensé pour vous → coffret → FAQ → appel final.
-Page produit du masque : modèle `product.masque-led` (achat + points clés, réassurance, points forts, 3 étapes, caractéristiques, compléments, FAQ).
+Page produit du masque : modèle `product.masque-led` (achat + points clés, réassurance, points forts, 3 étapes, caractéristiques, FAQ).
+**Règle (v17) : sur une page produit, aucun autre produit ne s'affiche** (pas de compléments, pas de bandeau d'un autre produit).
+Les compléments ne sont proposés que sur la page d'accueil. Page coffret : masque « Inclus » verrouillé + choix du complément.
+Photos produit : 1ʳᵉ = vraie photo du produit, puis 5 visuels VELEA (1200 × 1200, fond crème ou rose, sans avant/après).
 Sur mobile : barre d'achat fixe en bas, compléments en carrousel à faire glisser.
 Le masque LED reste toujours le produit n°1, en haut.
 
