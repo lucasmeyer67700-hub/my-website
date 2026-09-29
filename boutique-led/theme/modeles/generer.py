@@ -27,23 +27,30 @@ PAGES = {
   precautions="<p>Ne pas utiliser en cas de pacemaker ou d'implant électronique, de grossesse, d'épilepsie, de problème oculaire ou de peau lésée autour des yeux. Commencez toujours par l'intensité la plus faible. Demandez l'avis d'un médecin en cas de doute. Lisez la notice avant la première utilisation. Tenir hors de portée des enfants. Appareil de bien-être à usage cosmétique, non médical.</p>"),
  'haute-frequence': dict(
   eyebrow='✦ LE GESTE INSTITUT À LA MAISON',
-  pitch="<p>Un stylo léger et maniable avec <strong>4 embouts en verre</strong> pour un soin ciblé du visage, en quelques minutes, comme en institut.</p>",
-  bullets="<p>✓ <strong>4 embouts en verre</strong> interchangeables<br>✓ <strong>Léger et maniable</strong> : 23 × 2,5 cm<br>✓ <strong>Prise européenne</strong>, 100–240 V<br>✓ <strong>Séances courtes</strong> : quelques minutes suffisent<br>✓ Se glisse facilement dans votre <strong>rituel du soir</strong></p>",
+  pitch="<p>Un stylo léger et maniable avec <strong>4 embouts en verre</strong> pour un moment de soin ciblé du visage, en quelques minutes, comme en institut.</p>",
+  bullets="<p>✓ <strong>4 embouts en verre</strong> : champignon, cuillère, courbé, droit<br>✓ <strong>Léger et maniable</strong> : poignée de 21,2 cm<br>✓ <strong>Prise européenne</strong>, se branche sur le secteur<br>✓ <strong>Séances courtes</strong> : quelques minutes suffisent<br>✓ Se glisse facilement dans votre <strong>rituel du soir</strong></p>",
+  reassure="<p>🚚 Livraison suivie · ↩️ Retours sous 14 jours<br>🔒 Paiement sécurisé · ✅ Garantie légale 2 ans</p>",
   ben_title="Le soin ciblé, <em>tout simplement</em>", ben_lead="Un geste beauté précis pour compléter votre rituel masque LED.",
-  bens=[('sparkle','Une peau qui paraît plus nette','Un soin ciblé pour une peau qui paraît plus nette et plus lumineuse, séance après séance.'),
-        ('wand','4 embouts en verre','Une forme pour chaque zone : joues, front, menton, contours.'),
-        ('hands','Léger et maniable','23 cm pour 2,5 cm de diamètre : il se tient comme un stylo.'),
+  bens=[('sparkle','Une peau qui paraît plus nette','Un moment de soin ciblé pour une peau qui paraît plus nette et plus lumineuse.'),
+        ('wand','4 embouts en verre','Champignon, cuillère, courbé, droit : une forme pour chaque zone.'),
+        ('hands','Léger et maniable','Une poignée de 21,2 cm : il se tient comme un stylo.'),
         ('clock','Quelques minutes suffisent','Un geste rapide à glisser dans votre routine du soir.'),
         ('heart','Un rituel complet','Il complète parfaitement votre masque LED visage & cou.'),
-        ('light','Lumière néon','Les embouts s\'illuminent d\'une douce lueur orangée pendant le soin.')],
-  steps=[('Préparez votre peau','Nettoyez et séchez votre visage. Retirez vos bijoux.'),
-         ('Installez l\'embout','Choisissez l\'embout adapté à la zone, allumez et commencez doucement.'),
-         ('Quelques minutes de soin','Faites glisser l\'embout en petits mouvements, puis appliquez votre soin habituel.')],
+        ('light','Lueur néon','L\'embout s\'illumine d\'une douce lueur orangée au contact de la peau.')],
+  steps=[('Préparez votre peau','Visage propre et sec, sans produit à l\'alcool. Retirez vos bijoux.'),
+         ('Choisissez l\'embout','Fixez-le au stylo, allumez et commencez à l\'intensité la plus faible.'),
+         ('Quelques minutes de soin','Petits mouvements doux, puis appliquez votre soin habituel.')],
   steps_note="À utiliser 2 à 3 fois par semaine, en complément de votre masque LED.",
-  specs=[('Type','Stylo visage haute fréquence'),('Embouts','4 embouts en verre'),('Dimensions','23 × 2,5 cm'),('Tension','100–240 V'),
-         ('Puissance','10 W'),('Prise','Européenne'),('Matière','ABS + verre'),('Dans la boîte','Stylo, 4 embouts, notice'),
+  specs=[('Type','Stylo visage haute fréquence'),('Embouts','4 en verre : champignon, cuillère, courbé, droit'),('Poignée','21,2 cm, isolée, avec câble'),
+         ('Longueur des embouts','14 à 16 cm'),('Prise','Européenne'),('Dans la boîte','Stylo, 4 embouts, notice'),
          ('Garanties','Retours 14 jours · Garantie légale 2 ans'),('Utilisation','Bien-être, usage cosmétique')],
-  precautions="<p>Ne pas utiliser en cas de grossesse, de pacemaker ou d'implant électronique, d'épilepsie, de peau lésée ou irritée. Ne pas utiliser près des yeux. Retirez vos bijoux avant la séance. N'utilisez jamais l'appareil après avoir appliqué un produit contenant de l'alcool. Manipulez les embouts en verre avec précaution. Demandez l'avis d'un médecin en cas de doute et lisez la notice avant la première utilisation. Tenir hors de portée des enfants. Appareil de bien-être à usage cosmétique, non médical.</p>"),
+  precautions="<p>Ne pas utiliser en cas de grossesse, de pacemaker ou d'implant électronique ou métallique, d'épilepsie, de peau lésée ou irritée. Ne pas utiliser près des yeux. Retirez vos bijoux avant la séance. N'utilisez jamais l'appareil après avoir appliqué un produit contenant de l'alcool. Manipulez les embouts en verre avec précaution et laissez-les refroidir avant de les changer. Demandez l'avis d'un médecin en cas de doute et lisez la notice avant la première utilisation. Tenir hors de portée des enfants. Appareil de bien-être à usage cosmétique, non médical.</p>",
+  infos=[('box','Dans la boîte',"<p>1 stylo haute fréquence avec câble et prise européenne<br>4 embouts en verre : champignon, cuillère, courbé, droit<br>1 notice d'utilisation</p>"),
+         ('ruler','Caractéristiques',"<p>Poignée : 21,2 cm, isolée, avec câble<br>Embouts : en verre, de 14 à 16 cm<br>Prise : européenne<br>Usage : bien-être, cosmétique</p>"),
+         ('eye','Quel embout pour quelle zone ?',"<p><strong>Champignon</strong> : grandes zones (joues, front, mâchoire)<br><strong>Cuillère</strong> : petites zones, en touches précises<br><strong>Courbé</strong> : zones délicates (ailes du nez, menton)<br><strong>Droit</strong> : massage doux du cuir chevelu</p>"),
+         ('stopwatch','Comment l\'utiliser',"<p>1. Visage propre et sec, sans produit à l'alcool, bijoux retirés.<br>2. Fixez l'embout, allumez et commencez à l'intensité la plus faible.<br>3. Petits mouvements doux quelques minutes, puis votre soin habituel.<br>2 à 3 fois par semaine.</p>"),
+         ('check_box','Précautions',"<p>Ne pas utiliser en cas de grossesse, de pacemaker ou d'implant, d'épilepsie, de peau lésée ou irritée, ni près des yeux. Jamais après un produit contenant de l'alcool. En cas de doute, demandez l'avis d'un médecin. Appareil de bien-être, non médical.</p>"),
+         ('truck','Livraison et retours',"<p>Livraison suivie, en général sous 5 à 10 jours ouvrés. Retours possibles sous 14 jours. Garantie légale de conformité de 2 ans. Une question ? velea.officiel@gmail.com</p>")]),
  'coffret': dict(
   eyebrow='✦ OFFRE PREMIUM · COMPOSEZ VOTRE DUO',
   pitch="<p>Le <strong>masque LED visage &amp; cou</strong> + le complément de votre choix : <strong>lunettes regard</strong> ou <strong>stylo visage</strong>. Moins cher qu'achetés séparément.</p>",
@@ -70,6 +77,18 @@ for name, c in PAGES.items():
     blocks['eyebrow']['settings']['text'] = '<p><strong>%s</strong></p>' % c['eyebrow']
     blocks['pitch']['settings']['text'] = c['pitch']
     blocks['bullets']['settings']['text'] = c['bullets']
+    if 'reassure' in c: blocks['reassure']['settings']['text'] = c['reassure']
+    if 'infos' in c:
+        rows, rorder = {}, []
+        for i, (ic, he, tx) in enumerate(c['infos']):
+            k = 'row%d' % i; rorder.append(k)
+            tb = copy.deepcopy(blocks['bullets']); tb['settings']['text'] = tx; tb.pop('name', None)
+            tb['settings'].update({'background': False, 'padding-block-start': 0, 'padding-block-end': 12, 'padding-inline-start': 0, 'padding-inline-end': 0})
+            rows[k] = {'type': '_accordion-row', 'settings': {'heading': he, 'open_by_default': False, 'icon': ic, 'width': 20}, 'blocks': {'t': tb}, 'block_order': ['t']}
+        blocks['infos'] = {'type': 'accordion', 'name': 'Toutes les infos', 'settings': {'icon': 'caret', 'dividers': True, 'divider_color': '#EFD6D6', 'type_preset': 'paragraph',
+            'border': 'none', 'border_radius': 0, 'padding-block-start': 4, 'padding-block-end': 0, 'padding-inline-start': 0, 'padding-inline-end': 0}, 'blocks': rows, 'block_order': rorder}
+        order = t['sections']['main']['blocks']['product-details']['block_order']
+        order.insert(order.index('reassure') + 1, 'infos')
     info_blocks, order = {}, []
     for i, (ic, ti, tx) in enumerate(c['bens']):
         k = 'ben%d' % i; info_blocks[k] = {'type': 'ben', 'settings': {'icon': ic, 'title': ti, 'text': tx}}; order.append(k)

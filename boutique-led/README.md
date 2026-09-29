@@ -261,3 +261,18 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   partir des vrais prix, seulement si tous les produits sont actifs) ; section « RT · Coffret » réécrite (composez votre duo,
   badge « Au choix », bouton « Je compose mon coffret »).
 - Traductions EN/DE/ES/IT à refaire pour : cartes compléments, section coffret, pages lunettes/stylo/coffret.
+
+## v17 – page du stylo visage complète (29/09/2026)
+
+- v16 a été publiée par le propriétaire. Thème brouillon « 💗 VELEA v17 – page stylo (à publier) »
+  (gid://shopify/OnlineStoreTheme/207485829465), copie de v16.
+- Produit stylo (gid://shopify/Product/16650549068121) : nouveau fournisseur AliExpress (prise EU, coût 33,19 €, prix 49,90 €).
+  Infos réelles : poignée 21,2 cm isolée avec câble, 4 embouts en verre (champignon, cuillère, courbé, droit), 14 à 16 cm.
+  Les chiffres non confirmés (23 × 2,5 cm, 10 W, 100–240 V) ont été retirés.
+- Photos (dans `photos-stylo/`) : 1ʳᵉ = femme avec le stylo (fournie par le propriétaire), puis 5 visuels VELEA créés
+  (contenu de la boîte, 4 embouts, dimensions, rituel 3 étapes, points forts ; source `visuels-source.html`).
+  Les images du fournisseur ne sont PAS utilisées (avant/après et allégations médicales interdites).
+- Page (product.haute-frequence) : points clés, points forts, étapes, caractéristiques mis à jour ; nouveau bloc
+  « Toutes les infos » sous le bouton d'achat (menus dépliants : dans la boîte, caractéristiques, quel embout pour quelle zone,
+  comment l'utiliser, précautions, livraison et retours). Réassurance sans « Expédié depuis la France » (non vérifié).
+- Toujours en brouillon : le propriétaire le passe en Actif quand il veut.
