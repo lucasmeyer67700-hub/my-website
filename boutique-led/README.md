@@ -337,3 +337,19 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   plus d'emojis ni de ✦, textes réécrits courts et factuels (accueil + pages produits), titres simples
   (« Points forts », « Utilisation », « Caractéristiques », « Questions fréquentes »).
 - Page masque : bandeau défilant et « points forts » retirés (doublons). Traductions EN/DE/ES/IT des nouveaux textes.
+
+## v20 – nouveau masque (29/09/2026)
+
+- Nouveau fournisseur du masque : Foreverlily Store (AliExpress, item 1005008827664510, option « gift box »), 35,79 € —
+  même vendeur que les lunettes. Masque en PLASTIQUE (rigide) : ne plus jamais écrire « silicone ».
+  Caractéristiques confirmées par la fiche : 120 × 3 LED, 7 couleurs, visage + pièce cou (boucle détachable), sangle,
+  fenêtres transparentes (cache-yeux), bouton tactile (appui long 3 s = marche, appui court = couleur), batterie 600 mAh,
+  DC 5 V / 1 A, 3,7 W, charge 2 h, autonomie 1 à 2,5 h, câble USB-C (pas d'adaptateur), notice, boîte. Séance 10–15 min.
+  Pas de minuteur automatique mentionné → retiré du site.
+- Prix : masque 79,90 € (coût 35,79 €). Coffrets : masque + lunettes 109,90 € (coût 58,98 €, au lieu de 133,80 €),
+  masque + stylo 104,90 € (coût 68,98 €, au lieu de 129,80 €). Lunettes 53,90 €, stylo 49,90 € inchangés.
+- Produit masque : titre « Masque LED Visage & Cou – 7 Couleurs, Sans Fil » (adresse inchangée), description
+  réécrite, titres traduits EN/DE/ES/IT. Coffret : description mise à jour. Page FAQ mise à jour.
+- Thème « 💗 VELEA v20 – nouveau masque (à publier) » (gid://shopify/OnlineStoreTheme/207547498841), copie de v19 (publié) :
+  bannière, bloc masque, FAQ, étapes, caractéristiques, pages masque/coffret, prix de secours, traductions.
+- Toujours pas de photos : attendre de vraies photos du nouveau masque (ou photos propres du vendeur, sans texte ni avant/après).

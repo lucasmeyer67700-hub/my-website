@@ -2,7 +2,7 @@
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
 {%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '107,90 €' -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
 {%- assign ey = all_products['lunettes-led-regard-lumiere-rouge-contour-des-yeux'] -%}
 {%- assign hf = all_products['stylo-visage-haute-frequence'] -%}
@@ -11,7 +11,7 @@
 <div>
 <h1>Le masque LED visage &amp; cou</h1>
 {%- if m_ok -%}{% render 'velea-etoiles', product: m, link: '#avis' %}{%- endif -%}
-<p class="rt-lead">Silicone souple, sans fil, minuteur de 10 minutes. On le pose le soir, on ferme les yeux, il s'éteint tout seul.</p>
+<p class="rt-lead">Sans fil, 7 couleurs, visage et cou. Des fenêtres transparentes protègent les yeux. 10 à 15 minutes le soir, rechargeable en USB-C.</p>
 <div class="rt-price"><b>{{ m_price }}</b><span>Livraison suivie en 5 à 10 jours ouvrés</span></div>
 <div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Voir le masque</a><a class="rt-btn rt-btn--s" href="#rt-rituel">Les coffrets</a></div>
 {% render 'velea-paiement' %}
