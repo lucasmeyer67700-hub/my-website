@@ -353,3 +353,10 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Thème « 💗 VELEA v20 – nouveau masque (à publier) » (gid://shopify/OnlineStoreTheme/207547498841), copie de v19 (publié) :
   bannière, bloc masque, FAQ, étapes, caractéristiques, pages masque/coffret, prix de secours, traductions.
 - Toujours pas de photos : attendre de vraies photos du nouveau masque (ou photos propres du vendeur, sans texte ni avant/après).
+
+## Plan accueil v21 (30/09/2026) – à valider
+
+- Analyse complète de la page d'accueil et plan en 9 sections : voir `boutique-led/PLAN-ACCUEIL-v21.md`
+  (structure, textes finaux, couleurs, typographies, cartes, mobile, confiance, checklist).
+- Pas encore appliqué au thème : attendre la validation du propriétaire, puis créer « 💗 VELEA v21 – accueil (à publier) »
+  à partir de la v20.
