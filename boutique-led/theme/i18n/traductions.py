@@ -486,5 +486,9 @@ T = [
 ('<h1>Page introuvable</h1>','<h1>Page not found</h1>','<h1>Seite nicht gefunden</h1>','<h1>Página no encontrada</h1>','<h1>Pagina non trovata</h1>'),
 ("<p>Le lien est peut-être incorrect, ou cette page n'existe plus.</p>",'<p>The link may be incorrect, or this page no longer exists.</p>','<p>Der Link ist möglicherweise falsch oder die Seite existiert nicht mehr.</p>','<p>El enlace puede ser incorrecto o esta página ya no existe.</p>','<p>Il link potrebbe essere errato o questa pagina non esiste più.</p>'),
 ('Voir tous les produits','See all products','Alle Produkte ansehen','Ver todos los productos','Vedi tutti i prodotti'),
+
+# --- v30 : avis clientes ---
+(' avis de clientes VELEA<',' reviews from VELEA customers<',' Bewertungen von VELEA-Kundinnen<',' opiniones de clientas VELEA<',' recensioni di clienti VELEA<'),
+('>Produit offert à la cliente en échange de son avis.<','>Product given to the customer in exchange for her review.<','>Produkt der Kundin im Austausch für ihre Bewertung geschenkt.<','>Producto regalado a la clienta a cambio de su opinión.<','>Prodotto regalato alla cliente in cambio della sua recensione.<'),
 ]
 LANGS = ['en', 'de', 'es', 'it']

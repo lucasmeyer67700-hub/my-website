@@ -470,3 +470,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   le paiement, la recherche, et la bannière / l'appel final de l'accueil (qui utilisent la photo du masque).
   Coffret et lunettes : pas de photo, visuel rose avec icône.
 - `modeles/generer.py` ajoute aussi `rt_others` aux modèles générés.
+
+## v30 – section avis clientes haute qualité (30/09/2026)
+
+- Thème « 💗 VELEA v30 – avis clientes (à publier) » (gid://shopify/OnlineStoreTheme/207585444185), copie de v29 (publiée). md5 vérifiés.
+- `sections/rt-reviews.liquid` refaite : note moyenne + étoiles + répartition 5→1 calculées automatiquement à partir des blocs,
+  bandeau des photos clientes (agrandissement au clic), cartes avec case photo, titre, texte, prénom, produit,
+  « Achat vérifié » (case à cocher) et mention « Produit offert » (obligatoire si coché), défilement automatique doux
+  (pause au survol/toucher, flèches + points, glisser au doigt sur mobile). Visible par tous dès 3 avis ;
+  dans l'éditeur, cartes « Exemple » et cases « Photo cliente » vides pour voir la mise en page.
+- Avis AliExpress du fournisseur NON repris : ce ne sont pas des clientes VELEA (pratique trompeuse), plusieurs contiennent
+  des allégations santé (peau « améliorée », thyroïde). À remplacer par de vrais avis (Judge.me, premières clientes, échantillon offert + mention).

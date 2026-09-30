@@ -1,46 +1,245 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- comment -%}
-  Avis clientes RÉELS uniquement. Invisible pour les clientes tant que moins de 3 avis sont ajoutés.
-  Dans l'éditeur, 3 cartes d'exemple (clairement marquées) montrent le rendu.
+  Avis clientes VELEA – UNIQUEMENT de vrais avis de clientes VELEA (un bloc = un avis).
+  Visible par tout le monde dès 3 avis. Dans l'éditeur, des cartes « Exemple » montrent la mise en page tant qu'il y en a moins.
+  Note moyenne, nombre d'avis et répartition des étoiles sont calculés automatiquement à partir des avis saisis.
 {%- endcomment -%}
-{%- assign real = section.blocks.size -%}
-{%- if real >= 3 or request.design_mode -%}
+{%- liquid
+  assign real = section.blocks.size
+  assign show = false
+  if real >= 3
+    assign show = true
+  endif
+  assign demo = false
+  if real < 3 and request.design_mode
+    assign demo = true
+  endif
+  assign sum = 0
+  assign c5 = 0
+  assign c4 = 0
+  assign c3 = 0
+  assign c2 = 0
+  assign c1 = 0
+  assign photos = 0
+  for b in section.blocks
+    assign sum = sum | plus: b.settings.note
+    case b.settings.note
+      when 5
+        assign c5 = c5 | plus: 1
+      when 4
+        assign c4 = c4 | plus: 1
+      when 3
+        assign c3 = c3 | plus: 1
+      when 2
+        assign c2 = c2 | plus: 1
+      else
+        assign c1 = c1 | plus: 1
+    endcase
+    if b.settings.photo != blank
+      assign photos = photos | plus: 1
+    endif
+  endfor
+  if real > 0
+    assign avg10 = sum | times: 10 | divided_by: real
+    assign avg_int = avg10 | divided_by: 10
+    assign avg_dec = avg10 | modulo: 10
+    assign pct = sum | times: 100 | divided_by: real | divided_by: 5
+  endif
+-%}
+{%- if show or demo -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt" id="avis"><section class="rt-wrap vh-rev" style="padding-left:0;padding-right:0">
-<div class="rt-center"><h2>Ce qu'en disent nos clientes</h2>
-{%- if real >= 3 and section.settings.note != blank and section.settings.nombre != blank -%}<p class="vh-rev__sum"><span class="vh-rev__stars" aria-hidden="true">★★★★★</span> <b>{{ section.settings.note }}</b> sur 5 · {{ section.settings.nombre }} avis</p>{%- endif -%}
-{%- if real < 3 -%}<p class="vh-rev__demo">Aperçu visible uniquement dans l'éditeur : la section apparaîtra pour vos clientes à partir de 3 vrais avis.</p>{%- endif -%}
-</div>
-<div class="vh-rev__grid">
-{%- if real >= 3 -%}
-{%- for b in section.blocks limit: 6 -%}
-<figure class="vh-rev__card" {{ b.shopify_attributes }}>
-<span class="vh-rev__stars" aria-label="{{ b.settings.note }} sur 5">{%- for i in (1..5) -%}{%- if i <= b.settings.note -%}★{%- else -%}<i>★</i>{%- endif -%}{%- endfor -%}</span>
-{%- if b.settings.photo != blank -%}<div class="vh-rev__ph">{{ b.settings.photo | image_url: width: 144 | image_tag: loading: 'lazy', width: 72, height: 72, alt: b.settings.nom }}</div>{%- endif -%}
-<blockquote>{{ b.settings.texte }}</blockquote>
-<figcaption><b>{{ b.settings.nom }}</b>{%- if b.settings.date != blank -%} · {{ b.settings.date }}{%- endif -%}{%- if b.settings.verifie -%} · Achat vérifié{%- endif -%}{%- if b.settings.offert -%} · Produit offert{%- endif -%}</figcaption>
-</figure>
-{%- endfor -%}
-{%- else -%}
-{%- for i in (1..3) -%}<figure class="vh-rev__card"><span class="vh-rev__stars">★★★★★</span><blockquote>Exemple : le texte de l'avis de votre cliente s'affichera ici.</blockquote><figcaption><b>Prénom N.</b> · date</figcaption></figure>{%- endfor -%}
-{%- endif -%}
-</div>
-{%- if section.settings.lien != blank -%}<div class="rt-btns" style="justify-content:center;margin-top:20px"><a class="rt-btn rt-btn--s" href="{{ section.settings.lien }}">Lire tous les avis</a></div>{%- endif -%}
+<div class="rt" id="avis"><section class="vr{% if demo %} vr--demo{% endif %}" data-auto="{{ section.settings.auto }}">
+  <div class="rt-center">
+    <h2>{{ section.settings.titre }}</h2>
+    {%- if demo -%}<p class="vr__demo-note">Aperçu visible uniquement dans l'éditeur : ajoutez au moins 3 vrais avis (blocs « Avis ») pour l'afficher à vos clientes.</p>{%- endif -%}
+  </div>
+
+  <div class="vr__head">
+    <div class="vr__score">
+      {%- if show -%}
+        <b class="vr__avg">{{ avg_int }},{{ avg_dec }}</b>
+        <span class="vr__stars vr__stars--lg" style="--p:{{ pct }}%" aria-label="Note moyenne {{ avg_int }},{{ avg_dec }} sur 5">★★★★★</span>
+        <span class="vr__count">{{ real }} avis de clientes VELEA</span>
+      {%- else -%}
+        <b class="vr__avg">4,8</b><span class="vr__stars vr__stars--lg" style="--p:96%">★★★★★</span><span class="vr__count">Exemple : 00 avis</span>
+      {%- endif -%}
+    </div>
+    <div class="vr__bars" aria-hidden="true">
+      {%- if show -%}
+        {%- assign rows = c5 | append: ',' | append: c4 | append: ',' | append: c3 | append: ',' | append: c2 | append: ',' | append: c1 | split: ',' -%}
+      {%- else -%}
+        {%- assign rows = '8,2,1,0,0' | split: ',' -%}{%- assign real = 11 -%}
+      {%- endif -%}
+      {%- for r in rows -%}
+        {%- assign stars = 6 | minus: forloop.index -%}{%- assign w = r | plus: 0 | times: 100 | divided_by: real -%}
+        <div class="vr__bar"><span>{{ stars }} ★</span><i><em style="width:{{ w }}%"></em></i><small>{{ r }}</small></div>
+      {%- endfor -%}
+      {%- if show -%}{%- assign real = section.blocks.size -%}{%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} Bandeau des photos clientes {%- endcomment -%}
+  {%- if show and photos > 0 -%}
+    <div class="vr__photos">
+      {%- for b in section.blocks -%}{%- if b.settings.photo != blank -%}
+        <button type="button" class="vr__ph" data-full="{{ b.settings.photo | image_url: width: 1400 }}" aria-label="Voir la photo de {{ b.settings.nom | escape }}">
+          {{ b.settings.photo | image_url: width: 360 | image_tag: loading: 'lazy', width: 180, height: 180, alt: '' }}
+          <span class="vr__ph-note">★ {{ b.settings.note }},0</span>
+        </button>
+      {%- endif -%}{%- endfor -%}
+    </div>
+  {%- elsif demo -%}
+    <div class="vr__photos">
+      {%- for i in (1..6) -%}<span class="vr__ph vr__ph--empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><small>Photo cliente</small></span>{%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="vr__rail" tabindex="0" aria-label="Avis clientes, faites défiler">
+    {%- if show -%}
+      {%- for b in section.blocks -%}
+      <article class="vr__card" {{ b.shopify_attributes }}>
+        {%- if b.settings.photo != blank -%}
+          <button type="button" class="vr__cardph" data-full="{{ b.settings.photo | image_url: width: 1400 }}" aria-label="Agrandir la photo">{%- assign alt_ph = 'Photo de ' | append: b.settings.nom -%}{{ b.settings.photo | image_url: width: 640 | image_tag: loading: 'lazy', width: 320, height: 240, alt: alt_ph }}</button>
+        {%- endif -%}
+        <div class="vr__top">
+          <span class="vr__stars" style="--p:{{ b.settings.note | times: 20 }}%" aria-label="{{ b.settings.note }} sur 5">★★★★★</span>
+          {%- if b.settings.date != blank -%}<time>{{ b.settings.date }}</time>{%- endif -%}
+        </div>
+        {%- if b.settings.titre != blank -%}<h3>{{ b.settings.titre }}</h3>{%- endif -%}
+        <blockquote>{{ b.settings.texte }}</blockquote>
+        <footer>
+          <span class="vr__av">{{ b.settings.nom | slice: 0 }}</span>
+          <span class="vr__who"><b>{{ b.settings.nom }}</b>{%- if b.settings.produit != blank -%}<small>{{ b.settings.produit }}</small>{%- endif -%}</span>
+          {%- if b.settings.verifie -%}<span class="vr__ver">Achat vérifié</span>{%- endif -%}
+        </footer>
+        {%- if b.settings.offert -%}<p class="vr__gift">Produit offert à la cliente en échange de son avis.</p>{%- endif -%}
+      </article>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..5) -%}
+      <article class="vr__card">
+        <span class="vr__cardph vr__cardph--empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><small>Case photo (facultative)</small></span>
+        <div class="vr__top"><span class="vr__stars" style="--p:100%">★★★★★</span><time>date</time></div>
+        <h3>Exemple de titre</h3>
+        <blockquote>Exemple : le texte de l'avis de votre cliente s'affichera ici, tel qu'elle l'a écrit.</blockquote>
+        <footer><span class="vr__av">P</span><span class="vr__who"><b>Prénom N.</b><small>Masque LED visage &amp; cou</small></span><span class="vr__ver">Achat vérifié</span></footer>
+      </article>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+  <div class="vr__nav">
+    <button type="button" class="vr__arrow" data-dir="-1" aria-label="Avis précédent"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <span class="vr__dots" aria-hidden="true"></span>
+    <button type="button" class="vr__arrow" data-dir="1" aria-label="Avis suivant"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+  {%- if section.settings.lien != blank -%}<div class="rt-btns" style="justify-content:center;margin-top:18px"><a class="rt-btn rt-btn--s" href="{{ section.settings.lien }}">Lire tous les avis</a></div>{%- endif -%}
+
+  <dialog class="vr__lb" aria-label="Photo cliente"><button type="button" class="vr__lbx" aria-label="Fermer">×</button><img alt=""></dialog>
 </section></div>
 </div>
+<style>
+.vr__demo-note{display:inline-block;margin-top:12px!important;font-size:12px;font-weight:600;color:#A95F6C;background:#FBEFEC;border:1px dashed #C47A86;border-radius:999px;padding:5px 12px}
+.vr__head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;max-width:720px;margin:26px auto 0;padding:20px 24px;background:#fff;border:1px solid #E8D5CC;border-radius:20px}
+.vr__score{display:flex;flex-direction:column;align-items:center;gap:4px;padding-right:24px;border-right:1px solid #F0E2DC}
+.vr__avg{font-family:'Cormorant Garamond',Georgia,serif;font-size:52px;line-height:1;font-weight:600;color:#3D2B2F}
+.vr__count{font-size:13px;color:#7D625A}
+.vr__stars{display:inline-block;font-size:15px;letter-spacing:2px;line-height:1;background:linear-gradient(90deg,#C47A86 var(--p),#EADAD6 var(--p));-webkit-background-clip:text;background-clip:text;color:transparent}
+.vr__stars--lg{font-size:22px;letter-spacing:3px}
+.vr__bars{display:grid;gap:6px}
+.vr__bar{display:grid;grid-template-columns:34px 1fr 26px;align-items:center;gap:10px;font-size:13px;color:#7D625A}
+.vr__bar i{display:block;height:7px;border-radius:99px;background:#F3E9E1;overflow:hidden}
+.vr__bar em{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#C47A86,#C9A894)}
+.vr__bar small{text-align:right}
+.vr__photos{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;max-width:980px;margin:18px auto 0;padding:2px 2px 6px}
+.vr__photos::-webkit-scrollbar{display:none}
+.vr__ph{position:relative;flex:0 0 120px;height:120px;border-radius:14px;overflow:hidden;border:1px solid #E8D5CC;padding:0;background:#F6E9E7;cursor:zoom-in;transition:transform .3s ease}
+.vr__ph:hover,.vr__ph:active{transform:scale(1.04)}
+.vr__ph img{width:100%;height:100%;object-fit:cover;display:block}
+.vr__ph-note{position:absolute;left:8px;bottom:8px;color:#fff;font-size:12px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.vr__ph--empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#B38F7A;border-style:dashed;cursor:default;background:linear-gradient(160deg,#FDF7F5,#F3E4E0)}
+.vr__ph--empty svg{width:30px;height:30px}.vr__ph--empty small{font-size:11px}
+.vr__rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;margin:22px -16px 0;padding:8px 16px 18px;outline:none}
+.vr__rail::-webkit-scrollbar{display:none}
+.vr__card{flex:0 0 330px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #E8D5CC;border-radius:20px;padding:18px;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
+.vr__card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -28px rgba(61,43,47,.5)}
+.vr__cardph{display:block;margin:-18px -18px 4px;aspect-ratio:4/3;overflow:hidden;border:0;padding:0;background:#F6E9E7;cursor:zoom-in;border-radius:20px 20px 0 0}
+.vr__cardph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease}
+.vr__card:hover .vr__cardph img{transform:scale(1.04)}
+.vr__cardph--empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#B38F7A;cursor:default;background:linear-gradient(160deg,#FDF7F5,#F3E4E0);border-bottom:1px dashed #E1C9BF}
+.vr__cardph--empty svg{width:34px;height:34px}.vr__cardph--empty small{font-size:12px}
+.vr__top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.vr__top time{font-size:12px;color:#7D625A}
+.vr__card h3{font-family:var(--font-body--family),sans-serif!important;font-size:16px!important;font-weight:600;margin:0}
+.vr__card blockquote{margin:0;font-size:15px;line-height:1.55;color:#3D2B2F}
+.vr__card footer{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:10px;border-top:1px solid #F3E9E1}
+.vr__av{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#C47A86,#C9A894);color:#fff;font-weight:600;font-size:15px}
+.vr__who{display:flex;flex-direction:column;line-height:1.25;min-width:0;flex:1}
+.vr__who b{font-size:14px;font-weight:600}.vr__who small{font-size:12px;color:#7D625A}
+.vr__ver{flex:none;display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#4E7D5B;background:#EEF5EF;border-radius:999px;padding:4px 8px}
+.vr__ver:before{content:"✓"}
+.vr__gift{margin:0;font-size:11px;color:#7D625A;font-style:italic}
+.vr__nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:4px}
+.vr__arrow{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid #E8D5CC;background:#fff;color:#3D2B2F;cursor:pointer;transition:transform .2s ease,border-color .2s ease}
+.vr__arrow:hover{border-color:#C9A894;transform:scale(1.06)}.vr__arrow:active{transform:scale(.94)}
+.vr__dots{display:flex;gap:6px}
+.vr__dots i{display:block;width:6px;height:6px;border-radius:99px;background:#E8D5CC;transition:width .3s ease,background .3s ease}
+.vr__dots i.on{width:18px;background:#C47A86}
+.vr__lb{border:0;padding:0;background:transparent;max-width:min(92vw,900px)}
+.vr__lb::backdrop{background:rgba(30,12,18,.8)}
+.vr__lb img{display:block;max-width:100%;max-height:86vh;border-radius:16px}
+.vr__lbx{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.9);font-size:22px;cursor:pointer}
+@media (max-width:749px){
+  .vr__head{grid-template-columns:1fr;gap:14px;padding:18px}
+  .vr__score{padding:0 0 14px;border-right:0;border-bottom:1px solid #F0E2DC}
+  .vr__avg{font-size:44px}
+  .vr__photos{margin:14px -16px 0;padding:2px 16px 6px}
+  .vr__ph{flex-basis:96px;height:96px}
+  .vr__card{flex-basis:82%}
+}
+@media (prefers-reduced-motion:reduce){.vr__rail{scroll-behavior:auto}.vr__card,.vr__ph,.vr__cardph img{transition:none}}
+</style>
+<script>
+(function(){
+  var root=document.querySelector('#avis .vr'); if(!root||root.dataset.ok)return; root.dataset.ok=1;
+  var rail=root.querySelector('.vr__rail'), cards=[].slice.call(rail.children), dots=root.querySelector('.vr__dots');
+  cards.forEach(function(){dots.appendChild(document.createElement('i'))});
+  var di=[].slice.call(dots.children);
+  function step(){return (cards[1]?cards[1].offsetLeft-cards[0].offsetLeft:rail.clientWidth)}
+  function idx(){return Math.round(rail.scrollLeft/step())}
+  function mark(){var k=Math.min(di.length-1,idx());di.forEach(function(d,i){d.classList.toggle('on',i===k)})}
+  rail.addEventListener('scroll',function(){window.requestAnimationFrame(mark)},{passive:true}); mark();
+  function go(d){var max=rail.scrollWidth-rail.clientWidth-4;
+    if(d>0&&rail.scrollLeft>=max)rail.scrollTo({left:0});else rail.scrollBy({left:d*step()})}
+  root.querySelectorAll('.vr__arrow').forEach(function(b){b.addEventListener('click',function(){pause(8000);go(+b.dataset.dir)})});
+  // défilement automatique doux, en pause au survol / au toucher / hors écran
+  var hold=0,vis=false,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function pause(ms){hold=Date.now()+(ms||6000)}
+  ['pointerdown','touchstart','wheel','focusin'].forEach(function(e){rail.addEventListener(e,function(){pause(8000)},{passive:true})});
+  rail.addEventListener('mouseenter',function(){pause(600000)}); rail.addEventListener('mouseleave',function(){hold=Date.now()+1500});
+  if('IntersectionObserver' in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting},{threshold:.3}).observe(rail);
+  if(root.dataset.auto==='true'&&!reduce)setInterval(function(){if(vis&&Date.now()>hold&&!document.hidden)go(1)},4200);
+  // agrandir une photo cliente
+  var lb=root.querySelector('.vr__lb'), lbi=lb.querySelector('img');
+  root.querySelectorAll('[data-full]').forEach(function(b){b.addEventListener('click',function(){lbi.src=b.dataset.full;if(lb.showModal)lb.showModal();pause(15000)})});
+  lb.querySelector('.vr__lbx').addEventListener('click',function(){lb.close()});
+  lb.addEventListener('click',function(e){if(e.target===lb)lb.close()});
+})();
+</script>
 {%- endif -%}
 {% schema %}
 {"name": "RT · Avis clientes", "settings": [
-{"type": "paragraph", "content": "Ajoutez uniquement de VRAIS avis. La section reste invisible pour les clientes tant qu'il y a moins de 3 avis."},
-{"type": "text", "id": "note", "label": "Note moyenne réelle (ex. 4,7)"},
-{"type": "text", "id": "nombre", "label": "Nombre réel d'avis"},
+{"type": "paragraph", "content": "Ajoutez UNIQUEMENT de vrais avis de clientes VELEA (pas d'avis copiés d'un autre site). La section apparaît pour tout le monde dès 3 avis ; la note moyenne et le nombre d'avis sont calculés automatiquement."},
+{"type": "text", "id": "titre", "label": "Titre", "default": "Ce qu'en disent nos clientes"},
+{"type": "checkbox", "id": "auto", "label": "Défilement automatique", "default": true},
 {"type": "url", "id": "lien", "label": "Lien « Lire tous les avis » (facultatif)"}
 ], "blocks": [{"type": "avis", "name": "Avis", "settings": [
 {"type": "text", "id": "nom", "label": "Prénom + initiale (ex. Sophie M.)", "default": "Prénom N."},
-{"type": "text", "id": "date", "label": "Date (ex. octobre 2026)"},
+{"type": "text", "id": "date", "label": "Date (ex. 12 octobre 2026)"},
 {"type": "range", "id": "note", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5},
-{"type": "textarea", "id": "texte", "label": "Texte de l'avis"},
-{"type": "image_picker", "id": "photo", "label": "Photo de la cliente (avec son accord)"},
+{"type": "text", "id": "titre", "label": "Titre de l'avis (facultatif)"},
+{"type": "textarea", "id": "texte", "label": "Texte de l'avis (tel que la cliente l'a écrit)"},
+{"type": "image_picker", "id": "photo", "label": "Photo de la cliente avec le masque (avec son accord)"},
+{"type": "text", "id": "produit", "label": "Produit acheté (ex. Masque LED visage & cou)"},
 {"type": "checkbox", "id": "verifie", "label": "Achat vérifié (commande retrouvée)", "default": false},
 {"type": "checkbox", "id": "offert", "label": "Produit offert (obligatoire de l'indiquer)", "default": false}
 ]}], "presets": [{"name": "RT · Avis clientes"}]}
