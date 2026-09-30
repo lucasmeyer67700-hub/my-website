@@ -1,0 +1,103 @@
+{%- comment -%}
+  Vue 360° des lunettes LED (page produit lunettes) – modèle 3D (assets/velea-3d.js → VeleaLunettes3D, source : boutique-led/viewer3d/src/lunettes.js).
+  Deux modes : éteintes / allumées (lumière rouge). On tourne dans tous les sens (flèches ◀ ▶ ▲ ▼ + vues rapides).
+  Image haute définition affichée pendant le chargement ou si la 3D n'est pas disponible.
+{%- endcomment -%}
+<div class="vh-360 vh-360--lun" id="vue-360-lunettes" data-js="{{ 'velea-3d.js' | asset_url }}">
+  <div class="vh-360__stage" role="img" aria-label="Lunettes LED VELEA en 3D : faites glisser pour les tourner dans tous les sens">
+    <img class="vh-360__poster" src="{{ 'velea-lunettes-3d-1200.webp' | asset_url }}" srcset="{{ 'velea-lunettes-3d-800.webp' | asset_url }} 800w, {{ 'velea-lunettes-3d-1200.webp' | asset_url }} 1200w, {{ 'velea-lunettes-3d-1600.webp' | asset_url }} 1600w" sizes="(max-width: 749px) 100vw, 50vw" alt="Lunettes LED regard VELEA" width="1200" height="1500" fetchpriority="high" draggable="false">
+    <div class="vh-360__gl"></div>
+    <span class="vh-360__hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg><span>Glissez pour tourner</span></span>
+    <span class="vh-360__badge">360°</span>
+    <button type="button" class="vh-360__arr vh-360__arr--l" data-turn="-60" aria-label="Tourner vers la gauche"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button type="button" class="vh-360__arr vh-360__arr--r" data-turn="60" aria-label="Tourner vers la droite"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button type="button" class="vh-360__arr vh-360__arr--u" data-tilt="-45" aria-label="Voir par-dessus"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15l7-7 7 7"/></svg></button>
+    <button type="button" class="vh-360__arr vh-360__arr--d" data-tilt="45" aria-label="Voir par-dessous"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></button>
+  </div>
+  <div class="vh-360__bar vh-360__bar--mode" role="group" aria-label="Mode">
+    <button type="button" class="vh-360__b is-on" data-on="0"><i style="background:#F4F2F1"></i><span>Éteintes</span></button>
+    <button type="button" class="vh-360__b" data-on="1"><i style="background:#E0474C;box-shadow:0 0 8px 1px rgba(224,71,76,.7)"></i><span>Allumées</span></button>
+  </div>
+  <div class="vh-360__bar vh-360__bar--views" role="group" aria-label="Vues">
+    <button type="button" class="vh-360__v" data-view="face">Face</button>
+    <button type="button" class="vh-360__v" data-view="troisquart">3/4</button>
+    <button type="button" class="vh-360__v" data-view="cote">Côté</button>
+    <button type="button" class="vh-360__v" data-view="dessus">Dessus</button>
+    <button type="button" class="vh-360__v" data-view="dessous">Dessous</button>
+  </div>
+  <p class="vh-360__cap"><span data-cap="off">Tournez les lunettes dans tous les sens. Le bouton Mode est dessous, le port USB-C sur le côté.</span><span data-cap="on" hidden>Allumées : lumière rouge.</span></p>
+  <p class="vh-360__note">Modèle 3D d'illustration. Lumière simulée.</p>
+</div>
+<style>
+.vh-360{width:100%;font-family:var(--font-body--family),sans-serif}
+.vh-360__stage{position:relative;aspect-ratio:1/1;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 50% 41%,#B8737F 0%,#93505D 50%,#5E2A35 100%);user-select:none;-webkit-user-select:none}
+.vh-360__gl{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;cursor:grab}
+.vh-360__gl:active{cursor:grabbing}
+.vh-360__gl canvas{display:block;width:100%!important;height:100%!important;outline:none}
+.vh-360.is-3d .vh-360__gl{opacity:1}
+.vh-360--lun .vh-360__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s ease;pointer-events:none}
+.vh-360.is-3d .vh-360__poster{opacity:0}
+.vh-360__hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .4s ease;pointer-events:none;white-space:nowrap}
+.vh-360.is-touched .vh-360__hint,.vh-360.no-gl .vh-360__hint{opacity:0}
+.vh-360__badge{position:absolute;top:14px;left:14px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.45);color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em;pointer-events:none}
+.vh-360.no-gl .vh-360__badge{display:none}
+.vh-360__arr{position:absolute;z-index:2;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;opacity:0;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .4s ease,background .2s ease,transform .15s ease;-webkit-tap-highlight-color:transparent}
+.vh-360__arr--l{left:10px;top:50%;margin-top:-22px}.vh-360__arr--r{right:10px;top:50%;margin-top:-22px}
+.vh-360__arr--u{top:10px;left:50%;margin-left:-22px}.vh-360__arr--d{bottom:10px;left:50%;margin-left:-22px}
+.vh-360--lun .vh-360__hint{top:14px;bottom:auto;left:auto;right:12px;transform:none}
+.vh-360.is-3d .vh-360__arr{opacity:1;pointer-events:auto}
+.vh-360__arr:hover{background:rgba(255,255,255,.32)}
+.vh-360__arr:active{transform:scale(.92)}
+.vh-360__bar{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.vh-360__b{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 12px;border-radius:999px;border:1px solid #E8D5CC;background:#fff;color:#3D2B2F;font-size:14px;font-weight:600;cursor:pointer;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;-webkit-tap-highlight-color:transparent}
+.vh-360__b i{display:block;width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(61,43,47,.15)}
+.vh-360__b:active,.vh-360__v:active{transform:scale(.95)}
+.vh-360__b.is-on{border-color:#93505D;box-shadow:0 0 0 1px #93505D;background:#FCF6F4}
+.vh-360__bar--views{margin-top:8px;gap:6px}
+.vh-360__v{flex:1 1 0;min-height:38px;padding:6px 4px;border-radius:12px;border:1px solid #EFE2DC;background:#FCF6F4;color:#7D625A;font-size:13px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s ease,color .2s ease}
+.vh-360__v:hover{border-color:#C9A894;color:#3D2B2F}
+.vh-360__v.is-on{border-color:#93505D;color:#3D2B2F;background:#fff}
+.vh-360.no-gl .vh-360__bar,.vh-360.no-gl .vh-360__cap{display:none}
+.vh-360__cap{margin:8px 2px 0;font-size:14px;color:#3D2B2F}
+.vh-360__note{margin:2px 2px 0;font-size:12px;color:#7D625A}
+@media (max-width:749px){
+  .vh-360__stage{width:min(92%,46vh);width:min(92%,46svh);margin:0 auto;border-radius:18px}
+  .vh-360__hint{font-size:12px;padding:6px 10px}
+  .vh-360--lun .vh-360__hint{top:10px;right:10px}
+  .vh-360__badge{top:10px;left:10px}
+  .vh-360__arr{width:40px;height:40px}
+  .vh-360__arr--l,.vh-360__arr--r{margin-top:-20px}.vh-360__arr--u,.vh-360__arr--d{margin-left:-20px}
+  .vh-360__v{font-size:12px}
+  .vh-360__cap,.vh-360__note{text-align:center}
+}
+</style>
+<script>
+(function(){
+  var root=document.getElementById('vue-360-lunettes'); if(!root||root.dataset.ok)return; root.dataset.ok=1;
+  var api=null, pendingOn=0;
+  var modes=[].slice.call(root.querySelectorAll('[data-on]')), views=[].slice.call(root.querySelectorAll('[data-view]'));
+  var capOff=root.querySelector('[data-cap="off"]'), capOn=root.querySelector('[data-cap="on"]');
+  modes.forEach(function(b){b.addEventListener('click',function(){
+    modes.forEach(function(x){x.classList.toggle('is-on',x===b)});
+    var on=b.dataset.on==='1'; capOff.hidden=on; capOn.hidden=!on;
+    if(api)api.setOn(on); else pendingOn=on?1:0;
+  })});
+  views.forEach(function(b){b.addEventListener('click',function(){
+    views.forEach(function(x){x.classList.toggle('is-on',x===b)});
+    if(api)api.view(b.dataset.view);
+  })});
+  function clearViews(){views.forEach(function(x){x.classList.remove('is-on')})}
+  [].forEach.call(root.querySelectorAll('[data-turn]'),function(b){b.addEventListener('click',function(){if(api){api.turnBy(+b.dataset.turn);clearViews()}})});
+  [].forEach.call(root.querySelectorAll('[data-tilt]'),function(b){b.addEventListener('click',function(){if(api){api.tiltBy(+b.dataset.tilt);clearViews()}})});
+  function start(){
+    if(root.dataset.loading)return; root.dataset.loading=1;
+    var ok=false; try{var c=document.createElement('canvas');ok=!!(window.WebGLRenderingContext&&(c.getContext('webgl2')||c.getContext('webgl')))}catch(e){}
+    if(!ok){root.classList.add('no-gl');return}
+    var go=function(){ if(window.VeleaLunettes3D){api=window.VeleaLunettes3D(root,{fit:1})||null; if(api&&pendingOn)api.setOn(true);} else root.classList.add('no-gl'); };
+    if(window.VeleaLunettes3D){go();return}
+    var s=document.createElement('script'); s.src=root.dataset.js; s.async=true; s.onload=go; s.onerror=function(){root.classList.add('no-gl')};
+    document.head.appendChild(s);
+  }
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();start()}},{rootMargin:'200px'});io.observe(root)}else start();
+})();
+</script>

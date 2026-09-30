@@ -517,3 +517,16 @@ Thème « 💗 VELEA v33 – menu mobile (à publier) » (207602286937), copie d
 - Liens du menu sur téléphone : écriture Cormorant Garamond 27 px + petit tiret doré devant chaque lien (layout/theme.liquid, bloc « VELEA v33 »). L'ordinateur ne change pas.
 - Menus (déjà actifs, sans publier) : « Les coffrets » → « Le coffret » (menu principal et menu Boutique), « Tous les produits » → « Tous nos produits ».
 - Choix : l'accueil = le masque ; « Le masque LED » = sa fiche complète + « Découvrez aussi » en bas ; « Tous nos produits » = les 4 cartes (catalogue complet, une carte chacun).
+
+## v34 – lunettes LED en 3D (30/09/2026)
+Thème « 💗 VELEA v34 – lunettes 3D (à publier) » (207606808921), copie de v33. **À publier par le propriétaire.**
+- **Vue 3D des lunettes** sur leur page (modèle `product.lunettes`), même fond rose foncé que le masque et le stylo.
+  - Modèle 3D fait à partir des photos du fabricant (viewer3d/src/lunettes.js, fonction `VeleaLunettes3D`) : deux coques blanches brillantes, cadre gris clair, fenêtres transparentes cerclées d'argent, pont central, branches articulées.
+  - **Bouton ⏻/Mode + témoin bleu sous la coque droite** (plus visible de face, à la demande du propriétaire). Port USB-C sur le côté gauche.
+  - 2 modes : **Éteintes / Allumées** (lumière rouge dans les verres, LED intérieures, témoin bleu allumé).
+  - On tourne dans tous les sens : glisser, flèches ◀ ▶ ▲ ▼, et vues rapides Face · 3/4 · Côté · Dessus · Dessous.
+  - Fichiers : snippets/velea-360-lunettes.liquid ; sections/product-information.liquid et snippets/product-information-content.liquid (ajout du modèle « lunettes »).
+- **Images** : velea-lunettes-3d-{800,1200,1600}.webp (image de chargement + carte « Découvrez aussi »). 4K dans visuels/ (éteintes et allumées).
+- **Photo produit** (déjà en ligne) : velea-lunettes-led-regard.jpg ajoutée aux lunettes → visible dans le panier, le paiement et les cartes.
+- **Description** : nouvel onglet « Le produit en détail » (ouvert par défaut) à côté du produit, écrit d'après les photos ; traduit EN/DE/ES/IT.
+- 13 fichiers vérifiés (empreinte identique).

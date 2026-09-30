@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { initStylo } from './stylo.js';
+import { initLunettes } from './lunettes.js';
 
 const DEG = Math.PI / 180;
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -447,3 +448,4 @@ function init(root, opts) {
 
 window.VeleaMask3D = init;
 window.VeleaStylo3D = initStylo;
+window.VeleaLunettes3D = initLunettes;

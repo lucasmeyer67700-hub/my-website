@@ -110,3 +110,7 @@ Les boutons d'achat restent en vieux rose.
 ## v33 – menu du téléphone
 - Menu du téléphone : liens seuls, sans cartes produits dessous. Écriture Cormorant Garamond, tiret doré (#A87B3A → #D9B56E) devant chaque lien.
 - Un seul coffret → toujours « Le coffret » au singulier.
+
+## v34 – vues 3D des produits
+- Chaque appareil a sa vue 3D sur fond rose foncé (#B8737F → #93505D → #5E2A35), 360°, flèches pour tourner, note « Modèle 3D d'illustration ».
+- Les boutons et prises (Mode, USB-C) sont placés comme sur le produit réel ; rien de technique sur la face avant des lunettes.

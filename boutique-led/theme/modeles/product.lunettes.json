@@ -290,6 +290,45 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "row_detail": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Le produit en détail",
+                    "open_by_default": true,
+                    "icon": "eye",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "t": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Des lunettes de soin pour le contour des yeux, qui se portent comme des lunettes classiques. Elles associent une <strong>lumière rouge</strong> et un <strong>micro-massage doux (EMS)</strong>.</p><p><strong>Deux coques blanches brillantes</strong> entourent les yeux, reliées au centre par une petite charnière. Au milieu de chaque coque, une <strong>fenêtre transparente</strong> cerclée d'argent : vous voyez à travers pendant la séance. À l'intérieur, une couronne de LED diffuse la lumière rouge vers le contour des yeux.</p><p>Les <strong>branches articulées</strong> se replient pour le rangement. Le <strong>bouton ⏻/Mode</strong> est placé sous la coque droite, discret, avec un témoin bleu qui s'allume pendant l'utilisation. Le <strong>port de charge USB-C</strong> se trouve sur le côté gauche.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "paragraph",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 12,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "t"
+                  ]
+                },
                 "row0": {
                   "type": "_accordion-row",
                   "settings": {
@@ -487,6 +526,7 @@
                 }
               },
               "block_order": [
+                "row_detail",
                 "row0",
                 "row1",
                 "row2",

@@ -1,6 +1,6 @@
 {%- comment -%}
   Carte produit VELEA. Paramètre : p (produit).
-  Photo : photo principale du produit, sinon rendu 3D (masque, stylo), sinon visuel rose avec icône (coffret, lunettes).
+  Photo : photo principale du produit, sinon rendu 3D (masque, stylo, lunettes), sinon visuel rose avec icône (coffret).
 {%- endcomment -%}
 {%- liquid
   assign h = p.handle
@@ -22,6 +22,7 @@
     assign from_price = true
   elsif h == 'lunettes-led-regard-lumiere-rouge-contour-des-yeux'
     assign nom = 'Lunettes LED regard'
+    assign asset = 'velea-lunettes-3d'
     assign ico = 'eye'
     assign desc = 'Pour le contour des yeux'
   elsif h == 'stylo-visage-haute-frequence'
