@@ -425,3 +425,16 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   (snippets/product-information-content.liquid, `product_has_media`). Le masque n'a aucune photo → vue 360° invisible.
 - Correctif : ce snippet force `product_has_media = true` sur le modèle masque-led. Thème
   « 💗 VELEA v25 – vue 360 visible (à publier) » (gid://shopify/OnlineStoreTheme/207566700889), copie de v24 (publiée), md5 vérifié.
+
+## v26 – vrai 360° en 3D (30/09/2026)
+
+- Thème « 💗 VELEA v26 – masque 3D (à publier) » (gid://shopify/OnlineStoreTheme/207567683929), copie de v25 (publiée). md5 vérifiés.
+- La vue 360° n'utilise plus des photos qui défilent : modèle 3D du masque (three.js 0.160, sans CDN),
+  source dans `boutique-led/viewer3d/src/main.js`, compilé par `npm run build` → `theme/assets/velea-3d.js` (≈ 515 Ko, ≈ 130 Ko compressé).
+  Coque blanche brillante, contour rose doré en relief, cache-nez, grille de la bouche, bouton, pièce du cou, sangle,
+  ~700 LED à l'intérieur. Rotation libre à 360°, rotation automatique lente, reprise après 7 s sans toucher.
+- Pastilles « Éteint » + 7 couleurs : les LED et l'intérieur s'allument dans la couleur, halo coloré, la caméra tourne
+  vers l'intérieur. Chargé seulement quand la vue arrive à l'écran ; image fixe pendant le chargement ou si la 3D est impossible.
+- Mention : « Modèle 3D d'illustration. Couleurs et lumière des LED simulées. »
+- Pour un rendu identique au vrai produit : demander au fournisseur le fichier 3D (STEP/OBJ/GLB) ou faire scanner
+  le masque échantillon (photogrammétrie) → le fichier .glb peut remplacer le modèle dessiné dans la même visionneuse.

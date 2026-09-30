@@ -1,0 +1,1 @@
+{"name":"velea-viewer3d","private":true,"version":"1.0.0","scripts":{"build":"esbuild src/main.js --bundle --minify --format=iife --target=es2019 --outfile=../theme/assets/velea-3d.js"},"devDependencies":{"three":"0.160.0","esbuild":"0.20.2"}}

@@ -458,5 +458,10 @@ T = [
 ('>Tournez le masque, ou touchez une couleur pour allumer les LED.<','>Rotate the mask, or tap a colour to switch on the LEDs.<','>Drehen Sie die Maske oder tippen Sie auf eine Farbe, um die LEDs einzuschalten.<','>Gira la mascarilla o toca un color para encender los LED.<','>Ruota la maschera o tocca un colore per accendere i LED.<'),
 ('>LED allumées : <','>LEDs on: <','>LEDs an: <','>LED encendidos: <','>LED accesi: <'),
 ('>Couleurs des LED : rendu simulé à partir de la photo du fabricant.<',">LED colours: simulated from the manufacturer's photo.<",'>LED-Farben: Simulation auf Basis des Herstellerfotos.<','>Colores de los LED: simulación a partir de la foto del fabricante.<','>Colori dei LED: simulazione a partire dalla foto del produttore.<'),
+
+# --- v26 : modèle 3D ---
+('>Éteint<','>Off<','>Aus<','>Apagado<','>Spento<'),
+('>Tournez le masque à 360°, ou touchez une couleur pour allumer les LED.<','>Rotate the mask 360°, or tap a colour to switch on the LEDs.<','>Drehen Sie die Maske um 360° oder tippen Sie auf eine Farbe, um die LEDs einzuschalten.<','>Gira la mascarilla 360° o toca un color para encender los LED.<','>Ruota la maschera a 360° o tocca un colore per accendere i LED.<'),
+(">Modèle 3D d'illustration. Couleurs et lumière des LED simulées.<",'>Illustrative 3D model. LED colours and light are simulated.<','>Illustratives 3D-Modell. LED-Farben und -Licht sind simuliert.<','>Modelo 3D ilustrativo. Colores y luz de los LED simulados.<','>Modello 3D illustrativo. Colori e luce dei LED simulati.<'),
 ]
 LANGS = ['en', 'de', 'es', 'it']

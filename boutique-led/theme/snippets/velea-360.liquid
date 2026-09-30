@@ -1,49 +1,39 @@
 {%- comment -%}
-  Vue 360° du masque (page produit masque) : on fait glisser pour tourner, les pastilles allument les LED.
-  Photos : vues du fabricant détourées (gauche/droite = vues miroir). Couleurs des LED : rendu simulé à partir de la photo LED rouge.
+  Vue 360° du masque (page produit masque) – modèle 3D (assets/velea-3d.js, source : boutique-led/viewer3d).
+  On tourne le masque à 360° ; les pastilles allument les LED. Image fixe affichée pendant le chargement ou si la 3D n'est pas disponible.
 {%- endcomment -%}
-<div class="vh-360" id="vue-360">
-  <div class="vh-360__stage" tabindex="0" role="img" aria-label="Vue 360° du masque LED VELEA : faites glisser pour le tourner">
-    <div class="vh-360__spin">
-      <img src="{{ 'velea-360-m90.webp' | asset_url }}" data-a="-90" alt="" width="509" height="722" loading="lazy" draggable="false">
-      <img src="{{ 'velea-360-m35.webp' | asset_url }}" data-a="-35" alt="" width="509" height="722" loading="lazy" draggable="false">
-      <img src="{{ 'velea-360-p0.webp' | asset_url }}" data-a="0" alt="Masque LED VELEA de face" width="509" height="722" fetchpriority="high" draggable="false">
-      <img src="{{ 'velea-360-p35.webp' | asset_url }}" data-a="35" alt="" width="509" height="722" loading="lazy" draggable="false">
-      <img src="{{ 'velea-360-p90.webp' | asset_url }}" data-a="90" alt="" width="509" height="722" loading="lazy" draggable="false">
-    </div>
-    <div class="vh-360__led"><img alt="LED du masque allumées" width="474" height="564" draggable="false"></div>
+<div class="vh-360" id="vue-360" data-js="{{ 'velea-3d.js' | asset_url }}">
+  <div class="vh-360__stage" role="img" aria-label="Masque LED VELEA en 3D : faites glisser pour le tourner à 360°">
+    <img class="vh-360__poster" src="{{ 'velea-360-p0.webp' | asset_url }}" alt="Masque LED VELEA de face" width="509" height="722" fetchpriority="high" draggable="false">
+    <div class="vh-360__gl"></div>
     <span class="vh-360__hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg><span>Glissez pour tourner</span></span>
     <span class="vh-360__badge">360°</span>
   </div>
   <div class="vh-360__bar" role="group" aria-label="Couleurs des LED">
-    <button type="button" class="vh-360__b vh-360__b--spin is-on" data-mode="spin"><span>360°</span></button>
-    <button type="button" class="vh-360__b" data-c="rouge" data-g="255,58,58" data-src="{{ 'velea-led-rouge.webp' | asset_url }}"><i style="background:#E0474C"></i><span>Rouge</span></button>
-    <button type="button" class="vh-360__b" data-c="vert" data-g="60,215,110" data-src="{{ 'velea-led-vert.webp' | asset_url }}"><i style="background:#4CAF7A"></i><span>Vert</span></button>
-    <button type="button" class="vh-360__b" data-c="bleu" data-g="55,120,255" data-src="{{ 'velea-led-bleu.webp' | asset_url }}"><i style="background:#3F7FE0"></i><span>Bleu</span></button>
-    <button type="button" class="vh-360__b" data-c="violet" data-g="165,85,255" data-src="{{ 'velea-led-violet.webp' | asset_url }}"><i style="background:#8E5BD6"></i><span>Violet</span></button>
-    <button type="button" class="vh-360__b" data-c="jaune" data-g="255,205,45" data-src="{{ 'velea-led-jaune.webp' | asset_url }}"><i style="background:#F2C94C"></i><span>Jaune</span></button>
-    <button type="button" class="vh-360__b" data-c="cyan" data-g="35,215,235" data-src="{{ 'velea-led-cyan.webp' | asset_url }}"><i style="background:#3FC6D1"></i><span>Cyan</span></button>
-    <button type="button" class="vh-360__b" data-c="blanc" data-g="255,255,255" data-src="{{ 'velea-led-blanc.webp' | asset_url }}"><i style="background:#FFFFFF"></i><span>Blanc</span></button>
+    <button type="button" class="vh-360__b vh-360__b--spin is-on" data-mode="spin"><span>Éteint</span></button>
+    <button type="button" class="vh-360__b" data-hex="#ff2e2e"><i style="background:#E0474C"></i><span>Rouge</span></button>
+    <button type="button" class="vh-360__b" data-hex="#27e36a"><i style="background:#4CAF7A"></i><span>Vert</span></button>
+    <button type="button" class="vh-360__b" data-hex="#2f6bff"><i style="background:#3F7FE0"></i><span>Bleu</span></button>
+    <button type="button" class="vh-360__b" data-hex="#9b4dff"><i style="background:#8E5BD6"></i><span>Violet</span></button>
+    <button type="button" class="vh-360__b" data-hex="#ffc21f"><i style="background:#F2C94C"></i><span>Jaune</span></button>
+    <button type="button" class="vh-360__b" data-hex="#1fe0ff"><i style="background:#3FC6D1"></i><span>Cyan</span></button>
+    <button type="button" class="vh-360__b" data-hex="#ffffff"><i style="background:#FFFFFF"></i><span>Blanc</span></button>
   </div>
-  <p class="vh-360__cap"><span data-cap="spin">Tournez le masque, ou touchez une couleur pour allumer les LED.</span><span data-cap="led" hidden>LED allumées : <b></b></span></p>
-  <p class="vh-360__note">Couleurs des LED : rendu simulé à partir de la photo du fabricant.</p>
+  <p class="vh-360__cap"><span data-cap="spin">Tournez le masque à 360°, ou touchez une couleur pour allumer les LED.</span><span data-cap="led" hidden>LED allumées : <b></b></span></p>
+  <p class="vh-360__note">Modèle 3D d'illustration. Couleurs et lumière des LED simulées.</p>
 </div>
 <style>
-.vh-360{--g:255,255,255;--ga:0;width:100%;font-family:var(--font-body--family),sans-serif}
-.vh-360__stage{position:relative;aspect-ratio:1/1;border-radius:22px;overflow:hidden;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;
-  background:radial-gradient(circle at 50% 58%,rgba(var(--g),calc(var(--ga)*.55)) 0%,rgba(var(--g),0) 46%),radial-gradient(circle at 50% 40%,#B5707D 0%,#93505D 52%,#6C3340 100%);transition:background .5s ease}
-.vh-360__stage:active{cursor:grabbing}
-.vh-360__stage:focus-visible{box-shadow:0 0 0 3px #C9A894}
-.vh-360__spin,.vh-360__led{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;perspective:1000px}
-.vh-360__spin img{position:absolute;height:84%;width:auto;max-width:none;top:8%;left:50%;transform-origin:50% 60%;opacity:0;filter:drop-shadow(0 24px 30px rgba(40,10,18,.45));will-change:opacity,transform;pointer-events:none}
-.vh-360__led{opacity:0;transform:scale(.96);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
-.vh-360__led img{height:78%;width:auto;max-width:86%;object-fit:contain;filter:drop-shadow(0 0 28px rgba(var(--g),.55)) drop-shadow(0 20px 30px rgba(40,10,18,.4))}
-.vh-360.is-led .vh-360__led{opacity:1;transform:none}
-.vh-360.is-led .vh-360__spin{opacity:.0;transition:opacity .35s ease}
-.vh-360__spin{transition:opacity .35s ease}
+.vh-360{width:100%;font-family:var(--font-body--family),sans-serif}
+.vh-360__stage{position:relative;aspect-ratio:1/1;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 50% 41%,#B8737F 0%,#93505D 50%,#5E2A35 100%);user-select:none;-webkit-user-select:none}
+.vh-360__gl{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;cursor:grab}
+.vh-360__gl:active{cursor:grabbing}
+.vh-360__gl canvas{display:block;width:100%!important;height:100%!important;outline:none}
+.vh-360.is-3d .vh-360__gl{opacity:1}
+.vh-360__poster{position:absolute;left:50%;top:6%;height:88%;width:auto;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 24px 30px rgba(40,10,18,.45));transition:opacity .6s ease;pointer-events:none}
+.vh-360.is-3d .vh-360__poster{opacity:0}
 .vh-360__hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .4s ease;pointer-events:none;white-space:nowrap}
-.vh-360.is-touched .vh-360__hint,.vh-360.is-led .vh-360__hint{opacity:0}
-.vh-360__badge{position:absolute;top:14px;left:14px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.45);color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em}
+.vh-360.is-touched .vh-360__hint,.vh-360.no-gl .vh-360__hint{opacity:0}
+.vh-360__badge{position:absolute;top:14px;left:14px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.45);color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em;pointer-events:none}
 .vh-360__bar{display:flex;gap:6px;margin-top:12px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 4px}
 .vh-360__bar::-webkit-scrollbar{display:none}
 .vh-360__b{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:8px 12px;border-radius:999px;border:1px solid #E8D5CC;background:#fff;color:#3D2B2F;font-size:13px;font-weight:500;cursor:pointer;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;-webkit-tap-highlight-color:transparent}
@@ -52,55 +42,33 @@
 .vh-360__b:active{transform:scale(.95)}
 .vh-360__b.is-on{border-color:#93505D;box-shadow:0 0 0 1px #93505D;background:#FCF6F4}
 .vh-360__b--spin{font-weight:600}
+.vh-360.no-gl .vh-360__bar,.vh-360.no-gl .vh-360__cap{display:none}
 .vh-360__cap{margin:8px 2px 0;font-size:14px;color:#3D2B2F}
 .vh-360__note{margin:2px 2px 0;font-size:12px;color:#7D625A}
 @media (min-width:990px){.vh-360__bar{flex-wrap:wrap;overflow:visible}}
-@media (prefers-reduced-motion:reduce){.vh-360__led,.vh-360__spin,.vh-360__stage{transition:none}}
 </style>
 <script>
 (function(){
   var root=document.getElementById('vue-360'); if(!root||root.dataset.ok)return; root.dataset.ok=1;
-  var stage=root.querySelector('.vh-360__stage'), imgs=[].slice.call(root.querySelectorAll('.vh-360__spin img'));
-  var A=imgs.map(function(i){return +i.dataset.a}), a=0, raf=0, intro=true;
-  var ledImg=root.querySelector('.vh-360__led img'), btns=[].slice.call(root.querySelectorAll('.vh-360__b'));
+  var btns=[].slice.call(root.querySelectorAll('.vh-360__b')), api=null, pending=null;
   var capS=root.querySelector('[data-cap="spin"]'), capL=root.querySelector('[data-cap="led"]'), capB=capL.querySelector('b');
-  function ss(e0,e1,x){x=Math.min(1,Math.max(0,(x-e0)/(e1-e0)));return x*x*(3-2*x)}
-  function draw(){
-    var v=Math.max(A[0],Math.min(A[A.length-1],a));
-    for(var k=0;k<imgs.length;k++){
-      var op=0;
-      if(k<A.length-1&&v>=A[k]&&v<=A[k+1]){op=1-ss(.25,.75,(v-A[k])/(A[k+1]-A[k]))}
-      if(k>0&&v>=A[k-1]&&v<=A[k]){op=Math.max(op,ss(.25,.75,(v-A[k-1])/(A[k]-A[k-1])))}
-      var r=Math.max(-28,Math.min(28,(a-A[k])*.6));
-      imgs[k].style.opacity=op;
-      imgs[k].style.transform='translateX(-50%) rotateY('+r+'deg)';
-    }
+  function select(b){
+    btns.forEach(function(x){x.classList.toggle('is-on',x===b)});
+    var hex=b.dataset.hex||null;
+    capS.hidden=!!hex; capL.hidden=!hex; if(hex)capB.textContent=b.textContent.trim();
+    if(!api){pending=b;return}
+    api.setLed(hex); if(hex)api.turnTo(150); else api.turnTo(0);
   }
-  function setMode(m,btn){
-    btns.forEach(function(b){b.classList.toggle('is-on',b===btn)});
-    if(m==='spin'){root.classList.remove('is-led');root.style.setProperty('--ga',0);capS.hidden=false;capL.hidden=true;return}
-    ledImg.src=btn.dataset.src; root.style.setProperty('--g',btn.dataset.g); root.style.setProperty('--ga',1);
-    root.classList.add('is-led'); capS.hidden=true; capL.hidden=false; capB.textContent=btn.textContent.trim();
+  btns.forEach(function(b){b.addEventListener('click',function(){select(b)})});
+  function start(){
+    if(root.dataset.loading)return; root.dataset.loading=1;
+    var ok=false; try{var c=document.createElement('canvas');ok=!!(window.WebGLRenderingContext&&(c.getContext('webgl2')||c.getContext('webgl')))}catch(e){}
+    if(!ok){root.classList.add('no-gl');return}
+    var s=document.createElement('script'); s.src=root.dataset.js; s.async=true;
+    s.onload=function(){ if(window.VeleaMask3D){api=window.VeleaMask3D(root)||null; if(api&&pending)select(pending);} else root.classList.add('no-gl'); };
+    s.onerror=function(){root.classList.add('no-gl')};
+    document.head.appendChild(s);
   }
-  btns.forEach(function(b){b.addEventListener('click',function(){intro=false;setMode(b.dataset.mode==='spin'?'spin':'led',b)})});
-  // glisser pour tourner
-  var x0=0,a0=0,down=false;
-  stage.addEventListener('pointerdown',function(e){down=true;intro=false;x0=e.clientX;a0=a;root.classList.add('is-touched');
-    if(root.classList.contains('is-led'))setMode('spin',btns[0]); try{stage.setPointerCapture(e.pointerId)}catch(_){}});
-  stage.addEventListener('pointermove',function(e){if(!down)return;var n=a0+(e.clientX-x0)*.5;
-    if(n>90)n=90+(n-90)*.25; if(n<-90)n=-90+(n+90)*.25; a=n; cancelAnimationFrame(raf); raf=requestAnimationFrame(draw)});
-  function up(){if(!down)return;down=false;if(a>90||a<-90)tween(a,Math.max(-90,Math.min(90,a)),300)}
-  stage.addEventListener('pointerup',up); stage.addEventListener('pointercancel',up);
-  stage.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();intro=false;root.classList.add('is-touched');
-    if(root.classList.contains('is-led'))setMode('spin',btns[0]);tween(a,Math.max(-90,Math.min(90,a+(e.key==='ArrowRight'?30:-30))),250)}});
-  function tween(f,t,d,cb){var s=performance.now();(function step(n){var p=Math.min(1,(n-s)/d),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;a=f+(t-f)*e;draw();
-    if(p<1)raf=requestAnimationFrame(step);else if(cb)cb()})(s)}
-  draw();
-  // petite démonstration au premier affichage
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(en){if(!en[0].isIntersecting)return;io.disconnect();
-      setTimeout(function(){if(!intro)return;tween(0,40,900,function(){if(!intro)return;tween(40,-40,1400,function(){if(!intro)return;tween(-40,0,900)})})},600)},{threshold:.5});
-    io.observe(stage);
-  }
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();start()}},{rootMargin:'200px'});io.observe(root)}else start();
 })();
 </script>
