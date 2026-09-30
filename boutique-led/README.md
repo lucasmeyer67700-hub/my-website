@@ -404,3 +404,17 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Compléments rendus discrets : section « Pour aller plus loin » après la FAQ, 2 petites cartes coffret (vignette + prix + économie),
   lunettes et stylo seuls en simple lien texte.
 - En ligne tout de suite : description du masque et page FAQ mises à jour (fréquence, dimensions, LED, voyant, précautions).
+
+## v24 – vue 360° du masque (30/09/2026)
+
+- v23 publiée. Thème « 💗 VELEA v24 – vue 360 (à publier) » (gid://shopify/OnlineStoreTheme/207566537049), copie de v23.
+  18 fichiers envoyés, empreintes md5 toutes vérifiées.
+- Page du masque (modèle masque-led) : la galerie est remplacée par une vue 360° (snippets/velea-360.liquid,
+  branchée dans sections/product-information.liquid ; la galerie d'origine reste dans la page, masquée).
+  Fond rose sombre, on fait glisser pour tourner (5 angles : profil gauche, 3/4 gauche, face, 3/4 droit, profil droit),
+  petite démonstration automatique au premier affichage, flèches du clavier.
+- Pastilles 360° + 7 couleurs : un appui affiche le panneau LED allumé dans la couleur, avec un halo de la même couleur.
+- Images : photo 4 vues du fabricant détourée (theme/assets/decoupe-360.py), vues gauche = miroir des vues droite,
+  panneau LED recoloré à partir de la photo rouge. Mention affichée : « rendu simulé à partir de la photo du fabricant ».
+- Limite : pas de vue de dos dans les photos fournies → rotation de profil à profil (180°), pas 360° complet.
+  Pour un vrai 360° : 24 à 36 photos du masque sur un plateau tournant (ou vue de dos + 3/4 arrière).

@@ -452,5 +452,11 @@ T = [
 ('>Lunettes LED regard (','>LED eye glasses (','>LED-Augenbrille (','>Gafas LED para la mirada (','>Occhiali LED sguardo ('),
 ('>Stylo visage (','>Facial pen (','>Gesichtsstift (','>Lápiz facial (','>Penna viso ('),
 ('>Voir toutes les caractéristiques<','>See all specifications<','>Alle technischen Daten ansehen<','>Ver todas las características<','>Vedi tutte le caratteristiche<'),
+
+# --- v24 : vue 360° ---
+('>Glissez pour tourner<','>Drag to rotate<','>Zum Drehen ziehen<','>Desliza para girar<','>Trascina per ruotare<'),
+('>Tournez le masque, ou touchez une couleur pour allumer les LED.<','>Rotate the mask, or tap a colour to switch on the LEDs.<','>Drehen Sie die Maske oder tippen Sie auf eine Farbe, um die LEDs einzuschalten.<','>Gira la mascarilla o toca un color para encender los LED.<','>Ruota la maschera o tocca un colore per accendere i LED.<'),
+('>LED allumées : <','>LEDs on: <','>LEDs an: <','>LED encendidos: <','>LED accesi: <'),
+('>Couleurs des LED : rendu simulé à partir de la photo du fabricant.<',">LED colours: simulated from the manufacturer's photo.<",'>LED-Farben: Simulation auf Basis des Herstellerfotos.<','>Colores de los LED: simulación a partir de la foto del fabricante.<','>Colori dei LED: simulazione a partire dalla foto del produttore.<'),
 ]
 LANGS = ['en', 'de', 'es', 'it']
