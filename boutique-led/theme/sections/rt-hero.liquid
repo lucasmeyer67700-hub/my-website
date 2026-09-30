@@ -29,6 +29,12 @@
 var past=false,end=false;function u(){s.classList.toggle('is-on',past&&!end)}
 new IntersectionObserver(function(e){past=!e[0].isIntersecting&&e[0].boundingClientRect.top<0;u()}).observe(c);
 var f=document.querySelector('.vh-final')||document.querySelector('footer');if(f)new IntersectionObserver(function(e){end=e[0].isIntersecting||e[0].boundingClientRect.top<0;u()}).observe(f);})();
+/* v22 : effet au toucher (iOS) + apparition douce au défilement */
+document.addEventListener('touchstart',function(){},{passive:true});
+(function(){if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var els=document.querySelectorAll('.rt .rt-center,.vh-trust>div,.rt-feat>div,.vh-why__list>div,.vh-steps__list li,.vh-rev__card,.vh-cof__card,.vh-comp__card,.rt-faq details,.vh-final>*,.vh-prod__img');
+var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+els.forEach(function(el){if(el.closest('.vh-hero'))return;var i=Array.prototype.indexOf.call(el.parentNode.children,el);el.style.transitionDelay=Math.min(i,5)*70+'ms';el.classList.add('vh-r');el.addEventListener('transitionend',function d(ev){if(ev.propertyName!=='opacity')return;el.classList.remove('vh-r','is-in');el.style.transitionDelay='';el.removeEventListener('transitionend',d)});io.observe(el)});})();
 </script>
 </div>
 </div>

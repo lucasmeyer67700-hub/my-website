@@ -391,3 +391,62 @@ media-gallery:not(:has(slideshow-slide)){display:block;aspect-ratio:1/1;border-r
   .vh-final{padding:48px 16px;border-radius:20px}
   .vh-final .rt-btn{width:100%}
 }
+/* ===== v22 : rose brume · blanc · brun clair + animations douces ===== */
+.rt{--brume:#F6E9E7;--brume-l:#FCF6F4;--sable:#F3E9E1;--latte:#C9A894;--latte-d:#9C7A64;--cta:#A95F6C;--cta2:#8E6A55;--ink:#3D2B2F;--muted:#7D625A;--line:#E8D5CC}
+body{background:#FCF6F4}
+/* titres : petit trait brun clair sous les titres centrés */
+.rt-center h2:after{content:"";display:block;width:44px;height:2px;border-radius:2px;margin:14px auto 0;background:linear-gradient(90deg,#C47A86,#C9A894)}
+/* fonds : un mélange blanc, rose brume, sable */
+.rt-hero.vh-hero{background:linear-gradient(160deg,#FFFFFF 0%,#FCF6F4 45%,#F6E9E7 75%,#F3E9E1 100%)}
+.vh-trust{background:linear-gradient(120deg,#FFFFFF 0%,#F3E9E1 100%);border:1px solid #E8D5CC}
+.vh-trust .rt-ico,.rt-feat .rt-ico{background:#F3E9E1;color:#9C7A64}
+.vh-why{background:linear-gradient(180deg,#F6E9E7 0%,#FCF6F4 100%)}
+.vh-why__list>div{border-top-color:#E8D5CC}
+.rt-steps.vh-steps{background:#FFFFFF;border:1px solid #F0E2DC}
+.vh-steps__list span{background:linear-gradient(135deg,#C47A86,#C9A894);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rt-box{background:#F3E9E1!important;border-color:#E8D5CC!important}
+.vh-final{background:linear-gradient(135deg,#F6E9E7 0%,#F3E9E1 100%)}
+.vh-cof__card,.vh-comp__card,.vh-rev__card{border-color:#E8D5CC}
+.vh-badge{background:#FFFFFF;color:#9C7A64;border:1px solid #E8D5CC}
+.vh-badge--in{background:#F3E9E1}
+.vh-cof__sep b{background:#F3E9E1}
+.vh-price{color:#3D2B2F}
+.vh-link,.vh-comp__l{color:#9C7A64!important}
+.rt-faq summary:after{color:#C9A894}
+.rt-sticky{background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top-color:#E8D5CC}
+/* boutons : dégradé rose → brun clair, reflet qui passe, léger soulèvement */
+.rt .rt-btn--p,.rt-sticky .rt-btn--p,.add-to-cart-button,button[name="add"]{position:relative;overflow:hidden;background:linear-gradient(120deg,#A95F6C 0%,#9A6468 55%,#8E6A55 100%)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 10px 24px -14px rgba(142,106,85,.9)!important;transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease!important;-webkit-tap-highlight-color:transparent}
+.rt .rt-btn--p:after,.rt-sticky .rt-btn--p:after,.add-to-cart-button:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-18deg);animation:vh-shine 4.5s ease-in-out 1.2s infinite!important;pointer-events:none}
+@keyframes vh-shine{0%{left:-60%}28%{left:130%}100%{left:130%}}
+.rt .rt-btn--p:hover,.add-to-cart-button:hover,button[name="add"]:hover{transform:translateY(-2px)!important;box-shadow:0 16px 30px -14px rgba(142,106,85,1)!important}
+.rt .rt-btn--p:active,.rt-sticky .rt-btn--p:active,.add-to-cart-button:active,button[name="add"]:active{transform:scale(.97)!important}
+.rt-btn--s{transition:transform .25s ease,border-color .25s ease,background .25s ease!important}
+.rt-btn--s:hover,.rt-btn--s:active{border-color:#C9A894!important;background:#FCF6F4!important;transform:translateY(-1px)}
+/* cartes : grossissent un peu au survol ou au passage du doigt */
+.vh-cof__card,.vh-comp__card,.vh-rev__card,.vh-trust>div,.rt-feat>div,.vh-why__list>div,.product-card{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease!important;-webkit-tap-highlight-color:transparent}
+.vh-cof__card:hover,.vh-cof__card:active,.vh-comp__card:hover,.vh-comp__card:active,.vh-rev__card:hover,.vh-rev__card:active,.product-card:hover,.product-card:active{transform:scale(1.03)!important;box-shadow:0 22px 40px -26px rgba(61,43,47,.45)!important;position:relative;z-index:2}
+.vh-cof__card:hover .vh-cof__img img,.vh-cof__card:active .vh-cof__img img,.vh-comp__card:hover img,.vh-comp__card:active img{transform:scale(1.04)}
+.vh-cof__img,.vh-comp__img{overflow:hidden;border-radius:14px}
+.vh-cof__img img,.vh-comp__img img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.vh-trust>div:active,.rt-feat>div:active,.vh-why__list>div:active{transform:scale(1.03)}
+/* entrée de la bannière */
+.vh-hero__txt>*{animation:vh-up .8s cubic-bezier(.2,.7,.2,1) both!important}
+.vh-hero__txt>*:nth-child(2){animation-delay:.08s!important}
+.vh-hero__txt>*:nth-child(3){animation-delay:.16s!important}
+.vh-hero__txt>*:nth-child(4){animation-delay:.24s!important}
+.vh-hero__txt>*:nth-child(5){animation-delay:.32s!important}
+.vh-hero__txt>*:nth-child(6){animation-delay:.4s!important}
+.vh-vis img{animation:vh-zoom 1.2s cubic-bezier(.2,.7,.2,1) both!important}
+@keyframes vh-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes vh-zoom{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+/* apparition douce au défilement (ajoutée par le script de la bannière) */
+.vh-r.vh-r{opacity:0;transform:translateY(16px)!important;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)!important}
+.vh-r.vh-r.is-in{opacity:1;transform:none!important}
+.vh-r.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rt .rt-btn--p:after,.rt-sticky .rt-btn--p:after,.add-to-cart-button:after{animation:none!important;display:none}
+  .vh-hero__txt>*,.vh-vis img{animation:none!important}
+  .vh-r{opacity:1;transform:none;transition:none}
+  .vh-cof__card,.vh-comp__card,.vh-rev__card,.product-card{transition:none!important}
+}
+.rt-btn{border-radius:14px}

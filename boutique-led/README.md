@@ -381,3 +381,11 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Traductions EN/DE/ES/IT des nouveaux textes.
 - Reste à faire (propriétaire) : publier v21, ajouter les photos dans l'éditeur, réécrire « Notre histoire » (encore « rituel éclat », « spa »),
   confirmer avec le fournisseur : nettoyage, filtrage des fenêtres des yeux, notice FR, poids, CE.
+
+## v22 – rose brume + animations (30/09/2026)
+
+- v21 publiée par le propriétaire. Thème « 💗 VELEA v22 – animé rose brume (à publier) » (gid://shopify/OnlineStoreTheme/207565029721),
+  copie de v21. 3 fichiers modifiés : assets/rituel.css, sections/rt-hero.liquid (script : toucher mobile + apparition au défilement),
+  config/settings_data.json (fond #FCF6F4, textes #7D625A, bordures #E8D5CC, boutons #A95F6C arrondis 14 px, variantes, badges,
+  panier et champs en blanc). Empreintes md5 vérifiées (settings_data reformaté par Shopify, contenu vérifié).
+- Aperçu local testé sur mobile : toutes les apparitions se déclenchent, carte agrandie à 1,03 au toucher.

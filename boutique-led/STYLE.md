@@ -70,3 +70,15 @@ Les boutons d'achat restent en vieux rose.
 - Ne pas présenter la garantie légale de 2 ans comme un avantage de la marque (interdit) ; la citer seulement de façon neutre (FAQ, CGV, retours).
 - Ordre de l'accueil : bannière → réassurance → masque → pourquoi VELEA → comment ça marche → avis (dès 3 vrais avis) → coffrets + compléments → FAQ → appel final.
 - Un seul bouton plein par écran ; les autres actions sont des liens texte. Aucun carrousel, aucun pop-up sur l'accueil.
+
+## v22 – rose brume, blanc, brun clair + animations douces (remplace les couleurs v21 et la règle « pas d'animation » de v19)
+- Fond du site : rose brume clair #FCF6F4. Cartes, tiroir panier, champs : blanc #FFFFFF.
+- Rose brume #F6E9E7 (section « Pourquoi VELEA », appel final), sable #F3E9E1 (réassurance, icônes, « Dans la boîte »).
+- Brun clair #C9A894 (traits sous les titres, « + » FAQ, bordures boutons secondaires), brun clair foncé #9C7A64 (icônes, liens).
+- Bordures #E8D5CC. Texte #3D2B2F, texte secondaire #7D625A.
+- Boutons d'achat : dégradé #A95F6C → #8E6A55 (texte blanc lisible), arrondi 14 px, reflet lumineux qui passe toutes les ~4,5 s,
+  léger soulèvement au survol, petit « enfoncement » au toucher.
+- Cartes (coffrets, compléments, avis, cartes produits) : grossissent de 3 % au survol ou au passage du doigt, ombre douce.
+- Bannière : apparition douce du texte et de la photo ; autres blocs : apparition douce au défilement.
+- Tout est coupé pour les personnes qui ont activé « réduire les animations » sur leur téléphone.
+- Toujours interdit : compteurs, pop-ups, badges « best-seller », fausse urgence.
