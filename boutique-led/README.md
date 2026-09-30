@@ -438,3 +438,12 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Mention : « Modèle 3D d'illustration. Couleurs et lumière des LED simulées. »
 - Pour un rendu identique au vrai produit : demander au fournisseur le fichier 3D (STEP/OBJ/GLB) ou faire scanner
   le masque échantillon (photogrammétrie) → le fichier .glb peut remplacer le modèle dessiné dans la même visionneuse.
+
+## v27 – sangle noire + photo 3D sur l'accueil (30/09/2026)
+
+- Thème « 💗 VELEA v27 – sangle noire + photo 3D (à publier) » (gid://shopify/OnlineStoreTheme/207568994649), copie de v26 (publiée). md5 vérifiés.
+- Modèle 3D : sangle noire en velours avec épaisseur réelle et texture de fibres, rabat velcro gris foncé à l'arrière
+  (face à crochets), attaches blanches aux tempes inchangées. Options d'appel `VeleaMask3D(root, {dist, fit, still})` pour les rendus fixes.
+- Accueil, bloc « Le masque LED VELEA » : sans photo choisie dans l'éditeur, affiche un rendu haute qualité du masque 3D
+  (vue 3/4, fond rose sombre, format 4:5, rendu 2400 × 3000 réduit en 800 / 1200 / 1600 px, `assets/velea-masque-3d-*.webp`),
+  cliquable vers la page du masque. Rien d'autre n'a été modifié.

@@ -186,20 +186,47 @@ function buildMask(M) {
   const neckGeo = gridGeometry(160, 90, neckFn);
   group.add(new THREE.Mesh(neckGeo, M.white), new THREE.Mesh(neckGeo, M.inner));
 
-  // 6) Sangle réglable à l'arrière + attaches
+  // 6) Sangle noire réglable (velours) + fermeture velcro à l'arrière + attaches
   {
-    const yS = 0.22, H = 0.14, n = 120, a0 = 104 * DEG, a1 = 256 * DEG;
+    const yS = 0.22, H = 0.14, T = 0.012;
     const [rx, rz] = radii(yS);
-    const pos = [], idx = [];
-    for (let i = 0; i <= n; i++) {
-      const th = lerp(a0, a1, i / n);
-      const x = rx * 1.035 * se(Math.sin(th), 0.86), z = rz * 1.035 * se(Math.cos(th), 0.86);
-      pos.push(x, yS - H / 2, z, x, yS + H / 2, z);
-      if (i < n) { const k = i * 2; idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
-    group.add(new THREE.Mesh(g, M.strap));
+    // bande avec une vraie épaisseur (4 faces + bouts), coordonnées de texture le long de la sangle
+    const band = (a0, a1, f, h, n, uScale) => {
+      const pts = [];
+      for (let i = 0; i <= n; i++) {
+        const th = lerp(a0, a1, i / n);
+        const x = rx * f * se(Math.sin(th), 0.86), z = rz * f * se(Math.cos(th), 0.86);
+        const nr = new THREE.Vector3(x / (rx * rx), 0, z / (rz * rz)).normalize();
+        pts.push({ c: new THREE.Vector3(x, yS, z), nr });
+      }
+      let len = 0; const arc = [0];
+      for (let i = 1; i < pts.length; i++) { len += pts[i].c.distanceTo(pts[i - 1].c); arc.push(len); }
+      const pos = [], uv = [], idx = [];
+      const P = (i, sn, su) => pts[i].c.clone().addScaledVector(pts[i].nr, sn * T / 2).add(new THREE.Vector3(0, su * h / 2, 0));
+      const faces = [[[1, 1], [1, -1]], [[1, -1], [-1, -1]], [[-1, -1], [-1, 1]], [[-1, 1], [1, 1]]];
+      faces.forEach(([A, B]) => {
+        const base = pos.length / 3;
+        for (let i = 0; i <= n; i++) {
+          const a = P(i, A[0], A[1]), b = P(i, B[0], B[1]);
+          pos.push(a.x, a.y, a.z, b.x, b.y, b.z); uv.push(arc[i] * uScale, 0, arc[i] * uScale, 1);
+          if (i < n) { const k = base + i * 2; idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
+        }
+      });
+      [0, n].forEach((i, e) => {
+        const base = pos.length / 3, q = [[1, 1], [1, -1], [-1, -1], [-1, 1]].map(([a, b]) => P(i, a, b));
+        q.forEach((v) => { pos.push(v.x, v.y, v.z); uv.push(0, 0); });
+        if (e === 0) idx.push(base, base + 2, base + 1, base, base + 3, base + 2); else idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+      });
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx); g.computeVertexNormals();
+      return g;
+    };
+    group.add(new THREE.Mesh(band(100 * DEG, 260 * DEG, 1.035, H, 220, 3.2), M.strap));
+    // rabat velcro qui se referme par-dessus, à l'arrière
+    const tab = new THREE.Mesh(band(156 * DEG, 212 * DEG, 1.035 + T * 1.2 / rx, H * 1.0, 90, 3.2), M.hook);
+    group.add(tab);
     [-1, 1].forEach((s) => {
       const th = s * 101 * DEG, p = head(th, yS), nn = headNormal(th, yS);
       const b = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.19, 0.11, 2, 2, 2), M.plain);
@@ -251,6 +278,29 @@ function glowTexture() {
   g.fillStyle = r; g.fillRect(0, 0, 64, 64);
   return new THREE.CanvasTexture(c);
 }
+// textures de la sangle : velours noir (fibres) et face « crochets » du velcro
+function fabricTexture(bump) {
+  const W = 512, Hh = 128, c = document.createElement('canvas'); c.width = W; c.height = Hh;
+  const g = c.getContext('2d'); g.fillStyle = bump ? '#808080' : '#ffffff'; g.fillRect(0, 0, W, Hh);
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 9000; i++) {
+    const x = rnd() * W, y = rnd() * Hh, l = 2 + rnd() * 6, v = bump ? 90 + rnd() * 90 : 200 + rnd() * 55;
+    g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')'; g.fillRect(x, y, l, 1);
+  }
+  g.fillStyle = bump ? 'rgba(40,40,40,.9)' : 'rgba(150,150,150,.8)';
+  g.fillRect(0, 3, W, 2); g.fillRect(0, Hh - 5, W, 2);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (!bump) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8; return t;
+}
+function hookTexture() {
+  const W = 512, Hh = 128, c = document.createElement('canvas'); c.width = W; c.height = Hh;
+  const g = c.getContext('2d'); g.fillStyle = '#6a6a6a'; g.fillRect(0, 0, W, Hh);
+  for (let y = 10; y < Hh - 8; y += 7) for (let x = (y % 14 ? 3 : 0); x < W; x += 6) {
+    g.fillStyle = '#d8d8d8'; g.beginPath(); g.arc(x, y, 1.6, 0, Math.PI * 2); g.fill();
+  }
+  g.fillStyle = '#3a3a3a'; g.fillRect(0, 2, W, 4); g.fillRect(0, Hh - 6, W, 4);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t;
+}
 function shadowTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 256;
   const g = c.getContext('2d');
@@ -260,7 +310,8 @@ function shadowTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-function init(root) {
+function init(root, opts) {
+  opts = opts || {};
   const host = root.querySelector('.vh-360__gl');
   const stage = root.querySelector('.vh-360__stage');
   let renderer;
@@ -284,7 +335,8 @@ function init(root) {
     plain: new THREE.MeshPhysicalMaterial({ color: 0xf6f4f3, roughness: 0.3, clearcoat: 0.6, clearcoatRoughness: 0.2 }),
     hole: new THREE.MeshStandardMaterial({ color: 0xc9c3c1, roughness: 0.6 }),
     icon: new THREE.MeshStandardMaterial({ color: 0xb9b3b1, roughness: 0.5 }),
-    strap: new THREE.MeshStandardMaterial({ color: 0xebe8e6, roughness: 0.95, side: THREE.DoubleSide }),
+    strap: new THREE.MeshPhysicalMaterial({ color: 0x2a2729, map: fabricTexture(false), bumpMap: fabricTexture(true), bumpScale: 1.2, roughness: 0.95, sheen: 1, sheenColor: 0x6d6568, sheenRoughness: 0.55 }),
+    hook: new THREE.MeshPhysicalMaterial({ color: 0x5a5556, map: hookTexture(), bumpMap: hookTexture(), bumpScale: 2.2, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.35 }),
     led: new THREE.MeshBasicMaterial({ color: 0xd9d4d2 }),
     ledGlow: new THREE.PointsMaterial({ size: 0.09, map: glowTexture(), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, sizeAttenuation: true }),
   };
@@ -317,7 +369,7 @@ function init(root) {
   controls.enablePan = false; controls.enableZoom = false;
   controls.rotateSpeed = 0.7;
   controls.minPolarAngle = 62 * DEG; controls.maxPolarAngle = 104 * DEG;
-  controls.autoRotate = true; controls.autoRotateSpeed = 1.6;
+  controls.autoRotate = !opts.still; controls.autoRotateSpeed = 1.6;
   renderer.domElement.style.touchAction = 'pan-y';
   let idleT = 0;
   controls.addEventListener('start', () => { controls.autoRotate = false; root.classList.add('is-touched'); clearTimeout(idleT); });
@@ -328,7 +380,7 @@ function init(root) {
     const w = host.clientWidth || 400, h = host.clientHeight || 400;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    camera.position.setLength(7.6 * Math.max(1, 1 / camera.aspect));
+    camera.position.setLength((opts.dist || 7.6) * Math.max(1, (opts.fit || 1) / camera.aspect));
     camera.updateProjectionMatrix();
   }
   resize();

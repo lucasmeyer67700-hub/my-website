@@ -7,8 +7,11 @@
 {%- assign img = section.settings.photo -%}
 {%- if img == blank and m_ok and m.images.size > 1 -%}{%- assign img = m.images[1] -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt" id="rt-masque"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod{% if img == blank %} vh-prod--noimg{% endif %}">
-{%- if img != blank -%}<div class="vh-prod__img">{{ img | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(max-width: 989px) 100vw, 500px', widths: '500, 750, 1000', alt: section.settings.alt }}</div>{%- endif -%}
+<div class="rt" id="rt-masque"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod">
+{%- if img != blank -%}<div class="vh-prod__img">{{ img | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(max-width: 989px) 100vw, 500px', widths: '500, 750, 1000', alt: section.settings.alt }}</div>
+{%- else -%}{%- comment -%} Sans photo choisie : rendu haute qualité du masque 3D (4:5, 3 tailles) {%- endcomment -%}
+<a class="vh-prod__img" href="{{ m_url }}"><img src="{{ 'velea-masque-3d-1200.webp' | asset_url }}" srcset="{{ 'velea-masque-3d-800.webp' | asset_url }} 800w, {{ 'velea-masque-3d-1200.webp' | asset_url }} 1200w, {{ 'velea-masque-3d-1600.webp' | asset_url }} 1600w" sizes="(max-width: 989px) calc(100vw - 32px), 520px" width="1200" height="1500" loading="lazy" decoding="async" alt="{{ section.settings.alt | escape }}"></a>
+{%- endif -%}
 <div>
 <h2>Le masque LED VELEA</h2>
 <p class="vh-sub">Deux pièces, un bouton, aucun fil.</p>
