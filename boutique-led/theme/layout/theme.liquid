@@ -46,6 +46,17 @@
       {%- render 'theme-editor' -%}
     {% endif %}
 
+    {%- comment -%} VELEA v33 : menu du téléphone – écriture élégante + tiret doré (ordinateur inchangé) {%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    <style>
+      @media (max-width:989px){
+        .menu-drawer__menu-item--mainlist{padding-block:12px}
+        .menu-drawer__menu-item--mainlist .menu-drawer__menu-item-text{display:inline-flex;align-items:center;gap:14px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:27px;line-height:1.15;letter-spacing:.01em;color:#3D2B2F}
+        .menu-drawer__menu-item--mainlist .menu-drawer__menu-item-text:before{content:"";flex:none;width:20px;height:2px;border-radius:2px;background:linear-gradient(90deg,#A87B3A,#D9B56E);transition:width .25s ease}
+        .menu-drawer__menu-item--mainlist:hover .menu-drawer__menu-item-text:before,.menu-drawer__menu-item--mainlist:active .menu-drawer__menu-item-text:before,.menu-drawer__menu-item--mainlist[aria-current] .menu-drawer__menu-item-text:before{width:30px}
+      }
+    </style>
     {{ content_for_header }}
   </head>
 

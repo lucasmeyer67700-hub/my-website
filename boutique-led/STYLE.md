@@ -106,3 +106,7 @@ Les boutons d'achat restent en vieux rose.
 - Bouton du haut de l'accueil : texte doré sans cadre (dégradé #8C6428 → #EBD39A) + flèche dorée ronde.
 - Autres boutons de l'accueil : doré champagne (#D9B878 → #F1DDAE → #C9A160), texte brun #3B2A1C, reflet qui passe.
 - Vues 3D sur téléphone : le produit entier doit tenir dans le cadre, cadre centré plus petit que l'écran, flèches pour tourner.
+
+## v33 – menu du téléphone
+- Menu du téléphone : liens seuls, sans cartes produits dessous. Écriture Cormorant Garamond, tiret doré (#A87B3A → #D9B56E) devant chaque lien.
+- Un seul coffret → toujours « Le coffret » au singulier.

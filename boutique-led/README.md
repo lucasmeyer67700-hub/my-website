@@ -510,3 +510,10 @@ Thème « 💗 VELEA v32 – doré + mobile (à publier) » (207590162777), copi
   - Téléphone : on tourne seulement à gauche / à droite, le glissé vers le haut ou le bas fait défiler la page normalement.
   - Pastilles de couleur du masque : 2 rangées de 4 sur téléphone (plus de défilement de côté).
 - 12 fichiers vérifiés (empreinte identique).
+
+## v33 – menu du téléphone (30/09/2026)
+Thème « 💗 VELEA v33 – menu mobile (à publier) » (207602286937), copie de v32. **À publier par le propriétaire.**
+- Menu du téléphone (≤ 989 px) : les 4 produits affichés sous le menu sont retirés (réglage « menu_style » passé de « featured_products » à « text » dans header-group.json). Ils restent sur la page « Tous nos produits » (/collections/all, section rt_others).
+- Liens du menu sur téléphone : écriture Cormorant Garamond 27 px + petit tiret doré devant chaque lien (layout/theme.liquid, bloc « VELEA v33 »). L'ordinateur ne change pas.
+- Menus (déjà actifs, sans publier) : « Les coffrets » → « Le coffret » (menu principal et menu Boutique), « Tous les produits » → « Tous nos produits ».
+- Choix : l'accueil = le masque ; « Le masque LED » = sa fiche complète + « Découvrez aussi » en bas ; « Tous nos produits » = les 4 cartes (catalogue complet, une carte chacun).
