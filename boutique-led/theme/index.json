@@ -37,17 +37,22 @@
     "rt_final": {
       "type": "rt-final",
       "settings": {}
+    },
+    "rt_specs": {
+      "type": "rt-pdp-specs",
+      "settings": {}
     }
   },
   "order": [
     "rt_hero",
     "rt_trust",
     "rt_product",
+    "rt_specs",
     "rt_why",
     "rt_steps",
     "rt_reviews",
-    "rt_shop",
     "rt_faq",
+    "rt_shop",
     "rt_final"
   ]
 }

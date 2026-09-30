@@ -82,3 +82,8 @@ Les boutons d'achat restent en vieux rose.
 - Bannière : apparition douce du texte et de la photo ; autres blocs : apparition douce au défilement.
 - Tout est coupé pour les personnes qui ont activé « réduire les animations » sur leur téléphone.
 - Toujours interdit : compteurs, pop-ups, badges « best-seller », fausse urgence.
+
+## v23 – hiérarchie
+- L'accueil parle d'abord et surtout du masque (bannière, 6 points, fiche détaillée, étapes, FAQ).
+- Coffrets et compléments : un seul petit bloc « Pour aller plus loin » après la FAQ, sans gros bouton ni grande image.
+- Fréquence officielle : 2 à 3 fois par semaine, 10 à 15 minutes. Ne jamais attribuer d'effet à une couleur.

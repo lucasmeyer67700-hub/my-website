@@ -450,3 +450,42 @@ body{background:#FCF6F4}
   .vh-cof__card,.vh-comp__card,.vh-rev__card,.product-card{transition:none!important}
 }
 .rt-btn{border-radius:14px}
+/* ===== v23 : fiche masque détaillée + compléments discrets ===== */
+.vh-det__colors{max-width:860px;margin:28px auto 0;text-align:center}
+.vh-det__colors h3,.vh-det__care h3{font-size:22px;margin-bottom:14px}
+.vh-det__colors ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px}
+.vh-det__colors li{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;color:#7D625A;min-width:48px}
+.vh-det__colors i{display:block;width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 4px #fff,0 6px 14px -6px rgba(61,43,47,.45)}
+.vh-det__colors p{margin-top:14px!important;font-size:14px;color:#7D625A}
+.vh-det__specs{max-width:860px;margin:26px auto 0!important;border-color:#E8D5CC!important}
+.vh-det__specs div{border-bottom-color:#F0E2DC!important}
+.vh-det__care{max-width:860px;margin:22px auto 0;background:#F3E9E1;border-radius:20px;padding:20px 24px}
+.vh-det__care h3{text-align:left;font-size:20px;margin-bottom:8px}
+.vh-det__care ul{margin:0 0 10px;padding-left:18px;display:grid;gap:4px;font-size:15px;color:#3D2B2F}
+.vh-det__care li::marker{color:#C9A894}
+/* compléments : petit bloc, pas de gros boutons */
+.vh-shop--mini{background:transparent;padding-top:24px!important}
+.vh-shop--mini h2{font-size:30px}
+.vh-mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:760px;margin:20px auto 0}
+.vh-mini__card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E8D5CC;border-radius:16px;padding:12px 14px;text-decoration:none!important;color:#3D2B2F!important;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease!important;-webkit-tap-highlight-color:transparent}
+.vh-mini__card:hover,.vh-mini__card:active{transform:scale(1.03)!important;box-shadow:0 18px 34px -24px rgba(61,43,47,.45)!important}
+.vh-mini__img{flex:none;width:72px;height:72px;border-radius:12px;overflow:hidden;background:#F6E9E7}
+.vh-mini__img img{display:block;width:100%;height:100%;object-fit:cover}
+.vh-mini__txt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;line-height:1.35}
+.vh-mini__txt b{font-size:15px;font-weight:600}
+.vh-mini__d{font-size:13px;color:#7D625A}
+.vh-mini__p{font-size:15px;font-weight:600;margin-top:2px}
+.vh-mini__p small{font-weight:400;font-size:13px;color:#7D625A}
+.vh-mini__go{flex:none;color:#9C7A64;font-size:18px}
+.vh-mini__note{text-align:center;margin-top:10px!important}
+.vh-mini__solo{text-align:center;margin-top:14px!important;font-size:14px;color:#7D625A}
+.vh-mini__solo a{color:#9C7A64!important;text-underline-offset:3px}
+@media (max-width:989px){
+  .vh-det__colors ul{gap:10px 12px}
+  .vh-det__care{padding:18px}
+  .vh-det__care ul{font-size:14px}
+  .vh-shop--mini h2{font-size:24px}
+  .vh-mini{grid-template-columns:1fr}
+}
+.vh-det__specs span{flex:none;white-space:nowrap}
+@media (max-width:989px){.vh-det__colors ul{gap:10px 4px;flex-wrap:nowrap}.vh-det__colors li{min-width:0;flex:1;font-size:12px}.vh-det__colors i{width:26px;height:26px}}

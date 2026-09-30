@@ -1,4 +1,5 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- comment -%} v23 : bloc discret. Le masque reste le produit principal ; coffrets et compléments servent juste à compléter. {%- endcomment -%}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
@@ -10,43 +11,38 @@
 {%- assign ey_ok = false -%}{%- if ey.handle == 'lunettes-led-regard-lumiere-rouge-contour-des-yeux' -%}{%- assign ey_ok = true -%}{%- endif -%}
 {%- if ey_ok -%}{%- assign ey_url = ey.url -%}{%- assign ey_price = ey.price | money -%}{%- else -%}{%- assign ey_url = '/collections/rituel-eclat' -%}{%- assign ey_price = '53,90 €' -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt" id="coffrets"><section class="rt-wrap vh-shop" style="padding-left:0;padding-right:0">
-<div class="rt-center"><h2>{{ section.settings.titre }}</h2><p class="rt-lead">Le masque LED, accompagné d'un deuxième appareil. Livrés ensemble, à un prix plus doux qu'à l'unité.</p></div>
+<div class="rt" id="coffrets"><section class="rt-wrap vh-shop vh-shop--mini">
+<div class="rt-center"><h2>{{ section.settings.titre }}</h2><p class="rt-lead">Le masque suffit pour commencer. Si vous voulez compléter, il existe aussi en coffret.</p></div>
 {%- if pk_ok and m_ok -%}
-<div class="vh-cof">
+<div class="vh-mini">
 {%- for v in pk.variants -%}
   {%- assign c = blank -%}{%- assign nom = '' -%}{%- assign desc = '' -%}{%- assign ph = blank -%}
-  {%- if ey_ok and v.title contains 'Lunettes' -%}{%- assign c = ey -%}{%- assign nom = 'Coffret Visage & Regard' -%}{%- assign desc = 'Le masque, et des lunettes LED pour le contour des yeux.' -%}{%- assign ph = section.settings.photo_lunettes -%}{%- endif -%}
-  {%- if hf_ok and v.title contains 'Stylo' -%}{%- assign c = hf -%}{%- assign nom = 'Coffret Visage & Stylo' -%}{%- assign desc = 'Le masque, et un stylo visage pour les petites zones.' -%}{%- assign ph = section.settings.photo_stylo -%}{%- endif -%}
+  {%- if ey_ok and v.title contains 'Lunettes' -%}{%- assign c = ey -%}{%- assign nom = 'Coffret Visage & Regard' -%}{%- assign desc = 'Masque + lunettes LED pour le contour des yeux' -%}{%- assign ph = section.settings.photo_lunettes -%}{%- endif -%}
+  {%- if hf_ok and v.title contains 'Stylo' -%}{%- assign c = hf -%}{%- assign nom = 'Coffret Visage & Stylo' -%}{%- assign desc = 'Masque + stylo visage pour les petites zones' -%}{%- assign ph = section.settings.photo_stylo -%}{%- endif -%}
   {%- if c != blank -%}
     {%- if ph == blank -%}{%- assign ph = v.featured_image -%}{%- endif -%}
     {%- assign sep = m.price | plus: c.price -%}{%- assign eco = sep | minus: v.price -%}
-    <a class="vh-cof__card" href="{{ pk.url }}?variant={{ v.id }}">
-      {%- if ph != blank -%}<div class="vh-cof__img">{{ ph | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(max-width: 989px) 100vw, 480px', widths: '400, 600, 800', alt: nom }}<span class="vh-badge">Coffret</span></div>{%- endif -%}
-      <div class="vh-cof__body">
-        {%- if ph == blank -%}<span class="vh-badge vh-badge--in">Coffret</span>{%- endif -%}
-        <h3>{{ nom }}</h3>
-        <p class="vh-cof__desc">{{ desc }}</p>
-        <p class="vh-cof__price">{{ v.price | money }}</p>
-        {%- if eco > 0 -%}<p class="vh-cof__sep">Séparément : {{ sep | money }} · <b>Vous économisez {{ eco | money }}</b></p>{%- endif -%}
-        <span class="rt-btn rt-btn--p vh-cta">Choisir ce coffret</span>
+    <a class="vh-mini__card" href="{{ pk.url }}?variant={{ v.id }}">
+      {%- if ph != blank -%}<div class="vh-mini__img">{{ ph | image_url: width: 200 | image_tag: loading: 'lazy', sizes: '88px', widths: '100, 200', alt: nom }}</div>{%- endif -%}
+      <div class="vh-mini__txt">
+        <b>{{ nom }}</b>
+        <span class="vh-mini__d">{{ desc }}</span>
+        <span class="vh-mini__p">{{ v.price | money }}{%- if eco > 0 -%} <small>· vous économisez {{ eco | money }}</small>{%- endif -%}</span>
       </div>
+      <span class="vh-mini__go" aria-hidden="true">→</span>
     </a>
   {%- endif -%}
 {%- endfor -%}
 </div>
+<p class="rt-small vh-mini__note">Économie calculée par rapport au masque et au complément achetés séparément.</p>
 {%- endif -%}
-<h3 class="vh-comp__title">Vous avez déjà le masque ?</h3>
-<div class="vh-comp">
-<a class="vh-comp__card" href="{{ ey_url }}">{%- if ey_ok and ey.featured_image -%}<div class="vh-comp__img">{{ ey.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', sizes: '171px', widths: '200, 400', alt: 'Lunettes LED regard' }}</div>{%- endif -%}<b>Lunettes LED regard</b><span class="vh-comp__d">Pour le contour des yeux.</span><span class="vh-comp__p">{{ ey_price }}</span><span class="vh-comp__l">Voir →</span></a>
-<a class="vh-comp__card" href="{{ hf_url }}">{%- if hf_ok and hf.featured_image -%}<div class="vh-comp__img">{{ hf.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', sizes: '171px', widths: '200, 400', alt: 'Stylo visage' }}</div>{%- endif -%}<b>Stylo visage</b><span class="vh-comp__d">Pour les zones précises.</span><span class="vh-comp__p">{{ hf_price }}</span><span class="vh-comp__l">Voir →</span></a>
-</div>
+<p class="vh-mini__solo">Vous avez déjà le masque ? <a href="{{ ey_url }}">Lunettes LED regard ({{ ey_price }})</a> · <a href="{{ hf_url }}">Stylo visage ({{ hf_price }})</a></p>
 </section></div>
 </div>
 {% schema %}
 {"name": "RT · Coffrets", "settings": [
-{"type": "text", "id": "titre", "label": "Titre", "default": "Les coffrets VELEA"},
-{"type": "image_picker", "id": "photo_lunettes", "label": "Photo coffret masque + lunettes", "info": "Les 2 appareils côte à côte sur la boîte, fond rose poudré, carré 1200 × 1200 px."},
+{"type": "text", "id": "titre", "label": "Titre", "default": "Pour aller plus loin"},
+{"type": "image_picker", "id": "photo_lunettes", "label": "Photo coffret masque + lunettes", "info": "Petite vignette carrée, 400 × 400 px suffit."},
 {"type": "image_picker", "id": "photo_stylo", "label": "Photo coffret masque + stylo"}
 ], "presets": [{"name": "RT · Coffrets"}]}
 {% endschema %}

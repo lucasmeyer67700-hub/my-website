@@ -389,3 +389,18 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   config/settings_data.json (fond #FCF6F4, textes #7D625A, bordures #E8D5CC, boutons #A95F6C arrondis 14 px, variantes, badges,
   panier et champs en blanc). Empreintes md5 vérifiées (settings_data reformaté par Shopify, contenu vérifié).
 - Aperçu local testé sur mobile : toutes les apparitions se déclenchent, carte agrandie à 1,03 au toucher.
+
+## v23 – infos masque sur l'accueil (30/09/2026)
+
+- v22 publiée par le propriétaire. Thème « 💗 VELEA v23 – infos masque (à publier) » (gid://shopify/OnlineStoreTheme/207565619545),
+  copie de v22. 13 fichiers envoyés, empreintes md5 vérifiées.
+- Nouvelles infos fournisseur (captures AliExpress Foreverlily) : 31 × 18,8 cm ; LED 90 × 3 visage + 30 × 3 cou ;
+  voyant rouge en charge / vert chargé ; ne pas utiliser pendant la charge ; sérum possible avant la séance ;
+  2 à 3 fois par semaine (remplace « 3 à 5 ») ; précautions (plaie, dermatite, rougeur/démangeaison → arrêter, ne pas regarder les LED).
+  Non repris : effets par couleur et longueurs d'onde (allégations médicales ; violet 1040 nm et blanc 1580 nm incohérents),
+  « 400 mAh » dans le texte (la fiche technique dit 600 mAh).
+- Accueil : nouvelle section « Tout savoir sur le masque » (7 couleurs en pastilles, fiche technique, précautions), aussi sur la page masque.
+  Étapes, FAQ (+ charge, + taille) et « Pourquoi VELEA » mis à jour.
+- Compléments rendus discrets : section « Pour aller plus loin » après la FAQ, 2 petites cartes coffret (vignette + prix + économie),
+  lunettes et stylo seuls en simple lien texte.
+- En ligne tout de suite : description du masque et page FAQ mises à jour (fréquence, dimensions, LED, voyant, précautions).

@@ -1,23 +1,50 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'rituel.js' | asset_url }}"></script>
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt rt-anim"><section class="rt-wrap" style="padding-left:0;padding-right:0">
-<div class="rt-center"><p class="rt-eyebrow">En détail</p><h2>Caractéristiques</h2></div>
-<div class="rt-specs">
+<div class="rt" id="details"><section class="rt-wrap vh-det" style="padding-left:0;padding-right:0">
+<div class="rt-center"><h2>Tout savoir sur le masque</h2><p class="rt-lead">Les informations de la fiche technique, sans promesse.</p></div>
+
+<div class="vh-det__colors">
+<h3>7 couleurs au choix</h3>
+<ul>
+<li><i style="background:#E0474C"></i>Rouge</li>
+<li><i style="background:#4CAF7A"></i>Vert</li>
+<li><i style="background:#3F7FE0"></i>Bleu</li>
+<li><i style="background:#8E5BD6"></i>Violet</li>
+<li><i style="background:#F2C94C"></i>Jaune</li>
+<li><i style="background:#3FC6D1"></i>Cyan</li>
+<li><i style="background:#FFFFFF;box-shadow:inset 0 0 0 1px #E8D5CC"></i>Blanc</li>
+</ul>
+<p>Vous passez d'une couleur à l'autre d'un simple appui sur le bouton.</p>
+</div>
+
+<div class="rt-specs vh-det__specs">
+<div><span>Dimensions</span><b>31 × 18,8 cm</b></div>
 <div><span>Matière</span><b>Plastique léger</b></div>
-<div><span>LED</span><b>120 × 3 LED, 7 couleurs</b></div>
-<div><span>Zones</span><b>Visage + cou (2 pièces)</b></div>
-<div><span>Protection des yeux</span><b>Fenêtres transparentes</b></div>
+<div><span>LED</span><b>90 × 3 visage + 30 × 3 cou</b></div>
+<div><span>Yeux</span><b>Fenêtres transparentes</b></div>
+<div><span>Maintien</span><b>Sangle réglable</b></div>
+<div><span>Commande</span><b>Bouton tactile</b></div>
 <div><span>Batterie</span><b>600 mAh, intégrée</b></div>
 <div><span>Recharge</span><b>USB-C, 5 V / 1 A, 2 h</b></div>
+<div><span>Voyant</span><b>Rouge en charge, vert une fois chargé</b></div>
 <div><span>Autonomie</span><b>1 à 2,5 h</b></div>
-<div><span>Commande</span><b>Bouton tactile</b></div>
-<div><span>Durée d'une séance</span><b>10 à 15 min</b></div>
-<div><span>Utilisation conseillée</span><b>3 à 5 fois par semaine</b></div>
+<div><span>Puissance</span><b>3,7 W</b></div>
+<div><span>Séance</span><b>10 à 15 min, 2 à 3 fois par semaine</b></div>
 <div><span>Dans la boîte</span><b>Masque, pièce cou, sangle, câble USB-C, notice, boîte</b></div>
-<div><span>Garanties</span><b>Satisfaite ou remboursée 30 jours · Garantie légale 2 ans</b></div>
+<div><span>Essai</span><b>Satisfaite ou remboursée 30 jours</b></div>
 </div>
-<p class="rt-small" style="text-align:center;margin-top:16px">Appareil de bien-être, non médical. Lisez les précautions avant utilisation.</p>
+
+<div class="vh-det__care">
+<h3>Précautions</h3>
+<ul>
+<li>Ne l'utilisez pas pendant qu'il charge.</li>
+<li>Ne regardez pas directement les LED allumées.</li>
+<li>Rougeur ou démangeaison : arrêtez et demandez l'avis d'un médecin.</li>
+<li>Pas sur une plaie, une dermatite ou une peau irritée.</li>
+<li>Tenir hors de portée des enfants.</li>
+</ul>
+<p class="rt-small">Appareil de bien-être, non médical. Lisez la notice avant la première utilisation.</p>
+</div>
 </section></div>
 </div>
 {% schema %}
