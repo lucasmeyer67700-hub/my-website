@@ -33,6 +33,16 @@
 <div><span>Dans la boîte</span><b>Masque, pièce cou, sangle, câble USB-C, notice, boîte</b></div>
 <div><span>Essai</span><b>Satisfaite ou remboursée 30 jours</b></div>
 </div>
+<button type="button" class="vh-det__more" aria-expanded="false" onclick="var o=this.previousElementSibling.classList.toggle('is-open');this.setAttribute('aria-expanded',o);this.firstChild.textContent=o?'Réduire la fiche technique ':'Voir toute la fiche technique '">Voir toute la fiche technique <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+<style>
+.vh-det__more{display:none}
+@media (max-width:749px){
+  .vh-det__specs:not(.is-open)>div:nth-child(n+7){display:none}
+  .vh-det__more{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:48px;margin:10px 0 0;padding:10px;border:1px solid #E8D5CC;border-radius:14px;background:#fff;color:#3D2B2F;font:600 14px/1.2 var(--font-body--family),sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .vh-det__more svg{transition:transform .25s ease}
+  .vh-det__more[aria-expanded="true"] svg{transform:rotate(180deg)}
+}
+</style>
 
 <div class="vh-det__care">
 <h3>Précautions</h3>

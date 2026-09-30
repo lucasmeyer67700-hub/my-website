@@ -100,3 +100,9 @@ Les boutons d'achat restent en vieux rose.
 - Le bouton de la bannière descend vers la section du masque (ancre #rt-masque) ; les boutons « Commander » mènent à la fiche produit.
 - Ne pas répéter la réassurance (30 jours, livraison) à plusieurs endroits voisins : bandeau d'annonce + bandeau confiance suffisent.
 - Tout lien vers une collection doit viser une collection publiée (par défaut /collections/all).
+
+## v32 – doré premium, « Découvrir »
+- Accueil : les boutons vers le masque disent « Découvrir » (on regarde avant d'acheter). « Ajouter au panier » reste réservé à la fiche produit.
+- Bouton du haut de l'accueil : texte doré sans cadre (dégradé #8C6428 → #EBD39A) + flèche dorée ronde.
+- Autres boutons de l'accueil : doré champagne (#D9B878 → #F1DDAE → #C9A160), texte brun #3B2A1C, reflet qui passe.
+- Vues 3D sur téléphone : le produit entier doit tenir dans le cadre, cadre centré plus petit que l'écran, flèches pour tourner.

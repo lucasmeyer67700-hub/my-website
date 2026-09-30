@@ -495,3 +495,18 @@ Thème « 💗 VELEA v31 – accueil épuré (à publier) » (207588426073), cop
   - Bandeau d'annonce : « 🍂 Nouveau : votre rituel beauté d'automne » retiré, il reste « Livraison suivie · Satisfaite ou remboursée 30 jours ».
 - Ordre de l'accueil : bannière → confiance → le masque → tout savoir → comment ça marche → avis → FAQ → coffrets → appel final.
 - 12 fichiers vérifiés (empreinte identique).
+
+## v32 – doré premium + ergonomie téléphone (30/09/2026)
+Thème « 💗 VELEA v32 – doré + mobile (à publier) » (207590162777), copie de v31. **À publier par le propriétaire.**
+- **Accueil**
+  - Bouton du haut « Voir le masque ↓ » : plus de cadre, texte doré brillant + petite flèche dorée qui descend jusqu'au masque.
+  - « Commander » remplacé par « Découvrir » : section masque (« Découvrir – 79,90 € »), appel final (« Découvrir le masque »), barre du bas (« Découvrir »). Ces boutons sont dorés (champagne), texte brun.
+  - Téléphone : photo du haut limitée en hauteur pour que le bouton reste visible sans défiler.
+  - Fiche technique repliée sur téléphone après 6 lignes, bouton « Voir toute la fiche technique ».
+- **Vues 3D (masque et stylo)**
+  - Téléphone : cadre plus petit et centré (masque ≈ 88 % de la largeur, stylo ≈ 76 %), le produit entier est visible (le stylo dépassait en haut et en bas).
+  - Caméra reculée : masque dist 8,4, stylo dist 9,6.
+  - Flèches ◀ ▶ sur l'image pour tourner d'un toucher (60° par appui).
+  - Téléphone : on tourne seulement à gauche / à droite, le glissé vers le haut ou le bas fait défiler la page normalement.
+  - Pastilles de couleur du masque : 2 rangées de 4 sur téléphone (plus de défilement de côté).
+- 12 fichiers vérifiés (empreinte identique).

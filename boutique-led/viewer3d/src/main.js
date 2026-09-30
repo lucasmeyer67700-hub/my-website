@@ -370,6 +370,8 @@ function init(root, opts) {
   controls.enablePan = false; controls.enableZoom = false;
   controls.rotateSpeed = 0.7;
   controls.minPolarAngle = 62 * DEG; controls.maxPolarAngle = 104 * DEG;
+  // Téléphone : rotation seulement à gauche / à droite (le glissé vertical fait défiler la page), un peu plus rapide
+  if (window.matchMedia && matchMedia('(pointer: coarse)').matches) { const pa = Math.acos(clamp((camera.position.y - controls.target.y) / camera.position.distanceTo(controls.target), -1, 1)); controls.minPolarAngle = controls.maxPolarAngle = pa; controls.rotateSpeed = 1.05; }
   controls.autoRotate = !opts.still; controls.autoRotateSpeed = 1.6;
   renderer.domElement.style.touchAction = 'pan-y';
   let idleT = 0;
@@ -404,6 +406,12 @@ function init(root, opts) {
     controls.autoRotate = false; clearTimeout(idleT); idleT = setTimeout(() => { controls.autoRotate = true; }, 9000);
   }
 
+  function turnBy(deg, ms = 700) {
+    const off = camera.position.clone().sub(controls.target);
+    const a0 = Math.atan2(off.x, off.z) / DEG;
+    turnTo(a0 + deg, ms); root.classList.add('is-touched');
+  }
+
   let visible = true, raf = 0;
   const tmp = new THREE.Color(), white = new THREE.Color(1, 1, 1), innerOff = new THREE.Color(0xe6e1df);
   function frame(now) {
@@ -434,7 +442,7 @@ function init(root, opts) {
   if ('IntersectionObserver' in window) new IntersectionObserver((en) => { visible = en[0].isIntersecting; }, { threshold: 0.01 }).observe(stage);
 
   root.classList.add('is-3d');
-  return { setLed, turnTo };
+  return { setLed, turnTo, turnBy };
 }
 
 window.VeleaMask3D = init;

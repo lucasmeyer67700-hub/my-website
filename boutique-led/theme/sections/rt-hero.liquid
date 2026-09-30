@@ -13,20 +13,17 @@
 {%- if m_ok -%}{% render 'velea-etoiles', product: m, link: '#avis' %}{%- endif -%}
 <p class="rt-lead">{{ section.settings.texte }}</p>
 <p class="vh-price">{{ m_price }}</p>
-<div class="rt-btns"><a class="rt-btn rt-btn--p vh-cta vh-cta--down" id="vh-hero-cta" href="#rt-masque">{{ section.settings.cta }}<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a></div>
+<div class="vh-goldwrap"><a class="vh-gold" id="vh-hero-cta" href="#rt-masque"><span class="vh-gold__t">{{ section.settings.cta }}</span><span class="vh-gold__a" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></a></div>
 </div>
 {%- if img != blank -%}
 <div class="rt-viscol"><div class="vh-vis">{{ img | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 989px) 100vw, 600px', widths: '600, 900, 1200', alt: section.settings.alt }}</div></div>
 {%- endif -%}
 </div></section>
-<div class="rt-sticky" id="vh-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn rt-btn--p" href="{{ m_url }}">Commander</a></div>
+<div class="rt-sticky" id="vh-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn vh-gold-btn" href="{{ m_url }}">Découvrir</a></div>
 <style>
 html{scroll-behavior:smooth}
 #rt-masque{scroll-margin-top:84px}
-.vh-cta--down{display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.vh-cta--down svg{animation:vh-down 1.8s ease-in-out infinite}
-@keyframes vh-down{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.vh-cta--down svg{animation:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.vh-gold__a{animation:none}}
 </style>
 <script>
 (function(){var s=document.getElementById('vh-sticky'),c=document.getElementById('vh-hero-cta');if(!s||!c||!('IntersectionObserver' in window))return;

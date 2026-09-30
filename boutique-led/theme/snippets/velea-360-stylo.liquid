@@ -8,6 +8,8 @@
     <div class="vh-360__gl"></div>
     <span class="vh-360__hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg><span>Glissez pour tourner</span></span>
     <span class="vh-360__badge">360°</span>
+    <button type="button" class="vh-360__arr vh-360__arr--l" data-turn="-60" aria-label="Tourner vers la gauche"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button type="button" class="vh-360__arr vh-360__arr--r" data-turn="60" aria-label="Tourner vers la droite"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
   <p class="vh-360__note">Modèle 3D d'illustration.</p>
 </div>
@@ -26,15 +28,29 @@
 .vh-360__badge{position:absolute;top:14px;left:14px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.45);color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em;pointer-events:none}
 .vh-360.no-gl .vh-360__badge{display:none}
 .vh-360__note{margin:8px 2px 0;font-size:12px;color:#7D625A}
+.vh-360__arr{position:absolute;top:50%;z-index:2;display:grid;place-items:center;width:44px;height:44px;margin-top:-22px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;opacity:0;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .4s ease,background .2s ease,transform .15s ease;-webkit-tap-highlight-color:transparent}
+.vh-360__arr--l{left:10px}.vh-360__arr--r{right:10px}
+.vh-360.is-3d .vh-360__arr{opacity:1;pointer-events:auto}
+.vh-360__arr:hover{background:rgba(255,255,255,.32)}
+.vh-360__arr:active{transform:scale(.92)}
+@media (max-width:749px){
+  .vh-360__stage{width:min(88%,46vh);width:min(88%,46svh);margin:0 auto;border-radius:18px}
+  .vh-360--stylo .vh-360__stage{width:min(76%,40vh);width:min(76%,40svh)}
+  .vh-360__hint{font-size:12px;bottom:10px;padding:6px 11px}
+  .vh-360__badge{top:10px;left:10px}
+  .vh-360__cap,.vh-360__note{text-align:center}
+}
 </style>
 <script>
 (function(){
   var root=document.getElementById('vue-360-stylo'); if(!root||root.dataset.ok)return; root.dataset.ok=1;
+  var api=null;
+  [].forEach.call(root.querySelectorAll('[data-turn]'),function(b){b.addEventListener('click',function(){if(api&&api.turnBy)api.turnBy(+b.dataset.turn)})});
   function start(){
     if(root.dataset.loading)return; root.dataset.loading=1;
     var ok=false; try{var c=document.createElement('canvas');ok=!!(window.WebGLRenderingContext&&(c.getContext('webgl2')||c.getContext('webgl')))}catch(e){}
     if(!ok){root.classList.add('no-gl');return}
-    var go=function(){ if(window.VeleaStylo3D)window.VeleaStylo3D(root,{fit:0.62}); else root.classList.add('no-gl'); };
+    var go=function(){ if(window.VeleaStylo3D)api=window.VeleaStylo3D(root,{fit:0.62,dist:9.6})||null; else root.classList.add('no-gl'); };
     if(window.VeleaStylo3D){go();return}
     var s=document.createElement('script'); s.src=root.dataset.js; s.async=true; s.onload=go; s.onerror=function(){root.classList.add('no-gl')};
     document.head.appendChild(s);

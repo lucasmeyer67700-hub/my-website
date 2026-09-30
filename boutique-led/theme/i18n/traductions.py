@@ -491,5 +491,10 @@ T = [
 (' avis de clientes VELEA<',' reviews from VELEA customers<',' Bewertungen von VELEA-Kundinnen<',' opiniones de clientas VELEA<',' recensioni di clienti VELEA<'),
 ('>Produit offert à la cliente en échange de son avis.<','>Product given to the customer in exchange for her review.<','>Produkt der Kundin im Austausch für ihre Bewertung geschenkt.<','>Producto regalado a la clienta a cambio de su opinión.<','>Prodotto regalato alla cliente in cambio della sua recensione.<'),
 (">Commander – ",">Order – ",">Bestellen – ",">Pedir – ",">Ordina – "),
+(">Découvrir – ",">Discover – ",">Entdecken – ",">Descubrir – ",">Scopri – "),
+("Voir toute la fiche technique ","See the full specifications ","Alle technischen Daten ansehen ","Ver toda la ficha técnica ","Vedi tutta la scheda tecnica "),
+("Réduire la fiche technique ","Hide the specifications ","Technische Daten ausblenden ","Ocultar la ficha técnica ","Nascondi la scheda tecnica "),
+("Tourner vers la gauche","Turn left","Nach links drehen","Girar a la izquierda","Ruota a sinistra"),
+("Tourner vers la droite","Turn right","Nach rechts drehen","Girar a la derecha","Ruota a destra"),
 ]
 LANGS = ['en', 'de', 'es', 'it']

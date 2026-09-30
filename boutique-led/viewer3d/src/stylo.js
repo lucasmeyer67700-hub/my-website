@@ -161,6 +161,8 @@ export function initStylo(root, opts) {
   controls.enableDamping = true; controls.dampingFactor = 0.08;
   controls.enablePan = false; controls.enableZoom = false; controls.rotateSpeed = 0.7;
   controls.minPolarAngle = 55 * DEG; controls.maxPolarAngle = 110 * DEG;
+  // Téléphone : rotation seulement à gauche / à droite (le glissé vertical fait défiler la page), un peu plus rapide
+  if (window.matchMedia && matchMedia('(pointer: coarse)').matches) { const pa = Math.acos(clamp((camera.position.y - controls.target.y) / camera.position.distanceTo(controls.target), -1, 1)); controls.minPolarAngle = controls.maxPolarAngle = pa; controls.rotateSpeed = 1.05; }
   controls.autoRotate = !opts.still; controls.autoRotateSpeed = 1.8;
   renderer.domElement.style.touchAction = 'pan-y';
   let idleT = 0;
@@ -187,6 +189,12 @@ export function initStylo(root, opts) {
     if (!opts.still) idleT = setTimeout(() => { controls.autoRotate = true; }, 9000);
   }
 
+  function turnBy(deg, ms = 700) {
+    const off = camera.position.clone().sub(controls.target);
+    const a0 = Math.atan2(off.x, off.z) / DEG;
+    turnTo(a0 + deg, ms); root.classList.add('is-touched');
+  }
+
   let visible = true;
   function frame(now) {
     requestAnimationFrame(frame);
@@ -204,5 +212,5 @@ export function initStylo(root, opts) {
   if ('IntersectionObserver' in window) new IntersectionObserver((en) => { visible = en[0].isIntersecting; }, { threshold: 0.01 }).observe(stage);
 
   root.classList.add('is-3d');
-  return { turnTo };
+  return { turnTo, turnBy };
 }
