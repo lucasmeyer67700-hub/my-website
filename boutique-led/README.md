@@ -530,3 +530,12 @@ Thème « 💗 VELEA v34 – lunettes 3D (à publier) » (207606808921), copie d
 - **Photo produit** (déjà en ligne) : velea-lunettes-led-regard.jpg ajoutée aux lunettes → visible dans le panier, le paiement et les cartes.
 - **Description** : nouvel onglet « Le produit en détail » (ouvert par défaut) à côté du produit, écrit d'après les photos ; traduit EN/DE/ES/IT.
 - 13 fichiers vérifiés (empreinte identique).
+
+## v35 – lunettes refaites, fines et pleines (30/09/2026)
+Thème « 💗 VELEA v35 – lunettes fines (à publier) » (207608021337), copie de v34 (v34 à ignorer). **À publier par le propriétaire** : tant que ce n'est pas fait, la page des lunettes ne montre que la photo (pas la 3D).
+- Retour du propriétaire sur v34 : lunettes trop épaisses, vide à l'intérieur, pas fidèles.
+- Modèle refait en mesurant les photos : coques pleines (dos fermé, aucun vide), façade plate à arêtes biseautées, épaisseur réduite (0,42), fenêtre en trapèze avec biseau clair + cerclage argent, **panneau intérieur gris argenté derrière le verre** (on ne voit pas à travers, comme sur la photo).
+- Branches plus courtes (≈ 1,8 × la hauteur de la monture) et plus fines, fixées en haut par une petite charnière.
+- Allumées : le panneau derrière chaque verre devient rouge franc + points LED.
+- Bouton Mode + témoin bleu toujours dessous ; port USB-C sur le côté gauche.
+- Images HD et 4K refaites ; photo produit remplacée par le nouveau rendu.

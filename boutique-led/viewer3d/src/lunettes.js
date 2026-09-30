@@ -55,17 +55,18 @@ function extrude(shape, depth, bt, bs, seg = 5, curve = 1) {
 }
 
 // ---------- formes (coque droite, x > 0 ; la gauche est son miroir) ----------
-const POD = smoothClosed([
-  [0.07, 0.50], [0.42, 0.56], [0.95, 0.57], [1.38, 0.545], [1.60, 0.445], [1.69, 0.22], [1.68, -0.06],
-  [1.58, -0.34], [1.36, -0.55], [1.02, -0.66], [0.64, -0.66], [0.32, -0.58], [0.13, -0.38], [0.065, -0.08], [0.058, 0.24],
-], 220);
-const WIN = roundedPoly([[0.38, 0.25], [1.36, 0.25], [1.10, -0.26], [0.43, -0.28]], [0.07, 0.08, 0.09, 0.07], 12);
-const BEZ = offset(WIN, 0.1);
-const DEPTH = 0.6;
+// coque droite (vue de face) : forme anguleuse comme sur les photos
+const POD = roundedPoly([[0.045, 0.47], [1.58, 0.5], [1.7, 0.22], [1.63, -0.2], [1.3, -0.52], [0.75, -0.63], [0.22, -0.47], [0.05, -0.18]],
+  [0.05, 0.12, 0.12, 0.2, 0.25, 0.3, 0.2, 0.1], 14);
+// fenêtre : trapèze (haut large, pointe basse côté nez)
+const WIN = roundedPoly([[0.36, 0.22], [1.38, 0.22], [1.12, -0.2], [0.47, -0.3], [0.35, -0.12]], [0.035, 0.04, 0.05, 0.04, 0.04], 8);
+const BEZ = offset(WIN, 0.11);
+const DEPTH = 0.42;
 // bombé de la façade : les bords reculent, le centre avance (appliqué seulement à l'avant de la coque)
 function warpZ(x, y, z) {
-  const f = clamp((z + 0.42) / 0.3, 0, 1);
-  return z - f * (0.13 * Math.pow((x - 0.9) / 0.82, 2) + 0.08 * Math.pow((y + 0.03) / 0.6, 2));
+  const f = clamp((z + DEPTH + 0.02) / (DEPTH * 0.75), 0, 1);
+  const low = clamp((-y - 0.05) / 0.58, 0, 1);
+  return z - f * (0.04 * Math.pow((x - 0.9) / 0.82, 2) + 0.13 * low * low);
 }
 function weldSeam(g, nu) {
   const n = g.attributes.normal, rows = n.count / (nu + 1);
@@ -103,13 +104,12 @@ const PC = new V2(0.9, -0.03);
 // profil de la coque, le long de chaque rayon : [part, z] ; part = position entre trou (0) et bord (1),
 // ou [ 'o', décalage absolu depuis le bord, z ] / [ 'h', décalage depuis le trou, z ]
 function shellProfile() {
-  const P = [], R = 0.11, D = DEPTH, T = 0.085;
-  P.push(['h', 0.0, -0.075], ['h', 0.004, -0.035], ['h', 0.02, -0.008], ['h', 0.045, 0.0]);
-  for (let k = 1; k <= 10; k++) P.push([k / 11, 0.0]);
-  for (let k = 0; k <= 8; k++) { const a = (k / 8) * Math.PI / 2; P.push(['o', -R + Math.sin(a) * R, -R + Math.cos(a) * R]); }
-  for (let k = 1; k <= 8; k++) P.push(['o', 0, lerp(-R, -D + 0.07, k / 8)]);
-  for (let k = 1; k <= 6; k++) { const a = (k / 6) * Math.PI; P.push(['o', -T / 2 + Math.cos(a) * T / 2, -D + 0.07 - Math.sin(a) * 0.07]); }
-  for (let k = 1; k <= 5; k++) P.push(['o', -T, lerp(-D + 0.07, -0.16, k / 5)]);
+  const P = [['i', 0, 0]], D = DEPTH;
+  for (let k = 1; k <= 12; k++) P.push([k / 13, 0]);
+  P.push(['o', -0.07, 0], ['o', -0.045, -0.006], ['o', -0.02, -0.022], ['o', -0.005, -0.045], ['o', 0, -0.07]);
+  for (let k = 1; k <= 6; k++) P.push(['o', 0, lerp(-0.07, -D + 0.03, k / 6)]);
+  P.push(['o', -0.012, -D + 0.006], ['o', -0.035, -D]);
+  [0.85, 0.65, 0.45, 0.25, 0.08, 0].forEach((f) => P.push(['r', f, -D]));
   return P;
 }
 // surface lissée entre deux contours (le long de rayons partant du centre), profil = [mode, valeur, z]
@@ -124,8 +124,8 @@ function loft(inner, outer, prof, nu = 240, mi = 0, mo = 0) {
   for (let b = 0; b <= nv; b++) for (let a = 0; a <= nu; a++) {
     const th = (a / nu) * Math.PI * 2, d = new V2(Math.cos(th), Math.sin(th));
     const ro = RO[a], ri = RI[a], pr = prof[b];
-    const r = pr[0] === 'o' ? ro + pr[1] : pr[0] === 'i' ? ri + pr[1] : lerp(ri + mi, ro - mo, pr[0]);
-    const z = pr[0] === 'o' || pr[0] === 'i' ? pr[2] : pr[1];
+    const r = pr[0] === 'o' ? ro + pr[1] : pr[0] === 'i' ? ri + pr[1] : pr[0] === 'r' ? ro * pr[1] : lerp(ri + mi, ro - mo, pr[0]);
+    const z = typeof pr[0] === 'string' ? pr[2] : pr[1];
     pos[i++] = PC.x + d.x * r; pos[i++] = PC.y + d.y * r; pos[i++] = z;
   }
   const idx = [];
@@ -134,10 +134,7 @@ function loft(inner, outer, prof, nu = 240, mi = 0, mo = 0) {
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
   return g;
 }
-function podShell(hole) {
-  const P = shellProfile().map((p) => (p[0] === 'h' ? ['i', p[1], p[2]] : p));
-  return loft(hole, POD, P, 240, 0.045, 0.11);
-}
+function podShell() { return loft(BEZ, POD, shellProfile(), 240, 0, 0.07); }
 
 function podBottomY(x) { // y le plus bas du contour à l'abscisse x
   let m = 0;
@@ -170,51 +167,51 @@ function glowTexture() {
 // coque (sans les détails propres à un côté)
 function buildPod(M, glowTex) {
   const pod = new THREE.Group();
-  // coque lisse d'un seul tenant : façade bombée, bord arrondi, paroi, rebord arrière (ouvert côté visage)
-  const shell = new THREE.Mesh(podShell(offset(BEZ, 0.012)), M.whiteDS); shell.userData.seamNu = 240; pod.add(shell);
-  // cadre gris clair en retrait autour de la fenêtre
-  const fr = []; for (let k = 1; k <= 9; k++) fr.push([k / 10, -0.035]);
-  const bez = new THREE.Mesh(loft(WIN, BEZ, [['i', 0, -0.07], ['i', 0.008, -0.05], ['i', 0.02, -0.037]].concat(fr, [['o', -0.018, -0.037], ['o', -0.004, -0.045], ['o', 0.004, -0.07], ['o', 0.02, -0.11]]), 240, 0.02, 0.018), M.bezel);
-  bez.userData.seamNu = 240; pod.add(bez);
-  // cerclage argent + verre transparent
-  const rim = new THREE.Mesh(loft(offset(WIN, -0.024), offset(WIN, 0.004), [['i', 0, -0.082], ['i', 0.006, -0.066], [0.5, -0.06], ['o', -0.006, -0.064], ['o', 0, -0.075]], 240, 0.006, 0.006), M.chrome);
-  rim.userData.seamNu = 240; pod.add(rim);
-  const gl = []; for (let k = 0; k <= 10; k++) gl.push([k / 10, -0.072]);
-  const glass = new THREE.Mesh(loft([PC, PC, PC], offset(WIN, -0.01), gl, 120), M.glass);
-  glass.userData.seamNu = 120; glass.renderOrder = 2; pod.add(glass);
-  // anneau de LED (face intérieure, tournées vers l'œil)
-  const N = 26, per = [];
+  const add = (g, m, nu) => { const o = new THREE.Mesh(g, m); o.userData.seamNu = nu; pod.add(o); return o; };
+  // coque pleine : façade plate, arête biseautée nette, côté droit, dos fermé (aucun vide)
+  add(podShell(), M.white, 240);
+  // biseau clair qui descend vers la fenêtre
+  add(loft(WIN, BEZ, [['i', 0, -0.075], [0.25, -0.056], [0.5, -0.0375], [0.75, -0.019], ['o', 0, 0]], 240), M.bezel, 240);
+  // cerclage argent
+  add(loft(offset(WIN, -0.022), WIN, [['i', 0, -0.092], ['i', 0.005, -0.08], [0.5, -0.077], ['o', -0.004, -0.079], ['o', 0, -0.09]], 240, 0.005, 0.004), M.chrome, 240);
+  // verre
+  const gl = []; for (let k = 0; k <= 10; k++) gl.push([k / 10, -0.086]);
+  add(loft([PC, PC, PC], offset(WIN, -0.012), gl, 120), M.glass, 120).renderOrder = 2;
+  // chambre intérieure peu profonde : parois + panneau gris clair (c'est lui qui s'éclaire en rouge)
+  add(loft(WIN, WIN, [['i', 0, -0.085], ['i', 0, -0.15]], 240), M.inner, 240);
+  const pn = []; for (let k = 0; k <= 10; k++) pn.push([k / 10, -0.15]);
+  add(loft([PC, PC, PC], offset(WIN, 0.004), pn, 120), M.inner, 120);
+  const gp = []; for (let k = 0; k <= 10; k++) gp.push([k / 10, -0.14]);
+  add(loft([PC, PC, PC], offset(WIN, 0.002), gp, 120), M.glowPanel, 120);
+  // LED sur le panneau (discrètes éteintes, rouges allumées)
+  const N = 20, per = [];
   for (let k = 0; k < N; k++) {
-    const th = (k / N) * Math.PI * 2, d = new V2(Math.cos(th), Math.sin(th)), r = rayHit(WIN, PC, d) + 0.075;
-    per.push(new V3(PC.x + d.x * r, PC.y + d.y * r, -0.14));
+    const th = (k / N) * Math.PI * 2, d = new V2(Math.cos(th), Math.sin(th)), r = rayHit(WIN, PC, d) - 0.075;
+    per.push(new V3(PC.x + d.x * r, PC.y + d.y * r, -0.146));
   }
-  const ledGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.012, 20); ledGeo.rotateX(Math.PI / 2);
+  const ledGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.008, 18); ledGeo.rotateX(Math.PI / 2);
   per.forEach((p) => { const m = new THREE.Mesh(ledGeo, M.led); m.position.copy(p); m.userData.shared = true; pod.add(m); });
-  const pg = new THREE.BufferGeometry().setFromPoints(per.map((p) => p.clone().setZ(-0.15)));
+  const pg = new THREE.BufferGeometry().setFromPoints(per.map((p) => p.clone().setZ(-0.13)));
   pod.add(new THREE.Points(pg, M.ledGlow));
-  // petit plateau intérieur (support des LED) entre cadre et paroi
-  const inner = new THREE.Mesh(extrude(shapeOf(offset(POD, -0.07), [offset(WIN, 0.012)]), 0.02, 0, 0), M.inner);
-  inner.position.z = -0.1; pod.add(inner);
-  // lueur intérieure (visible à travers la fenêtre quand c'est allumé)
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xff0000, blending: THREE.AdditiveBlending, transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
-  halo.position.set(0.86, -0.02, -0.28); halo.scale.set(1.25, 0.8, 1); pod.add(halo);
+  halo.position.set(0.87, -0.02, -0.11); halo.scale.set(1.1, 0.62, 1); pod.add(halo);
   pod.userData.halo = halo;
   warpPod(pod);
-  // charnière de branche (bloc à l'arrière du bord extérieur)
-  const hy = 0.2, hx = podOuterX(hy);
-  const hinge = new THREE.Mesh(new RoundedBoxGeometry(0.2, 0.5, 0.42, 4, 0.06), M.white);
-  hinge.position.set(hx - 0.05, hy, -DEPTH + 0.16); pod.add(hinge);
-  const seam = new THREE.Mesh(new THREE.BoxGeometry(0.205, 0.5, 0.008), M.seam);
-  seam.position.set(hx - 0.05, hy, -DEPTH + 0.26); pod.add(seam);
-  [-0.12, 0.12].forEach((dy) => { const s = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.012, 16), M.chrome); s.rotation.z = Math.PI / 2; s.position.set(hx + 0.056, hy + dy, -DEPTH + 0.1); pod.add(s); });
+  // charnière de branche : petit bloc en haut, à l'arrière du bord extérieur
+  const hy = 0.31, hx = podOuterX(hy);
+  const hinge = new THREE.Mesh(new RoundedBoxGeometry(0.12, 0.24, 0.24, 4, 0.03), M.white);
+  hinge.position.set(hx - 0.03, hy, -DEPTH + 0.1); pod.add(hinge);
+  const seam = new THREE.Mesh(new THREE.BoxGeometry(0.122, 0.24, 0.006), M.seam);
+  seam.position.set(hx - 0.03, hy, -DEPTH + 0.16); pod.add(seam);
+  [-0.055, 0.055].forEach((dy) => { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.01, 14), M.seam); c.rotation.z = Math.PI / 2; c.position.set(hx + 0.031, hy + dy, -DEPTH + 0.06); pod.add(c); });
   return pod;
 }
 
 // branche : section rectangulaire arrondie balayée le long d'une courbe
 function buildArm(M) {
   const path = new THREE.CatmullRomCurve3([
-    new V3(1.58, 0.20, -0.62), new V3(1.66, 0.21, -1.3), new V3(1.70, 0.20, -2.0), new V3(1.66, 0.15, -2.6),
-    new V3(1.58, 0.04, -3.0), new V3(1.51, -0.12, -3.2), new V3(1.47, -0.28, -3.19),
+    new V3(1.6, 0.31, -0.46), new V3(1.66, 0.3, -1.05), new V3(1.67, 0.25, -1.65), new V3(1.62, 0.12, -2.1),
+    new V3(1.56, -0.06, -2.36), new V3(1.53, -0.2, -2.4),
   ], false, 'centripetal');
   const nu = 40, nv = 260, up = new V3(0, 1, 0);
   const pos = [], idx = [];
@@ -224,10 +221,10 @@ function buildArm(M) {
     const s = new V3().crossVectors(T, up); if (s.length() > 0.15) side = s.normalize();
     const u2 = new V3().crossVectors(side, T).normalize();
     // hauteur / épaisseur : large près de la charnière, gorge (articulation), puis fine
-    let h = v < 0.24 ? 0.44 : lerp(0.3, 0.2, clamp((v - 0.24) / 0.5, 0, 1));
-    if (v > 0.2 && v < 0.24) h = lerp(0.44, 0.3, (v - 0.2) / 0.04);
-    let w = v < 0.24 ? 0.13 : 0.1;
-    const groove = Math.exp(-Math.pow((v - 0.245) / 0.004, 2)) * 0.012; h -= groove * 2; w -= groove;
+    let h = v < 0.3 ? 0.21 : lerp(0.19, 0.15, clamp((v - 0.3) / 0.5, 0, 1));
+    if (v > 0.27 && v < 0.3) h = lerp(0.21, 0.19, (v - 0.27) / 0.03);
+    let w = v < 0.3 ? 0.06 : 0.05;
+    const groove = Math.exp(-Math.pow((v - 0.3) / 0.004, 2)) * 0.01; h -= groove * 2; w -= groove;
     const tip = v > 0.97 ? Math.sqrt(Math.max(0, 1 - Math.pow((v - 0.97) / 0.03, 2))) : 1;
     const st = v < 0.02 ? 1 : 1;
     for (let a = 0; a <= nu; a++) {
@@ -247,30 +244,30 @@ function buildLunettes(M) {
   const group = new THREE.Group(), glowTex = glowTexture();
   const TILT = 9 * DEG;
   const right = buildPod(M, glowTex);
-  right.rotation.y = TILT; right.position.x = 0.05;
+  right.rotation.y = TILT; right.position.x = 0.02;
   const left = buildPod(M, glowTex);
-  left.scale.x = -1; left.rotation.y = -TILT; left.position.x = -0.05;
+  left.scale.x = -1; left.rotation.y = -TILT; left.position.x = -0.02;
   group.add(right, left);
 
   // bouton ⏻/Mode + témoin bleu : SOUS la coque droite (invisible de face)
-  const bx = 0.98, by = podBottomY(bx) - 0.045;
+  const bx = 0.98, by = podBottomY(bx);
   const ind = new THREE.Mesh(new RoundedBoxGeometry(0.17, 0.036, 0.055, 3, 0.017), M.indicator);
-  ind.position.set(bx, by + 0.002, -0.42); right.add(ind);
+  ind.position.set(bx, by + 0.006, -0.3); right.add(ind);
   const lab = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.085), new THREE.MeshBasicMaterial({ map: textTexture('⏻ / Mode'), transparent: true, depthWrite: false }));
-  lab.rotation.x = Math.PI / 2; lab.position.set(bx, by - 0.0025, -0.28); right.add(lab);
+  lab.rotation.x = Math.PI / 2; lab.position.set(bx, by - 0.003, -0.17); right.add(lab);
 
   // port USB-C : côté extérieur de la coque gauche
-  const py = -0.2, px = podOuterX(py) + 0.03;
-  const port = new THREE.Mesh(new RoundedBoxGeometry(0.03, 0.08, 0.25, 3, 0.014), M.port);
-  port.position.set(px, py, -0.42); left.add(port);
-  const portIn = new THREE.Mesh(new THREE.BoxGeometry(0.034, 0.03, 0.17), M.portIn);
-  portIn.position.set(px + 0.002, py, -0.42); left.add(portIn);
+  const py = -0.12, px = podOuterX(py) - 0.004;
+  const port = new THREE.Mesh(new RoundedBoxGeometry(0.03, 0.06, 0.16, 3, 0.012), M.port);
+  port.position.set(px, py, -0.26); left.add(port);
+  const portIn = new THREE.Mesh(new THREE.BoxGeometry(0.034, 0.022, 0.11), M.portIn);
+  portIn.position.set(px + 0.002, py, -0.26); left.add(portIn);
 
   // pont central (petite charnière entre les coques)
-  const bridge = new THREE.Mesh(new RoundedBoxGeometry(0.2, 0.24, 0.4, 4, 0.05), M.white);
-  bridge.position.set(0, 0.4, -0.34); group.add(bridge);
-  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.16, 24), M.bezel);
-  pin.position.set(0, 0.42, -0.15); group.add(pin);
+  const bridge = new THREE.Mesh(new RoundedBoxGeometry(0.14, 0.2, 0.3, 4, 0.03), M.white);
+  bridge.position.set(0, 0.38, -0.2); group.add(bridge);
+  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.14, 20), M.seam);
+  pin.position.set(0, 0.38, -0.05); group.add(pin);
   
 
   // branches
@@ -278,7 +275,7 @@ function buildLunettes(M) {
   const armL = armR.clone(); armL.scale.x = -1; group.add(armL);
 
   group.userData.halos = [right.userData.halo, left.userData.halo];
-  group.position.set(0, 0.02, 1.6); // centre visuel (les branches partent loin vers l'arrière)
+  group.position.set(0, 0.0, 1.2); // centre visuel (les branches partent loin vers l'arrière)
   return group;
 }
 
@@ -311,12 +308,13 @@ export function initLunettes(root, opts) {
   const M = {
     white: new THREE.MeshPhysicalMaterial({ color: 0xf7f5f4, roughness: 0.2, clearcoat: 0.9, clearcoatRoughness: 0.1 }),
     whiteDS: new THREE.MeshPhysicalMaterial({ color: 0xf7f5f4, roughness: 0.2, clearcoat: 0.9, clearcoatRoughness: 0.1, side: THREE.DoubleSide }),
-    bezel: new THREE.MeshPhysicalMaterial({ color: 0xebe8e7, roughness: 0.28, clearcoat: 0.6, clearcoatRoughness: 0.15, side: THREE.DoubleSide }),
-    inner: new THREE.MeshPhysicalMaterial({ color: 0xe9e6e5, roughness: 0.5, side: THREE.DoubleSide }),
+    bezel: new THREE.MeshPhysicalMaterial({ color: 0xf3f1f0, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.15, side: THREE.DoubleSide }),
+    inner: new THREE.MeshPhysicalMaterial({ color: 0xc4c9cd, roughness: 0.16, metalness: 0.4, clearcoat: 0.8, envMapIntensity: 1.4, side: THREE.DoubleSide }),
+    glowPanel: new THREE.MeshBasicMaterial({ color: 0xff1a12, transparent: true, opacity: 0, depthWrite: false, toneMapped: false, side: THREE.DoubleSide }),
     seam: new THREE.MeshStandardMaterial({ color: 0xc9c4c2, roughness: 0.6 }),
     chrome: new THREE.MeshPhysicalMaterial({ color: 0xe9ecef, metalness: 1, roughness: 0.14, envMapIntensity: 1.5 }),
-    glass: new THREE.MeshPhysicalMaterial({ color: 0xeef2f3, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.2, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.8, side: THREE.DoubleSide, depthWrite: false, emissive: 0xff0a0a, emissiveIntensity: 0, toneMapped: false }),
-    led: new THREE.MeshStandardMaterial({ color: 0x9b9392, roughness: 0.35, emissive: 0xff1e1e, emissiveIntensity: 0 }),
+    glass: new THREE.MeshPhysicalMaterial({ color: 0xeef2f3, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.14, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.8, side: THREE.DoubleSide, depthWrite: false, emissive: 0xff0a0a, emissiveIntensity: 0, toneMapped: false }),
+    led: new THREE.MeshStandardMaterial({ color: 0xff5a5a, roughness: 0.35, emissive: 0xff1e1e, emissiveIntensity: 0, transparent: true, opacity: 0 }),
     ledGlow: new THREE.PointsMaterial({ size: 0.16, map: glowTexture(), color: 0xff3a3a, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }),
     button: new THREE.MeshPhysicalMaterial({ color: 0xf1efee, roughness: 0.3, clearcoat: 0.6 }),
     indicator: new THREE.MeshStandardMaterial({ color: 0x5a6a8a, roughness: 0.3, emissive: 0x2f6bff, emissiveIntensity: 0.05 }),
@@ -330,7 +328,7 @@ export function initLunettes(root, opts) {
   const rim = new THREE.DirectionalLight(0xffdde2, 0.8); rim.position.set(-4, 2, -4); scene.add(rim);
   const under = new THREE.DirectionalLight(0xffffff, 0.35); under.position.set(0, -4, 2); scene.add(under);
   const redL = [new THREE.PointLight(0xff2a2a, 0, 3, 1.6), new THREE.PointLight(0xff2a2a, 0, 3, 1.6)];
-  redL[0].position.set(0.85, 0.0, -0.35); redL[1].position.set(-0.85, 0.0, -0.35);
+  redL[0].position.set(0.85, -0.05, 0.35); redL[1].position.set(-0.85, -0.05, 0.35);
   redL.forEach((l) => group.add(l));
   const back = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xff3a3a, blending: THREE.AdditiveBlending, transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
   back.position.set(0, 0.0, -0.9); back.scale.set(5.2, 2.6, 1); group.add(back);
@@ -348,7 +346,7 @@ export function initLunettes(root, opts) {
   controls.addEventListener('start', () => { controls.autoRotate = false; root.classList.add('is-touched'); clearTimeout(idleT); camAnim = null; });
   controls.addEventListener('end', () => { clearTimeout(idleT); if (!opts.still) idleT = setTimeout(() => { controls.autoRotate = true; }, 7000); });
 
-  const DIST = opts.dist || 10.4;
+  const DIST = opts.dist || 9.6;
   function place(az, pol) {
     const r = DIST * Math.max(1, (opts.fit || 1) / camera.aspect);
     camera.position.set(r * Math.sin(pol) * Math.sin(az), r * Math.cos(pol), r * Math.sin(pol) * Math.cos(az)).add(controls.target);
@@ -393,14 +391,14 @@ export function initLunettes(root, opts) {
       if (p >= 1) camAnim = null;
     }
     cur += (target - cur) * 0.1;
-    M.led.emissiveIntensity = 3.2 * cur; M.led.color.setRGB(lerp(0.6, 1, cur), lerp(0.57, 0.3, cur), lerp(0.57, 0.3, cur));
+    M.led.emissiveIntensity = 3.2 * cur; M.led.opacity = cur;
     M.ledGlow.opacity = 0.95 * cur;
-    M.glass.emissiveIntensity = 1.05 * cur; M.glass.opacity = lerp(0.2, 0.78, cur); M.glass.color.setRGB(lerp(0.93, 1, cur), lerp(0.95, 0.22, cur), lerp(0.95, 0.2, cur));
-    M.inner.emissive.setRGB(0.9 * cur, 0.08 * cur, 0.08 * cur);
+    M.glass.emissiveIntensity = 0.25 * cur; M.glass.opacity = lerp(0.14, 0.2, cur); M.glowPanel.opacity = 0.92 * cur;
+    M.inner.emissive.setRGB(0.5 * cur, 0.02 * cur, 0.02 * cur);
     M.indicator.emissiveIntensity = lerp(0.05, 2.6, cur);
     group.userData.halos.forEach((h) => { h.material.opacity = 0.55 * cur; });
-    back.material.opacity = 0.08 * cur;
-    redL.forEach((l) => { l.intensity = 3.2 * cur; });
+    back.material.opacity = 0;
+    redL.forEach((l) => { l.intensity = 0.9 * cur; });
     controls.update();
     renderer.render(scene, camera);
   }
