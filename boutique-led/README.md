@@ -418,3 +418,10 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   panneau LED recoloré à partir de la photo rouge. Mention affichée : « rendu simulé à partir de la photo du fabricant ».
 - Limite : pas de vue de dos dans les photos fournies → rotation de profil à profil (180°), pas 360° complet.
   Pour un vrai 360° : 24 à 36 photos du masque sur un plateau tournant (ou vue de dos + 3/4 arrière).
+
+## v25 – correctif vue 360° (30/09/2026)
+
+- Problème v24 : le thème Horizon n'affiche la colonne photo que si le produit a au moins une photo
+  (snippets/product-information-content.liquid, `product_has_media`). Le masque n'a aucune photo → vue 360° invisible.
+- Correctif : ce snippet force `product_has_media = true` sur le modèle masque-led. Thème
+  « 💗 VELEA v25 – vue 360 visible (à publier) » (gid://shopify/OnlineStoreTheme/207566700889), copie de v24 (publiée), md5 vérifié.
