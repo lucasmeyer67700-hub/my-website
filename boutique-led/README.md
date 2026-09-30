@@ -539,3 +539,10 @@ Thème « 💗 VELEA v35 – lunettes fines (à publier) » (207608021337), copi
 - Allumées : le panneau derrière chaque verre devient rouge franc + points LED.
 - Bouton Mode + témoin bleu toujours dessous ; port USB-C sur le côté gauche.
 - Images HD et 4K refaites ; photo produit remplacée par le nouveau rendu.
+
+## Remise à zéro (30/09/2026)
+À la demande du propriétaire (« enlève tout », suppression définitive confirmée) :
+- **Supprimés définitivement** : les 16 produits (dont masque, coffret, lunettes, stylo et les anciens produits archivés), les 7 collections, les 6 pages (contact, notre histoire, FAQ, livraison, retours, mentions légales), le menu « Boutique ».
+- **Vidés** : menu principal et menu du bas (Shopify ne permet pas de les supprimer).
+- **Gardés** : menu du compte client (système), réglages de la boutique, thèmes (Claude ne peut pas supprimer de thème : v17 à v31 sont à supprimer à la main si souhaité ; v35 est publié).
+- Tout l'historique (textes, images 4K, modèles 3D, thèmes) reste dans ce dépôt si besoin plus tard.
