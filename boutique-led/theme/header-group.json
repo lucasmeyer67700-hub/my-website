@@ -14,17 +14,6 @@
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
-        "announcement_BxgCk9": {
-          "type": "_announcement",
-          "settings": {
-            "text": "🍂 Nouveau : votre rituel beauté d'automne",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
-        },
         "announcement_noel": {
           "type": "_announcement",
           "settings": {
@@ -38,7 +27,6 @@
         }
       },
       "block_order": [
-        "announcement_BxgCk9",
         "announcement_noel"
       ],
       "name": "t:names.announcement_bar",

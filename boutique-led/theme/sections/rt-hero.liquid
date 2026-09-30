@@ -1,10 +1,8 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/all' -%}{%- endif -%}
 {%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
-{%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
-{%- if pk.handle == 'pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard' -%}{%- assign pk_price = pk.price_min | money -%}{%- else -%}{%- assign pk_price = '104,90 €' -%}{%- endif -%}
 {%- comment -%} Photo : celle choisie dans l'éditeur, sinon la photo principale du masque. Sans photo : pas de cadre vide. {%- endcomment -%}
 {%- assign img = section.settings.photo -%}
 {%- if img == blank and m_ok -%}{%- assign img = m.featured_image -%}{%- endif -%}
@@ -15,15 +13,21 @@
 {%- if m_ok -%}{% render 'velea-etoiles', product: m, link: '#avis' %}{%- endif -%}
 <p class="rt-lead">{{ section.settings.texte }}</p>
 <p class="vh-price">{{ m_price }}</p>
-<div class="rt-btns"><a class="rt-btn rt-btn--p vh-cta" id="vh-hero-cta" href="{{ m_url }}">{{ section.settings.cta }}</a></div>
-<a class="vh-link" href="#coffrets">ou voir les coffrets, dès {{ pk_price }}</a>
-<p class="vh-reass">{{ section.settings.reassurance }}</p>
+<div class="rt-btns"><a class="rt-btn rt-btn--p vh-cta vh-cta--down" id="vh-hero-cta" href="#rt-masque">{{ section.settings.cta }}<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a></div>
 </div>
 {%- if img != blank -%}
 <div class="rt-viscol"><div class="vh-vis">{{ img | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 989px) 100vw, 600px', widths: '600, 900, 1200', alt: section.settings.alt }}</div></div>
 {%- endif -%}
 </div></section>
 <div class="rt-sticky" id="vh-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn rt-btn--p" href="{{ m_url }}">Commander</a></div>
+<style>
+html{scroll-behavior:smooth}
+#rt-masque{scroll-margin-top:84px}
+.vh-cta--down{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.vh-cta--down svg{animation:vh-down 1.8s ease-in-out infinite}
+@keyframes vh-down{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.vh-cta--down svg{animation:none}}
+</style>
 <script>
 (function(){var s=document.getElementById('vh-sticky'),c=document.getElementById('vh-hero-cta');if(!s||!c||!('IntersectionObserver' in window))return;
 var past=false,end=false;function u(){s.classList.toggle('is-on',past&&!end)}
@@ -44,7 +48,6 @@ els.forEach(function(el){if(el.closest('.vh-hero'))return;var i=Array.prototype.
 {"type": "text", "id": "alt", "label": "Description de la photo", "default": "Femme portant le masque LED VELEA allumé sur le visage et le cou"},
 {"type": "text", "id": "titre", "label": "Titre", "default": "La lumière LED, visage et cou."},
 {"type": "textarea", "id": "texte", "label": "Phrase", "default": "Un masque sans fil à porter 10 à 15 minutes, le soir, chez vous. 7 couleurs de lumière, un bouton, rien d'autre."},
-{"type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir le masque"},
-{"type": "text", "id": "reassurance", "label": "Ligne sous le bouton", "default": "Satisfaite ou remboursée 30 jours · Livraison suivie"}
+{"type": "text", "id": "cta", "label": "Bouton", "default": "Voir le masque", "info": "Le bouton fait descendre la page jusqu'au masque."}
 ], "presets": [{"name": "RT · Bannière masque LED"}]}
 {% endschema %}

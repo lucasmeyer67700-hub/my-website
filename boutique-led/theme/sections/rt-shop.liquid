@@ -6,10 +6,10 @@
 {%- assign pk_ok = false -%}{%- if pk.handle == 'pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard' -%}{%- assign pk_ok = true -%}{%- endif -%}
 {%- assign hf = all_products['stylo-visage-haute-frequence'] -%}
 {%- assign hf_ok = false -%}{%- if hf.handle == 'stylo-visage-haute-frequence' -%}{%- assign hf_ok = true -%}{%- endif -%}
-{%- if hf_ok -%}{%- assign hf_url = hf.url -%}{%- assign hf_price = hf.price | money -%}{%- else -%}{%- assign hf_url = '/collections/rituel-eclat' -%}{%- assign hf_price = '49,90 €' -%}{%- endif -%}
+{%- if hf_ok -%}{%- assign hf_url = hf.url -%}{%- assign hf_price = hf.price | money -%}{%- else -%}{%- assign hf_url = '/collections/all' -%}{%- assign hf_price = '49,90 €' -%}{%- endif -%}
 {%- assign ey = all_products['lunettes-led-regard-lumiere-rouge-contour-des-yeux'] -%}
 {%- assign ey_ok = false -%}{%- if ey.handle == 'lunettes-led-regard-lumiere-rouge-contour-des-yeux' -%}{%- assign ey_ok = true -%}{%- endif -%}
-{%- if ey_ok -%}{%- assign ey_url = ey.url -%}{%- assign ey_price = ey.price | money -%}{%- else -%}{%- assign ey_url = '/collections/rituel-eclat' -%}{%- assign ey_price = '53,90 €' -%}{%- endif -%}
+{%- if ey_ok -%}{%- assign ey_url = ey.url -%}{%- assign ey_price = ey.price | money -%}{%- else -%}{%- assign ey_url = '/collections/all' -%}{%- assign ey_price = '53,90 €' -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
 <div class="rt" id="coffrets"><section class="rt-wrap vh-shop vh-shop--mini">
 <div class="rt-center"><h2>{{ section.settings.titre }}</h2><p class="rt-lead">Le masque suffit pour commencer. Si vous voulez compléter, il existe aussi en coffret.</p></div>

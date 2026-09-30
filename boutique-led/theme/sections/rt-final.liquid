@@ -1,12 +1,9 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_url = m.url -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
-{%- assign img = section.settings.photo -%}
-{%- if img == blank and m_ok -%}{%- assign img = m.featured_image -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_url = m.url -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_url = '/collections/all' -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:30px">
 <div class="rt"><section class="rt-wrap vh-final">
-{%- if img != blank -%}<div class="vh-final__img">{{ img | image_url: width: 320 | image_tag: loading: 'lazy', sizes: '160px', widths: '160, 320', alt: 'Masque LED VELEA' }}</div>{%- endif -%}
 <h2>Prête à essayer ?</h2>
 <p class="rt-lead">Le masque LED visage &amp; cou. 30 jours pour changer d'avis.</p>
 <p class="vh-price">{{ m_price }}</p>
@@ -14,7 +11,5 @@
 </section></div>
 </div>
 {% schema %}
-{"name": "RT · Appel final", "settings": [
-{"type": "image_picker", "id": "photo", "label": "Petite photo (facultatif)", "info": "Sans photo choisie : photo principale du masque."}
-], "presets": [{"name": "RT · Appel final"}]}
+{"name": "RT · Appel final", "settings": [], "presets": [{"name": "RT · Appel final"}]}
 {% endschema %}

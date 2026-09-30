@@ -12,12 +12,6 @@
       "type": "rt-product",
       "settings": {}
     },
-    "rt_why": {
-      "type": "rt-why",
-      "settings": {
-        "lien": "shopify://pages/a-propos"
-      }
-    },
     "rt_steps": {
       "type": "rt-steps",
       "settings": {}
@@ -48,7 +42,6 @@
     "rt_trust",
     "rt_product",
     "rt_specs",
-    "rt_why",
     "rt_steps",
     "rt_reviews",
     "rt_faq",

@@ -481,3 +481,17 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   dans l'éditeur, cartes « Exemple » et cases « Photo cliente » vides pour voir la mise en page.
 - Avis AliExpress du fournisseur NON repris : ce ne sont pas des clientes VELEA (pratique trompeuse), plusieurs contiennent
   des allégations santé (peau « améliorée », thyroïde). À remplacer par de vrais avis (Judge.me, premières clientes, échantillon offert + mention).
+
+## v31 – accueil épuré + fin des « Page introuvable » (30/09/2026)
+Thème « 💗 VELEA v31 – accueil épuré (à publier) » (207588426073), copie de v30. **À publier par le propriétaire.**
+- **Cause des « Page introuvable »** : le menu « Tous les produits » pointait vers la collection « Rituel Éclat », non publiée. Corrigé tout de suite dans le menu principal (→ /collections/all, déjà en ligne). Les liens de secours des sections pointent aussi vers /collections/all.
+- **Page 404** : titre « Page introuvable », phrase et bouton retirés ; il ne reste que « Nos produits » (les 4 cartes).
+- **Accueil (mobile)** : une seule photo du masque (en haut).
+  - Bouton du haut : « Voir le masque ↓ », il fait descendre en douceur jusqu'à la section du masque (#rt-masque) au lieu d'ouvrir une autre page.
+  - Retirés du haut : le lien « ou voir les coffrets » (la section coffrets est plus bas) et la ligne « Satisfaite ou remboursée · Livraison suivie » (déjà dans le bandeau confiance juste dessous).
+  - Section du masque : plus de 2e photo, plus de lien « Voir toutes les caractéristiques » (elles sont juste en dessous) ; bouton « Commander – 79,90 € ».
+  - Section « Pourquoi VELEA » retirée de l'accueil (répétait sans fil / visage + cou / 30 jours). La page « Notre histoire » reste dans le menu.
+  - Appel final : sans photo.
+  - Bandeau d'annonce : « 🍂 Nouveau : votre rituel beauté d'automne » retiré, il reste « Livraison suivie · Satisfaite ou remboursée 30 jours ».
+- Ordre de l'accueil : bannière → confiance → le masque → tout savoir → comment ça marche → avis → FAQ → coffrets → appel final.
+- 12 fichiers vérifiés (empreinte identique).

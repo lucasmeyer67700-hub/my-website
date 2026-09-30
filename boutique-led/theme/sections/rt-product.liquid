@@ -1,17 +1,10 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
 {%- assign m = all_products['masque-led-visage-cou-silicone-souple-sans-fil'] -%}
 {%- assign m_ok = false -%}{%- if m.handle == 'masque-led-visage-cou-silicone-souple-sans-fil' -%}{%- assign m_ok = true -%}{%- endif -%}
-{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
+{%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/all' -%}{%- endif -%}
 {%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
-{%- comment -%} Photo : celle choisie dans l'éditeur, sinon la 2e photo du masque. Sans photo : pas de cadre vide. {%- endcomment -%}
-{%- assign img = section.settings.photo -%}
-{%- if img == blank and m_ok and m.images.size > 1 -%}{%- assign img = m.images[1] -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt" id="rt-masque"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod">
-{%- if img != blank -%}<div class="vh-prod__img">{{ img | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(max-width: 989px) 100vw, 500px', widths: '500, 750, 1000', alt: section.settings.alt }}</div>
-{%- else -%}{%- comment -%} Sans photo choisie : rendu haute qualité du masque 3D (4:5, 3 tailles) {%- endcomment -%}
-<a class="vh-prod__img" href="{{ m_url }}"><img src="{{ 'velea-masque-3d-1200.webp' | asset_url }}" srcset="{{ 'velea-masque-3d-800.webp' | asset_url }} 800w, {{ 'velea-masque-3d-1200.webp' | asset_url }} 1200w, {{ 'velea-masque-3d-1600.webp' | asset_url }} 1600w" sizes="(max-width: 989px) calc(100vw - 32px), 520px" width="1200" height="1500" loading="lazy" decoding="async" alt="{{ section.settings.alt | escape }}"></a>
-{%- endif -%}
+<div class="rt" id="rt-masque"><section class="rt-wrap" style="padding-left:0;padding-right:0"><div class="rt-prod vh-prod--noimg">
 <div>
 <h2>Le masque LED VELEA</h2>
 <p class="vh-sub">Deux pièces, un bouton, aucun fil.</p>
@@ -24,14 +17,10 @@
 <div><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v5M15 3v5M6 8h12v4a6 6 0 0 1-12 0zM12 18v3"/></svg></span><p><b>Recharge USB-C</b><span>2 h pour 1 à 2,5 h d'utilisation</span></p></div>
 <div><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></span><p><b>Fenêtres pour les yeux</b><span>Vous voyez à travers</span></p></div>
 </div>
-<div class="rt-btns" style="margin-top:20px"><a class="rt-btn rt-btn--p vh-cta" href="{{ m_url }}">Voir le masque – {{ m_price }}</a></div>
-<p class="rt-small" style="margin-top:12px"><a href="#details">Voir toutes les caractéristiques</a></p>
+<div class="rt-btns" style="margin-top:20px"><a class="rt-btn rt-btn--p vh-cta" href="{{ m_url }}">Commander – {{ m_price }}</a></div>
 </div>
 </div></section></div>
 </div>
 {% schema %}
-{"name": "RT · Le masque en détail", "settings": [
-{"type": "image_picker", "id": "photo", "label": "Photo (masque + pièce du cou)", "info": "Le masque éteint, de face, pièce du cou à côté, fond crème. Format 4:5, 1000 × 1250 px. Sans photo choisie : 2e photo du masque."},
-{"type": "text", "id": "alt", "label": "Description de la photo", "default": "Le masque LED VELEA et sa pièce pour le cou"}
-], "presets": [{"name": "RT · Le masque en détail"}]}
+{"name": "RT · Le masque en détail", "settings": [], "presets": [{"name": "RT · Le masque en détail"}]}
 {% endschema %}

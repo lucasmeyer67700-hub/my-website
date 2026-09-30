@@ -490,5 +490,6 @@ T = [
 # --- v30 : avis clientes ---
 (' avis de clientes VELEA<',' reviews from VELEA customers<',' Bewertungen von VELEA-Kundinnen<',' opiniones de clientas VELEA<',' recensioni di clienti VELEA<'),
 ('>Produit offert à la cliente en échange de son avis.<','>Product given to the customer in exchange for her review.<','>Produkt der Kundin im Austausch für ihre Bewertung geschenkt.<','>Producto regalado a la clienta a cambio de su opinión.<','>Prodotto regalato alla cliente in cambio della sua recensione.<'),
+(">Commander – ",">Order – ",">Bestellen – ",">Pedir – ",">Ordina – "),
 ]
 LANGS = ['en', 'de', 'es', 'it']

@@ -94,3 +94,9 @@ Les boutons d'achat restent en vieux rose.
   image 4:5, pastille (« Le produit phare », « Coffret », « Complément »), nom en serif, prix, bouton « Découvrir » en dégradé
   avec reflet ; au survol / toucher la carte monte et grossit légèrement, la photo zoome.
 - Sans photo : dégradé rose brume → sable avec une icône fine (cadeau, lunettes) et une courte description. Jamais de gros titre gris.
+
+## v31 – une information = un seul endroit
+- Sur l'accueil, une seule grande photo du masque (la bannière). Pas de 2e photo identique plus bas.
+- Le bouton de la bannière descend vers la section du masque (ancre #rt-masque) ; les boutons « Commander » mènent à la fiche produit.
+- Ne pas répéter la réassurance (30 jours, livraison) à plusieurs endroits voisins : bandeau d'annonce + bandeau confiance suffisent.
+- Tout lien vers une collection doit viser une collection publiée (par défaut /collections/all).
