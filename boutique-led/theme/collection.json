@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "rt_others": {
+      "type": "rt-others",
+      "settings": {
+        "titre": "Tous nos produits",
+        "texte": "Le masque LED, et ses compléments pour aller plus loin.",
+        "exclure": false,
+        "pt": 40
+      }
+    }
+  },
+  "order": [
+    "rt_others"
+  ]
+}

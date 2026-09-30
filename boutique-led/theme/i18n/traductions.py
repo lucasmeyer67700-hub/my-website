@@ -466,5 +466,25 @@ T = [
 
 # --- v28 : stylo 3D ---
 (">Modèle 3D d'illustration.<",'>Illustrative 3D model.<','>Illustratives 3D-Modell.<','>Modelo 3D ilustrativo.<','>Modello 3D illustrativo.<'),
+
+# --- v29 : cartes produits ---
+('<h2>Découvrez aussi</h2>','<h2>You may also like</h2>','<h2>Entdecken Sie auch</h2>','<h2>Descubre también</h2>','<h2>Scopri anche</h2>'),
+('>Les autres appareils VELEA.<','>The other VELEA devices.<','>Die anderen VELEA-Geräte.<','>Los demás aparatos VELEA.<','>Gli altri dispositivi VELEA.<'),
+('<h2>Nos produits</h2>','<h2>Our products</h2>','<h2>Unsere Produkte</h2>','<h2>Nuestros productos</h2>','<h2>I nostri prodotti</h2>'),
+('<h2>Tous nos produits</h2>','<h2>All our products</h2>','<h2>Alle Produkte</h2>','<h2>Todos nuestros productos</h2>','<h2>Tutti i nostri prodotti</h2>'),
+('>Le masque LED et ses compléments.<','>The LED mask and its add-ons.<','>Die LED-Maske und ihre Ergänzungen.<','>La mascarilla LED y sus complementos.<','>La maschera LED e i suoi complementi.<'),
+('>Le masque LED, et ses compléments pour aller plus loin.<','>The LED mask, and add-ons to go further.<','>Die LED-Maske und Ergänzungen für noch mehr.<','>La mascarilla LED y complementos para ir más allá.<','>La maschera LED e i complementi per andare oltre.<'),
+('>Découvrir<','>Discover<','>Entdecken<','>Descubrir<','>Scopri<'),
+('>Le produit phare<','>Our signature product<','>Unser Bestseller-Gerät<','>El producto estrella<','>Il prodotto di punta<'),
+('>Complément<','>Add-on<','>Ergänzung<','>Complemento<','>Complemento<'),
+('>Coffret masque + complément<','>Mask + add-on set<','>Set Maske + Ergänzung<','>Pack mascarilla + complemento<','>Cofanetto maschera + complemento<'),
+('>Masque LED visage & cou<','>LED mask face & neck<','>LED-Maske Gesicht & Hals<','>Mascarilla LED rostro y cuello<','>Maschera LED viso & collo<'),
+('>Stylo visage haute fréquence<','>High-frequency facial pen<','>Hochfrequenz-Gesichtsstift<','>Lápiz facial de alta frecuencia<','>Penna viso ad alta frequenza<'),
+('>Masque + 1 appareil au choix<','>Mask + 1 device of your choice<','>Maske + 1 Gerät nach Wahl<','>Mascarilla + 1 aparato a elegir<','>Maschera + 1 dispositivo a scelta<'),
+('>Pour le contour des yeux<','>For the eye area<','>Für die Augenpartie<','>Para el contorno de ojos<','>Per il contorno occhi<'),
+('>Dès ','>From ','>Ab ','>Desde ','>Da '),
+('<h1>Page introuvable</h1>','<h1>Page not found</h1>','<h1>Seite nicht gefunden</h1>','<h1>Página no encontrada</h1>','<h1>Pagina non trovata</h1>'),
+("<p>Le lien est peut-être incorrect, ou cette page n'existe plus.</p>",'<p>The link may be incorrect, or this page no longer exists.</p>','<p>Der Link ist möglicherweise falsch oder die Seite existiert nicht mehr.</p>','<p>El enlace puede ser incorrecto o esta página ya no existe.</p>','<p>Il link potrebbe essere errato o questa pagina non esiste più.</p>'),
+('Voir tous les produits','See all products','Alle Produkte ansehen','Ver todos los productos','Vedi tutti i prodotti'),
 ]
 LANGS = ['en', 'de', 'es', 'it']

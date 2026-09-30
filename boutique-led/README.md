@@ -458,3 +458,15 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   fond rose sombre, pas de pastilles de couleur). Colonne photo forcée même sans photo produit (product-information-content).
 - Rendu 4K (3072 × 3840) : `visuels/velea-stylo-3d-4k.png` ; versions 800/1200/1600 px en image d'attente (`assets/velea-stylo-3d-*.webp`).
 - Vue du masque inchangée (testée après la mise à jour du fichier commun).
+
+## v29 – « Découvrez aussi » + cartes produits soignées (30/09/2026)
+
+- Thème « 💗 VELEA v29 – autres produits (à publier) » (gid://shopify/OnlineStoreTheme/207584723289), copie de v28 (publiée). 13 fichiers, md5 vérifiés.
+- Nouvelle section `rt-others` + carte `velea-card` : bas des 5 modèles produit (masque, coffret, lunettes, stylo, défaut),
+  page 404 (textes en français + « Nos produits ») et page collection « Tous les produits » (grille du thème remplacée).
+  Mobile : défilement horizontal quand 3 cartes, grille 2 colonnes quand 4.
+- Photos produit (en ligne tout de suite) : rendus 3D carrés 2400 × 2400 ajoutés au masque et au stylo
+  (`visuels/velea-masque-led-visage-cou.jpg`, `visuels/velea-stylo-visage-haute-frequence.jpg`) → visibles aussi dans le panier,
+  le paiement, la recherche, et la bannière / l'appel final de l'accueil (qui utilisent la photo du masque).
+  Coffret et lunettes : pas de photo, visuel rose avec icône.
+- `modeles/generer.py` ajoute aussi `rt_others` aux modèles générés.

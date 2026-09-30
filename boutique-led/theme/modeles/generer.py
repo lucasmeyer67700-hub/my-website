@@ -125,7 +125,8 @@ for name, c in PAGES.items():
         'specs_eyebrow': '', 'specs_title': 'Caractéristiques', 'precautions': c['precautions']}}
     for k in ('rt_pdp_ben', 'rt_steps', 'rt_pdp_specs', 'rt_faq', 'rt_shop', 'rt_marquee'):
         t['sections'].pop(k, None)
-    # Aucune autre offre sur une page produit : pas de bandeau du masque ni de compléments.
-    t['order'] = ['main', 'rt_info', 'rt_trust']
+    # v29 : en bas de page, « Découvrez aussi » (les autres produits VELEA, demande du propriétaire).
+    t['sections']['rt_others'] = {'type': 'rt-others', 'settings': {}}
+    t['order'] = ['main', 'rt_info', 'rt_trust', 'rt_others']
     open(os.path.join(here, 'product.%s.json' % name), 'w').write(json.dumps(t, ensure_ascii=False, separators=(',', ':')))
     print(name, 'ok')

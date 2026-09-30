@@ -87,3 +87,10 @@ Les boutons d'achat restent en vieux rose.
 - L'accueil parle d'abord et surtout du masque (bannière, 6 points, fiche détaillée, étapes, FAQ).
 - Coffrets et compléments : un seul petit bloc « Pour aller plus loin » après la FAQ, sans gros bouton ni grande image.
 - Fréquence officielle : 2 à 3 fois par semaine, 10 à 15 minutes. Ne jamais attribuer d'effet à une couleur.
+
+## v29 – autres produits et cartes produits (remplace la règle v17 « aucun autre produit sur une page produit »)
+- En bas de chaque page produit : « Découvrez aussi » (les autres produits VELEA, le produit en cours retiré), demandé par le propriétaire.
+- Cartes produits VELEA (snippets/velea-card.liquid) partout où des produits sont listés : fond blanc, bord #E8D5CC, arrondi 20 px,
+  image 4:5, pastille (« Le produit phare », « Coffret », « Complément »), nom en serif, prix, bouton « Découvrir » en dégradé
+  avec reflet ; au survol / toucher la carte monte et grossit légèrement, la photo zoome.
+- Sans photo : dégradé rose brume → sable avec une icône fine (cadeau, lunettes) et une courte description. Jamais de gros titre gris.

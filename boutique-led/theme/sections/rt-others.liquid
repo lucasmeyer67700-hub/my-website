@@ -1,0 +1,66 @@
+{{ 'rituel.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Autres produits VELEA (bas des pages produits, page 404, page « Tous les produits »).
+  Ordre fixe : masque, coffret, lunettes, stylo. Le produit de la page en cours est retiré si « exclure » est coché.
+{%- endcomment -%}
+{%- assign handles = 'masque-led-visage-cou-silicone-souple-sans-fil,pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard,lunettes-led-regard-lumiere-rouge-contour-des-yeux,stylo-visage-haute-frequence' | split: ',' -%}
+{%- capture cards -%}
+{%- for hd in handles -%}
+  {%- assign p = all_products[hd] -%}
+  {%- if p.handle != hd -%}{%- continue -%}{%- endif -%}
+  {%- if section.settings.exclure and product and p.id == product.id -%}{%- continue -%}{%- endif -%}
+  {% render 'velea-card', p: p %}
+{%- endfor -%}
+{%- endcapture -%}
+{%- assign count = cards | split: 'class="vc"' | size | minus: 1 -%}
+<div class="section section--page-width" style="padding-top:{{ section.settings.pt }}px;padding-bottom:48px">
+<div class="rt"><section class="vo{% if count <= 3 %} vo--scroll{% endif %}">
+  <div class="rt-center">
+    {%- if section.settings.titre != blank -%}<h2>{{ section.settings.titre }}</h2>{%- endif -%}
+    {%- if section.settings.texte != blank -%}<p class="rt-lead">{{ section.settings.texte }}</p>{%- endif -%}
+  </div>
+  <div class="vo__grid" style="--n:{{ count }}">{{ cards }}</div>
+</section></div>
+</div>
+<style>
+.vo{margin-top:8px}
+.vo__grid{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:18px;max-width:calc(var(--n) * 300px);margin:28px auto 0}
+.vc{display:flex;flex-direction:column;background:#fff;border:1px solid #E8D5CC;border-radius:20px;overflow:hidden;text-decoration:none!important;color:#3D2B2F!important;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease;-webkit-tap-highlight-color:transparent}
+.vc:hover,.vc:active{transform:translateY(-4px) scale(1.02);box-shadow:0 24px 44px -28px rgba(61,43,47,.5)}
+.vc__media{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;background:#93505D}
+.vc__img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.vc:hover .vc__img,.vc:active .vc__img{transform:scale(1.05)}
+.vc__ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 18px;background:radial-gradient(circle at 50% 38%,#FDF7F5 0%,#F4E5E1 52%,#E7CFC8 100%)}
+.vc__ico{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.7);border:1px solid #E1C9BF;color:#9C7A64;box-shadow:0 12px 26px -18px rgba(61,43,47,.45);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.vc__ico svg{width:40px;height:40px}
+.vc:hover .vc__ico,.vc:active .vc__ico{transform:scale(1.08) rotate(-4deg)}
+.vc__phname{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:21px;line-height:1.2;text-align:center;color:#3D2B2F}
+.vc__badge{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92);color:#9C7A64;border:1px solid #E8D5CC;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.03em;padding:5px 10px}
+.vc__body{display:flex;flex-direction:column;gap:4px;padding:14px 16px 16px;flex:1}
+.vc__name{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:20px;line-height:1.2}
+.vc__price{font-size:15px;font-weight:600;color:#3D2B2F}
+.vc__cta{position:relative;overflow:hidden;margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:9px 14px;margin-top:10px;border-radius:12px;color:#fff;font-size:14px;font-weight:600;background:linear-gradient(120deg,#A95F6C 0%,#9A6468 55%,#8E6A55 100%);box-shadow:0 10px 22px -14px rgba(142,106,85,.9)}
+.vc__cta svg{transition:transform .3s ease}
+.vc:hover .vc__cta svg,.vc:active .vc__cta svg{transform:translateX(4px)}
+.vc__cta:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-18deg);animation:vc-shine 4.5s ease-in-out 1.5s infinite}
+@keyframes vc-shine{0%{left:-60%}28%{left:130%}100%{left:130%}}
+@media (max-width:749px){
+  .vo__grid{grid-template-columns:1fr 1fr;gap:12px;max-width:none}
+  .vo--scroll .vo__grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:22px -16px 0;padding:4px 16px 14px;scrollbar-width:none}
+  .vo--scroll .vo__grid::-webkit-scrollbar{display:none}
+  .vo--scroll .vc{flex:0 0 68%;scroll-snap-align:start}
+  .vc__name{font-size:17px}
+  .vc__phname{font-size:18px}
+  .vc__body{padding:12px 12px 14px}
+  .vc__cta{padding:8px 12px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){.vc,.vc__img,.vc__ico{transition:none}.vc__cta:after{animation:none;display:none}}
+</style>
+{% schema %}
+{"name": "RT · Découvrez aussi", "settings": [
+{"type": "text", "id": "titre", "label": "Titre", "default": "Découvrez aussi"},
+{"type": "text", "id": "texte", "label": "Phrase", "default": "Les autres appareils VELEA."},
+{"type": "checkbox", "id": "exclure", "label": "Retirer le produit de la page en cours", "default": true},
+{"type": "range", "id": "pt", "label": "Espace au-dessus", "min": 0, "max": 80, "step": 4, "default": 24}
+], "presets": [{"name": "RT · Découvrez aussi"}]}
+{% endschema %}
