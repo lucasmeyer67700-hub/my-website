@@ -4,30 +4,41 @@
 {%- if m_ok -%}{%- assign m_url = m.url -%}{%- else -%}{%- assign m_url = '/collections/rituel-eclat' -%}{%- endif -%}
 {%- if m_ok -%}{%- assign m_price = m.price | money -%}{%- else -%}{%- assign m_price = '79,90 €' -%}{%- endif -%}
 {%- assign pk = all_products['pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard'] -%}
-{%- assign ey = all_products['lunettes-led-regard-lumiere-rouge-contour-des-yeux'] -%}
-{%- assign hf = all_products['stylo-visage-haute-frequence'] -%}
+{%- if pk.handle == 'pack-rituel-eclat-masque-led-visage-cou-lunettes-led-regard' -%}{%- assign pk_price = pk.price_min | money -%}{%- else -%}{%- assign pk_price = '104,90 €' -%}{%- endif -%}
+{%- comment -%} Photo : celle choisie dans l'éditeur, sinon la photo principale du masque. Sans photo : pas de cadre vide. {%- endcomment -%}
+{%- assign img = section.settings.photo -%}
+{%- if img == blank and m_ok -%}{%- assign img = m.featured_image -%}{%- endif -%}
 <div class="section section--page-width" style="padding-top:8px;padding-bottom:4px">
-<div class="rt"><section class="rt-wrap rt-hero"><div class="rt-hero__in">
-<div>
-<h1>Le masque LED visage &amp; cou</h1>
+<div class="rt"><section class="rt-wrap rt-hero vh-hero{% if img == blank %} vh-hero--noimg{% endif %}"><div class="rt-hero__in">
+<div class="vh-hero__txt">
+<h1>{{ section.settings.titre }}</h1>
 {%- if m_ok -%}{% render 'velea-etoiles', product: m, link: '#avis' %}{%- endif -%}
-<p class="rt-lead">Sans fil, 7 couleurs, visage et cou. Des fenêtres transparentes protègent les yeux. 10 à 15 minutes le soir, rechargeable en USB-C.</p>
-<div class="rt-price"><b>{{ m_price }}</b><span>Livraison suivie en 5 à 10 jours ouvrés</span></div>
-<div class="rt-btns"><a class="rt-btn rt-btn--p" href="{{ m_url }}">Voir le masque</a><a class="rt-btn rt-btn--s" href="#rt-rituel">Les coffrets</a></div>
-{% render 'velea-paiement' %}
-<nav class="vl-chips" aria-label="Accès rapide">
-<a href="{{ m_url }}">Masque</a>
-{%- if pk.handle != blank -%}<a href="{{ pk.url }}">Coffret</a>{%- endif -%}
-{%- if ey.handle != blank -%}<a href="{{ ey.url }}">Lunettes</a>{%- endif -%}
-{%- if hf.handle != blank -%}<a href="{{ hf.url }}">Stylo</a>{%- endif -%}
-<a href="#faq">Questions</a>
-</nav>
+<p class="rt-lead">{{ section.settings.texte }}</p>
+<p class="vh-price">{{ m_price }}</p>
+<div class="rt-btns"><a class="rt-btn rt-btn--p vh-cta" id="vh-hero-cta" href="{{ m_url }}">{{ section.settings.cta }}</a></div>
+<a class="vh-link" href="#coffrets">ou voir les coffrets, dès {{ pk_price }}</a>
+<p class="vh-reass">{{ section.settings.reassurance }}</p>
 </div>
-<div class="rt-viscol"><div class="rt-vis vl-frame" aria-hidden="true"></div></div>
+{%- if img != blank -%}
+<div class="rt-viscol"><div class="vh-vis">{{ img | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 989px) 100vw, 600px', widths: '600, 900, 1200', alt: section.settings.alt }}</div></div>
+{%- endif -%}
 </div></section>
-<div class="rt-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn rt-btn--p" href="{{ m_url }}">Voir le masque</a></div>
+<div class="rt-sticky" id="vh-sticky"><p><b>{{ m_price }}</b>Masque LED visage &amp; cou</p><a class="rt-btn rt-btn--p" href="{{ m_url }}">Commander</a></div>
+<script>
+(function(){var s=document.getElementById('vh-sticky'),c=document.getElementById('vh-hero-cta');if(!s||!c||!('IntersectionObserver' in window))return;
+var past=false,end=false;function u(){s.classList.toggle('is-on',past&&!end)}
+new IntersectionObserver(function(e){past=!e[0].isIntersecting&&e[0].boundingClientRect.top<0;u()}).observe(c);
+var f=document.querySelector('.vh-final')||document.querySelector('footer');if(f)new IntersectionObserver(function(e){end=e[0].isIntersecting||e[0].boundingClientRect.top<0;u()}).observe(f);})();
+</script>
 </div>
 </div>
 {% schema %}
-{"name": "RT · Bannière masque LED", "settings": [], "presets": [{"name": "RT · Bannière masque LED"}]}
+{"name": "RT · Bannière masque LED", "settings": [
+{"type": "image_picker", "id": "photo", "label": "Photo (masque porté et allumé)", "info": "Carrée, 1200 × 1200 px, fond rose poudré ou crème, sans texte. Sans photo choisie : photo principale du masque."},
+{"type": "text", "id": "alt", "label": "Description de la photo", "default": "Femme portant le masque LED VELEA allumé sur le visage et le cou"},
+{"type": "text", "id": "titre", "label": "Titre", "default": "La lumière LED, visage et cou."},
+{"type": "textarea", "id": "texte", "label": "Phrase", "default": "Un masque sans fil à porter 10 à 15 minutes, le soir, chez vous. 7 couleurs de lumière, un bouton, rien d'autre."},
+{"type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir le masque"},
+{"type": "text", "id": "reassurance", "label": "Ligne sous le bouton", "default": "Satisfaite ou remboursée 30 jours · Livraison suivie"}
+], "presets": [{"name": "RT · Bannière masque LED"}]}
 {% endschema %}

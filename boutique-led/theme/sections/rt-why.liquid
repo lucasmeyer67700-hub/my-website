@@ -1,16 +1,21 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'rituel.js' | asset_url }}"></script>
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt rt-anim"><section class="rt-wrap" style="padding-left:0;padding-right:0">
-<div class="rt-center"><p class="rt-eyebrow">Pensé pour vous</p><h2>Un moment <em>rien qu'à vous</em>, même les jours chargés</h2></div>
-<div class="rt-grid rt-4">
-<div class="rt-card"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>10 minutes suffisent</h3><p>Le temps d'une tisane ou d'un épisode de votre série.</p></div>
-<div class="rt-card"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></span><h3>L'esprit spa, chez vous</h3><p>Pas de rendez-vous, pas de trajet : quand vous voulez.</p></div>
-<div class="rt-card"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3c4.4 0 7 3.3 7 8 0 5-3.2 10-7 10s-7-5-7-10c0-4.7 2.6-8 7-8z"/><path d="M9 10h.01M15 10h.01M10 15c1.2.8 2.8.8 4 0"/></svg></span><h3>Ultra-léger</h3><p>202 g seulement : il se fait oublier, même allongée.</p></div>
-<div class="rt-card"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span><h3>Un vrai rituel</h3><p>Un geste doux pour finir la journée en prenant soin de vous.</p></div>
+<div class="rt"><section class="rt-wrap vh-why">
+<div class="rt-center"><h2>Pourquoi VELEA</h2><p class="rt-lead">Nous avons choisi un seul masque, et nous l'avons choisi avec soin.</p></div>
+<div class="vh-why__list">
+<div><h3>Un seul appareil, visage et cou</h3><p>Le cou est souvent oublié. Ici, il a sa propre pièce, incluse.</p></div>
+<div><h3>Vraiment sans fil</h3><p>Pas de boîtier à tenir ni de câble pendant la séance. Vous bougez librement.</p></div>
+<div><h3>Des informations claires</h3><p>Caractéristiques, contenu de la boîte, précautions : tout est écrit. Pas de promesse miracle.</p></div>
+<div><h3>30 jours pour essayer</h3><p>S'il ne vous convient pas, vous le renvoyez et nous vous remboursons.</p></div>
 </div>
+{%- if section.settings.citation != blank -%}<blockquote class="vh-why__sig"><p>« {{ section.settings.citation }} »</p>{%- if section.settings.signature != blank -%}<cite>{{ section.settings.signature }}</cite>{%- endif -%}</blockquote>{%- endif -%}
+{%- if section.settings.lien != blank -%}<p class="rt-center" style="margin-top:18px"><a class="vh-link" href="{{ section.settings.lien }}">Notre histoire</a></p>{%- endif -%}
 </section></div>
 </div>
 {% schema %}
-{"name": "RT · Pensé pour vous", "settings": [], "presets": [{"name": "RT · Pensé pour vous"}]}
+{"name": "RT · Pourquoi VELEA", "settings": [
+{"type": "textarea", "id": "citation", "label": "Votre phrase (facultatif, seulement si c'est vrai)", "info": "Ex. : J'ai lancé VELEA pour proposer des appareils beauté simples, bien expliqués et faciles à utiliser chez soi."},
+{"type": "text", "id": "signature", "label": "Signature (ex. Prénom, fondateur)"},
+{"type": "url", "id": "lien", "label": "Lien « Notre histoire »"}
+], "presets": [{"name": "RT · Pourquoi VELEA"}]}
 {% endschema %}

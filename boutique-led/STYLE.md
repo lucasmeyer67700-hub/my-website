@@ -58,3 +58,15 @@ Pétales de la fleur du logo, petit trait devant les accroches, cercles fins aut
 numéros des 3 étapes, badges « Offre premium » et « Routine complète », détails du bloc coffret,
 « + » de la FAQ, phrase en italique des sections.
 Les boutons d'achat restent en vieux rose.
+
+## v21 – page d'accueil (remplace la section « Où mettre le doré »)
+- **Plus de doré nulle part.** Détails (étoiles, numéros, « + » de la FAQ) en rose #C47A86.
+- **Boutons d'achat : #A95F6C, survol #8F4B57**, texte blanc, arrondi 12 px, 52 px de haut. Le #C47A86 est trop pâle pour du texte blanc.
+- Palette : fond #FFFBFA, fond alterné #FBEFEC, rose poudré #F8E3E1, texte #3D2B2F, texte secondaire #7A5E63, bordures #EFD6D6, cartes #FFFFFF.
+- Titres : Cormorant Garamond 600. H1 34 px mobile / 52 px ordinateur, H2 28 / 40, H3 19 / 22. Texte 16 / 17 px. Logo VELEA 18 / 22 px.
+- **Pas de cadre rose vide** : sans photo, la zone image n'apparaît pas du tout (les photos se choisissent dans l'éditeur du thème).
+- Coffrets : pas de prix barré. Écrire « Séparément : X € · Vous économisez Y € » (calculé automatiquement).
+- Yeux : écrire « fenêtres transparentes au niveau des yeux / vous voyez à travers ». Jamais « protègent les yeux » sans confirmation écrite du fournisseur.
+- Ne pas présenter la garantie légale de 2 ans comme un avantage de la marque (interdit) ; la citer seulement de façon neutre (FAQ, CGV, retours).
+- Ordre de l'accueil : bannière → réassurance → masque → pourquoi VELEA → comment ça marche → avis (dès 3 vrais avis) → coffrets + compléments → FAQ → appel final.
+- Un seul bouton plein par écran ; les autres actions sont des liens texte. Aucun carrousel, aucun pop-up sur l'accueil.

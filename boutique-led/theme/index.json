@@ -4,28 +4,38 @@
       "type": "rt-hero",
       "settings": {}
     },
+    "rt_trust": {
+      "type": "rt-trust",
+      "settings": {}
+    },
     "rt_product": {
       "type": "rt-product",
+      "settings": {}
+    },
+    "rt_why": {
+      "type": "rt-why",
+      "settings": {
+        "lien": "shopify://pages/a-propos"
+      }
+    },
+    "rt_steps": {
+      "type": "rt-steps",
+      "settings": {}
+    },
+    "rt_reviews": {
+      "type": "rt-reviews",
       "settings": {}
     },
     "rt_shop": {
       "type": "rt-shop",
       "settings": {}
     },
-    "rt_steps": {
-      "type": "rt-steps",
-      "settings": {}
-    },
-    "rt_trust": {
-      "type": "rt-trust",
-      "settings": {}
-    },
     "rt_faq": {
       "type": "rt-faq",
       "settings": {}
     },
-    "rt_reviews": {
-      "type": "rt-reviews",
+    "rt_final": {
+      "type": "rt-final",
       "settings": {}
     }
   },
@@ -33,9 +43,11 @@
     "rt_hero",
     "rt_trust",
     "rt_product",
-    "rt_shop",
+    "rt_why",
     "rt_steps",
+    "rt_reviews",
+    "rt_shop",
     "rt_faq",
-    "rt_reviews"
+    "rt_final"
   ]
 }

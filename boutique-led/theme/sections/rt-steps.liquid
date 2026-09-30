@@ -1,16 +1,18 @@
 {{ 'rituel.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'rituel.js' | asset_url }}"></script>
 <div class="section section--page-width" style="padding-top:10px;padding-bottom:10px">
-<div class="rt rt-anim"><section class="rt-wrap rt-steps">
-<div class="rt-center"><h2>Comment l'utiliser</h2></div>
-<div class="rt-grid rt-3" style="margin-top:28px">
-<div class="rt-card rt-step"><h3>Peau propre</h3><p>Visage et cou nettoyés et secs, sans crème.</p></div>
-<div class="rt-card rt-step"><h3>Le masque</h3><p>Posez-le, fermez les yeux, appui long pour allumer.</p></div>
-<div class="rt-card rt-step"><h3>10 à 15 minutes</h3><p>Puis retirez-le et appliquez votre crème.</p></div>
-</div>
-<p class="rt-small" style="text-align:center;margin-top:16px">3 à 5 fois par semaine, de préférence le soir.</p>
+<div class="rt"><section class="rt-wrap rt-steps vh-steps">
+<div class="rt-center"><h2>Comment ça marche</h2></div>
+{%- if section.settings.video != blank -%}<div class="vh-steps__video">{{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false }}</div>{%- endif -%}
+<ol class="vh-steps__list">
+<li><span>01</span><div><h3>Peau propre</h3><p>Visage et cou nettoyés et secs, sans maquillage.</p></div></li>
+<li><span>02</span><div><h3>Allumez</h3><p>Posez le masque, appuyez 3 secondes pour allumer, puis choisissez votre couleur d'une touche.</p></div></li>
+<li><span>03</span><div><h3>10 à 15 minutes</h3><p>Retirez-le, puis appliquez votre soin habituel.</p></div></li>
+</ol>
+<p class="rt-small" style="text-align:center;margin-top:18px">3 à 5 fois par semaine, de préférence le soir. Lisez la notice avant la première utilisation.</p>
 </section></div>
 </div>
 {% schema %}
-{"name": "RT · Rituel en 3 étapes", "settings": [], "presets": [{"name": "RT · Rituel en 3 étapes"}]}
+{"name": "RT · Comment ça marche", "settings": [
+{"type": "video", "id": "video", "label": "Vidéo courte (facultatif)", "info": "8 à 12 secondes, verticale, sans son : on allume le masque, 2 ou 3 couleurs, puis le masque porté."}
+], "presets": [{"name": "RT · Comment ça marche"}]}
 {% endschema %}

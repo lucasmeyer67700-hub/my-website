@@ -360,3 +360,24 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
   (structure, textes finaux, couleurs, typographies, cartes, mobile, confiance, checklist).
 - Pas encore appliqué au thème : attendre la validation du propriétaire, puis créer « 💗 VELEA v21 – accueil (à publier) »
   à partir de la v20.
+
+## v21 – nouvelle page d'accueil (30/09/2026)
+
+- Thème « 💗 VELEA v21 – accueil (à publier) » (gid://shopify/OnlineStoreTheme/207564964185), copie de v20 (publié) :
+  plan `PLAN-ACCUEIL-v21.md` appliqué. 20 fichiers envoyés, empreintes md5 vérifiées (product.masque-led.json reformaté par Shopify, contenu vérifié).
+- Accueil : bannière (titre « La lumière LED, visage et cou. », prix, 1 bouton, lien coffrets, pastilles et logos de paiement retirés),
+  réassurance 2 × 2, « Le masque LED VELEA » (6 points), nouvelle section « Pourquoi VELEA » (lien Notre histoire),
+  « Comment ça marche » en 3 étapes empilées (+ vidéo facultative), avis (visibles dès 3 vrais avis, cases « Achat vérifié » / « Produit offert »),
+  « Les coffrets VELEA » (Coffret Visage & Regard 109,90 €, Coffret Visage & Stylo 104,90 €, « Séparément … · Vous économisez … »,
+  lien direct vers la bonne option) + « Vous avez déjà le masque ? » (lunettes, stylo en petit), FAQ 8 questions, appel final « Prête à essayer ? ».
+- Photos : chaque zone image a un champ « Photo » dans l'éditeur ; sinon photo du produit ; sinon la zone disparaît (plus de cadre vide).
+- Barre d'achat mobile : apparaît après le bouton de la bannière, disparaît à l'appel final.
+- Boutons #A95F6C (survol #8F4B57), y compris « Ajouter au panier ». Logo agrandi (18 / 22 px). Doré retiré (étoiles, coffret).
+- Pied de page : colonnes VELEA (contact), Boutique (nouveau menu « boutique »), Aide (menu footer), Restez informée ;
+  « Powered by Shopify » retiré ; liens Facebook et TikTok génériques retirés (Instagram et Pinterest gardés : à vérifier qu'ils existent).
+- En ligne tout de suite (données partagées) : menu principal (Le masque LED, Les coffrets, Tous les produits, Notre histoire,
+  Questions fréquentes, Contact), menu « boutique » créé, description du masque et page FAQ : « protègent les yeux » retiré,
+  question nettoyage ajoutée.
+- Traductions EN/DE/ES/IT des nouveaux textes.
+- Reste à faire (propriétaire) : publier v21, ajouter les photos dans l'éditeur, réécrire « Notre histoire » (encore « rituel éclat », « spa »),
+  confirmer avec le fournisseur : nettoyage, filtrage des fenêtres des yeux, notice FR, poids, CE.

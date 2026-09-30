@@ -76,7 +76,7 @@
             "text_f9CFLH": {
               "type": "text",
               "settings": {
-                "text": "<p>Nos conseils rituel et nos nouveautés, directement dans votre boîte mail.</p>",
+                "text": "<p>Nos nouveautés et conseils d'utilisation, sans pop-up ni spam.</p>",
                 "type_preset": "rte",
                 "width": "100%",
                 "max_width": "normal",
@@ -96,38 +96,39 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "email_signup_crihX7": {
+              "type": "email-signup",
+              "settings": {
+                "width": "fill",
+                "custom_width": 100,
+                "heading_preset": "h3",
+                "border_style": "all",
+                "input_style": "custom",
+                "border_width": 1,
+                "border_radius": 100,
+                "input_background_color": "{{ settings.color_palette.background }}",
+                "input_text_color": "{{ settings.color_palette.color1 }}",
+                "input_border_color": "{{ settings.color_palette.color2 }}",
+                "input_type_preset": "paragraph",
+                "style_class": "button-unstyled",
+                "display_type": "arrow",
+                "label": "S'inscrire",
+                "integrated_button": true,
+                "button_type_preset": "paragraph",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "text_LWt8Pz",
-            "text_f9CFLH"
+            "text_f9CFLH",
+            "email_signup_crihX7"
           ]
-        },
-        "email_signup_crihX7": {
-          "type": "email-signup",
-          "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "heading_preset": "h3",
-            "border_style": "all",
-            "input_style": "custom",
-            "border_width": 1,
-            "border_radius": 100,
-            "input_background_color": "{{ settings.color_palette.background }}",
-            "input_text_color": "{{ settings.color_palette.color1 }}",
-            "input_border_color": "{{ settings.color_palette.color2 }}",
-            "input_type_preset": "paragraph",
-            "style_class": "button-unstyled",
-            "display_type": "arrow",
-            "label": "S'inscrire",
-            "integrated_button": true,
-            "button_type_preset": "paragraph",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
         },
         "group_velea_contact": {
           "type": "group",
@@ -167,7 +168,7 @@
             "text_contact_titre": {
               "type": "text",
               "settings": {
-                "text": "<h2>Nous contacter</h2>",
+                "text": "<h2>VELEA</h2>",
                 "type_preset": "h4",
                 "width": "100%",
                 "max_width": "normal",
@@ -191,7 +192,7 @@
             "text_contact_mail": {
               "type": "text",
               "settings": {
-                "text": "<p>Une question sur votre commande ou sur le masque ? Écrivez-nous :<br><a href=\"mailto:velea.officiel@gmail.com\">velea.officiel@gmail.com</a></p>",
+                "text": "<p>Appareils beauté à utiliser chez soi.<br>Contact : <a href=\"mailto:velea.officiel@gmail.com\">velea.officiel@gmail.com</a></p>",
                 "type_preset": "rte",
                 "width": "100%",
                 "max_width": "normal",
@@ -217,12 +218,49 @@
             "text_contact_titre",
             "text_contact_mail"
           ]
+        },
+        "menu_velea_boutique": {
+          "type": "menu",
+          "settings": {
+            "menu_spacing": 10,
+            "show_as_accordion": true,
+            "accordion_icon": "plus",
+            "accordion_dividers": true,
+            "heading_preset": "h4",
+            "link_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "menu": "boutique",
+            "heading": "Boutique"
+          },
+          "blocks": {}
+        },
+        "menu_velea_aide": {
+          "type": "menu",
+          "settings": {
+            "menu_spacing": 10,
+            "show_as_accordion": true,
+            "accordion_icon": "plus",
+            "accordion_dividers": true,
+            "heading_preset": "h4",
+            "link_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "menu": "footer",
+            "heading": "Aide"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "group_H6VpwJ",
-        "email_signup_crihX7",
-        "group_velea_contact"
+        "group_velea_contact",
+        "menu_velea_boutique",
+        "menu_velea_aide",
+        "group_H6VpwJ"
       ],
       "name": "t:names.footer",
       "settings": {
@@ -239,7 +277,7 @@
         "footer_copyright_jweRK8": {
           "type": "footer-copyright",
           "settings": {
-            "show_powered_by": true,
+            "show_powered_by": false,
             "font_size": "0.75rem",
             "case": "none"
           },
@@ -256,9 +294,9 @@
         "social_links_Ew63Kq": {
           "type": "social-links",
           "settings": {
-            "facebook_url": "https://www.facebook.com/",
+            "facebook_url": "",
             "instagram_url": "https://www.instagram.com/velea.officiel/",
-            "tiktok_url": "https://www.tiktok.com/",
+            "tiktok_url": "",
             "pinterest_url": "https://www.pinterest.com/veleaofficiel/"
           },
           "blocks": {}
