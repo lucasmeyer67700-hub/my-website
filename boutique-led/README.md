@@ -447,3 +447,14 @@ Brief complet : voir la conversation d'origine. Ce dossier contient les textes p
 - Accueil, bloc « Le masque LED VELEA » : sans photo choisie dans l'éditeur, affiche un rendu haute qualité du masque 3D
   (vue 3/4, fond rose sombre, format 4:5, rendu 2400 × 3000 réduit en 800 / 1200 / 1600 px, `assets/velea-masque-3d-*.webp`),
   cliquable vers la page du masque. Rien d'autre n'a été modifié.
+
+## v28 – stylo visage en 3D (30/09/2026)
+
+- Thème « 💗 VELEA v28 – stylo 3D (à publier) » (gid://shopify/OnlineStoreTheme/207583183193), copie de v27 (publiée). 11 fichiers, md5 vérifiés.
+- Modèle 3D du stylo haute fréquence (`viewer3d/src/stylo.js`, dans le même `assets/velea-3d.js` → `VeleaStylo3D`) :
+  manche blanc brillant à alvéoles en quinconce, base évasée, rainure, cou conique, bague chromée,
+  électrode en verre rosé courbée avec disque « champignon », ressort de cordon + câble. Rotation libre à 360°.
+- Page du stylo (modèle haute-frequence) : la galerie est remplacée par la vue 360° (snippets/velea-360-stylo.liquid, format 4:5,
+  fond rose sombre, pas de pastilles de couleur). Colonne photo forcée même sans photo produit (product-information-content).
+- Rendu 4K (3072 × 3840) : `visuels/velea-stylo-3d-4k.png` ; versions 800/1200/1600 px en image d'attente (`assets/velea-stylo-3d-*.webp`).
+- Vue du masque inchangée (testée après la mise à jour du fichier commun).

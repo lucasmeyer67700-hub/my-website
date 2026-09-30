@@ -48,8 +48,8 @@
     assign product_has_media = false
   endif
 
-  # VELEA : la page du masque affiche la vue 360° même sans photo produit
-  if template.suffix == 'masque-led' and request.page_type == 'product'
+  # VELEA : les pages du masque et du stylo affichent la vue 360° même sans photo produit
+  if request.page_type == 'product' and template.suffix == 'masque-led' or request.page_type == 'product' and template.suffix == 'haute-frequence'
     assign product_has_media = true
   endif
 

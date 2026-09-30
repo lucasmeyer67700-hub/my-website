@@ -6,13 +6,13 @@
 
 {% capture media_gallery %}
   {%- comment -%} VELEA : vue 360° interactive à la place de la galerie sur la page du masque {%- endcomment -%}
-  {%- if template.suffix == 'masque-led' -%}{%- render 'velea-360' -%}<div hidden>{%- endif -%}
+  {%- if template.suffix == 'masque-led' -%}{%- render 'velea-360' -%}<div hidden>{%- elsif template.suffix == 'haute-frequence' -%}{%- render 'velea-360-stylo' -%}<div hidden>{%- endif -%}
   {%- content_for 'block',
     type: '_product-media-gallery',
     id: 'media-gallery',
     closest.product: closest.product
   -%}
-  {%- if template.suffix == 'masque-led' -%}</div>{%- endif -%}
+  {%- if template.suffix == 'masque-led' or template.suffix == 'haute-frequence' -%}</div>{%- endif -%}
 {% endcapture %}
 
 {% capture product_details %}
