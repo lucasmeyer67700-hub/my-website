@@ -1,11 +1,23 @@
 {
   "version": 1,
   "skills": {
+    "ecommerce-checkout-optimization": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "ecommerce-checkout-optimization/SKILL.md",
+      "computedHash": "2489c741edfead05a4a2fadb4bde1b476c4ec7891f9154a6f7b9b9859576cb99"
+    },
     "ecommerce-landing-page": {
       "source": "nexscope-ai/ecommerce-skills",
       "sourceType": "github",
       "skillPath": "ecommerce-landing-page/SKILL.md",
       "computedHash": "3647e4875d6375c2f62f39c8392dbe52c63fb791312f25c3bb5ada10d4171a49"
+    },
+    "ecommerce-ppc-strategy-planner": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "ecommerce-ppc-strategy-planner/SKILL.md",
+      "computedHash": "2f7a21c73811208e63d59deb87bf45e8be16d5bb2468f908ab6f939243bf2817"
     },
     "ecommerce-seo": {
       "source": "finsilabs/awesome-ecommerce-skills",
@@ -13,11 +25,29 @@
       "skillPath": "skills/marketing-growth/ecommerce-seo/SKILL.md",
       "computedHash": "b47308cbcff24767c05e55b87aa19e63c1c97280882ad95c15ef551e26d14f44"
     },
+    "product-description-generator": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "product-description-generator/SKILL.md",
+      "computedHash": "5d6a35e69013e707a3495790c2a91066f4ef9062ae58ae830f3d2ef6ed56a797"
+    },
+    "shopify-email-flows": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "shopify-email-flows/SKILL.md",
+      "computedHash": "2f1073e3e171c2f55b97c8bb667a5b32bb70e349b59591540daac42f0a510d94"
+    },
     "shopify-theme-optimization": {
       "source": "nexscope-ai/ecommerce-skills",
       "sourceType": "github",
       "skillPath": "shopify-theme-optimization/SKILL.md",
       "computedHash": "4e0ca84900af126c6b616497fcdb9b1e05aef6c85afb528327c59efb79b0b564"
+    },
+    "shopify-upsell-cross-sell": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "shopify-upsell-cross-sell/SKILL.md",
+      "computedHash": "fe76cbcffd440c182441da1b53faa701a11ed17378e712e3285a1851c5e0c196"
     },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
