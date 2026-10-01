@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "ecommerce-landing-page": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "ecommerce-landing-page/SKILL.md",
+      "computedHash": "3647e4875d6375c2f62f39c8392dbe52c63fb791312f25c3bb5ada10d4171a49"
+    },
+    "ecommerce-seo": {
+      "source": "finsilabs/awesome-ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-growth/ecommerce-seo/SKILL.md",
+      "computedHash": "b47308cbcff24767c05e55b87aa19e63c1c97280882ad95c15ef551e26d14f44"
+    },
+    "shopify-theme-optimization": {
+      "source": "nexscope-ai/ecommerce-skills",
+      "sourceType": "github",
+      "skillPath": "shopify-theme-optimization/SKILL.md",
+      "computedHash": "4e0ca84900af126c6b616497fcdb9b1e05aef6c85afb528327c59efb79b0b564"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "daa1a7be30edc9cda6b31da821c5285a9f421ee3136dd6335ff47e917215d1a5"
+    }
+  }
+}
