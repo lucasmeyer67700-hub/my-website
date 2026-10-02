@@ -1,13 +1,207 @@
 {
   "sections": {
-    "velea_accueil": {
-      "type": "velea-accueil",
+    "hero": {
+      "type": "velea-hero",
+      "settings": {}
+    },
+    "categories": {
+      "type": "velea-categories",
+      "settings": {},
+      "blocks": {
+        "c1": {
+          "type": "categorie",
+          "settings": {
+            "collection": "oreillers",
+            "title": "Oreillers",
+            "photo_label": "l'Oreiller Papillon sur un lit en lin, lumière du matin"
+          }
+        },
+        "c2": {
+          "type": "categorie",
+          "settings": {
+            "collection": "coussins",
+            "title": "Coussins",
+            "photo_label": "le coussin genoux entre les jambes d'une personne sur le côté"
+          }
+        },
+        "c3": {
+          "type": "categorie",
+          "settings": {
+            "collection": "nos-packs",
+            "title": "Packs",
+            "photo_label": "oreiller et coussin côte à côte sur le lit"
+          }
+        },
+        "c4": {
+          "type": "categorie",
+          "settings": {
+            "collection": "accessoires",
+            "title": "Accessoires",
+            "photo_label": "housse pliée sur un drap beige"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ]
+    },
+    "situations": {
+      "type": "velea-situations",
+      "settings": {},
+      "blocks": {
+        "s1": {
+          "type": "situation",
+          "settings": {
+            "photo_label": "une personne qui se masse la nuque au réveil",
+            "title": "Vous vous réveillez avec la nuque raide.",
+            "text": "Le matin, tourner la tête demande un petit effort. Souvent, c'est l'oreiller qui laisse la tête trop haut, ou trop bas."
+          }
+        },
+        "s2": {
+          "type": "situation",
+          "settings": {
+            "photo_label": "personne endormie sur le côté, bras glissé sous l'oreiller",
+            "title": "Vous dormez sur le côté et votre épaule s'écrase.",
+            "text": "L'oreiller s'aplatit au fil de la nuit. La tête descend, l'épaule prend le poids, et vous glissez un bras dessous pour compenser."
+          }
+        },
+        "s3": {
+          "type": "situation",
+          "settings": {
+            "photo_label": "plusieurs oreillers empilés au pied d'un lit",
+            "title": "Vous avez déjà essayé plusieurs oreillers.",
+            "text": "Trop mou, trop ferme, trop haut. Un oreiller plat ne peut pas convenir au dos et au côté à la fois."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
+    },
+    "produits": {
+      "type": "velea-produits",
       "settings": {
-        "hero_title": "Bien aligné, de la nuque aux genoux.",
-        "hero_sub": "Vous vous réveillez avec la nuque raide ? L'Oreiller Papillon garde votre tête à la bonne hauteur, que vous dormiez sur le dos ou sur le côté.",
-        "show_reviews": false
+        "collection": "tous-nos-produits",
+        "limit": 4
       }
+    },
+    "solution": {
+      "type": "velea-image-texte",
+      "settings": {
+        "photo_label": "vue de dessus de l'oreiller, pour bien voir la forme papillon",
+        "reverse": false,
+        "fond": "blanc",
+        "eyebrow": "L'Oreiller Papillon",
+        "title": "Une forme pensée pour la façon dont vous dormez vraiment.",
+        "text": "<p>Sur le dos, la tête repose dans le creux central et les bords soutiennent la nuque. Sur le côté, les ailes plus hautes comblent l'espace entre l'oreille et le matelas : l'épaule n'a plus à porter le poids de la tête.</p><p>La mousse à mémoire de forme épouse doucement la courbe du cou, puis reprend sa forme quand vous bougez. Housse amovible, lavable à 30 °C.</p>",
+        "button_label": "Découvrir l'oreiller",
+        "button_link": "/products/loreiller-papillon"
+      }
+    },
+    "conseil": {
+      "type": "velea-conseil",
+      "settings": {}
+    },
+    "packs": {
+      "type": "velea-packs",
+      "settings": {}
+    },
+    "histoire": {
+      "type": "velea-image-texte",
+      "settings": {
+        "photo_label": "détail de la matière : housse, couture, fermeture",
+        "reverse": true,
+        "fond": "beige",
+        "eyebrow": "Notre façon de faire",
+        "title": "Peu de produits, choisis avec soin.",
+        "text": "<p>VELEA est une petite marque française. Nous ne faisons qu'une chose : vous aider à dormir bien aligné, de la nuque aux genoux. Chaque produit est testé avant d'être proposé, et nous préférons en avoir peu plutôt que beaucoup de moyens.</p>",
+        "button_label": "Lire le guide du sommeil",
+        "button_link": "/pages/guide-choisir-oreiller"
+      }
+    },
+    "engagements": {
+      "type": "velea-engagements",
+      "settings": {}
+    },
+    "avis": {
+      "type": "velea-avis",
+      "settings": {
+        "show": false
+      }
+    },
+    "faq": {
+      "type": "velea-faq",
+      "settings": {},
+      "blocks": {
+        "q0": {
+          "type": "question",
+          "settings": {
+            "question": "Je dors sur le ventre. Est-ce qu'il me convient ?",
+            "answer": "<p>Honnêtement, probablement pas. Sur le ventre, il faut un oreiller très plat. L'Oreiller Papillon est pensé pour le dos et le côté.</p>"
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps pour s'habituer ?",
+            "answer": "<p>Comptez une à deux semaines. C'est pour ça que nous laissons 30 nuits d'essai.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Il est ferme ou moelleux ?",
+            "answer": "<p>Entre les deux. La mousse cède doucement sous la tête, puis la maintient.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Comment le laver ?",
+            "answer": "<p>La housse se retire et se lave en machine à 30 °C. La mousse ne se lave pas : aérez-la de temps en temps.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Quand vais-je être livré ?",
+            "answer": "<p>En 7 à 14 jours ouvrés en France métropolitaine, avec un numéro de suivi.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Et si ça ne me convient pas ?",
+            "answer": "<p>Vous avez 14 jours pour vous rétracter et notre essai de 30 nuits en plus. <a href=\"/pages/livraison-et-retours\">Les conditions</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ]
     }
   },
-  "order": ["velea_accueil"]
+  "order": [
+    "hero",
+    "categories",
+    "situations",
+    "produits",
+    "solution",
+    "conseil",
+    "packs",
+    "histoire",
+    "engagements",
+    "avis",
+    "faq"
+  ]
 }

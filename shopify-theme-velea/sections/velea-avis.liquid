@@ -1,0 +1,18 @@
+{%- comment -%} VELEA : avis clients. Reste invisible tant que la case n'est pas cochée (uniquement avec de vrais avis, via une application d'avis) {%- endcomment -%}
+{%- if section.settings.show -%}
+  <section class="vl-wrap vl-reviews">
+    <h2 class="vl-h2 vl-center">{{ section.settings.title }}</h2>
+    {%- for block in section.blocks -%}{% render block %}{%- endfor -%}
+  </section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "VELEA avis clients",
+  "settings": [
+    { "type": "checkbox", "id": "show", "label": "Afficher (seulement avec de vrais avis)", "default": false },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'en disent nos clients" }
+  ],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [ { "name": "VELEA avis clients" } ]
+}
+{% endschema %}

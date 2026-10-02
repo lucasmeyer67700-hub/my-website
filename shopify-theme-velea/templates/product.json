@@ -236,9 +236,9 @@
                   "static": true,
                   "settings": {
                     "style_class": "button",
-                    "custom_button_background": "#1F2A44",
-                    "custom_button_text": "#F7F2EA",
-                    "custom_button_border": "#1F2A44"
+                    "custom_button_background": "#4B3627",
+                    "custom_button_text": "#FBF8F3",
+                    "custom_button_border": "#4B3627"
                   },
                   "blocks": {}
                 },

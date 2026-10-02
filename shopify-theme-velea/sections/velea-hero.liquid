@@ -1,0 +1,32 @@
+{%- comment -%} VELEA : grande image d'ouverture avec texte posé dessus {%- endcomment -%}
+<section class="vl-hero-full">
+  {% render 'velea-photo', image: section.settings.image, label: section.settings.photo_label, ratio: '16 / 8', sizes: '100vw', eager: true %}
+  <div class="vl-hero-full__overlay"></div>
+  <div class="vl-hero-full__content vl-fade">
+    {%- if section.settings.eyebrow != blank -%}<p class="vl-eyebrow vl-eyebrow--light">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h1 class="vl-display">{{ section.settings.title }}</h1>
+    <p class="vl-hero-full__sub">{{ section.settings.text }}</p>
+    <div class="vl-actions">
+      <a class="vl-btn vl-btn--light" href="{{ section.settings.button_link | default: '/products/loreiller-papillon' }}">{{ section.settings.button_label }}</a>
+      {%- if section.settings.button2_label != blank -%}<a class="vl-btn vl-btn--outline-light" href="{{ section.settings.button2_link | default: '/collections/nos-packs' }}">{{ section.settings.button2_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA grande image",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (paysage, 2400 px de large)" },
+    { "type": "text", "id": "photo_label", "label": "Description de la photo attendue", "default": "chambre lumineuse, l'oreiller sur un lit en lin beige" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Oreillers et coussins ergonomiques" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Bien aligné, de la nuque aux genoux." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Vous vous réveillez avec la nuque raide ? Nos oreillers gardent votre tête à la bonne hauteur, sur le dos comme sur le côté." },
+    { "type": "text", "id": "button_label", "label": "Bouton 1", "default": "Découvrir l'oreiller" },
+    { "type": "url", "id": "button_link", "label": "Lien bouton 1" },
+    { "type": "text", "id": "button2_label", "label": "Bouton 2", "default": "Voir les packs" },
+    { "type": "url", "id": "button2_link", "label": "Lien bouton 2" }
+  ],
+  "presets": [ { "name": "VELEA grande image" } ]
+}
+{% endschema %}

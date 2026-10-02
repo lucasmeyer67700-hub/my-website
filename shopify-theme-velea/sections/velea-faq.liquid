@@ -1,0 +1,19 @@
+{%- comment -%} VELEA : questions fréquentes {%- endcomment -%}
+<section class="vl-wrap vl-faq">
+  <h2 class="vl-h2 vl-center">{{ section.settings.title }}</h2>
+  {%- for block in section.blocks -%}
+    <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="vl-rte">{{ block.settings.answer }}</div></details>
+  {%- endfor -%}
+  <p class="vl-center" style="margin-top:24px"><a class="vl-link" href="/pages/faq">Toutes les questions</a></p>
+</section>
+{% schema %}
+{
+  "name": "VELEA FAQ",
+  "settings": [ { "type": "text", "id": "title", "label": "Titre", "default": "Vos questions" } ],
+  "blocks": [ { "type": "question", "name": "Question", "settings": [
+    { "type": "text", "id": "question", "label": "Question" },
+    { "type": "richtext", "id": "answer", "label": "Réponse" }
+  ] } ],
+  "presets": [ { "name": "VELEA FAQ" } ]
+}
+{% endschema %}

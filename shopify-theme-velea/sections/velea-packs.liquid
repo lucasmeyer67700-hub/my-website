@@ -1,0 +1,42 @@
+{%- comment -%} VELEA : les packs, Duo en premier {%- endcomment -%}
+{%- assign p_oreiller = all_products['loreiller-papillon'] -%}
+{%- assign p_genoux = all_products['le-coussin-genoux'] -%}
+{%- assign p_duo = all_products['pack-duo'] -%}
+{%- assign p_cote = all_products['pack-dormeur-sur-le-cote'] -%}
+<section class="vl-wrap vl-packs" id="packs">
+  <div class="vl-head vl-center">
+    <p class="vl-eyebrow">Les packs</p>
+    <h2 class="vl-h2">{{ section.settings.title }}</h2>
+    <p class="vl-muted">Les mêmes produits, à un meilleur prix qu'à l'unité.</p>
+  </div>
+  <div class="vl-grid2">
+    {%- if p_duo != blank -%}
+      <article class="vl-card vl-card--feature">
+        <a href="{{ p_duo.url }}" class="vl-card__img">
+          <span class="vl-badge vl-badge--abs">Le plus choisi</span>
+          {% render 'velea-photo', image: p_duo.featured_image, label: 'Pack Duo : deux oreillers sur un lit double', ratio: '4 / 3', sizes: '(min-width: 990px) 50vw, 100vw' %}
+        </a>
+        <h3 class="vl-h3">{{ p_duo.title }}</h3>
+        <p>Deux Oreillers Papillon et deux housses de rechange. Pour vous et la personne qui dort à côté, ou pour offrir.</p>
+        {%- assign duo_sep = p_oreiller.price | times: 2 | plus: 3980 -%}
+        <p class="vl-price">{{ p_duo.price | money }} <span class="vl-muted">au lieu de {{ duo_sep | money }} séparément</span></p>
+        <form method="post" action="/cart/add"><input type="hidden" name="id" value="{{ p_duo.selected_or_first_available_variant.id }}"><button type="submit" class="vl-btn vl-btn--full">Ajouter au panier</button></form>
+      </article>
+    {%- endif -%}
+    {%- if p_cote != blank -%}
+      <article class="vl-card">
+        <a href="{{ p_cote.url }}" class="vl-card__img">
+          {% render 'velea-photo', image: p_cote.featured_image, label: 'Pack Dormeur : oreiller et coussin genoux côte à côte', ratio: '4 / 3', sizes: '(min-width: 990px) 50vw, 100vw' %}
+        </a>
+        <h3 class="vl-h3">{{ p_cote.title }}</h3>
+        <p>L'Oreiller Papillon et le Coussin Genoux. La nuque et les hanches alignées, de la tête aux genoux.</p>
+        <p class="vl-price">{{ p_cote.price | money }} <span class="vl-muted">au lieu de {{ p_oreiller.price | plus: p_genoux.price | money }} séparément</span></p>
+        <form method="post" action="/cart/add"><input type="hidden" name="id" value="{{ p_cote.selected_or_first_available_variant.id }}"><button type="submit" class="vl-btn vl-btn--full">Ajouter au panier</button></form>
+      </article>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "VELEA packs", "settings": [ { "type": "text", "id": "title", "label": "Titre", "default": "Mieux dormir, à deux ou sur le côté" } ], "presets": [ { "name": "VELEA packs" } ] }
+{% endschema %}

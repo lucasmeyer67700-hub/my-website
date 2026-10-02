@@ -1,0 +1,33 @@
+{%- comment -%} VELEA : sélecteur de position de sommeil {%- endcomment -%}
+{%- assign p_oreiller = all_products['loreiller-papillon'] -%}
+{%- assign p_genoux = all_products['le-coussin-genoux'] -%}
+{%- assign p_cote = all_products['pack-dormeur-sur-le-cote'] -%}
+<section class="vl-band--brun">
+  <div class="vl-wrap vl-quiz">
+    <p class="vl-eyebrow vl-eyebrow--light vl-center">Notre conseil</p>
+    <h2 class="vl-h2 vl-center">Quelle est votre position de sommeil ?</h2>
+    <p class="vl-center">Choisissez celle dans laquelle vous vous réveillez le plus souvent.</p>
+    <input type="radio" name="vl-pos" id="vl-pos-cote" class="vl-visually-hidden" checked>
+    <input type="radio" name="vl-pos" id="vl-pos-dos" class="vl-visually-hidden">
+    <div class="vl-quiz__choices">
+      <label for="vl-pos-cote" class="vl-chip vl-chip--cote">Sur le côté</label>
+      <label for="vl-pos-dos" class="vl-chip vl-chip--dos">Sur le dos</label>
+    </div>
+    <div class="vl-quiz__answer vl-quiz__answer--cote">
+      <h3 class="vl-h3">Le Pack Dormeur sur le côté</h3>
+      <p>Sur le côté, deux choses comptent : une tête soutenue assez haut, et des hanches qui ne pivotent pas quand la jambe du dessus glisse. L'oreiller s'occupe de la première, le coussin genoux de la seconde.</p>
+      {%- if p_cote != blank -%}<p class="vl-price">{{ p_cote.price | money }} <span class="vl-muted">au lieu de {{ p_oreiller.price | plus: p_genoux.price | money }} séparément</span></p>{%- endif -%}
+      <a class="vl-btn" href="{{ p_cote.url | default: '/products/pack-dormeur-sur-le-cote' }}">Voir le pack</a>
+    </div>
+    <div class="vl-quiz__answer vl-quiz__answer--dos">
+      <h3 class="vl-h3">L'Oreiller Papillon</h3>
+      <p>Sur le dos, la tête a besoin d'être stable sans être poussée vers l'avant. Le creux central la garde en place, les bords soutiennent la nuque. Et si vous finissez la nuit sur le côté, les ailes sont là.</p>
+      {%- if p_oreiller != blank -%}<p class="vl-price">{{ p_oreiller.price | money }}</p>{%- endif -%}
+      <a class="vl-btn" href="{{ p_oreiller.url | default: '/products/loreiller-papillon' }}">Voir l'oreiller</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "VELEA conseil position", "settings": [], "presets": [ { "name": "VELEA conseil position" } ] }
+{% endschema %}

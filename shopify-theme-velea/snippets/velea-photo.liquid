@@ -1,0 +1,16 @@
+{%- comment -%}
+  VELEA : emplacement photo. Affiche l'image choisie dans l'éditeur, sinon un cadre beige.
+  Le libellé du cadre n'apparaît que dans l'éditeur de thème, jamais pour les clients.
+  Paramètres : image, label, ratio (ex. '4 / 5'), sizes, eager
+{%- endcomment -%}
+<div class="vl-photo" style="aspect-ratio: {{ ratio | default: '4 / 5' }};">
+  {%- if image != blank -%}
+    {%- if eager -%}
+      {{ image | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: sizes, alt: image.alt | default: label }}
+    {%- else -%}
+      {{ image | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: sizes, alt: image.alt | default: label }}
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <span class="vl-photo__label">Photo à ajouter : {{ label }}</span>
+  {%- endif -%}
+</div>

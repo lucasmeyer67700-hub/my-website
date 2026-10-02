@@ -1,0 +1,32 @@
+{%- comment -%} VELEA : sélection de produits en cartes {%- endcomment -%}
+{%- assign col = section.settings.collection | default: collections['tous-nos-produits'] -%}
+<section class="vl-wrap vl-products">
+  <div class="vl-head vl-head--row">
+    <h2 class="vl-h2">{{ section.settings.title }}</h2>
+    <a class="vl-link" href="{{ col.url | default: '/collections/all' }}">Tout voir</a>
+  </div>
+  <div class="vl-products__grid">
+    {%- for p in col.products limit: section.settings.limit -%}
+      <article class="vl-pcard">
+        <a href="{{ p.url }}" class="vl-pcard__media">
+          {%- if p.tags contains 'le-plus-choisi' -%}<span class="vl-badge vl-badge--abs">Le plus choisi</span>{%- endif -%}
+          {% render 'velea-photo', image: p.featured_image, label: p.title, ratio: '4 / 5', sizes: '(min-width: 990px) 25vw, 50vw' %}
+        </a>
+        <a href="{{ p.url }}" class="vl-pcard__title">{{ p.title }}</a>
+        <p class="vl-pcard__price">{{ p.price | money }}</p>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA produits",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Nos essentiels du sommeil" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "limit", "label": "Nombre de produits", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [ { "name": "VELEA produits" } ]
+}
+{% endschema %}

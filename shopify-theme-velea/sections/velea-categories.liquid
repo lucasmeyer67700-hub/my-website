@@ -1,0 +1,42 @@
+{%- comment -%} VELEA : tuiles de catégories avec photo {%- endcomment -%}
+<section class="vl-wrap vl-cats">
+  <div class="vl-head">
+    <h2 class="vl-h2">{{ section.settings.title }}</h2>
+    {%- if section.settings.text != blank -%}<p class="vl-muted">{{ section.settings.text }}</p>{%- endif -%}
+  </div>
+  <div class="vl-cats__grid">
+    {%- for block in section.blocks -%}
+      {%- assign col = block.settings.collection -%}
+      <a class="vl-cat" href="{{ col.url | default: '/collections/all' }}" {{ block.shopify_attributes }}>
+        {%- assign img = block.settings.image | default: col.image -%}
+        {% render 'velea-photo', image: img, label: block.settings.photo_label, ratio: '3 / 4', sizes: '(min-width: 990px) 25vw, 50vw' %}
+        <span class="vl-cat__name">{{ block.settings.title | default: col.title }}</span>
+        <span class="vl-cat__link">Découvrir</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA catégories",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Trouvez votre confort" },
+    { "type": "text", "id": "text", "label": "Texte", "default": "Quatre façons de mieux dormir, selon votre position." }
+  ],
+  "blocks": [
+    {
+      "type": "categorie",
+      "name": "Catégorie",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Nom affiché" },
+        { "type": "image_picker", "id": "image", "label": "Photo (portrait 3:4)" },
+        { "type": "text", "id": "photo_label", "label": "Description de la photo attendue" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "VELEA catégories" } ]
+}
+{% endschema %}

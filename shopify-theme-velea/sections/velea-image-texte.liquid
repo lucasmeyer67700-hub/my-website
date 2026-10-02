@@ -1,0 +1,34 @@
+{%- comment -%} VELEA : photo + texte, côte à côte {%- endcomment -%}
+<section class="vl-it {% if section.settings.fond == 'beige' %}vl-band--beige{% elsif section.settings.fond == 'brun' %}vl-band--brun{% endif %}">
+  <div class="vl-wrap vl-it__grid {% if section.settings.reverse %}vl-it__grid--rev{% endif %}">
+    <div class="vl-it__media">
+      {% render 'velea-photo', image: section.settings.image, label: section.settings.photo_label, ratio: '4 / 5', sizes: '(min-width: 990px) 50vw, 100vw' %}
+    </div>
+    <div class="vl-it__text">
+      {%- if section.settings.eyebrow != blank -%}<p class="vl-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="vl-h2">{{ section.settings.title }}</h2>
+      <div class="vl-rte">{{ section.settings.text }}</div>
+      {%- if section.settings.button_label != blank -%}
+        <a class="vl-btn {% if section.settings.fond == 'brun' %}vl-btn--light{% endif %}" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA image et texte",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (portrait 4:5)" },
+    { "type": "text", "id": "photo_label", "label": "Description de la photo attendue" },
+    { "type": "checkbox", "id": "reverse", "label": "Photo à droite", "default": false },
+    { "type": "select", "id": "fond", "label": "Fond", "default": "blanc", "options": [ { "value": "blanc", "label": "Blanc cassé" }, { "value": "beige", "label": "Beige" }, { "value": "brun", "label": "Brun" } ] },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Titre" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" }
+  ],
+  "presets": [ { "name": "VELEA image et texte" } ]
+}
+{% endschema %}

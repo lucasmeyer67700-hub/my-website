@@ -222,7 +222,7 @@
                 "border_style": "all",
                 "input_style": "custom",
                 "border_width": 1,
-                "border_radius": 12,
+                "border_radius": 4,
                 "input_background_color": "#FFFFFF",
                 "input_text_color": "#2E2E2E",
                 "input_border_color": "{{ settings.color_palette.color2 }}",
@@ -263,7 +263,7 @@
       "settings": {
         "section_width": "page-width",
         "gap": 20,
-        "background_color": "#F1E9DC",
+        "background_color": "#EDE3D5",
         "padding-block-start": 40,
         "padding-block-end": 30
       }
@@ -299,7 +299,7 @@
       "settings": {
         "section_width": "page-width",
         "gap": 24,
-        "background_color": "#F1E9DC",
+        "background_color": "#EDE3D5",
         "divider_thickness": 1,
         "divider_color": "{{ settings.color_palette.color2 }}",
         "padding-block-start": 20,
