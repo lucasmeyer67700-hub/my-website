@@ -245,13 +245,19 @@
             "text_f9CFLH",
             "email_signup_crihX7"
           ]
+        },
+        "payment_icons_velea": {
+          "type": "payment-icons",
+          "settings": {},
+          "blocks": {}
         }
       },
       "block_order": [
         "group_velea_contact",
         "menu_velea_boutique",
         "menu_velea_aide",
-        "group_H6VpwJ"
+        "group_H6VpwJ",
+        "payment_icons_velea"
       ],
       "name": "t:names.footer",
       "settings": {
@@ -274,11 +280,6 @@
           },
           "blocks": {}
         },
-        "payment_icons_velea": {
-          "type": "payment-icons",
-          "settings": {},
-          "blocks": {}
-        },
         "social_links_Ew63Kq": {
           "type": "social-links",
           "settings": {
@@ -292,7 +293,6 @@
       },
       "block_order": [
         "footer_copyright_jweRK8",
-        "payment_icons_velea",
         "social_links_Ew63Kq"
       ],
       "name": "t:names.utilities",
