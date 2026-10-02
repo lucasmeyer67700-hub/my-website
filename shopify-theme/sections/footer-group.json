@@ -1,0 +1,54 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "text",
+          "settings": {
+            "heading": "Le sommeil, bien aligné",
+            "subtext": "<p>Oreillers et coussins ergonomiques en mousse à mémoire de forme, pensés pour la nuque, le dos et les hanches. Essai 30 nuits sur tous nos produits.</p>"
+          }
+        },
+        "shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Boutique",
+            "menu": "main-menu"
+          }
+        },
+        "help": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Aide & infos",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "brand",
+        "shop",
+        "help"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "newsletter_enable": true,
+        "newsletter_heading": "Conseils sommeil et offres en avant-première",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 56,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

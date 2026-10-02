@@ -1,0 +1,48 @@
+{% render 'pp-padding', section: section %}
+
+<div class="pp-guarantee color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-guarantee__inner">
+      <div class="pp-guarantee__seal" aria-hidden="true">
+        <svg viewBox="0 0 160 160">
+          <defs><path id="ppSeal{{ section.id }}" d="M80 80 m-58 0 a58 58 0 1 1 116 0 a58 58 0 1 1 -116 0"/></defs>
+          <circle cx="80" cy="80" r="76" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+          <circle cx="80" cy="80" r="44" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text font-size="11" letter-spacing="3" fill="currentColor"><textPath href="#ppSeal{{ section.id }}">{{ section.settings.seal_ring | upcase }}</textPath></text>
+          <text x="80" y="82" text-anchor="middle" font-size="34" font-weight="600" fill="currentColor">{{ section.settings.seal_number }}</text>
+          <text x="80" y="102" text-anchor="middle" font-size="12" letter-spacing="2" fill="currentColor">{{ section.settings.seal_unit | upcase }}</text>
+        </svg>
+      </div>
+      <div class="pp-guarantee__content">
+        {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="h1">{{ section.settings.title }}</h2>
+        <div class="rte">{{ section.settings.text }}</div>
+        {%- if section.settings.button_label != blank -%}
+          <a class="button button--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Garantie",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "seal_number", "label": "Chiffre du sceau", "default": "30" },
+    { "type": "text", "id": "seal_unit", "label": "Unité du sceau", "default": "nuits" },
+    { "type": "text", "id": "seal_ring", "label": "Texte circulaire", "default": "Essai · Satisfait ou remboursé · Essai · Satisfait ou remboursé ·" },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Sans risque" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Dormez dessus 30 nuits. Ensuite, décidez." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Il faut quelques nuits pour qu'un corps s'habitue à un nouvel oreiller. Si au bout de 30 nuits il ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Choisir mon oreiller" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-3" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 72 }
+  ],
+  "presets": [ { "name": "Garantie" } ]
+}
+{% endschema %}

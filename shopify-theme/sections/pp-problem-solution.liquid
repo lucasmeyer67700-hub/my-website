@@ -1,0 +1,51 @@
+{% render 'pp-padding', section: section %}
+
+<div class="pp-ps color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <div class="pp-ps__grid">
+      <div class="pp-ps__card pp-ps__card--bad">
+        <div class="pp-ps__visual">{% render 'pp-illustration', name: 'align-bad' %}</div>
+        <p class="pp-ps__tag">{% render 'pp-icon', icon: 'cross' %} {{ section.settings.bad_label }}</p>
+        <h3 class="h3">{{ section.settings.bad_title }}</h3>
+        <div class="rte">{{ section.settings.bad_text }}</div>
+      </div>
+      <div class="pp-ps__card pp-ps__card--good">
+        <div class="pp-ps__visual">{% render 'pp-illustration', name: 'align-good' %}</div>
+        <p class="pp-ps__tag">{% render 'pp-icon', icon: 'check' %} {{ section.settings.good_label }}</p>
+        <h3 class="h3">{{ section.settings.good_title }}</h3>
+        <div class="rte">{{ section.settings.good_text }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Problème / solution",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Pourquoi ça coince" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Le problème vient rarement du matelas." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Un oreiller trop haut, trop mou ou trop plat oblige la nuque à rester pliée pendant des heures. Le matin, c'est elle qui vous le fait savoir.</p>" },
+    { "type": "header", "content": "Carte « avant »" },
+    { "type": "text", "id": "bad_label", "label": "Étiquette", "default": "Oreiller classique" },
+    { "type": "text", "id": "bad_title", "label": "Titre", "default": "La nuque se plie" },
+    { "type": "richtext", "id": "bad_text", "label": "Texte", "default": "<p>Le rembourrage s'écrase ou remonte la tête trop haut. La colonne n'est plus droite et les muscles du cou travaillent toute la nuit.</p>" },
+    { "type": "header", "content": "Carte « après »" },
+    { "type": "text", "id": "good_label", "label": "Étiquette", "default": "Oreiller cervical" },
+    { "type": "text", "id": "good_title", "label": "Titre", "default": "La nuque se repose" },
+    { "type": "richtext", "id": "good_text", "label": "Texte", "default": "<p>Le rebord épouse le creux de la nuque et le centre creusé accueille la tête. Tête, cou et dos restent dans le même axe.</p>" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 72 }
+  ],
+  "presets": [ { "name": "Problème / solution" } ]
+}
+{% endschema %}

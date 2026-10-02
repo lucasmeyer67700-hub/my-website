@@ -1,0 +1,73 @@
+{% render 'pp-padding', section: section %}
+
+<div class="pp-features color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <div class="pp-features__grid{% if section.settings.show_visual == false %} pp-features__grid--full{% endif %}">
+      {%- if section.settings.show_visual -%}
+        <div class="pp-features__visual">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '600, 900, 1200' }}
+          {%- else -%}
+            {% render 'pp-illustration', name: 'pillow', markers: true, uid: section.id %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <ol class="pp-features__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="pp-feature" {{ block.shopify_attributes }}>
+            <span class="pp-feature__icon">
+              {%- if section.settings.numbered -%}
+                <span class="pp-feature__num">{{ block.settings.number | default: forloop.index }}</span>
+              {%- else -%}
+                {% render 'pp-icon', icon: block.settings.icon %}
+              {%- endif -%}
+            </span>
+            <div>
+              <h3 class="pp-feature__title">{{ block.settings.title }}</h3>
+              <div class="pp-feature__text rte">{{ block.settings.text }}</div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atouts produit",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Conçu zone par zone" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Chaque courbe a une raison d'être." },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "checkbox", "id": "show_visual", "label": "Afficher le visuel", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Sans image, une illustration numérotée de l'oreiller est affichée." },
+    { "type": "checkbox", "id": "numbered", "label": "Numéros au lieu des icônes", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 72 }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Atout",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Numéro (si numérotation)" },
+        { "type": "select", "id": "icon", "label": "Icône", "default": "check", "options": [{"value": "truck", "label": "Camion / livraison"}, {"value": "moon", "label": "Lune / nuit"}, {"value": "shield", "label": "Bouclier / garantie"}, {"value": "chat", "label": "Bulle / service client"}, {"value": "return", "label": "Retour"}, {"value": "leaf", "label": "Feuille / matière"}, {"value": "wind", "label": "Air / respirant"}, {"value": "layers", "label": "Couches / mousse"}, {"value": "neck", "label": "Nuque"}, {"value": "wash", "label": "Lavable"}, {"value": "ruler", "label": "Règle / hauteur"}, {"value": "lock", "label": "Cadenas / paiement"}, {"value": "star", "label": "Étoile"}, {"value": "gift", "label": "Cadeau"}, {"value": "thermo", "label": "Température"}, {"value": "check", "label": "Coche"}] },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Atout" },
+        { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Décrivez ce que cet atout change pour le client.</p>" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Atouts produit" } ]
+}
+{% endschema %}

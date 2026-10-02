@@ -1,0 +1,75 @@
+{%- comment -%}
+  Barre d'achat collante : apparaît quand le bouton « Ajouter au panier » principal sort de l'écran.
+  Elle déclenche le formulaire produit principal (même variante, même quantité).
+{%- endcomment -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<pp-sticky-atc class="pp-sticky color-{{ section.settings.color_scheme }}" hidden>
+  <div class="page-width pp-sticky__inner">
+    <div class="pp-sticky__info">
+      {%- if product.featured_media -%}
+        {{ product.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', class: 'pp-sticky__thumb', alt: product.title }}
+      {%- endif -%}
+      <div>
+        <p class="pp-sticky__title">{{ product.title }}</p>
+        <p class="pp-sticky__price">
+          <span data-pp-price>{{ current_variant.price | money }}</span>
+          <s data-pp-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+        </p>
+      </div>
+    </div>
+    <button type="button" class="button button--primary pp-sticky__button" data-pp-add>
+      {{ section.settings.button_label }}
+    </button>
+  </div>
+</pp-sticky-atc>
+
+<script>
+  if (!customElements.get('pp-sticky-atc')) {
+    customElements.define('pp-sticky-atc', class extends HTMLElement {
+      connectedCallback() {
+        this.form = document.querySelector('product-info product-form form[action$="/cart/add"]');
+        this.submit = this.form && this.form.querySelector('[type="submit"]');
+        if (!this.submit) return;
+
+        this.querySelector('[data-pp-add]').addEventListener('click', () => {
+          if (this.submit.disabled) {
+            this.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+          this.submit.click();
+        });
+
+        this.hidden = false;
+        new IntersectionObserver(([entry]) => {
+          const passed = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          this.classList.toggle('is-visible', passed);
+        }).observe(this.submit);
+
+        if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+          const format = (cents) => new Intl.NumberFormat('{{ request.locale.iso_code }}', { style: 'currency', currency: '{{ cart.currency.iso_code }}' }).format(cents / 100);
+          subscribe(PUB_SUB_EVENTS.variantChange, ({ data }) => {
+            if (!data || !data.variant) return;
+            this.querySelector('[data-pp-price]').textContent = format(data.variant.price);
+            const compare = this.querySelector('[data-pp-compare]');
+            const hasCompare = data.variant.compare_at_price > data.variant.price;
+            compare.hidden = !hasCompare;
+            if (hasCompare) compare.textContent = format(data.variant.compare_at_price);
+          });
+        }
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Barre d'achat collante",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Ajouter au panier" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" }
+  ],
+  "presets": [ { "name": "Barre d'achat collante" } ]
+}
+{% endschema %}

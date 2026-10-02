@@ -1,0 +1,425 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title_1": {
+          "type": "title",
+          "settings": {}
+        },
+        "price_2": {
+          "type": "price",
+          "settings": {}
+        },
+        "custom_liquid_3": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.compare_at_price > v.price -%}\n  <p class=\"pp-save\">Vous économisez {{ v.compare_at_price | minus: v.price | money }} ({{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %)</p>\n{%- endif -%}"
+          }
+        },
+        "variant_picker_4": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_5": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_6": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "custom_liquid_7": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<p class=\"pp-product-note\">{% render 'pp-icon', icon: 'truck' %}<span>Expédié avec suivi, livré en <strong>7 à 14 jours ouvrés</strong> en France métropolitaine.</span></p>"
+          }
+        },
+        "icon_with_text_8": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "icon_1": "truck",
+            "heading_1": "Livraison offerte",
+            "icon_2": "return",
+            "heading_2": "Essai 30 nuits",
+            "icon_3": "lock",
+            "heading_3": "Paiement sécurisé"
+          }
+        },
+        "description_9": {
+          "type": "description",
+          "settings": {}
+        },
+        "collapsible_tab_10": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Livraison et essai 30 nuits",
+            "icon": "truck",
+            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi. Délai : 7 à 14 jours ouvrés.</p><p>Vous disposez de 30 nuits pour essayer votre produit. S'il ne vous convient pas, contactez-nous et nous organisons le retour puis le remboursement.</p>"
+          }
+        },
+        "collapsible_tab_11": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Entretien",
+            "icon": "washing",
+            "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la régulièrement.</p><p>À la réception, laissez le produit respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "title_1",
+        "price_2",
+        "custom_liquid_3",
+        "variant_picker_4",
+        "quantity_selector_5",
+        "buy_buttons_6",
+        "custom_liquid_7",
+        "icon_with_text_8",
+        "description_9",
+        "collapsible_tab_10",
+        "collapsible_tab_11"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_position": "left",
+        "gallery_layout": "thumbnail_slider",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "image_zoom": "lightbox",
+        "mobile_thumbnails": "show",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 28,
+        "padding_bottom": 56
+      }
+    },
+    "features": {
+      "type": "pp-features",
+      "settings": {
+        "eyebrow": "Conçu zone par zone",
+        "title": "Chaque courbe a une raison d'être.",
+        "text": "",
+        "show_visual": true,
+        "numbered": true,
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "number": "1",
+            "icon": "neck",
+            "title": "Creux central",
+            "text": "<p>Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée.</p>"
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "number": "2",
+            "icon": "layers",
+            "title": "Rebord cervical",
+            "text": "<p>Un bord légèrement bombé vient se loger dans le creux de la nuque pour combler l'espace entre le cou et le matelas.</p>"
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "number": "3",
+            "icon": "moon",
+            "title": "Ailes latérales",
+            "text": "<p>Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous vous tournez sur le côté.</p>"
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "number": "4",
+            "icon": "check",
+            "title": "Encoches pour les bras",
+            "text": "<p>Vous pouvez glisser un bras sous l'oreiller sans le soulever ni vous tordre l'épaule.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4"
+      ]
+    },
+    "problem": {
+      "type": "pp-problem-solution",
+      "settings": {
+        "eyebrow": "Pourquoi ça change tout",
+        "title": "Une nuque alignée, des matins plus légers.",
+        "text": "",
+        "bad_label": "Oreiller classique",
+        "bad_title": "La nuque se plie",
+        "bad_text": "<p>Le garnissage s'écrase ou remonte la tête trop haut. Les muscles du cou restent tendus toute la nuit.</p>",
+        "good_label": "Oreiller papillon",
+        "good_title": "La nuque se repose",
+        "good_text": "<p>Le rebord épouse la nuque, le creux central stabilise la tête : tête, cou et dos restent alignés.</p>",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "compare": {
+      "type": "pp-comparison",
+      "settings": {
+        "eyebrow": "Comparatif",
+        "title": "Ce qui fait la différence",
+        "text": "",
+        "col_1": "Oreiller Papillon",
+        "col_2": "Oreiller classique",
+        "col_3": "Mousse premier prix",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Garde la nuque dans l'axe",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "partiel"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Adapté dos et côté",
+            "value_1": "oui",
+            "value_2": "partiel",
+            "value_3": "non"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Garde sa forme dans le temps",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "partiel"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Housse amovible et lavable",
+            "value_1": "oui",
+            "value_2": "partiel",
+            "value_3": "partiel"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Encoches pour les bras",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_6": {
+          "type": "row",
+          "settings": {
+            "label": "Essai 30 nuits",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "row_6"
+      ]
+    },
+    "steps": {
+      "type": "pp-steps",
+      "settings": {
+        "eyebrow": "Mode d'emploi",
+        "title": "Bien démarrer avec votre oreiller",
+        "text": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Laissez-le respirer",
+            "text": "<p>À la réception, sortez l'oreiller de son emballage et laissez-le 24 à 48 h dans une pièce aérée pour qu'il reprenne tout son volume.</p>"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Choisissez votre hauteur",
+            "text": "<p>Tournez l'oreiller : le bord le plus bas pour les nuques fines ou le dos, le plus haut pour les épaules larges ou le côté.</p>"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Laissez-vous quelques nuits",
+            "text": "<p>Le corps a ses habitudes. Comptez une à deux semaines pour vous y faire : c'est pour ça que l'essai dure 30 nuits.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ]
+    },
+    "guarantee": {
+      "type": "pp-guarantee",
+      "settings": {
+        "seal_number": "30",
+        "seal_unit": "nuits",
+        "seal_ring": "Essai · Satisfait ou remboursé · Essai · Satisfait ou remboursé ·",
+        "eyebrow": "Sans risque",
+        "title": "Dormez dessus 30 nuits. Ensuite, décidez.",
+        "text": "<p>Si au bout de 30 nuits le produit ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "scheme-3",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "settings": {
+        "caption": "",
+        "heading": "Questions fréquentes",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_first",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "collapsible_row_1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Quelle position de sommeil convient à l'Oreiller Papillon ?",
+            "icon": "silhouette",
+            "row_content": "<p>Il est pensé pour les personnes qui dorment sur le dos, sur le côté, ou qui alternent les deux. Si vous dormez principalement sur le ventre, il risque d'être trop haut.</p>"
+          }
+        },
+        "collapsible_row_2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Combien de temps faut-il pour s'habituer ?",
+            "icon": "stopwatch",
+            "row_content": "<p>Comptez en général une à deux semaines. Les premières nuits peuvent sembler inhabituelles : votre nuque découvre un soutien différent. C'est pour cela que nous offrons 30 nuits d'essai.</p>"
+          }
+        },
+        "collapsible_row_3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Comment l'entretenir ?",
+            "icon": "washing",
+            "row_content": "<p>La housse se retire grâce à sa fermeture éclair et se lave en machine à 30 °C, cycle délicat. La mousse ne se lave pas : aérez-la régulièrement.</p>"
+          }
+        },
+        "collapsible_row_4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Il a une odeur à la réception, est-ce normal ?",
+            "icon": "leaf",
+            "row_content": "<p>Oui, c'est l'odeur de neuf de la mousse, qui a voyagé compressée. Laissez-le 24 à 48 h dans une pièce aérée : elle disparaît.</p>"
+          }
+        },
+        "collapsible_row_5": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Quels sont les délais de livraison ?",
+            "icon": "truck",
+            "row_content": "<p>La livraison est offerte en France métropolitaine. Chaque commande est expédiée avec un numéro de suivi et livrée en 7 à 14 jours ouvrés.</p>"
+          }
+        },
+        "collapsible_row_6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Comment fonctionne l'essai 30 nuits ?",
+            "icon": "return",
+            "row_content": "<p>Si l'oreiller ne vous convient pas dans les 30 nuits suivant la réception, contactez-nous. Nous vous indiquons la marche à suivre pour le retour et vous remboursons dès réception.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_1",
+        "collapsible_row_2",
+        "collapsible_row_3",
+        "collapsible_row_4",
+        "collapsible_row_5",
+        "collapsible_row_6"
+      ]
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Complétez votre nuit",
+        "heading_size": "h1",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-2",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "sticky": {
+      "type": "pp-sticky-atc",
+      "settings": {
+        "button_label": "Ajouter au panier",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "features",
+    "problem",
+    "compare",
+    "steps",
+    "guarantee",
+    "faq",
+    "related",
+    "sticky"
+  ]
+}

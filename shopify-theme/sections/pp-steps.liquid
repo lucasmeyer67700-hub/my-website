@@ -1,0 +1,49 @@
+{% render 'pp-padding', section: section %}
+
+<div class="pp-steps color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <ol class="pp-steps__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="pp-step" {{ block.shopify_attributes }}>
+          <span class="pp-step__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <h3 class="pp-step__title">{{ block.settings.title }}</h3>
+          <div class="pp-step__text rte">{{ block.settings.text }}</div>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Étapes",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Mode d'emploi" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Trois nuits pour prendre le pli." },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 72 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Étape" },
+        { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Décrivez l'étape.</p>" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Étapes" } ]
+}
+{% endschema %}

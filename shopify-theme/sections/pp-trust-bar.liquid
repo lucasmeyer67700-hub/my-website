@@ -1,0 +1,53 @@
+{% render 'pp-padding', section: section %}
+
+<div class="pp-trust color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <ul class="pp-trust__list pp-trust__list--{{ section.blocks.size }}" role="list">
+      {%- for block in section.blocks -%}
+        <li class="pp-trust__item" {{ block.shopify_attributes }}>
+          <span class="pp-trust__icon">{% render 'pp-icon', icon: block.settings.icon %}</span>
+          <span class="pp-trust__copy">
+            <strong>{{ block.settings.title }}</strong>
+            {%- if block.settings.text != blank -%}<span>{{ block.settings.text }}</span>{%- endif -%}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bandeau de réassurance",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Argument",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icône", "default": "truck", "options": [{"value": "truck", "label": "Camion / livraison"}, {"value": "moon", "label": "Lune / nuit"}, {"value": "shield", "label": "Bouclier / garantie"}, {"value": "chat", "label": "Bulle / service client"}, {"value": "return", "label": "Retour"}, {"value": "leaf", "label": "Feuille / matière"}, {"value": "wind", "label": "Air / respirant"}, {"value": "layers", "label": "Couches / mousse"}, {"value": "neck", "label": "Nuque"}, {"value": "wash", "label": "Lavable"}, {"value": "ruler", "label": "Règle / hauteur"}, {"value": "lock", "label": "Cadenas / paiement"}, {"value": "star", "label": "Étoile"}, {"value": "gift", "label": "Cadeau"}, {"value": "thermo", "label": "Température"}, {"value": "check", "label": "Coche"}] },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "Suivi par e-mail" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bandeau de réassurance",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "truck", "title": "Livraison offerte", "text": "Suivi par e-mail" } },
+        { "type": "item", "settings": { "icon": "moon", "title": "Essai 30 nuits", "text": "Satisfait ou remboursé" } },
+        { "type": "item", "settings": { "icon": "lock", "title": "Paiement sécurisé", "text": "CB, PayPal, Apple Pay" } },
+        { "type": "item", "settings": { "icon": "chat", "title": "Service client", "text": "Réponse sous 24 h" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
