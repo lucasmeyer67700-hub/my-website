@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "velea_accueil": {
+      "type": "velea-accueil",
+      "settings": {
+        "hero_title": "Bien aligné, de la nuque aux genoux.",
+        "hero_sub": "Vous vous réveillez avec la nuque raide ? L'Oreiller Papillon garde votre tête à la bonne hauteur, que vous dormiez sur le dos ou sur le côté.",
+        "show_reviews": false
+      }
+    }
+  },
+  "order": ["velea_accueil"]
+}

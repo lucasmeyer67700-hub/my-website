@@ -1,0 +1,73 @@
+{%- comment -%} VELEA : « Est-il fait pour vous ? » et FAQ propre à chaque produit {%- endcomment -%}
+{%- assign h = product.handle -%}
+{%- assign est_coussin = false -%}
+{%- assign est_housse = false -%}
+{%- if h == 'le-coussin-genoux' -%}{%- assign est_coussin = true -%}{%- endif -%}
+{%- if h == 'housse-de-rechange-pour-oreiller-papillon' -%}{%- assign est_housse = true -%}{%- endif -%}
+
+<div class="vl-pdp vl-band--creme2">
+  <div class="vl-wrap">
+    {%- unless est_housse -%}
+      <h2 class="vl-h2">Est-il fait pour vous ?</h2>
+      <div class="vl-fit">
+        <div>
+          <h3 class="vl-h3">Oui, si…</h3>
+          <ul>
+            {%- if est_coussin -%}
+              <li>vous dormez surtout sur le côté ;</li>
+              <li>votre jambe du dessus glisse vers l'avant pendant la nuit ;</li>
+              <li>vous vous réveillez avec le bas du dos raide ;</li>
+              <li>vous dormez déjà avec un oreiller ou une couverture entre les genoux.</li>
+            {%- else -%}
+              <li>vous dormez sur le dos, sur le côté, ou les deux ;</li>
+              <li>vous vous réveillez souvent avec la nuque raide ;</li>
+              <li>vous repliez ou retapez votre oreiller plusieurs fois par nuit ;</li>
+              <li>vous avez déjà essayé plusieurs oreillers sans trouver le bon.</li>
+            {%- endif -%}
+          </ul>
+        </div>
+        <div>
+          <h3 class="vl-h3">Plutôt non, si…</h3>
+          <ul>
+            {%- if est_coussin -%}
+              <li>vous dormez uniquement sur le dos ou sur le ventre ;</li>
+              <li>vous n'aimez rien sentir entre les jambes en dormant.</li>
+            {%- else -%}
+              <li>vous dormez presque toujours sur le ventre ;</li>
+              <li>vous aimez un oreiller très mou dans lequel la tête s'enfonce ;</li>
+              <li>vous cherchez un produit médical : il s'agit d'un oreiller de confort.</li>
+            {%- endif -%}
+          </ul>
+        </div>
+      </div>
+    {%- endunless -%}
+
+    <div class="vl-faq" style="margin-top:48px;padding:0;">
+      <h2 class="vl-h2">Questions fréquentes</h2>
+      {%- if est_housse -%}
+        <details><summary>Est-elle compatible avec un autre oreiller ?</summary><p>Non, elle est coupée à la forme exacte de l'Oreiller Papillon VELEA.</p></details>
+        <details><summary>Comment la laver ?</summary><p>En machine à 30 °C, cycle délicat, fermeture éclair fermée. Séchage à l'air libre de préférence.</p></details>
+        <details><summary>Comment l'avoir à 14,90 € ?</summary><p>Ajoutez-la à votre panier avec un Oreiller Papillon ou un pack : la réduction s'applique automatiquement.</p></details>
+      {%- elsif est_coussin -%}
+        <details><summary>Comment le placer ?</summary><p>Entre les jambes, la partie la plus large côté cuisses, la plus fine vers les genoux. Il doit rester en place quand vous pliez les jambes.</p></details>
+        <details><summary>Et si je change de côté pendant la nuit ?</summary><p>Il suit le mouvement si vous le gardez entre les jambes en vous retournant. Après quelques nuits, ça devient automatique.</p></details>
+        <details><summary>Comment l'entretenir ?</summary><p>La housse se lave en machine à 30 °C. La mousse s'aère simplement de temps en temps.</p></details>
+        <details><summary>Et si je ne m'y fais pas ?</summary><p>Vous avez 30 nuits pour l'essayer, en plus des 14 jours de rétractation. <a href="/pages/livraison-et-retours">Voir les conditions</a></p></details>
+      {%- else -%}
+        <details><summary>Quel côté de l'oreiller utiliser ?</summary><p>Le creux central accueille la tête quand vous êtes sur le dos. Quand vous vous tournez, posez la tête sur l'une des ailes, plus hautes.</p></details>
+        <details><summary>Combien de temps pour s'habituer ?</summary><p>Une à deux semaines en général. Les premières nuits peuvent sembler étranges : c'est normal, votre nuque change d'habitude.</p></details>
+        <details><summary>Il y a une odeur à l'ouverture, c'est normal ?</summary><p>Oui, c'est l'odeur de la mousse neuve emballée sous vide. Laissez l'oreiller 24 à 48 heures dans une pièce aérée.</p></details>
+        <details><summary>Comment le laver ?</summary><p>La housse se retire et se lave à 30 °C. La mousse ne se lave pas : aérez-la régulièrement.</p></details>
+        <details><summary>Et si ça ne me convient pas ?</summary><p>Vous avez 14 jours de rétractation et notre essai de 30 nuits en plus. <a href="/pages/livraison-et-retours">Voir les conditions</a></p></details>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "VELEA guide et FAQ produit",
+  "settings": [],
+  "presets": [ { "name": "VELEA guide et FAQ produit" } ]
+}
+{% endschema %}

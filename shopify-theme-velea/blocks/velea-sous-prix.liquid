@@ -1,0 +1,54 @@
+{%- comment -%} VELEA : réassurances sous le prix + vente additionnelle selon le produit {%- endcomment -%}
+{%- assign vp = closest.product | default: product -%}
+<div class="vl-pdp" {{ block.shopify_attributes }} style="display:grid;gap:18px;width:100%;">
+  <ul class="vl-reassure">
+    <li>Essai 30 nuits, en plus des 14 jours de rétractation</li>
+    <li>Livraison suivie en 7 à 14 jours ouvrés</li>
+    <li>Retour simple, sur demande via notre formulaire</li>
+  </ul>
+
+  {%- assign up = blank -%}
+  {%- assign up_text = '' -%}
+  {%- case vp.handle -%}
+    {%- when 'loreiller-papillon' -%}
+      {%- assign up = all_products['pack-dormeur-sur-le-cote'] -%}
+      {%- assign up_text = "Vous dormez sur le côté ? Ajoutez le coussin genoux et gardez aussi les hanches alignées." -%}
+    {%- when 'le-coussin-genoux' -%}
+      {%- assign up = all_products['pack-dormeur-sur-le-cote'] -%}
+      {%- assign up_text = "Avec l'Oreiller Papillon, la nuque et les hanches sont alignées. 14,90 € de moins qu'à l'unité." -%}
+    {%- when 'pack-dormeur-sur-le-cote' -%}
+      {%- assign up = all_products['housse-de-rechange-pour-oreiller-papillon'] -%}
+      {%- assign up_text = "Une housse au lavage, une sur l'oreiller. 14,90 € au lieu de 19,90 € avec votre oreiller." -%}
+    {%- when 'housse-de-rechange-pour-oreiller-papillon' -%}
+      {%- assign up = all_products['loreiller-papillon'] -%}
+      {%- assign up_text = "Pas encore d'oreiller ? Avec lui, la housse passe à 14,90 €." -%}
+  {%- endcase -%}
+
+  {%- if up != blank and up.available -%}
+    <div class="vl-upsell">
+      <a class="vl-upsell__img" href="{{ up.url }}">
+        {%- if up.featured_image -%}{{ up.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: up.title }}{%- endif -%}
+      </a>
+      <div>
+        <p class="vl-upsell__title">{{ up.title }} · {{ up.price | money }}</p>
+        <p>{{ up_text }}</p>
+        {%- if up.handle == 'pack-dormeur-sur-le-cote' -%}
+          <a class="vl-btn" href="{{ up.url }}">Voir le pack</a>
+        {%- else -%}
+          <form method="post" action="/cart/add">
+            <input type="hidden" name="id" value="{{ up.selected_or_first_available_variant.id }}">
+            <button type="submit" class="vl-btn">Ajouter</button>
+          </form>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "VELEA réassurance et vente additionnelle",
+  "settings": [],
+  "presets": [ { "name": "VELEA réassurance et vente additionnelle" } ]
+}
+{% endschema %}

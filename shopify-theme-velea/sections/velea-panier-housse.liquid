@@ -1,0 +1,40 @@
+{%- comment -%} VELEA : propose la housse de rechange à 14,90 € dans le panier si un oreiller (ou un pack) y est et qu'il n'y a pas déjà de housse {%- endcomment -%}
+{%- assign housse = all_products['housse-de-rechange-pour-oreiller-papillon'] -%}
+{%- assign a_oreiller = false -%}
+{%- assign a_housse = false -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == 'loreiller-papillon' or item.product.handle == 'pack-dormeur-sur-le-cote' or item.product.handle == 'pack-duo' -%}{%- assign a_oreiller = true -%}{%- endif -%}
+  {%- if item.product.handle == 'housse-de-rechange-pour-oreiller-papillon' -%}{%- assign a_housse = true -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if housse != blank and housse.available and cart.item_count > 0 and a_housse == false -%}
+  <div class="vl-cart-upsell vl-pdp">
+    <div class="vl-upsell">
+      <span class="vl-upsell__img">
+        {%- if housse.featured_image -%}{{ housse.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: housse.title }}{%- endif -%}
+      </span>
+      <div>
+        {%- if a_oreiller -%}
+          <p class="vl-upsell__title">Une housse de rechange pour 14,90 € au lieu de 19,90 €</p>
+          <p>Une au lavage, une sur l'oreiller. La réduction s'applique automatiquement au paiement.</p>
+        {%- else -%}
+          <p class="vl-upsell__title">{{ housse.title }} · {{ housse.price | money }}</p>
+          <p>Passe à 14,90 € avec un Oreiller Papillon ou un pack.</p>
+        {%- endif -%}
+        <form method="post" action="/cart/add">
+          <input type="hidden" name="id" value="{{ housse.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="return_to" value="/cart">
+          <button type="submit" class="vl-btn">Ajouter la housse</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA housse dans le panier",
+  "settings": [],
+  "presets": [ { "name": "VELEA housse dans le panier" } ]
+}
+{% endschema %}
