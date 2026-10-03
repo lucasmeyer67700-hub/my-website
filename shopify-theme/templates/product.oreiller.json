@@ -409,11 +409,52 @@
         "button_label": "Ajouter au panier",
         "color_scheme": "scheme-1"
       }
+    },
+    "bundle": {
+      "type": "pp-bundle-promo",
+      "settings": {
+        "product": "pack-dormeur-sur-le-cote",
+        "image": "shopify://shop_images/oreiller-coussin-genoux-duo.jpg",
+        "eyebrow": "Le duo des dormeurs sur le côté",
+        "title": "Complétez votre nuit",
+        "text": "<p>Dormir sur le côté sollicite deux zones : la nuque et les hanches. Le Pack Nuit complète s'occupe des deux, pour moins cher qu'à l'unité.</p>",
+        "compare_note": "prix des deux produits achetés séparément",
+        "button_label": "Voir le Pack Nuit complète",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "1 Oreiller Cervical, au coloris de votre choix"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "1 Coussin Genoux Ergonomique"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "text": "Livraison offerte et essai 30 nuits sur l'ensemble"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
     }
   },
   "order": [
     "main",
     "features",
+    "bundle",
     "problem",
     "compare",
     "steps",

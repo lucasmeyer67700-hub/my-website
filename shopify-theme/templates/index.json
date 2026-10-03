@@ -1,52 +1,48 @@
 {
   "sections": {
-    "hero": {
-      "type": "pp-hero",
+    "hero_photo": {
+      "type": "pp-hero-image",
       "settings": {
-        "eyebrow": "Oreiller cervical ergonomique",
-        "title": "Réveillez-vous sans nuque raide.",
-        "text": "<p>Un oreiller papillon en mousse à mémoire de forme qui garde la tête, la nuque et le dos dans le même axe. Sur le dos comme sur le côté.</p>",
-        "button_label": "Découvrir l'oreiller",
-        "button_link": "shopify://products/loreiller-papillon",
-        "button_label_2": "Voir les packs",
-        "button_link_2": "shopify://collections/nos-packs",
+        "image": "shopify://shop_images/oreiller-coussin-genoux-duo.jpg",
+        "mobile_focus": 40,
+        "animate": true,
+        "eyebrow": "Le duo des dormeurs sur le côté",
+        "title": "De la nuque aux genoux, enfin aligné.",
+        "text": "<p>L'oreiller cervical garde la tête dans l'axe du dos. Le coussin genoux empêche le bassin de tourner. Ensemble, ils changent vos nuits sur le côté.</p>",
+        "button_label": "Découvrir le Pack Nuit complète",
+        "button_link": "shopify://products/pack-dormeur-sur-le-cote",
+        "button_label_2": "Voir chaque produit",
+        "button_link_2": "shopify://collections/tous-nos-produits",
         "reassurance": "Livraison offerte en France · Essai 30 nuits · Paiement sécurisé",
-        "badge": "30 nuits pour l'essayer",
-        "color_scheme": "scheme-2",
-        "padding_top": 56,
-        "padding_bottom": 72
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 48
       },
       "blocks": {
-        "point_1": {
-          "type": "point",
+        "hotspot_pillow": {
+          "type": "hotspot",
           "settings": {
-            "text": "Creux central qui stabilise la tête sur le dos"
+            "product": "loreiller-papillon",
+            "label": "Oreiller cervical",
+            "x": 16,
+            "y": 54,
+            "label_side": "bottom-right"
           }
         },
-        "point_2": {
-          "type": "point",
+        "hotspot_knee": {
+          "type": "hotspot",
           "settings": {
-            "text": "Ailes plus hautes pour dormir sur le côté"
-          }
-        },
-        "point_3": {
-          "type": "point",
-          "settings": {
-            "text": "Rebord cervical qui épouse la nuque"
-          }
-        },
-        "point_4": {
-          "type": "point",
-          "settings": {
-            "text": "Housse respirante, amovible et lavable"
+            "product": "le-coussin-genoux",
+            "label": "Coussin genoux",
+            "x": 69,
+            "y": 57,
+            "label_side": "bottom-left"
           }
         }
       },
       "block_order": [
-        "point_1",
-        "point_2",
-        "point_3",
-        "point_4"
+        "hotspot_pillow",
+        "hotspot_knee"
       ]
     },
     "trust": {
@@ -539,7 +535,7 @@
     }
   },
   "order": [
-    "hero",
+    "hero_photo",
     "trust",
     "problem",
     "featured",

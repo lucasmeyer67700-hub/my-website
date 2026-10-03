@@ -1,0 +1,82 @@
+{%- comment -%}
+  Mise en avant d'un pack avec photo en situation et prix réel du pack.
+  Masquée automatiquement sur la fiche du pack lui-même.
+{%- endcomment -%}
+{%- assign bundle = section.settings.product -%}
+{%- unless bundle == blank or product and product.id == bundle.id -%}
+  {% render 'pp-padding', section: section %}
+  {%- assign v = bundle.selected_or_first_available_variant -%}
+
+  <div class="pp-bundle color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      <div class="pp-bundle__grid">
+        <a class="pp-bundle__media" href="{{ bundle.url }}" tabindex="-1" aria-hidden="true">
+          {%- assign img = section.settings.image | default: bundle.featured_image -%}
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 55vw, 100vw', widths: '600, 900, 1200, 1600', class: 'pp-bundle__img', alt: '' }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'pp-bundle__img placeholder-svg' }}
+          {%- endif -%}
+          {%- if v.compare_at_price > v.price -%}
+            <span class="pp-bundle__badge">−{{ v.compare_at_price | minus: v.price | money }}</span>
+          {%- endif -%}
+        </a>
+
+        <div class="pp-bundle__content">
+          {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+          <h2 class="h1 pp-bundle__title">{{ section.settings.title | default: bundle.title }}</h2>
+          {%- if section.settings.text != blank -%}<div class="rte pp-bundle__text">{{ section.settings.text }}</div>{%- endif -%}
+
+          {%- if section.blocks.size > 0 -%}
+            <ul class="pp-checklist" role="list">
+              {%- for block in section.blocks -%}
+                <li {{ block.shopify_attributes }}>
+                  <span class="pp-checklist__mark">{% render 'pp-icon', icon: 'check' %}</span>
+                  <span>{{ block.settings.text }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          <p class="pp-bundle__price">
+            <span class="pp-bundle__now">{{ v.price | money }}</span>
+            {%- if v.compare_at_price > v.price -%}
+              <s>{{ v.compare_at_price | money }}</s>
+              <span class="pp-bundle__note">{{ section.settings.compare_note }}</span>
+            {%- endif -%}
+          </p>
+          <a class="button button--primary pp-button-lg" href="{{ bundle.url }}">{{ section.settings.button_label }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Offre pack (photo)",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Pack mis en avant" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Sans photo, l'image principale du pack est utilisée." },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Le duo des dormeurs sur le côté" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Complétez votre nuit" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "compare_note", "label": "Mention sous le prix barré", "default": "prix des deux produits achetés séparément" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Voir le pack" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 72 }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Point fort",
+      "limit": 4,
+      "settings": [ { "type": "text", "id": "text", "label": "Texte", "default": "Point fort" } ]
+    }
+  ],
+  "presets": [ { "name": "Offre pack (photo)" } ]
+}
+{% endschema %}
