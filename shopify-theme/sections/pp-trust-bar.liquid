@@ -4,7 +4,7 @@
   <div class="page-width section-{{ section.id }}-padding">
     <ul class="pp-trust__list pp-trust__list--{{ section.blocks.size }}" role="list">
       {%- for block in section.blocks -%}
-        <li class="pp-trust__item" {{ block.shopify_attributes }}>
+        <li class="pp-trust__item pp-reveal" style="--d: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
           <span class="pp-trust__icon">{% render 'pp-icon', icon: block.settings.icon %}</span>
           <span class="pp-trust__copy">
             <strong>{{ block.settings.title }}</strong>

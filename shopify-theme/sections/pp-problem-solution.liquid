@@ -2,20 +2,20 @@
 
 <div class="pp-ps color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
-    <div class="pp-heading pp-heading--center">
+    <div class="pp-heading pp-heading--center pp-reveal">
       {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
       {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
     </div>
 
     <div class="pp-ps__grid">
-      <div class="pp-ps__card pp-ps__card--bad">
+      <div class="pp-ps__card pp-ps__card--bad pp-reveal">
         <div class="pp-ps__visual">{% render 'pp-illustration', name: 'align-bad' %}</div>
         <p class="pp-ps__tag">{% render 'pp-icon', icon: 'cross' %} {{ section.settings.bad_label }}</p>
         <h3 class="h3">{{ section.settings.bad_title }}</h3>
         <div class="rte">{{ section.settings.bad_text }}</div>
       </div>
-      <div class="pp-ps__card pp-ps__card--good">
+      <div class="pp-ps__card pp-ps__card--good pp-reveal" style="--d: 1">
         <div class="pp-ps__visual">{% render 'pp-illustration', name: 'align-good' %}</div>
         <p class="pp-ps__tag">{% render 'pp-icon', icon: 'check' %} {{ section.settings.good_label }}</p>
         <h3 class="h3">{{ section.settings.good_title }}</h3>

@@ -2,7 +2,7 @@
 
 <div class="pp-steps color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
-    <div class="pp-heading pp-heading--center">
+    <div class="pp-heading pp-heading--center pp-reveal">
       {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
       {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
@@ -10,7 +10,7 @@
 
     <ol class="pp-steps__list" role="list">
       {%- for block in section.blocks -%}
-        <li class="pp-step" {{ block.shopify_attributes }}>
+        <li class="pp-step pp-reveal" style="--d: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
           <span class="pp-step__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
           <h3 class="pp-step__title">{{ block.settings.title }}</h3>
           <div class="pp-step__text rte">{{ block.settings.text }}</div>

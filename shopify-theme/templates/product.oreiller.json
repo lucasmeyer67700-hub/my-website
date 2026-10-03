@@ -305,7 +305,7 @@
         "text": "<p>Si au bout de 30 nuits le produit ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
         "button_label": "",
         "button_link": "",
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-5",
         "padding_top": 72,
         "padding_bottom": 72
       }
@@ -414,7 +414,7 @@
       "type": "pp-bundle-promo",
       "settings": {
         "product": "pack-dormeur-sur-le-cote",
-        "image": "shopify://shop_images/oreiller-coussin-genoux-duo.jpg",
+        "image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
         "eyebrow": "Le duo des dormeurs sur le côté",
         "title": "Complétez votre nuit",
         "text": "<p>Dormir sur le côté sollicite deux zones : la nuque et les hanches. Le Pack Nuit complète s'occupe des deux, pour moins cher qu'à l'unité.</p>",

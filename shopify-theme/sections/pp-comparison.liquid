@@ -2,13 +2,13 @@
 
 <div class="pp-compare color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width page-width--narrow section-{{ section.id }}-padding">
-    <div class="pp-heading pp-heading--center">
+    <div class="pp-heading pp-heading--center pp-reveal">
       {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
       {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
     </div>
 
-    <div class="pp-compare__wrap">
+    <div class="pp-compare__wrap pp-reveal">
       <table class="pp-compare__table">
         <thead>
           <tr>

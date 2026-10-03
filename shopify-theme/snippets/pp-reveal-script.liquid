@@ -1,0 +1,25 @@
+{%- comment -%}
+  Apparition douce au défilement pour tout élément .pp-reveal (délai en cascade via --d).
+  La classe pp-js est posée dans le <head> pour éviter tout clignotement ;
+  sans JavaScript, le contenu reste simplement visible.
+{%- endcomment -%}
+<script>
+  (function () {
+    var items = document.querySelectorAll('.pp-reveal');
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    items.forEach(function (el) { io.observe(el); });
+    document.addEventListener('shopify:section:load', function (e) {
+      e.target.querySelectorAll('.pp-reveal').forEach(function (el) { el.classList.add('is-in'); });
+    });
+  })();
+</script>

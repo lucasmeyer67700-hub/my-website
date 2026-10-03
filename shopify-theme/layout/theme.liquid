@@ -280,6 +280,8 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'oreiller.css' | asset_url | stylesheet_tag }}
+    {% render 'pp-fonts' %}
+    <script>document.documentElement.classList.add('pp-js');</script>
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -402,5 +404,6 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+      {% render 'pp-reveal-script' %}
   </body>
 </html>

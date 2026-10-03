@@ -3,20 +3,22 @@
     "hero_photo": {
       "type": "pp-hero-image",
       "settings": {
-        "image": "shopify://shop_images/oreiller-coussin-genoux-duo.jpg",
+        "image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
         "mobile_focus": 40,
         "animate": true,
         "eyebrow": "Le duo des dormeurs sur le côté",
-        "title": "De la nuque aux genoux, enfin aligné.",
-        "text": "<p>L'oreiller cervical garde la tête dans l'axe du dos. Le coussin genoux empêche le bassin de tourner. Ensemble, ils changent vos nuits sur le côté.</p>",
-        "button_label": "Découvrir le Pack Nuit complète",
-        "button_link": "shopify://products/pack-dormeur-sur-le-cote",
-        "button_label_2": "Voir chaque produit",
-        "button_link_2": "shopify://collections/tous-nos-produits",
-        "reassurance": "Livraison offerte en France · Essai 30 nuits · Paiement sécurisé",
-        "color_scheme": "scheme-1",
+        "title": "De la nuque aux genoux,",
+        "text": "<p>Un oreiller cervical qui garde la tête dans l'axe du dos, un coussin qui empêche le bassin de tourner. Le confort d'un sommeil bien aligné, nuit après nuit.</p>",
+        "button_label": "Découvrir le fonctionnement",
+        "button_link": "#fonctionnement",
+        "button_label_2": "Voir les produits",
+        "button_link_2": "#produits",
+        "reassurance": "Livraison offerte · Essai 30 nuits · Paiement sécurisé",
+        "color_scheme": "scheme-3",
         "padding_top": 0,
-        "padding_bottom": 48
+        "padding_bottom": 72,
+        "show_scroll_cue": true,
+        "title_accent": "enfin aligné."
       },
       "blocks": {
         "hotspot_pillow": {
@@ -48,9 +50,9 @@
     "trust": {
       "type": "pp-trust-bar",
       "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 28,
-        "padding_bottom": 28
+        "color_scheme": "scheme-2",
+        "padding_top": 36,
+        "padding_bottom": 36
       },
       "blocks": {
         "item_1": {
@@ -96,8 +98,8 @@
     "problem": {
       "type": "pp-problem-solution",
       "settings": {
-        "eyebrow": "Pourquoi ça coince",
-        "title": "Le problème vient rarement du matelas.",
+        "eyebrow": "Ce que ça change",
+        "title": "Une nuque qui se repose vraiment.",
         "text": "<p>Un oreiller trop haut, trop mou ou trop plat oblige la nuque à rester pliée pendant des heures. Le matin, c'est elle qui vous le fait savoir.</p>",
         "bad_label": "Oreiller classique",
         "bad_title": "La nuque se plie",
@@ -105,100 +107,23 @@
         "good_label": "Oreiller papillon",
         "good_title": "La nuque se repose",
         "good_text": "<p>Le rebord épouse le creux de la nuque, le centre creusé accueille la tête. Tête, cou et dos restent dans le même axe, sans effort.</p>",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 64
-      }
-    },
-    "featured": {
-      "type": "featured-product",
-      "settings": {
-        "product": "loreiller-papillon",
         "color_scheme": "scheme-2",
-        "secondary_background": false,
-        "media_size": "large",
-        "constrain_to_viewport": true,
-        "media_fit": "contain",
-        "media_position": "left",
-        "image_zoom": "lightbox",
-        "hide_variants": false,
-        "enable_video_looping": false,
-        "padding_top": 64,
-        "padding_bottom": 64
-      },
-      "blocks": {
-        "text_1": {
-          "type": "text",
-          "settings": {
-            "text": "Notre best-seller",
-            "text_style": "uppercase"
-          }
-        },
-        "title_2": {
-          "type": "title",
-          "settings": {
-            "heading_size": "h1"
-          }
-        },
-        "price_3": {
-          "type": "price",
-          "settings": {}
-        },
-        "text_4": {
-          "type": "text",
-          "settings": {
-            "text": "Mousse à mémoire de forme, housse respirante, deux positions de sommeil couvertes.",
-            "text_style": "body"
-          }
-        },
-        "variant_picker_5": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "swatch_shape": "circle"
-          }
-        },
-        "buy_buttons_6": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": false
-          }
-        },
-        "icon_with_text_7": {
-          "type": "icon-with-text",
-          "settings": {
-            "layout": "horizontal",
-            "icon_1": "truck",
-            "heading_1": "Livraison offerte",
-            "icon_2": "return",
-            "heading_2": "Essai 30 nuits",
-            "icon_3": "lock",
-            "heading_3": "Paiement sécurisé"
-          }
-        }
-      },
-      "block_order": [
-        "text_1",
-        "title_2",
-        "price_3",
-        "text_4",
-        "variant_picker_5",
-        "buy_buttons_6",
-        "icon_with_text_7"
-      ]
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     },
     "features": {
       "type": "pp-features",
       "settings": {
-        "eyebrow": "Conçu zone par zone",
-        "title": "Chaque courbe a une raison d'être.",
-        "text": "",
+        "eyebrow": "Le fonctionnement",
+        "title": "Comment l'oreiller soutient votre nuque",
+        "text": "<p>Quatre zones travaillent ensemble pour garder la tête, le cou et le dos dans le même axe, sur le dos comme sur le côté.</p>",
         "show_visual": true,
         "numbered": true,
         "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "padding_top": 96,
+        "padding_bottom": 80,
+        "anchor": "fonctionnement"
       },
       "blocks": {
         "feature_1": {
@@ -251,7 +176,7 @@
         "eyebrow": "Trouvez votre combinaison",
         "title": "Comment dormez-vous ?",
         "text": "<p>Chaque position sollicite le corps différemment. Voici ce que nous conseillons.</p>",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding_top": 80,
         "padding_bottom": 80
       },
@@ -305,7 +230,7 @@
         "col_1": "Oreiller Papillon",
         "col_2": "Oreiller classique",
         "col_3": "Mousse premier prix",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding_top": 80,
         "padding_bottom": 80
       },
@@ -374,41 +299,13 @@
         "row_6"
       ]
     },
-    "collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Toute la gamme",
-        "heading_size": "h1",
-        "description": "<p>De la nuque aux genoux, de quoi bien dormir dans toutes les positions.</p>",
-        "show_description": true,
-        "description_style": "body",
-        "collection": "tous-nos-produits",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "outline",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": true,
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "padding_top": 24,
-        "padding_bottom": 80
-      }
-    },
     "steps": {
       "type": "pp-steps",
       "settings": {
         "eyebrow": "Mode d'emploi",
         "title": "Bien démarrer avec votre oreiller",
         "text": "",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding_top": 80,
         "padding_bottom": 80
       },
@@ -452,7 +349,7 @@
         "text": "<p>Il faut quelques nuits pour s'habituer à un nouvel oreiller. Si au bout de 30 nuits il ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
         "button_label": "Choisir mon oreiller",
         "button_link": "shopify://products/loreiller-papillon",
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-5",
         "padding_top": 80,
         "padding_bottom": 80
       }
@@ -532,17 +429,35 @@
         "collapsible_row_5",
         "collapsible_row_6"
       ]
+    },
+    "products": {
+      "type": "pp-products",
+      "settings": {
+        "anchor": "produits",
+        "eyebrow": "La collection",
+        "title": "Nos essentiels du sommeil",
+        "text": "<p>Pensés ensemble, pour la nuque, le dos et les hanches.</p>",
+        "collection": "tous-nos-produits",
+        "limit": 4,
+        "featured_product": "pack-dormeur-sur-le-cote",
+        "featured_image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
+        "featured_badge": "Le duo",
+        "featured_text": "L'oreiller cervical et le coussin genoux réunis : la nuque et les hanches alignées, toute la nuit.",
+        "show_all": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "hero_photo",
-    "trust",
-    "problem",
-    "featured",
     "features",
+    "problem",
+    "products",
+    "trust",
     "positions",
     "compare",
-    "collection",
     "steps",
     "guarantee",
     "faq"

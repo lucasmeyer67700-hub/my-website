@@ -1,0 +1,23 @@
+{%- comment -%}
+  Cormorant Garamond (SIL Open Font License 1.1), hébergée dans le thème.
+  Titres en serif pour une signature chic ; le texte courant reste en Inter.
+{%- endcomment -%}
+{{ 'cormorant-garamond-500-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
+{%- style -%}
+  {%- for f in (1..5) -%}
+    {%- case f -%}
+      {%- when 1 -%}{%- assign file = 'cormorant-garamond-400-normal.woff2' -%}{%- assign w = 400 -%}{%- assign st = 'normal' -%}
+      {%- when 2 -%}{%- assign file = 'cormorant-garamond-500-normal.woff2' -%}{%- assign w = 500 -%}{%- assign st = 'normal' -%}
+      {%- when 3 -%}{%- assign file = 'cormorant-garamond-600-normal.woff2' -%}{%- assign w = 600 -%}{%- assign st = 'normal' -%}
+      {%- when 4 -%}{%- assign file = 'cormorant-garamond-400-italic.woff2' -%}{%- assign w = 400 -%}{%- assign st = 'italic' -%}
+      {%- when 5 -%}{%- assign file = 'cormorant-garamond-500-italic.woff2' -%}{%- assign w = 500 -%}{%- assign st = 'italic' -%}
+    {%- endcase %}
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('{{ file | asset_url }}') format('woff2');
+    font-weight: {{ w }};
+    font-style: {{ st }};
+    font-display: swap;
+  }
+  {%- endfor %}
+{%- endstyle -%}

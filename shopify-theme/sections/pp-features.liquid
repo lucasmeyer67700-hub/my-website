@@ -1,8 +1,8 @@
 {% render 'pp-padding', section: section %}
 
-<div class="pp-features color-{{ section.settings.color_scheme }} gradient">
+<div{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handleize }}"{% endif %} class="pp-features pp-anchor color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
-    <div class="pp-heading pp-heading--center">
+    <div class="pp-heading pp-heading--center pp-reveal">
       {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
       {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
@@ -10,7 +10,7 @@
 
     <div class="pp-features__grid{% if section.settings.show_visual == false %} pp-features__grid--full{% endif %}">
       {%- if section.settings.show_visual -%}
-        <div class="pp-features__visual">
+        <div class="pp-features__visual pp-reveal">
           {%- if section.settings.image != blank -%}
             {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '600, 900, 1200' }}
           {%- else -%}
@@ -21,7 +21,7 @@
 
       <ol class="pp-features__list" role="list">
         {%- for block in section.blocks -%}
-          <li class="pp-feature" {{ block.shopify_attributes }}>
+          <li class="pp-feature pp-reveal" style="--d: {{ forloop.index }}" {{ block.shopify_attributes }}>
             <span class="pp-feature__icon">
               {%- if section.settings.numbered -%}
                 <span class="pp-feature__num">{{ block.settings.number | default: forloop.index }}</span>
@@ -46,6 +46,7 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (lien #...)", "info": "Ex. : fonctionnement, pour le bouton « Découvrir le fonctionnement »." },
     { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Conçu zone par zone" },
     { "type": "text", "id": "title", "label": "Titre", "default": "Chaque courbe a une raison d'être." },
     { "type": "richtext", "id": "text", "label": "Texte" },

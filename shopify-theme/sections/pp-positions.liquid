@@ -2,7 +2,7 @@
 
 <div class="pp-positions color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
-    <div class="pp-heading pp-heading--center">
+    <div class="pp-heading pp-heading--center pp-reveal">
       {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
       {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
@@ -10,7 +10,7 @@
 
     <div class="pp-positions__grid">
       {%- for block in section.blocks -%}
-        <a class="pp-position" href="{{ block.settings.link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
+        <a class="pp-position pp-reveal" style="--d: {{ forloop.index0 }}" href="{{ block.settings.link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
           <span class="pp-position__picto" aria-hidden="true">
             <svg viewBox="0 0 160 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M8 64h144" opacity=".35"/>

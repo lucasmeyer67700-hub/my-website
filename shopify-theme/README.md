@@ -26,3 +26,12 @@ Palettes Shopify : `scheme-1` blanc, `scheme-2` gris perle, `scheme-3` anthracit
 ## Déployer
 Zipper le contenu de ce dossier (assets, config, layout, locales, sections, snippets, templates à la racine du zip)
 puis Boutique en ligne > Thèmes > Ajouter un thème > Importer un fichier zip.
+
+## Typographie
+Titres : **Cormorant Garamond** (SIL Open Font License 1.1, © The Cormorant Project Authors),
+hébergée dans `assets/cormorant-garamond-*.woff2` et déclarée dans `snippets/pp-fonts.liquid`.
+Texte courant : Inter (bibliothèque Shopify).
+
+## Palette v3
+Gris nuit `#16171A` (ouverture, en-tête, pied de page), anthracite `#1E2024` (texte),
+blanc, gris perle `#F4F5F7`, bleu nuit `#1B2A41` (accents, bandeau d'annonce, garantie).
