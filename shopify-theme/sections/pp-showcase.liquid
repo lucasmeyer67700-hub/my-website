@@ -1,0 +1,184 @@
+{%- comment -%}
+  Vitrine premium : le produit principal en grand (fond sombre, photo studio, note,
+  bénéfices, choix du coloris et ajout au panier direct), puis deux produits
+  complémentaires pour augmenter le panier moyen.
+  L'ajout au panier passe par le formulaire Shopify standard (/cart/add) :
+  il fonctionne sans JavaScript.
+{%- endcomment -%}
+{% render 'pp-padding', section: section %}
+
+{%- liquid
+  assign main = section.settings.main_product
+  assign c1 = section.settings.complement_1
+  assign c2 = section.settings.complement_2
+-%}
+
+{%- capture stars -%}
+  <svg viewBox="0 0 120 24" aria-hidden="true" focusable="false"><g fill="currentColor">
+    {%- for i in (0..4) -%}<path transform="translate({{ i | times: 24 }} 0)" d="M12 1.8l3 6.2 6.8.9-5 4.7 1.3 6.7L12 17l-6.1 3.3 1.3-6.7-5-4.7 6.8-.9z"/>{%- endfor -%}
+  </g></svg>
+{%- endcapture -%}
+
+<div
+  id="{{ section.settings.anchor | default: 'produits' | handleize }}"
+  class="pp-show pp-anchor color-{{ section.settings.color_scheme }} gradient"
+>
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center pp-reveal">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    {%- if main != blank -%}
+      {%- assign v = main.selected_or_first_available_variant -%}
+      <article class="pp-show__main color-scheme-3 pp-reveal">
+        <a class="pp-show__media" href="{{ main.url }}" tabindex="-1" aria-hidden="true">
+          {%- if main.featured_image -%}
+            {{ main.featured_image | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 55vw, 100vw', widths: '600, 900, 1200, 1600', class: 'pp-show__img', alt: '' }}
+          {%- endif -%}
+          {%- if section.settings.main_badge != blank -%}<span class="pp-show__badge">{{ section.settings.main_badge }}</span>{%- endif -%}
+        </a>
+
+        <div class="pp-show__info">
+          {%- if section.settings.main_eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.main_eyebrow }}</p>{%- endif -%}
+          <h3 class="pp-show__title"><a href="{{ main.url }}">{{ main.title }}</a></h3>
+
+          {%- if section.settings.rating != blank -%}
+            {%- assign pct = section.settings.rating | plus: 0 | divided_by: 5.0 | times: 100 -%}
+            <a class="pp-rating-line" href="{{ main.url }}#avis">
+              <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true">
+                <span class="pp-stars__base">{{ stars }}</span><span class="pp-stars__fill">{{ stars }}</span>
+              </span>
+              <span><strong>{{ section.settings.rating | replace: '.', ',' }}</strong>/5 · {{ section.settings.rating_count }} avis</span>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.main_text != blank -%}<p class="pp-pitch">{{ section.settings.main_text }}</p>{%- endif -%}
+
+          {%- assign points = section.settings.main_points | newline_to_br | split: '<br />' -%}
+          {%- if section.settings.main_points != blank -%}
+            <ul class="pp-benefits" role="list">
+              {%- for pt in points -%}{%- assign pt = pt | strip -%}{%- if pt != blank -%}<li><span>{{ pt }}</span></li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- form 'product', main, class: 'pp-show__form', novalidate: 'novalidate' -%}
+            {%- if main.has_only_default_variant -%}
+              <input type="hidden" name="id" value="{{ v.id }}">
+            {%- else -%}
+              <fieldset class="pp-show__variants">
+                <legend>{{ main.options.first }}</legend>
+                {%- for variant in main.variants -%}
+                  <label class="pp-show__pill{% unless variant.available %} is-disabled{% endunless %}">
+                    <input type="radio" name="id" value="{{ variant.id }}" {% if variant.id == v.id %}checked{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                    <span>{{ variant.title }}</span>
+                  </label>
+                {%- endfor -%}
+              </fieldset>
+            {%- endif -%}
+            <div class="pp-show__buy">
+              <p class="pp-show__price">
+                {{ v.price | money }}
+                {%- if v.compare_at_price > v.price %} <s>{{ v.compare_at_price | money }}</s>{% endif -%}
+              </p>
+              <button type="submit" class="pp-show__add" {% unless main.available %}disabled{% endunless %}>
+                {%- if main.available -%}Ajouter au panier{%- else -%}Épuisé{%- endif -%}
+              </button>
+            </div>
+          {%- endform -%}
+          <a class="pp-show__more" href="{{ main.url }}">Voir tous les détails <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+    {%- endif -%}
+
+    {%- if c1 != blank or c2 != blank -%}
+      <div class="pp-show__extra">
+        <p class="pp-show__extra-title pp-reveal">{{ section.settings.complements_title }}</p>
+        <div class="pp-show__extra-grid">
+          {%- for p in (1..2) -%}
+            {%- if p == 1 -%}{%- assign c = c1 -%}{%- assign note = section.settings.complement_1_text -%}{%- else -%}{%- assign c = c2 -%}{%- assign note = section.settings.complement_2_text -%}{%- endif -%}
+            {%- if c == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign cv = c.selected_or_first_available_variant -%}
+            <article class="pp-show__card pp-reveal" style="--d: {{ p }}">
+              <a class="pp-show__card-media" href="{{ c.url }}" tabindex="-1" aria-hidden="true">
+                {%- if c.featured_image -%}
+                  {{ c.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 100vw', widths: '400, 600, 900', class: 'pp-show__card-img', alt: '' }}
+                {%- endif -%}
+                {%- if cv.compare_at_price > cv.price -%}
+                  <span class="pp-show__card-badge">−{{ cv.compare_at_price | minus: cv.price | money }}</span>
+                {%- endif -%}
+              </a>
+              <div class="pp-show__card-body">
+                <h3 class="pp-show__card-title"><a href="{{ c.url }}">{{ c.title }}</a></h3>
+                {%- if note != blank -%}<p class="pp-show__card-text">{{ note }}</p>{%- endif -%}
+                <div class="pp-show__card-foot">
+                  <span class="pp-show__card-price">
+                    {{ cv.price | money }}
+                    {%- if cv.compare_at_price > cv.price %} <s>{{ cv.compare_at_price | money }}</s>{% endif -%}
+                  </span>
+                  {%- if c.has_only_default_variant -%}
+                    {%- form 'product', c -%}
+                      <input type="hidden" name="id" value="{{ cv.id }}">
+                      <button type="submit" class="pp-show__quick" {% unless c.available %}disabled{% endunless %}>Ajouter</button>
+                    {%- endform -%}
+                  {%- else -%}
+                    <a class="pp-show__quick" href="{{ c.url }}">Choisir</a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  // Met à jour le prix affiché quand on change de coloris dans la grande carte.
+  document.querySelectorAll('.pp-show__form').forEach(function (form) {
+    var prices = {
+      {%- for variant in main.variants -%}
+        "{{ variant.id }}": { p: {{ variant.price | money | json }}, c: {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    };
+    form.addEventListener('change', function (e) {
+      var d = prices[e.target.value];
+      if (!d) return;
+      form.querySelector('.pp-show__price').innerHTML = d.p + (d.c ? ' <s>' + d.c + '</s>' : '');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Vitrine premium",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (lien #...)", "default": "produits" },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "La collection" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Notre oreiller signature" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "header", "content": "Produit principal" },
+    { "type": "product", "id": "main_product", "label": "Produit" },
+    { "type": "text", "id": "main_badge", "label": "Badge", "default": "Best-seller" },
+    { "type": "text", "id": "main_eyebrow", "label": "Sur-titre du produit" },
+    { "type": "textarea", "id": "main_text", "label": "Accroche" },
+    { "type": "textarea", "id": "main_points", "label": "Bénéfices (un par ligne)" },
+    { "type": "text", "id": "rating", "label": "Note (sur 5)", "info": "Laissez vide pour masquer la note." },
+    { "type": "text", "id": "rating_count", "label": "Nombre d'avis" },
+    { "type": "header", "content": "Produits complémentaires" },
+    { "type": "text", "id": "complements_title", "label": "Titre", "default": "Complétez votre nuit" },
+    { "type": "product", "id": "complement_1", "label": "Produit 1" },
+    { "type": "text", "id": "complement_1_text", "label": "Accroche 1" },
+    { "type": "product", "id": "complement_2", "label": "Produit 2" },
+    { "type": "text", "id": "complement_2_text", "label": "Accroche 2" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 88 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 88 }
+  ],
+  "presets": [ { "name": "Vitrine premium" } ]
+}
+{% endschema %}

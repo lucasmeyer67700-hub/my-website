@@ -50,9 +50,9 @@
     "trust": {
       "type": "pp-trust-bar",
       "settings": {
-        "color_scheme": "scheme-2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 48
       },
       "blocks": {
         "item_1": {
@@ -93,132 +93,6 @@
         "item_2",
         "item_3",
         "item_4"
-      ]
-    },
-    "problem": {
-      "type": "pp-problem-solution",
-      "settings": {
-        "eyebrow": "Ce que ça change",
-        "title": "Une nuque qui se repose vraiment.",
-        "text": "<p>Un oreiller trop haut, trop mou ou trop plat oblige la nuque à rester pliée pendant des heures. Le matin, c'est elle qui vous le fait savoir.</p>",
-        "bad_label": "Oreiller classique",
-        "bad_title": "La nuque se plie",
-        "bad_text": "<p>Le garnissage s'écrase ou remonte la tête trop haut. La colonne n'est plus droite et les muscles du cou restent tendus toute la nuit.</p>",
-        "good_label": "Oreiller papillon",
-        "good_title": "La nuque se repose",
-        "good_text": "<p>Le rebord épouse le creux de la nuque, le centre creusé accueille la tête. Tête, cou et dos restent dans le même axe, sans effort.</p>",
-        "color_scheme": "scheme-2",
-        "padding_top": 88,
-        "padding_bottom": 88
-      }
-    },
-    "features": {
-      "type": "pp-features",
-      "settings": {
-        "eyebrow": "Le fonctionnement",
-        "title": "Comment l'oreiller soutient votre nuque",
-        "text": "<p>Quatre zones travaillent ensemble pour garder la tête, le cou et le dos dans le même axe, sur le dos comme sur le côté.</p>",
-        "show_visual": true,
-        "numbered": true,
-        "color_scheme": "scheme-1",
-        "padding_top": 96,
-        "padding_bottom": 80,
-        "anchor": "fonctionnement"
-      },
-      "blocks": {
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "number": "1",
-            "icon": "neck",
-            "title": "Creux central",
-            "text": "<p>Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée.</p>"
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "number": "2",
-            "icon": "layers",
-            "title": "Rebord cervical",
-            "text": "<p>Un bord légèrement bombé vient se loger dans le creux de la nuque pour combler l'espace entre le cou et le matelas.</p>"
-          }
-        },
-        "feature_3": {
-          "type": "feature",
-          "settings": {
-            "number": "3",
-            "icon": "moon",
-            "title": "Ailes latérales",
-            "text": "<p>Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous vous tournez sur le côté.</p>"
-          }
-        },
-        "feature_4": {
-          "type": "feature",
-          "settings": {
-            "number": "4",
-            "icon": "check",
-            "title": "Encoches pour les bras",
-            "text": "<p>Vous pouvez glisser un bras sous l'oreiller sans le soulever ni vous tordre l'épaule.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "feature_1",
-        "feature_2",
-        "feature_3",
-        "feature_4"
-      ]
-    },
-    "positions": {
-      "type": "pp-positions",
-      "settings": {
-        "eyebrow": "Trouvez votre combinaison",
-        "title": "Comment dormez-vous ?",
-        "text": "<p>Chaque position sollicite le corps différemment. Voici ce que nous conseillons.</p>",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
-      },
-      "blocks": {
-        "position_1": {
-          "type": "position",
-          "settings": {
-            "position": "back",
-            "title": "Sur le dos",
-            "text": "La tête doit rester dans l'axe, ni relevée ni basculée en arrière.",
-            "advice": "L'Oreiller Papillon, côté le plus bas vers vous.",
-            "link_label": "Voir l'oreiller",
-            "link": "shopify://products/loreiller-papillon"
-          }
-        },
-        "position_2": {
-          "type": "position",
-          "settings": {
-            "position": "side",
-            "title": "Sur le côté",
-            "text": "Il faut combler la hauteur de l'épaule et garder les hanches parallèles.",
-            "advice": "Le Pack Nuit complète : oreiller + coussin genoux.",
-            "link_label": "Voir le pack",
-            "link": "shopify://products/pack-dormeur-sur-le-cote"
-          }
-        },
-        "position_3": {
-          "type": "position",
-          "settings": {
-            "position": "stomach",
-            "title": "Sur le ventre",
-            "text": "La position la plus exigeante pour la nuque : un oreiller haut la cambre davantage.",
-            "advice": "Préférez un oreiller très bas, ou tentez la transition vers le côté avec le coussin genoux.",
-            "link_label": "Voir le coussin genoux",
-            "link": "shopify://products/le-coussin-genoux"
-          }
-        }
-      },
-      "block_order": [
-        "position_1",
-        "position_2",
-        "position_3"
       ]
     },
     "compare": {
@@ -299,61 +173,6 @@
         "row_6"
       ]
     },
-    "steps": {
-      "type": "pp-steps",
-      "settings": {
-        "eyebrow": "Mode d'emploi",
-        "title": "Bien démarrer avec votre oreiller",
-        "text": "",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
-      },
-      "blocks": {
-        "step_1": {
-          "type": "step",
-          "settings": {
-            "title": "Laissez-le respirer",
-            "text": "<p>À la réception, sortez l'oreiller de son emballage et laissez-le 24 à 48 h dans une pièce aérée pour qu'il reprenne tout son volume.</p>"
-          }
-        },
-        "step_2": {
-          "type": "step",
-          "settings": {
-            "title": "Choisissez votre hauteur",
-            "text": "<p>Tournez l'oreiller : le bord le plus bas pour les nuques fines ou le dos, le plus haut pour les épaules larges ou le côté.</p>"
-          }
-        },
-        "step_3": {
-          "type": "step",
-          "settings": {
-            "title": "Laissez-vous quelques nuits",
-            "text": "<p>Le corps a ses habitudes. Comptez une à deux semaines pour vous y faire : c'est pour ça que l'essai dure 30 nuits.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "step_1",
-        "step_2",
-        "step_3"
-      ]
-    },
-    "guarantee": {
-      "type": "pp-guarantee",
-      "settings": {
-        "seal_number": "30",
-        "seal_unit": "nuits",
-        "seal_ring": "Essai · Satisfait ou remboursé · Essai · Satisfait ou remboursé ·",
-        "eyebrow": "Sans risque",
-        "title": "Dormez dessus 30 nuits. Ensuite, décidez.",
-        "text": "<p>Il faut quelques nuits pour s'habituer à un nouvel oreiller. Si au bout de 30 nuits il ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
-        "button_label": "Choisir mon oreiller",
-        "button_link": "shopify://products/loreiller-papillon",
-        "color_scheme": "scheme-5",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
-    },
     "faq": {
       "type": "collapsible-content",
       "settings": {
@@ -362,8 +181,8 @@
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
-        "container_color_scheme": "scheme-2",
-        "color_scheme": "scheme-1",
+        "container_color_scheme": "scheme-6",
+        "color_scheme": "scheme-2",
         "open_first_collapsible_row": true,
         "image_ratio": "adapt",
         "desktop_layout": "image_first",
@@ -429,25 +248,6 @@
         "collapsible_row_5",
         "collapsible_row_6"
       ]
-    },
-    "products": {
-      "type": "pp-products",
-      "settings": {
-        "anchor": "produits",
-        "eyebrow": "La collection",
-        "title": "Nos essentiels du sommeil",
-        "text": "<p>Pensés ensemble, pour la nuque, le dos et les hanches.</p>",
-        "collection": "tous-nos-produits",
-        "limit": 4,
-        "featured_product": "pack-dormeur-sur-le-cote",
-        "featured_image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
-        "featured_badge": "Le duo",
-        "featured_text": "L'oreiller cervical et le coussin genoux réunis : la nuque et les hanches alignées, toute la nuit.",
-        "show_all": true,
-        "color_scheme": "scheme-1",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
     },
     "reviews": {
       "type": "pp-reviews",
@@ -584,23 +384,110 @@
         "tags": "Fortement recommandé (19)\nBonne qualité (15)\nLivraison rapide (12)",
         "source_note": "Avis laissés par des acheteurs de cet oreiller sur la boutique AliExpress de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
         "verified_label": "Acheteur vérifié · AliExpress",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding_top": 88,
         "padding_bottom": 88
+      }
+    },
+    "fonctionnement": {
+      "type": "pp-spotlight",
+      "blocks": {
+        "zone_1": {
+          "type": "zone",
+          "settings": {
+            "x": 54,
+            "y": 45,
+            "title": "Creux central",
+            "text": "Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée."
+          }
+        },
+        "zone_2": {
+          "type": "zone",
+          "settings": {
+            "x": 52,
+            "y": 63,
+            "title": "Rebord cervical",
+            "text": "Il se loge sous la nuque et comble l'espace entre le cou et le matelas."
+          }
+        },
+        "zone_3": {
+          "type": "zone",
+          "settings": {
+            "x": 82,
+            "y": 41,
+            "title": "Ailes latérales",
+            "text": "Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous dormez sur le côté."
+          }
+        },
+        "zone_4": {
+          "type": "zone",
+          "settings": {
+            "x": 23,
+            "y": 53,
+            "title": "Encoches pour les bras",
+            "text": "Glissez un bras sous l'oreiller sans le soulever ni vous tordre l'épaule."
+          }
+        },
+        "zone_5": {
+          "type": "zone",
+          "settings": {
+            "x": 37,
+            "y": 66,
+            "title": "Panneaux respirants",
+            "text": "Les côtés en maille laissent circuler l'air : la tête reste au frais toute la nuit."
+          }
+        }
+      },
+      "block_order": [
+        "zone_1",
+        "zone_2",
+        "zone_3",
+        "zone_4",
+        "zone_5"
+      ],
+      "settings": {
+        "anchor": "fonctionnement",
+        "eyebrow": "Le fonctionnement",
+        "title": "Cinq zones, un seul objectif : votre nuque.",
+        "text": "<p>Survolez les points pour découvrir chaque zone.</p>",
+        "image": "shopify://shop_images/oreiller-cervical-papillon-studio.jpg",
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 88
+      }
+    },
+    "showcase": {
+      "type": "pp-showcase",
+      "settings": {
+        "anchor": "produits",
+        "eyebrow": "La collection",
+        "title": "Notre oreiller signature",
+        "text": "",
+        "main_product": "loreiller-papillon",
+        "main_badge": "Best-seller",
+        "main_eyebrow": "Oreiller ergonomique",
+        "main_text": "La forme papillon garde la tête dans l'axe du dos, sur le dos comme sur le côté. Le confort d'un sommeil bien aligné, nuit après nuit.",
+        "main_points": "<strong>Nuque soutenue</strong> sur le dos comme sur le côté\n<strong>Mousse à mémoire de forme</strong> qui ne s'affaisse pas\n<strong>Housse respirante</strong>, amovible et lavable",
+        "rating": "4.8",
+        "rating_count": "164",
+        "complements_title": "Complétez votre nuit",
+        "complement_1": "le-coussin-genoux",
+        "complement_1_text": "Garde les hanches alignées quand vous dormez sur le côté.",
+        "complement_2": "pack-dormeur-sur-le-cote",
+        "complement_2_text": "L'oreiller et le coussin genoux réunis, moins cher qu'à l'unité.",
+        "color_scheme": "scheme-2",
+        "padding_top": 88,
+        "padding_bottom": 96
       }
     }
   },
   "order": [
     "hero_photo",
-    "features",
-    "problem",
-    "products",
+    "fonctionnement",
+    "showcase",
     "reviews",
-    "trust",
-    "positions",
     "compare",
-    "steps",
-    "guarantee",
+    "trust",
     "faq"
   ]
 }

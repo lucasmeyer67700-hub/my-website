@@ -151,22 +151,6 @@
         "item_4"
       ]
     },
-    "guarantee": {
-      "type": "pp-guarantee",
-      "settings": {
-        "seal_number": "30",
-        "seal_unit": "nuits",
-        "seal_ring": "Essai · Satisfait ou remboursé · Essai · Satisfait ou remboursé ·",
-        "eyebrow": "Sans risque",
-        "title": "Dormez dessus 30 nuits. Ensuite, décidez.",
-        "text": "<p>Si au bout de 30 nuits le produit ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
-        "button_label": "",
-        "button_link": "",
-        "color_scheme": "scheme-5",
-        "padding_top": 72,
-        "padding_bottom": 72
-      }
-    },
     "faq": {
       "type": "collapsible-content",
       "settings": {
@@ -175,7 +159,7 @@
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
-        "container_color_scheme": "scheme-2",
+        "container_color_scheme": "scheme-6",
         "color_scheme": "scheme-1",
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
@@ -264,7 +248,7 @@
       "type": "pp-sticky-atc",
       "settings": {
         "button_label": "Ajouter au panier",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-6"
       }
     },
     "bundle": {
@@ -312,7 +296,6 @@
     "main",
     "bundle",
     "trust",
-    "guarantee",
     "faq",
     "related",
     "sticky"

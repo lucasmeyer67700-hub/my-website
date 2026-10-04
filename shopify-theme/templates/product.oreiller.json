@@ -220,7 +220,7 @@
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
-        "container_color_scheme": "scheme-2",
+        "container_color_scheme": "scheme-6",
         "color_scheme": "scheme-1",
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
@@ -309,7 +309,7 @@
       "type": "pp-sticky-atc",
       "settings": {
         "button_label": "Ajouter au panier",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-6"
       }
     },
     "bundle": {
