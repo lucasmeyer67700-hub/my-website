@@ -3,45 +3,51 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "title_1": {
+        "eyebrow": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<p class=\"product__text uppercase pp-pdp-eyebrow\">{{ product.type }} · Livraison offerte</p>"
+          }
+        },
+        "title": {
           "type": "title",
           "settings": {}
         },
-        "price_2": {
+        "price": {
           "type": "price",
           "settings": {}
         },
-        "custom_liquid_3": {
+        "save": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.compare_at_price > v.price -%}\n  <p class=\"pp-save\">Vous économisez {{ v.compare_at_price | minus: v.price | money }} ({{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %)</p>\n{%- endif -%}"
+            "custom_liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.compare_at_price > v.price -%}\n  <p class=\"pp-save\">Vous économisez {{ v.compare_at_price | minus: v.price | money }}</p>\n{%- endif -%}"
           }
         },
-        "variant_picker_4": {
+        "variant_picker": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
             "swatch_shape": "circle"
           }
         },
-        "quantity_selector_5": {
+        "quantity": {
           "type": "quantity_selector",
           "settings": {}
         },
-        "buy_buttons_6": {
+        "buy": {
           "type": "buy_buttons",
           "settings": {
             "show_dynamic_checkout": true,
             "show_gift_card_recipient": false
           }
         },
-        "custom_liquid_7": {
+        "delivery": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<p class=\"pp-product-note\">{% render 'pp-icon', icon: 'truck' %}<span>Expédié avec suivi, livré en <strong>7 à 14 jours ouvrés</strong> en France métropolitaine.</span></p>"
+            "custom_liquid": "{% render 'pp-delivery', min: 7, max: 14 %}"
           }
         },
-        "icon_with_text_8": {
+        "icons": {
           "type": "icon-with-text",
           "settings": {
             "layout": "horizontal",
@@ -53,43 +59,46 @@
             "heading_3": "Paiement sécurisé"
           }
         },
-        "description_9": {
-          "type": "description",
-          "settings": {}
+        "description": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-description', title: 'Description' %}"
+          }
         },
-        "collapsible_tab_10": {
+        "tab_ship": {
           "type": "collapsible_tab",
           "settings": {
             "heading": "Livraison et essai 30 nuits",
             "icon": "truck",
-            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi. Délai : 7 à 14 jours ouvrés.</p><p>Vous disposez de 30 nuits pour essayer votre produit. S'il ne vous convient pas, contactez-nous et nous organisons le retour puis le remboursement.</p>"
+            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi, en 7 à 14 jours ouvrés.</p><p>Vous avez 30 nuits pour l'essayer. S'il ne vous convient pas, écrivez-nous : nous organisons le retour puis le remboursement.</p>"
           }
         },
-        "collapsible_tab_11": {
+        "tab_care": {
           "type": "collapsible_tab",
           "settings": {
             "heading": "Entretien",
             "icon": "washing",
-            "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la régulièrement.</p><p>À la réception, laissez le produit respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
+            "content": "<p>Housses et taies lavables en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps.</p>"
           }
         }
       },
       "block_order": [
-        "title_1",
-        "price_2",
-        "custom_liquid_3",
-        "variant_picker_4",
-        "quantity_selector_5",
-        "buy_buttons_6",
-        "custom_liquid_7",
-        "icon_with_text_8",
-        "description_9",
-        "collapsible_tab_10",
-        "collapsible_tab_11"
+        "eyebrow",
+        "title",
+        "price",
+        "save",
+        "variant_picker",
+        "quantity",
+        "buy",
+        "delivery",
+        "icons",
+        "description",
+        "tab_ship",
+        "tab_care"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
         "media_position": "left",
         "gallery_layout": "thumbnail_slider",
         "media_size": "large",
@@ -99,8 +108,8 @@
         "mobile_thumbnails": "show",
         "hide_variants": false,
         "enable_video_looping": false,
-        "padding_top": 28,
-        "padding_bottom": 56
+        "padding_top": 40,
+        "padding_bottom": 80
       }
     },
     "trust": {
@@ -254,13 +263,12 @@
     "bundle": {
       "type": "pp-bundle-promo",
       "settings": {
-        "product": "pack-dormeur-sur-le-cote",
-        "image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
-        "eyebrow": "Le duo des dormeurs sur le côté",
-        "title": "Complétez votre nuit",
-        "text": "<p>Dormir sur le côté sollicite deux zones : la nuque et les hanches. Le Pack Nuit complète s'occupe des deux, pour moins cher qu'à l'unité.</p>",
+        "product": "pack-oreiller-taie",
+        "eyebrow": "Le duo malin",
+        "title": "L'oreiller et sa taie de rechange",
+        "text": "<p>Une taie sur l'oreiller, une au lavage. Choisissez le coloris de chacun.</p>",
         "compare_note": "prix des deux produits achetés séparément",
-        "button_label": "Voir le Pack Nuit complète",
+        "button_label": "Voir le Pack Oreiller + Taie",
         "color_scheme": "scheme-2",
         "padding_top": 72,
         "padding_bottom": 72
@@ -269,19 +277,19 @@
         "p1": {
           "type": "point",
           "settings": {
-            "text": "1 Oreiller Cervical, au coloris de votre choix"
+            "text": "1 Oreiller Cervical Papillon, gris perle ou anthracite"
           }
         },
         "p2": {
           "type": "point",
           "settings": {
-            "text": "1 Coussin Genoux Ergonomique"
+            "text": "1 Taie de rechange : noire, grise ou verte"
           }
         },
         "p3": {
           "type": "point",
           "settings": {
-            "text": "Livraison offerte et essai 30 nuits sur l'ensemble"
+            "text": "Livraison offerte et essai 30 nuits"
           }
         }
       },

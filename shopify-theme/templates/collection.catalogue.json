@@ -17,7 +17,12 @@
         "builder_note": "La remise s'applique automatiquement dans le panier.",
         "color_scheme": "scheme-1",
         "padding_top": 64,
-        "padding_bottom": 96
+        "padding_bottom": 96,
+        "packs": [
+          "pack-oreiller-taie",
+          "pack-dormeur-sur-le-cote"
+        ],
+        "packs_title": "Nos packs"
       }
     },
     "trust": {

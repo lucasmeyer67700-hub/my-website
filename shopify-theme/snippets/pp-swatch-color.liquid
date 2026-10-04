@@ -1,0 +1,20 @@
+{%- comment -%} Couleur d'une pastille à partir du nom du coloris. {%- endcomment -%}
+{%- liquid
+  assign n = name | downcase
+  case n
+    when 'noir'
+      echo '#1d1e21'
+    when 'gris'
+      echo '#8a8c90'
+    when 'vert', 'vert sauge'
+      echo '#9db5a6'
+    when 'gris perle'
+      echo '#d9dce1'
+    when 'gris anthracite'
+      echo '#3a3d44'
+    when 'bleu ardoise'
+      echo '#4a5d78'
+    else
+      echo '#c9cdd3'
+  endcase
+-%}

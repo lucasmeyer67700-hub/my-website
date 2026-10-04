@@ -23,37 +23,29 @@
     {%- comment -%} Les cartes produits {%- endcomment -%}
     <div class="pp-cat__grid">
       {%- for p in collection.products limit: 6 -%}
-        {%- assign v = p.selected_or_first_available_variant -%}
-        <article class="pp-cat__card pp-reveal" style="--d: {{ forloop.index0 }}">
-          <a class="pp-cat__media" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
-            {%- if p.featured_image -%}
-              {{ p.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 33vw, 100vw', widths: '400, 700, 1000', class: 'pp-cat__img', alt: '' }}
-            {%- else -%}
-              <span class="pp-cat__illu">{% render 'pp-illustration', name: 'pillow', uid: p.id %}</span>
-            {%- endif -%}
-            {%- if forloop.first and section.settings.first_badge != blank -%}
-              <span class="pp-cat__badge">{{ section.settings.first_badge }}</span>
-            {%- endif -%}
-          </a>
-          <div class="pp-cat__body">
-            <p class="pp-cat__type">{{ p.type }}</p>
-            <h2 class="pp-cat__title"><a href="{{ p.url }}">{{ p.title }}</a></h2>
-            {%- if forloop.first and section.settings.rating != blank -%}
-              {%- assign pct = section.settings.rating | plus: 0 | divided_by: 5.0 | times: 100 -%}
-              <p class="pp-rating-line">
-                <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true"><span class="pp-stars__base">{{ stars }}</span><span class="pp-stars__fill">{{ stars }}</span></span>
-                <span><strong>{{ section.settings.rating | replace: '.', ',' }}</strong>/5 · {{ section.settings.rating_count }} avis</span>
-              </p>
-            {%- endif -%}
-            <p class="pp-cat__desc">{{ p.description | strip_html | truncatewords: 18 }}</p>
-            <div class="pp-cat__foot">
-              <span class="pp-cat__price">{%- if p.price_varies -%}Dès {% endif -%}{{ p.price | money }}</span>
-              <a class="pp-cat__cta" href="{{ p.url }}">Découvrir <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
+        {%- liquid
+          assign badge = ''
+          assign rating = ''
+          if forloop.first
+            assign badge = section.settings.first_badge
+            assign rating = section.settings.rating
+          endif
+        -%}
+        {% render 'pp-cat-card', p: p, index: forloop.index0, badge: badge, rating: rating, rating_count: section.settings.rating_count, swatches: true, stars: stars %}
       {%- endfor -%}
     </div>
+
+    {%- comment -%} Packs déjà composés {%- endcomment -%}
+    {%- if section.settings.packs.size > 0 -%}
+      <div class="pp-cat__packs">
+        <p class="pp-show__extra-title pp-reveal">{{ section.settings.packs_title }}</p>
+        <div class="pp-cat__grid pp-cat__grid--packs">
+          {%- for p in section.settings.packs -%}
+            {% render 'pp-cat-card', p: p, index: forloop.index0, badge: '', rating: '', rating_count: '', swatches: false, stars: stars %}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
 
     {%- comment -%} Composez votre pack {%- endcomment -%}
     {%- if section.settings.show_builder and collection.products.size > 1 -%}
@@ -81,7 +73,7 @@
               <span class="pp-pack__tick" aria-hidden="true"></span>
               <span class="pp-pack__thumb">
                 {%- if p.featured_image -%}
-                  {{ p.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
+                  {{ v.featured_image | default: p.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                 {%- else -%}
                   {% render 'pp-illustration', name: 'pillow', uid: p.id %}
                 {%- endif -%}
@@ -93,7 +85,7 @@
                 {%- else -%}
                   <select class="pp-pack__variant" aria-label="{{ p.options.first }} : {{ p.title | escape }}">
                     {%- for variant in p.variants -%}
-                      <option value="{{ variant.id }}" data-price="{{ variant.price }}" {% if variant.id == v.id %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title }}</option>
+                      <option value="{{ variant.id }}" data-price="{{ variant.price }}"{% if variant.featured_image %} data-img="{{ variant.featured_image | image_url: width: 240 }}"{% endif %} {% if variant.id == v.id %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title }}</option>
                     {%- endfor -%}
                   </select>
                 {%- endif -%}
@@ -119,6 +111,20 @@
 </div>
 
 <script>
+  // Pastilles de coloris : changent la photo et le lien de la carte.
+  document.querySelectorAll('.pp-cat__card').forEach(function (card) {
+    card.querySelectorAll('.pp-cat__swatch').forEach(function (sw) {
+      sw.addEventListener('click', function () {
+        card.querySelectorAll('.pp-cat__swatch').forEach(function (s) { s.classList.toggle('is-active', s === sw); });
+        var name = card.querySelector('.pp-cat__swatch-name');
+        if (name) name.textContent = sw.getAttribute('aria-label');
+        var img = card.querySelector('.pp-cat__img');
+        if (img && sw.dataset.img) { img.removeAttribute('srcset'); img.src = sw.dataset.img; }
+        if (sw.dataset.url) card.querySelectorAll('[data-pp-card-link]').forEach(function (a) { a.href = sw.dataset.url; });
+      });
+    });
+  });
+
   if (!customElements.get('pp-pack-builder')) {
     customElements.define('pp-pack-builder', class extends HTMLElement {
       connectedCallback() {
@@ -141,6 +147,12 @@
           const field = row.querySelector('.pp-pack__variant');
           const opt = field.tagName === 'SELECT' ? field.selectedOptions[0] : field;
           row.querySelector('[data-pp-item-price]').textContent = this.fmt.format(opt.dataset.price / 100);
+          const thumb = row.querySelector('.pp-pack__thumb img');
+          if (thumb && opt.dataset.img && thumb.dataset.src !== opt.dataset.img) {
+            thumb.dataset.src = opt.dataset.img;
+            thumb.removeAttribute('srcset');
+            thumb.src = opt.dataset.img;
+          }
           row.classList.toggle('is-checked', row.querySelector('.pp-pack__check').checked);
         });
         const items = this.selected();
@@ -193,6 +205,9 @@
     { "type": "text", "id": "first_badge", "label": "Badge du premier produit", "default": "Best-seller" },
     { "type": "text", "id": "rating", "label": "Note du premier produit (sur 5)" },
     { "type": "text", "id": "rating_count", "label": "Nombre d'avis du premier produit" },
+    { "type": "header", "content": "Packs déjà composés" },
+    { "type": "product_list", "id": "packs", "label": "Packs", "limit": 4 },
+    { "type": "text", "id": "packs_title", "label": "Titre", "default": "Nos packs" },
     { "type": "header", "content": "Composez votre pack" },
     { "type": "checkbox", "id": "show_builder", "label": "Afficher", "default": true },
     { "type": "text", "id": "builder_eyebrow", "label": "Sur-titre", "default": "Sur mesure" },

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Carte produit du catalogue.
+  Paramètres : p (produit), index, badge, rating, rating_count, swatches (bool), stars (svg)
+  Les pastilles de coloris changent la photo de la carte quand la variante a sa propre image.
+{%- endcomment -%}
+{%- assign v = p.selected_or_first_available_variant -%}
+<article class="pp-cat__card pp-reveal" style="--d: {{ index }}">
+  <a class="pp-cat__media" href="{{ p.url }}" tabindex="-1" aria-hidden="true" data-pp-card-link>
+    {%- if p.featured_image -%}
+      {{ p.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 33vw, 100vw', widths: '400, 700, 1000', class: 'pp-cat__img', alt: '' }}
+    {%- else -%}
+      <span class="pp-cat__illu">{% render 'pp-illustration', name: 'pillow', uid: p.id %}</span>
+    {%- endif -%}
+    {%- if badge != blank -%}
+      <span class="pp-cat__badge">{{ badge }}</span>
+    {%- elsif v.compare_at_price > v.price -%}
+      <span class="pp-cat__badge">−{{ v.compare_at_price | minus: v.price | money }}</span>
+    {%- endif -%}
+  </a>
+  <div class="pp-cat__body">
+    <p class="pp-cat__type">{{ p.type }}</p>
+    <h2 class="pp-cat__title"><a href="{{ p.url }}" data-pp-card-link>{{ p.title }}</a></h2>
+    {%- if rating != blank -%}
+      {%- assign pct = rating | plus: 0 | divided_by: 5.0 | times: 100 -%}
+      <p class="pp-rating-line">
+        <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true"><span class="pp-stars__base">{{ stars }}</span><span class="pp-stars__fill">{{ stars }}</span></span>
+        <span><strong>{{ rating | replace: '.', ',' }}</strong>/5 · {{ rating_count }} avis</span>
+      </p>
+    {%- endif -%}
+    <p class="pp-cat__desc">{{ p.description | strip_html | truncatewords: 18 }}</p>
+
+    {%- assign copt = p.options_with_values | first -%}
+    {%- if swatches and copt.values.size > 1 and copt.name contains 'oloris' -%}
+      <div class="pp-cat__swatches" role="group" aria-label="{{ copt.name }}">
+        {%- for val in copt.values -%}
+          {%- assign vv = p.variants | where: 'option1', val | first -%}
+          <button
+            type="button"
+            class="pp-cat__swatch{% if vv.id == v.id %} is-active{% endif %}"
+            style="--sw: {% render 'pp-swatch-color', name: val %}"
+            aria-label="{{ val | escape }}"
+            title="{{ val | escape }}"
+            data-url="{{ vv.url }}"
+            {%- if vv.featured_image %} data-img="{{ vv.featured_image | image_url: width: 1000 }}"{% endif %}
+          ></button>
+        {%- endfor -%}
+        <span class="pp-cat__swatch-name">{{ v.option1 }}</span>
+      </div>
+    {%- endif -%}
+
+    <div class="pp-cat__foot">
+      <span class="pp-cat__price">
+        {%- if p.price_varies -%}Dès {% endif -%}{{ p.price | money }}
+        {%- if v.compare_at_price > v.price %} <s>{{ v.compare_at_price | money }}</s>{% endif -%}
+      </span>
+      <a class="pp-cat__cta" href="{{ p.url }}" data-pp-card-link>Découvrir <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</article>

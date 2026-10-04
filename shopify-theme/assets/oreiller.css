@@ -1062,3 +1062,40 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
   .pp-pack__name { font-size: 1.8rem; }
 }
 .pp-pack__add { font-size: 1.4rem; letter-spacing: 0.06em; padding: 0 2rem; }
+
+/* Pastilles de coloris (catalogue) */
+.pp-cat__swatches { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.pp-cat__swatch {
+  width: 2.6rem; height: 2.6rem; padding: 0; border-radius: 50%;
+  border: 2px solid var(--pp-white); background: var(--sw);
+  box-shadow: 0 0 0 1px rgba(22, 23, 26, 0.18);
+  cursor: pointer; transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.pp-cat__swatch:hover { transform: scale(1.08); }
+.pp-cat__swatch.is-active { box-shadow: 0 0 0 2px var(--pp-gold); }
+.pp-cat__swatch:focus-visible { outline: 2px solid var(--pp-gold-deep); outline-offset: 2px; }
+.pp-cat__swatch-name { font-size: 1.3rem; color: rgba(30, 32, 36, 0.65); margin-left: 0.4rem; }
+.pp-cat__img { transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.25s ease; }
+.pp-cat__price s { margin-left: 0.4rem; font-weight: 400; font-size: 1.4rem; color: var(--pp-steel); }
+.pp-cat__packs { margin-top: 5.6rem; }
+@media screen and (min-width: 990px) { .pp-cat__grid--packs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Pastilles de coloris dans le sélecteur de variantes des fiches produits (Dawn) */
+.product-form__input input[type='radio'] + label { display: inline-flex; align-items: center; gap: 0.8rem; }
+.product-form__input input[type='radio'][value='Noir'] + label::before,
+.product-form__input input[type='radio'][value='Gris'] + label::before,
+.product-form__input input[type='radio'][value='Vert'] + label::before,
+.product-form__input input[type='radio'][value='Gris perle'] + label::before,
+.product-form__input input[type='radio'][value='Gris anthracite'] + label::before {
+  content: '';
+  width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+  flex: none;
+}
+.product-form__input input[type='radio'][value='Noir'] + label::before { background: #1d1e21; }
+.product-form__input input[type='radio'][value='Gris'] + label::before { background: #8a8c90; }
+.product-form__input input[type='radio'][value='Vert'] + label::before { background: #9db5a6; }
+.product-form__input input[type='radio'][value='Gris perle'] + label::before { background: #d9dce1; }
+.product-form__input input[type='radio'][value='Gris anthracite'] + label::before { background: #3a3d44; }
+.color-scheme-3 .product-form__input input[type='radio']:checked + label { border-color: var(--pp-gold); box-shadow: 0 0 0 1px var(--pp-gold); }
+[id^="MainProduct-"] .pp-pdp-eyebrow { color: var(--pp-gold-light); opacity: 1; margin: 0; }
