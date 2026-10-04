@@ -1,0 +1,76 @@
+{
+  "sections": {
+    "catalogue": {
+      "type": "pp-catalogue",
+      "settings": {
+        "eyebrow": "Le catalogue",
+        "title": "Nos essentiels du sommeil",
+        "text": "<p>Trois pièces pensées ensemble, pour la nuque, les hanches et le confort de chaque nuit.</p>",
+        "first_badge": "Best-seller",
+        "rating": "4.8",
+        "rating_count": "164",
+        "show_builder": true,
+        "builder_eyebrow": "Sur mesure",
+        "builder_title": "Composez votre pack",
+        "tier2_amount": 10,
+        "tier3_amount": 20,
+        "builder_note": "La remise s'applique automatiquement dans le panier.",
+        "color_scheme": "scheme-1",
+        "padding_top": 64,
+        "padding_bottom": 96
+      }
+    },
+    "trust": {
+      "type": "pp-trust-bar",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 48,
+        "padding_bottom": 48
+      },
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison offerte",
+            "text": "France métropolitaine, suivie"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "icon": "moon",
+            "title": "Essai 30 nuits",
+            "text": "Satisfait ou remboursé"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement sécurisé",
+            "text": "CB, PayPal, Apple Pay"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "Service client",
+            "text": "Réponse sous 24 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ]
+    }
+  },
+  "order": [
+    "catalogue",
+    "trust"
+  ]
+}
