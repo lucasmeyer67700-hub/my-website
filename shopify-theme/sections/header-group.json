@@ -59,10 +59,20 @@
         "padding_top": 16,
         "padding_bottom": 16
       }
+    },
+    "fade_header": {
+      "type": "pp-fade",
+      "settings": {
+        "color_from": "#16171A",
+        "color_to": "#FFFFFF",
+        "height": 72,
+        "hide_on_home": true
+      }
     }
   },
   "order": [
     "announcement-bar",
-    "header"
+    "header",
+    "fade_header"
   ]
 }

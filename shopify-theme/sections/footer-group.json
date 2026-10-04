@@ -9,46 +9,56 @@
           "type": "text",
           "settings": {
             "heading": "Le sommeil, bien aligné",
-            "subtext": "<p>Oreillers et coussins ergonomiques en mousse à mémoire de forme, pensés pour la nuque, le dos et les hanches. Essai 30 nuits sur tous nos produits.</p>"
-          }
-        },
-        "shop": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Boutique",
-            "menu": "main-menu"
+            "subtext": "<p>Oreillers et coussins ergonomiques. Livraison offerte en France, essai 30 nuits.</p>"
           }
         },
         "help": {
           "type": "link_list",
           "settings": {
-            "heading": "Aide & infos",
-            "menu": "footer"
+            "heading": "Aide",
+            "menu": "pied-de-page-aide"
+          }
+        },
+        "legal": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Informations",
+            "menu": "pied-de-page-legal"
           }
         }
       },
       "block_order": [
         "brand",
-        "shop",
-        "help"
+        "help",
+        "legal"
       ],
       "settings": {
         "color_scheme": "scheme-3",
         "newsletter_enable": true,
-        "newsletter_heading": "Conseils sommeil et offres en avant-première",
+        "newsletter_heading": "Offres et conseils sommeil",
         "enable_follow_on_shop": false,
-        "show_social": true,
+        "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false,
         "payment_enable": true,
         "show_policy": true,
         "margin_top": 0,
-        "padding_top": 56,
-        "padding_bottom": 36
+        "padding_top": 24,
+        "padding_bottom": 32
+      }
+    },
+    "fade_footer": {
+      "type": "pp-fade",
+      "settings": {
+        "color_from": "#FFFFFF",
+        "color_to": "#16171A",
+        "height": 160,
+        "hide_on_home": false
       }
     }
   },
   "order": [
+    "fade_footer",
     "footer"
   ]
 }
