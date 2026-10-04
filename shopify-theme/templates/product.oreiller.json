@@ -72,10 +72,17 @@
             "icon": "washing",
             "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la régulièrement.</p><p>À la réception, laissez le produit respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
           }
+        },
+        "rating_line": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-rating-line', rating: '4.8', count: '164', anchor: 'avis' %}"
+          }
         }
       },
       "block_order": [
         "title_1",
+        "rating_line",
         "price_2",
         "custom_liquid_3",
         "variant_picker_4",
@@ -449,10 +456,151 @@
         "p2",
         "p3"
       ]
+    },
+    "reviews": {
+      "type": "pp-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "01 sept. 2026",
+            "rating": 5,
+            "text": "Très bien, excellente ergonomie, s'adapte bien au cou et ne provoque pas de sensation d'étouffement."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "11 août 2026",
+            "rating": 5,
+            "text": "C'est mieux que ce que j'imaginais, c'est incroyablement confortable, tous ceux qui l'essaient en veulent un."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "06 juil. 2026",
+            "rating": 5,
+            "text": "Il est arrivé en un peu plus d'une semaine, bien emballé. Le produit correspond à ce qui était annoncé.\nAvis supplémentaire : l'oreiller est vraiment excellent, il s'adapte parfaitement. Après quelques jours d'utilisation, j'ai déjà senti la différence."
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "25 juil. 2026",
+            "rating": 5,
+            "text": "J'ai adoré cet oreiller, il est merveilleux et très doux. Je vais en acheter un autre pour mon mari, ça vaut vraiment le coup !"
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "author": "N***r",
+            "date": "04 sept. 2026",
+            "rating": 5,
+            "text": "Article parfait. Il est arrivé à temps, correspond à la description, et j'ai très bien dormi la première nuit avec cet oreiller."
+          }
+        },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "18 août 2026",
+            "rating": 5,
+            "text": "Ça sent un peu les produits chimiques. J'ai dû le laisser aérer pendant 3 jours, mais ensuite on peut dormir très bien avec. Les dimensions sont correctes. La housse est amovible pour le lavage."
+          }
+        },
+        "review_7": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "01 juil. 2026",
+            "rating": 5,
+            "text": "Très bien, fortement recommandé. Doux, j'ai adoré l'oreiller."
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "author": "6***r",
+            "date": "04 août 2026",
+            "rating": 5,
+            "text": "Le produit semble être de bonne qualité et bien fabriqué, arrivé bien emballé sous vide. Il est arrivé très rapidement, bien avant le délai de livraison annoncé. Je le recommande."
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "22 sept. 2026",
+            "rating": 5,
+            "text": "Le produit est arrivé à temps ! C'est vraiment magnifique ! Je l'ai déjà essayé et j'ai été très satisfait !"
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "25 juil. 2026",
+            "rating": 5,
+            "text": "Excellente qualité, je le recommande."
+          }
+        },
+        "review_11": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "31 août 2026",
+            "rating": 5,
+            "text": "Confortable, arrivé à temps."
+          }
+        },
+        "review_12": {
+          "type": "review",
+          "settings": {
+            "author": "Acheteur AliExpress",
+            "date": "03 sept. 2026",
+            "rating": 5,
+            "text": "Livraison rapide, bon produit."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10",
+        "review_11",
+        "review_12"
+      ],
+      "settings": {
+        "anchor": "avis",
+        "eyebrow": "Avis clients",
+        "title": "Ils dorment déjà dessus",
+        "rating": "4.8",
+        "count": "164",
+        "tags": "Fortement recommandé (19)\nBonne qualité (15)\nLivraison rapide (12)",
+        "source_note": "Avis laissés par des acheteurs de cet oreiller sur la boutique AliExpress de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
+        "verified_label": "Acheteur vérifié · AliExpress",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
     "main",
+    "reviews",
     "features",
     "bundle",
     "problem",

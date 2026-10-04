@@ -673,3 +673,72 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
 .pp-ps__card--good { background: var(--pp-navy); }
 .pp-ps__card--good .pp-ps__visual { background: #24365a; }
 .pp-ps__card--good .pp-ps__visual rect:first-child { fill: #3a4e72; }
+
+/* ==========================================================================
+   Avis clients (pp-reviews)
+   ========================================================================== */
+.pp-stars { --w: 9rem; position: relative; display: inline-block; width: var(--w); height: 1.8rem; line-height: 0; color: #c9a227; flex: none; }
+.pp-stars--lg { --w: 14rem; height: 2.8rem; }
+.pp-stars svg { width: 100%; height: 100%; }
+.pp-stars__base { position: absolute; inset: 0; color: rgba(30, 32, 36, 0.14); }
+.pp-stars__fill { position: absolute; inset: 0; width: var(--pct, 100%); overflow: hidden; }
+.pp-stars__fill svg { width: var(--w); max-width: none; height: 100%; }
+
+.pp-reviews { overflow: hidden; }
+.pp-reviews__grid { display: grid; gap: 4rem; align-items: center; }
+@media screen and (min-width: 990px) { .pp-reviews__grid { grid-template-columns: minmax(30rem, 0.8fr) 2fr; gap: 6.4rem; } }
+.pp-reviews__title { margin: 0 0 2.4rem; }
+.pp-reviews__score { display: flex; align-items: center; gap: 2rem; }
+.pp-reviews__note { font-family: var(--pp-serif); font-size: 8rem; line-height: 0.9; font-weight: 500; color: var(--pp-ink); }
+.pp-reviews__count { margin: 0.8rem 0 0; font-size: 1.5rem; color: rgba(var(--color-foreground), 0.7); }
+.pp-reviews__tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 2.4rem 0 0; padding: 0; }
+.pp-reviews__tags li { padding: 0.6rem 1.4rem; border-radius: 99rem; background: var(--pp-white); border: 1px solid var(--pp-mist); font-size: 1.3rem; color: var(--pp-navy); }
+.pp-reviews__source { display: flex; gap: 1rem; align-items: flex-start; margin: 2.4rem 0 0; font-size: 1.25rem; line-height: 1.5; color: rgba(var(--color-foreground), 0.62); }
+.pp-reviews__source .pp-icon { width: 1.8rem; height: 1.8rem; flex: none; margin-top: 0.1rem; }
+
+/* Mur d'avis qui défile */
+.pp-reviews__wall {
+  display: grid; gap: 1.6rem; min-width: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.pp-reviews__row { overflow: hidden; }
+.pp-reviews__track { display: flex; width: max-content; animation: pp-marquee var(--pp-marquee, 70s) linear infinite; }
+.pp-reviews__row--reverse .pp-reviews__track { animation-direction: reverse; --pp-marquee: 80s; }
+.pp-reviews__wall:hover .pp-reviews__track, .pp-reviews__wall:focus-within .pp-reviews__track { animation-play-state: paused; }
+.pp-reviews__set { display: flex; gap: 1.6rem; padding-right: 1.6rem; }
+@keyframes pp-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.pp-review {
+  display: flex; flex-direction: column; gap: 1.2rem;
+  width: 34rem; flex: none;
+  padding: 2.2rem 2.4rem;
+  border-radius: var(--pp-radius-lg);
+  background: var(--pp-white);
+  color: var(--pp-ink);
+  box-shadow: 0 1px 2px rgba(30, 32, 36, 0.04), 0 10px 30px -18px rgba(30, 32, 36, 0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.pp-review:hover { transform: translateY(-4px); box-shadow: 0 2px 6px rgba(30, 32, 36, 0.05), 0 24px 44px -22px rgba(30, 32, 36, 0.4); }
+.pp-review__head { display: flex; align-items: center; gap: 1.2rem; }
+.pp-review__avatar { display: grid; place-items: center; width: 3.8rem; height: 3.8rem; border-radius: 50%; background: var(--pp-navy); color: var(--pp-white); font-weight: 600; font-size: 1.5rem; flex: none; }
+.pp-review__who { display: grid; line-height: 1.3; margin-right: auto; min-width: 0; }
+.pp-review__who strong { font-size: 1.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pp-review__who span { font-size: 1.2rem; color: var(--pp-steel); }
+.pp-review__text { margin: 0; font-size: 1.45rem; line-height: 1.6; flex: 1; }
+.pp-review__badge { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; letter-spacing: 0.04em; color: var(--pp-navy); }
+.pp-review__badge .pp-icon { width: 1.4rem; height: 1.4rem; stroke-width: 2.4; }
+@media screen and (max-width: 749px) {
+  .pp-review { width: 27rem; padding: 1.8rem; }
+  .pp-reviews__note { font-size: 6.4rem; }
+}
+/* Sans animation : défilement manuel */
+@media (prefers-reduced-motion: reduce) {
+  .pp-reviews__track { animation: none; }
+  .pp-reviews__row { overflow-x: auto; }
+  .pp-reviews__set[aria-hidden] { display: none; }
+}
+
+/* Ligne de note sous le titre produit */
+.pp-rating-line { display: inline-flex; align-items: center; gap: 1rem; font-size: 1.4rem; color: rgba(var(--color-foreground), 0.8); text-decoration: none; }
+.pp-rating-line:hover span:last-child { text-decoration: underline; }
