@@ -1,0 +1,24 @@
+{%- comment -%}
+  « Commandez aujourd'hui, livré entre le … et le … » calculé dans le navigateur
+  (jours ouvrés, week-ends exclus) à partir du délai annoncé dans la politique de livraison.
+  Usage : {% render 'pp-delivery', min: 7, max: 14 %}
+{%- endcomment -%}
+<p class="pp-delivery" data-min="{{ min | default: 7 }}" data-max="{{ max | default: 14 }}">
+  {% render 'pp-icon', icon: 'truck' %}
+  <span>Livraison offerte et suivie · <span data-pp-dates>en {{ min | default: 7 }} à {{ max | default: 14 }} jours ouvrés</span></span>
+</p>
+<script>
+  (function () {
+    var el = document.currentScript.previousElementSibling;
+    var out = el && el.querySelector('[data-pp-dates]');
+    if (!out) return;
+    function addBusinessDays(date, n) {
+      var d = new Date(date);
+      while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6 !== 0) n--; }
+      return d;
+    }
+    var fmt = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+    var now = new Date();
+    out.textContent = 'chez vous entre le ' + fmt.format(addBusinessDays(now, +el.dataset.min)) + ' et le ' + fmt.format(addBusinessDays(now, +el.dataset.max));
+  })();
+</script>

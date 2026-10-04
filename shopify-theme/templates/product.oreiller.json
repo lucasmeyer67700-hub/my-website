@@ -3,45 +3,70 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "title_1": {
+        "eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "Oreiller ergonomique · Mousse à mémoire de forme",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
           "type": "title",
           "settings": {}
         },
-        "price_2": {
+        "rating_line": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-rating-line', rating: '4.8', count: '164', anchor: 'avis' %}"
+          }
+        },
+        "price": {
           "type": "price",
           "settings": {}
         },
-        "custom_liquid_3": {
+        "save": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.compare_at_price > v.price -%}\n  <p class=\"pp-save\">Vous économisez {{ v.compare_at_price | minus: v.price | money }} ({{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %)</p>\n{%- endif -%}"
+            "custom_liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.compare_at_price > v.price -%}\n  <p class=\"pp-save\">Vous économisez {{ v.compare_at_price | minus: v.price | money }}</p>\n{%- endif -%}"
           }
         },
-        "variant_picker_4": {
+        "pitch": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<p class=\"pp-pitch\">Pensé pour les dormeurs sur le dos et sur le côté : la tête reste dans l'axe, la nuque se repose, et vous n'avez plus à chercher votre position au milieu de la nuit.</p>"
+          }
+        },
+        "benefits": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<ul class=\"pp-benefits\" role=\"list\"><li><span><strong>Nuque soutenue</strong> sur le dos comme sur le côté</span></li><li><span><strong>Mousse à mémoire de forme</strong> qui ne s'affaisse pas</span></li><li><span><strong>Housse respirante</strong>, amovible et lavable</span></li></ul>"
+          }
+        },
+        "variant_picker": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
             "swatch_shape": "circle"
           }
         },
-        "quantity_selector_5": {
+        "quantity": {
           "type": "quantity_selector",
           "settings": {}
         },
-        "buy_buttons_6": {
+        "buy": {
           "type": "buy_buttons",
           "settings": {
             "show_dynamic_checkout": true,
             "show_gift_card_recipient": false
           }
         },
-        "custom_liquid_7": {
+        "delivery": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<p class=\"pp-product-note\">{% render 'pp-icon', icon: 'truck' %}<span>Expédié avec suivi, livré en <strong>7 à 14 jours ouvrés</strong> en France métropolitaine.</span></p>"
+            "custom_liquid": "{% render 'pp-delivery', min: 7, max: 14 %}"
           }
         },
-        "icon_with_text_8": {
+        "icons": {
           "type": "icon-with-text",
           "settings": {
             "layout": "horizontal",
@@ -53,50 +78,49 @@
             "heading_3": "Paiement sécurisé"
           }
         },
-        "description_9": {
-          "type": "description",
-          "settings": {}
+        "description": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-description', title: 'Description' %}"
+          }
         },
-        "collapsible_tab_10": {
+        "tab_ship": {
           "type": "collapsible_tab",
           "settings": {
             "heading": "Livraison et essai 30 nuits",
             "icon": "truck",
-            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi. Délai : 7 à 14 jours ouvrés.</p><p>Vous disposez de 30 nuits pour essayer votre produit. S'il ne vous convient pas, contactez-nous et nous organisons le retour puis le remboursement.</p>"
+            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi, en 7 à 14 jours ouvrés.</p><p>Vous avez 30 nuits pour l'essayer. S'il ne vous convient pas, écrivez-nous : nous organisons le retour puis le remboursement.</p>"
           }
         },
-        "collapsible_tab_11": {
+        "tab_care": {
           "type": "collapsible_tab",
           "settings": {
             "heading": "Entretien",
             "icon": "washing",
-            "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la régulièrement.</p><p>À la réception, laissez le produit respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
-          }
-        },
-        "rating_line": {
-          "type": "custom_liquid",
-          "settings": {
-            "custom_liquid": "{% render 'pp-rating-line', rating: '4.8', count: '164', anchor: 'avis' %}"
+            "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps.</p><p>À la réception, laissez l'oreiller respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
           }
         }
       },
       "block_order": [
-        "title_1",
+        "eyebrow",
+        "title",
         "rating_line",
-        "price_2",
-        "custom_liquid_3",
-        "variant_picker_4",
-        "quantity_selector_5",
-        "buy_buttons_6",
-        "custom_liquid_7",
-        "icon_with_text_8",
-        "description_9",
-        "collapsible_tab_10",
-        "collapsible_tab_11"
+        "price",
+        "save",
+        "pitch",
+        "benefits",
+        "variant_picker",
+        "quantity",
+        "buy",
+        "delivery",
+        "icons",
+        "description",
+        "tab_ship",
+        "tab_care"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
         "media_position": "left",
         "gallery_layout": "thumbnail_slider",
         "media_size": "large",
@@ -106,82 +130,8 @@
         "mobile_thumbnails": "show",
         "hide_variants": false,
         "enable_video_looping": false,
-        "padding_top": 28,
-        "padding_bottom": 56
-      }
-    },
-    "features": {
-      "type": "pp-features",
-      "settings": {
-        "eyebrow": "Conçu zone par zone",
-        "title": "Chaque courbe a une raison d'être.",
-        "text": "",
-        "show_visual": true,
-        "numbered": true,
-        "color_scheme": "scheme-2",
-        "padding_top": 72,
-        "padding_bottom": 72
-      },
-      "blocks": {
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "number": "1",
-            "icon": "neck",
-            "title": "Creux central",
-            "text": "<p>Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée.</p>"
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "number": "2",
-            "icon": "layers",
-            "title": "Rebord cervical",
-            "text": "<p>Un bord légèrement bombé vient se loger dans le creux de la nuque pour combler l'espace entre le cou et le matelas.</p>"
-          }
-        },
-        "feature_3": {
-          "type": "feature",
-          "settings": {
-            "number": "3",
-            "icon": "moon",
-            "title": "Ailes latérales",
-            "text": "<p>Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous vous tournez sur le côté.</p>"
-          }
-        },
-        "feature_4": {
-          "type": "feature",
-          "settings": {
-            "number": "4",
-            "icon": "check",
-            "title": "Encoches pour les bras",
-            "text": "<p>Vous pouvez glisser un bras sous l'oreiller sans le soulever ni vous tordre l'épaule.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "feature_1",
-        "feature_2",
-        "feature_3",
-        "feature_4"
-      ]
-    },
-    "problem": {
-      "type": "pp-problem-solution",
-      "settings": {
-        "eyebrow": "Pourquoi ça change tout",
-        "title": "Une nuque alignée, des matins plus légers.",
-        "text": "",
-        "bad_label": "Oreiller classique",
-        "bad_title": "La nuque se plie",
-        "bad_text": "<p>Le garnissage s'écrase ou remonte la tête trop haut. Les muscles du cou restent tendus toute la nuit.</p>",
-        "good_label": "Oreiller papillon",
-        "good_title": "La nuque se repose",
-        "good_text": "<p>Le rebord épouse la nuque, le creux central stabilise la tête : tête, cou et dos restent alignés.</p>",
-        "color_scheme": "scheme-1",
-        "padding_top": 72,
-        "padding_bottom": 72
+        "padding_top": 40,
+        "padding_bottom": 80
       }
     },
     "compare": {
@@ -262,66 +212,11 @@
         "row_6"
       ]
     },
-    "steps": {
-      "type": "pp-steps",
-      "settings": {
-        "eyebrow": "Mode d'emploi",
-        "title": "Bien démarrer avec votre oreiller",
-        "text": "",
-        "color_scheme": "scheme-1",
-        "padding_top": 72,
-        "padding_bottom": 72
-      },
-      "blocks": {
-        "step_1": {
-          "type": "step",
-          "settings": {
-            "title": "Laissez-le respirer",
-            "text": "<p>À la réception, sortez l'oreiller de son emballage et laissez-le 24 à 48 h dans une pièce aérée pour qu'il reprenne tout son volume.</p>"
-          }
-        },
-        "step_2": {
-          "type": "step",
-          "settings": {
-            "title": "Choisissez votre hauteur",
-            "text": "<p>Tournez l'oreiller : le bord le plus bas pour les nuques fines ou le dos, le plus haut pour les épaules larges ou le côté.</p>"
-          }
-        },
-        "step_3": {
-          "type": "step",
-          "settings": {
-            "title": "Laissez-vous quelques nuits",
-            "text": "<p>Le corps a ses habitudes. Comptez une à deux semaines pour vous y faire : c'est pour ça que l'essai dure 30 nuits.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "step_1",
-        "step_2",
-        "step_3"
-      ]
-    },
-    "guarantee": {
-      "type": "pp-guarantee",
-      "settings": {
-        "seal_number": "30",
-        "seal_unit": "nuits",
-        "seal_ring": "Essai · Satisfait ou remboursé · Essai · Satisfait ou remboursé ·",
-        "eyebrow": "Sans risque",
-        "title": "Dormez dessus 30 nuits. Ensuite, décidez.",
-        "text": "<p>Si au bout de 30 nuits le produit ne vous convient pas, écrivez-nous : on organise le retour et on vous rembourse.</p>",
-        "button_label": "",
-        "button_link": "",
-        "color_scheme": "scheme-5",
-        "padding_top": 72,
-        "padding_bottom": 72
-      }
-    },
     "faq": {
       "type": "collapsible-content",
       "settings": {
         "caption": "",
-        "heading": "Questions fréquentes",
+        "heading": "Vos questions",
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
@@ -427,7 +322,7 @@
         "text": "<p>Dormir sur le côté sollicite deux zones : la nuque et les hanches. Le Pack Nuit complète s'occupe des deux, pour moins cher qu'à l'unité.</p>",
         "compare_note": "prix des deux produits achetés séparément",
         "button_label": "Voir le Pack Nuit complète",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding_top": 72,
         "padding_bottom": 72
       },
@@ -596,17 +491,81 @@
         "padding_top": 80,
         "padding_bottom": 80
       }
+    },
+    "spotlight": {
+      "type": "pp-spotlight",
+      "blocks": {
+        "zone_1": {
+          "type": "zone",
+          "settings": {
+            "x": 54,
+            "y": 45,
+            "title": "Creux central",
+            "text": "Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée."
+          }
+        },
+        "zone_2": {
+          "type": "zone",
+          "settings": {
+            "x": 52,
+            "y": 63,
+            "title": "Rebord cervical",
+            "text": "Il se loge sous la nuque et comble l'espace entre le cou et le matelas."
+          }
+        },
+        "zone_3": {
+          "type": "zone",
+          "settings": {
+            "x": 82,
+            "y": 41,
+            "title": "Ailes latérales",
+            "text": "Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous dormez sur le côté."
+          }
+        },
+        "zone_4": {
+          "type": "zone",
+          "settings": {
+            "x": 23,
+            "y": 53,
+            "title": "Encoches pour les bras",
+            "text": "Glissez un bras sous l'oreiller sans le soulever ni vous tordre l'épaule."
+          }
+        },
+        "zone_5": {
+          "type": "zone",
+          "settings": {
+            "x": 37,
+            "y": 66,
+            "title": "Panneaux respirants",
+            "text": "Les côtés en maille laissent circuler l'air : la tête reste au frais toute la nuit."
+          }
+        }
+      },
+      "block_order": [
+        "zone_1",
+        "zone_2",
+        "zone_3",
+        "zone_4",
+        "zone_5"
+      ],
+      "settings": {
+        "anchor": "zones",
+        "eyebrow": "Le fonctionnement",
+        "title": "Cinq zones, un seul objectif : votre nuque.",
+        "text": "<p>Survolez les points pour découvrir chaque zone.</p>",
+        "image": "shopify://shop_images/oreiller-cervical-papillon-studio.jpg",
+        "color_scheme": "scheme-1",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     }
   },
   "order": [
     "main",
     "reviews",
-    "features",
-    "bundle",
-    "problem",
+    "spotlight",
     "compare",
-    "steps",
-    "guarantee",
+    "bundle",
     "faq",
     "related",
     "sticky"
