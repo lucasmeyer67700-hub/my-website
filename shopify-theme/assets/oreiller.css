@@ -673,7 +673,3 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
 .pp-ps__card--good { background: var(--pp-navy); }
 .pp-ps__card--good .pp-ps__visual { background: #24365a; }
 .pp-ps__card--good .pp-ps__visual rect:first-child { fill: #3a4e72; }
-
-/* Transitions en dégradé entre zones sombres et claires */
-div.pp-fade, div.pp-fade:empty { display: block; height: var(--pp-fade-h, 16rem); margin: 0; pointer-events: none; }
-@media screen and (max-width: 749px) { .pp-fade { height: calc(var(--pp-fade-h, 16rem) * 0.6); } }
