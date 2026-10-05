@@ -70,22 +70,37 @@
                 assign r = block.settings.rating
                 assign rp = r | times: 20
               -%}
+              {%- liquid
+                assign author = block.settings.author | strip
+                if author == blank
+                  assign author = section.settings.anonymous_label | default: 'Acheteur vérifié'
+                  assign anonymous = true
+                else
+                  assign anonymous = false
+                endif
+              -%}
               <article class="pp-review" {{ block.shopify_attributes }}>
-                <header class="pp-review__head">
-                  <span class="pp-review__avatar" aria-hidden="true">{{ block.settings.author | slice: 0 | upcase }}</span>
-                  <span class="pp-review__who">
-                    <strong>{{ block.settings.author }}</strong>
-                    <span>{{ block.settings.date }}</span>
-                  </span>
+                <span class="pp-review__quote" aria-hidden="true">&ldquo;</span>
+                <div class="pp-review__rating">
                   <span class="pp-stars" style="--pct: {{ rp }}%" role="img" aria-label="{{ r }} sur 5">
                     <span class="pp-stars__base">{{ stars }}</span>
                     <span class="pp-stars__fill">{{ stars }}</span>
                   </span>
-                </header>
+                  <span class="pp-review__score">{{ r }},0</span>
+                </div>
                 <p class="pp-review__text">{{ block.settings.text | newline_to_br }}</p>
-                {%- if section.settings.verified_label != blank -%}
-                  <p class="pp-review__badge">{% render 'pp-icon', icon: 'check' %}{{ section.settings.verified_label }}</p>
-                {%- endif -%}
+                <footer class="pp-review__foot">
+                  <span class="pp-review__avatar{% if anonymous %} pp-review__avatar--icon{% endif %}" aria-hidden="true">
+                    {%- if anonymous -%}{% render 'pp-icon', icon: 'check' %}{%- else -%}{{ author | slice: 0 | upcase }}{%- endif -%}
+                  </span>
+                  <span class="pp-review__who">
+                    <strong>{{ author }}</strong>
+                    <span>
+                      {%- if section.settings.verified_label != blank and anonymous == false -%}{{ section.settings.verified_label }} · {% endif -%}
+                      {{ block.settings.date }}
+                    </span>
+                  </span>
+                </footer>
               </article>
             {%- endfor -%}
           {%- endcapture -%}
@@ -115,6 +130,7 @@
     { "type": "textarea", "id": "tags", "label": "Mots-clés (un par ligne)" },
     { "type": "textarea", "id": "source_note", "label": "Provenance des avis", "info": "Obligatoire : indiquez d'où viennent les avis et s'ils sont vérifiés." },
     { "type": "text", "id": "verified_label", "label": "Mention sous chaque avis", "default": "Achat vérifié" },
+    { "type": "text", "id": "anonymous_label", "label": "Nom si l'auteur est anonyme", "default": "Acheteur vérifié" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 88 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 88 }
@@ -124,7 +140,7 @@
       "type": "review",
       "name": "Avis",
       "settings": [
-        { "type": "text", "id": "author", "label": "Auteur", "default": "Client" },
+        { "type": "text", "id": "author", "label": "Auteur", "info": "Pseudonyme tel qu'affiché sur l'avis d'origine. Laissez vide s'il est anonyme." },
         { "type": "text", "id": "date", "label": "Date" },
         { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Note", "default": 5 },
         { "type": "textarea", "id": "text", "label": "Texte" }

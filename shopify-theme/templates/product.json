@@ -266,7 +266,7 @@
         "product": "pack-oreiller-taie",
         "eyebrow": "Le duo malin",
         "title": "L'oreiller et sa taie de rechange",
-        "text": "<p>Une taie sur l'oreiller, une au lavage. Choisissez le coloris de chacun.</p>",
+        "text": "<p>Une taie sur l'oreiller, une au lavage. Choisissez la couleur de la taie.</p>",
         "compare_note": "prix des deux produits achetés séparément",
         "button_label": "Voir le Pack Oreiller + Taie",
         "color_scheme": "scheme-2",
@@ -277,7 +277,7 @@
         "p1": {
           "type": "point",
           "settings": {
-            "text": "1 Oreiller Cervical Papillon, gris perle ou anthracite"
+            "text": "1 Oreiller Cervical Papillon"
           }
         },
         "p2": {

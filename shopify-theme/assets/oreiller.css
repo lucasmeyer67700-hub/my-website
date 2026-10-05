@@ -713,26 +713,47 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
 @keyframes pp-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .pp-review {
-  display: flex; flex-direction: column; gap: 1.2rem;
-  width: 34rem; flex: none;
-  padding: 2.2rem 2.4rem;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 1.4rem;
+  width: 36rem; flex: none;
+  padding: 2.6rem 2.8rem 2.2rem;
   border-radius: var(--pp-radius-lg);
-  background: var(--pp-white);
+  background: linear-gradient(180deg, #ffffff 0%, #fafafb 100%);
+  border: 1px solid rgba(30, 32, 36, 0.06);
   color: var(--pp-ink);
-  box-shadow: 0 1px 2px rgba(30, 32, 36, 0.04), 0 10px 30px -18px rgba(30, 32, 36, 0.3);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 1px 2px rgba(30, 32, 36, 0.04), 0 14px 34px -20px rgba(30, 32, 36, 0.32);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease, border-color 0.45s ease;
 }
-.pp-review:hover { transform: translateY(-4px); box-shadow: 0 2px 6px rgba(30, 32, 36, 0.05), 0 24px 44px -22px rgba(30, 32, 36, 0.4); }
-.pp-review__head { display: flex; align-items: center; gap: 1.2rem; }
-.pp-review__avatar { display: grid; place-items: center; width: 3.8rem; height: 3.8rem; border-radius: 50%; background: var(--pp-navy); color: var(--pp-white); font-weight: 600; font-size: 1.5rem; flex: none; }
-.pp-review__who { display: grid; line-height: 1.3; margin-right: auto; min-width: 0; }
-.pp-review__who strong { font-size: 1.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pp-review::before {
+  content: ''; position: absolute; left: 2.8rem; right: 2.8rem; top: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--pp-gold), transparent); opacity: 0; transition: opacity 0.45s ease;
+}
+.pp-review:hover { transform: translateY(-4px); border-color: rgba(198, 161, 91, 0.4); box-shadow: 0 2px 6px rgba(30, 32, 36, 0.05), 0 26px 46px -24px rgba(30, 32, 36, 0.42); }
+.pp-review:hover::before { opacity: 1; }
+.pp-review__quote {
+  position: absolute; top: 0.6rem; right: 2rem;
+  font-family: var(--pp-serif); font-size: 9rem; line-height: 1; color: var(--pp-gold); opacity: 0.22; pointer-events: none;
+}
+.pp-review__rating { display: flex; align-items: center; gap: 0.8rem; }
+.pp-review__rating .pp-stars svg { width: 9.6rem; }
+.pp-review__score { font-size: 1.2rem; font-weight: 600; letter-spacing: 0.06em; color: var(--pp-gold-deep); }
+.pp-review__text {
+  margin: 0; flex: 1;
+  font-family: var(--pp-serif); font-size: 2rem; line-height: 1.4; font-weight: 500; color: var(--pp-ink);
+}
+.pp-review__foot { display: flex; align-items: center; gap: 1.2rem; padding-top: 1.6rem; border-top: 1px solid rgba(30, 32, 36, 0.07); }
+.pp-review__avatar {
+  display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 50%; flex: none;
+  background: var(--pp-night); color: var(--pp-gold-light); font-family: var(--pp-serif); font-size: 1.9rem; font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(198, 161, 91, 0.45);
+}
+.pp-review__avatar--icon .pp-icon { width: 1.8rem; height: 1.8rem; stroke-width: 2.2; }
+.pp-review__who { display: grid; line-height: 1.35; min-width: 0; }
+.pp-review__who strong { font-size: 1.4rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pp-review__who span { font-size: 1.2rem; color: var(--pp-steel); }
-.pp-review__text { margin: 0; font-size: 1.45rem; line-height: 1.6; flex: 1; }
-.pp-review__badge { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; letter-spacing: 0.04em; color: var(--pp-navy); }
-.pp-review__badge .pp-icon { width: 1.4rem; height: 1.4rem; stroke-width: 2.4; }
 @media screen and (max-width: 749px) {
-  .pp-review { width: 27rem; padding: 1.8rem; }
+  .pp-review { width: 29rem; padding: 2.2rem 2rem 1.8rem; }
+  .pp-review__text { font-size: 1.8rem; }
   .pp-reviews__note { font-size: 6.4rem; }
 }
 /* Sans animation : défilement manuel */
@@ -849,8 +870,6 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
 .pp-ps__card--good .pp-ps__visual { background: #26282d; }
 .pp-ps__card--good .pp-ps__visual rect:first-child { fill: #3a3d44; }
 .pp-reviews__tags li { color: var(--pp-gold-deep); border-color: rgba(198, 161, 91, 0.45); }
-.pp-review__avatar { background: var(--pp-night); color: var(--pp-gold-light); }
-.pp-review__badge { color: var(--pp-gold-deep); }
 .pp-stars { color: var(--pp-gold); }
 .pp-benefits li::before {
   background: var(--pp-gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8.5'/%3E%3C/svg%3E") center / 1.4rem no-repeat;
@@ -1322,3 +1341,12 @@ h1, h2, h3, .h0, .h1, .h2, .h3, .pp-pcard__title {
 .pp-cart .cart-item dl dt { display: inline; margin-right: 0.4rem; }
 .pp-cart .cart-item dl dd { display: inline; margin: 0; color: var(--pp-c-text); }
 .pp-cart .discounts:empty { display: none; }
+
+/* Avis : bloc de note façon écrin */
+.pp-reviews__score {
+  display: inline-flex; padding: 2rem 2.6rem; border-radius: var(--pp-radius-lg);
+  background: radial-gradient(120% 120% at 0% 0%, #23262c 0%, var(--pp-night) 60%);
+  box-shadow: inset 0 0 0 1px rgba(198, 161, 91, 0.3), 0 18px 40px -24px rgba(22, 23, 26, 0.6);
+}
+.pp-reviews__score .pp-reviews__note { color: var(--pp-gold-light); }
+.pp-reviews__score .pp-reviews__count { color: rgba(244, 244, 242, 0.75); }
