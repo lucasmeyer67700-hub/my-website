@@ -2,44 +2,48 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
+    "announce": {
+      "type": "pp-announce",
       "settings": {
-        "color_scheme": "scheme-5",
-        "show_line_separator": false,
-        "show_social": false,
-        "auto_rotate": true,
-        "change_slides_speed": 5,
-        "enable_country_selector": false,
-        "enable_language_selector": false
+        "interval": 4
       },
       "blocks": {
-        "a1": {
-          "type": "announcement",
+        "m1": {
+          "type": "message",
           "settings": {
             "text": "Livraison offerte en France métropolitaine",
-            "link": ""
+            "icon": "truck"
           }
         },
-        "a2": {
-          "type": "announcement",
+        "m2": {
+          "type": "message",
           "settings": {
             "text": "Essai 30 nuits · Satisfait ou remboursé",
+            "icon": "moon",
             "link": "shopify://pages/livraison-et-retours"
           }
         },
-        "a3": {
-          "type": "announcement",
+        "m3": {
+          "type": "message",
           "settings": {
-            "text": "Pack Nuit complète : oreiller + coussin genoux",
+            "text": "−10 % sur votre première commande avec notre newsletter",
+            "icon": "gift"
+          }
+        },
+        "m4": {
+          "type": "message",
+          "settings": {
+            "text": "Pack Nuit complète : l'oreiller + le coussin genoux, −10 €",
+            "icon": "check",
             "link": "shopify://products/pack-dormeur-sur-le-cote"
           }
         }
       },
       "block_order": [
-        "a1",
-        "a2",
-        "a3"
+        "m1",
+        "m2",
+        "m3",
+        "m4"
       ]
     },
     "header": {
@@ -62,7 +66,7 @@
     }
   },
   "order": [
-    "announcement-bar",
+    "announce",
     "header"
   ]
 }

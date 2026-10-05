@@ -108,7 +108,7 @@
           "settings": {
             "question": "Comment profiter des remises pack ?",
             "answer": "<p>Dans le catalogue, composez votre pack : <strong>−10 € dès 2 produits</strong>, <strong>−20 € dès 3</strong>. La remise s'applique automatiquement dans le panier, sans code.</p>",
-            "keywords": "pack, remise, reduction, promo, code, moins cher, offre, prix",
+            "keywords": "pack, remise pack, lot, plusieurs produits, deux produits, trois produits, moins cher, offre",
             "link": "shopify://collections/catalogue",
             "link_label": "Composer mon pack",
             "quick": true
@@ -151,23 +151,79 @@
             "keywords": "payer, paiement, carte, paypal, securise, apple pay",
             "quick": false
           }
+        },
+        "qa11": {
+          "type": "qa",
+          "settings": {
+            "question": "Livrez-vous hors de France ?",
+            "answer": "<p>Pour l'instant, nous livrons uniquement en <strong>France métropolitaine</strong>, gratuitement. Écrivez-nous si vous êtes ailleurs : on regarde ce qui est possible.</p>",
+            "keywords": "etranger, belgique, suisse, luxembourg, canada, dom tom, corse, international, hors de france, europe",
+            "quick": false,
+            "link": "shopify://pages/contact",
+            "link_label": "Nous écrire"
+          }
+        },
+        "qa12": {
+          "type": "qa",
+          "settings": {
+            "question": "Quelles sont les dimensions de l'oreiller ?",
+            "answer": "<p>L'Oreiller Papillon a <strong>deux hauteurs</strong> : retournez-le pour choisir le bord le plus bas ou le plus haut, selon votre carrure et votre position.</p><p>Besoin des mesures exactes ? Écrivez-nous, on vous les envoie.</p>",
+            "keywords": "dimension, taille, mesure, hauteur, epaisseur, cm, centimetre, largeur, longueur",
+            "quick": false,
+            "link": "shopify://pages/contact",
+            "link_label": "Demander les mesures"
+          }
+        },
+        "qa13": {
+          "type": "qa",
+          "settings": {
+            "question": "En quelle matière est l'oreiller ?",
+            "answer": "<p>Le cœur est en <strong>mousse à mémoire de forme</strong> : elle épouse la nuque puis reprend sa forme. La housse est respirante, amovible et lavable à 30 °C.</p>",
+            "keywords": "matiere, mousse, memoire de forme, tissu, composition, materiau, ferme, mou, dur",
+            "quick": false
+          }
+        },
+        "qa14": {
+          "type": "qa",
+          "settings": {
+            "question": "Puis-je annuler ou modifier ma commande ?",
+            "answer": "<p>Écrivez-nous le plus vite possible avec votre numéro de commande : tant qu'elle n'est pas expédiée, on peut la modifier ou l'annuler.</p>",
+            "keywords": "annuler, annulation, modifier, changer adresse, erreur commande, modification",
+            "quick": false,
+            "link": "shopify://pages/contact",
+            "link_label": "Nous écrire"
+          }
+        },
+        "qa15": {
+          "type": "qa",
+          "settings": {
+            "question": "Avez-vous un code promo ?",
+            "answer": "<p>Oui : inscrivez-vous à notre newsletter et recevez <strong>−10 % sur votre première commande</strong> (code BIENVENUE10, une fois par client).</p><p>Et en prenant plusieurs produits, la remise pack s'ajoute toute seule dans le panier.</p>",
+            "keywords": "code, promo, code promo, reduction, reduc, bienvenue, newsletter, inscription, pourcentage, bon de reduction",
+            "quick": true
+          }
         }
       },
       "block_order": [
         "qa1",
         "qa2",
         "qa3",
+        "qa15",
         "qa4",
         "qa5",
         "qa6",
         "qa7",
         "qa8",
         "qa9",
-        "qa10"
+        "qa10",
+        "qa11",
+        "qa12",
+        "qa13",
+        "qa14"
       ],
       "settings": {
         "title": "Assistant VELEA",
-        "subtitle": "Répond instantanément",
+        "subtitle": "En ligne · répond en quelques secondes",
         "greeting": "Bonjour ! Une question sur nos oreillers, la livraison ou l'essai 30 nuits ? Choisissez un sujet ou écrivez-moi.",
         "teaser": "Une question ? Je vous réponds tout de suite.",
         "placeholder": "Posez votre question…",
@@ -175,12 +231,44 @@
         "contact_label": "Écrire à l'équipe",
         "contact_url": "shopify://pages/contact",
         "typing_delay": 700,
-        "show_socials_floating": true
+        "show_socials_floating": true,
+        "products": [
+          "loreiller-papillon",
+          "le-coussin-genoux",
+          "housse-de-rechange-pour-oreiller-papillon",
+          "pack-dormeur-sur-le-cote",
+          "pack-oreiller-taie"
+        ]
+      }
+    },
+    "welcome": {
+      "type": "pp-welcome",
+      "settings": {
+        "enabled": true,
+        "code": "BIENVENUE10",
+        "percent": 10,
+        "delay": 6,
+        "days": 7,
+        "product": "loreiller-papillon",
+        "eyebrow": "Bienvenue chez VELEA",
+        "title": "−10 % sur votre première commande",
+        "text": "Inscrivez-vous et recevez votre code de bienvenue, ainsi que nos conseils pour mieux dormir.",
+        "button": "Recevoir mon code",
+        "tags": "newsletter,bienvenue10",
+        "legal": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Désinscription en un clic à tout moment.",
+        "privacy_page": "shopify://pages/confidentialite-et-cookies",
+        "skip": "Non merci",
+        "success_eyebrow": "C'est fait",
+        "success_title": "Voici votre code",
+        "success_text": "−10 % sur toute votre première commande. Il s'applique automatiquement avec le bouton ci-dessous, ou au paiement.",
+        "success_button": "Profiter de mes −10 %",
+        "redirect": "shopify://collections/catalogue"
       }
     }
   },
   "order": [
     "footer",
-    "assistant"
+    "assistant",
+    "welcome"
   ]
 }

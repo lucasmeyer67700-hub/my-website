@@ -5,6 +5,9 @@
   - si aucune réponse ne correspond, il propose d'écrire à l'équipe ;
   - les liens Instagram, Facebook, Pinterest et TikTok des paramètres du thème
     (Paramètres du thème > Réseaux sociaux) s'affichent au-dessus du bouton et dans le panneau.
+  Le moteur (assets/pp-assistant.js) comprend les fautes de frappe et les synonymes,
+  connaît les produits choisis (prix, liens, ajout au panier), conseille selon la position
+  de sommeil et garde la conversation d'une page à l'autre.
   Aucun service externe : tout fonctionne dans le navigateur.
 {%- endcomment -%}
 {%- liquid
@@ -47,12 +50,18 @@
 
   <button type="button" class="pp-dock__toggle" aria-expanded="false" aria-controls="PpAssistant" data-pp-dock-toggle>
     <span class="pp-dock__toggle-open" aria-hidden="true">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5a7.5 7.5 0 0 1-11.1 6.6L4 20l1-4.4A7.5 7.5 0 1 1 20 12.5z"/><path d="M12.5 8.2l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="currentColor" stroke="none"/></svg>
+      <svg class="pp-dock__bubble" viewBox="0 0 32 32" width="30" height="30" fill="none">
+        <path d="M16 5c6.6 0 12 4.4 12 10s-5.4 10-12 10c-1.4 0-2.8-.2-4-.6L6 27l1.6-5.2C5.6 20 4 17.6 4 15 4 9.4 9.4 5 16 5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle class="pp-dock__dot" cx="11" cy="15" r="1.7" fill="currentColor"/>
+        <circle class="pp-dock__dot" cx="16" cy="15" r="1.7" fill="currentColor"/>
+        <circle class="pp-dock__dot" cx="21" cy="15" r="1.7" fill="currentColor"/>
+      </svg>
     </span>
     <span class="pp-dock__toggle-close" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </span>
     <span class="visually-hidden">{{ section.settings.title }}</span>
+    <span class="pp-dock__ping" aria-hidden="true"></span>
   </button>
   {%- if section.settings.teaser != blank -%}
     <p class="pp-dock__teaser" data-pp-dock-teaser hidden>{{ section.settings.teaser }}</p>
@@ -100,7 +109,13 @@
     {
       "items": [
         {%- for block in section.blocks -%}
-          { "q": {{ block.settings.question | json }}, "a": {{ block.settings.answer | json }}, "k": {{ block.settings.keywords | json }}, "url": {{ block.settings.link | json }}, "cta": {{ block.settings.link_label | json }} }{% unless forloop.last %},{% endunless %}
+          { "q": {{ block.settings.question | json }}, "a": {{ block.settings.answer | json }}, "k": {{ block.settings.keywords | json }}, "url": {{ block.settings.link | json }}, "cta": {{ block.settings.link_label | json }}, "quick": {{ block.settings.quick | json }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      "products": [
+        {%- for p in section.settings.products -%}
+          {%- assign v = p.selected_or_first_available_variant -%}
+          { "t": {{ p.title | json }}, "url": {{ p.url | json }}, "price": {{ p.price | money | json }}, "from": {{ p.price_varies | json }}, "compare": {% if v.compare_at_price > v.price %}{{ v.compare_at_price | money | json }}{% else %}null{% endif %}, "img": {{ p.featured_image | image_url: width: 160 | json }}, "id": {{ v.id | json }}, "single": {{ p.has_only_default_variant | json }}, "available": {{ p.available | json }}, "type": {{ p.type | json }}, "tags": {{ p.tags | join: ',' | json }} }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ],
       "fallback": {{ section.settings.fallback | json }},
@@ -110,97 +125,7 @@
   </script>
 </pp-dock>
 
-<script>
-  if (!customElements.get('pp-dock')) {
-    customElements.define('pp-dock', class extends HTMLElement {
-      connectedCallback() {
-        this.kb = JSON.parse(this.querySelector('[data-pp-kb]').textContent);
-        this.panel = this.querySelector('.pp-dock__panel');
-        this.toggle = this.querySelector('[data-pp-dock-toggle]');
-        this.log = this.querySelector('[data-pp-log]');
-        this.input = this.querySelector('#PpAssistantInput');
-        this.delay = +this.dataset.delay || 700;
-        this.toggle.addEventListener('click', () => this.setOpen(this.panel.hidden));
-        this.querySelector('[data-pp-dock-close]').addEventListener('click', () => this.setOpen(false));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !this.panel.hidden) this.setOpen(false); });
-        this.querySelector('[data-pp-chips]').addEventListener('click', (e) => {
-          const chip = e.target.closest('[data-pp-q]');
-          if (chip) this.ask(chip.textContent.trim(), this.kb.items[+chip.dataset.ppQ]);
-        });
-        this.querySelector('[data-pp-form]').addEventListener('submit', (e) => {
-          e.preventDefault();
-          const text = this.input.value.trim();
-          if (!text) return;
-          this.input.value = '';
-          this.ask(text, this.match(text));
-        });
-        // Petite bulle d'invitation, une seule fois par visite
-        const teaser = this.querySelector('[data-pp-dock-teaser]');
-        let seen = false;
-        try { seen = sessionStorage.getItem('pp-dock-teaser') === '1'; } catch (e) {}
-        if (teaser && !seen) {
-          setTimeout(() => { if (this.panel.hidden) teaser.hidden = false; }, 9000);
-          setTimeout(() => { teaser.hidden = true; }, 17000);
-          teaser.addEventListener('click', () => this.setOpen(true));
-          try { sessionStorage.setItem('pp-dock-teaser', '1'); } catch (e) {}
-        }
-      }
-      setOpen(open) {
-        this.panel.hidden = !open;
-        this.classList.toggle('is-open', open);
-        this.toggle.setAttribute('aria-expanded', open);
-        const teaser = this.querySelector('[data-pp-dock-teaser]');
-        if (teaser) teaser.hidden = true;
-        if (open && window.matchMedia('(min-width: 750px)').matches) this.input.focus();
-        if (!open) this.toggle.focus();
-      }
-      normalize(s) {
-        return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ');
-      }
-      // Choisit la réponse dont les mots-clés apparaissent le plus dans la question
-      match(text) {
-        const q = ' ' + this.normalize(text) + ' ';
-        let best = null, score = 0;
-        this.kb.items.forEach((item) => {
-          let s = 0;
-          (item.k || '').split(',').forEach((kw) => {
-            const k = this.normalize(kw).trim();
-            if (k && q.includes(k.length > 3 ? k : ' ' + k + ' ')) s += k.length > 5 ? 2 : 1;
-          });
-          if (s > score) { score = s; best = item; }
-        });
-        return best;
-      }
-      bubble(cls, html) {
-        const el = document.createElement('div');
-        el.className = 'pp-msg ' + cls;
-        el.innerHTML = html;
-        this.log.appendChild(el);
-        this.log.scrollTop = this.log.scrollHeight;
-        return el;
-      }
-      escape(s) {
-        const d = document.createElement('div');
-        d.textContent = s;
-        return d.innerHTML;
-      }
-      ask(question, item) {
-        this.bubble('pp-msg--user', this.escape(question));
-        const typing = this.bubble('pp-msg--bot pp-msg--typing', '<span></span><span></span><span></span>');
-        setTimeout(() => {
-          typing.remove();
-          if (item) {
-            let html = item.a;
-            if (item.url) html += '<a class="pp-msg__link" href="' + item.url + '">' + this.escape(item.cta || 'En savoir plus') + ' →</a>';
-            this.bubble('pp-msg--bot', html);
-          } else {
-            this.bubble('pp-msg--bot', this.kb.fallback + '<a class="pp-msg__link" href="' + this.kb.contactUrl + '">' + this.escape(this.kb.contactLabel) + ' →</a>');
-          }
-        }, this.delay);
-      }
-    });
-  }
-</script>
+<script src="{{ 'pp-assistant.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
@@ -217,6 +142,7 @@
     { "type": "text", "id": "contact_label", "label": "Lien de contact", "default": "Écrire à l'équipe" },
     { "type": "url", "id": "contact_url", "label": "Page de contact" },
     { "type": "range", "id": "typing_delay", "min": 200, "max": 1500, "step": 100, "unit": "ms", "label": "Délai avant la réponse", "default": 700 },
+    { "type": "product_list", "id": "products", "label": "Produits connus de l'assistant", "limit": 12, "info": "Il peut donner leur prix, les recommander et les ajouter au panier." },
     { "type": "checkbox", "id": "show_socials_floating", "label": "Afficher les réseaux au-dessus du bouton", "default": true, "info": "Les liens se règlent dans Paramètres du thème > Réseaux sociaux." }
   ],
   "blocks": [

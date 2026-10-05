@@ -1,0 +1,182 @@
+{%- comment -%}
+  Fenêtre de bienvenue : inscription à la newsletter contre un code de réduction.
+  - L'e-mail est enregistré dans Shopify (Clients) avec l'accord marketing et les tags choisis.
+  - Après l'inscription, le code s'affiche avec un bouton pour l'appliquer directement au panier.
+  - Apparition : à la première visite, après quelques secondes, à mi-page ou quand la souris
+    quitte la fenêtre. Si le visiteur la ferme, elle ne revient pas avant le nombre de jours
+    choisi ; une fois inscrit, plus jamais. Jamais sur le panier, le compte ni le contact.
+{%- endcomment -%}
+{%- liquid
+  assign hidden_here = false
+  if template.name == 'cart' or template.name contains 'customers' or template.suffix == 'contact' or template.name == 'password'
+    assign hidden_here = true
+  endif
+  assign image = section.settings.image
+  if image == blank and section.settings.product != blank
+    assign image = section.settings.product.featured_image
+  endif
+  assign code = section.settings.code | strip | upcase
+-%}
+{%- unless hidden_here or section.settings.enabled == false -%}
+  <pp-welcome
+    class="pp-welcome"
+    data-delay="{{ section.settings.delay | times: 1000 }}"
+    data-days="{{ section.settings.days }}"
+    {% if request.design_mode %}data-design-mode{% endif %}
+    hidden
+  >
+    <div class="pp-welcome__overlay" data-pp-welcome-close></div>
+    <div class="pp-welcome__dialog" role="dialog" aria-modal="true" aria-labelledby="PpWelcomeTitle" tabindex="-1">
+      <button type="button" class="pp-welcome__close" data-pp-welcome-close aria-label="Fermer">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+
+      <div class="pp-welcome__media">
+        {%- if image != blank -%}
+          {{ image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 380px, 100vw', widths: '450, 700, 900', alt: '' }}
+        {%- endif -%}
+        <span class="pp-welcome__seal" aria-hidden="true"><strong>−{{ section.settings.percent }}<small>%</small></strong><em>Bienvenue</em></span>
+      </div>
+
+      <div class="pp-welcome__body">
+        {%- form 'customer', id: 'PpWelcomeForm', class: 'pp-welcome__form' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="pp-welcome__done" data-pp-welcome-success>
+              <p class="pp-eyebrow">{{ section.settings.success_eyebrow }}</p>
+              <h2 class="pp-welcome__title" id="PpWelcomeTitle">{{ section.settings.success_title }}</h2>
+              <p class="pp-welcome__text">{{ section.settings.success_text }}</p>
+              <div class="pp-welcome__code">
+                <span data-pp-code>{{ code }}</span>
+                <button type="button" data-pp-copy aria-label="Copier le code">Copier</button>
+              </div>
+              <a class="pp-welcome__cta" href="{{ routes.root_url | append: 'discount/' | replace: '//', '/' }}{{ code | url_encode }}?redirect={{ section.settings.redirect | default: routes.all_products_collection_url | url_encode }}">
+                {{ section.settings.success_button }} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          {%- else -%}
+            <p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>
+            <h2 class="pp-welcome__title" id="PpWelcomeTitle">{{ section.settings.title }}</h2>
+            <p class="pp-welcome__text">{{ section.settings.text }}</p>
+
+            <input type="hidden" name="contact[tags]" value="{{ section.settings.tags }}">
+            <input type="hidden" name="contact[accepts_marketing]" value="true">
+            <div class="pp-welcome__field">
+              <label class="visually-hidden" for="PpWelcomeEmail">Adresse e-mail</label>
+              <input
+                id="PpWelcomeEmail"
+                type="email"
+                name="contact[email]"
+                required
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="Votre adresse e-mail"
+                {% if form.errors %}aria-invalid="true" aria-describedby="PpWelcomeError"{% endif %}
+              >
+              <button type="submit" class="pp-welcome__submit">{{ section.settings.button }}</button>
+            </div>
+            {%- if form.errors -%}
+              <p class="pp-welcome__error" id="PpWelcomeError" role="alert">
+                {%- if form.errors contains 'email' -%}Cette adresse e-mail ne semble pas valide.{%- else -%}{{ form.errors | default_errors }}{%- endif -%}
+              </p>
+            {%- endif -%}
+            <p class="pp-welcome__legal">
+              {{ section.settings.legal }}
+              {%- if section.settings.privacy_page != blank %} <a href="{{ section.settings.privacy_page }}">Confidentialité</a>{% endif -%}
+            </p>
+            <button type="button" class="pp-welcome__skip" data-pp-welcome-close>{{ section.settings.skip }}</button>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </pp-welcome>
+
+  <script>
+    if (!customElements.get('pp-welcome')) {
+      customElements.define('pp-welcome', class extends HTMLElement {
+        connectedCallback() {
+          this.dialog = this.querySelector('.pp-welcome__dialog');
+          this.querySelectorAll('[data-pp-welcome-close]').forEach((b) => b.addEventListener('click', () => this.close()));
+          this.addEventListener('keydown', (e) => { if (e.key === 'Escape') this.close(); });
+          const copy = this.querySelector('[data-pp-copy]');
+          if (copy) copy.addEventListener('click', () => {
+            const code = this.querySelector('[data-pp-code]').textContent.trim();
+            (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject()).then(() => { copy.textContent = 'Copié ✓'; }, () => {});
+          });
+
+          // Retour après inscription : on affiche le code et on ne repropose plus jamais la fenêtre
+          if (this.querySelector('[data-pp-welcome-success]')) { this.store('subscribed'); this.open(); return; }
+          // Erreur de saisie : on rouvre la fenêtre pour corriger
+          if (this.querySelector('.pp-welcome__error')) { this.open(); return; }
+          if (this.hasAttribute('data-design-mode')) return;
+          if (!this.shouldShow()) return;
+
+          const trigger = () => { if (!this.triggered) { this.triggered = true; this.open(); cleanup(); } };
+          const onScroll = () => { if (window.scrollY > (document.body.scrollHeight - innerHeight) * 0.45) trigger(); };
+          const onLeave = (e) => { if (e.clientY <= 0) trigger(); };
+          const timer = setTimeout(trigger, +this.dataset.delay || 6000);
+          const cleanup = () => { clearTimeout(timer); removeEventListener('scroll', onScroll); document.removeEventListener('mouseout', onLeave); };
+          addEventListener('scroll', onScroll, { passive: true });
+          document.addEventListener('mouseout', onLeave);
+        }
+        read() { try { return localStorage.getItem('pp-welcome') || ''; } catch (e) { return ''; } }
+        store(v) { try { localStorage.setItem('pp-welcome', v); } catch (e) {} }
+        shouldShow() {
+          const v = this.read();
+          if (v === 'subscribed') return false;
+          if (v.startsWith('closed:')) {
+            const days = +this.dataset.days || 7;
+            if (Date.now() - +v.slice(7) < days * 864e5) return false;
+          }
+          return true;
+        }
+        open() {
+          this.lastFocus = document.activeElement;
+          this.hidden = false;
+          document.body.classList.add('pp-welcome-open');
+          requestAnimationFrame(() => this.classList.add('is-open'));
+          const field = this.querySelector('input[type="email"]');
+          setTimeout(() => (field && matchMedia('(min-width: 750px)').matches ? field : this.dialog).focus({ preventScroll: true }), 350);
+        }
+        close() {
+          if (this.read() !== 'subscribed') this.store('closed:' + Date.now());
+          this.classList.remove('is-open');
+          document.body.classList.remove('pp-welcome-open');
+          setTimeout(() => { this.hidden = true; }, 400);
+          if (this.lastFocus && this.lastFocus.focus) this.lastFocus.focus({ preventScroll: true });
+        }
+      });
+    }
+  </script>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Fenêtre de bienvenue",
+  "tag": "div",
+  "class": "pp-welcome-section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Activer", "default": true },
+    { "type": "text", "id": "code", "label": "Code de réduction", "default": "BIENVENUE10", "info": "Doit exister dans Shopify > Réductions." },
+    { "type": "number", "id": "percent", "label": "Pourcentage affiché", "default": 10 },
+    { "type": "range", "id": "delay", "min": 2, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 6 },
+    { "type": "range", "id": "days", "min": 1, "max": 30, "step": 1, "unit": "j", "label": "Si fermée, ne pas réafficher pendant", "default": 7 },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "product", "id": "product", "label": "Ou photo de ce produit" },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Bienvenue chez nous" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "−10 % sur votre première commande" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Inscrivez-vous et recevez votre code de bienvenue, ainsi que nos conseils pour mieux dormir." },
+    { "type": "text", "id": "button", "label": "Bouton", "default": "Recevoir mon code" },
+    { "type": "text", "id": "tags", "label": "Tags client", "default": "newsletter,bienvenue10" },
+    { "type": "textarea", "id": "legal", "label": "Mention légale", "default": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Désinscription en un clic à tout moment." },
+    { "type": "url", "id": "privacy_page", "label": "Page confidentialité" },
+    { "type": "text", "id": "skip", "label": "Lien de refus", "default": "Non merci" },
+    { "type": "header", "content": "Après l'inscription" },
+    { "type": "text", "id": "success_eyebrow", "label": "Sur-titre", "default": "C'est fait" },
+    { "type": "text", "id": "success_title", "label": "Titre", "default": "Voici votre code" },
+    { "type": "textarea", "id": "success_text", "label": "Texte", "default": "−10 % sur toute votre première commande. Il s'applique au moment du paiement." },
+    { "type": "text", "id": "success_button", "label": "Bouton", "default": "Profiter de mes −10 %" },
+    { "type": "url", "id": "redirect", "label": "Page après le bouton" }
+  ]
+}
+{% endschema %}
