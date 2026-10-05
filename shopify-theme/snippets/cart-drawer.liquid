@@ -21,7 +21,7 @@
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
-      class="drawer__inner gradient color-{{ settings.cart_color_scheme }}"
+      class="drawer__inner pp-cart gradient color-{{ settings.cart_color_scheme }}"
       role="dialog"
       aria-modal="true"
       aria-label="{{ 'sections.cart.title' | t }}"
@@ -31,7 +31,9 @@
         <div class="drawer__inner-empty">
           <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
             <div class="cart-drawer__empty-content">
-              <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
+              <span class="pp-cart__empty-icon" aria-hidden="true">{% render 'pp-icon', icon: 'moon' %}</span>
+              <h2 class="cart__empty-text">Votre panier est vide</h2>
+              <p class="pp-cart__empty-text">Nos oreillers ergonomiques vous attendent pour des nuits plus douces.</p>
               <button
                 class="drawer__close"
                 type="button"
@@ -42,8 +44,8 @@
                   {{- 'icon-close.svg' | inline_asset_content -}}
                 </span>
               </button>
-              <a href="{{ routes.all_products_collection_url }}" class="button">
-                {{ 'general.continue_shopping' | t }}
+              <a href="{{ routes.collections_url }}/catalogue" class="button pp-cart__empty-cta">
+                Découvrir le catalogue
               </a>
 
               {%- if shop.customer_accounts_enabled and customer == null -%}
@@ -62,7 +64,10 @@
         </div>
       {%- endif -%}
       <div class="drawer__header">
-        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <h2 class="drawer__heading">
+          Votre panier
+          {%- if cart.item_count > 0 %} <span class="pp-cart__count">{{ cart.item_count }}</span>{% endif -%}
+        </h2>
         <button
           class="drawer__close"
           type="button"
@@ -74,6 +79,9 @@
           </span>
         </button>
       </div>
+      {%- if cart != empty -%}
+        {% render 'pp-cart-perks' %}
+      {%- endif -%}
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"
@@ -162,6 +170,16 @@
                               modal_id: cart_disclosure_modal_id
                             -%}
                           </div>
+                          {%- liquid
+                            assign item_saving = 0
+                            if item.variant.compare_at_price > item.variant.price
+                              assign item_saving = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity
+                            endif
+                            assign item_saving = item_saving | plus: item.line_level_total_discount
+                          -%}
+                          {%- if item_saving > 0 -%}
+                            <span class="pp-cart__saving">{{ item_saving | money }} économisés</span>
+                          {%- endif -%}
 
                           {%- if item.original_price != item.final_price -%}
                             <div class="cart-item__discounted-prices">
@@ -478,6 +496,7 @@
                   </tbody>
                 </table>
               </div>
+              {% render 'pp-cart-upsell' %}
             {%- endif -%}
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
             <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
@@ -526,9 +545,28 @@
             {%- endif -%}
           </div>
 
+          {%- liquid
+            assign cart_saving = cart.total_discount
+            for item in cart.items
+              if item.variant.compare_at_price > item.variant.price
+                assign line_saving = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity
+                assign cart_saving = cart_saving | plus: line_saving
+              endif
+            endfor
+          -%}
+          {%- if cart_saving > 0 -%}
+            <p class="pp-cart__savings">
+              <span>Vos économies</span>
+              <strong>−{{ cart_saving | money }}</strong>
+            </p>
+          {%- endif -%}
+          <p class="pp-cart__shipping">
+            <span>Livraison</span>
+            <strong>Offerte</strong>
+          </p>
           <div class="totals" role="status">
-            <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+            <h2 class="totals__total">Total</h2>
+            <p class="totals__total-value">{{ cart.total_price | money }}</p>
           </div>
 
           <small class="tax-note caption-large rte">
@@ -585,9 +623,25 @@
               disabled
             {% endif %}
           >
-            {{ 'sections.cart.checkout' | t }}
+            <span class="pp-cart__lock" aria-hidden="true">{% render 'pp-icon', icon: 'lock' %}</span>
+            <span>Paiement sécurisé</span>
+            <span class="pp-cart__checkout-total">{{ cart.total_price | money }}</span>
           </button>
         </div>
+        {%- if cart != empty -%}
+          {%- if shop.enabled_payment_types.size > 0 -%}
+            <ul class="pp-cart__payments list-unstyled" role="list" aria-label="Moyens de paiement acceptés">
+              {%- for type in shop.enabled_payment_types limit: 6 -%}
+                <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          <p class="pp-cart__reassure">
+            <span>{% render 'pp-icon', icon: 'truck' %}Livraison offerte</span>
+            <span>{% render 'pp-icon', icon: 'moon' %}Essai 30 nuits</span>
+            <span>{% render 'pp-icon', icon: 'return' %}Retours simples</span>
+          </p>
+        {%- endif -%}
       </div>
     </div>
   </div>

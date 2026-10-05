@@ -184,8 +184,8 @@
     "cart_type": "drawer",
     "show_vendor": false,
     "show_cart_note": false,
-    "cart_drawer_collection": "tous-nos-produits",
-    "cart_color_scheme": "scheme-1",
+    "cart_drawer_collection": "",
+    "cart_color_scheme": "scheme-3",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
@@ -199,7 +199,14 @@
           "color_scheme": "scheme-1"
         }
       }
-    }
+    },
+    "pp_cart_pack_collection": "catalogue",
+    "pp_cart_tier2_amount": 10,
+    "pp_cart_tier3_amount": 20,
+    "pp_cart_delivery_min": 7,
+    "pp_cart_delivery_max": 14,
+    "pp_cart_upsell_collection": "catalogue",
+    "pp_cart_upsell_title": "Complétez votre nuit"
   },
   "presets": {
     "Dawn": {

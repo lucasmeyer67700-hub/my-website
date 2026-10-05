@@ -1453,6 +1453,64 @@
     ]
   },
   {
+    "name": "Panier premium",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Remise pack"
+      },
+      {
+        "type": "collection",
+        "id": "pp_cart_pack_collection",
+        "label": "Produits comptés pour le pack",
+        "info": "Doit correspondre aux remises automatiques du pack."
+      },
+      {
+        "type": "number",
+        "id": "pp_cart_tier2_amount",
+        "label": "Remise dès 2 produits (€)",
+        "default": 10
+      },
+      {
+        "type": "number",
+        "id": "pp_cart_tier3_amount",
+        "label": "Remise dès 3 produits (€)",
+        "default": 20
+      },
+      {
+        "type": "header",
+        "content": "Livraison"
+      },
+      {
+        "type": "number",
+        "id": "pp_cart_delivery_min",
+        "label": "Délai minimum (jours ouvrés)",
+        "default": 7
+      },
+      {
+        "type": "number",
+        "id": "pp_cart_delivery_max",
+        "label": "Délai maximum (jours ouvrés)",
+        "default": 14
+      },
+      {
+        "type": "header",
+        "content": "Suggestions"
+      },
+      {
+        "type": "collection",
+        "id": "pp_cart_upsell_collection",
+        "label": "Collection suggérée"
+      },
+      {
+        "type": "text",
+        "id": "pp_cart_upsell_title",
+        "label": "Titre",
+        "default": "Complétez votre nuit"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.customer_accounts.name",
     "settings": [
       {

@@ -175,7 +175,15 @@
         if (!items.length) return;
         btn.disabled = true;
         btn.textContent = 'Ajout en cours…';
+        const label = btn.textContent;
         try {
+          if (window.ppAddToCart && document.querySelector('cart-drawer')) {
+            // Panier coulissant : le pack s'ajoute et le panier s'ouvre sans quitter la page
+            await window.ppAddToCart(items);
+            btn.disabled = false;
+            btn.textContent = label;
+            return;
+          }
           const res = await fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },

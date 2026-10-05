@@ -1,0 +1,70 @@
+{%- comment -%}
+  Haut du panier premium :
+  1. Frise de livraison (dates réelles calculées en jours ouvrés, d'après le délai de la boutique)
+  2. Progression vers la remise pack (calculée sur les produits de la collection choisie,
+     paliers identiques aux remises automatiques Shopify)
+  Re-rendu par Shopify à chaque modification du panier.
+{%- endcomment -%}
+{%- liquid
+  assign pack_collection = settings.pp_cart_pack_collection
+  assign tier2 = settings.pp_cart_tier2_amount | default: 10
+  assign tier3 = settings.pp_cart_tier3_amount | default: 20
+  assign pack_count = 0
+  if pack_collection != blank
+    for item in cart.items
+      for c in item.product.collections
+        if c.id == pack_collection.id
+          assign pack_count = pack_count | plus: item.quantity
+          break
+        endif
+      endfor
+    endfor
+  endif
+  assign shown = pack_count
+  if shown > 3
+    assign shown = 3
+  endif
+  assign progress = shown | times: 100 | divided_by: 3
+-%}
+<div class="pp-cart-perks">
+  <pp-eta class="pp-eta" data-min="{{ settings.pp_cart_delivery_min | default: 7 }}" data-max="{{ settings.pp_cart_delivery_max | default: 14 }}">
+    <div class="pp-eta__step is-done">
+      <span class="pp-eta__dot">{% render 'pp-icon', icon: 'check' %}</span>
+      <strong>Commande</strong>
+      <span>Aujourd'hui</span>
+    </div>
+    <span class="pp-eta__line" aria-hidden="true"></span>
+    <div class="pp-eta__step">
+      <span class="pp-eta__dot">{% render 'pp-icon', icon: 'truck' %}</span>
+      <strong>En route</strong>
+      <span>Suivi par e-mail</span>
+    </div>
+    <span class="pp-eta__line" aria-hidden="true"></span>
+    <div class="pp-eta__step">
+      <span class="pp-eta__dot">{% render 'pp-icon', icon: 'gift' %}</span>
+      <strong>Livraison offerte</strong>
+      <span data-pp-eta-range>{{ settings.pp_cart_delivery_min | default: 7 }} à {{ settings.pp_cart_delivery_max | default: 14 }} jours ouvrés</span>
+    </div>
+  </pp-eta>
+
+  {%- if pack_collection != blank -%}
+    <div class="pp-tiers{% if pack_count >= 3 %} is-max{% endif %}">
+      <p class="pp-tiers__msg">
+        {%- if pack_count == 0 -%}
+          Composez votre pack : <strong>−{{ tier2 }} €</strong> dès 2 produits, <strong>−{{ tier3 }} €</strong> dès 3.
+        {%- elsif pack_count == 1 -%}
+          Ajoutez 1 produit et économisez <strong>{{ tier2 }} €</strong>.
+        {%- elsif pack_count == 2 -%}
+          <strong>−{{ tier2 }} € débloqués.</strong> Encore 1 produit pour passer à <strong>−{{ tier3 }} €</strong>.
+        {%- else -%}
+          <strong>Remise pack maximale débloquée : −{{ tier3 }} €</strong>
+        {%- endif -%}
+      </p>
+      <div class="pp-tiers__bar" role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="{{ shown }}" aria-label="Produits pour la remise pack">
+        <span class="pp-tiers__fill" style="width: {{ progress }}%"></span>
+        <span class="pp-tiers__mark{% if pack_count >= 2 %} is-on{% endif %}" style="left: 66.666%"><em>−{{ tier2 }} €</em></span>
+        <span class="pp-tiers__mark{% if pack_count >= 3 %} is-on{% endif %}" style="left: 100%"><em>−{{ tier3 }} €</em></span>
+      </div>
+    </div>
+  {%- endif -%}
+</div>

@@ -63,7 +63,7 @@
             </ul>
           {%- endif -%}
 
-          {%- form 'product', main, class: 'pp-show__form', novalidate: 'novalidate' -%}
+          {%- form 'product', main, class: 'pp-show__form pp-ajax-add', novalidate: 'novalidate' -%}
             {%- if main.has_only_default_variant -%}
               <input type="hidden" name="id" value="{{ v.id }}">
             {%- else -%}
@@ -118,7 +118,7 @@
                     {%- if cv.compare_at_price > cv.price %} <s>{{ cv.compare_at_price | money }}</s>{% endif -%}
                   </span>
                   {%- if c.has_only_default_variant -%}
-                    {%- form 'product', c -%}
+                    {%- form 'product', c, class: 'pp-ajax-add' -%}
                       <input type="hidden" name="id" value="{{ cv.id }}">
                       <button type="submit" class="pp-show__quick" {% unless c.available %}disabled{% endunless %}>Ajouter</button>
                     {%- endform -%}

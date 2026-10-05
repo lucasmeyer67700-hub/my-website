@@ -1,0 +1,48 @@
+{%- comment -%}
+  « Complétez votre nuit » : produits de la collection choisie qui ne sont pas déjà dans le panier.
+  L'ajout se fait sans recharger la page (assets/pp-cart.js) et met le panier à jour.
+  Le changement de coloris ne remonte pas jusqu'à <cart-drawer-items>, qui le prendrait
+  pour une modification de quantité.
+{%- endcomment -%}
+{%- assign upsell = settings.pp_cart_upsell_collection -%}
+{%- if upsell != blank -%}
+  {%- assign in_cart = cart.items | map: 'product_id' -%}
+  {%- capture cards -%}
+    {%- assign shown = 0 -%}
+    {%- for p in upsell.products -%}
+      {%- if in_cart contains p.id or p.available == false -%}{%- continue -%}{%- endif -%}
+      {%- if shown >= 2 -%}{%- break -%}{%- endif -%}
+      {%- assign shown = shown | plus: 1 -%}
+      {%- assign v = p.selected_or_first_available_variant -%}
+      <div class="pp-upsell__item">
+        <a class="pp-upsell__thumb" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+          {%- if v.featured_image or p.featured_image -%}
+            {{ v.featured_image | default: p.featured_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+          {%- endif -%}
+        </a>
+        <div class="pp-upsell__info">
+          <a class="pp-upsell__name" href="{{ p.url }}">{{ p.title }}</a>
+          <span class="pp-upsell__price">{{ v.price | money }}</span>
+          {%- if p.has_only_default_variant -%}
+            <input type="hidden" value="{{ v.id }}" data-pp-upsell-variant>
+          {%- else -%}
+            <select class="pp-upsell__select" data-pp-upsell-variant onchange="event.stopPropagation(); window.ppUpsellSwap && window.ppUpsellSwap(this);" aria-label="{{ p.options.first }} : {{ p.title | escape }}">
+              {%- for variant in p.variants -%}
+                <option value="{{ variant.id }}"{% if variant.featured_image %} data-img="{{ variant.featured_image | image_url: width: 200 }}"{% endif %}{% if variant.id == v.id %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>{{ variant.title }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endif -%}
+        </div>
+        <button type="button" class="pp-upsell__add" data-pp-upsell-add aria-label="Ajouter {{ p.title | escape }} au panier">
+          <span aria-hidden="true">+</span> Ajouter
+        </button>
+      </div>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if cards contains 'pp-upsell__item' -%}
+    <div class="pp-upsell">
+      <p class="pp-upsell__title">{{ settings.pp_cart_upsell_title | default: 'Complétez votre nuit' }}</p>
+      {{ cards }}
+    </div>
+  {%- endif -%}
+{%- endif -%}
