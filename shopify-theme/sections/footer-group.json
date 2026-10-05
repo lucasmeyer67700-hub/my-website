@@ -46,9 +46,141 @@
         "padding_top": 56,
         "padding_bottom": 36
       }
+    },
+    "assistant": {
+      "type": "pp-assistant",
+      "blocks": {
+        "qa1": {
+          "type": "qa",
+          "settings": {
+            "question": "Quels sont les délais de livraison ?",
+            "answer": "<p>La livraison est <strong>offerte</strong> en France métropolitaine. Chaque commande part avec un numéro de suivi et arrive en <strong>7 à 14 jours ouvrés</strong>.</p>",
+            "keywords": "livraison, livrer, delai, recevoir, expedition, expedie, colis, quand, combien de temps, arrive",
+            "link": "shopify://pages/livraison-et-retours",
+            "link_label": "Livraison et retours",
+            "quick": true
+          }
+        },
+        "qa2": {
+          "type": "qa",
+          "settings": {
+            "question": "Comment marche l'essai 30 nuits ?",
+            "answer": "<p>Vous avez <strong>30 nuits</strong> pour l'essayer chez vous. S'il ne vous convient pas, écrivez-nous : on vous indique la marche à suivre pour le retour et on vous rembourse dès réception.</p>",
+            "keywords": "essai, 30 nuits, retour, retourner, renvoyer, rembourse, remboursement, satisfait, pas content",
+            "link": "shopify://pages/politique-de-retour",
+            "link_label": "Politique de retour",
+            "quick": true
+          }
+        },
+        "qa3": {
+          "type": "qa",
+          "settings": {
+            "question": "Quel oreiller choisir ?",
+            "answer": "<p>L'<strong>Oreiller Papillon</strong> convient si vous dormez sur le dos, sur le côté, ou si vous alternez. Sur le ventre, il risque d'être trop haut.</p><p>Vous dormez sur le côté ? Le <strong>Pack Nuit complète</strong> ajoute le coussin genoux pour garder les hanches alignées.</p>",
+            "keywords": "choisir, lequel, quel oreiller, position, ventre, cote, dos, conseil, recommande, adapte",
+            "link": "shopify://pages/guide-choisir-oreiller",
+            "link_label": "Guide du sommeil",
+            "quick": true
+          }
+        },
+        "qa4": {
+          "type": "qa",
+          "settings": {
+            "question": "Comment entretenir l'oreiller ?",
+            "answer": "<p>La housse se retire grâce à sa fermeture éclair et se lave en machine à <strong>30 °C</strong>, cycle délicat. La mousse ne se lave pas : aérez-la de temps en temps.</p>",
+            "keywords": "laver, lavage, entretien, entretenir, housse, machine, propre, nettoyer",
+            "quick": true
+          }
+        },
+        "qa5": {
+          "type": "qa",
+          "settings": {
+            "question": "Où en est ma commande ?",
+            "answer": "<p>Le numéro de suivi vous est envoyé par e-mail dès l'expédition. Vous pouvez aussi suivre votre colis depuis notre page de suivi.</p>",
+            "keywords": "suivi, suivre, ma commande, numero, tracking, ou est, pas recu",
+            "link": "shopify://pages/suivi-de-commande",
+            "link_label": "Suivre ma commande",
+            "quick": true
+          }
+        },
+        "qa6": {
+          "type": "qa",
+          "settings": {
+            "question": "Comment profiter des remises pack ?",
+            "answer": "<p>Dans le catalogue, composez votre pack : <strong>−10 € dès 2 produits</strong>, <strong>−20 € dès 3</strong>. La remise s'applique automatiquement dans le panier, sans code.</p>",
+            "keywords": "pack, remise, reduction, promo, code, moins cher, offre, prix",
+            "link": "shopify://collections/catalogue",
+            "link_label": "Composer mon pack",
+            "quick": true
+          }
+        },
+        "qa7": {
+          "type": "qa",
+          "settings": {
+            "question": "L'oreiller a une odeur, est-ce normal ?",
+            "answer": "<p>Oui, c'est l'odeur de neuf de la mousse, qui a voyagé compressée. Laissez-le 24 à 48 h dans une pièce aérée : elle disparaît.</p>",
+            "keywords": "odeur, sent, sentir, chimique",
+            "quick": false
+          }
+        },
+        "qa8": {
+          "type": "qa",
+          "settings": {
+            "question": "Combien de temps pour s'habituer ?",
+            "answer": "<p>Comptez en général une à deux semaines. Les premières nuits peuvent sembler inhabituelles : c'est pour ça que vous avez 30 nuits d'essai.</p>",
+            "keywords": "habituer, habitude, adaptation, premieres nuits, temps pour",
+            "quick": false
+          }
+        },
+        "qa9": {
+          "type": "qa",
+          "settings": {
+            "question": "Quelles couleurs pour la taie ?",
+            "answer": "<p>La taie de rechange existe en <strong>noir, gris et vert</strong>. Elle est coupée à la forme exacte de l'Oreiller Papillon.</p>",
+            "keywords": "taie, couleur, coloris, noir, vert, gris",
+            "link": "shopify://products/housse-de-rechange-pour-oreiller-papillon",
+            "link_label": "Voir la taie",
+            "quick": false
+          }
+        },
+        "qa10": {
+          "type": "qa",
+          "settings": {
+            "question": "Comment payer ?",
+            "answer": "<p>Le paiement se fait sur la page sécurisée de Shopify, par carte bancaire ou avec les autres moyens affichés au moment du paiement.</p>",
+            "keywords": "payer, paiement, carte, paypal, securise, apple pay",
+            "quick": false
+          }
+        }
+      },
+      "block_order": [
+        "qa1",
+        "qa2",
+        "qa3",
+        "qa4",
+        "qa5",
+        "qa6",
+        "qa7",
+        "qa8",
+        "qa9",
+        "qa10"
+      ],
+      "settings": {
+        "title": "Assistant VELEA",
+        "subtitle": "Répond instantanément",
+        "greeting": "Bonjour ! Une question sur nos oreillers, la livraison ou l'essai 30 nuits ? Choisissez un sujet ou écrivez-moi.",
+        "teaser": "Une question ? Je vous réponds tout de suite.",
+        "placeholder": "Posez votre question…",
+        "fallback": "Je n'ai pas de réponse toute prête à cette question. Écrivez à notre équipe : elle vous répond sous 24 h ouvrées.",
+        "contact_label": "Écrire à l'équipe",
+        "contact_url": "shopify://pages/contact",
+        "typing_delay": 700,
+        "show_socials_floating": true
+      }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "assistant"
   ]
 }

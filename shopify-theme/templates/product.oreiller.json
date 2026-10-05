@@ -135,82 +135,79 @@
       }
     },
     "compare": {
-      "type": "pp-comparison",
-      "settings": {
-        "eyebrow": "Comparatif",
-        "title": "Ce qui fait la différence",
-        "text": "",
-        "col_1": "Oreiller Papillon",
-        "col_2": "Oreiller classique",
-        "col_3": "Mousse premier prix",
-        "color_scheme": "scheme-2",
-        "padding_top": 72,
-        "padding_bottom": 72
-      },
+      "type": "pp-versus",
       "blocks": {
-        "row_1": {
+        "vs1": {
           "type": "row",
           "settings": {
-            "label": "Garde la nuque dans l'axe",
-            "value_1": "oui",
-            "value_2": "non",
-            "value_3": "partiel"
+            "label": "Nuque",
+            "ours": "Le rebord cervical vient combler le creux de la nuque : la tête reste dans l'axe du dos, sans tirer d'un côté.",
+            "theirs": "La tête s'enfonce ou reste trop haute. La nuque se plie, et c'est elle qui compense toute la nuit."
           }
         },
-        "row_2": {
+        "vs2": {
           "type": "row",
           "settings": {
-            "label": "Adapté dos et côté",
-            "value_1": "oui",
-            "value_2": "partiel",
-            "value_3": "non"
+            "label": "Dos ou côté",
+            "ours": "Creux central pour dormir sur le dos, ailes plus hautes pour le côté. Une seule forme pour les deux positions.",
+            "theirs": "Une seule épaisseur, partout. Trop haute sur le dos, trop basse sur le côté."
           }
         },
-        "row_3": {
+        "vs3": {
           "type": "row",
           "settings": {
-            "label": "Garde sa forme dans le temps",
-            "value_1": "oui",
-            "value_2": "non",
-            "value_3": "partiel"
+            "label": "Tenue",
+            "ours": "Mousse à mémoire de forme : elle épouse la nuque, puis reprend sa forme chaque matin.",
+            "theirs": "Plumes ou fibres qui s'aplatissent au fil des mois. On le retape chaque soir."
           }
         },
-        "row_4": {
+        "vs4": {
           "type": "row",
           "settings": {
-            "label": "Housse amovible et lavable",
-            "value_1": "oui",
-            "value_2": "partiel",
-            "value_3": "partiel"
+            "label": "Les bras",
+            "ours": "Deux encoches latérales : vous glissez un bras dessous sans soulever l'oreiller.",
+            "theirs": "Le bras glissé dessous soulève l'oreiller et décale la tête."
           }
         },
-        "row_5": {
+        "vs5": {
           "type": "row",
           "settings": {
-            "label": "Encoches pour les bras",
-            "value_1": "oui",
-            "value_2": "non",
-            "value_3": "non"
+            "label": "Entretien",
+            "ours": "Housse zippée lavable à 30 °C, et une taie de rechange en noir, gris ou vert.",
+            "theirs": "Souvent lavable à la main seulement, quand il l'est."
           }
         },
-        "row_6": {
+        "vs6": {
           "type": "row",
           "settings": {
-            "label": "Essai 30 nuits",
-            "value_1": "oui",
-            "value_2": "non",
-            "value_3": "non"
+            "label": "Essai",
+            "ours": "30 nuits pour vous faire votre avis. S'il ne vous va pas, on organise le retour.",
+            "theirs": "Une fois sorti de son emballage, il est à vous."
           }
         }
       },
       "block_order": [
-        "row_1",
-        "row_2",
-        "row_3",
-        "row_4",
-        "row_5",
-        "row_6"
-      ]
+        "vs1",
+        "vs2",
+        "vs3",
+        "vs4",
+        "vs5",
+        "vs6"
+      ],
+      "settings": {
+        "eyebrow": "Comparatif",
+        "title": "Ce qui change, nuit après nuit",
+        "text": "",
+        "product": "loreiller-papillon",
+        "ours_eyebrow": "Avec",
+        "ours_title": "L'Oreiller Papillon",
+        "theirs_eyebrow": "Avec",
+        "theirs_title": "Un oreiller classique",
+        "button_label": "",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
     },
     "faq": {
       "type": "collapsible-content",

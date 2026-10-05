@@ -1,6 +1,7 @@
 {%- comment -%}
-  Avis clients : note globale à gauche, avis qui défilent en continu à droite
-  (deux rangées en sens opposés, pause au survol). Les avis sont saisis comme blocs.
+  Avis clients : note globale à gauche, carrousel d'avis à droite (défilement automatique
+  carte par carte, glissement au doigt sur mobile, pause dès que le visiteur interagit).
+  Les avis sont saisis comme blocs.
   La provenance des avis est affichée sous la note (obligation de transparence :
   article L111-7-2 du Code de la consommation).
   Aucune donnée structurée n'est générée : Google n'accepte pas, dans ses
@@ -11,7 +12,6 @@
 {%- liquid
   assign rating = section.settings.rating | plus: 0
   assign pct = rating | divided_by: 5.0 | times: 100
-  assign half = section.blocks.size | plus: 1 | divided_by: 2
 -%}
 
 {%- capture stars -%}
@@ -56,65 +56,120 @@
         {%- endif -%}
       </div>
 
-      <div class="pp-reviews__wall pp-reveal" style="--d: 1">
-        {%- for row in (1..2) -%}
-          {%- capture cards -%}
-            {%- for block in section.blocks -%}
-              {%- liquid
-                if row == 1 and forloop.index > half
-                  continue
-                endif
-                if row == 2 and forloop.index <= half
-                  continue
-                endif
-                assign r = block.settings.rating
-                assign rp = r | times: 20
-              -%}
-              {%- liquid
-                assign author = block.settings.author | strip
-                if author == blank
-                  assign author = section.settings.anonymous_label | default: 'Acheteur vérifié'
-                  assign anonymous = true
-                else
-                  assign anonymous = false
-                endif
-              -%}
-              <article class="pp-review" {{ block.shopify_attributes }}>
-                <span class="pp-review__quote" aria-hidden="true">&ldquo;</span>
-                <div class="pp-review__rating">
-                  <span class="pp-stars" style="--pct: {{ rp }}%" role="img" aria-label="{{ r }} sur 5">
-                    <span class="pp-stars__base">{{ stars }}</span>
-                    <span class="pp-stars__fill">{{ stars }}</span>
+      <pp-review-carousel class="pp-reviews__carousel pp-reveal" style="--d: 1" data-interval="{{ section.settings.interval | times: 1000 }}">
+        <div class="pp-reviews__viewport" tabindex="0" role="region" aria-roledescription="carrousel" aria-label="Avis clients">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign r = block.settings.rating
+              assign rp = r | times: 20
+              assign author = block.settings.author | strip
+              if author == blank
+                assign author = section.settings.anonymous_label | default: 'Acheteur vérifié'
+                assign anonymous = true
+              else
+                assign anonymous = false
+              endif
+            -%}
+            <article class="pp-review{% if forloop.first %} is-active{% endif %}" aria-roledescription="avis" aria-label="{{ forloop.index }} sur {{ forloop.length }}" {{ block.shopify_attributes }}>
+              <span class="pp-review__quote" aria-hidden="true">&ldquo;</span>
+              <div class="pp-review__rating">
+                <span class="pp-stars" style="--pct: {{ rp }}%" role="img" aria-label="{{ r }} sur 5">
+                  <span class="pp-stars__base">{{ stars }}</span>
+                  <span class="pp-stars__fill">{{ stars }}</span>
+                </span>
+                <span class="pp-review__score">{{ r }},0</span>
+              </div>
+              <p class="pp-review__text">{{ block.settings.text | newline_to_br }}</p>
+              <footer class="pp-review__foot">
+                <span class="pp-review__avatar{% if anonymous %} pp-review__avatar--icon{% endif %}" aria-hidden="true">
+                  {%- if anonymous -%}{% render 'pp-icon', icon: 'check' %}{%- else -%}{{ author | slice: 0 | upcase }}{%- endif -%}
+                </span>
+                <span class="pp-review__who">
+                  <strong>{{ author }}</strong>
+                  <span>
+                    {%- if section.settings.verified_label != blank and anonymous == false -%}{{ section.settings.verified_label }} · {% endif -%}
+                    {{ block.settings.date }}
                   </span>
-                  <span class="pp-review__score">{{ r }},0</span>
-                </div>
-                <p class="pp-review__text">{{ block.settings.text | newline_to_br }}</p>
-                <footer class="pp-review__foot">
-                  <span class="pp-review__avatar{% if anonymous %} pp-review__avatar--icon{% endif %}" aria-hidden="true">
-                    {%- if anonymous -%}{% render 'pp-icon', icon: 'check' %}{%- else -%}{{ author | slice: 0 | upcase }}{%- endif -%}
-                  </span>
-                  <span class="pp-review__who">
-                    <strong>{{ author }}</strong>
-                    <span>
-                      {%- if section.settings.verified_label != blank and anonymous == false -%}{{ section.settings.verified_label }} · {% endif -%}
-                      {{ block.settings.date }}
-                    </span>
-                  </span>
-                </footer>
-              </article>
-            {%- endfor -%}
-          {%- endcapture -%}
-          <div class="pp-reviews__row{% if row == 2 %} pp-reviews__row--reverse{% endif %}">
-            <div class="pp-reviews__track">
-              <div class="pp-reviews__set">{{ cards }}</div>
-              <div class="pp-reviews__set" aria-hidden="true">{{ cards }}</div>
-            </div>
-          </div>
-        {%- endfor -%}
-      </div>
+                </span>
+              </footer>
+            </article>
+          {%- endfor -%}
+        </div>
+        <div class="pp-reviews__controls">
+          <button type="button" class="pp-reviews__nav" data-prev aria-label="Avis précédent">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <div class="pp-reviews__progress" aria-hidden="true"><span data-bar></span></div>
+          <p class="pp-reviews__counter" aria-live="polite"><span data-current>01</span> / {{ section.blocks.size | prepend: '0' | slice: -2, 2 }}</p>
+          <button type="button" class="pp-reviews__nav" data-next aria-label="Avis suivant">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </pp-review-carousel>
     </div>
   </div>
 </div>
+
+<script>
+  if (!customElements.get('pp-review-carousel')) {
+    customElements.define('pp-review-carousel', class extends HTMLElement {
+      connectedCallback() {
+        this.viewport = this.querySelector('.pp-reviews__viewport');
+        this.cards = [...this.viewport.querySelectorAll('.pp-review')];
+        this.bar = this.querySelector('[data-bar]');
+        this.counter = this.querySelector('[data-current]');
+        this.index = 0;
+        this.delay = +this.dataset.interval || 5000;
+        this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.querySelector('[data-prev]').addEventListener('click', () => { this.go(this.index - 1); this.hold(); });
+        this.querySelector('[data-next]').addEventListener('click', () => { this.go(this.index + 1); this.hold(); });
+        // La carte active suit le défilement (doigt, trackpad ou boutons)
+        let t;
+        this.viewport.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => this.sync(), 80); }, { passive: true });
+        ['pointerenter', 'focusin', 'touchstart'].forEach((ev) => this.addEventListener(ev, () => this.hold(), { passive: true }));
+        this.addEventListener('pointerleave', () => this.resume());
+        new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; this.visible ? this.resume() : this.stop(); }, { threshold: 0.35 }).observe(this);
+        this.render();
+      }
+      // Position de défilement qui place la carte i : centrée sur mobile, alignée à gauche sinon
+      target(card) {
+        if (window.innerWidth < 750) return card.offsetLeft - (this.viewport.clientWidth - card.offsetWidth) / 2;
+        return card.offsetLeft - parseFloat(getComputedStyle(this.viewport).paddingLeft || 0);
+      }
+      sync() {
+        let best = 0, dist = Infinity;
+        this.cards.forEach((c, i) => {
+          const d = Math.abs(this.target(c) - this.viewport.scrollLeft);
+          if (d < dist) { dist = d; best = i; }
+        });
+        if (best !== this.index) { this.index = best; this.render(); }
+      }
+      go(i) {
+        const n = this.cards.length;
+        this.index = (i + n) % n;
+        this.viewport.scrollTo({ left: this.target(this.cards[this.index]), behavior: this.reduced ? 'auto' : 'smooth' });
+        this.render();
+      }
+      render() {
+        this.cards.forEach((c, i) => c.classList.toggle('is-active', i === this.index));
+        this.bar.style.width = ((this.index + 1) / this.cards.length) * 100 + '%';
+        this.counter.textContent = String(this.index + 1).padStart(2, '0');
+      }
+      stop() { clearInterval(this.timer); this.timer = null; }
+      resume() {
+        if (this.reduced || !this.visible || this.held) return;
+        this.stop();
+        this.timer = setInterval(() => this.go(this.index + 1), this.delay);
+      }
+      hold() {
+        this.stop();
+        this.held = true;
+        clearTimeout(this.release);
+        this.release = setTimeout(() => { this.held = false; this.resume(); }, 9000);
+      }
+    });
+  }
+</script>
 
 {% schema %}
 {
@@ -130,6 +185,7 @@
     { "type": "textarea", "id": "tags", "label": "Mots-clés (un par ligne)" },
     { "type": "textarea", "id": "source_note", "label": "Provenance des avis", "info": "Obligatoire : indiquez d'où viennent les avis et s'ils sont vérifiés." },
     { "type": "text", "id": "verified_label", "label": "Mention sous chaque avis", "default": "Achat vérifié" },
+    { "type": "range", "id": "interval", "min": 3, "max": 10, "step": 1, "unit": "s", "label": "Défilement automatique", "default": 5 },
     { "type": "text", "id": "anonymous_label", "label": "Nom si l'auteur est anonyme", "default": "Acheteur vérifié" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 88 },

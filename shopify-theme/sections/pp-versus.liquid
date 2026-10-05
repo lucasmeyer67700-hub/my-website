@@ -1,0 +1,104 @@
+{%- comment -%}
+  Comparatif éditorial : notre produit (colonne sombre) face à un oreiller classique
+  (colonne claire), critère par critère, avec de vraies phrases plutôt que des cases.
+  Sur ordinateur, les deux colonnes sont alignées ligne à ligne ; sur mobile, chaque
+  critère devient une carte qui empile les deux réponses.
+{%- endcomment -%}
+{% render 'pp-padding', section: section %}
+
+{%- assign product = section.settings.product -%}
+
+<div class="pp-vs color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center pp-reveal">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <div class="pp-vs__board pp-reveal" style="--d: 1">
+      <div class="pp-vs__row pp-vs__row--head">
+        <div class="pp-vs__cell pp-vs__cell--ours">
+          {%- if product.featured_image -%}
+            <span class="pp-vs__thumb">
+              {{- product.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '', width: 120, height: 120 -}}
+            </span>
+          {%- endif -%}
+          <span class="pp-vs__name">
+            <small>{{ section.settings.ours_eyebrow }}</small>
+            {{ section.settings.ours_title | default: product.title }}
+          </span>
+        </div>
+        <div class="pp-vs__cell pp-vs__cell--theirs">
+          <span class="pp-vs__name">
+            <small>{{ section.settings.theirs_eyebrow }}</small>
+            {{ section.settings.theirs_title }}
+          </span>
+        </div>
+        <span class="pp-vs__badge" aria-hidden="true">vs</span>
+      </div>
+
+      {%- for block in section.blocks -%}
+        <div class="pp-vs__row" {{ block.shopify_attributes }}>
+          <p class="pp-vs__label">{{ block.settings.label }}</p>
+          <div class="pp-vs__cell pp-vs__cell--ours">
+            <span class="pp-vs__mark pp-vs__mark--yes" aria-hidden="true">{% render 'pp-icon', icon: 'check' %}</span>
+            <p>
+              <strong>{{ block.settings.label }}</strong>
+              <span class="visually-hidden">{{ section.settings.ours_title | default: product.title }} :</span>
+              {{ block.settings.ours }}
+            </p>
+          </div>
+          <div class="pp-vs__cell pp-vs__cell--theirs">
+            <span class="pp-vs__mark" aria-hidden="true">{% render 'pp-icon', icon: 'cross' %}</span>
+            <p>
+              <strong>{{ block.settings.label }}</strong>
+              <span class="visually-hidden">{{ section.settings.theirs_title }} :</span>
+              {{ block.settings.theirs }}
+            </p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.button_label != blank and product != blank -%}
+      <div class="pp-vs__cta pp-reveal" style="--d: 2">
+        <a class="pp-vs__button" href="{{ product.url }}">{{ section.settings.button_label }} <span aria-hidden="true">→</span></a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Comparatif éditorial",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Comparatif" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qui change, nuit après nuit" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "product", "id": "product", "label": "Notre produit" },
+    { "type": "text", "id": "ours_eyebrow", "label": "Sur-titre (notre colonne)", "default": "Avec" },
+    { "type": "text", "id": "ours_title", "label": "Titre (notre colonne)", "info": "Vide : nom du produit." },
+    { "type": "text", "id": "theirs_eyebrow", "label": "Sur-titre (autre colonne)", "default": "Avec" },
+    { "type": "text", "id": "theirs_title", "label": "Titre (autre colonne)", "default": "Un oreiller classique" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Découvrir l'oreiller" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Critère",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Critère", "default": "Nuque" },
+        { "type": "textarea", "id": "ours", "label": "Notre produit" },
+        { "type": "textarea", "id": "theirs", "label": "L'autre" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Comparatif éditorial" } ]
+}
+{% endschema %}
