@@ -76,6 +76,48 @@
     }
   });
 
+  // « Passer au pack » : ajoute la formule, puis retire une unité des articles qu'elle remplace
+  document.addEventListener('click', async function (e) {
+    var btn = e.target.closest('[data-pp-upgrade-add]');
+    if (!btn) return;
+    var box = btn.closest('[data-pp-upgrade]');
+    var drawer = cartDrawer();
+    var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
+    var id = +box.querySelector('[data-pp-upgrade-variant]').value;
+    var updates = {};
+    try { updates = JSON.parse(box.dataset.remove || '{}'); } catch (err) { updates = {}; }
+    btn.disabled = true;
+    btn.classList.add('is-loading');
+    try {
+      var res = await fetch(root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: [{ id: id, quantity: 1 }] }),
+      });
+      if (!res.ok) throw new Error('add');
+      var body = { updates: updates };
+      if (drawer && drawer.getSectionsToRender) {
+        body.sections = drawer.getSectionsToRender().map(function (s) { return s.id; });
+        body.sections_url = window.location.pathname;
+      }
+      var up = await fetch(root + 'cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(body),
+      });
+      var data = await up.json();
+      if (drawer && data.sections) {
+        data.id = id;
+        drawer.renderContents(data);
+      } else {
+        window.location.reload();
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.classList.remove('is-loading');
+    }
+  });
+
   // Formulaires d'ajout rapide (vitrine, cartes) : ajout sans quitter la page
   document.addEventListener('submit', async function (e) {
     var form = e.target.closest('form.pp-ajax-add');

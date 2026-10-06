@@ -1,0 +1,212 @@
+{%- comment -%}
+  « Passer au pack » dans le panier.
+  Si le panier contient des produits achetés seuls (oreiller, taie, coussin genoux) ou un pack
+  incomplet, propose la formule du pack qui les contient avec un complément.
+  L'écart affiché est exact : prix de la formule moins ce que coûtent déjà, dans le panier
+  (remises comprises), les articles qu'elle remplace. Au clic (assets/pp-cart.js), la formule
+  est ajoutée puis les articles remplacés sont retirés (une unité chacun).
+  Réglages : Paramètres du thème > Panier premium > Passer au pack.
+{%- endcomment -%}
+{%- liquid
+  assign pack = settings.pp_cart_upgrade_pack
+  assign p_base = settings.pp_cart_upgrade_base
+  assign p_taie = settings.pp_cart_upgrade_taie
+  assign p_knee = settings.pp_cart_upgrade_knee
+  assign ok = true
+  if pack == blank or cart.item_count == 0
+    assign ok = false
+  endif
+
+  assign pack_item = nil
+  assign b_item = nil
+  assign t_item = nil
+  assign k_item = nil
+  for item in cart.items
+    unless ok
+      break
+    endunless
+    if item.product_id == pack.id and pack_item == nil
+      assign pack_item = item
+    elsif p_base and item.product_id == p_base.id and b_item == nil
+      assign b_item = item
+    elsif p_taie and item.product_id == p_taie.id and t_item == nil
+      assign t_item = item
+    elsif p_knee and item.product_id == p_knee.id and k_item == nil
+      assign k_item = item
+    endif
+  endfor
+
+  comment
+    Formule visée et articles remplacés
+  endcomment
+  assign target = ''
+  assign fixed_color = ''
+  assign removed = ''
+  assign removed_cost = 0
+  assign add_taie = false
+  assign add_knee = false
+  assign add_base = false
+
+  if ok == false
+    assign target = ''
+  elsif pack_item
+    assign pk = pack_item.variant.option1 | downcase
+    if pk contains 'genou' and pk contains 'taie'
+      assign target = ''
+    else
+      assign target = 'trio'
+      assign left = pack_item.quantity | minus: 1
+      assign removed = removed | append: '"' | append: pack_item.key | append: '":' | append: left | append: ','
+      assign removed_cost = pack_item.final_price
+      if pk contains 'genou'
+        assign add_taie = true
+      else
+        assign add_knee = true
+        assign fixed_color = pack_item.variant.option2
+      endif
+    endif
+  elsif b_item or t_item or k_item
+    assign n = 0
+    if b_item
+      assign n = n | plus: 1
+      assign left = b_item.quantity | minus: 1
+      assign removed = removed | append: '"' | append: b_item.key | append: '":' | append: left | append: ','
+      assign removed_cost = removed_cost | plus: b_item.final_price
+    endif
+    if t_item
+      assign n = n | plus: 1
+      assign left = t_item.quantity | minus: 1
+      assign removed = removed | append: '"' | append: t_item.key | append: '":' | append: left | append: ','
+      assign removed_cost = removed_cost | plus: t_item.final_price
+      assign fixed_color = t_item.variant.option1
+    endif
+    if k_item
+      assign n = n | plus: 1
+      assign left = k_item.quantity | minus: 1
+      assign removed = removed | append: '"' | append: k_item.key | append: '":' | append: left | append: ','
+      assign removed_cost = removed_cost | plus: k_item.final_price
+    endif
+    if n > 1
+      assign target = 'trio'
+    elsif k_item
+      assign target = 'knee'
+    else
+      assign target = 'taie'
+    endif
+    unless b_item
+      assign add_base = true
+    endunless
+    if target != 'knee' and t_item == nil
+      assign add_taie = true
+    endif
+    if target == 'trio' and k_item == nil
+      assign add_knee = true
+    endif
+  endif
+
+  if target == ''
+    assign ok = false
+  endif
+
+  comment
+    Variantes de la formule visée (une par couleur de taie)
+  endcomment
+  assign options = ''
+  assign chosen = nil
+  for v in pack.variants
+    unless ok
+      break
+    endunless
+    assign lv = v.option1 | downcase
+    assign kind = 'taie'
+    if lv contains 'genou' and lv contains 'taie'
+      assign kind = 'trio'
+    elsif lv contains 'genou'
+      assign kind = 'knee'
+    endif
+    if kind != target or v.available == false
+      continue
+    endif
+    if fixed_color != '' and v.option2 == fixed_color
+      assign chosen = v
+    endif
+    if chosen == nil and options == ''
+      assign first_v = v
+    endif
+    assign options = options | append: v.id | append: '|' | append: v.option2 | append: ';'
+  endfor
+  if chosen
+    assign options = ''
+  else
+    assign chosen = first_v
+  endif
+  assign options = options | remove_last: ';'
+  if target == 'knee'
+    assign options = ''
+  endif
+  assign opt_count = options | split: ';' | size
+  if opt_count < 2
+    assign options = ''
+  endif
+  if chosen == nil
+    assign ok = false
+  endif
+
+  assign diff = chosen.price | default: 0 | minus: removed_cost
+  assign added_solo = 0
+  assign added_label = ''
+  if add_base
+    assign added_solo = added_solo | plus: p_base.price
+    assign added_label = "l'oreiller"
+  endif
+  if add_taie
+    assign added_solo = added_solo | plus: p_taie.price
+    if added_label != ''
+      assign added_label = added_label | append: ' et la taie'
+    else
+      assign added_label = 'la taie de rechange'
+    endif
+  endif
+  if add_knee
+    assign added_solo = added_solo | plus: p_knee.price
+    if added_label != ''
+      assign added_label = added_label | append: ' et le coussin genoux'
+    else
+      assign added_label = 'le coussin genoux'
+    endif
+  endif
+  if diff > 0 and added_solo <= diff
+    assign ok = false
+  endif
+  assign removed = removed | remove_last: ','
+  assign thumb = pack.featured_image | default: p_base.featured_image
+-%}
+{%- if ok -%}
+<div class="pp-upgrade" data-pp-upgrade data-remove="{ {{ removed | escape }} }">
+  <span class="pp-upgrade__thumb" aria-hidden="true">
+    {%- if thumb -%}{{ thumb | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+    <span class="pp-upgrade__plus">+</span>
+  </span>
+  <div class="pp-upgrade__info">
+    <p class="pp-upgrade__kicker">{% if pack_item %}Complétez votre pack{% else %}Passez au pack{% endif %}</p>
+    {%- if diff > 0 -%}
+      <p class="pp-upgrade__text">Ajoutez {{ added_label }} pour <strong>+{{ diff | money }}</strong>{% if added_solo > diff %} <s>{{ added_solo | money }}</s>{% endif %}</p>
+    {%- else -%}
+      <p class="pp-upgrade__text">Regroupez vos articles en pack : <strong>−{{ diff | abs | money }}</strong></p>
+    {%- endif -%}
+    <p class="pp-upgrade__meta">{{ pack.title }} · {{ chosen.option1 }}</p>
+    {%- if options != '' -%}
+      {%- assign opts = options | split: ';' -%}
+      <select class="pp-upsell__select pp-upgrade__select" data-pp-upgrade-variant onchange="event.stopPropagation();" aria-label="Couleur de la taie">
+        {%- for o in opts -%}
+          {%- assign parts = o | split: '|' -%}
+          <option value="{{ parts[0] }}"{% if forloop.first %} selected{% endif %}>Taie {{ parts[1] | downcase }}</option>
+        {%- endfor -%}
+      </select>
+    {%- else -%}
+      <input type="hidden" value="{{ chosen.id }}" data-pp-upgrade-variant>
+    {%- endif -%}
+  </div>
+  <button type="button" class="pp-upgrade__btn" data-pp-upgrade-add>Choisir</button>
+</div>
+{%- endif -%}

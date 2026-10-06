@@ -1507,6 +1507,34 @@
         "id": "pp_cart_upsell_title",
         "label": "Titre",
         "default": "Complétez votre nuit"
+      },
+      {
+        "type": "header",
+        "content": "Passer au pack"
+      },
+      {
+        "type": "paragraph",
+        "content": "Quand le panier contient des produits achetés seuls, une carte propose la formule du pack qui les contient avec un complément, en affichant l'écart de prix exact. Le pack remplace alors ces produits."
+      },
+      {
+        "type": "product",
+        "id": "pp_cart_upgrade_pack",
+        "label": "Produit pack"
+      },
+      {
+        "type": "product",
+        "id": "pp_cart_upgrade_base",
+        "label": "Oreiller (vendu seul)"
+      },
+      {
+        "type": "product",
+        "id": "pp_cart_upgrade_taie",
+        "label": "Taie (vendue seule)"
+      },
+      {
+        "type": "product",
+        "id": "pp_cart_upgrade_knee",
+        "label": "Coussin genoux (vendu seul)"
       }
     ]
   },

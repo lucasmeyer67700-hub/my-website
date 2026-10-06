@@ -207,6 +207,10 @@
     "pp_cart_delivery_max": 14,
     "pp_cart_upsell_collection": "catalogue",
     "pp_cart_upsell_title": "Complétez votre nuit",
+    "pp_cart_upgrade_pack": "pack-sur-mesure",
+    "pp_cart_upgrade_base": "loreiller-papillon",
+    "pp_cart_upgrade_taie": "housse-de-rechange-pour-oreiller-papillon",
+    "pp_cart_upgrade_knee": "le-coussin-genoux",
     "favicon": "shopify://shop_images/velea-favicon.png"
   },
   "presets": {
