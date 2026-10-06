@@ -45,7 +45,7 @@
         {%- if section.settings.image_mobile != blank -%}
           {{ section.settings.image_mobile | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '100vw', widths: '600, 900, 1200', alt: '', class: 'pp-welcome__img pp-welcome__img--mobile' }}
         {%- endif -%}
-        <span class="pp-welcome__brand" aria-hidden="true">{{ shop.name }}</span>
+        <span class="pp-welcome__brand" aria-hidden="true">{% render 'pp-logo-mark', uid: 'w' %}{{ shop.name }}</span>
       </div>
 
       <div class="pp-welcome__body">

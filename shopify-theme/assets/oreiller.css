@@ -1982,3 +1982,14 @@ pp-pack-config.is-empty .pp-pc__total strong { opacity: 0.4; }
   .pp-pc__item, .pp-pc__extra, .pp-pc__meter span, .pp-pc__bar { transition: none; }
   .pp-pc__item.is-bump, .pp-pc__chip.is-on, .pp-pc__plus-sign.is-on, .pp-pc__lines li.is-on, .pp-pc__save.is-flash span, .pp-pc__add::after { animation: none; }
 }
+
+/* Logo : emblème lune en V + nom */
+.pp-brand { display: inline-flex; align-items: center; gap: 1.2rem; }
+.pp-brand .pp-logo-mark { width: 3.4rem; height: 3.4rem; flex: none; transform: translateY(-0.1rem); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.header__heading-link:hover .pp-logo-mark { transform: translateY(-0.1rem) rotate(-6deg); }
+.pp-brand__name { line-height: 1; }
+@media screen and (max-width: 749px) { .pp-brand { gap: 0.9rem; } .pp-brand .pp-logo-mark { width: 2.8rem; height: 2.8rem; } }
+
+.pp-welcome__brand { display: inline-flex; align-items: center; gap: 1rem; }
+.pp-welcome__brand .pp-logo-mark { width: 2.8rem; height: 2.8rem; }
+.pp-welcome__brand::after { position: absolute; left: 3.8rem; bottom: -1.1rem; }

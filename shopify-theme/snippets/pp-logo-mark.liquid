@@ -1,0 +1,15 @@
+{%- comment -%}
+  Emblème VELEA : un croissant de lune en forme de V, surmonté d'une petite étoile.
+  Usage : {% render 'pp-logo-mark', uid: 'h' %}  (uid : identifiant unique du dégradé)
+{%- endcomment -%}
+<svg class="pp-logo-mark" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="ppLogoGold{{ uid }}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ecdaa9"/>
+      <stop offset=".55" stop-color="#c6a15b"/>
+      <stop offset="1" stop-color="#a8843f"/>
+    </linearGradient>
+  </defs>
+  <path d="M7 11 C 13 35, 21 53, 32 57 C 43 53, 51 35, 57 11 C 49 31, 41.5 43, 32 46 C 22.5 43, 15 31, 7 11 Z" fill="url(#ppLogoGold{{ uid }})"/>
+  <path d="M48 3.5 l1.7 3.6 3.6 1.7 -3.6 1.7 L48 14.1 l-1.7 -3.6 -3.6 -1.7 3.6 -1.7 z" fill="#e2cc98"/>
+</svg>

@@ -206,7 +206,8 @@
     "pp_cart_delivery_min": 7,
     "pp_cart_delivery_max": 14,
     "pp_cart_upsell_collection": "catalogue",
-    "pp_cart_upsell_title": "Complétez votre nuit"
+    "pp_cart_upsell_title": "Complétez votre nuit",
+    "favicon": "shopify://shop_images/velea-favicon.png"
   },
   "presets": {
     "Dawn": {
