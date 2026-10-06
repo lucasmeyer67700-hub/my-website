@@ -2096,3 +2096,77 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 .pp-welcome__brand { display: inline-flex; align-items: center; gap: 1rem; }
 .pp-welcome__brand .pp-logo-mark { width: 2.8rem; height: 2.8rem; }
 .pp-welcome__brand::after { position: absolute; left: 3.8rem; bottom: -1.1rem; }
+
+/* ==========================================================================
+   Avis : mur de cartes sombres avec photos clients (pp-reviews, présentation « wall »)
+   ========================================================================== */
+.pp-wall { overflow: hidden; color: #f4f4f2; background: radial-gradient(90% 60% at 50% 0%, rgba(27, 42, 65, 0.55) 0%, rgba(27, 42, 65, 0) 70%), #0c0d10; }
+.pp-wall__head { display: grid; justify-items: center; gap: 1.4rem; text-align: center; margin-bottom: 4.4rem; }
+.pp-wall__eyebrow { display: inline-flex; align-items: center; gap: 0.8rem; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 244, 242, 0.7); }
+.pp-wall__eyebrow::before { content: ''; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--pp-gold); box-shadow: 0 0 10px rgba(198, 161, 91, 0.8); }
+.pp-wall__title { margin: 0; font-family: var(--font-body-family); font-size: clamp(3.6rem, 6.4vw, 8rem); font-weight: 800; line-height: 1; letter-spacing: -0.045em; color: #fff; }
+.pp-wall__score { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 0.6rem; }
+.pp-wall__score strong { font-size: 2.6rem; font-weight: 700; color: #fff; }
+.pp-wall__score .pp-stars { --w: 11rem; height: 2.1rem; color: #f5b72f; }
+.pp-wall .pp-stars__base { color: rgba(255, 255, 255, 0.18); }
+.pp-wall__badge { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border-radius: 50%; color: var(--pp-night); background: linear-gradient(135deg, var(--pp-gold-light), var(--pp-gold)); }
+.pp-wall__badge .pp-icon { width: 1.8rem; height: 1.8rem; }
+.pp-wall__count { font-size: 1.6rem; color: rgba(244, 244, 242, 0.65); }
+.pp-wall__source { max-width: 62rem; margin: 0; font-size: 1.2rem; line-height: 1.5; color: rgba(244, 244, 242, 0.45); }
+
+.pp-wall .pp-reviews__viewport {
+  gap: 2.4rem; padding: 0.4rem 0 4rem; padding-inline-end: 0; align-items: flex-start;
+  -webkit-mask-image: none; mask-image: none;
+}
+.pp-wall .pp-reviews__viewport .pp-review.pp-wcard {
+  width: calc((100% - 4.8rem) / 3); opacity: 1; transform: none; gap: 1.6rem; padding: 3.2rem 3.2rem 2.8rem;
+  border-radius: 2rem; color: #f4f4f2; background: #121317; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: none;
+  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s ease;
+}
+.pp-wall .pp-reviews__viewport .pp-review.pp-wcard::before { display: none; }
+.pp-wall .pp-reviews__viewport .pp-review.pp-wcard:hover { transform: translateY(-4px); border-color: rgba(198, 161, 91, 0.45); background: #15171c; }
+.pp-wall .pp-review.is-active .pp-stars__fill { animation: none; }
+.pp-wcard__head { display: flex; align-items: center; gap: 1.4rem; }
+.pp-wcard__avatar { display: grid; place-items: center; width: 4.8rem; height: 4.8rem; flex: none; border-radius: 50%; font-size: 1.9rem; font-weight: 700; color: #fff; background: #2a2c33; }
+.pp-wcard__avatar.is-anon { color: var(--pp-gold-light); background: rgba(198, 161, 91, 0.14); box-shadow: inset 0 0 0 1px rgba(198, 161, 91, 0.4); }
+.pp-wcard__avatar .pp-icon { width: 2rem; height: 2rem; stroke-width: 2.2; }
+.pp-wcard__who { display: grid; gap: 0.2rem; min-width: 0; flex: 1; }
+.pp-wcard__who strong { font-size: 1.8rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pp-wcard__who span { font-size: 1.4rem; color: rgba(244, 244, 242, 0.55); }
+.pp-wcard__verified { display: inline-flex; align-items: center; gap: 0.4rem; flex: none; padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 1.1rem; font-weight: 600; color: var(--pp-gold-light); background: rgba(198, 161, 91, 0.1); border: 1px solid rgba(198, 161, 91, 0.3); }
+.pp-wcard__verified .pp-icon { width: 1.3rem; height: 1.3rem; stroke-width: 2.6; }
+.pp-wcard__stars.pp-stars { --w: 10rem; height: 1.9rem; color: #f5b72f; }
+.pp-wcard__text { margin: 0; font-size: 1.7rem; line-height: 1.6; color: rgba(244, 244, 242, 0.88); }
+.pp-wcard__photo { margin: 0.4rem 0 0; }
+.pp-wcard__photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 1rem; }
+.pp-wcard__photo figcaption { margin-top: 1rem; font-size: 1.5rem; color: rgba(244, 244, 242, 0.65); }
+
+.pp-wall .pp-reviews__nav { color: #fff; background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.14); }
+.pp-wall .pp-reviews__nav:hover { color: var(--pp-night); background: var(--pp-gold); border-color: var(--pp-gold); }
+.pp-wall .pp-reviews__progress { background: rgba(255, 255, 255, 0.1); }
+.pp-wall .pp-reviews__counter { color: rgba(244, 244, 242, 0.5); }
+.pp-wall .pp-reviews__counter span { color: #fff; }
+.pp-wall__controls { max-width: 56rem; margin: -1.6rem auto 0; }
+
+@media screen and (max-width: 989px) {
+  .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { width: calc((100% - 2.4rem) / 2); }
+}
+@media screen and (max-width: 749px) {
+  .pp-wall__head { gap: 1.2rem; margin-bottom: 3rem; }
+  .pp-wall__eyebrow { font-size: 1.15rem; }
+  .pp-wall__score strong { font-size: 2.2rem; }
+  .pp-wall__score .pp-stars { --w: 9.6rem; height: 1.8rem; }
+  .pp-wall__count { font-size: 1.4rem; }
+  .pp-wall pp-review-carousel { margin-inline: -1.5rem; }
+  .pp-wall .pp-reviews__viewport { gap: 1.2rem; padding: 0.4rem 0 2.8rem; padding-inline: 7vw; scroll-padding-inline: 7vw; }
+  .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { width: 86vw; padding: 2.4rem 2.2rem 2.2rem; scroll-snap-align: center; }
+  .pp-wcard__avatar { width: 4.2rem; height: 4.2rem; font-size: 1.7rem; }
+  .pp-wcard__who strong { font-size: 1.6rem; }
+  .pp-wcard__who span { font-size: 1.25rem; }
+  .pp-wcard__verified { display: none; }
+  .pp-wall .pp-reviews__controls [data-next] { order: 0; }
+  .pp-wall .pp-reviews__viewport { padding-bottom: 2.8rem; }
+  .pp-wcard__text { font-size: 1.55rem; }
+  .pp-wall__controls { margin: -1.2rem 1.5rem 0; }
+}
+@media (prefers-reduced-motion: reduce) { .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { transition: none; } }

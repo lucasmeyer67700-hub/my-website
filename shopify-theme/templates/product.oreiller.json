@@ -478,7 +478,7 @@
       "settings": {
         "anchor": "avis",
         "eyebrow": "Avis clients",
-        "title": "Ils dorment déjà dessus",
+        "title": "Ce qu'en disent nos clients.",
         "rating": "4.8",
         "count": "103",
         "tags": "",
@@ -486,7 +486,9 @@
         "verified_label": "Achat vérifié",
         "color_scheme": "scheme-2",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "layout": "wall",
+        "anonymous_label": "Client vérifié"
       }
     },
     "spotlight": {

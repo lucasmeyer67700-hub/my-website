@@ -20,6 +20,82 @@
   </g></svg>
 {%- endcapture -%}
 
+{%- if section.settings.layout == 'wall' -%}
+<div
+  id="{{ section.settings.anchor | default: 'avis' | handleize }}"
+  class="pp-wall pp-anchor"
+>
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-wall__head pp-reveal">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-wall__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="pp-wall__title">{{ section.settings.title }}</h2>
+      <div class="pp-wall__score">
+        <span class="pp-wall__badge" aria-hidden="true">{% render 'pp-icon', icon: 'shield' %}</span>
+        <strong>{{ section.settings.rating | replace: '.', ',' }}</strong>
+        <span class="pp-stars" style="--pct: {{ pct }}%" role="img" aria-label="Note moyenne : {{ section.settings.rating | replace: '.', ',' }} sur 5">
+          <span class="pp-stars__base">{{ stars }}</span>
+          <span class="pp-stars__fill">{{ stars }}</span>
+        </span>
+        <span class="pp-wall__count">{{ section.settings.count }} avis vérifiés</span>
+      </div>
+      {%- if section.settings.source_note != blank -%}<p class="pp-wall__source">{{ section.settings.source_note }}</p>{%- endif -%}
+    </div>
+
+    <pp-review-carousel class="pp-wall__carousel pp-reveal" style="--d: 1" data-interval="{{ section.settings.interval | times: 1000 }}">
+      <div class="pp-reviews__viewport pp-wall__track" tabindex="0" role="region" aria-roledescription="carrousel" aria-label="Avis clients">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign r = block.settings.rating
+            assign rp = r | times: 20
+            assign author = block.settings.author | strip
+            if author == blank
+              assign author = section.settings.anonymous_label | default: 'Client vérifié'
+              assign anonymous = true
+            else
+              assign anonymous = false
+            endif
+          -%}
+          <article class="pp-review pp-wcard{% if forloop.first %} is-active{% endif %}" aria-roledescription="avis" aria-label="{{ forloop.index }} sur {{ forloop.length }}" {{ block.shopify_attributes }}>
+            <header class="pp-wcard__head">
+              <span class="pp-wcard__avatar{% if anonymous %} is-anon{% endif %}" aria-hidden="true">
+                {%- if anonymous -%}{% render 'pp-icon', icon: 'check' %}{%- else -%}{{ author | slice: 0 | upcase }}{%- endif -%}
+              </span>
+              <span class="pp-wcard__who">
+                <strong>{{ author }}</strong>
+                <span>{{ block.settings.date }}</span>
+              </span>
+              {%- if section.settings.verified_label != blank -%}
+                <span class="pp-wcard__verified" title="{{ section.settings.verified_label | escape }}">{% render 'pp-icon', icon: 'check' %}<span>{{ section.settings.verified_label }}</span></span>
+              {%- endif -%}
+            </header>
+            <span class="pp-stars pp-wcard__stars" style="--pct: {{ rp }}%" role="img" aria-label="{{ r }} sur 5">
+              <span class="pp-stars__base">{{ stars }}</span>
+              <span class="pp-stars__fill">{{ stars }}</span>
+            </span>
+            <p class="pp-wcard__text">{{ block.settings.text | newline_to_br }}</p>
+            {%- if block.settings.photo != blank -%}
+              <figure class="pp-wcard__photo">
+                {{ block.settings.photo | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 700, 900', sizes: '(min-width: 990px) 420px, 85vw', alt: 'Photo envoyée par le client' }}
+                <figcaption>— photo client</figcaption>
+              </figure>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+      <div class="pp-reviews__controls pp-wall__controls">
+        <button type="button" class="pp-reviews__nav" data-prev aria-label="Avis précédent">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="pp-reviews__progress" aria-hidden="true"><span data-bar></span></div>
+        <p class="pp-reviews__counter" aria-live="polite"><span data-current>01</span> / {{ section.blocks.size | prepend: '0' | slice: -2, 2 }}</p>
+        <button type="button" class="pp-reviews__nav" data-next aria-label="Avis suivant">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </pp-review-carousel>
+  </div>
+</div>
+{%- else -%}
 <div
   id="{{ section.settings.anchor | default: 'avis' | handleize }}"
   class="pp-reviews pp-anchor color-{{ section.settings.color_scheme }} gradient"
@@ -109,6 +185,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 <script>
   if (!customElements.get('pp-review-carousel')) {
@@ -177,6 +254,7 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "select", "id": "layout", "label": "Présentation", "default": "wall", "options": [ { "value": "wall", "label": "Cartes avec photos clients (fond sombre)" }, { "value": "carousel", "label": "Note à gauche, carrousel à droite" } ] },
     { "type": "text", "id": "anchor", "label": "Ancre (lien #...)", "default": "avis" },
     { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Avis clients" },
     { "type": "text", "id": "title", "label": "Titre", "default": "Ils dorment déjà dessus" },
@@ -199,7 +277,8 @@
         { "type": "text", "id": "author", "label": "Auteur", "info": "Pseudonyme tel qu'affiché sur l'avis d'origine. Laissez vide s'il est anonyme." },
         { "type": "text", "id": "date", "label": "Date" },
         { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Note", "default": 5 },
-        { "type": "textarea", "id": "text", "label": "Texte" }
+        { "type": "textarea", "id": "text", "label": "Texte" },
+        { "type": "image_picker", "id": "photo", "label": "Photo du client", "info": "Photo envoyée par l'acheteur avec son avis (avec l'accord du fournisseur)." }
       ]
     }
   ],
