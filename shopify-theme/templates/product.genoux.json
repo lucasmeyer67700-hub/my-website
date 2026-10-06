@@ -93,11 +93,18 @@
             "icon": "washing",
             "content": "<p>Housse amovible, lavable en machine à 30 °C. La mousse ne se lave pas : aérez-la de temps en temps.</p><p>À la réception, laissez le coussin respirer 24 à 48 h pour qu'il reprenne son volume.</p>"
           }
+        },
+        "rating_line": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-rating-line', rating: '', count: '41', anchor: 'avis' %}"
+          }
         }
       },
       "block_order": [
         "eyebrow",
         "title",
+        "rating_line",
         "price",
         "save",
         "pitch",

@@ -2171,3 +2171,4 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 }
 @media (prefers-reduced-motion: reduce) { .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { transition: none; } }
 @media screen and (min-width: 990px) { .pp-wall__carousel.is-few .pp-wall__controls { display: none; } }
+.pp-rating-line__star { font-size: 1.6rem; line-height: 1; color: #c9a227; }

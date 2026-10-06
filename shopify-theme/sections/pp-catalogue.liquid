@@ -26,12 +26,23 @@
         {%- liquid
           assign badge = ''
           assign rating = ''
+          assign rating_count = ''
           if forloop.first
             assign badge = section.settings.first_badge
             assign rating = section.settings.rating
+            assign rating_count = section.settings.rating_count
           endif
+          assign lines = section.settings.ratings_more | newline_to_br | split: '<br />'
+          for line in lines
+            assign parts = line | split: '|'
+            assign h = parts[0] | strip
+            if h == p.handle
+              assign rating = parts[1] | strip
+              assign rating_count = parts[2] | strip
+            endif
+          endfor
         -%}
-        {% render 'pp-cat-card', p: p, index: forloop.index0, badge: badge, rating: rating, rating_count: section.settings.rating_count, swatches: true, stars: stars %}
+        {% render 'pp-cat-card', p: p, index: forloop.index0, badge: badge, rating: rating, rating_count: rating_count, swatches: true, stars: stars %}
       {%- endfor -%}
     </div>
 
@@ -213,6 +224,7 @@
     { "type": "text", "id": "first_badge", "label": "Badge du premier produit", "default": "Best-seller" },
     { "type": "text", "id": "rating", "label": "Note du premier produit (sur 5)" },
     { "type": "text", "id": "rating_count", "label": "Nombre d'avis du premier produit" },
+    { "type": "textarea", "id": "ratings_more", "label": "Avis des autres produits", "info": "Une ligne par produit : identifiant du produit | note | nombre d'avis. Laissez la note vide si vous ne la connaissez pas (ex. : le-coussin-genoux | | 41)." },
     { "type": "header", "content": "Packs déjà composés" },
     { "type": "product_list", "id": "packs", "label": "Packs", "limit": 4 },
     { "type": "text", "id": "packs_title", "label": "Titre", "default": "Nos packs" },

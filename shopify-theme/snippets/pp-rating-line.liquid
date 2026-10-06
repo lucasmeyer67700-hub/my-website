@@ -1,6 +1,7 @@
 {%- comment -%}
   Ligne « ★★★★★ 4,8 · 164 avis » qui renvoie vers la section avis de la page.
   Usage : {% render 'pp-rating-line', rating: '4.8', count: '164', anchor: 'avis' %}
+  Sans note (rating vide) : une étoile et le nombre d'avis.
 {%- endcomment -%}
 {%- liquid
   assign pct = rating | plus: 0 | divided_by: 5.0 | times: 100
@@ -11,9 +12,14 @@
   </g></svg>
 {%- endcapture -%}
 <a class="pp-rating-line" href="#{{ anchor | default: 'avis' }}" data-pp-scroll>
-  <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true">
-    <span class="pp-stars__base">{{ stars }}</span>
-    <span class="pp-stars__fill">{{ stars }}</span>
-  </span>
-  <span><strong>{{ rating | replace: '.', ',' }}</strong>/5 · {{ count }} avis</span>
+  {%- if rating != blank -%}
+    <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true">
+      <span class="pp-stars__base">{{ stars }}</span>
+      <span class="pp-stars__fill">{{ stars }}</span>
+    </span>
+    <span><strong>{{ rating | replace: '.', ',' }}</strong>/5 · {{ count }} avis</span>
+  {%- else -%}
+    <span class="pp-rating-line__star" aria-hidden="true">★</span>
+    <span>{{ count }} avis clients</span>
+  {%- endif -%}
 </a>

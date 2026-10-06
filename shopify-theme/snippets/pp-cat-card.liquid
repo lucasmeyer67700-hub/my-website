@@ -26,6 +26,11 @@
         <span class="pp-stars" style="--pct: {{ pct }}%" aria-hidden="true"><span class="pp-stars__base">{{ stars }}</span><span class="pp-stars__fill">{{ stars }}</span></span>
         <span><strong>{{ rating | replace: '.', ',' }}</strong>/5 · {{ rating_count }} avis</span>
       </p>
+    {%- elsif rating_count != blank -%}
+      <p class="pp-rating-line">
+        <span class="pp-rating-line__star" aria-hidden="true">★</span>
+        <span>{{ rating_count }} avis clients</span>
+      </p>
     {%- endif -%}
     <p class="pp-cat__desc">{{ p.description | strip_html | truncatewords: 18 }}</p>
 
