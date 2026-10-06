@@ -250,10 +250,9 @@
         "code": "BIENVENUE10",
         "percent": 10,
         "delay": 5,
-        "image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
-        "focus": 24,
+        "image": "shopify://shop_images/bienvenue-oreiller-portrait.jpg",
+        "focus": 50,
         "product": "loreiller-papillon",
-        "seal": "Bienvenue",
         "eyebrow": "Bienvenue chez VELEA",
         "title": "−10 % sur votre première commande",
         "text": "Laissez votre e-mail : votre code s'affiche tout de suite et s'applique automatiquement à votre panier.",
@@ -267,7 +266,8 @@
         "success_title": "Votre code est activé",
         "success_text": "−10 % sur toute votre première commande, déjà appliqués à votre panier. Gardez aussi le code ci-dessous.",
         "success_button": "Découvrir la boutique",
-        "redirect": "shopify://collections/catalogue"
+        "redirect": "shopify://collections/catalogue",
+        "image_mobile": "shopify://shop_images/bienvenue-oreiller-mobile.jpg"
       }
     }
   },

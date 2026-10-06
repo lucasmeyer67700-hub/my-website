@@ -40,9 +40,12 @@
 
       <div class="pp-welcome__media">
         {%- if image != blank -%}
-          {{ image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 400px, 100vw', widths: '600, 900, 1200', alt: '', style: focus_style }}
+          {{ image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '400px', widths: '600, 900, 1200', alt: '', style: focus_style, class: 'pp-welcome__img pp-welcome__img--desktop' }}
         {%- endif -%}
-        <span class="pp-welcome__seal" aria-hidden="true"><strong>−{{ section.settings.percent }}<small>%</small></strong><em>{{ section.settings.seal }}</em></span>
+        {%- if section.settings.image_mobile != blank -%}
+          {{ section.settings.image_mobile | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '100vw', widths: '600, 900, 1200', alt: '', class: 'pp-welcome__img pp-welcome__img--mobile' }}
+        {%- endif -%}
+        <span class="pp-welcome__brand" aria-hidden="true">{{ shop.name }}</span>
       </div>
 
       <div class="pp-welcome__body">
@@ -244,10 +247,10 @@
     { "type": "text", "id": "code", "label": "Code de réduction", "default": "BIENVENUE10", "info": "Doit exister dans Shopify > Réductions." },
     { "type": "number", "id": "percent", "label": "Pourcentage affiché", "default": 10 },
     { "type": "range", "id": "delay", "min": 1, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 5, "info": "La fenêtre s'ouvre à chaque nouvelle visite, sauf pour les inscrits." },
-    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image (ordinateur)", "info": "Format portrait, 4:5 conseillé." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Format paysage, environ 2:1. Vide : l'image ordinateur est utilisée." },
     { "type": "range", "id": "focus", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Cadrage horizontal de l'image", "default": 50 },
     { "type": "product", "id": "product", "label": "Ou photo de ce produit" },
-    { "type": "text", "id": "seal", "label": "Texte du macaron", "default": "Bienvenue" },
     { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Bienvenue chez nous" },
     { "type": "text", "id": "title", "label": "Titre", "default": "−10 % sur votre première commande" },
     { "type": "textarea", "id": "text", "label": "Texte", "default": "Laissez votre e-mail : votre code s'affiche tout de suite." },

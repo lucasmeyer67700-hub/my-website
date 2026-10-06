@@ -1686,17 +1686,13 @@ div.pp-welcome__overlay {
 .pp-welcome__media { position: relative; min-height: 54rem; background: #24262a; overflow: hidden; }
 .pp-welcome__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50%) 50%; transform: scale(1.06); transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .pp-welcome.is-open .pp-welcome__media img { transform: none; }
-.pp-welcome__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 16, 19, 0) 50%, rgba(15, 16, 19, 0.65) 100%); }
-.pp-welcome__seal {
-  position: absolute; z-index: 1; left: 2.4rem; bottom: 2.4rem; display: grid; place-items: center; align-content: center;
-  width: 11rem; height: 11rem; border-radius: 50%; color: var(--pp-night);
-  background: linear-gradient(135deg, #ecdaa9, var(--pp-gold) 55%, #a8843f);
-  box-shadow: 0 0 0 6px rgba(198, 161, 91, 0.22), 0 18px 34px -12px rgba(0, 0, 0, 0.6);
+@media screen and (min-width: 750px) { .pp-welcome__img--mobile { display: none; } }
+.pp-welcome__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 16, 19, 0.35) 0%, rgba(15, 16, 19, 0) 22%, rgba(15, 16, 19, 0) 78%, rgba(15, 16, 19, 0.35) 100%); }
+.pp-welcome__brand {
+  position: absolute; z-index: 1; left: 3.2rem; top: 3rem; font-family: var(--pp-serif); font-size: 2rem; font-weight: 500;
+  letter-spacing: 0.32em; text-transform: uppercase; color: rgba(236, 218, 169, 0.92);
 }
-.pp-welcome.is-open .pp-welcome__seal { animation: pp-seal-in 0.9s 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
-.pp-welcome__seal strong { font-family: var(--pp-serif); font-size: 4rem; font-weight: 600; line-height: 1; }
-.pp-welcome__seal small { font-size: 2.2rem; }
-.pp-welcome__seal em { font-style: normal; font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 0.3rem; }
+.pp-welcome__brand::after { content: ''; display: block; width: 3.2rem; height: 1px; margin-top: 1rem; background: rgba(198, 161, 91, 0.7); }
 @keyframes pp-seal-in { from { opacity: 0; transform: scale(0.4) rotate(-20deg); } }
 .pp-welcome__body { display: grid; align-content: center; padding: 5.6rem 5.2rem 4.4rem; }
 .pp-welcome__step { display: grid; gap: 1.4rem; }
@@ -1773,18 +1769,16 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 @media screen and (max-width: 749px) {
   .pp-welcome { place-items: end center; padding: 0; }
   .pp-welcome__dialog { grid-template-columns: 1fr; width: 100%; max-height: 94dvh; border-radius: 2.8rem 2.8rem 0 0; transform: translateY(100%); }
-  .pp-welcome__media { min-height: 0; height: 16rem; overflow: visible; }
-  .pp-welcome__media img { border-radius: 2.8rem 2.8rem 0 0; object-position: var(--focus, 50%) 35%; }
+  .pp-welcome__media { min-height: 0; height: 17rem; }
+  .pp-welcome__brand { left: 2.2rem; top: 2rem; font-size: 1.6rem; }
+  .pp-welcome__media:has(.pp-welcome__img--mobile) .pp-welcome__img--desktop { display: none; }
+  .pp-welcome__img--mobile { object-position: 50% 50% !important; }
+  .pp-welcome__media img { border-radius: 2.8rem 2.8rem 0 0; object-position: var(--focus, 50%) 60%; }
   .pp-welcome__media::after { border-radius: 2.8rem 2.8rem 0 0; }
-  .pp-welcome__seal { width: 8.4rem; height: 8.4rem; left: auto; right: 2rem; bottom: -2.4rem; }
-  .pp-welcome__seal strong { font-size: 3rem; }
-  .pp-welcome__seal small { font-size: 1.6rem; }
-  .pp-welcome__seal em { font-size: 0.8rem; }
-  .pp-welcome__body { padding: 2.8rem 2.2rem calc(2.4rem + env(safe-area-inset-bottom)); }
+        .pp-welcome__body { padding: 2.8rem 2.2rem calc(2.4rem + env(safe-area-inset-bottom)); }
   .pp-welcome__step { gap: 1.2rem; }
   .pp-welcome__title { font-size: 3rem; }
   .pp-welcome__text { font-size: 1.4rem; }
-  .pp-welcome__body .pp-eyebrow { padding-right: 9rem; }
   .pp-welcome__perks { padding: 1.2rem 1.4rem; }
   .pp-welcome__perks li { font-size: 1.3rem; }
   .pp-welcome-tab { left: 1.2rem; bottom: 1.6rem; }
@@ -1792,7 +1786,6 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .pp-welcome__dialog, .pp-welcome__overlay, .pp-welcome__media img { transition: none; }
-  .pp-welcome__seal, .pp-welcome__step > *, .pp-welcome__submit::after, .pp-welcome__cta::after { animation: none !important; }
 }
 
 /* Assistant : bouton agrandi, bulle de discussion animée */
