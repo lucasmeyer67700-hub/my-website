@@ -97,7 +97,7 @@
         "rating_line": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "{% render 'pp-rating-line', rating: '', count: '41', anchor: 'avis' %}"
+            "custom_liquid": "{% render 'pp-rating-line', rating: '4.7', count: '362', anchor: 'avis' %}"
           }
         }
       },
@@ -319,13 +319,49 @@
         "review_1": {
           "type": "review",
           "settings": {
+            "author": "M***o",
+            "date": "26 févr. 2026",
+            "rating": 5,
+            "text": "Il est arrivé emballé sous vide ; une fois l'emballage retiré, il a immédiatement repris sa forme originale. Il semble être d'excellente qualité et possède une fermeture éclair latérale pour retirer la housse et la laver. La fermeture éclair est très discrète, ce qui semble rendre impossible de la retirer."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "author": "b***r",
+            "date": "01 juin 2026",
+            "rating": 5,
+            "text": "Merveilleux oreiller ! Mousse de bonne qualité, housse amovible 👍"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "04 sept. 2026",
+            "rating": 5,
+            "text": "C'est très confortable. Si je n'ai pas ça quand je dors sur le côté, je n'arrive plus à dormir."
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
             "author": "",
             "date": "10 sept. 2026",
             "rating": 4,
             "text": "La qualité est bonne et c'est confortable à porter entre les jambes en position allongée. Le type à fermeture éclair facilite le lavage."
           }
         },
-        "review_2": {
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "author": "U***r",
+            "date": "26 mars 2026",
+            "rating": 5,
+            "text": "Petit mais épais, idéal pour dormir sur le côté et confortable. Je le recommande vraiment !"
+          }
+        },
+        "review_6": {
           "type": "review",
           "settings": {
             "author": "",
@@ -334,7 +370,43 @@
             "text": "Excellent produit, testé dès sa réception et je suis très satisfait de cet article. Je l'achèterais sans hésiter à nouveau, j'en suis très content !!!"
           }
         },
-        "review_3": {
+        "review_7": {
+          "type": "review",
+          "settings": {
+            "author": "T***g",
+            "date": "29 juil. 2026",
+            "rating": 5,
+            "text": "Je l'utilise depuis une semaine maintenant et il est confortable et maintient mes jambes confortablement."
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "07 août 2026",
+            "rating": 5,
+            "text": "Bon rapport qualité-prix, je rachèterais sans hésiter. Je le recommande."
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "28 févr. 2026",
+            "rating": 5,
+            "text": "C'est une très bonne mousse à mémoire de forme à placer entre les jambes pour se reposer, et elle reprend ensuite sa forme originale."
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "01 mai 2026",
+            "rating": 5,
+            "text": "J'ai mal au dos, donc j'ai besoin d'un oreiller à mettre entre mes jambes quand je dors sur le côté. Ce coussin remplit bien sa fonction. La livraison se fait dans un emballage sous vide compressé. Très bien."
+          }
+        },
+        "review_11": {
           "type": "review",
           "settings": {
             "author": "K***e",
@@ -347,17 +419,25 @@
       "block_order": [
         "review_1",
         "review_2",
-        "review_3"
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10",
+        "review_11"
       ],
       "settings": {
         "layout": "wall",
         "anchor": "avis",
         "eyebrow": "Avis clients",
         "title": "Ce qu'en disent nos clients.",
-        "rating": "",
-        "count": "41",
+        "rating": "4.7",
+        "count": "362",
         "tags": "",
-        "source_note": "Avis laissés par des acheteurs de ce coussin sur la boutique en ligne de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
+        "source_note": "Avis laissés sur la boutique en ligne de notre fournisseur par des acheteurs de ce coussin ou d'un modèle similaire, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
         "verified_label": "Achat vérifié",
         "interval": 5,
         "anonymous_label": "Client vérifié",
