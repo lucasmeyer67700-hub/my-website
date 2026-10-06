@@ -2172,3 +2172,36 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { transition: none; } }
 @media screen and (min-width: 990px) { .pp-wall__carousel.is-few .pp-wall__controls { display: none; } }
 .pp-rating-line__star { font-size: 1.6rem; line-height: 1; color: #c9a227; }
+
+/* Catalogue sur téléphone : cartes portrait qui défilent au doigt, la suivante dépasse */
+.pp-cat__dots { display: none; }
+@media screen and (max-width: 749px) {
+  .pp-cat .pp-heading { margin-bottom: 2.4rem; }
+  .pp-cat__grid:not(.pp-cat__grid--packs) {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80vw; gap: 1.2rem; align-items: stretch;
+    margin-inline: -1.5rem; padding: 0.6rem 1.5rem 2.4rem; overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: 1.5rem; scrollbar-width: none;
+  }
+  .pp-cat__grid:not(.pp-cat__grid--packs)::-webkit-scrollbar { display: none; }
+  .pp-cat__grid .pp-cat__card { scroll-snap-align: start; border-radius: 2rem; }
+  .pp-cat__card:hover { transform: none; }
+  .pp-cat__media { aspect-ratio: 1 / 1; }
+  .pp-cat__badge { top: 1.2rem; left: 1.2rem; padding: 0.5rem 1.1rem; font-size: 1rem; }
+  .pp-cat__body { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.8rem 1.8rem 2rem; }
+  .pp-cat__body > * { margin: 0; }
+  .pp-cat__foot { margin-top: auto; }
+  .pp-cat__type { font-size: 1.05rem; }
+  .pp-cat__title { font-size: 2.1rem; }
+  .pp-cat__body .pp-rating-line { font-size: 1.25rem; }
+  .pp-cat__desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 1.3rem; line-height: 1.5; }
+  .pp-cat__swatch-name { font-size: 1.2rem; }
+  .pp-cat__foot { padding-top: 1rem; }
+  .pp-cat__price { font-size: 1.7rem; }
+  .pp-cat__cta {
+    padding: 0.9rem 1.4rem; border-radius: 999px; font-size: 1.1rem; letter-spacing: 0.1em;
+    color: var(--pp-gold-light); background: var(--pp-night);
+  }
+  .pp-cat__dots { display: flex; justify-content: center; gap: 0.6rem; margin-top: -0.8rem; }
+  .pp-cat__dots span { width: 0.6rem; height: 0.6rem; border-radius: 999px; background: rgba(30, 32, 36, 0.2); transition: width 0.35s ease, background 0.35s ease; }
+  .pp-cat__dots span.is-on { width: 2.2rem; background: var(--pp-gold); }
+}

@@ -32,7 +32,7 @@
             assign rating = section.settings.rating
             assign rating_count = section.settings.rating_count
           endif
-          assign lines = section.settings.ratings_more | newline_to_br | split: '<br />'
+          assign lines = section.settings.ratings_more | newline_to_br | replace: '<br />', '§' | replace: '<br>', '§' | split: '§'
           for line in lines
             assign parts = line | split: '|'
             assign h = parts[0] | strip
@@ -45,6 +45,32 @@
         {% render 'pp-cat-card', p: p, index: forloop.index0, badge: badge, rating: rating, rating_count: rating_count, swatches: true, stars: stars %}
       {%- endfor -%}
     </div>
+    {%- comment -%} Sur téléphone, les cartes défilent au doigt ; les points indiquent la carte affichée {%- endcomment -%}
+    {%- assign shown = collection.products.size | at_most: 6 -%}
+    {%- if shown > 1 -%}
+      <div class="pp-cat__dots" aria-hidden="true" data-pp-cat-dots>
+        {%- for i in (1..shown) -%}<span{% if forloop.first %} class="is-on"{% endif %}></span>{%- endfor -%}
+      </div>
+      <script>
+        (function () {
+          var dots = document.currentScript.previousElementSibling;
+          var grid = dots.previousElementSibling;
+          if (!grid || !grid.classList.contains('pp-cat__grid')) return;
+          var t;
+          grid.addEventListener('scroll', function () {
+            clearTimeout(t);
+            t = setTimeout(function () {
+              var cards = grid.children, best = 0, dist = Infinity;
+              for (var i = 0; i < cards.length; i++) {
+                var d = Math.abs(cards[i].offsetLeft - grid.offsetLeft - grid.scrollLeft - parseFloat(getComputedStyle(grid).paddingLeft));
+                if (d < dist) { dist = d; best = i; }
+              }
+              [].forEach.call(dots.children, function (s, i) { s.classList.toggle('is-on', i === best); });
+            }, 60);
+          }, { passive: true });
+        })();
+      </script>
+    {%- endif -%}
 
     {%- comment -%} Packs déjà composés {%- endcomment -%}
     {%- if section.settings.packs.size > 0 -%}

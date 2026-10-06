@@ -80,11 +80,18 @@
             "icon": "washing",
             "content": "<p>Taies lavables en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps. Pour les housses, suivez les consignes de leur étiquette.</p>"
           }
+        },
+        "rating_line": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'pp-rating-line', rating: '4.5', count: '256', anchor: 'avis' %}"
+          }
         }
       },
       "block_order": [
         "eyebrow",
         "title",
+        "rating_line",
         "price",
         "save",
         "variant_picker",
@@ -298,10 +305,134 @@
         "p2",
         "p3"
       ]
+    },
+    "reviews": {
+      "type": "pp-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "30 mars 2026",
+            "rating": 5,
+            "text": "La housse s'adapte parfaitement à l'oreiller que j'avais acheté précédemment, la qualité est très bonne, elle est agréable au toucher, je la recommande."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "author": "p***a",
+            "date": "16 avr. 2026",
+            "rating": 5,
+            "text": "S'adapte parfaitement à mon oreiller cervical, joli couleur, bonne qualité, et la matière est toute douce. Parfait !!!"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "author": "5***r",
+            "date": "02 sept. 2026",
+            "rating": 5,
+            "text": "Il semble être fait d'un bon matériau ! Toucher doux et moelleux !"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "author": "B***i",
+            "date": "13 janv. 2026",
+            "rating": 5,
+            "text": "Super produit, le rapport qualité/prix est juste parfait, je recommande le vendeur"
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "author": "D***l",
+            "date": "17 avr. 2026",
+            "rating": 5,
+            "text": "s'adapte parfaitement à mon oreiller ergonomique."
+          }
+        },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "author": "6***r",
+            "date": "11 mai 2026",
+            "rating": 5,
+            "text": "Très bon produit, fonctionne parfaitement, emballage impeccable, livraison rapide, vendeur très fiable, merci !"
+          }
+        },
+        "review_7": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "17 avr. 2026",
+            "rating": 5,
+            "text": "Le vert est + clair que sur la photo mais ça me plaît quand même. Qualité du tissu ok."
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "02 avr. 2026",
+            "rating": 5,
+            "text": "convient parfaitement je vous recommande fortement si vous possédez l'oreiller"
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "05 mars 2026",
+            "rating": 5,
+            "text": "La taie d'oreiller est de très bonne qualité. Elle est juste un peu plus petite que ce que j'imaginais."
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "19 févr. 2026",
+            "rating": 5,
+            "text": "S'adapte à l'oreiller acheté précédemment. Je le recommande. La livraison a été effectuée dans les délais."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10"
+      ],
+      "settings": {
+        "layout": "wall",
+        "anchor": "avis",
+        "eyebrow": "Avis clients",
+        "title": "Ce qu'en disent nos clients.",
+        "rating": "4.5",
+        "count": "256",
+        "tags": "",
+        "source_note": "Avis laissés par des acheteurs de cette taie sur la boutique en ligne de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
+        "verified_label": "Achat vérifié",
+        "interval": 5,
+        "anonymous_label": "Client vérifié",
+        "color_scheme": "scheme-1",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     }
   },
   "order": [
     "main",
+    "reviews",
     "bundle",
     "trust",
     "faq",
