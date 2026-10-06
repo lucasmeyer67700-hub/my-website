@@ -78,7 +78,7 @@
           "settings": {
             "heading": "Entretien",
             "icon": "washing",
-            "content": "<p>Housses et taies lavables en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps.</p>"
+            "content": "<p>Taies lavables en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps. Pour les housses, suivez les consignes de leur étiquette.</p>"
           }
         }
       },
@@ -133,7 +133,7 @@
           "settings": {
             "icon": "wind",
             "title": "Housse respirante",
-            "text": "Amovible, lavable à 30 °C"
+            "text": "Côtés en maille qui laissent passer l'air"
           }
         },
         "item_3": {
@@ -198,7 +198,7 @@
           "settings": {
             "heading": "Comment l'entretenir ?",
             "icon": "washing",
-            "row_content": "<p>La housse se retire grâce à sa fermeture éclair et se lave en machine à 30 °C, cycle délicat. La mousse ne se lave pas : aérez-la régulièrement.</p>"
+            "row_content": "<p>La mousse ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p>"
           }
         },
         "collapsible_row_4": {

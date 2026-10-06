@@ -87,9 +87,11 @@
           "type": "qa",
           "settings": {
             "question": "Comment entretenir l'oreiller ?",
-            "answer": "<p>La housse se retire grâce à sa fermeture éclair et se lave en machine à <strong>30 °C</strong>, cycle délicat. La mousse ne se lave pas : aérez-la de temps en temps.</p>",
+            "answer": "<p>La mousse à mémoire de forme ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p><p>Astuce : une taie de rechange (noir, gris ou vert) permet d'en changer quand vous voulez.</p>",
             "keywords": "laver, lavage, entretien, entretenir, housse, machine, propre, nettoyer",
-            "quick": true
+            "quick": true,
+            "link": "shopify://products/housse-de-rechange-pour-oreiller-papillon",
+            "link_label": "Voir la taie"
           }
         },
         "qa5": {
@@ -167,18 +169,18 @@
           "type": "qa",
           "settings": {
             "question": "Quelles sont les dimensions de l'oreiller ?",
-            "answer": "<p>L'Oreiller Papillon a <strong>deux hauteurs</strong> : retournez-le pour choisir le bord le plus bas ou le plus haut, selon votre carrure et votre position.</p><p>Besoin des mesures exactes ? Écrivez-nous, on vous les envoie.</p>",
+            "answer": "<p>L'Oreiller Papillon mesure <strong>62 × 41 cm</strong>, pour une hauteur de <strong>8 à 12 cm</strong> selon la zone. Ses deux faces sont utilisables : retournez-le pour choisir la hauteur qui vous convient.</p>",
             "keywords": "dimension, taille, mesure, hauteur, epaisseur, cm, centimetre, largeur, longueur",
             "quick": false,
-            "link": "shopify://pages/contact",
-            "link_label": "Demander les mesures"
+            "link": "shopify://products/loreiller-papillon",
+            "link_label": "Voir la fiche"
           }
         },
         "qa13": {
           "type": "qa",
           "settings": {
             "question": "En quelle matière est l'oreiller ?",
-            "answer": "<p>Le cœur est en <strong>mousse à mémoire de forme</strong> : elle épouse la nuque puis reprend sa forme. La housse est respirante, amovible et lavable à 30 °C.</p>",
+            "answer": "<p>Le cœur est en <strong>mousse à mémoire de forme</strong> (polyuréthane) : elle épouse la nuque puis reprend sa forme. Les côtés de la housse sont en maille de coton respirante, le dessus en tissu doux et extensible.</p>",
             "keywords": "matiere, mousse, memoire de forme, tissu, composition, materiau, ferme, mou, dur",
             "quick": false
           }

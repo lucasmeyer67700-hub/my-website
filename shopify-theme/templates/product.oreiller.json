@@ -17,7 +17,7 @@
         "rating_line": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "{% render 'pp-rating-line', rating: '4.8', count: '164', anchor: 'avis' %}"
+            "custom_liquid": "{% render 'pp-rating-line', rating: '4.8', count: '103', anchor: 'avis' %}"
           }
         },
         "price": {
@@ -39,7 +39,7 @@
         "benefits": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<ul class=\"pp-benefits\" role=\"list\"><li><span><strong>Nuque soutenue</strong> sur le dos comme sur le côté</span></li><li><span><strong>Mousse à mémoire de forme</strong> qui ne s'affaisse pas</span></li><li><span><strong>Housse respirante</strong>, amovible et lavable</span></li></ul>"
+            "custom_liquid": "<ul class=\"pp-benefits\" role=\"list\"><li><span><strong>Nuque soutenue</strong> sur le dos comme sur le côté</span></li><li><span><strong>Mousse à mémoire de forme</strong> qui ne s'affaisse pas</span></li><li><span><strong>Côtés en maille</strong> qui laissent respirer</span></li></ul>"
           }
         },
         "variant_picker": {
@@ -97,7 +97,7 @@
           "settings": {
             "heading": "Entretien",
             "icon": "washing",
-            "content": "<p>Housse amovible avec fermeture éclair, lavable en machine à 30 °C (cycle délicat). La mousse ne se lave pas : aérez-la de temps en temps.</p><p>À la réception, laissez l'oreiller respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p>"
+            "content": "<p>La mousse ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p><p>À la réception, laissez l'oreiller respirer 24 à 48 h dans une pièce aérée pour qu'il reprenne son volume et perde l'odeur de neuf.</p><p><strong>Dimensions :</strong> 62 × 41 cm, hauteur de 8 à 12 cm selon la zone, deux faces utilisables.</p>"
           }
         }
       },
@@ -149,7 +149,7 @@
           "type": "row",
           "settings": {
             "label": "Dos ou côté",
-            "ours": "Creux central pour dormir sur le dos, ailes plus hautes pour le côté. Une seule forme pour les deux positions.",
+            "ours": "Centre plus bas pour le dos, côtés plus hauts pour le flanc, et deux faces pour choisir la hauteur (8 à 12 cm).",
             "theirs": "Une seule épaisseur, partout. Trop haute sur le dos, trop basse sur le côté."
           }
         },
@@ -165,16 +165,16 @@
           "type": "row",
           "settings": {
             "label": "Les bras",
-            "ours": "Deux encoches latérales : vous glissez un bras dessous sans soulever l'oreiller.",
+            "ours": "Découpe en papillon : l'épaule trouve sa place et vous glissez un bras dessous sans soulever l'oreiller.",
             "theirs": "Le bras glissé dessous soulève l'oreiller et décale la tête."
           }
         },
         "vs5": {
           "type": "row",
           "settings": {
-            "label": "Entretien",
-            "ours": "Housse zippée lavable à 30 °C, et une taie de rechange en noir, gris ou vert.",
-            "theirs": "Souvent lavable à la main seulement, quand il l'est."
+            "label": "Housse",
+            "ours": "Côtés en maille de coton qui laissent passer l'air, dessus en tissu doux et extensible. Et une taie de rechange en noir, gris ou vert.",
+            "theirs": "Souvent un tissu épais qui garde la chaleur : on retourne l'oreiller pour trouver le côté frais."
           }
         },
         "vs6": {
@@ -247,7 +247,7 @@
           "settings": {
             "heading": "Comment l'entretenir ?",
             "icon": "washing",
-            "row_content": "<p>La housse se retire grâce à sa fermeture éclair et se lave en machine à 30 °C, cycle délicat. La mousse ne se lave pas : aérez-la régulièrement.</p>"
+            "row_content": "<p>La mousse ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p>"
           }
         },
         "collapsible_row_4": {
@@ -480,8 +480,8 @@
         "eyebrow": "Avis clients",
         "title": "Ils dorment déjà dessus",
         "rating": "4.8",
-        "count": "164",
-        "tags": "Fortement recommandé (19)\nBonne qualité (15)\nLivraison rapide (12)",
+        "count": "103",
+        "tags": "",
         "source_note": "Avis laissés par des acheteurs de cet oreiller sur la boutique en ligne de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
         "verified_label": "Achat vérifié",
         "color_scheme": "scheme-2",
@@ -498,7 +498,7 @@
             "x": 54,
             "y": 45,
             "title": "Creux central",
-            "text": "Sur le dos, la tête se cale au centre et ne roule plus. La nuque reste soutenue sans être relevée."
+            "text": "Sur le dos, la tête s'y loge et s'enfonce d'environ 3 cm : elle reste au centre et ne roule plus."
           }
         },
         "zone_2": {
@@ -507,7 +507,7 @@
             "x": 52,
             "y": 63,
             "title": "Rebord cervical",
-            "text": "Il se loge sous la nuque et comble l'espace entre le cou et le matelas."
+            "text": "Une avancée d'environ 10 cm se place sous la nuque et comble l'espace entre le cou et le matelas."
           }
         },
         "zone_3": {
@@ -515,8 +515,8 @@
           "settings": {
             "x": 82,
             "y": 41,
-            "title": "Ailes latérales",
-            "text": "Plus hautes que le centre, elles compensent la largeur de l'épaule quand vous dormez sur le côté."
+            "title": "Côtés plus hauts",
+            "text": "Plus hauts que le centre, ils compensent la largeur de l'épaule quand vous dormez sur le côté."
           }
         },
         "zone_4": {
@@ -524,8 +524,8 @@
           "settings": {
             "x": 23,
             "y": 53,
-            "title": "Encoches pour les bras",
-            "text": "Glissez un bras sous l'oreiller sans le soulever ni vous tordre l'épaule."
+            "title": "Découpe en papillon",
+            "text": "L'épaule trouve sa place, et vous glissez un bras sous l'oreiller sans le soulever."
           }
         },
         "zone_5": {
@@ -533,8 +533,8 @@
           "settings": {
             "x": 37,
             "y": 66,
-            "title": "Panneaux respirants",
-            "text": "Les côtés en maille laissent circuler l'air : la tête reste au frais toute la nuit."
+            "title": "Côtés en maille",
+            "text": "Une maille de coton respirante sur les côtés : l'air circule, la tête reste au frais."
           }
         }
       },
