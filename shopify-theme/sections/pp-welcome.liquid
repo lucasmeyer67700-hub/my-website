@@ -1,10 +1,13 @@
 {%- comment -%}
   Fenêtre de bienvenue : inscription à la newsletter contre un code de réduction.
   - L'e-mail est enregistré dans Shopify (Clients) avec l'accord marketing et les tags choisis.
-  - Après l'inscription, le code s'affiche avec un bouton pour l'appliquer directement au panier.
-  - Apparition : à la première visite, après quelques secondes, à mi-page ou quand la souris
-    quitte la fenêtre. Si le visiteur la ferme, elle ne revient pas avant le nombre de jours
-    choisi ; une fois inscrit, plus jamais. Jamais sur le panier, le compte ni le contact.
+  - Envoi sans rechargement : le code s'affiche aussitôt et il est appliqué automatiquement
+    au panier (lien /discount/CODE appelé en arrière-plan). Si Shopify demande une
+    vérification anti-robot, le formulaire est envoyé normalement.
+  - Apparition rapide à la première visite ; fermeture par la croix (ou Échap au clavier).
+    Une fois fermée, elle ne revient pas avant le nombre de jours choisi, mais une petite
+    étiquette « −10 % » reste en bas à gauche pour la rouvrir. Une fois inscrit : plus rien.
+  - Jamais sur le panier, le compte, le contact ni la page mot de passe.
 {%- endcomment -%}
 {%- liquid
   assign hidden_here = false
@@ -16,47 +19,52 @@
     assign image = section.settings.product.featured_image
   endif
   assign code = section.settings.code | strip | upcase
+  assign discount_base = routes.root_url | append: '/discount/' | replace: '//', '/'
+  assign redirect = section.settings.redirect | default: routes.all_products_collection_url
+  assign focus_style = '--focus: ' | append: section.settings.focus | append: '%'
 -%}
 {%- unless hidden_here or section.settings.enabled == false -%}
   <pp-welcome
     class="pp-welcome"
     data-delay="{{ section.settings.delay | times: 1000 }}"
     data-days="{{ section.settings.days }}"
+    data-code="{{ code | escape }}"
+    data-discount-url="{{ discount_base }}{{ code | url_encode }}"
     {% if request.design_mode %}data-design-mode{% endif %}
     hidden
   >
-    <div class="pp-welcome__overlay" data-pp-welcome-close></div>
+    <div class="pp-welcome__overlay"></div>
     <div class="pp-welcome__dialog" role="dialog" aria-modal="true" aria-labelledby="PpWelcomeTitle" tabindex="-1">
       <button type="button" class="pp-welcome__close" data-pp-welcome-close aria-label="Fermer">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
 
       <div class="pp-welcome__media">
         {%- if image != blank -%}
-          {{ image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 380px, 100vw', widths: '450, 700, 900', alt: '' }}
+          {{ image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 400px, 100vw', widths: '600, 900, 1200', alt: '', style: focus_style }}
         {%- endif -%}
-        <span class="pp-welcome__seal" aria-hidden="true"><strong>−{{ section.settings.percent }}<small>%</small></strong><em>Bienvenue</em></span>
+        <span class="pp-welcome__seal" aria-hidden="true"><strong>−{{ section.settings.percent }}<small>%</small></strong><em>{{ section.settings.seal }}</em></span>
       </div>
 
       <div class="pp-welcome__body">
-        {%- form 'customer', id: 'PpWelcomeForm', class: 'pp-welcome__form' -%}
+        {%- form 'customer', id: 'PpWelcomeForm', class: 'pp-welcome__form', novalidate: 'novalidate' -%}
           {%- if form.posted_successfully? -%}
-            <div class="pp-welcome__done" data-pp-welcome-success>
-              <p class="pp-eyebrow">{{ section.settings.success_eyebrow }}</p>
-              <h2 class="pp-welcome__title" id="PpWelcomeTitle">{{ section.settings.success_title }}</h2>
-              <p class="pp-welcome__text">{{ section.settings.success_text }}</p>
-              <div class="pp-welcome__code">
-                <span data-pp-code>{{ code }}</span>
-                <button type="button" data-pp-copy aria-label="Copier le code">Copier</button>
-              </div>
-              <a class="pp-welcome__cta" href="{{ routes.root_url | append: 'discount/' | replace: '//', '/' }}{{ code | url_encode }}?redirect={{ section.settings.redirect | default: routes.all_products_collection_url | url_encode }}">
-                {{ section.settings.success_button }} <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          {%- else -%}
+            {%- assign posted = true -%}
+          {%- endif -%}
+          <div class="pp-welcome__step" data-step="form"{% if posted %} hidden{% endif %}>
             <p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>
             <h2 class="pp-welcome__title" id="PpWelcomeTitle">{{ section.settings.title }}</h2>
             <p class="pp-welcome__text">{{ section.settings.text }}</p>
+
+            {%- assign perks = section.settings.perks | newline_to_br | split: '<br />' -%}
+            {%- if section.settings.perks != blank -%}
+              <ul class="pp-welcome__perks" role="list">
+                {%- for perk in perks -%}
+                  {%- assign perk = perk | strip -%}
+                  {%- if perk != blank -%}<li>{% render 'pp-icon', icon: 'check' %}<span>{{ perk }}</span></li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
 
             <input type="hidden" name="contact[tags]" value="{{ section.settings.tags }}">
             <input type="hidden" name="contact[accepts_marketing]" value="true">
@@ -70,80 +78,152 @@
                 autocomplete="email"
                 autocorrect="off"
                 autocapitalize="off"
+                inputmode="email"
                 placeholder="Votre adresse e-mail"
-                {% if form.errors %}aria-invalid="true" aria-describedby="PpWelcomeError"{% endif %}
+                aria-describedby="PpWelcomeError"
               >
-              <button type="submit" class="pp-welcome__submit">{{ section.settings.button }}</button>
+              <button type="submit" class="pp-welcome__submit">
+                <span>{{ section.settings.button }}</span>
+                <span class="pp-welcome__spinner" aria-hidden="true"></span>
+              </button>
             </div>
-            {%- if form.errors -%}
-              <p class="pp-welcome__error" id="PpWelcomeError" role="alert">
-                {%- if form.errors contains 'email' -%}Cette adresse e-mail ne semble pas valide.{%- else -%}{{ form.errors | default_errors }}{%- endif -%}
-              </p>
-            {%- endif -%}
-            <p class="pp-welcome__legal">
-              {{ section.settings.legal }}
-              {%- if section.settings.privacy_page != blank %} <a href="{{ section.settings.privacy_page }}">Confidentialité</a>{% endif -%}
+            <p class="pp-welcome__error" id="PpWelcomeError" role="alert"{% unless form.errors %} hidden{% endunless %}>
+              {%- if form.errors -%}Cette adresse e-mail ne semble pas valide.{%- endif -%}
             </p>
-            <button type="button" class="pp-welcome__skip" data-pp-welcome-close>{{ section.settings.skip }}</button>
-          {%- endif -%}
+            <p class="pp-welcome__legal">
+              {% render 'pp-icon', icon: 'lock' %}
+              <span>
+                {{- section.settings.legal -}}
+                {%- if section.settings.privacy_page != blank %} <a href="{{ section.settings.privacy_page }}">Confidentialité</a>{% endif -%}
+              </span>
+            </p>
+          </div>
+
+          <div class="pp-welcome__step pp-welcome__done" data-step="done"{% unless posted %} hidden{% endunless %}>
+            <span class="pp-welcome__check" aria-hidden="true">{% render 'pp-icon', icon: 'check' %}</span>
+            <p class="pp-eyebrow">{{ section.settings.success_eyebrow }}</p>
+            <h2 class="pp-welcome__title" id="PpWelcomeDoneTitle">{{ section.settings.success_title }}</h2>
+            <p class="pp-welcome__text">{{ section.settings.success_text }}</p>
+            <div class="pp-welcome__code">
+              <span data-pp-code>{{ code }}</span>
+              <button type="button" data-pp-copy>Copier</button>
+            </div>
+            <a class="pp-welcome__cta" href="{{ discount_base }}{{ code | url_encode }}?redirect={{ redirect | url_encode }}">
+              {{ section.settings.success_button }} <span aria-hidden="true">→</span>
+            </a>
+          </div>
         {%- endform -%}
       </div>
     </div>
   </pp-welcome>
+
+  <button type="button" class="pp-welcome-tab" data-pp-welcome-open hidden>
+    <strong>−{{ section.settings.percent }} %</strong>
+    <span>{{ section.settings.tab_label }}</span>
+  </button>
 
   <script>
     if (!customElements.get('pp-welcome')) {
       customElements.define('pp-welcome', class extends HTMLElement {
         connectedCallback() {
           this.dialog = this.querySelector('.pp-welcome__dialog');
-          this.querySelectorAll('[data-pp-welcome-close]').forEach((b) => b.addEventListener('click', () => this.close()));
-          this.addEventListener('keydown', (e) => { if (e.key === 'Escape') this.close(); });
+          this.form = this.querySelector('form');
+          this.tab = document.querySelector('[data-pp-welcome-open]');
+          this.querySelector('[data-pp-welcome-close]').addEventListener('click', () => this.close());
+          this.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.close();
+            if (e.key === 'Tab') this.trap(e);
+          });
+          if (this.tab) this.tab.addEventListener('click', () => this.open());
+          this.form.addEventListener('submit', (e) => this.submit(e));
           const copy = this.querySelector('[data-pp-copy]');
-          if (copy) copy.addEventListener('click', () => {
-            const code = this.querySelector('[data-pp-code]').textContent.trim();
+          copy.addEventListener('click', () => {
+            const code = this.dataset.code;
             (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject()).then(() => { copy.textContent = 'Copié ✓'; }, () => {});
           });
 
-          // Retour après inscription : on affiche le code et on ne repropose plus jamais la fenêtre
-          if (this.querySelector('[data-pp-welcome-success]')) { this.store('subscribed'); this.open(); return; }
-          // Erreur de saisie : on rouvre la fenêtre pour corriger
-          if (this.querySelector('.pp-welcome__error')) { this.open(); return; }
+          // Retour d'un envoi classique (après vérification anti-robot)
+          if (!this.querySelector('[data-step="done"]').hidden) { this.success(); this.open(); return; }
+          if (!this.querySelector('.pp-welcome__error').hidden) { this.open(); return; }
           if (this.hasAttribute('data-design-mode')) return;
-          if (!this.shouldShow()) return;
 
-          const trigger = () => { if (!this.triggered) { this.triggered = true; this.open(); cleanup(); } };
-          const onScroll = () => { if (window.scrollY > (document.body.scrollHeight - innerHeight) * 0.45) trigger(); };
-          const onLeave = (e) => { if (e.clientY <= 0) trigger(); };
-          const timer = setTimeout(trigger, +this.dataset.delay || 6000);
-          const cleanup = () => { clearTimeout(timer); removeEventListener('scroll', onScroll); document.removeEventListener('mouseout', onLeave); };
-          addEventListener('scroll', onScroll, { passive: true });
-          document.addEventListener('mouseout', onLeave);
+          const state = this.read();
+          if (state === 'subscribed') return;
+          if (state.startsWith('closed:')) {
+            if (Date.now() - +state.slice(7) < (+this.dataset.days || 7) * 864e5) { this.showTab(); return; }
+          }
+          setTimeout(() => { if (this.hidden) this.open(); }, +this.dataset.delay || 2000);
         }
         read() { try { return localStorage.getItem('pp-welcome') || ''; } catch (e) { return ''; } }
         store(v) { try { localStorage.setItem('pp-welcome', v); } catch (e) {} }
-        shouldShow() {
-          const v = this.read();
-          if (v === 'subscribed') return false;
-          if (v.startsWith('closed:')) {
-            const days = +this.dataset.days || 7;
-            if (Date.now() - +v.slice(7) < days * 864e5) return false;
-          }
-          return true;
-        }
+        showTab() { if (this.tab && this.read() !== 'subscribed') this.tab.hidden = false; }
         open() {
           this.lastFocus = document.activeElement;
           this.hidden = false;
+          if (this.tab) this.tab.hidden = true;
           document.body.classList.add('pp-welcome-open');
-          requestAnimationFrame(() => this.classList.add('is-open'));
-          const field = this.querySelector('input[type="email"]');
-          setTimeout(() => (field && matchMedia('(min-width: 750px)').matches ? field : this.dialog).focus({ preventScroll: true }), 350);
+          requestAnimationFrame(() => requestAnimationFrame(() => this.classList.add('is-open')));
+          const field = this.querySelector('#PpWelcomeEmail');
+          setTimeout(() => {
+            const target = field && !field.closest('[hidden]') && matchMedia('(min-width: 750px)').matches ? field : this.dialog;
+            target.focus({ preventScroll: true });
+          }, 450);
         }
         close() {
-          if (this.read() !== 'subscribed') this.store('closed:' + Date.now());
+          if (this.read() !== 'subscribed') { this.store('closed:' + Date.now()); this.showTab(); }
           this.classList.remove('is-open');
           document.body.classList.remove('pp-welcome-open');
-          setTimeout(() => { this.hidden = true; }, 400);
+          setTimeout(() => { this.hidden = true; }, 450);
           if (this.lastFocus && this.lastFocus.focus) this.lastFocus.focus({ preventScroll: true });
+        }
+        trap(e) {
+          const els = [...this.dialog.querySelectorAll('button, a[href], input:not([type="hidden"])')].filter((el) => !el.closest('[hidden]'));
+          if (!els.length) return;
+          const first = els[0], last = els[els.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+        error(msg) {
+          const el = this.querySelector('.pp-welcome__error');
+          el.textContent = msg;
+          el.hidden = false;
+          this.querySelector('#PpWelcomeEmail').setAttribute('aria-invalid', 'true');
+        }
+        async submit(e) {
+          const email = this.querySelector('#PpWelcomeEmail');
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) {
+            e.preventDefault();
+            this.error('Indiquez une adresse e-mail valide, par exemple prenom@exemple.fr');
+            email.focus();
+            return;
+          }
+          e.preventDefault();
+          this.classList.add('is-loading');
+          try {
+            const res = await fetch(this.form.action, { method: 'POST', body: new FormData(this.form), headers: { Accept: 'text/html' } });
+            // Vérification anti-robot demandée par Shopify : envoi classique
+            if (/challenge/.test(res.url)) { this.form.submit(); return; }
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const done = doc.querySelector('#PpWelcomeForm [data-step="done"]');
+            if (/customer_posted=true/.test(res.url) || (done && !done.hasAttribute('hidden'))) { this.success(); return; }
+            if (doc.querySelector('#PpWelcomeForm .pp-welcome__error:not([hidden])')) { this.error('Cette adresse e-mail ne semble pas valide.'); return; }
+            this.form.submit();
+          } catch (err) {
+            this.form.submit();
+          } finally {
+            this.classList.remove('is-loading');
+          }
+        }
+        success() {
+          this.store('subscribed');
+          if (this.tab) this.tab.hidden = true;
+          this.querySelector('[data-step="form"]').hidden = true;
+          this.querySelector('[data-step="done"]').hidden = false;
+          this.dialog.setAttribute('aria-labelledby', 'PpWelcomeDoneTitle');
+          // Le code est appliqué tout de suite au panier du visiteur
+          fetch(this.dataset.discountUrl, { credentials: 'same-origin' }).catch(() => {});
+          this.dialog.focus({ preventScroll: true });
         }
       });
     }
@@ -159,23 +239,26 @@
     { "type": "checkbox", "id": "enabled", "label": "Activer", "default": true },
     { "type": "text", "id": "code", "label": "Code de réduction", "default": "BIENVENUE10", "info": "Doit exister dans Shopify > Réductions." },
     { "type": "number", "id": "percent", "label": "Pourcentage affiché", "default": 10 },
-    { "type": "range", "id": "delay", "min": 2, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 6 },
+    { "type": "range", "id": "delay", "min": 1, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 2 },
     { "type": "range", "id": "days", "min": 1, "max": 30, "step": 1, "unit": "j", "label": "Si fermée, ne pas réafficher pendant", "default": 7 },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "range", "id": "focus", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Cadrage horizontal de l'image", "default": 50 },
     { "type": "product", "id": "product", "label": "Ou photo de ce produit" },
+    { "type": "text", "id": "seal", "label": "Texte du macaron", "default": "Bienvenue" },
     { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Bienvenue chez nous" },
     { "type": "text", "id": "title", "label": "Titre", "default": "−10 % sur votre première commande" },
-    { "type": "textarea", "id": "text", "label": "Texte", "default": "Inscrivez-vous et recevez votre code de bienvenue, ainsi que nos conseils pour mieux dormir." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Laissez votre e-mail : votre code s'affiche tout de suite." },
+    { "type": "textarea", "id": "perks", "label": "Avantages (un par ligne)" },
     { "type": "text", "id": "button", "label": "Bouton", "default": "Recevoir mon code" },
     { "type": "text", "id": "tags", "label": "Tags client", "default": "newsletter,bienvenue10" },
-    { "type": "textarea", "id": "legal", "label": "Mention légale", "default": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Désinscription en un clic à tout moment." },
+    { "type": "textarea", "id": "legal", "label": "Mention légale", "default": "Pas de spam. Désinscription en un clic à tout moment." },
     { "type": "url", "id": "privacy_page", "label": "Page confidentialité" },
-    { "type": "text", "id": "skip", "label": "Lien de refus", "default": "Non merci" },
+    { "type": "text", "id": "tab_label", "label": "Étiquette après fermeture", "default": "En profiter" },
     { "type": "header", "content": "Après l'inscription" },
     { "type": "text", "id": "success_eyebrow", "label": "Sur-titre", "default": "C'est fait" },
-    { "type": "text", "id": "success_title", "label": "Titre", "default": "Voici votre code" },
-    { "type": "textarea", "id": "success_text", "label": "Texte", "default": "−10 % sur toute votre première commande. Il s'applique au moment du paiement." },
-    { "type": "text", "id": "success_button", "label": "Bouton", "default": "Profiter de mes −10 %" },
+    { "type": "text", "id": "success_title", "label": "Titre", "default": "Votre code est activé" },
+    { "type": "textarea", "id": "success_text", "label": "Texte", "default": "−10 % sur toute votre première commande, déjà appliqués à votre panier." },
+    { "type": "text", "id": "success_button", "label": "Bouton", "default": "Découvrir la boutique" },
     { "type": "url", "id": "redirect", "label": "Page après le bouton" }
   ]
 }
