@@ -4,8 +4,8 @@
   - Envoi sans rechargement : le code s'affiche aussitôt et il est appliqué automatiquement
     au panier (lien /discount/CODE appelé en arrière-plan). Si Shopify demande une
     vérification anti-robot, le formulaire est envoyé normalement.
-  - Apparition rapide à la première visite ; fermeture par la croix (ou Échap au clavier).
-    Une fois fermée, elle ne revient pas avant le nombre de jours choisi, mais une petite
+  - Apparition à chaque nouvelle visite après le délai choisi ; fermeture par la croix
+    (ou Échap au clavier). Fermée, elle ne revient pas pendant la visite, mais une petite
     étiquette « −10 % » reste en bas à gauche pour la rouvrir. Une fois inscrit : plus rien.
   - Jamais sur le panier, le compte, le contact ni la page mot de passe.
 {%- endcomment -%}
@@ -27,7 +27,6 @@
   <pp-welcome
     class="pp-welcome"
     data-delay="{{ section.settings.delay | times: 1000 }}"
-    data-days="{{ section.settings.days }}"
     data-code="{{ code | escape }}"
     data-discount-url="{{ discount_base }}{{ code | url_encode }}"
     {% if request.design_mode %}data-design-mode{% endif %}
@@ -145,17 +144,22 @@
           // Retour d'un envoi classique (après vérification anti-robot)
           if (!this.querySelector('[data-step="done"]').hidden) { this.success(); this.open(); return; }
           if (!this.querySelector('.pp-welcome__error').hidden) { this.open(); return; }
-          if (this.hasAttribute('data-design-mode')) return;
-
-          const state = this.read();
-          if (state === 'subscribed') return;
-          if (state.startsWith('closed:')) {
-            if (Date.now() - +state.slice(7) < (+this.dataset.days || 7) * 864e5) { this.showTab(); return; }
+          // Dans l'éditeur de thème : la fenêtre s'ouvre quand on sélectionne la section
+          if (this.hasAttribute('data-design-mode')) {
+            document.addEventListener('shopify:section:select', (e) => { if (e.target.contains(this)) this.open(); });
+            document.addEventListener('shopify:section:deselect', (e) => { if (e.target.contains(this)) this.close(); });
+            return;
           }
-          setTimeout(() => { if (this.hidden) this.open(); }, +this.dataset.delay || 2000);
+
+          // À chaque nouvelle visite : la fenêtre s'ouvre après le délai choisi.
+          // Fermée : elle ne revient pas pendant cette visite (l'étiquette reste). Inscrit : plus jamais.
+          if (this.read() === 'subscribed') return;
+          if (this.closedThisVisit()) { this.showTab(); return; }
+          setTimeout(() => { if (this.hidden && !this.closedThisVisit()) this.open(); }, +this.dataset.delay || 5000);
         }
-        read() { try { return localStorage.getItem('pp-welcome') || ''; } catch (e) { return ''; } }
-        store(v) { try { localStorage.setItem('pp-welcome', v); } catch (e) {} }
+        read() { try { return localStorage.getItem('pp-welcome-v2') || ''; } catch (e) { return ''; } }
+        store(v) { try { localStorage.setItem('pp-welcome-v2', v); } catch (e) {} }
+        closedThisVisit() { try { return sessionStorage.getItem('pp-welcome-closed') === '1'; } catch (e) { return false; } }
         showTab() { if (this.tab && this.read() !== 'subscribed') this.tab.hidden = false; }
         open() {
           this.lastFocus = document.activeElement;
@@ -170,7 +174,7 @@
           }, 450);
         }
         close() {
-          if (this.read() !== 'subscribed') { this.store('closed:' + Date.now()); this.showTab(); }
+          if (this.read() !== 'subscribed') { try { sessionStorage.setItem('pp-welcome-closed', '1'); } catch (e) {} this.showTab(); }
           this.classList.remove('is-open');
           document.body.classList.remove('pp-welcome-open');
           setTimeout(() => { this.hidden = true; }, 450);
@@ -239,8 +243,7 @@
     { "type": "checkbox", "id": "enabled", "label": "Activer", "default": true },
     { "type": "text", "id": "code", "label": "Code de réduction", "default": "BIENVENUE10", "info": "Doit exister dans Shopify > Réductions." },
     { "type": "number", "id": "percent", "label": "Pourcentage affiché", "default": 10 },
-    { "type": "range", "id": "delay", "min": 1, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 2 },
-    { "type": "range", "id": "days", "min": 1, "max": 30, "step": 1, "unit": "j", "label": "Si fermée, ne pas réafficher pendant", "default": 7 },
+    { "type": "range", "id": "delay", "min": 1, "max": 30, "step": 1, "unit": "s", "label": "Apparition après", "default": 5, "info": "La fenêtre s'ouvre à chaque nouvelle visite, sauf pour les inscrits." },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "range", "id": "focus", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Cadrage horizontal de l'image", "default": 50 },
     { "type": "product", "id": "product", "label": "Ou photo de ce produit" },
