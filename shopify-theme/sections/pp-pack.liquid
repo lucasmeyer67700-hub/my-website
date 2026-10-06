@@ -1,0 +1,382 @@
+{%- comment -%}
+  Composeur de pack « sur mesure ».
+  Le pack est UN produit Shopify dont les variantes portent les compositions et leurs prix :
+    option 1 « Composition » : « Oreiller + Taie », « Oreiller + Coussin genoux »,
+                               « Oreiller + Coussin genoux + Taie »
+    option 2 « Couleur de la taie » : Noir / Gris / Vert (ou « Sans taie »)
+  Le client coche ses compléments ; le composeur choisit la variante correspondante, affiche
+  le prix du pack, le prix des mêmes produits à l'unité et l'économie, puis ajoute la
+  variante au panier (panier coulissant si disponible).
+  Les cases photo se remplissent dans l'éditeur ; vides, elles affichent un visuel neutre.
+  Sans JavaScript, le bouton ajoute la composition proposée par défaut.
+{%- endcomment -%}
+{% render 'pp-padding', section: section %}
+
+{%- liquid
+  assign pack = section.settings.product
+  if pack == blank and product
+    assign pack = product
+  endif
+  assign p_base = section.settings.base_product
+  assign p_taie = section.settings.taie_product
+  assign p_knee = section.settings.knee_product
+  assign default_variant = pack.selected_or_first_available_variant
+-%}
+
+{%- capture placeholder_base -%}{% render 'pp-illustration', name: 'pillow', uid: 'pcb' %}{%- endcapture -%}
+{%- capture placeholder_knee -%}{% render 'pp-illustration', name: 'knee', uid: 'pck' %}{%- endcapture -%}
+{%- capture placeholder_taie -%}{% render 'pp-illustration', name: 'pillow', uid: 'pct' %}{%- endcapture -%}
+
+{%- if pack != blank -%}
+<div class="pp-pc color-{{ section.settings.color_scheme }} gradient" id="pack">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center pp-reveal">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <pp-pack-config
+      class="pp-pc__grid"
+      data-currency="{{ cart.currency.iso_code }}"
+      data-default-taie="{{ section.settings.default_taie }}"
+      data-default-knee="{{ section.settings.default_knee }}"
+    >
+      <div class="pp-pc__steps">
+        {%- comment -%} Étape 1 : la base, toujours incluse {%- endcomment -%}
+        <p class="pp-pc__step pp-reveal"><span>1</span>{{ section.settings.step1_title }}</p>
+        <div class="pp-pc__item pp-pc__item--base is-on pp-reveal" style="--d: 1">
+          <span class="pp-pc__media">
+            {%- if section.settings.base_image != blank -%}
+              {{ section.settings.base_image | image_url: width: 500 | image_tag: loading: 'lazy', widths: '250, 500', sizes: '160px', alt: '' }}
+            {%- else -%}
+              <span class="pp-pc__ph">{{ placeholder_base }}{% if request.design_mode %}<em>Ajoutez une photo</em>{% endif %}</span>
+            {%- endif -%}
+          </span>
+          <span class="pp-pc__info">
+            <span class="pp-pc__name">{{ p_base.title | default: 'Oreiller Cervical Papillon' }}</span>
+            <span class="pp-pc__note">{{ section.settings.base_note }}</span>
+            {%- if p_base -%}<span class="pp-pc__solo">Seul : {{ p_base.price | money }}</span>{%- endif -%}
+          </span>
+          <span class="pp-pc__tag">{{ section.settings.base_tag }}</span>
+        </div>
+
+        {%- comment -%} Étape 2 : les compléments à cocher {%- endcomment -%}
+        <p class="pp-pc__step pp-reveal" style="--d: 2"><span>2</span>{{ section.settings.step2_title }}</p>
+
+        <div class="pp-pc__opt pp-reveal" style="--d: 2" data-opt="taie">
+          <button type="button" class="pp-pc__item" data-toggle="taie" aria-pressed="false">
+            <span class="pp-pc__media" data-taie-media>
+              {%- if section.settings.taie_image != blank -%}
+                {{ section.settings.taie_image | image_url: width: 500 | image_tag: loading: 'lazy', widths: '250, 500', sizes: '160px', alt: '' }}
+              {%- else -%}
+                <span class="pp-pc__ph">{{ placeholder_taie }}{% if request.design_mode %}<em>Ajoutez une photo</em>{% endif %}</span>
+              {%- endif -%}
+            </span>
+            <span class="pp-pc__info">
+              <span class="pp-pc__name">{{ p_taie.title | default: 'Taie de rechange' }}</span>
+              <span class="pp-pc__note">{{ section.settings.taie_note }}</span>
+              {%- if p_taie -%}<span class="pp-pc__solo">Seule : {{ p_taie.price | money }}</span>{%- endif -%}
+            </span>
+            <span class="pp-pc__check" aria-hidden="true">
+              <svg class="pp-pc__plus" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <svg class="pp-pc__tick" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            </span>
+          </button>
+          <div class="pp-pc__extra" data-extra="taie">
+            <div class="pp-pc__extra-in">
+              <p class="pp-pc__extra-label">Couleur de la taie : <strong data-color-name></strong></p>
+              <div class="pp-pc__swatches" role="radiogroup" aria-label="Couleur de la taie">
+                {%- for value in pack.options_with_values[1].values -%}
+                  {%- assign v = value | downcase -%}
+                  {%- if v contains 'sans' -%}{%- continue -%}{%- endif -%}
+                  {%- capture sw -%}{% render 'pp-swatch-color', name: value %}{%- endcapture -%}
+                  {%- assign img_key = 'taie_image_' | append: v -%}
+                  <button
+                    type="button"
+                    class="pp-pc__swatch"
+                    role="radio"
+                    aria-checked="false"
+                    data-color="{{ value | escape }}"
+                    style="--sw: {{ sw | strip }}"
+                    {% if section.settings[img_key] != blank %}data-img="{{ section.settings[img_key] | image_url: width: 500 }}"{% endif %}
+                    aria-label="{{ value | escape }}"
+                  ></button>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pp-pc__opt pp-reveal" style="--d: 3" data-opt="knee">
+          <button type="button" class="pp-pc__item" data-toggle="knee" aria-pressed="false">
+            <span class="pp-pc__media">
+              {%- if section.settings.knee_image != blank -%}
+                {{ section.settings.knee_image | image_url: width: 500 | image_tag: loading: 'lazy', widths: '250, 500', sizes: '160px', alt: '' }}
+              {%- else -%}
+                <span class="pp-pc__ph">{{ placeholder_knee }}{% if request.design_mode %}<em>Ajoutez une photo</em>{% endif %}</span>
+              {%- endif -%}
+            </span>
+            <span class="pp-pc__info">
+              <span class="pp-pc__name">{{ p_knee.title | default: 'Coussin Genoux' }}</span>
+              <span class="pp-pc__note">{{ section.settings.knee_note }}</span>
+              {%- if p_knee -%}<span class="pp-pc__solo">Seul : {{ p_knee.price | money }}</span>{%- endif -%}
+            </span>
+            <span class="pp-pc__check" aria-hidden="true">
+              <svg class="pp-pc__plus" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <svg class="pp-pc__tick" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} Récapitulatif {%- endcomment -%}
+      <aside class="pp-pc__summary color-scheme-3 pp-reveal" style="--d: 2" aria-live="polite">
+        <p class="pp-pc__sum-eyebrow">{{ section.settings.summary_title }}</p>
+        <div class="pp-pc__stack" aria-hidden="true">
+          <span class="pp-pc__chip is-on" data-chip="base">{{ section.settings.base_short }}</span>
+          <span class="pp-pc__plus-sign" data-chip-sep="taie">+</span>
+          <span class="pp-pc__chip" data-chip="taie">{{ section.settings.taie_short }} <i data-chip-color></i></span>
+          <span class="pp-pc__plus-sign" data-chip-sep="knee">+</span>
+          <span class="pp-pc__chip" data-chip="knee">{{ section.settings.knee_short }}</span>
+        </div>
+
+        <ul class="pp-pc__lines" role="list">
+          <li class="is-on"><span>{{ p_base.title | default: 'Oreiller' }}</span><span>{{ p_base.price | money }}</span></li>
+          <li data-line="taie"><span>{{ p_taie.title | default: 'Taie' }} <em data-line-color></em></span><span>{{ p_taie.price | money }}</span></li>
+          <li data-line="knee"><span>{{ p_knee.title | default: 'Coussin genoux' }}</span><span>{{ p_knee.price | money }}</span></li>
+        </ul>
+
+        <div class="pp-pc__totals">
+          <p class="pp-pc__unit"><span>Prix à l'unité</span><s data-compare>{{ default_variant.compare_at_price | money }}</s></p>
+          <p class="pp-pc__total"><span>Prix du pack</span><strong data-price>{{ default_variant.price | money }}</strong></p>
+          <p class="pp-pc__save" data-save-wrap><span data-save>Vous économisez {{ default_variant.compare_at_price | minus: default_variant.price | money }}</span></p>
+        </div>
+
+        <div class="pp-pc__meter" aria-hidden="true"><span data-meter></span></div>
+        <p class="pp-pc__nudge" data-nudge></p>
+
+        {%- form 'product', pack, class: 'pp-pc__form', id: 'PpPackForm', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ default_variant.id }}" data-variant-input>
+          <button type="submit" class="pp-pc__add" data-add>
+            <span data-add-label>{{ section.settings.button_label }}</span>
+            <span class="pp-pc__add-price" data-add-price>{{ default_variant.price | money }}</span>
+          </button>
+        {%- endform -%}
+        {%- if section.settings.note != blank -%}<p class="pp-pc__fine">{{ section.settings.note }}</p>{%- endif -%}
+        <p class="pp-pc__reassure">
+          <span>{% render 'pp-icon', icon: 'truck' %}Livraison offerte</span>
+          <span>{% render 'pp-icon', icon: 'moon' %}Essai 30 nuits</span>
+        </p>
+      </aside>
+
+      {%- comment -%} Barre fixe sur mobile quand le récapitulatif n'est pas à l'écran {%- endcomment -%}
+      <div class="pp-pc__bar" aria-hidden="true">
+        <span class="pp-pc__bar-price"><strong data-bar-price>{{ default_variant.price | money }}</strong><s data-bar-compare>{{ default_variant.compare_at_price | money }}</s></span>
+        <button type="button" class="pp-pc__bar-btn" data-bar-add tabindex="-1">{{ section.settings.button_label }}</button>
+      </div>
+
+      <script type="application/json" data-pp-variants>
+        [
+          {%- for v in pack.variants -%}
+            { "id": {{ v.id }}, "c": {{ v.option1 | json }}, "t": {{ v.option2 | json }}, "price": {{ v.price }}, "compare": {{ v.compare_at_price | default: v.price }}, "available": {{ v.available | json }} }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      </script>
+    </pp-pack-config>
+  </div>
+</div>
+{%- endif -%}
+
+<script>
+  if (!customElements.get('pp-pack-config')) {
+    customElements.define('pp-pack-config', class extends HTMLElement {
+      connectedCallback() {
+        this.variants = JSON.parse(this.querySelector('[data-pp-variants]').textContent);
+        this.fmt = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: this.dataset.currency || 'EUR' });
+        this.state = {
+          taie: this.dataset.defaultTaie !== 'false',
+          knee: this.dataset.defaultKnee === 'true',
+          color: (this.querySelector('.pp-pc__swatch') || {}).dataset?.color || ''
+        };
+        this.maxSave = Math.max(...this.variants.map((v) => v.compare - v.price));
+        this.shown = { price: null, compare: null };
+
+        this.querySelectorAll('[data-toggle]').forEach((btn) => btn.addEventListener('click', () => {
+          const k = btn.dataset.toggle;
+          this.state[k] = !this.state[k];
+          btn.classList.remove('is-bump'); void btn.offsetWidth; btn.classList.add('is-bump');
+          this.render();
+        }));
+        this.querySelectorAll('.pp-pc__swatch').forEach((sw) => sw.addEventListener('click', () => {
+          this.state.color = sw.dataset.color;
+          this.render();
+        }));
+        this.form = this.querySelector('.pp-pc__form');
+        this.form.addEventListener('submit', (e) => this.add(e));
+        this.querySelector('[data-bar-add]').addEventListener('click', () => this.form.requestSubmit());
+
+        // Barre mobile : visible quand le récapitulatif est hors de l'écran mais la section visible
+        const bar = this.querySelector('.pp-pc__bar');
+        const summary = this.querySelector('.pp-pc__summary');
+        let inSection = false, summaryVisible = false;
+        const sync = () => bar.classList.toggle('is-visible', inSection && !summaryVisible);
+        new IntersectionObserver(([e]) => { summaryVisible = e.isIntersecting; sync(); }, { threshold: 0.25 }).observe(summary);
+        new IntersectionObserver(([e]) => { inSection = e.isIntersecting; sync(); }, { threshold: 0 }).observe(this);
+        this.render(true);
+      }
+      money(cents) { return this.fmt.format(cents / 100); }
+      variantFor(taie, knee, color) {
+        return this.variants.find((v) => {
+          const c = v.c.toLowerCase();
+          if (/taie/.test(c) !== taie || /genou/.test(c) !== knee) return false;
+          return taie ? v.t === color : true;
+        });
+      }
+      tween(el, from, to) {
+        if (from === null || from === to || matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = this.money(to); return; }
+        const start = performance.now(), dur = 520;
+        const step = (now) => {
+          const p = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - p, 3);
+          el.textContent = this.money(Math.round(from + (to - from) * e));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+      render(first) {
+        const s = this.state;
+        const any = s.taie || s.knee;
+        // Interrupteurs, couleurs, lignes du récapitulatif
+        ['taie', 'knee'].forEach((k) => {
+          const on = s[k];
+          const btn = this.querySelector(`[data-toggle="${k}"]`);
+          btn.classList.toggle('is-on', on);
+          btn.setAttribute('aria-pressed', on);
+          const extra = this.querySelector(`[data-extra="${k}"]`);
+          if (extra) extra.classList.toggle('is-open', on);
+          this.querySelector(`[data-line="${k}"]`).classList.toggle('is-on', on);
+          this.querySelector(`[data-chip="${k}"]`).classList.toggle('is-on', on);
+          this.querySelector(`[data-chip-sep="${k}"]`).classList.toggle('is-on', on);
+        });
+        this.querySelectorAll('.pp-pc__swatch').forEach((sw) => {
+          const on = sw.dataset.color === s.color;
+          sw.classList.toggle('is-active', on);
+          sw.setAttribute('aria-checked', on);
+          if (on && sw.dataset.img) {
+            const media = this.querySelector('[data-taie-media]');
+            media.innerHTML = '<img src="' + sw.dataset.img + '" alt="" loading="lazy">';
+          }
+        });
+        this.querySelector('[data-color-name]').textContent = s.color;
+        this.querySelector('[data-line-color]').textContent = s.color ? '· ' + s.color : '';
+        const chipColor = this.querySelector('[data-chip-color]');
+        const activeSw = this.querySelector('.pp-pc__swatch.is-active');
+        if (chipColor && activeSw) chipColor.style.background = getComputedStyle(activeSw).getPropertyValue('--sw');
+
+        const v = any ? this.variantFor(s.taie, s.knee, s.color) : null;
+        const add = this.querySelector('[data-add]');
+        const barBtn = this.querySelector('[data-bar-add]');
+        const nudge = this.querySelector('[data-nudge]');
+        this.classList.toggle('is-empty', !v);
+        add.disabled = barBtn.disabled = !v || !v.available;
+
+        if (!v) {
+          nudge.textContent = 'Ajoutez au moins un complément pour composer votre pack.';
+          this.querySelector('[data-meter]').style.width = '0%';
+          return;
+        }
+        this.querySelector('[data-variant-input]').value = v.id;
+
+        // Prix animés
+        this.tween(this.querySelector('[data-price]'), this.shown.price, v.price);
+        this.tween(this.querySelector('[data-add-price]'), this.shown.price, v.price);
+        this.tween(this.querySelector('[data-bar-price]'), this.shown.price, v.price);
+        this.tween(this.querySelector('[data-compare]'), this.shown.compare, v.compare);
+        this.querySelector('[data-bar-compare]').textContent = this.money(v.compare);
+        this.shown = { price: v.price, compare: v.compare };
+
+        const save = v.compare - v.price;
+        const saveEl = this.querySelector('[data-save]');
+        saveEl.textContent = 'Vous économisez ' + this.money(save);
+        const wrap = this.querySelector('[data-save-wrap]');
+        if (!first) { wrap.classList.remove('is-flash'); void wrap.offsetWidth; wrap.classList.add('is-flash'); }
+        this.querySelector('[data-meter]').style.width = (save / this.maxSave) * 100 + '%';
+
+        // Incitation : ce que rapporte le complément manquant
+        const missing = !s.taie ? 'taie' : !s.knee ? 'knee' : null;
+        if (missing) {
+          const next = this.variantFor(missing === 'taie' ? true : s.taie, missing === 'knee' ? true : s.knee, s.color || (this.querySelector('.pp-pc__swatch') || {}).dataset?.color);
+          const extra = next ? (next.compare - next.price) - save : 0;
+          const label = missing === 'taie' ? 'la taie' : 'le coussin genoux';
+          nudge.innerHTML = extra > 0 ? 'Ajoutez ' + label + ' : <strong>' + this.money(extra) + '</strong> d\'économie en plus.' : '';
+        } else {
+          nudge.innerHTML = '<strong>Pack complet :</strong> l\'économie maximale.';
+        }
+      }
+      async add(e) {
+        const id = +this.querySelector('[data-variant-input]').value;
+        if (!window.ppAddToCart || !document.querySelector('cart-drawer')) return; // envoi classique
+        e.preventDefault();
+        const btn = this.querySelector('[data-add]');
+        const label = this.querySelector('[data-add-label]');
+        const text = label.textContent;
+        btn.classList.add('is-loading');
+        try {
+          await window.ppAddToCart([{ id, quantity: 1 }]);
+          label.textContent = 'Ajouté ✓';
+          btn.classList.add('is-done');
+          setTimeout(() => { label.textContent = text; btn.classList.remove('is-done'); }, 2200);
+        } catch (err) {
+          this.form.submit();
+        } finally {
+          btn.classList.remove('is-loading');
+        }
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Pack sur mesure",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit pack", "info": "Vide sur la fiche du pack : le produit affiché est utilisé." },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Sur mesure" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Composez votre pack" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "step1_title", "label": "Étape 1", "default": "La base de votre nuit" },
+    { "type": "text", "id": "step2_title", "label": "Étape 2", "default": "Ajoutez ce qui vous manque" },
+    { "type": "header", "content": "Base (toujours incluse)" },
+    { "type": "product", "id": "base_product", "label": "Produit" },
+    { "type": "image_picker", "id": "base_image", "label": "Photo" },
+    { "type": "text", "id": "base_note", "label": "Accroche", "default": "La nuque soutenue, sur le dos comme sur le côté." },
+    { "type": "text", "id": "base_tag", "label": "Étiquette", "default": "Inclus" },
+    { "type": "text", "id": "base_short", "label": "Nom court (récapitulatif)", "default": "Oreiller" },
+    { "type": "header", "content": "Complément : taie" },
+    { "type": "product", "id": "taie_product", "label": "Produit" },
+    { "type": "image_picker", "id": "taie_image", "label": "Photo" },
+    { "type": "image_picker", "id": "taie_image_noir", "label": "Photo (noir)" },
+    { "type": "image_picker", "id": "taie_image_gris", "label": "Photo (gris)" },
+    { "type": "image_picker", "id": "taie_image_vert", "label": "Photo (vert)" },
+    { "type": "text", "id": "taie_note", "label": "Accroche", "default": "Une sur l'oreiller, une au lavage." },
+    { "type": "text", "id": "taie_short", "label": "Nom court (récapitulatif)", "default": "Taie" },
+    { "type": "checkbox", "id": "default_taie", "label": "Cochée au départ", "default": true },
+    { "type": "header", "content": "Complément : coussin genoux" },
+    { "type": "product", "id": "knee_product", "label": "Produit" },
+    { "type": "image_picker", "id": "knee_image", "label": "Photo" },
+    { "type": "text", "id": "knee_note", "label": "Accroche", "default": "Les hanches alignées quand vous dormez sur le côté." },
+    { "type": "text", "id": "knee_short", "label": "Nom court (récapitulatif)", "default": "Coussin genoux" },
+    { "type": "checkbox", "id": "default_knee", "label": "Coché au départ", "default": false },
+    { "type": "header", "content": "Récapitulatif" },
+    { "type": "text", "id": "summary_title", "label": "Titre", "default": "Votre pack" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Ajouter le pack" },
+    { "type": "text", "id": "note", "label": "Mention", "default": "Prix à l'unité : mêmes produits achetés séparément sur notre boutique." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 80 }
+  ],
+  "presets": [ { "name": "Pack sur mesure" } ]
+}
+{% endschema %}

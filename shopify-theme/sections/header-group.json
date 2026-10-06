@@ -33,9 +33,9 @@
         "m4": {
           "type": "message",
           "settings": {
-            "text": "Pack Nuit complète : l'oreiller + le coussin genoux, −10 €",
+            "text": "Pack sur mesure : jusqu'à 22,99 € d'économie",
             "icon": "check",
-            "link": "shopify://products/pack-dormeur-sur-le-cote"
+            "link": "shopify://products/pack-sur-mesure"
           }
         }
       },

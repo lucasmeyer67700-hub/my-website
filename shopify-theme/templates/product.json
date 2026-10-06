@@ -263,12 +263,12 @@
     "bundle": {
       "type": "pp-bundle-promo",
       "settings": {
-        "product": "pack-oreiller-taie",
-        "eyebrow": "Le duo malin",
-        "title": "L'oreiller et sa taie de rechange",
-        "text": "<p>Une taie sur l'oreiller, une au lavage. Choisissez la couleur de la taie.</p>",
-        "compare_note": "prix des deux produits achetés séparément",
-        "button_label": "Voir le Pack Oreiller + Taie",
+        "product": "pack-sur-mesure",
+        "eyebrow": "Pack sur mesure",
+        "title": "Composez votre pack",
+        "text": "<p>Partez de l'Oreiller Papillon et ajoutez la taie de rechange, le coussin genoux, ou les deux. Plus le pack est complet, plus vous économisez : jusqu'à 22,99 €.</p>",
+        "compare_note": "prix des mêmes produits achetés à l'unité",
+        "button_label": "Composer mon pack",
         "color_scheme": "scheme-2",
         "padding_top": 72,
         "padding_bottom": 72
@@ -277,13 +277,13 @@
         "p1": {
           "type": "point",
           "settings": {
-            "text": "1 Oreiller Cervical Papillon"
+            "text": "L'Oreiller Papillon, toujours inclus"
           }
         },
         "p2": {
           "type": "point",
           "settings": {
-            "text": "1 Taie de rechange : noire, grise ou verte"
+            "text": "+ la taie, le coussin genoux, ou les deux"
           }
         },
         "p3": {

@@ -108,10 +108,10 @@
         "qa6": {
           "type": "qa",
           "settings": {
-            "question": "Comment profiter des remises pack ?",
-            "answer": "<p>Dans le catalogue, composez votre pack : <strong>−10 € dès 2 produits</strong>, <strong>−20 € dès 3</strong>. La remise s'applique automatiquement dans le panier, sans code.</p>",
+            "question": "Comment fonctionne le pack ?",
+            "answer": "<p>Le <strong>Pack Nuit sur mesure</strong> part de l'Oreiller Papillon. Ajoutez la taie, le coussin genoux, ou les deux :</p><p>Oreiller + Taie : <strong>70,00 €</strong> · Oreiller + Coussin genoux : <strong>79,90 €</strong> · Les trois : <strong>99,90 €</strong>.</p>",
             "keywords": "pack, remise pack, lot, plusieurs produits, deux produits, trois produits, moins cher, offre",
-            "link": "shopify://collections/catalogue",
+            "link": "shopify://products/pack-sur-mesure",
             "link_label": "Composer mon pack",
             "quick": true
           }
@@ -200,7 +200,7 @@
           "type": "qa",
           "settings": {
             "question": "Avez-vous un code promo ?",
-            "answer": "<p>Oui : inscrivez-vous à notre newsletter et recevez <strong>−10 % sur votre première commande</strong> (code BIENVENUE10, une fois par client).</p><p>Et en prenant plusieurs produits, la remise pack s'ajoute toute seule dans le panier.</p>",
+            "answer": "<p>Oui : inscrivez-vous à notre newsletter et recevez <strong>−10 % sur votre première commande</strong> (code BIENVENUE10, une fois par client), valable sur les produits achetés à l'unité.</p><p>Le pack sur mesure a déjà son propre prix réduit : le code ne s'y ajoute pas.</p>",
             "keywords": "code, promo, code promo, reduction, reduc, bienvenue, newsletter, inscription, pourcentage, bon de reduction",
             "quick": true
           }
@@ -238,8 +238,7 @@
           "loreiller-papillon",
           "le-coussin-genoux",
           "housse-de-rechange-pour-oreiller-papillon",
-          "pack-dormeur-sur-le-cote",
-          "pack-oreiller-taie"
+          "pack-sur-mesure"
         ]
       }
     },
@@ -259,12 +258,12 @@
         "perks": "Livraison offerte en France métropolitaine\nEssai 30 nuits, satisfait ou remboursé\nConseils sommeil et offres en avant-première",
         "button": "Recevoir mes −10 %",
         "tags": "newsletter,bienvenue10",
-        "legal": "Pas de spam. Désinscription en un clic à tout moment.",
+        "legal": "Code valable une fois, sur les produits achetés à l'unité (hors pack). Pas de spam, désinscription en un clic.",
         "privacy_page": "shopify://pages/confidentialite-et-cookies",
         "tab_label": "En profiter",
         "success_eyebrow": "C'est fait",
         "success_title": "Votre code est activé",
-        "success_text": "−10 % sur toute votre première commande, déjà appliqués à votre panier. Gardez aussi le code ci-dessous.",
+        "success_text": "−10 % sur les produits achetés à l'unité, déjà appliqués à votre panier. Gardez aussi le code ci-dessous.",
         "success_button": "Découvrir la boutique",
         "redirect": "shopify://collections/catalogue",
         "image_mobile": "shopify://shop_images/bienvenue-oreiller-mobile.jpg"

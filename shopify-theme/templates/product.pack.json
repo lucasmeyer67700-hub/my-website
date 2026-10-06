@@ -1,0 +1,160 @@
+{
+  "sections": {
+    "pack": {
+      "type": "pp-pack",
+      "settings": {
+        "eyebrow": "Pack Nuit sur mesure",
+        "title": "Composez votre pack",
+        "text": "<p>L'Oreiller Papillon, puis ce qui vous manque : la taie de rechange, le coussin genoux, ou les deux. Plus le pack est complet, plus vous économisez.</p>",
+        "step1_title": "La base de votre nuit",
+        "step2_title": "Ajoutez ce qui vous manque",
+        "base_product": "loreiller-papillon",
+        "base_note": "La nuque soutenue, sur le dos comme sur le côté.",
+        "base_tag": "Inclus",
+        "base_short": "Oreiller",
+        "taie_product": "housse-de-rechange-pour-oreiller-papillon",
+        "taie_note": "Une sur l'oreiller, une au lavage.",
+        "taie_short": "Taie",
+        "default_taie": true,
+        "knee_product": "le-coussin-genoux",
+        "knee_note": "Les hanches alignées quand vous dormez sur le côté.",
+        "knee_short": "Coussin genoux",
+        "default_knee": false,
+        "summary_title": "Votre pack",
+        "button_label": "Ajouter le pack",
+        "note": "Prix à l'unité : mêmes produits achetés séparément sur notre boutique.",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "trust": {
+      "type": "pp-trust-bar",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 28,
+        "padding_bottom": 28
+      },
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "icon": "layers",
+            "title": "Mousse à mémoire",
+            "text": "Épouse puis reprend sa forme"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "icon": "wind",
+            "title": "Housse respirante",
+            "text": "Côtés en maille qui laissent passer l'air"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "icon": "moon",
+            "title": "Essai 30 nuits",
+            "text": "Satisfait ou remboursé"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "Service client",
+            "text": "Réponse sous 24 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ]
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "settings": {
+        "caption": "",
+        "heading": "Questions fréquentes",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "scheme-6",
+        "color_scheme": "scheme-1",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_first",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "collapsible_row_1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Quelle position de sommeil convient à l'Oreiller Papillon ?",
+            "icon": "silhouette",
+            "row_content": "<p>Il est pensé pour les personnes qui dorment sur le dos, sur le côté, ou qui alternent les deux. Si vous dormez principalement sur le ventre, il risque d'être trop haut.</p>"
+          }
+        },
+        "collapsible_row_2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Combien de temps faut-il pour s'habituer ?",
+            "icon": "stopwatch",
+            "row_content": "<p>Comptez en général une à deux semaines. Les premières nuits peuvent sembler inhabituelles : votre nuque découvre un soutien différent. C'est pour cela que nous offrons 30 nuits d'essai.</p>"
+          }
+        },
+        "collapsible_row_3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Comment l'entretenir ?",
+            "icon": "washing",
+            "row_content": "<p>La mousse ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p>"
+          }
+        },
+        "collapsible_row_4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Il a une odeur à la réception, est-ce normal ?",
+            "icon": "leaf",
+            "row_content": "<p>Oui, c'est l'odeur de neuf de la mousse, qui a voyagé compressée. Laissez-le 24 à 48 h dans une pièce aérée : elle disparaît.</p>"
+          }
+        },
+        "collapsible_row_5": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Quels sont les délais de livraison ?",
+            "icon": "truck",
+            "row_content": "<p>La livraison est offerte en France métropolitaine. Chaque commande est expédiée avec un numéro de suivi et livrée en 7 à 14 jours ouvrés.</p>"
+          }
+        },
+        "collapsible_row_6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Comment fonctionne l'essai 30 nuits ?",
+            "icon": "return",
+            "row_content": "<p>Si l'oreiller ne vous convient pas dans les 30 nuits suivant la réception, contactez-nous. Nous vous indiquons la marche à suivre pour le retour et vous remboursons dès réception.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_1",
+        "collapsible_row_2",
+        "collapsible_row_3",
+        "collapsible_row_4",
+        "collapsible_row_5",
+        "collapsible_row_6"
+      ]
+    }
+  },
+  "order": [
+    "pack",
+    "trust",
+    "faq"
+  ]
+}

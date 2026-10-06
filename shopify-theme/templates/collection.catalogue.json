@@ -9,7 +9,7 @@
         "first_badge": "Best-seller",
         "rating": "4.8",
         "rating_count": "103",
-        "show_builder": true,
+        "show_builder": false,
         "builder_eyebrow": "Sur mesure",
         "builder_title": "Composez votre pack",
         "tier2_amount": 10,
@@ -18,10 +18,7 @@
         "color_scheme": "scheme-1",
         "padding_top": 64,
         "padding_bottom": 96,
-        "packs": [
-          "pack-oreiller-taie",
-          "pack-dormeur-sur-le-cote"
-        ],
+        "packs": [],
         "packs_title": "Nos packs"
       }
     },
@@ -72,10 +69,40 @@
         "item_3",
         "item_4"
       ]
+    },
+    "pack": {
+      "type": "pp-pack",
+      "settings": {
+        "eyebrow": "Sur mesure",
+        "title": "Composez votre pack",
+        "text": "<p>L'Oreiller Papillon, puis ce qui vous manque : la taie de rechange, le coussin genoux, ou les deux. Plus le pack est complet, plus vous économisez.</p>",
+        "step1_title": "La base de votre nuit",
+        "step2_title": "Ajoutez ce qui vous manque",
+        "base_product": "loreiller-papillon",
+        "base_note": "La nuque soutenue, sur le dos comme sur le côté.",
+        "base_tag": "Inclus",
+        "base_short": "Oreiller",
+        "taie_product": "housse-de-rechange-pour-oreiller-papillon",
+        "taie_note": "Une sur l'oreiller, une au lavage.",
+        "taie_short": "Taie",
+        "default_taie": true,
+        "knee_product": "le-coussin-genoux",
+        "knee_note": "Les hanches alignées quand vous dormez sur le côté.",
+        "knee_short": "Coussin genoux",
+        "default_knee": false,
+        "summary_title": "Votre pack",
+        "button_label": "Ajouter le pack",
+        "note": "Prix à l'unité : mêmes produits achetés séparément sur notre boutique.",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "product": "pack-sur-mesure"
+      }
     }
   },
   "order": [
     "catalogue",
+    "pack",
     "trust"
   ]
 }

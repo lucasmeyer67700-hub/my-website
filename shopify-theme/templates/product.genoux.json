@@ -187,13 +187,13 @@
     "bundle": {
       "type": "pp-bundle-promo",
       "settings": {
-        "product": "pack-dormeur-sur-le-cote",
+        "product": "pack-sur-mesure",
         "image": "shopify://shop_images/oreiller-coussin-genoux-duo-4k.jpg",
-        "eyebrow": "Le duo des dormeurs sur le côté",
-        "title": "Complétez votre nuit",
-        "text": "<p>Dormir sur le côté sollicite deux zones : la nuque et les hanches. Le Pack Nuit complète s'occupe des deux, pour moins cher qu'à l'unité.</p>",
-        "compare_note": "prix des deux produits achetés séparément",
-        "button_label": "Voir le Pack Nuit complète",
+        "eyebrow": "Pack sur mesure",
+        "title": "Composez votre pack",
+        "text": "<p>Partez de l'Oreiller Papillon et ajoutez la taie de rechange, le coussin genoux, ou les deux. Plus le pack est complet, plus vous économisez : jusqu'à 22,99 €.</p>",
+        "compare_note": "prix des mêmes produits achetés à l'unité",
+        "button_label": "Composer mon pack",
         "color_scheme": "scheme-2",
         "padding_top": 72,
         "padding_bottom": 72
@@ -202,19 +202,19 @@
         "p1": {
           "type": "point",
           "settings": {
-            "text": "1 Oreiller Cervical Papillon"
+            "text": "L'Oreiller Papillon, toujours inclus"
           }
         },
         "p2": {
           "type": "point",
           "settings": {
-            "text": "1 Coussin Genoux Ergonomique"
+            "text": "+ la taie, le coussin genoux, ou les deux"
           }
         },
         "p3": {
           "type": "point",
           "settings": {
-            "text": "Livraison offerte et essai 30 nuits sur l'ensemble"
+            "text": "Livraison offerte et essai 30 nuits"
           }
         }
       },

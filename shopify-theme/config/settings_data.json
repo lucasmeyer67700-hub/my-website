@@ -200,7 +200,7 @@
         }
       }
     },
-    "pp_cart_pack_collection": "catalogue",
+    "pp_cart_pack_collection": "",
     "pp_cart_tier2_amount": 10,
     "pp_cart_tier3_amount": 20,
     "pp_cart_delivery_min": 7,
