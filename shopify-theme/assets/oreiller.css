@@ -2170,3 +2170,4 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
   .pp-wall__controls { margin: -1.2rem 1.5rem 0; }
 }
 @media (prefers-reduced-motion: reduce) { .pp-wall .pp-reviews__viewport .pp-review.pp-wcard { transition: none; } }
+@media screen and (min-width: 990px) { .pp-wall__carousel.is-few .pp-wall__controls { display: none; } }

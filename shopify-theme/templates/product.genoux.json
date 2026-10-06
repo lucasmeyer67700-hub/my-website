@@ -305,11 +305,65 @@
         "button_label": "Ajouter au panier",
         "color_scheme": "scheme-6"
       }
+    },
+    "reviews": {
+      "type": "pp-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "10 sept. 2026",
+            "rating": 4,
+            "text": "La qualité est bonne et c'est confortable à porter entre les jambes en position allongée. Le type à fermeture éclair facilite le lavage."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "author": "",
+            "date": "24 sept. 2026",
+            "rating": 5,
+            "text": "Excellent produit, testé dès sa réception et je suis très satisfait de cet article. Je l'achèterais sans hésiter à nouveau, j'en suis très content !!!"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "author": "K***e",
+            "date": "01 oct. 2026",
+            "rating": 5,
+            "text": "C'est excellent. Nous l'avons utilisé sur une femme d'âge mûr, un homme d'âge mûr et un homme de 20 ans. Confortable et léger. Un couvercle amovible pour le lavage serait un plus."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "layout": "wall",
+        "anchor": "avis",
+        "eyebrow": "Avis clients",
+        "title": "Ce qu'en disent nos clients.",
+        "rating": "",
+        "count": "41",
+        "tags": "",
+        "source_note": "Avis laissés par des acheteurs de ce coussin sur la boutique en ligne de notre fournisseur, reproduits avec son accord. Ils ne proviennent pas de commandes passées sur notre site.",
+        "verified_label": "Achat vérifié",
+        "interval": 5,
+        "anonymous_label": "Client vérifié",
+        "color_scheme": "scheme-1",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     }
   },
   "order": [
     "main",
     "spotlight",
+    "reviews",
     "bundle",
     "faq",
     "related",

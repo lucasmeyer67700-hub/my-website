@@ -31,17 +31,19 @@
       <h2 class="pp-wall__title">{{ section.settings.title }}</h2>
       <div class="pp-wall__score">
         <span class="pp-wall__badge" aria-hidden="true">{% render 'pp-icon', icon: 'shield' %}</span>
-        <strong>{{ section.settings.rating | replace: '.', ',' }}</strong>
-        <span class="pp-stars" style="--pct: {{ pct }}%" role="img" aria-label="Note moyenne : {{ section.settings.rating | replace: '.', ',' }} sur 5">
-          <span class="pp-stars__base">{{ stars }}</span>
-          <span class="pp-stars__fill">{{ stars }}</span>
-        </span>
+        {%- if section.settings.rating != blank -%}
+          <strong>{{ section.settings.rating | replace: '.', ',' }}</strong>
+          <span class="pp-stars" style="--pct: {{ pct }}%" role="img" aria-label="Note moyenne : {{ section.settings.rating | replace: '.', ',' }} sur 5">
+            <span class="pp-stars__base">{{ stars }}</span>
+            <span class="pp-stars__fill">{{ stars }}</span>
+          </span>
+        {%- endif -%}
         <span class="pp-wall__count">{{ section.settings.count }} avis vérifiés</span>
       </div>
       {%- if section.settings.source_note != blank -%}<p class="pp-wall__source">{{ section.settings.source_note }}</p>{%- endif -%}
     </div>
 
-    <pp-review-carousel class="pp-wall__carousel pp-reveal" style="--d: 1" data-interval="{{ section.settings.interval | times: 1000 }}">
+    <pp-review-carousel class="pp-wall__carousel pp-reveal{% if section.blocks.size <= 3 %} is-few{% endif %}" style="--d: 1" data-interval="{{ section.settings.interval | times: 1000 }}">
       <div class="pp-reviews__viewport pp-wall__track" tabindex="0" role="region" aria-roledescription="carrousel" aria-label="Avis clients">
         {%- for block in section.blocks -%}
           {%- liquid
@@ -258,7 +260,7 @@
     { "type": "text", "id": "anchor", "label": "Ancre (lien #...)", "default": "avis" },
     { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Avis clients" },
     { "type": "text", "id": "title", "label": "Titre", "default": "Ils dorment déjà dessus" },
-    { "type": "text", "id": "rating", "label": "Note moyenne (sur 5)", "default": "4.8" },
+    { "type": "text", "id": "rating", "label": "Note moyenne (sur 5)", "default": "4.8", "info": "Laissez vide si vous ne connaissez pas la note moyenne exacte." },
     { "type": "text", "id": "count", "label": "Nombre d'avis", "default": "103" },
     { "type": "textarea", "id": "tags", "label": "Mots-clés (un par ligne)" },
     { "type": "textarea", "id": "source_note", "label": "Provenance des avis", "info": "Obligatoire : indiquez d'où viennent les avis et s'ils sont vérifiés." },
