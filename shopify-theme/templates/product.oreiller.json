@@ -647,12 +647,70 @@
         "padding_top": 88,
         "padding_bottom": 88
       }
+    },
+    "foam": {
+      "type": "pp-media-text",
+      "blocks": {
+        "point_1": {
+          "type": "point",
+          "settings": {
+            "icon": "layers",
+            "title": "Mousse à mémoire de forme",
+            "text": "Elle s'enfonce doucement sous la pression, sans effet ressort, puis retrouve sa forme."
+          }
+        },
+        "point_2": {
+          "type": "point",
+          "settings": {
+            "icon": "neck",
+            "title": "Un soutien qui tient toute la nuit",
+            "text": "Elle ne s'aplatit pas au fil des heures comme un oreiller en plumes ou en fibres."
+          }
+        },
+        "point_3": {
+          "type": "point",
+          "settings": {
+            "icon": "wind",
+            "title": "Côtés en maille respirante",
+            "text": "Une maille de coton sur les côtés laisse circuler l'air."
+          }
+        },
+        "point_4": {
+          "type": "point",
+          "settings": {
+            "icon": "ruler",
+            "title": "62 × 41 cm, 8 à 12 cm de haut",
+            "text": "Une hauteur qui varie selon la zone, pour le dos comme pour le côté."
+          }
+        }
+      },
+      "block_order": [
+        "point_1",
+        "point_2",
+        "point_3",
+        "point_4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/oreiller-cervical-papillon-mousse-memoire-main.jpg",
+        "image_right": false,
+        "badge": "Mousse à mémoire de forme",
+        "eyebrow": "Sentez la différence",
+        "title": "Elle épouse, puis elle reprend sa forme.",
+        "text": "<p>Posez la main : la mousse s'enfonce lentement sous la pression, puis retrouve sa forme d'origine. La nuit, elle suit les mouvements de votre tête sans jamais s'écraser.</p>",
+        "button_label": "",
+        "button_link": "",
+        "note": "Essai 30 nuits : si elle ne vous convient pas, on vous rembourse.",
+        "color_scheme": "scheme-3",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     }
   },
   "order": [
     "main",
     "reviews",
     "spotlight",
+    "foam",
     "compare",
     "bundle",
     "faq",
