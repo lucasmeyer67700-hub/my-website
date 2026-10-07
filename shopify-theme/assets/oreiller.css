@@ -2325,3 +2325,72 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 .pp-pc__upgrade { border-style: solid; border-color: rgba(198, 161, 91, 0.35); }
 .pp-pc__step > span { display: none; }
 .pp-pc__step { letter-spacing: 0.16em; }
+
+/* ==========================================================================
+   Page contact (pp-contact)
+   ========================================================================== */
+.pp-contact__grid { display: grid; gap: 3.2rem; max-width: 112rem; margin: 0 auto; }
+@media screen and (min-width: 990px) { .pp-contact__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 6.4rem; align-items: start; } }
+.pp-contact__intro { display: grid; gap: 1.6rem; align-content: start; }
+.pp-contact__intro .pp-eyebrow { margin: 0; }
+.pp-contact__title { margin: 0; }
+.pp-contact__text { font-size: 1.6rem; line-height: 1.6; opacity: 0.8; }
+.pp-contact__text p { margin: 0; }
+.pp-contact__ways { list-style: none; display: grid; gap: 1rem; margin: 0.8rem 0 0; padding: 0; }
+.pp-contact__way {
+  box-sizing: border-box; display: flex; align-items: center; gap: 1.4rem; width: 100%; padding: 1.4rem 1.6rem; border-radius: 1.6rem; cursor: pointer;
+  font: inherit; text-align: left; text-decoration: none; color: var(--pp-ink); background: var(--pp-white); border: 0;
+  box-shadow: 0 0 0 1px rgba(30, 32, 36, 0.08), 0 12px 28px -24px rgba(22, 23, 26, 0.5); transition: box-shadow 0.3s, transform 0.3s;
+}
+.pp-contact__way:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(198, 161, 91, 0.5), 0 16px 32px -24px rgba(22, 23, 26, 0.6); }
+.pp-contact__way:focus-visible { outline: 2px solid var(--pp-gold); outline-offset: 2px; }
+.pp-contact__icon { display: grid; place-items: center; flex: none; width: 4.4rem; height: 4.4rem; border-radius: 50%; color: var(--pp-gold-light); background: var(--pp-night); }
+.pp-contact__icon .pp-icon { width: 2rem; height: 2rem; }
+.pp-contact__way > span:last-child { display: grid; gap: 0.2rem; min-width: 0; }
+.pp-contact__way strong { font-size: 1.55rem; font-weight: 600; }
+.pp-contact__way > span:last-child > span { font-size: 1.3rem; color: rgba(30, 32, 36, 0.65); overflow-wrap: anywhere; }
+.pp-contact__promise { display: inline-flex; align-items: center; gap: 0.8rem; margin: 0; font-size: 1.35rem; font-weight: 600; color: #6d5424; }
+.pp-contact__promise .pp-icon { width: 1.8rem; height: 1.8rem; stroke-width: 2.2; color: var(--pp-gold-deep, #a8843f); }
+.pp-contact__quick { margin-top: 0.8rem; padding-top: 1.6rem; border-top: 1px solid rgba(30, 32, 36, 0.1); }
+.pp-contact__quick-title { margin: 0 0 0.8rem; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(30, 32, 36, 0.6); }
+.pp-contact__quick ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.pp-contact__quick a { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; font-size: 1.45rem; color: var(--pp-ink); text-decoration: none; border-bottom: 1px solid rgba(30, 32, 36, 0.07); }
+.pp-contact__quick a:hover { color: var(--pp-gold-deep, #a8843f); }
+.pp-contact__card {
+  box-sizing: border-box; padding: 3.2rem; border-radius: 2.6rem; color: #f4f4f2;
+  background: radial-gradient(120% 70% at 100% 0%, rgba(27, 42, 65, 0.95) 0%, rgba(27, 42, 65, 0) 60%), linear-gradient(180deg, #17181c 0%, #121419 100%);
+  box-shadow: 0 0 0 1px rgba(198, 161, 91, 0.3), 0 40px 70px -40px rgba(10, 11, 14, 0.75);
+}
+.pp-contact__form { display: grid; gap: 1.4rem; margin: 0; }
+.pp-contact__form-title { margin: 0 0 0.4rem; font-family: var(--pp-serif); font-size: 2.8rem; color: #fff; }
+.pp-contact__row { display: grid; gap: 1.4rem; }
+@media screen and (min-width: 750px) { .pp-contact__row { grid-template-columns: 1fr 1fr; } }
+.pp-contact__field { display: grid; gap: 0.6rem; min-width: 0; }
+.pp-contact__field > span { font-size: 1.2rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 244, 242, 0.7); }
+.pp-contact__field em { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; opacity: 0.7; }
+.pp-contact__field input, .pp-contact__field select, .pp-contact__field textarea {
+  box-sizing: border-box; width: 100%; padding: 1.3rem 1.4rem; border-radius: 1.2rem; font: inherit; font-size: 1.5rem; color: #fff;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); transition: border-color 0.25s, background 0.25s; appearance: none; -webkit-appearance: none;
+}
+.pp-contact__field select { background-image: linear-gradient(45deg, transparent 50%, #c6a15b 50%), linear-gradient(135deg, #c6a15b 50%, transparent 50%); background-position: calc(100% - 1.8rem) 55%, calc(100% - 1.3rem) 55%; background-size: 0.5rem 0.5rem; background-repeat: no-repeat; padding-right: 3.6rem; }
+.pp-contact__field select option { color: #16171a; }
+.pp-contact__field textarea { resize: vertical; min-height: 14rem; }
+.pp-contact__field input:focus, .pp-contact__field select:focus, .pp-contact__field textarea:focus { outline: none; border-color: var(--pp-gold); background: rgba(255, 255, 255, 0.09); }
+.pp-contact__field input::placeholder { color: rgba(244, 244, 242, 0.35); }
+.pp-contact__submit {
+  margin-top: 0.4rem; height: 5.6rem; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 1.45rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--pp-night); background: linear-gradient(135deg, #ead7a6 0%, #c6a15b 50%, #a8843f 100%); box-shadow: 0 14px 30px -12px rgba(198, 161, 91, 0.8); transition: transform 0.2s;
+}
+.pp-contact__submit:hover { transform: translateY(-1px); }
+.pp-contact__fine { margin: 0; font-size: 1.15rem; color: rgba(244, 244, 242, 0.5); }
+.pp-contact__fine a { color: rgba(244, 244, 242, 0.75); }
+.pp-contact__error { margin: 0; padding: 1rem 1.2rem; border-radius: 1rem; font-size: 1.3rem; color: #ffd7d0; background: rgba(220, 80, 60, 0.15); }
+.pp-contact__ok { display: grid; justify-items: start; gap: 1rem; padding: 1rem 0; }
+.pp-contact__ok-icon { display: grid; place-items: center; width: 5.2rem; height: 5.2rem; border-radius: 50%; color: var(--pp-night); background: linear-gradient(135deg, #ecdaa9, var(--pp-gold)); }
+.pp-contact__ok-icon .pp-icon { width: 2.6rem; height: 2.6rem; stroke-width: 2.4; }
+.pp-contact__ok-title { margin: 0; font-family: var(--pp-serif); font-size: 2.8rem; color: #fff; }
+.pp-contact__ok p:last-child { margin: 0; font-size: 1.45rem; color: rgba(244, 244, 242, 0.75); }
+@media screen and (max-width: 749px) {
+  .pp-contact__card { padding: 2.4rem 1.8rem; border-radius: 2.2rem; }
+  .pp-contact__form-title { font-size: 2.4rem; }
+}

@@ -1,25 +1,67 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "contact": {
+      "type": "pp-contact",
+      "blocks": {
+        "q1": {
+          "type": "link",
+          "settings": {
+            "label": "Où en est ma commande ?",
+            "link": "/pages/suivi-de-commande"
+          }
+        },
+        "q2": {
+          "type": "link",
+          "settings": {
+            "label": "Comment fonctionne l'essai 30 nuits ?",
+            "link": "/pages/livraison-et-retours"
+          }
+        },
+        "q3": {
+          "type": "link",
+          "settings": {
+            "label": "Comment faire un retour ?",
+            "link": "/pages/politique-de-retour"
+          }
+        },
+        "q4": {
+          "type": "link",
+          "settings": {
+            "label": "Quel oreiller pour ma position de sommeil ?",
+            "link": "/pages/guide-choisir-oreiller"
+          }
+        },
+        "q5": {
+          "type": "link",
+          "settings": {
+            "label": "Toutes les questions fréquentes",
+            "link": "/pages/faq"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
       "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "form": {
-      "type": "contact-form",
-      "settings": {
-        "heading": "",
-        "heading_size": "h1",
+        "eyebrow": "Contact",
+        "title": "Une question ? On vous répond.",
+        "text": "<p>Un produit, une commande, un retour : écrivez-nous. Une vraie personne vous répond, en français.</p>",
+        "email": "",
+        "promise": "Réponse sous 24 h ouvrées",
+        "quick_title": "Les réponses aux questions les plus fréquentes",
+        "form_title": "Écrivez-nous",
+        "success_text": "Nous vous répondons par e-mail sous 24 h ouvrées. Pensez à regarder dans vos courriers indésirables.",
         "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 64,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
-    "main",
-    "form"
+    "contact"
   ]
 }
