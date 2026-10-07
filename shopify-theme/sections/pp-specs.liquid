@@ -1,0 +1,97 @@
+{%- comment -%}
+  Fiche technique : un tableau de caractéristiques (blocs « Ligne ») à gauche,
+  des encadrés d'information (blocs « Encadré ») à droite. Aucune image.
+{%- endcomment -%}
+{% render 'pp-padding', section: section %}
+
+<div id="{{ section.settings.anchor | default: 'fiche' | handleize }}" class="pp-specs pp-anchor color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="pp-heading pp-heading--center pp-reveal">
+      {%- if section.settings.eyebrow != blank -%}<p class="pp-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="pp-heading__text rte">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+
+    <div class="pp-specs__grid">
+      <div class="pp-specs__table pp-reveal">
+        {%- if section.settings.table_title != blank -%}<h3 class="pp-specs__h">{{ section.settings.table_title }}</h3>{%- endif -%}
+        <dl>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'row' -%}
+              <div class="pp-specs__row" {{ block.shopify_attributes }}>
+                <dt>{{ block.settings.label }}</dt>
+                <dd>{{ block.settings.value }}</dd>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+      </div>
+
+      <div class="pp-specs__cards">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'card' -%}
+            <div class="pp-specs__card pp-reveal" style="--d: {{ forloop.index | modulo: 4 }}" {{ block.shopify_attributes }}>
+              <span class="pp-specs__icon" aria-hidden="true">{% render 'pp-icon', icon: block.settings.icon %}</span>
+              <div>
+                <h3 class="pp-specs__card-title">{{ block.settings.title }}</h3>
+                <div class="pp-specs__card-text rte">{{ block.settings.text }}</div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Fiche technique",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (lien #...)", "default": "fiche" },
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Fiche technique" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Tout savoir avant de commander" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "table_title", "label": "Titre du tableau", "default": "Caractéristiques" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge basse", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne du tableau",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Caractéristique", "default": "Dimensions" },
+        { "type": "text", "id": "value", "label": "Valeur", "default": "62 × 41 cm" }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Encadré",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "check",
+          "options": [
+            { "value": "ruler", "label": "Mesure" },
+            { "value": "neck", "label": "Nuque" },
+            { "value": "layers", "label": "Couches" },
+            { "value": "wind", "label": "Air" },
+            { "value": "moon", "label": "Nuit" },
+            { "value": "gift", "label": "Colis" },
+            { "value": "wash", "label": "Lavage" },
+            { "value": "leaf", "label": "Feuille" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "check", "label": "Coche" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Encadré" },
+        { "type": "richtext", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Fiche technique" } ]
+}
+{% endschema %}

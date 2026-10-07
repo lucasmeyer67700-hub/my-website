@@ -581,73 +581,6 @@
         "anonymous_label": "Client vérifié"
       }
     },
-    "spotlight": {
-      "type": "pp-spotlight",
-      "blocks": {
-        "zone_1": {
-          "type": "zone",
-          "settings": {
-            "x": 54,
-            "y": 45,
-            "title": "Creux central",
-            "text": "Sur le dos, la tête s'y loge et s'enfonce d'environ 3 cm : elle reste au centre et ne roule plus."
-          }
-        },
-        "zone_2": {
-          "type": "zone",
-          "settings": {
-            "x": 52,
-            "y": 63,
-            "title": "Rebord cervical",
-            "text": "Une avancée d'environ 10 cm se place sous la nuque et comble l'espace entre le cou et le matelas."
-          }
-        },
-        "zone_3": {
-          "type": "zone",
-          "settings": {
-            "x": 82,
-            "y": 41,
-            "title": "Côtés plus hauts",
-            "text": "Plus hauts que le centre, ils compensent la largeur de l'épaule quand vous dormez sur le côté."
-          }
-        },
-        "zone_4": {
-          "type": "zone",
-          "settings": {
-            "x": 23,
-            "y": 53,
-            "title": "Découpe en papillon",
-            "text": "L'épaule trouve sa place, et vous glissez un bras sous l'oreiller sans le soulever."
-          }
-        },
-        "zone_5": {
-          "type": "zone",
-          "settings": {
-            "x": 37,
-            "y": 66,
-            "title": "Côtés en maille",
-            "text": "Une maille de coton respirante sur les côtés : l'air circule, la tête reste au frais."
-          }
-        }
-      },
-      "block_order": [
-        "zone_1",
-        "zone_2",
-        "zone_3",
-        "zone_4",
-        "zone_5"
-      ],
-      "settings": {
-        "anchor": "zones",
-        "eyebrow": "Le fonctionnement",
-        "title": "Cinq zones, un seul objectif : votre nuque.",
-        "text": "<p>Survolez les points pour découvrir chaque zone.</p>",
-        "image": "shopify://shop_images/oreiller-cervical-papillon-studio.jpg",
-        "color_scheme": "scheme-1",
-        "padding_top": 88,
-        "padding_bottom": 88
-      }
-    },
     "foam": {
       "type": "pp-media-text",
       "blocks": {
@@ -704,12 +637,171 @@
         "padding_top": 88,
         "padding_bottom": 88
       }
+    },
+    "specs": {
+      "type": "pp-specs",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Dimensions",
+            "value": "62 × 41 cm"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Hauteurs",
+            "value": "12 cm et 10 cm aux extrémités, 8 cm au centre"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Rebord cervical",
+            "value": "Avancée d'environ 10 cm sous la nuque"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Creux central",
+            "value": "La tête s'y enfonce d'environ 3 cm"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Garnissage",
+            "value": "Mousse à mémoire de forme (polyuréthane)"
+          }
+        },
+        "row_6": {
+          "type": "row",
+          "settings": {
+            "label": "Dessus",
+            "value": "Tissu gris doux et extensible (élasthanne, nylon, polyester)"
+          }
+        },
+        "row_7": {
+          "type": "row",
+          "settings": {
+            "label": "Côtés",
+            "value": "Maille de coton tricotée, respirante"
+          }
+        },
+        "row_8": {
+          "type": "row",
+          "settings": {
+            "label": "Coloris",
+            "value": "Gris et blanc"
+          }
+        },
+        "row_9": {
+          "type": "row",
+          "settings": {
+            "label": "Positions",
+            "value": "Pensé pour le dos et le côté ; sur le ventre, il peut être trop haut"
+          }
+        },
+        "row_10": {
+          "type": "row",
+          "settings": {
+            "label": "Livraison",
+            "value": "Offerte, avec suivi, en 7 à 14 jours ouvrés"
+          }
+        },
+        "row_11": {
+          "type": "row",
+          "settings": {
+            "label": "Essai",
+            "value": "30 nuits, satisfait ou remboursé"
+          }
+        },
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "icon": "ruler",
+            "title": "Deux hauteurs dans un seul oreiller",
+            "text": "<p>Un bord fait 12 cm, l'autre 10 cm. Tournez l'oreiller pour placer sous votre nuque la hauteur qui vous convient.</p><ul><li><strong>Épaules larges ou sommeil sur le côté</strong> : commencez par le bord de 12 cm.</li><li><strong>Sommeil sur le dos ou carrure fine</strong> : commencez par le bord de 10 cm.</li></ul>"
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "icon": "neck",
+            "title": "Une zone pour chaque position",
+            "text": "<p><strong>Sur le dos</strong>, la tête se loge dans le creux central et la nuque repose sur le rebord. <strong>Sur le côté</strong>, les zones latérales plus hautes comblent l'espace laissé par l'épaule. Les découpes en papillon laissent passer l'épaule et un bras.</p>"
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "icon": "gift",
+            "title": "Dans le colis",
+            "text": "<p>1 Oreiller Cervical Papillon avec sa housse, livré compressé sous vide.</p><p>Envie d'une housse de rechange ? La <a href=\"/products/housse-de-rechange-pour-oreiller-papillon\">taie de rechange</a> existe en noir, gris et vert, et elle est moins chère dans le <a href=\"/products/pack-sur-mesure\">Pack Nuit sur mesure</a>.</p>"
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "icon": "leaf",
+            "title": "À la réception",
+            "text": "<p>Sortez l'oreiller de son emballage et laissez-le 24 à 48 h dans une pièce aérée : il reprend tout son volume et perd l'odeur de neuf de la mousse.</p>"
+          }
+        },
+        "card_5": {
+          "type": "card",
+          "settings": {
+            "icon": "moon",
+            "title": "Les premières nuits",
+            "text": "<p>Comptez une à deux semaines pour vous habituer à un oreiller ergonomique : votre nuque découvre un soutien différent. C'est pour cela que vous avez 30 nuits pour l'essayer.</p>"
+          }
+        },
+        "card_6": {
+          "type": "card",
+          "settings": {
+            "icon": "wash",
+            "title": "Entretien",
+            "text": "<p>La mousse ne se lave pas : aérez-la de temps en temps, à l'abri du soleil direct. Pour la housse, suivez les consignes de son étiquette.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "row_6",
+        "row_7",
+        "row_8",
+        "row_9",
+        "row_10",
+        "row_11",
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5",
+        "card_6"
+      ],
+      "settings": {
+        "anchor": "fiche",
+        "eyebrow": "Fiche technique",
+        "title": "Tout savoir avant de commander",
+        "text": "<p>Mesures, matières, réglage de la hauteur et premiers jours : les réponses aux questions qu'on nous pose le plus.</p>",
+        "table_title": "Caractéristiques",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
     "main",
     "reviews",
-    "spotlight",
+    "specs",
     "foam",
     "compare",
     "bundle",
