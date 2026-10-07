@@ -33,7 +33,7 @@
         "benefits": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<ul class=\"pp-benefits\" role=\"list\"><li><span><strong>Hanches alignées</strong> toute la nuit</span></li><li><span><strong>Format long</strong> : il ne glisse pas au premier mouvement</span></li><li><span><strong>Housse amovible</strong>, lavable à 30 °C</span></li></ul>"
+            "custom_liquid": "<ul class=\"pp-benefits\" role=\"list\"><li><span><strong>Hanches alignées</strong> toute la nuit</span></li><li><span><strong>Format long</strong> : il ne glisse pas au premier mouvement</span></li><li><span><strong>Housse amovible</strong> par fermeture éclair</span></li></ul>"
           }
         },
         "variant_picker": {
@@ -91,7 +91,7 @@
           "settings": {
             "heading": "Entretien",
             "icon": "washing",
-            "content": "<p>Housse amovible, lavable en machine à 30 °C. La mousse ne se lave pas : aérez-la de temps en temps.</p><p>À la réception, laissez le coussin respirer 24 à 48 h pour qu'il reprenne son volume.</p>"
+            "content": "<p>Housse amovible par fermeture éclair : pour son lavage, suivez les consignes de son étiquette. La mousse ne se lave pas : aérez-la de temps en temps.</p><p>À la réception, laissez le coussin respirer 24 à 48 h pour qu'il reprenne son volume.</p>"
           }
         },
         "rating_line": {
@@ -170,7 +170,7 @@
             "x": 82,
             "y": 47,
             "title": "Housse amovible",
-            "text": "Douce et respirante, elle se retire en quelques secondes et passe en machine à 30 °C."
+            "text": "Douce et respirante, elle se retire en quelques secondes grâce à sa fermeture éclair."
           }
         }
       },
@@ -255,7 +255,7 @@
           "settings": {
             "heading": "Comment l'entretenir ?",
             "icon": "washing",
-            "row_content": "<p>La housse se retire et se lave en machine à 30 °C. La mousse ne se lave pas : aérez-la de temps en temps.</p>"
+            "row_content": "<p>La housse se retire grâce à sa fermeture éclair ; pour son lavage, suivez les consignes de son étiquette. La mousse ne se lave pas : aérez-la de temps en temps.</p>"
           }
         },
         "row_4": {
