@@ -26,7 +26,9 @@
         "recommended": "taie",
         "badge_recommended": "Recommandé",
         "badge_best": "Meilleure économie",
-        "show_per_night": true
+        "show_per_night": true,
+        "rating": "4.8",
+        "rating_count": "167"
       }
     },
     "trust": {

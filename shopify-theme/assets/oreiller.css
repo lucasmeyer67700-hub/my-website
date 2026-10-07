@@ -1997,13 +1997,6 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
 .pp-pc__unit s { color: rgba(244, 244, 242, 0.55); }
 .pp-pc__total { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .pp-pc__total strong { font-family: var(--pp-serif); font-size: 4.6rem; font-weight: 600; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
-.pp-pc__save > span {
-  position: relative; display: inline-block; overflow: hidden; padding: 0.6rem 1.4rem; border-radius: 999px; font-size: 1.4rem; font-weight: 700; color: var(--pp-night);
-  background: linear-gradient(135deg, #ecdaa9, var(--pp-gold));
-}
-.pp-pc__save > span::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%); transform: translateX(-120%); }
-.pp-pc__save.is-flash > span { animation: pp-pc-pop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
-.pp-pc__save.is-flash > span::after { animation: pp-sheen-once 0.9s 0.15s ease; }
 @keyframes pp-sheen-once { to { transform: translateX(120%); } }
 .pp-pc__night { font-size: 1.25rem; color: rgba(244, 244, 242, 0.6); }
 .pp-pc__form { margin: 0; }
@@ -2075,7 +2068,6 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
   .pp-pc__sum-name { font-size: 2.2rem; }
   .pp-pc__lines li { padding: 0.6rem 0; font-size: 1.3rem; }
   .pp-pc__total strong { font-size: 3.6rem; }
-  .pp-pc__save > span { font-size: 1.25rem; padding: 0.5rem 1.1rem; }
   .pp-pc__add { height: 5.4rem; padding: 0 2.2rem; font-size: 1.35rem; }
   .pp-pc__add-price { font-size: 2rem; }
   .pp-pc__upgrade { padding: 1rem 1.2rem; font-size: 1.25rem; }
@@ -2296,3 +2288,40 @@ body.pp-welcome-open .pp-dock { opacity: 0; pointer-events: none; }
   .pp-specs__card-title { font-size: 1.85rem; }
   .pp-specs__card-text { font-size: 1.35rem; }
 }
+
+/* Pack : finitions (prix en rouleaux, récapitulatif rassurant) */
+.pp-odo-wrap { display: inline-flex; align-items: flex-start; line-height: 1; font-variant-numeric: tabular-nums lining-nums; }
+.pp-odo { display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
+.pp-odo__strip { display: block; white-space: pre; line-height: 1; text-align: center; transition: transform 0.75s cubic-bezier(0.2, 0.85, 0.15, 1); will-change: transform; }
+.pp-odo__ch { display: inline-block; line-height: 1; }
+[data-compare], [data-save], [data-night], [data-add-price] { display: inline-block; transition: opacity 0.16s ease, transform 0.25s ease; }
+.is-swapping { opacity: 0; transform: translateY(-0.25em); }
+.pp-pc__f-price em { font-style: normal; font-size: 1.2rem; font-weight: 600; color: #8a6a2c; }
+.pp-pc__formula.is-on .pp-pc__f-price em { color: #6d5424; }
+.pp-pc__thumb img { object-fit: contain; background: radial-gradient(90% 80% at 50% 40%, #4a4b50 0%, #26272a 85%); }
+.pp-pc__rating { display: inline-flex; align-items: center; gap: 0.8rem; order: 3; flex-basis: 100%; margin-top: 0.4rem; font-size: 1.25rem; color: rgba(244, 244, 242, 0.7); text-decoration: none; }
+.pp-pc__rating .pp-stars { --w: 8.4rem; height: 1.5rem; color: var(--pp-gold); }
+.pp-pc__rating .pp-stars__base { color: rgba(255, 255, 255, 0.15); }
+.pp-pc__rating strong { color: #fff; font-weight: 600; }
+.pp-pc__total { align-items: baseline !important; }
+.pp-pc__total > span { font-size: 1.4rem; color: rgba(244, 244, 242, 0.75); }
+.pp-pc__save { display: flex !important; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.6rem; margin: -0.2rem 0 0 !important; font-size: 1.35rem; color: rgba(244, 244, 242, 0.75); justify-content: flex-end !important; }
+.pp-pc__save strong { color: var(--pp-gold-light); font-weight: 700; }
+.pp-pc__save .pp-pc__night { flex-basis: 100%; text-align: right; font-size: 1.2rem; color: rgba(244, 244, 242, 0.5); }
+.pp-pc__promise { list-style: none; display: grid; gap: 1.2rem; margin: 0.4rem 0 0; padding: 1.6rem 0 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.pp-pc__promise li { display: flex; gap: 1.2rem; align-items: flex-start; }
+.pp-pc__promise .pp-icon { flex: none; width: 2rem; height: 2rem; margin-top: 0.1rem; color: var(--pp-gold); }
+.pp-pc__promise li > span { display: grid; gap: 0.1rem; font-size: 1.25rem; line-height: 1.45; color: rgba(244, 244, 242, 0.6); }
+.pp-pc__promise strong { font-size: 1.35rem; font-weight: 600; color: #f4f4f2; }
+.pp-pc__pay { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
+.pp-pc__pay svg { width: 3.4rem; height: 2.2rem; border-radius: 0.3rem; }
+@media screen and (max-width: 749px) {
+  .pp-pc__promise { gap: 1rem; padding-top: 1.2rem; }
+  .pp-pc__save { justify-content: flex-start !important; }
+  .pp-pc__save .pp-pc__night { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .pp-odo__strip { transition: none; } .is-swapping { opacity: 1; transform: none; } }
+.pp-pc__f-foot { border-top-style: solid; border-top-color: rgba(30, 32, 36, 0.07); }
+.pp-pc__upgrade { border-style: solid; border-color: rgba(198, 161, 91, 0.35); }
+.pp-pc__step > span { display: none; }
+.pp-pc__step { letter-spacing: 0.16em; }

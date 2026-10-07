@@ -25,6 +25,7 @@
   assign taie_price = p_taie.price | default: 0
   assign knee_price = p_knee.price | default: 0
   assign rec = section.settings.recommended
+  assign taie_default_img = p_taie.featured_image
 
   comment
     Formule par défaut : la recommandée si elle existe et est disponible.
@@ -50,7 +51,20 @@
   if default_variant == nil
     assign default_variant = pack.selected_or_first_available_variant
   endif
+  if p_taie
+    for tv in p_taie.variants
+      if tv.option1 == default_variant.option2 and tv.featured_image
+        assign taie_default_img = tv.featured_image
+      endif
+    endfor
+  endif
 -%}
+
+{%- capture stars -%}
+  <svg viewBox="0 0 120 24" aria-hidden="true" focusable="false"><g fill="currentColor">
+    {%- for i in (0..4) -%}<path transform="translate({{ i | times: 24 }} 0)" d="M12 1.8l3 6.2 6.8.9-5 4.7 1.3 6.7L12 17l-6.1 3.3 1.3-6.7-5-4.7 6.8-.9z"/>{%- endfor -%}
+  </g></svg>
+{%- endcapture -%}
 
 {%- if pack != blank -%}
 <div class="pp-pc color-{{ section.settings.color_scheme }} gradient" id="pack">
@@ -153,12 +167,13 @@
               </span>
               <span class="pp-pc__f-price">
                 <strong>{{ fv.price | money }}</strong>
-                {%- if f_save > 0 -%}<s>{{ f_compare | money }}</s>{%- endif -%}
+                {%- if f_save > 0 -%}<s>{{ f_compare | money }}</s><em>Économie {{ f_save | money }}</em>{%- endif -%}
               </span>
               <span class="pp-pc__thumbs" aria-hidden="true">
                 <span class="pp-pc__thumb">
-                  {%- if section.settings.base_image != blank -%}
-                    {{ section.settings.base_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                  {%- assign th = section.settings.base_image | default: p_base.featured_image -%}
+                  {%- if th != blank -%}
+                    {{ th | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                   {%- else -%}
                     {% render 'pp-illustration', name: 'pillow', uid: uid_b %}
                   {%- endif -%}
@@ -166,8 +181,9 @@
                 {%- if has_taie -%}
                   <i>+</i>
                   <span class="pp-pc__thumb" data-taie-thumb>
-                    {%- if section.settings.taie_image != blank -%}
-                      {{ section.settings.taie_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                    {%- assign th = section.settings.taie_image | default: taie_default_img -%}
+                    {%- if th != blank -%}
+                      {{ th | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                     {%- else -%}
                       {% render 'pp-illustration', name: 'pillow', uid: uid_t %}
                       <b class="pp-pc__thumb-dot" data-taie-dot></b>
@@ -177,8 +193,9 @@
                 {%- if has_knee -%}
                   <i>+</i>
                   <span class="pp-pc__thumb">
-                    {%- if section.settings.knee_image != blank -%}
-                      {{ section.settings.knee_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                    {%- assign th = section.settings.knee_image | default: p_knee.featured_image -%}
+                    {%- if th != blank -%}
+                      {{ th | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                     {%- else -%}
                       {% render 'pp-illustration', name: 'knee', uid: uid_k %}
                     {%- endif -%}
@@ -189,7 +206,6 @@
                 {%- if addon_solo > addon_cost and addon_cost > 0 -%}
                   <span class="pp-pc__anchor">{{ addon_label | capitalize }} pour <strong>{{ addon_cost | money }}</strong> au lieu de {{ addon_solo | money }}</span>
                 {%- endif -%}
-                {%- if f_save > 0 -%}<span class="pp-pc__pill">−{{ f_save | money }}</span>{%- endif -%}
               </span>
             </button>
           {%- endfor -%}
@@ -211,7 +227,11 @@
                   aria-checked="false"
                   data-color="{{ value | escape }}"
                   style="--sw: {{ sw | strip }}"
-                  {% if section.settings[img_key] != blank %}data-img="{{ section.settings[img_key] | image_url: width: 200 }}"{% endif %}
+                  {%- assign sw_img = section.settings[img_key] -%}
+                  {%- if sw_img == blank and p_taie -%}
+                    {%- for tv in p_taie.variants -%}{%- if tv.option1 == value and tv.featured_image -%}{%- assign sw_img = tv.featured_image -%}{%- endif -%}{%- endfor -%}
+                  {%- endif -%}
+                  {% if sw_img != blank %}data-img="{{ sw_img | image_url: width: 240 }}"{% endif %}
                 >
                   <span class="pp-pc__swatch-dot" aria-hidden="true"></span>
                   <span class="pp-pc__swatch-name">{{ value }}</span>
@@ -227,6 +247,13 @@
         <div class="pp-pc__sum-head">
           <p class="pp-pc__sum-eyebrow">{{ section.settings.summary_title }}</p>
           <p class="pp-pc__sum-name" data-sum-name></p>
+          {%- if section.settings.rating != blank -%}
+            {%- assign rpct = section.settings.rating | plus: 0 | divided_by: 5.0 | times: 100 -%}
+            <a class="pp-pc__rating" href="{{ p_base.url | default: '#' }}#avis">
+              <span class="pp-stars" style="--pct: {{ rpct }}%" aria-hidden="true"><span class="pp-stars__base">{{ stars }}</span><span class="pp-stars__fill">{{ stars }}</span></span>
+              <span><strong>{{ section.settings.rating | replace: '.', ',' }}/5</strong> · {{ section.settings.rating_count }} avis clients</span>
+            </a>
+          {%- endif -%}
         </div>
 
         <ul class="pp-pc__lines" role="list">
@@ -237,12 +264,12 @@
         </ul>
 
         <div class="pp-pc__totals">
-          <p class="pp-pc__unit"><span>Prix à l'unité</span><s data-compare>{{ default_variant.compare_at_price | money }}</s></p>
+          <p class="pp-pc__unit"><span>Valeur à l'unité</span><s data-compare>{{ default_variant.compare_at_price | money }}</s></p>
           <p class="pp-pc__total">
-            <strong data-price>{{ default_variant.price | money }}</strong>
-            <span class="pp-pc__save" data-save-wrap><span data-save>−{{ default_variant.compare_at_price | minus: default_variant.price | money }}</span></span>
+            <span>Prix du pack</span>
+            <strong class="pp-odo-wrap" data-price>{{ default_variant.price | money }}</strong>
           </p>
-          {%- if section.settings.show_per_night -%}<p class="pp-pc__night" data-night></p>{%- endif -%}
+          <p class="pp-pc__save" data-save-wrap>Vous économisez <strong data-save>{{ default_variant.compare_at_price | minus: default_variant.price | money }}</strong>{%- if section.settings.show_per_night -%}<span class="pp-pc__night" data-night></span>{%- endif -%}</p>
         </div>
 
         {%- form 'product', pack, class: 'pp-pc__form', id: 'PpPackForm', novalidate: 'novalidate' -%}
@@ -255,11 +282,15 @@
 
         <button type="button" class="pp-pc__upgrade" data-upgrade hidden></button>
 
-        <p class="pp-pc__reassure">
-          <span>{% render 'pp-icon', icon: 'truck' %}Livraison offerte</span>
-          <span>{% render 'pp-icon', icon: 'moon' %}Essai 30 nuits</span>
-          <span>{% render 'pp-icon', icon: 'lock' %}Paiement sécurisé</span>
-        </p>
+        <ul class="pp-pc__promise" role="list">
+          <li>{% render 'pp-icon', icon: 'truck' %}<span><strong>Livraison offerte</strong>Suivie, en 7 à 14 jours ouvrés</span></li>
+          <li>{% render 'pp-icon', icon: 'moon' %}<span><strong>30 nuits pour l'essayer</strong>Pas convaincu ? On vous rembourse.</span></li>
+          <li>{% render 'pp-icon', icon: 'lock' %}<span><strong>Paiement sécurisé</strong>
+            {%- if shop.enabled_payment_types.size > 0 -%}
+              <span class="pp-pc__pay">{%- for type in shop.enabled_payment_types limit: 5 -%}{{ type | payment_type_svg_tag }}{%- endfor -%}</span>
+            {%- else -%}Carte bancaire, données chiffrées{%- endif -%}
+          </span></li>
+        </ul>
         {%- if section.settings.note != blank -%}<p class="pp-pc__fine">{{ section.settings.note }}</p>{%- endif -%}
       </aside>
 
@@ -267,7 +298,7 @@
       <div class="pp-pc__bar" aria-hidden="true">
         <span class="pp-pc__bar-price">
           <em data-bar-name></em>
-          <span><strong data-bar-price>{{ default_variant.price | money }}</strong><s data-bar-compare>{{ default_variant.compare_at_price | money }}</s></span>
+          <span><strong class="pp-odo-wrap" data-bar-price>{{ default_variant.price | money }}</strong><s data-bar-compare>{{ default_variant.compare_at_price | money }}</s></span>
         </span>
         <button type="button" class="pp-pc__bar-btn" data-bar-add tabindex="-1">{{ section.settings.button_label }}</button>
       </div>
@@ -322,7 +353,40 @@
         new IntersectionObserver(([e]) => { inSection = e.isIntersecting; sync(); }, { threshold: 0 }).observe(this);
         this.render(true);
       }
-      money(cents) { return this.fmt.format(cents / 100); }
+      money(cents) { return this.fmt.format(cents / 100).replace(/[\s\u202f\u00a0]/g, ''); }
+      // Prix en rouleaux : chaque chiffre glisse jusqu'à sa nouvelle valeur
+      odo(el, cents) {
+        if (!el) return;
+        const str = this.money(cents), chars = [...str];
+        el.setAttribute('aria-label', str);
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = str; return; }
+        if (!el._cols || el._len !== chars.length) {
+          el.textContent = ''; el._cols = []; el._len = chars.length;
+          chars.forEach((ch) => {
+            const box = document.createElement('span');
+            box.setAttribute('aria-hidden', 'true');
+            if (/\d/.test(ch)) {
+              box.className = 'pp-odo';
+              const strip = document.createElement('span');
+              strip.className = 'pp-odo__strip'; strip.textContent = '0\n1\n2\n3\n4\n5\n6\n7\n8\n9';
+              box.appendChild(strip); el._cols.push(strip);
+            } else { box.className = 'pp-odo__ch'; el._cols.push(box); }
+            el.appendChild(box);
+          });
+          void el.offsetWidth;
+        }
+        chars.forEach((ch, i) => {
+          const c = el._cols[i];
+          if (c.classList.contains('pp-odo__strip')) { c.style.transitionDelay = (i * 0.035) + 's'; c.style.transform = 'translateY(' + (-Number(ch)) + 'em)'; }
+          else c.textContent = ch;
+        });
+      }
+      swap(el, text) {
+        if (!el || el.textContent === text) return;
+        if (el._t) clearTimeout(el._t);
+        el.classList.add('is-swapping');
+        el._t = setTimeout(() => { el.textContent = text; el.classList.remove('is-swapping'); }, 160);
+      }
       kindOf(c) { const l = (c || '').toLowerCase(); return /genou/.test(l) && /taie/.test(l) ? 'trio' : /genou/.test(l) ? 'knee' : 'taie'; }
       variantFor(formula, color) {
         const hasTaie = this.kindOf(formula) !== 'knee';
@@ -335,17 +399,6 @@
         const card = this.cards.find((c) => c.dataset.formula === formula);
         if (card) { card.classList.remove('is-bump'); void card.offsetWidth; card.classList.add('is-bump'); }
         this.render();
-      }
-      tween(el, from, to) {
-        if (!el) return;
-        if (from === null || from === to || matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = this.money(to); return; }
-        const start = performance.now(), dur = 520;
-        const step = (now) => {
-          const p = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - p, 3);
-          el.textContent = this.money(Math.round(from + (to - from) * e));
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
       }
       render(first) {
         const s = this.state;
@@ -391,20 +444,19 @@
         if (!v) return;
         this.querySelector('[data-variant-input]').value = v.id;
 
-        this.tween(this.querySelector('[data-price]'), this.shown.price, v.price);
-        this.tween(this.querySelector('[data-add-price]'), this.shown.price, v.price);
-        this.tween(this.querySelector('[data-bar-price]'), this.shown.price, v.price);
-        this.tween(this.querySelector('[data-compare]'), this.shown.compare, v.compare);
+        this.odo(this.querySelector('[data-price]'), v.price);
+        this.odo(this.querySelector('[data-bar-price]'), v.price);
+        this.swap(this.querySelector('[data-add-price]'), this.money(v.price));
+        this.swap(this.querySelector('[data-compare]'), this.money(v.compare));
         this.querySelector('[data-bar-compare]').textContent = v.compare > v.price ? this.money(v.compare) : '';
         this.shown = { price: v.price, compare: v.compare };
 
         const save = v.compare - v.price;
         const wrap = this.querySelector('[data-save-wrap]');
-        this.querySelector('[data-save]').textContent = '−' + this.money(save);
+        this.swap(this.querySelector('[data-save]'), this.money(save));
         wrap.hidden = save <= 0;
-        if (!first) { wrap.classList.remove('is-flash'); void wrap.offsetWidth; wrap.classList.add('is-flash'); }
         const night = this.querySelector('[data-night]');
-        if (night) night.textContent = 'Soit ' + this.money(Math.round(v.price / 365)) + ' par nuit sur un an';
+        if (night) this.swap(night, 'soit ' + this.money(Math.round(v.price / 365)) + ' par nuit sur un an');
 
         // Passer à la formule complète : l'écart exact et ce que coûterait le complément seul
         const up = this.querySelector('[data-upgrade]');
@@ -488,6 +540,8 @@
     { "type": "text", "id": "summary_title", "label": "Titre", "default": "Votre pack" },
     { "type": "text", "id": "button_label", "label": "Bouton", "default": "Ajouter au panier" },
     { "type": "checkbox", "id": "show_per_night", "label": "Afficher le prix par nuit", "default": true },
+    { "type": "text", "id": "rating", "label": "Note moyenne affichée (sur 5)", "default": "4.8", "info": "Celle de l'oreiller. Laissez vide pour masquer." },
+    { "type": "text", "id": "rating_count", "label": "Nombre d'avis", "default": "167" },
     { "type": "text", "id": "note", "label": "Mention", "default": "Prix à l'unité : mêmes produits achetés séparément sur notre boutique." },
     { "type": "color_scheme", "id": "color_scheme", "label": "Palette", "default": "scheme-1" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Marge haute", "default": 80 },
