@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#1A1013">
+  <meta name="theme-color" content="#1C1416">
   <link rel="canonical" href="{{ canonical_url }}">
   <title>{{ page_title }}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}</title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
@@ -24,18 +24,60 @@
 
   <header class="v-header">
     <div class="v-wrap v-header__inner">
+      <div class="v-header__left">
+        <button type="button" class="v-icon-btn v-burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="v-drawer" data-drawer-open>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <nav class="v-nav" aria-label="Navigation principale">
+          <a href="{{ routes.root_url }}#ceinture">La ceinture</a>
+          <a href="{{ routes.root_url }}#fonctionnement">Comment ça marche</a>
+          <a href="{{ routes.root_url }}#faq">Questions</a>
+        </nav>
+      </div>
       <a href="{{ routes.root_url }}" class="v-logo" aria-label="{{ shop.name }}, accueil">VELEA</a>
-      <nav class="v-nav" aria-label="Navigation principale">
-        <a href="{{ routes.root_url }}#ceinture">La ceinture</a>
-        <a href="{{ routes.root_url }}#fonctionnement">Comment ça marche</a>
-        <a href="{{ routes.root_url }}#faq">Questions</a>
-      </nav>
-      <a href="{{ routes.cart_url }}" class="v-cart" aria-label="Panier, {{ cart.item_count }} article(s)">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        {% if cart.item_count > 0 %}<span class="v-cart__count">{{ cart.item_count }}</span>{% endif %}
-      </a>
+      <div class="v-header__right">
+        <button type="button" class="v-icon-btn" aria-label="Rechercher" aria-expanded="false" aria-controls="v-search" data-search-open>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+        </button>
+        <a href="{{ routes.cart_url }}" class="v-icon-btn v-cart" aria-label="Panier, {{ cart.item_count }} article(s)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          {% if cart.item_count > 0 %}<span class="v-cart__count">{{ cart.item_count }}</span>{% endif %}
+        </a>
+      </div>
+    </div>
+    <div class="v-search" id="v-search" hidden>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="v-wrap v-search__form">
+        <input type="hidden" name="type" value="product">
+        <label for="v-search-input" class="v-skip-sr">Rechercher</label>
+        <input id="v-search-input" type="search" name="q" placeholder="Rechercher sur VELEA" autocomplete="off">
+        <button type="submit" class="v-btn v-btn--main">Chercher</button>
+        <button type="button" class="v-icon-btn" aria-label="Fermer la recherche" data-search-close>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </form>
     </div>
   </header>
+
+  <div class="v-drawer" id="v-drawer" hidden>
+    <div class="v-drawer__backdrop" data-drawer-close></div>
+    <nav class="v-drawer__panel" aria-label="Menu">
+      <div class="v-drawer__top">
+        <span class="v-logo">VELEA</span>
+        <button type="button" class="v-icon-btn" aria-label="Fermer le menu" data-drawer-close>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <ul class="v-drawer__links">
+        <li><a href="{{ routes.root_url }}" data-drawer-close>Accueil</a></li>
+        <li><a href="{{ routes.root_url }}#ceinture" data-drawer-close>La ceinture</a></li>
+        <li><a href="{{ routes.root_url }}#fonctionnement" data-drawer-close>Comment ça marche</a></li>
+        <li><a href="{{ routes.root_url }}#faq" data-drawer-close>Questions</a></li>
+        <li><a href="{{ routes.cart_url }}">Mon panier</a></li>
+        <li><a href="mailto:{{ shop.email }}">Nous écrire</a></li>
+      </ul>
+      <a href="{{ routes.root_url }}#ceinture" class="v-btn v-btn--main v-btn--full" data-drawer-close>Commander ma ceinture</a>
+    </nav>
+  </div>
 
   <main id="contenu" class="v-main">
     {{ content_for_layout }}
