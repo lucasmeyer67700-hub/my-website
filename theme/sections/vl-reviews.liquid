@@ -24,9 +24,10 @@
           {%- assign items = demo | split: '~' -%}
           {%- for it in items -%}
             {%- assign f = it | split: '|' -%}
+            {%- assign stars = f[2] | plus: 0 -%}
             <li class="vl-review">
               <p class="vl-review__head"><strong>{{ f[0] }}</strong> <span class="vl-demo-tag">Exemple</span></p>
-              <p class="vl-review__stars" aria-label="{{ f[2] }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= f[2] | plus: 0 %}is-on{% endif %}">★</span>{%- endfor -%}</p>
+              <p class="vl-review__stars" aria-label="{{ f[2] }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= stars %}is-on{% endif %}">★</span>{%- endfor -%}</p>
               <blockquote class="vl-review__text">« {{ f[1] }} »</blockquote>
             </li>
           {%- endfor -%}
