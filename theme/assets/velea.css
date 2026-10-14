@@ -1101,3 +1101,62 @@ h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
 .vl-footer__social { display: flex !important; gap: 2rem !important; }
 .vl-footer__pay { display: flex !important; flex-wrap: wrap; gap: 0.6rem !important; }
 .vl-footer__copy { margin: 3.2rem 0 0; font-size: 1.35rem; opacity: 0.7; }
+
+/* ---------- Schéma produit ---------- */
+.vl-anatomy__stage { position: relative; max-width: 72rem; margin: 0 auto; }
+.vl-anatomy__stage img { display: block; width: 100%; height: auto; }
+.vl-anatomy__pin { position: absolute; display: grid; place-items: center; width: 3.4rem; height: 3.4rem; margin: -1.7rem 0 0 -1.7rem; border-radius: 50%; background: var(--vl-plum); color: #fff; font-weight: 700; font-size: 1.5rem; box-shadow: 0 0 0 6px rgba(255,255,255,0.85); animation: vlPulse 2.4s ease-in-out infinite; }
+@keyframes vlPulse { 50% { box-shadow: 0 0 0 10px rgba(255,255,255,0.5); } }
+.vl-anatomy__list { display: grid; gap: 1.2rem; max-width: 96rem; margin: 3.2rem auto 0; padding: 0; list-style: none; }
+@media screen and (min-width: 750px) { .vl-anatomy__list { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 2.4rem; } }
+@media screen and (min-width: 990px) { .vl-anatomy__list { grid-template-columns: repeat(3, 1fr); } }
+.vl-anatomy__list li { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.6rem; border-radius: 1.6rem; background: var(--vl-cream); }
+.vl-anatomy__list strong { display: block; margin-bottom: 0.3rem; font-size: 1.7rem; }
+.vl-anatomy__list span { font-size: 1.5rem; line-height: 1.5; }
+.vl-anatomy__num { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: 50%; background: var(--vl-plum); color: #fff; font-weight: 700; font-size: 1.4rem !important; }
+@media (prefers-reduced-motion: reduce) { .vl-anatomy__pin { animation: none; } }
+
+/* ---------- Explications en zigzag ---------- */
+.vl-zz { display: grid; gap: 2.4rem; align-items: center; }
+@media screen and (min-width: 990px) {
+  .vl-zz { grid-template-columns: 1fr 1fr; gap: 6.4rem; }
+  .vl-zz--flip .vl-zz__media { order: 2; }
+}
+.vl-zz__media { position: relative; aspect-ratio: 4 / 3; border-radius: 2.4rem; overflow: hidden; background: var(--vl-blush); }
+.vl-zz__media img { width: 100%; height: 100%; object-fit: cover; }
+.vl-zz__badge { position: absolute; left: 1.6rem; top: 1.6rem; padding: 0.8rem 1.6rem; border-radius: 99rem; background: #fff; color: var(--vl-plum); font-weight: 700; font-size: 1.4rem; box-shadow: var(--vl-shadow-soft); }
+.vl-zz__step { margin: 0 0 0.6rem; font-family: 'Didot', 'Bodoni 72', Georgia, serif; font-size: 2.4rem; color: var(--vl-rose); }
+.vl-zz__title { margin: 0 0 1.2rem; font-size: clamp(2.4rem, 3vw, 3.4rem); font-weight: 700; line-height: 1.15; }
+.vl-zz__text { margin: 0 0 1.8rem; font-size: 1.7rem; line-height: 1.6; color: var(--vl-mute); }
+.vl-zz__points { display: grid; gap: 1.1rem; margin: 0; padding: 0; list-style: none; }
+.vl-zz__points li { display: flex; align-items: center; gap: 1.1rem; font-size: 1.6rem; font-weight: 600; }
+.vl-zz__arrow { display: grid; place-items: center; margin: 2.4rem 0; color: var(--vl-rose); }
+.vl-zz__arrow svg { animation: vlBounce 2s ease-in-out infinite; }
+@keyframes vlBounce { 50% { transform: translateY(6px); } }
+.vl-zz__cta { display: flex; justify-content: center; margin-top: 4.8rem; }
+.vl-zz__cta .vl-feature__cta { width: 100%; max-width: 48rem; }
+@media screen and (max-width: 749px) {
+  .vl-zz__title { font-size: 2.4rem; }
+  .vl-zz__text { font-size: 1.6rem; }
+  .vl-zz__arrow { margin: 1.6rem 0; }
+}
+@media (prefers-reduced-motion: reduce) { .vl-zz__arrow svg { animation: none; } }
+
+/* ---------- Finitions mobile ---------- */
+@media screen and (max-width: 749px) {
+  .vl-intro__title { font-size: 2.6rem; }
+  .vl-intro__text { font-size: 1.6rem; }
+  .vl-intro__badges { gap: 0.8rem; }
+  .vl-intro__badges li { font-size: 1.4rem; padding: 0.6rem 1.2rem; }
+  .vl-feature__info { padding: 2.4rem 2rem 2.8rem; }
+  .vl-feature__checks li { font-size: 1.6rem; }
+  .vl-feature__cta { min-height: 5.6rem; font-size: 1.6rem; padding: 0 2rem; }
+  .vl-feature__sticker { width: 8.4rem; height: 8.4rem; top: 1.4rem; right: 1.4rem; }
+  .vl-feature__sticker span { font-size: 1.2rem; } .vl-feature__sticker strong { font-size: 1.35rem; }
+  .vl-needs--pills .vl-needs__grid { margin: 0 -1.6rem; padding: 0 1.6rem 0.8rem; scroll-snap-type: x mandatory; }
+  .vl-needs--pills .vl-needs__grid > li { scroll-snap-align: start; }
+  .vl-carousel .vl-review { width: 27rem; padding: 2rem; }
+  .vl-ugc-photos { gap: 1.2rem; margin-top: 2.8rem; }
+  .vl-footer { padding-top: 5.6rem; }
+  .vl-footer__bottom { flex-direction: column; align-items: flex-start; }
+}

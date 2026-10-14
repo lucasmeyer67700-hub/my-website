@@ -1,0 +1,55 @@
+{%- comment -%}
+  Schéma du produit : photo au centre, repères numérotés positionnés sur l'image (ordinateur),
+  et liste numérotée lisible sous la photo (mobile et ordinateur).
+{%- endcomment -%}
+{%- render 'vl-padding' -%}
+<section class="vl-anatomy color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="vl-intro__title">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank %}<p class="vl-heading__text">{{ section.settings.text | escape }}</p>{% endif -%}
+    </div>
+    <div class="vl-anatomy__stage">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1400', sizes: '(min-width: 990px) 70rem, 100vw', alt: section.settings.image.alt | default: 'Ceinture chauffante VELEA' }}
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        <span class="vl-anatomy__pin" style="left: {{ block.settings.x }}%; top: {{ block.settings.y }}%" aria-hidden="true" {{ block.shopify_attributes }}>{{ forloop.index }}</span>
+      {%- endfor -%}
+    </div>
+    <ol class="vl-anatomy__list" role="list">
+      {%- for block in section.blocks -%}
+        <li><span class="vl-anatomy__num" aria-hidden="true">{{ forloop.index }}</span><span><strong>{{ block.settings.title | escape }}</strong>{{ block.settings.text | escape }}</span></li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Schéma produit",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo détourée du produit" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Simple comme bonjour" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Ta ceinture en un coup d'œil" },
+    { "type": "text", "id": "text", "label": "Texte" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-3" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "pin", "name": "Repère", "limit": 6,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "text", "id": "text", "label": "Explication" },
+        { "type": "range", "id": "x", "label": "Position horizontale", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+        { "type": "range", "id": "y", "label": "Position verticale", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Schéma produit" }]
+}
+{% endschema %}

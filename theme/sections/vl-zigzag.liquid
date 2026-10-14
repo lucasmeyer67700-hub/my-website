@@ -1,0 +1,74 @@
+{%- comment -%}
+  Explications en zigzag : photo d'un côté, texte de l'autre, une flèche qui guide vers le bloc suivant.
+  Sur mobile : photo puis texte, empilés, flèche centrée.
+{%- endcomment -%}
+{%- render 'vl-padding' -%}
+<section class="vl-zigzag color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.title != blank -%}
+      <div class="vl-heading vl-heading--center">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="vl-intro__title">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      <article class="vl-zz{% cycle '', ' vl-zz--flip' %}" {{ block.shopify_attributes }}>
+        <div class="vl-zz__media">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '500, 800, 1200', sizes: '(min-width: 990px) 50vw, 100vw', alt: block.settings.image.alt | default: block.settings.title }}
+          {%- else -%}
+            <span class="vl-feature__placeholder">{% if request.design_mode %}Ajoute une photo{% endif %}</span>
+          {%- endif -%}
+          {%- if block.settings.badge != blank %}<span class="vl-zz__badge">{{ block.settings.badge | escape }}</span>{% endif -%}
+        </div>
+        <div class="vl-zz__copy">
+          <p class="vl-zz__step">{{ forloop.index | prepend: '0' }}</p>
+          <h3 class="vl-zz__title">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.text != blank %}<p class="vl-zz__text">{{ block.settings.text | escape }}</p>{% endif -%}
+          {%- if block.settings.points != blank -%}
+            <ul class="vl-zz__points" role="list">
+              {%- assign lines = block.settings.points | newline_to_br | split: '<br />' -%}
+              {%- for l in lines -%}{%- assign t = l | strip -%}{%- if t != blank -%}<li><span class="vl-feature__tick">{% render 'vl-icon', icon: 'check' %}</span>{{ t | escape }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </article>
+      {%- unless forloop.last -%}
+        <div class="vl-zz__arrow" aria-hidden="true"><svg viewBox="0 0 24 48" width="24" height="48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v42M4 36l8 8 8-8"/></svg></div>
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if section.settings.button_label != blank -%}
+      <div class="vl-zz__cta"><a class="vl-feature__cta" href="{{ section.settings.button_link | default: section.settings.product.url }}"><strong>{{ section.settings.button_label | escape }}</strong>{%- if section.settings.product != blank %}<span aria-hidden="true">–</span><em>{{ section.settings.product.price | money }}</em>{% endif -%}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Explications",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Comment elle t'aide" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Pensée pour ces jours-là" },
+    { "type": "product", "id": "product", "label": "Produit (bouton final)" },
+    { "type": "text", "id": "button_label", "label": "Bouton final", "default": "Je veux ma ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row", "name": "Explication", "limit": 6,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "badge", "label": "Pastille sur la photo" },
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "textarea", "id": "text", "label": "Explication" },
+        { "type": "textarea", "id": "points", "label": "Points clés (un par ligne)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Explications" }]
+}
+{% endschema %}
