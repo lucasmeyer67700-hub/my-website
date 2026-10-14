@@ -1,0 +1,138 @@
+{%- comment -%}
+  Quiz « Trouve ton cocon » : 3 questions, 4 réponses chacune. Chaque réponse vote pour un des
+  4 produits configurés (1 à 4). Aucune donnée n'est envoyée, tout se passe dans le navigateur.
+{%- endcomment -%}
+{%- render 'vl-padding' -%}
+<section class="vl-quiz color-{{ section.settings.color_scheme }} gradient" id="quiz">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-quiz__box" data-quiz>
+      <div class="vl-heading vl-heading--center">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h1">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank %}<p class="vl-heading__text">{{ section.settings.text | escape }}</p>{% endif -%}
+      </div>
+
+      <div class="vl-quiz__progress" aria-hidden="true"><span data-quiz-bar></span></div>
+
+      {%- for block in section.blocks -%}
+        <fieldset class="vl-quiz__step" data-quiz-step {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
+          <legend class="vl-quiz__question">
+            <span class="vl-quiz__count">Question {{ forloop.index }} sur {{ forloop.length }}</span>
+            {{ block.settings.question | escape }}
+          </legend>
+          <div class="vl-quiz__answers">
+            {%- for n in (1..4) -%}
+              {%- assign key = 'answer_' | append: n -%}
+              {%- if block.settings[key] != blank -%}
+                <button type="button" class="vl-quiz__answer" data-vote="{{ n }}">{{ block.settings[key] | escape }}</button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+
+      <div class="vl-quiz__result" data-quiz-result hidden tabindex="-1">
+        {%- for n in (1..4) -%}
+          {%- assign pkey = 'product_' | append: n -%}
+          {%- assign rkey = 'reason_' | append: n -%}
+          {%- assign p = section.settings[pkey] -%}
+          {%- if p != blank -%}
+            <div class="vl-quiz__pick" data-pick="{{ n }}" hidden>
+              <div class="vl-quiz__pick-media">
+                {%- if p.featured_image -%}
+                  {{ p.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 600', sizes: '(min-width: 750px) 280px, 70vw', alt: '' }}
+                {%- else -%}
+                  <span class="vl-pcard__placeholder">{% render 'vl-icon', icon: 'heart' %}</span>
+                {%- endif -%}
+              </div>
+              <div class="vl-quiz__pick-copy">
+                <p class="vl-eyebrow">Ton cocon idéal</p>
+                <h3 class="h2">{{ p.title | escape }}</h3>
+                {%- if section.settings[rkey] != blank %}<p>{{ section.settings[rkey] | escape }}</p>{% endif -%}
+                <p class="vl-pcard__price">{%- if p.price_varies %}Dès {% endif -%}{{ p.price | money }}</p>
+                <a class="button button--primary" href="{{ p.url }}">Je le découvre</a>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        <button type="button" class="vl-welcome__later" data-quiz-restart>Recommencer le quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.querySelector('#shopify-section-{{ section.id }} [data-quiz]');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    var steps = root.querySelectorAll('[data-quiz-step]');
+    var bar = root.querySelector('[data-quiz-bar]');
+    var result = root.querySelector('[data-quiz-result]');
+    var votes, current;
+    function show(i) {
+      steps.forEach(function (s, k) { s.hidden = k !== i; });
+      bar.style.width = (i / steps.length * 100) + '%';
+    }
+    function reset() { votes = [0, 0, 0, 0, 0]; current = 0; result.hidden = true; show(0); }
+    function finish() {
+      var best = 1;
+      for (var n = 2; n <= 4; n++) { if (votes[n] > votes[best]) best = n; }
+      var pick = root.querySelector('[data-pick="' + best + '"]') || root.querySelector('[data-pick]');
+      steps.forEach(function (s) { s.hidden = true; });
+      root.querySelectorAll('[data-pick]').forEach(function (p) { p.hidden = p !== pick; });
+      bar.style.width = '100%';
+      result.hidden = false;
+      result.focus();
+    }
+    root.querySelectorAll('[data-vote]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        votes[parseInt(b.dataset.vote, 10)]++;
+        current++;
+        if (current < steps.length) { show(current); steps[current].querySelector('button').focus(); }
+        else finish();
+      });
+    });
+    root.querySelector('[data-quiz-restart]').addEventListener('click', reset);
+    reset();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "VELEA · Quiz",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Quiz · 30 secondes" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Trouve <em>ton cocon</em>" },
+    { "type": "text", "id": "text", "label": "Texte", "default": "3 petites questions pour savoir ce qui te fera le plus de bien." },
+    { "type": "header", "content": "Résultats (réponse 1 → produit 1, etc.)" },
+    { "type": "product", "id": "product_1", "label": "Produit 1" },
+    { "type": "text", "id": "reason_1", "label": "Pourquoi le produit 1" },
+    { "type": "product", "id": "product_2", "label": "Produit 2" },
+    { "type": "text", "id": "reason_2", "label": "Pourquoi le produit 2" },
+    { "type": "product", "id": "product_3", "label": "Produit 3" },
+    { "type": "text", "id": "reason_3", "label": "Pourquoi le produit 3" },
+    { "type": "product", "id": "product_4", "label": "Produit 4" },
+    { "type": "text", "id": "reason_4", "label": "Pourquoi le produit 4" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "limit": 5,
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "text", "id": "answer_1", "label": "Réponse → produit 1" },
+        { "type": "text", "id": "answer_2", "label": "Réponse → produit 2" },
+        { "type": "text", "id": "answer_3", "label": "Réponse → produit 3" },
+        { "type": "text", "id": "answer_4", "label": "Réponse → produit 4" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Quiz" }]
+}
+{% endschema %}

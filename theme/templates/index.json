@@ -55,54 +55,6 @@
         "point_3"
       ]
     },
-    "trust": {
-      "type": "vl-trust",
-      "settings": {
-        "color_scheme": "scheme-2",
-        "padding_top": 28,
-        "padding_bottom": 28
-      },
-      "blocks": {
-        "item_1": {
-          "type": "item",
-          "settings": {
-            "icon": "truck",
-            "title": "Livraison offerte",
-            "text": "En France métropolitaine, avec suivi"
-          }
-        },
-        "item_2": {
-          "type": "item",
-          "settings": {
-            "icon": "return",
-            "title": "30 jours pour l'essayer",
-            "text": "Satisfaite ou remboursée"
-          }
-        },
-        "item_3": {
-          "type": "item",
-          "settings": {
-            "icon": "lock",
-            "title": "Paiement sécurisé",
-            "text": "Carte bancaire, Apple Pay, Google Pay"
-          }
-        },
-        "item_4": {
-          "type": "item",
-          "settings": {
-            "icon": "chat",
-            "title": "Une vraie équipe",
-            "text": "Réponse sous 24 h ouvrées"
-          }
-        }
-      },
-      "block_order": [
-        "item_1",
-        "item_2",
-        "item_3",
-        "item_4"
-      ]
-    },
     "problem": {
       "type": "vl-problem",
       "settings": {
@@ -500,15 +452,186 @@
         "padding_top": 72,
         "padding_bottom": 72
       }
+    },
+    "marquee": {
+      "type": "vl-marquee",
+      "settings": {
+        "speed": 40,
+        "color_scheme": "scheme-5"
+      },
+      "blocks": {
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "Livraison offerte",
+            "icon": "truck"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "30 jours satisfaite ou remboursée",
+            "icon": "return"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "Chaleur douce + massage",
+            "icon": "heat"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "Marque française",
+            "icon": "heart"
+          }
+        },
+        "m5": {
+          "type": "item",
+          "settings": {
+            "text": "Paiement 100 % sécurisé",
+            "icon": "lock"
+          }
+        },
+        "m6": {
+          "type": "item",
+          "settings": {
+            "text": "Une vraie équipe à ton écoute",
+            "icon": "chat"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6"
+      ]
+    },
+    "needs": {
+      "type": "vl-needs",
+      "settings": {
+        "eyebrow": "Ton besoin du moment",
+        "title": "De quoi as-tu <em>besoin</em> aujourd'hui ?",
+        "color_scheme": "scheme-1",
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "n1": {
+          "type": "need",
+          "settings": {
+            "title": "Apaiser mes crampes",
+            "text": "Chaleur réglable et massage",
+            "product": "ceinture-chauffante-regles",
+            "icon": "heat"
+          }
+        },
+        "n2": {
+          "type": "need",
+          "settings": {
+            "title": "Sortir sans y penser",
+            "text": "Ultra fins, sans batterie",
+            "product": "patchs-chauffants-regles",
+            "icon": "truck"
+          }
+        },
+        "n3": {
+          "type": "need",
+          "settings": {
+            "title": "Mon moment canapé",
+            "text": "Un câlin chaud et doux",
+            "product": "coussin-chauffant-doudou",
+            "icon": "heart"
+          }
+        },
+        "n4": {
+          "type": "need",
+          "settings": {
+            "title": "Être prête partout",
+            "text": "Le kit complet",
+            "product": "pack-cocon",
+            "icon": "gift"
+          }
+        }
+      },
+      "block_order": [
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "quiz": {
+      "type": "vl-quiz",
+      "settings": {
+        "eyebrow": "Quiz · 30 secondes",
+        "title": "Trouve <em>ton cocon</em>",
+        "text": "3 petites questions pour savoir ce qui te fera le plus de bien.",
+        "product_1": "ceinture-chauffante-regles",
+        "reason_1": "Une chaleur que tu règles toi-même et un massage léger, sans fil, du canapé au bureau.",
+        "product_2": "patchs-chauffants-regles",
+        "reason_2": "Ultra fins et prêts en quelques minutes : ta chaleur te suit partout, sans batterie.",
+        "product_3": "coussin-chauffant-doudou",
+        "reason_3": "Tout doux, tout chaud : ton moment cocooning du soir, rien qu'à toi.",
+        "product_4": "pack-cocon",
+        "reason_4": "La ceinture pour la maison, les patchs pour tes sorties, une pochette pour tout emporter.",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Où as-tu le plus besoin de chaleur ?",
+            "answer_1": "À la maison ou au bureau",
+            "answer_2": "En déplacement, en cours, en voyage",
+            "answer_3": "Le soir, au calme sous le plaid",
+            "answer_4": "Un peu partout"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Ce que tu cherches surtout ?",
+            "answer_1": "Chaleur réglable et massage",
+            "answer_2": "Une discrétion totale",
+            "answer_3": "Un vrai moment réconfort",
+            "answer_4": "Être prête quoi qu'il arrive"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Tu préfères…",
+            "answer_1": "Un objet que je recharge et garde longtemps",
+            "answer_2": "Prêt à l'emploi, sans rien à recharger",
+            "answer_3": "Quelque chose de tout doux à serrer contre moi",
+            "answer_4": "Un kit complet, pour ne manquer de rien"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ]
     }
   },
   "order": [
     "hero",
-    "trust",
+    "marquee",
+    "needs",
     "problem",
     "benefits",
     "how",
     "products",
+    "quiz",
     "versus",
     "reviews",
     "ugc",

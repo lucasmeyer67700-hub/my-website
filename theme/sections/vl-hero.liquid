@@ -21,6 +21,14 @@
           {{ section.settings.title | escape }}
           {%- if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent | escape }}</em>{% endif -%}
         </h1>
+        {%- comment -%} Note réelle transmise par l'app d'avis (champ standard reviews.*). Rien n'est affiché sans avis. {%- endcomment -%}
+        {%- if p != blank and p.metafields.reviews.rating_count.value > 0 -%}
+          {%- assign r = p.metafields.reviews.rating.value -%}
+          <a class="vl-rating" href="{{ p.url }}#avis">
+            <span class="vl-rating__stars" aria-hidden="true">★★★★★<span style="width: {{ r.rating | divided_by: r.scale_max | times: 100 }}%">★★★★★</span></span>
+            <span>{{ r.rating | round: 1 }}/5 · {{ p.metafields.reviews.rating_count.value }} avis vérifiés</span>
+          </a>
+        {%- endif -%}
         {%- if section.settings.text != blank -%}
           <div class="vl-hero__text rte">{{ section.settings.text }}</div>
         {%- endif -%}

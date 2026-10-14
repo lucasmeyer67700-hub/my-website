@@ -1,0 +1,44 @@
+{%- comment -%} Bandeau défilant de réassurance. Respecte prefers-reduced-motion (il s'arrête). {%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <div class="vl-marquee color-{{ section.settings.color_scheme }} gradient" style="--vl-marquee-speed: {{ section.settings.speed }}s">
+    <div class="vl-marquee__track">
+      {%- for i in (1..2) -%}
+        <ul class="vl-marquee__list" role="list"{% if i == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>{% render 'vl-icon', icon: block.settings.icon %}<span>{{ block.settings.text | escape }}</span></li>
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Bandeau défilant",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "speed", "label": "Durée d'un tour", "min": 15, "max": 80, "step": 5, "unit": "s", "default": 40 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-5" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Élément",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "Livraison offerte" },
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "heart",
+          "options": [
+            { "value": "heart", "label": "Cœur" }, { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" }, { "value": "lock", "label": "Cadenas" },
+            { "value": "heat", "label": "Chaleur" }, { "value": "leaf", "label": "Feuille" },
+            { "value": "chat", "label": "Bulle" }, { "value": "sparkle", "label": "Étincelle" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Bandeau défilant" }]
+}
+{% endschema %}

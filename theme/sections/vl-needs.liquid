@@ -1,0 +1,68 @@
+{%- comment -%} « Ton besoin du moment » : tuiles qui orientent vers le bon produit. {%- endcomment -%}
+{%- render 'vl-padding' -%}
+<section class="vl-needs color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+    </div>
+    <ul class="vl-needs__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product -%}
+        <li {{ block.shopify_attributes }}>
+          <a class="vl-need" href="{{ block.settings.link | default: p.url | default: routes.all_products_collection_url }}">
+            <span class="vl-need__media">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 990px) 25vw, 50vw', alt: '' }}
+              {%- elsif p.featured_image -%}
+                {{ p.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 990px) 25vw, 50vw', alt: '' }}
+              {%- else -%}
+                <span class="vl-need__icon">{% render 'vl-icon', icon: block.settings.icon %}</span>
+              {%- endif -%}
+            </span>
+            <span class="vl-need__label">{{ block.settings.title | escape }}</span>
+            {%- if block.settings.text != blank %}<span class="vl-need__text">{{ block.settings.text | escape }}</span>{% endif -%}
+            <span class="vl-need__arrow" aria-hidden="true">{% render 'vl-icon', icon: 'arrow' %}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Par besoin",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Ton besoin du moment" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "De quoi as-tu <em>besoin</em> aujourd'hui ?" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "need",
+      "name": "Besoin",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Apaiser mes crampes" },
+        { "type": "text", "id": "text", "label": "Texte" },
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "url", "id": "link", "label": "Ou lien" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        {
+          "type": "select", "id": "icon", "label": "Icône (sans image)", "default": "heat",
+          "options": [
+            { "value": "heat", "label": "Chaleur" }, { "value": "body", "label": "Corps" },
+            { "value": "truck", "label": "Déplacement" }, { "value": "heart", "label": "Cœur" },
+            { "value": "gift", "label": "Cadeau" }, { "value": "feather", "label": "Plume" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Par besoin" }]
+}
+{% endschema %}
