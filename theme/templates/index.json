@@ -413,29 +413,30 @@
     "marquee": {
       "type": "vl-marquee",
       "settings": {
-        "speed": 40,
-        "color_scheme": "scheme-5"
+        "speed": 45,
+        "color_scheme": "scheme-3",
+        "style": "light"
       },
       "blocks": {
         "m1": {
           "type": "item",
           "settings": {
             "text": "Livraison offerte",
-            "icon": "truck"
+            "icon": "heart"
           }
         },
         "m2": {
           "type": "item",
           "settings": {
-            "text": "30 jours satisfaite ou remboursée",
-            "icon": "return"
+            "text": "Satisfaite ou remboursée 30 jours",
+            "icon": "heart"
           }
         },
         "m3": {
           "type": "item",
           "settings": {
-            "text": "Chaleur douce + massage",
-            "icon": "heat"
+            "text": "Chaleur douce & massage",
+            "icon": "heart"
           }
         },
         "m4": {
@@ -448,15 +449,8 @@
         "m5": {
           "type": "item",
           "settings": {
-            "text": "Paiement 100 % sécurisé",
-            "icon": "lock"
-          }
-        },
-        "m6": {
-          "type": "item",
-          "settings": {
-            "text": "Une vraie équipe à ton écoute",
-            "icon": "chat"
+            "text": "Paiement sécurisé",
+            "icon": "heart"
           }
         }
       },
@@ -465,8 +459,7 @@
         "m2",
         "m3",
         "m4",
-        "m5",
-        "m6"
+        "m5"
       ]
     },
     "needs": {
@@ -475,7 +468,7 @@
         "eyebrow": "",
         "title": "",
         "color_scheme": "scheme-2",
-        "padding_top": 56,
+        "padding_top": 64,
         "padding_bottom": 24,
         "style": "pills"
       },
@@ -583,13 +576,14 @@
     "banner": {
       "type": "vl-banner",
       "settings": {
+        "focal": "center center",
+        "overlay": 20,
         "product": "ceinture-chauffante-regles",
         "pill": "Nouvelle saison",
         "title": "LA SAISON COCON",
         "subtitle": "Ta chaleur douce pendant tes règles",
         "button_label": "JE DÉCOUVRE",
-        "note": "Satisfaite ou remboursée 30 jours",
-        "color_scheme": "scheme-2"
+        "note": "Satisfaite ou remboursée 30 jours"
       }
     },
     "intro": {

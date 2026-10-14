@@ -928,3 +928,95 @@ a:not(.button):focus-visible, button:focus-visible, input:focus-visible, summary
 @media (prefers-reduced-motion: reduce) { .vl-banner__button, .vl-feature__cta { transition: none; } }
 h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
 .color-scheme-5 h1 em, .color-scheme-5 h2 em, .color-scheme-7 h2 em { color: var(--vl-petal); }
+
+/* ==========================================================================
+   VELEA · Premium v4 : rose poudré profond, logo texte, bannière photo
+   ========================================================================== */
+:root {
+  --vl-cream: #fbf7f5;
+  --vl-blush: #f3e5e3;
+  --vl-petal: #ead2ce;
+  --vl-rose: #c48b8f;
+  --vl-terracotta: #c48b8f;
+  --vl-berry: #9e5a66;
+  --vl-berry-deep: #8f4e5b;
+  --vl-plum: #3a2a30;
+  --vl-mute: #6f5a61;
+  --vl-line: #e6d3cf;
+  --vl-gold: #c6a77f;
+}
+
+/* Logo texte premium */
+.vl-logo { gap: 0; }
+.vl-logo__mark { display: none !important; }
+.vl-logo__name {
+  font-family: 'Didot', 'Bodoni 72', 'Bodoni Moda', 'Playfair Display', Georgia, serif !important;
+  font-weight: 400 !important;
+  font-size: 2.6rem !important;
+  letter-spacing: 0.42em !important;
+  margin-right: -0.42em;
+  color: var(--vl-plum);
+  text-transform: uppercase;
+}
+@media screen and (max-width: 749px) { .vl-logo__name { font-size: 2rem !important; letter-spacing: 0.34em !important; } }
+
+/* En-tête : menu sur une seule ligne, aéré */
+.header--middle-center .header__inline-menu .list-menu--inline { flex-wrap: nowrap; gap: 0.4rem; }
+.header__inline-menu .header__menu-item { white-space: nowrap; font-weight: 500; font-size: 1.5rem; letter-spacing: 0.02em; }
+.header__menu-item:hover span { text-decoration: none; color: var(--vl-berry); }
+.header-wrapper { border-bottom: 1px solid var(--vl-line); }
+
+/* Bannière plein écran */
+.vl-banner { position: relative; overflow: hidden; color: #fff; background: none; }
+.vl-banner__bg { position: absolute; inset: 0; }
+.vl-banner__bg img { width: 100%; height: 100%; object-fit: cover; }
+.vl-banner__bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58, 42, 48, calc(var(--vl-banner-overlay, 0.2) + 0.15)) 0%, rgba(58, 42, 48, var(--vl-banner-overlay, 0.2)) 45%, rgba(58, 42, 48, 0) 75%); }
+.vl-banner--placeholder .vl-banner__bg {
+  background:
+    radial-gradient(60% 80% at 78% 45%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 60%),
+    linear-gradient(115deg, rgba(58, 42, 48, 0.10) 0 22%, rgba(0, 0, 0, 0) 22% 30%, rgba(58, 42, 48, 0.06) 30% 34%, rgba(0, 0, 0, 0) 34%),
+    linear-gradient(180deg, #e9cfca 0%, #dcb7b1 62%, #cfa59e 62.4%, #d9b2a9 100%);
+}
+.vl-banner__hint { position: absolute; right: 2.4rem; bottom: 2.4rem; z-index: 1; padding: 0.8rem 1.4rem; border-radius: 99rem; background: rgba(255, 255, 255, 0.85); color: var(--vl-plum); font-size: 1.3rem; }
+.vl-banner__inner { position: relative; z-index: 1; display: flex; align-items: center; min-height: clamp(52rem, 72vh, 78rem); padding-top: 6rem; padding-bottom: 6rem; }
+.vl-banner__copy { max-width: 62rem; color: #fff; }
+.vl-banner__pill { display: inline-block; margin: 0 0 3.2rem; padding: 1.1rem 2.4rem; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 99rem; font-size: 1.5rem; letter-spacing: 0.26em; text-transform: uppercase; }
+.vl-banner__title { margin: 0 0 2rem; font-size: clamp(4.2rem, 7.4vw, 8.4rem); font-weight: 600; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.vl-banner__subtitle { margin: 0 0 4rem; font-size: clamp(1.6rem, 2.2vw, 2.3rem); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; }
+.vl-banner__cta { display: inline-flex; flex-direction: column; align-items: stretch; gap: 1.4rem; }
+.vl-banner__button, .vl-banner:not(.vl-banner--image) .vl-banner__button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 30rem; min-height: 6.4rem; padding: 0 4rem; border-radius: 99rem;
+  background: #fff; color: var(--vl-plum); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.22em;
+  text-decoration: none; box-shadow: 0 12px 30px -16px rgba(58, 42, 48, 0.5); transition: transform 0.2s ease;
+}
+.vl-banner__button:hover { transform: translateY(-2px); }
+.vl-banner__note { margin: 0; min-width: 0; text-align: center; font-size: 1.6rem; color: rgba(255, 255, 255, 0.95); }
+@media screen and (max-width: 749px) {
+  .vl-banner__inner { min-height: 62rem; align-items: flex-end; padding-bottom: 4rem; }
+  .vl-banner__bg::after { background: linear-gradient(0deg, rgba(58, 42, 48, 0.55) 0%, rgba(58, 42, 48, 0.1) 70%); }
+  .vl-banner__cta { width: 100%; }
+  .vl-banner__button { min-width: 0; width: 100%; }
+}
+
+/* Bandeau sous la bannière : style « presse », clair et épuré */
+.vl-marquee--light { padding: 2.4rem 0; background: #fff; border-bottom: 1px solid var(--vl-line); }
+.vl-marquee--light .vl-marquee__list { gap: 7.2rem; padding: 0 3.6rem; }
+.vl-marquee--light .vl-marquee__list li { gap: 1.2rem; font-family: 'Didot', 'Bodoni 72', 'Playfair Display', Georgia, serif; font-size: clamp(1.8rem, 2.2vw, 2.6rem); font-weight: 400; letter-spacing: 0.12em; color: var(--vl-plum); }
+.vl-marquee--light .vl-marquee__list .vl-icon { display: none; }
+.vl-marquee--light .vl-marquee__list li::after { content: '✦'; margin-left: 7.2rem; font-size: 1.2rem; color: var(--vl-rose); }
+
+/* Pastilles alignées */
+.vl-needs--pills .vl-needs__grid { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(24rem, 1fr); gap: 1.6rem; overflow-x: auto; justify-content: start; }
+@media screen and (min-width: 990px) { .vl-needs--pills .vl-needs__grid { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); gap: 2rem; overflow: visible; } }
+.vl-needs--pills .vl-needs__grid > li { display: flex; }
+.vl-needs--pills .vl-need { flex: 1; min-height: 8.8rem; padding: 1rem 2rem 1rem 1rem; box-shadow: 0 1px 0 var(--vl-line), 0 10px 24px -18px rgba(58, 42, 48, 0.35); }
+.vl-needs--pills .vl-need__media { display: grid; place-items: center; width: 6.8rem; height: 6.8rem; background: var(--vl-blush); }
+.vl-needs--pills .vl-need__icon { display: grid; place-items: center; width: 100%; height: 100%; }
+.vl-needs--pills .vl-need__label { font-size: 1.7rem; font-weight: 600; line-height: 1.25; white-space: normal; }
+
+/* Annonces */
+.vl-announce { font-size: 1.3rem; }
+
+.vl-feature__placeholder { display: grid; place-items: center; width: 100%; height: 100%; padding: 2rem; text-align: center; font-size: 1.4rem; color: var(--vl-mute);
+  background: radial-gradient(60% 60% at 50% 45%, #fff 0%, var(--vl-blush) 70%, var(--vl-petal) 100%); }

@@ -1,6 +1,6 @@
 {%- comment -%} Bandeau défilant de réassurance. Respecte prefers-reduced-motion (il s'arrête). {%- endcomment -%}
 {%- if section.blocks.size > 0 -%}
-  <div class="vl-marquee color-{{ section.settings.color_scheme }} gradient" style="--vl-marquee-speed: {{ section.settings.speed }}s">
+  <div class="vl-marquee vl-marquee--{{ section.settings.style }} color-{{ section.settings.color_scheme }} gradient" style="--vl-marquee-speed: {{ section.settings.speed }}s">
     <div class="vl-marquee__track">
       {%- for i in (1..2) -%}
         <ul class="vl-marquee__list" role="list"{% if i == 2 %} aria-hidden="true"{% endif %}>
@@ -18,6 +18,7 @@
   "name": "VELEA · Bandeau défilant",
   "tag": "div",
   "settings": [
+    { "type": "select", "id": "style", "label": "Style", "default": "light", "options": [{ "value": "light", "label": "Clair, grandes lettres" }, { "value": "dark", "label": "Bandeau foncé" }] },
     { "type": "range", "id": "speed", "label": "Durée d'un tour", "min": 15, "max": 80, "step": 5, "unit": "s", "default": 40 },
     { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-5" }
   ],

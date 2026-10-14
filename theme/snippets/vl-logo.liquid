@@ -1,21 +1,5 @@
 {%- comment -%}
-  Logo VELEA : un galet chaud (framboise vers corail) traversé de trois ondes de chaleur,
-  suivi du nom en Fraunces. Usage : {% render 'vl-logo', uid: 'h' %}
+  Logo texte VELEA (sans pictogramme), en attendant le logo définitif à ajouter dans
+  Paramètres du thème › Logo. Usage : {% render 'vl-logo', uid: 'h' %}
 {%- endcomment -%}
-<span class="vl-logo">
-  <svg class="vl-logo__mark" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">
-    <defs>
-      <linearGradient id="vlLogo{{ uid }}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#C24B6E"/>
-        <stop offset="1" stop-color="#EE8E6F"/>
-      </linearGradient>
-    </defs>
-    <path d="M24 3.5c11.6 0 20.5 8.4 20.5 20S35.6 44.5 24 44.5 3.5 35.1 3.5 23.5 12.4 3.5 24 3.5z" fill="url(#vlLogo{{ uid }})"/>
-    <g fill="none" stroke="#FFF8F4" stroke-width="2.6" stroke-linecap="round">
-      <path d="M15.5 33c-2.3-2.6 2.3-5.2 0-7.8s2.3-5.2 0-7.8"/>
-      <path d="M24 35c-2.3-2.6 2.3-5.2 0-7.8s2.3-5.2 0-7.8-2.3-3.3 0-5.4"/>
-      <path d="M32.5 33c-2.3-2.6 2.3-5.2 0-7.8s2.3-5.2 0-7.8"/>
-    </g>
-  </svg>
-  <span class="vl-logo__name">{{ shop.name | default: 'VELEA' }}</span>
-</span>
+<span class="vl-logo"><span class="vl-logo__name">{{ shop.name | default: 'VELEA' | upcase }}</span></span>

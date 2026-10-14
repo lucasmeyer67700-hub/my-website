@@ -11,11 +11,11 @@
       {%- if section.settings.heading != blank %}<h2 class="vl-intro__title vl-feature__heading">{{ section.settings.heading }}</h2>{% endif -%}
       <div class="vl-feature__card">
         <div class="vl-feature__media">
-          {%- assign img = section.settings.image | default: p.featured_image -%}
+          {%- assign img = section.settings.image -%}
           {%- if img != blank -%}
             {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1200', alt: img.alt | default: p.title }}
           {%- else -%}
-            {% render 'vl-belt-illustration', uid: section.id %}
+            <span class="vl-feature__placeholder">{% if request.design_mode %}Ajoute ta photo produit (carrée) dans « Photo »{% endif %}</span>
           {%- endif -%}
           {%- if section.settings.sticker_top != blank -%}
             <p class="vl-feature__sticker"><span>{{ section.settings.sticker_top | escape }}</span><strong>{{ section.settings.sticker_bottom | escape }}</strong></p>
