@@ -42,14 +42,14 @@
           "type": "link_list",
           "settings": {
             "heading": "La boutique",
-            "menu": "main-menu"
+            "menu": "menu-cocon"
           }
         },
         "help": {
           "type": "link_list",
           "settings": {
             "heading": "Aide et informations",
-            "menu": "footer"
+            "menu": "footer-cocon"
           }
         }
       },

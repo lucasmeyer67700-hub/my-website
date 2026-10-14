@@ -27,7 +27,7 @@
       var KEY = 'vl-welcome-seen', shown = false, lastFocus = null;
       var store = { get: function () { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
                     set: function () { try { localStorage.setItem(KEY, '1'); } catch (e) {} } };
-      var posted = el.querySelector('.vl-signup__success');
+      var posted = el.querySelector('.vl-signup__success') && location.hash.indexOf('vl-welcome-form') !== -1;
       if (posted) { el.hidden = false; document.body.classList.add('overflow-hidden'); store.set(); }
       else if (store.get() && el.dataset.design !== 'true') return;
 
