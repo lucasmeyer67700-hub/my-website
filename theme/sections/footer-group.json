@@ -15,48 +15,46 @@
   "type": "footer",
   "sections": {
     "footer": {
-      "type": "footer",
+      "type": "vl-footer",
       "settings": {
-        "color_scheme": "scheme-2",
-        "newsletter_enable": false,
-        "newsletter_heading": "Conseils bien-être et offres en avant-première",
-        "enable_follow_on_shop": false,
-        "show_social": true,
-        "enable_country_selector": false,
-        "enable_language_selector": false,
-        "payment_enable": true,
-        "show_policy": true,
-        "margin_top": 0,
-        "padding_top": 56,
-        "padding_bottom": 36
+        "news_title": "RESTONS EN CONTACT",
+        "news_text": "-10 % sur ta première commande, des conseils doux pour tes règles et nos nouveautés en avant-première.",
+        "email": "velea.officiel@gmail.com",
+        "instagram": "https://www.instagram.com/",
+        "pinterest": "https://www.pinterest.fr/",
+        "facebook": "https://www.facebook.com/",
+        "color_scheme": "scheme-5"
       },
       "blocks": {
-        "brand": {
-          "type": "text",
+        "c1": {
+          "type": "column",
           "settings": {
-            "heading": "VELEA",
-            "subtext": "<p>Ton cocon pendant tes règles. Une petite marque française, pensée par des femmes, pour les jours où l'on a besoin d'un peu de douceur.</p><p>Une question ? <a href=\"/pages/contact\">Écris-nous</a>, on répond sous 24 h ouvrées.</p>"
+            "title": "VELEA",
+            "menu": "menu-cocon",
+            "show_email": false
           }
         },
-        "shop": {
-          "type": "link_list",
+        "c2": {
+          "type": "column",
           "settings": {
-            "heading": "La boutique",
-            "menu": "menu-cocon"
+            "title": "AIDE",
+            "menu": "pied-de-page-aide",
+            "show_email": true
           }
         },
-        "help": {
-          "type": "link_list",
+        "c3": {
+          "type": "column",
           "settings": {
-            "heading": "Aide et informations",
-            "menu": "footer-cocon"
+            "title": "INFORMATIONS",
+            "menu": "pied-de-page-legal",
+            "show_email": false
           }
         }
       },
       "block_order": [
-        "brand",
-        "shop",
-        "help"
+        "c1",
+        "c2",
+        "c3"
       ]
     },
     "welcome": {

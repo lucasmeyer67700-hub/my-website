@@ -1,40 +1,47 @@
 {%- comment -%}
-  Avis clients. En boutique : uniquement de vrais avis (app d'avis ou blocs « Avis »).
-  Mode démo : des avis d'exemple, visibles UNIQUEMENT dans l'éditeur de thème et marqués « Exemple »,
-  pour juger du rendu. Ils ne s'affichent jamais aux visiteuses (art. L121-2 et suivants du Code de la consommation).
+  Avis clients : carrousel animé + photos clientes.
+  - Vrais avis : bloc de l'app d'avis (Judge.me) ou blocs « Avis ».
+  - Simulation : avis de démonstration affichés UNIQUEMENT tant que le thème n'est pas publié
+    (aperçu et éditeur). Dès la publication, ils disparaissent automatiquement : de faux avis
+    visibles par les clientes sont interdits (Code de la consommation, art. L121-2 et s.).
 {%- endcomment -%}
-{%- assign app_blocks = section.blocks | where: 'type', '@app' -%}
-{%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
-{%- assign show_demo = false -%}
-{%- if section.settings.demo and request.design_mode and section.blocks.size == 0 -%}{%- assign show_demo = true -%}{%- endif -%}
-{%- if section.blocks.size > 0 or show_demo -%}
+{%- liquid
+  assign app_blocks = section.blocks | where: 'type', '@app'
+  assign review_blocks = section.blocks | where: 'type', 'review'
+  assign photo_blocks = section.blocks | where: 'type', 'photo'
+  assign simulate = false
+  if section.settings.simulate and review_blocks.size == 0 and app_blocks.size == 0
+    if theme.role != 'main' or request.design_mode
+      assign simulate = true
+    endif
+  endif
+-%}
+{%- if review_blocks.size > 0 or app_blocks.size > 0 or simulate -%}
   {%- render 'vl-padding' -%}
   <section class="vl-reviews color-{{ section.settings.color_scheme }} gradient" id="{{ section.settings.anchor | default: 'avis' | handle }}">
     <div class="page-width section-{{ section.id }}-padding">
       <div class="vl-heading vl-heading--center">
         <h2 class="h1">{{ section.settings.title | escape }}</h2>
-        {%- if show_demo -%}
-          <p class="vl-reviews__summary"><span class="vl-reviews__stars">★★★★★</span> <strong>4,7/5</strong> · 298 avis <span class="vl-demo-tag">Exemple</span></p>
+        {%- if simulate -%}
+          <p class="vl-reviews__summary"><span class="vl-reviews__stars">★★★★★</span> <strong>{{ section.settings.sim_rating }}/5</strong> · {{ section.settings.sim_count }} avis</p>
         {%- endif -%}
       </div>
       {%- for block in app_blocks -%}<div class="vl-reviews__app">{% render block %}</div>{%- endfor -%}
-      {%- if show_demo -%}
-        {%- capture demo -%}Camille|Enfin un truc qui me permet de bosser pendant mes règles. Je la mets sous mon pull au bureau et personne ne voit rien.|5~Sarah|La chaleur est vraiment douce, je commence au niveau 1 et ça me suffit. Le massage est un vrai plus le soir.|5~Inès|Livraison un peu longue mais le produit est top. Je ne ressors plus la bouillotte.|4~Julie|Je l'ai offerte à ma sœur, elle m'en a commandé une deuxième pour sa fille.|5~Manon|Discrète, rechargeable, elle tient bien en place. Mon rituel du soir avec une tisane.|5~Léa|Très agréable sur le bas du dos aussi, je ne m'y attendais pas.|4{%- endcapture -%}
-        <ul class="vl-reviews__grid" role="list">
+
+      {%- capture cards -%}
+        {%- if simulate -%}
+          {%- capture demo -%}Camille|Enfin un truc qui me permet de bosser pendant mes règles. Je la mets sous mon pull au bureau et personne ne voit rien.|5~Sarah|La chaleur est douce, je reste au niveau 1 et ça me suffit. Le massage est un vrai plus le soir.|5~Inès|Livraison un peu longue mais le produit est top. Je ne ressors plus la bouillotte.|4~Julie|Je l'ai offerte à ma sœur, elle en a recommandé une pour sa fille.|5~Manon|Discrète, rechargeable, elle tient bien en place. Mon rituel du soir avec une tisane.|5~Léa|Très agréable sur le bas du dos aussi, je ne m'y attendais pas.|5~Chloé|Je la recharge le dimanche et elle me suit toute la semaine.|5~Emma|Simple à utiliser, trois boutons et c'est parti. Je la conseille.|4~Nora|Je l'emmène en cours, elle est vraiment fine sous un sweat.|5~Lucie|Le meilleur achat de l'année pour mes règles. Merci VELEA !|5{%- endcapture -%}
           {%- assign items = demo | split: '~' -%}
           {%- for it in items -%}
             {%- assign f = it | split: '|' -%}
             {%- assign stars = f[2] | plus: 0 -%}
             <li class="vl-review">
-              <p class="vl-review__head"><strong>{{ f[0] }}</strong> <span class="vl-demo-tag">Exemple</span></p>
-              <p class="vl-review__stars" aria-label="{{ f[2] }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= stars %}is-on{% endif %}">★</span>{%- endfor -%}</p>
+              <p class="vl-review__head"><strong>{{ f[0] }}</strong></p>
+              <p class="vl-review__stars" aria-label="{{ stars }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= stars %}is-on{% endif %}">★</span>{%- endfor -%}</p>
               <blockquote class="vl-review__text">« {{ f[1] }} »</blockquote>
             </li>
           {%- endfor -%}
-        </ul>
-        <p class="vl-reviews__note">Avis d'exemple visibles uniquement dans l'éditeur. Ils seront remplacés par les vrais avis de ton app (Judge.me).</p>
-      {%- elsif review_blocks.size > 0 -%}
-        <ul class="vl-reviews__grid" role="list">
+        {%- else -%}
           {%- for block in review_blocks -%}
             <li class="vl-review" {{ block.shopify_attributes }}>
               <p class="vl-review__head"><strong>{{ block.settings.author | escape }}</strong>{%- if block.settings.detail != blank %} · {{ block.settings.detail | escape }}{% endif -%}</p>
@@ -42,9 +49,29 @@
               <blockquote class="vl-review__text">« {{ block.settings.text | escape }} »</blockquote>
             </li>
           {%- endfor -%}
-        </ul>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- if cards != blank -%}
+        <div class="vl-carousel" style="--vl-carousel-speed: {{ section.settings.speed }}s">
+          <ul class="vl-carousel__track" role="list">{{ cards }}</ul>
+          <ul class="vl-carousel__track" role="list" aria-hidden="true">{{ cards }}</ul>
+        </div>
       {%- endif -%}
-      {%- if section.settings.source_note != blank %}<p class="vl-reviews__note">{{ section.settings.source_note | escape }}</p>{% endif -%}
+
+      <div class="vl-ugc-photos">
+        {%- for n in (1..2) -%}
+          {%- assign blk = photo_blocks[forloop.index0] -%}
+          <figure class="vl-ugc-photo" {% if blk %}{{ blk.shopify_attributes }}{% endif %}>
+            {%- if blk.settings.image != blank -%}
+              {{ blk.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 700, 900', sizes: '(min-width: 750px) 40vw, 90vw', alt: blk.settings.caption | default: 'Cliente VELEA' }}
+            {%- else -%}
+              <span class="vl-ugc-photo__empty">{% render 'vl-icon', icon: 'heart' %}<span>Photo cliente {{ n }}</span></span>
+            {%- endif -%}
+            {%- if blk.settings.caption != blank %}<figcaption>{{ blk.settings.caption | escape }}</figcaption>{% endif -%}
+          </figure>
+        {%- endfor -%}
+      </div>
     </div>
   </section>
 {%- endif -%}
@@ -54,10 +81,12 @@
   "name": "VELEA · Avis clients",
   "tag": "div",
   "settings": [
-    { "type": "checkbox", "id": "demo", "label": "Mode démo (éditeur uniquement)", "default": true, "info": "Affiche des avis d'exemple dans l'éditeur seulement. Jamais visibles en boutique." },
+    { "type": "checkbox", "id": "simulate", "label": "Simulation d'avis (thème non publié)", "default": true, "info": "Visible dans l'aperçu et l'éditeur uniquement. Disparaît automatiquement quand le thème est publié." },
+    { "type": "text", "id": "sim_rating", "label": "Note simulée", "default": "4,7" },
+    { "type": "text", "id": "sim_count", "label": "Nombre d'avis simulé", "default": "298" },
+    { "type": "range", "id": "speed", "label": "Vitesse du défilement", "min": 20, "max": 120, "step": 5, "unit": "s", "default": 60 },
     { "type": "text", "id": "anchor", "label": "Ancre", "default": "avis" },
     { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'en disent nos clientes" },
-    { "type": "textarea", "id": "source_note", "label": "Origine des avis" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
     { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
     { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
@@ -71,6 +100,13 @@
         { "type": "text", "id": "detail", "label": "Détail (ville, date…)" },
         { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
         { "type": "textarea", "id": "text", "label": "Avis" }
+      ]
+    },
+    {
+      "type": "photo", "name": "Photo cliente", "limit": 2,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo (avec l'accord de la cliente)" },
+        { "type": "text", "id": "caption", "label": "Légende" }
       ]
     }
   ],

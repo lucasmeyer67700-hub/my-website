@@ -1044,3 +1044,60 @@ h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
 .vl-reviews__stars, .vl-review__stars .is-on { color: var(--vl-gold); letter-spacing: 0.1em; }
 .vl-review__head { display: flex; align-items: center; gap: 0.8rem; margin: 0 0 0.6rem; font-size: 1.7rem; }
 .vl-demo-tag { padding: 0.2rem 0.8rem; border-radius: 99rem; background: #fff3cd; color: #6b4e00; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* v7 : 5 pastilles sur une ligne */
+.vl-needs--pills .vl-needs__grid { flex-wrap: nowrap !important; gap: 1.2rem; }
+@media screen and (min-width: 990px) { .vl-needs--pills .vl-needs__grid { justify-content: center; } }
+.vl-needs--pills .vl-need { padding: 0.7rem 2rem 0.7rem 0.7rem; gap: 1.1rem; }
+.vl-needs--pills .vl-need__media { width: 5.6rem; height: 5.6rem; }
+.vl-needs--pills .vl-need__label { font-size: 1.7rem; }
+@media screen and (min-width: 990px) and (max-width: 1199px) { .vl-needs--pills .vl-need__label { font-size: 1.5rem; } .vl-needs--pills .vl-need__media { width: 4.8rem; height: 4.8rem; } }
+
+/* Carrousel d'avis */
+.vl-carousel { display: flex; overflow: hidden; margin: 0 calc(50% - 50vw); padding: 0.8rem 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.vl-carousel__track { display: flex; gap: 2rem; margin: 0; padding: 0 1rem; list-style: none; flex: none; animation: vlMarquee var(--vl-carousel-speed, 60s) linear infinite; }
+.vl-carousel:hover .vl-carousel__track { animation-play-state: paused; }
+.vl-carousel .vl-review { flex: none; width: 32rem; padding: 2.4rem; border-radius: 2rem; background: #fff; box-shadow: 0 10px 30px -22px rgba(58, 42, 48, 0.4); }
+.vl-review__text { margin: 1rem 0 0; padding: 0; border: 0; font-size: 1.55rem; line-height: 1.55; font-style: normal; }
+@keyframes vlMarquee { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .vl-carousel { overflow-x: auto; } .vl-carousel__track { animation: none; } .vl-carousel__track[aria-hidden] { display: none; } }
+.vl-ugc-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 96rem; margin: 4rem auto 0; }
+.vl-ugc-photo { position: relative; margin: 0; aspect-ratio: 4 / 5; border-radius: 2.4rem; overflow: hidden; background: #fff; }
+.vl-ugc-photo img { width: 100%; height: 100%; object-fit: cover; }
+.vl-ugc-photo__empty { display: grid; place-items: center; align-content: center; gap: 1rem; height: 100%; color: var(--vl-mute); border: 2px dashed var(--vl-line); border-radius: inherit; font-size: 1.5rem; }
+.vl-ugc-photo figcaption { position: absolute; left: 1.6rem; bottom: 1.6rem; padding: 0.6rem 1.2rem; border-radius: 99rem; background: rgba(255,255,255,0.9); font-size: 1.3rem; }
+
+/* Arguments */
+.vl-proof__grid { display: grid; gap: 3.2rem; align-items: center; }
+@media screen and (min-width: 990px) { .vl-proof__grid { grid-template-columns: 0.8fr 1.2fr; gap: 4.8rem; } }
+.vl-proof__media { position: relative; aspect-ratio: 4 / 5; border-radius: 2rem; overflow: hidden; background: var(--vl-blush); }
+.vl-proof__media img { width: 100%; height: 100%; object-fit: cover; }
+.vl-proof__checks { position: absolute; left: 1.6rem; right: 1.6rem; bottom: 1.6rem; margin: 0; padding: 0; list-style: none; border: 1px solid rgba(255,255,255,0.7); border-radius: 0.8rem; background: rgba(58, 42, 48, 0.35); backdrop-filter: blur(4px); color: #fff; }
+.vl-proof__checks li { display: flex; align-items: center; gap: 1.4rem; padding: 1.4rem 1.6rem; font-size: 1.6rem; }
+.vl-proof__checks li + li { border-top: 1px solid rgba(255,255,255,0.5); }
+.vl-proof__title { margin: 0 0 1.6rem; font-size: clamp(2.8rem, 3.6vw, 4.2rem); font-weight: 700; line-height: 1.15; }
+.vl-proof__text { margin: 0 0 3.2rem; font-size: 1.8rem; line-height: 1.55; }
+.vl-proof__steps { position: relative; display: grid; gap: 3.2rem; margin: 0; padding: 0 0 0 4rem; list-style: none; }
+.vl-proof__steps::before { content: ''; position: absolute; left: 0.9rem; top: 0.6rem; bottom: 0.6rem; width: 2px; background: var(--vl-plum); }
+.vl-proof__steps li { position: relative; display: grid; gap: 0.6rem; }
+.vl-proof__steps li::before { content: ''; position: absolute; left: -4rem; top: 0.2rem; width: 2rem; height: 2rem; border-radius: 50%; background: var(--vl-plum); }
+.vl-proof__steps strong { font-size: 2rem; }
+.vl-proof__steps span { font-size: 1.6rem; color: var(--vl-mute); }
+
+/* Pied de page */
+.vl-footer { padding: 7.2rem 0 3.2rem; font-size: 1.6rem; }
+.vl-footer__grid { display: grid; gap: 4rem; }
+@media screen and (min-width: 750px) { .vl-footer__grid { grid-template-columns: repeat(2, 1fr); } }
+@media screen and (min-width: 990px) { .vl-footer__grid { grid-template-columns: 1.1fr 1fr 1fr 1fr; } }
+.vl-footer__title { margin: 0 0 2.4rem; font-family: var(--font-body-family); font-size: 1.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: inherit; }
+.vl-footer ul { display: grid; gap: 1.4rem; margin: 0; padding: 0; list-style: none; }
+.vl-footer a { color: inherit; opacity: 0.85; text-decoration: none; }
+.vl-footer a:hover { opacity: 1; text-decoration: underline; }
+.vl-footer__field { display: flex; align-items: center; max-width: 32rem; margin-top: 2.4rem; border: 1px solid rgba(251, 247, 245, 0.4); }
+.vl-footer__field input { flex: 1; min-height: 5.6rem; padding: 0 1.6rem; border: 0; background: transparent; color: inherit; font: inherit; }
+.vl-footer__field button { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; margin-right: 1.2rem; border: 0; border-radius: 50%; background: rgba(251,247,245,0.15); color: inherit; cursor: pointer; }
+.vl-footer__consent { display: flex; gap: 0.8rem; margin-top: 1rem; font-size: 1.25rem; opacity: 0.75; }
+.vl-footer__bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 6.4rem; }
+.vl-footer__social { display: flex !important; gap: 2rem !important; }
+.vl-footer__pay { display: flex !important; flex-wrap: wrap; gap: 0.6rem !important; }
+.vl-footer__copy { margin: 3.2rem 0 0; font-size: 1.35rem; opacity: 0.7; }

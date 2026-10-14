@@ -1,0 +1,48 @@
+{%- comment -%} Photo + points clés à gauche, titre et frise de 4 arguments à droite. {%- endcomment -%}
+{%- render 'vl-padding' -%}
+<section class="vl-proof color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-proof__grid">
+      <div class="vl-proof__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 990px) 35vw, 100vw', alt: section.settings.image.alt | default: '' }}
+        {%- else -%}
+          <span class="vl-feature__placeholder">{% if request.design_mode %}Ajoute une photo verticale{% endif %}</span>
+        {%- endif -%}
+        {%- if section.settings.checks != blank -%}
+          <ul class="vl-proof__checks" role="list">
+            {%- assign lines = section.settings.checks | newline_to_br | split: '<br />' -%}
+            {%- for l in lines -%}{%- assign t = l | strip -%}{%- if t != blank -%}<li>{% render 'vl-icon', icon: 'check' %}<span>{{ t | escape }}</span></li>{%- endif -%}{%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+      <div class="vl-proof__copy">
+        <h2 class="vl-proof__title">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank %}<p class="vl-proof__text">{{ section.settings.text | escape }}</p>{% endif -%}
+        <ol class="vl-proof__steps" role="list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.text | escape }}</span></li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Arguments",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (verticale)" },
+    { "type": "textarea", "id": "checks", "label": "Points sur la photo (un par ligne)" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Une chaleur qui fait du bien. Pas de fausses promesses." },
+    { "type": "text", "id": "text", "label": "Texte" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [{ "type": "point", "name": "Argument", "limit": 6, "settings": [{ "type": "text", "id": "title", "label": "Titre" }, { "type": "text", "id": "text", "label": "Texte" }] }],
+  "presets": [{ "name": "VELEA · Arguments" }]
+}
+{% endschema %}

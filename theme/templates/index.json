@@ -182,14 +182,34 @@
     "reviews": {
       "type": "vl-reviews",
       "settings": {
-        "demo": true,
+        "simulate": true,
+        "sim_rating": "4,7",
+        "sim_count": "298",
+        "speed": 60,
         "anchor": "avis",
         "title": "Ce qu'en disent nos clientes",
-        "source_note": "",
         "color_scheme": "scheme-2",
         "padding_top": 80,
         "padding_bottom": 80
-      }
+      },
+      "blocks": {
+        "photo1": {
+          "type": "photo",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "photo2": {
+          "type": "photo",
+          "settings": {
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "photo1",
+        "photo2"
+      ]
     },
     "faq": {
       "type": "vl-faq",
@@ -271,6 +291,54 @@
         "padding_top": 72,
         "padding_bottom": 72
       }
+    },
+    "proof": {
+      "type": "vl-proof",
+      "settings": {
+        "image": "shopify://shop_images/velea-hero-cocon.webp",
+        "checks": "3 niveaux de chaleur\nArrêt automatique de sécurité\nRechargeable en USB-C",
+        "title": "Une chaleur qui fait du bien. Pas de fausses promesses.",
+        "text": "Une ceinture pensée pour une chose : t'apporter du réconfort pendant tes règles, simplement.",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "s1": {
+          "type": "point",
+          "settings": {
+            "title": "Une chaleur douce et réglable",
+            "text": "3 niveaux pour trouver la température qui aide ton ventre à se relâcher."
+          }
+        },
+        "s2": {
+          "type": "point",
+          "settings": {
+            "title": "Un massage par vibration",
+            "text": "3 modes qui complètent la sensation de détente, sur le ventre ou le bas du dos."
+          }
+        },
+        "s3": {
+          "type": "point",
+          "settings": {
+            "title": "Sans fil, discrète",
+            "text": "Rechargeable en USB-C, elle se glisse sous un pull : à la maison, au bureau, en cours."
+          }
+        },
+        "s4": {
+          "type": "point",
+          "settings": {
+            "title": "Pensée pour ta sécurité",
+            "text": "Arrêt automatique, et 30 jours pour l'essayer, satisfaite ou remboursée."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ]
     }
   },
   "order": [
@@ -278,8 +346,9 @@
     "needs",
     "intro",
     "feature",
-    "faq",
+    "proof",
     "reviews",
+    "faq",
     "newsletter"
   ]
 }
