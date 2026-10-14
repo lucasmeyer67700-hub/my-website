@@ -1,7 +1,9 @@
 {%- assign p = section.settings.product -%}
 {%- if p != blank -%}
 {%- assign v = p.selected_or_first_available_variant -%}
-<section class="vp vp-sec vp-bg-white" id="vp-product"><div class="vp-wrap"><div class="vp-product">
+<section class="vp vp-sec vp-bg-white" id="vp-product"><div class="vp-wrap">
+  {%- if section.settings.heading != blank %}<h2 class="vp-h2 vp-card-title">{{ section.settings.heading }}</h2>{% endif -%}
+  <div class="vp-product vp-product--card">
   <div class="vp-product__media">
     {%- assign img = section.settings.image | default: p.featured_image -%}
     {%- if img != blank -%}{{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '500, 800, 1200', sizes: '(min-width: 990px) 45vw, 90vw', alt: p.title }}{%- endif -%}
@@ -19,8 +21,9 @@
     </ul>
     {%- form 'product', p, class: 'vp-product__form' -%}
       <input type="hidden" name="id" value="{{ v.id }}">
-      <button type="submit" class="vp-btn"{% unless v.available %} disabled{% endunless %}>{% if v.available %}{{ section.settings.button_label | escape }}{% else %}Bientôt de retour{% endif %}</button>
+      <button type="submit" class="vp-btn vp-btn--dark"{% unless v.available %} disabled{% endunless %}>{% if v.available %}<strong>{{ section.settings.button_label | escape }}</strong> <span class="vp-btn__sep">–</span> <em class="vp-btn__price">{{ v.price | money }}</em>{% else %}Bientôt de retour{% endif %}</button>
     {%- endform -%}
+    {%- if section.settings.note != blank %}<p class="vp-note">{% if section.settings.note_tag != blank %}<span>{{ section.settings.note_tag | escape }}</span>{% endif %}{{ section.settings.note | escape }}</p>{% endif -%}
     {%- if section.settings.under != blank %}<ul class="vp-ticks" style="justify-content:flex-start">{%- assign ls = section.settings.under | split: '|' -%}{%- for t in ls -%}<li>{{ t | strip | escape }}</li>{%- endfor -%}</ul>{%- endif -%}
   </div>
 </div></div></section>
@@ -46,6 +49,7 @@
   "name": "VELEA+ · Produit",
   "tag": "div",
   "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "Titre au-dessus", "default": "Reprends le contrôle de tes règles" },
     { "type": "product", "id": "product", "label": "Produit" },
     { "type": "image_picker", "id": "image", "label": "Photo (sinon photo du produit)" },
     { "type": "text", "id": "badge", "label": "Badge", "default": "Notre best-seller" },
@@ -53,6 +57,8 @@
     { "type": "text", "id": "price_note", "label": "Mention prix", "default": "TTC · livraison offerte" },
     { "type": "textarea", "id": "points", "label": "Bénéfices (un par ligne, sinon champ du produit)" },
     { "type": "text", "id": "button_label", "label": "Bouton", "default": "Ajouter au panier" },
+    { "type": "text", "id": "note_tag", "label": "Étiquette de la mention", "default": "PACK" },
+    { "type": "text", "id": "note", "label": "Mention sous le bouton", "default": "Ceinture + 10 patchs + pochette dans le Pack Cocon" },
     { "type": "text", "id": "under", "label": "Sous le bouton (séparé par |)", "default": "Paiement sécurisé | Retours 30 jours" },
     { "type": "checkbox", "id": "sticky", "label": "Barre d'achat collante sur mobile", "default": true },
     { "type": "text", "id": "sticky_label", "label": "Bouton de la barre", "default": "Je la veux" },

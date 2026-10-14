@@ -84,12 +84,15 @@
         "title": "Ceinture chauffante Cocon",
         "price_note": "TTC · livraison offerte",
         "points": "Chaleur douce réglable : 50, 55 ou 60 °C\nMassage par vibration, 4 modes\nBatterie 1800 mAh, environ 2 h d'utilisation\n30 jours pour l'essayer, satisfaite ou remboursée",
-        "button_label": "Ajouter au panier",
-        "under": "Paiement sécurisé | Retours 30 jours",
+        "button_label": "Je la veux",
+        "under": "",
         "sticky": true,
         "sticky_label": "Je la veux",
         "sim_rating": "4,7",
-        "sim_count": "298"
+        "sim_count": "298",
+        "heading": "Reprends le contrôle de tes règles",
+        "note_tag": "PACK",
+        "note": "Ceinture + 10 patchs + pochette dans le Pack Cocon"
       }
     },
     "steps": {
