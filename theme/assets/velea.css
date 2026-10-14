@@ -1020,3 +1020,13 @@ h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
 
 .vl-feature__placeholder { display: grid; place-items: center; width: 100%; height: 100%; padding: 2rem; text-align: center; font-size: 1.4rem; color: var(--vl-mute);
   background: radial-gradient(60% 60% at 50% 45%, #fff 0%, var(--vl-blush) 70%, var(--vl-petal) 100%); }
+
+/* Bannière : texte à droite */
+.vl-banner--text-right .vl-banner__inner { justify-content: flex-end; }
+.vl-banner--text-right .vl-banner__bg::after { background: linear-gradient(270deg, rgba(58, 42, 48, calc(var(--vl-banner-overlay, 0.2) + 0.2)) 0%, rgba(58, 42, 48, var(--vl-banner-overlay, 0.2)) 45%, rgba(58, 42, 48, 0) 75%); }
+.vl-banner__copy { text-shadow: 0 2px 18px rgba(58, 42, 48, 0.35); }
+.vl-banner__button { text-shadow: none; }
+@media screen and (max-width: 749px) {
+  .vl-banner--text-right .vl-banner__inner { justify-content: flex-start; }
+  .vl-banner--text-right .vl-banner__bg::after { background: linear-gradient(0deg, rgba(58, 42, 48, 0.65) 0%, rgba(58, 42, 48, 0.1) 65%); }
+}

@@ -10,7 +10,8 @@
     assign link = section.settings.product.url
   endif
 -%}
-<section class="vl-banner{% if img == blank %} vl-banner--placeholder{% endif %}" style="--vl-banner-overlay: {{ section.settings.overlay | divided_by: 100.0 }}">
+<style>@media screen and (max-width: 749px) { #shopify-section-{{ section.id }} .vl-banner__bg img { object-position: {{ section.settings.focal_mobile }} !important; } }</style>
+<section class="vl-banner vl-banner--text-{{ section.settings.align }}{% if img == blank %} vl-banner--placeholder{% endif %}" style="--vl-banner-overlay: {{ section.settings.overlay | divided_by: 100.0 }}">
   <div class="vl-banner__bg">
     {%- if img != blank -%}
       {{ img | image_url: width: 2800 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2800', alt: img.alt | default: '', style: focal_style }}
@@ -40,6 +41,8 @@
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Photo de fond", "info": "Paysage, 2800 × 1400 minimum. Garde la partie gauche épurée pour le texte." },
     { "type": "text", "id": "focal", "label": "Cadrage de la photo", "default": "center center", "info": "Ex. : right center" },
+    { "type": "select", "id": "align", "label": "Position du texte", "default": "left", "options": [{ "value": "left", "label": "À gauche" }, { "value": "right", "label": "À droite" }] },
+    { "type": "text", "id": "focal_mobile", "label": "Cadrage sur mobile", "default": "center center" },
     { "type": "range", "id": "overlay", "label": "Voile sombre sur la photo", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 20 },
     { "type": "product", "id": "product", "label": "Produit lié au bouton" },
     { "type": "text", "id": "pill", "label": "Pastille", "default": "Nouvelle saison" },
