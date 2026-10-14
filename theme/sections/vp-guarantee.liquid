@@ -1,0 +1,20 @@
+<section class="vp vp-sec vp-bg-ink"><div class="vp-wrap"><div class="vp-guarantee">
+  <div class="vp-seal"><strong>{{ section.settings.days }}</strong><span>jours</span></div>
+  <h2 class="vp-h2">{{ section.settings.title }}</h2>
+  <p class="vp-lead">{{ section.settings.text | escape }}</p>
+  {%- if section.settings.button_label != blank %}<a class="vp-btn vp-btn--light" href="{{ section.settings.link | default: '#vp-product' }}">{{ section.settings.button_label | escape }}</a>{% endif -%}
+</div></div></section>
+{% schema %}
+{
+  "name": "VELEA+ · Garantie",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "days", "label": "Jours", "default": "30" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Essaie-la. <em>Adopte-la.</em>" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Si elle ne te convient pas, tu as 30 jours pour la renvoyer. On te rembourse." },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je l'essaie sans risque" },
+    { "type": "url", "id": "link", "label": "Lien" }
+  ],
+  "presets": [{ "name": "VELEA+ · Garantie" }]
+}
+{% endschema %}

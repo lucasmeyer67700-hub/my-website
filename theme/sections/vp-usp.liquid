@@ -1,0 +1,21 @@
+<section class="vp vp-sec vp-bg-{{ section.settings.bg }}" style="padding-top: {{ section.settings.pad }}px; padding-bottom: {{ section.settings.pad }}px"><div class="vp-wrap">
+  <ul class="vp-usp">
+    {%- for block in section.blocks -%}
+      <li {{ block.shopify_attributes }}><span class="vp-usp__icon">{% render 'vl-icon', icon: block.settings.icon %}</span><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.text | escape }}</span></li>
+    {%- endfor -%}
+  </ul>
+</div></section>
+{% schema %}
+{
+  "name": "VELEA+ · Atouts",
+  "tag": "div",
+  "settings": [
+    { "type": "select", "id": "bg", "label": "Fond", "default": "cream", "options": [{ "value": "cream", "label": "Crème" }, { "value": "blush", "label": "Rose" }, { "value": "white", "label": "Blanc" }] },
+    { "type": "range", "id": "pad", "label": "Marges", "min": 16, "max": 96, "step": 8, "unit": "px", "default": 40 }
+  ],
+  "blocks": [{ "type": "item", "name": "Atout", "limit": 4, "settings": [
+    { "type": "select", "id": "icon", "label": "Icône", "default": "heat", "options": [{ "value": "heat", "label": "Chaleur" }, { "value": "massage", "label": "Massage" }, { "value": "battery", "label": "Batterie" }, { "value": "shield", "label": "Sécurité" }, { "value": "truck", "label": "Livraison" }, { "value": "return", "label": "Retour" }, { "value": "heart", "label": "Cœur" }, { "value": "clock", "label": "Horloge" }] },
+    { "type": "text", "id": "title", "label": "Titre" }, { "type": "text", "id": "text", "label": "Texte" } ] }],
+  "presets": [{ "name": "VELEA+ · Atouts" }]
+}
+{% endschema %}

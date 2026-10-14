@@ -1,0 +1,20 @@
+<section class="vp vp-sec vp-bg-{{ section.settings.bg }}"><div class="vp-wrap">
+  <div class="vp-head">{%- if section.settings.kicker != blank %}<span class="vp-kicker">{{ section.settings.kicker | escape }}</span>{% endif -%}<h2 class="vp-h2">{{ section.settings.title }}</h2></div>
+  <ul class="vp-steps">
+    {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span class="vp-steps__num">{{ forloop.index | prepend: '0' }}</span><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.text | escape }}</span></li>{%- endfor -%}
+  </ul>
+  {%- if section.blocks.size > 1 %}<p class="vp-swipe">Fais glisser →</p>{% endif -%}
+</div></section>
+{% schema %}
+{
+  "name": "VELEA+ · Étapes",
+  "tag": "div",
+  "settings": [
+    { "type": "select", "id": "bg", "label": "Fond", "default": "blush", "options": [{ "value": "cream", "label": "Crème" }, { "value": "blush", "label": "Rose" }, { "value": "white", "label": "Blanc" }] },
+    { "type": "text", "id": "kicker", "label": "Petit titre", "default": "Simple comme bonjour" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Ton rituel <em>en 3 gestes</em>" }
+  ],
+  "blocks": [{ "type": "step", "name": "Étape", "limit": 4, "settings": [{ "type": "text", "id": "title", "label": "Titre" }, { "type": "textarea", "id": "text", "label": "Texte" }] }],
+  "presets": [{ "name": "VELEA+ · Étapes" }]
+}
+{% endschema %}

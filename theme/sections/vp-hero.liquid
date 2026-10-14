@@ -1,0 +1,43 @@
+{%- liquid
+  assign p = section.settings.product
+  assign link = section.settings.button_link | default: p.url
+  assign fp = 'object-position: ' | append: section.settings.focal
+-%}
+<style>@media (max-width: 989px) { #shopify-section-{{ section.id }} .vp-hero__media img { object-position: {{ section.settings.focal_mobile }} !important; } }</style>
+<section class="vp vp-hero">
+  <div class="vp-hero__media">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '600, 900, 1200, 1800, 2400', alt: section.settings.image.alt | default: '', style: fp }}
+    {%- endif -%}
+  </div>
+  <div class="vp-hero__copy"><div class="vp-hero__inner">
+    {%- render 'vp-rating', product: p, sim_rating: section.settings.sim_rating, sim_count: section.settings.sim_count, class: 'vp-hero__rating' -%}
+    <h1 class="vp-hero__title">{{ section.settings.title }}</h1>
+    {%- if section.settings.text != blank %}<p class="vp-hero__text">{{ section.settings.text | escape }}</p>{% endif -%}
+    <a class="vp-btn" href="{{ link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}{% if p != blank and section.settings.show_price %} <span class="vp-btn__price">· {{ p.price | money }}</span>{% endif %}</a>
+    {%- if section.settings.ticks != blank -%}
+      <ul class="vp-ticks">{%- assign ls = section.settings.ticks | split: '|' -%}{%- for t in ls -%}<li>{{ t | strip | escape }}</li>{%- endfor -%}</ul>
+    {%- endif -%}
+  </div></div>
+</section>
+{% schema %}
+{
+  "name": "VELEA+ · Haut de page",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "focal", "label": "Cadrage ordinateur", "default": "center center" },
+    { "type": "text", "id": "focal_mobile", "label": "Cadrage mobile", "default": "center center" },
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Tes règles ne devraient pas <em>te clouer au lit.</em>" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je découvre la ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "checkbox", "id": "show_price", "label": "Prix dans le bouton", "default": true },
+    { "type": "text", "id": "ticks", "label": "Réassurance (séparée par |)", "default": "Livraison offerte | Satisfaite ou remboursée 30 j" },
+    { "type": "text", "id": "sim_rating", "label": "Note simulée (aperçu uniquement)", "default": "4,7" },
+    { "type": "text", "id": "sim_count", "label": "Nombre d'avis simulé", "default": "298" }
+  ],
+  "presets": [{ "name": "VELEA+ · Haut de page" }]
+}
+{% endschema %}

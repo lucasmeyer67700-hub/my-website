@@ -12,262 +12,247 @@
  */
 {
   "sections": {
-    "banner": {
-      "type": "vl-banner",
+    "hero": {
+      "type": "vp-hero",
       "settings": {
-        "focal": "center center",
-        "overlay": 15,
-        "product": "ceinture-chauffante-regles",
-        "pill": "Spécial règles douloureuses",
-        "title": "TON COCON",
-        "subtitle": "Chaleur douce & massage, sans fil",
-        "button_label": "JE DÉCOUVRE",
-        "note": "Satisfaite ou remboursée 30 jours",
         "image": "shopify://shop_images/velea-hero-cocon.webp",
-        "align": "right",
-        "focal_mobile": "28% center"
+        "focal": "center center",
+        "focal_mobile": "42% center",
+        "product": "ceinture-chauffante-regles",
+        "title": "Tes règles ne devraient pas <em>te clouer au lit.</em>",
+        "text": "La ceinture chauffante et massante qui t'enveloppe de chaleur en quelques secondes. Sans fil, discrète, partout avec toi.",
+        "button_label": "Je découvre la ceinture",
+        "show_price": true,
+        "ticks": "Livraison offerte | Satisfaite ou remboursée 30 j",
+        "sim_rating": "4,7",
+        "sim_count": "298"
       }
     },
-    "needs": {
-      "type": "vl-needs",
+    "usp": {
+      "type": "vp-usp",
       "settings": {
-        "eyebrow": "",
-        "title": "",
-        "color_scheme": "scheme-2",
-        "padding_top": 48,
-        "padding_bottom": 16,
-        "style": "pills"
+        "bg": "cream",
+        "pad": 40
       },
       "blocks": {
-        "n1": {
-          "type": "need",
+        "u1": {
+          "type": "item",
           "settings": {
-            "title": "Crampes",
-            "product": "ceinture-chauffante-regles",
-            "icon": "heat"
+            "icon": "heat",
+            "title": "Prête en 5 secondes",
+            "text": "50, 55 ou 60 °C"
           }
         },
-        "n2": {
-          "type": "need",
+        "u2": {
+          "type": "item",
           "settings": {
-            "title": "Bas du dos",
-            "product": "ceinture-chauffante-regles",
-            "icon": "body"
+            "icon": "massage",
+            "title": "4 modes de massage",
+            "text": "Seuls ou avec la chaleur"
           }
         },
-        "n3": {
-          "type": "need",
+        "u3": {
+          "type": "item",
           "settings": {
-            "title": "Au bureau",
-            "product": "ceinture-chauffante-regles",
-            "icon": "feather"
+            "icon": "battery",
+            "title": "Sans fil, 142 g",
+            "text": "Discrète sous un pull"
           }
         },
-        "n4": {
-          "type": "need",
+        "u4": {
+          "type": "item",
           "settings": {
-            "title": "En déplacement",
-            "product": "ceinture-chauffante-regles",
-            "icon": "truck"
-          }
-        },
-        "n5": {
-          "type": "need",
-          "settings": {
-            "title": "Le soir",
-            "product": "ceinture-chauffante-regles",
-            "icon": "heart"
+            "icon": "shield",
+            "title": "Arrêt auto 30 min",
+            "text": "Tu te détends sereine"
           }
         }
       },
       "block_order": [
-        "n1",
-        "n2",
-        "n3",
-        "n4",
-        "n5"
+        "u1",
+        "u2",
+        "u3",
+        "u4"
       ]
     },
-    "intro": {
-      "type": "vl-intro",
+    "product": {
+      "type": "vp-product",
       "settings": {
-        "title": "VELEA, la douceur par la chaleur",
-        "text": "<p>Une petite marque française née d'une conviction : tes règles ne devraient pas te clouer au lit. Des objets chauds, doux et pratiques, pour un réconfort que tu ressens au quotidien.</p>",
-        "color_scheme": "scheme-2",
-        "padding_top": 48,
-        "padding_bottom": 72
-      },
-      "blocks": {
-        "b1": {
-          "type": "badge",
-          "settings": {
-            "text": "Marque française"
-          }
-        },
-        "b2": {
-          "type": "badge",
-          "settings": {
-            "text": "Chaleur douce réglable"
-          }
-        },
-        "b3": {
-          "type": "badge",
-          "settings": {
-            "text": "30 jours pour l'adopter"
-          }
-        },
-        "b4": {
-          "type": "badge",
-          "settings": {
-            "text": "Une vraie équipe à ton écoute"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4"
-      ]
-    },
-    "feature": {
-      "type": "vl-feature",
-      "settings": {
-        "heading": "Reprends le contrôle de tes règles",
         "product": "ceinture-chauffante-regles",
-        "sticker_top": "Prête en",
-        "sticker_bottom": "5 secondes",
+        "image": "shopify://shop_images/velea-ceinture-clean.png",
+        "badge": "Notre best-seller",
         "title": "Ceinture chauffante Cocon",
-        "button_label": "Je découvre ma ceinture",
-        "show_price": true,
-        "note_tag": "PACK",
-        "note": "Ceinture + 10 patchs + pochette dans le Pack Cocon",
-        "color_scheme": "scheme-3",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "image": "shopify://shop_images/velea-ceinture-detail.png"
+        "price_note": "TTC · livraison offerte",
+        "points": "Chaleur douce réglable : 50, 55 ou 60 °C\nMassage par vibration, 4 modes\nBatterie 1800 mAh, environ 2 h d'utilisation\n30 jours pour l'essayer, satisfaite ou remboursée",
+        "button_label": "Ajouter au panier",
+        "under": "Paiement sécurisé | Retours 30 jours",
+        "sticky": true,
+        "sticky_label": "Je la veux",
+        "sim_rating": "4,7",
+        "sim_count": "298"
+      }
+    },
+    "steps": {
+      "type": "vp-steps",
+      "settings": {
+        "bg": "blush",
+        "kicker": "Simple comme bonjour",
+        "title": "Ton rituel <em>en 3 gestes</em>"
       },
       "blocks": {
-        "p1": {
-          "type": "point",
+        "s1": {
+          "type": "step",
           "settings": {
-            "text": "Chaleur en quelques secondes : 50, 55 ou 60 °C"
+            "title": "Attache-la",
+            "text": "Sur le ventre ou le bas du dos, par-dessus un vêtement fin."
           }
         },
-        "p2": {
-          "type": "point",
+        "s2": {
+          "type": "step",
           "settings": {
-            "text": "4 modes de massage par vibration"
+            "title": "Choisis ta chaleur",
+            "text": "50, 55 ou 60 °C, et un des 4 massages si tu en as envie."
           }
         },
-        "p3": {
-          "type": "point",
+        "s3": {
+          "type": "step",
           "settings": {
-            "text": "Sans fil, légère (142 g) et discrète"
-          }
-        },
-        "p4": {
-          "type": "point",
-          "settings": {
-            "text": "30 jours satisfaite ou remboursée"
+            "title": "Laisse-toi aller",
+            "text": "30 minutes de douceur. Elle s'éteint toute seule."
           }
         }
       },
       "block_order": [
-        "p1",
-        "p2",
-        "p3",
-        "p4"
+        "s1",
+        "s2",
+        "s3"
+      ]
+    },
+    "rows": {
+      "type": "vp-rows",
+      "settings": {
+        "bg": "cream",
+        "kicker": "Pensée pour ces jours-là",
+        "title": "Pourquoi elles <em>l'adorent</em>"
+      },
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/velea-hero-cocon.webp",
+            "contain": false,
+            "tag": "Prête en 5 secondes",
+            "title": "Une chaleur douce, presque instantanée",
+            "text": "Tu allumes, et une chaleur enveloppante se diffuse sur ton bas du ventre. Elle aide tes muscles à se relâcher.",
+            "points": "3 niveaux : 50, 55 ou 60 °C\nUne grande surface chauffante"
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/velea-ceinture-clean.png",
+            "contain": true,
+            "tag": "4 modes",
+            "title": "Un massage qui détend, en plus de la chaleur",
+            "text": "4 rythmes de vibration, seuls ou avec la chaleur, sur le ventre ou dans le bas du dos.",
+            "points": "Chaleur et massage en même temps\nVentre ou bas du dos"
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "contain": false,
+            "tag": "Sans fil",
+            "title": "Elle te suit partout, sans que personne ne la voie",
+            "text": "142 g, sans fil, rechargeable en USB : tu la glisses sous un pull et tu continues ta journée.",
+            "points": "Batterie 1800 mAh, environ 2 h\nArrêt automatique après 30 minutes"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
       ]
     },
     "reviews": {
-      "type": "vl-reviews",
+      "type": "vp-reviews",
       "settings": {
+        "title": "Ce qu'en disent <em>nos clientes</em>",
         "simulate": true,
         "sim_rating": "4,7",
-        "sim_count": "298",
-        "speed": 60,
-        "anchor": "avis",
-        "title": "Ce qu'en disent nos clientes",
-        "color_scheme": "scheme-2",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "sim_count": "298"
       },
       "blocks": {
-        "photo1": {
+        "ph1": {
           "type": "photo",
-          "settings": {
-            "caption": ""
-          }
+          "settings": {}
         },
-        "photo2": {
+        "ph2": {
           "type": "photo",
-          "settings": {
-            "caption": ""
-          }
+          "settings": {}
         }
       },
       "block_order": [
-        "photo1",
-        "photo2"
+        "ph1",
+        "ph2"
       ]
     },
-    "faq": {
-      "type": "vl-faq",
+    "guarantee": {
+      "type": "vp-guarantee",
       "settings": {
-        "anchor": "faq",
-        "eyebrow": "Tes questions",
-        "title": "Questions fréquentes",
-        "open_first": true,
-        "schema_markup": true,
-        "contact_text": "Une autre question ?",
-        "contact_label": "Écris-nous",
-        "contact_link": "shopify://pages/contact",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "days": "30",
+        "title": "Essaie-la. <em>Adopte-la.</em>",
+        "text": "Si elle ne te convient pas, tu as 30 jours pour la renvoyer. On te rembourse.",
+        "button_label": "Je l'essaie sans risque"
+      }
+    },
+    "faq": {
+      "type": "vp-faq",
+      "settings": {
+        "title": "Tes <em>questions</em>"
       },
       "blocks": {
         "question_1": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Combien de temps dois-je la porter ?",
-            "answer": "<p>Compte <strong>30 minutes par séance</strong>, puis fais une pause. Tu peux recommencer 2 à 3 fois dans la journée. De toute façon, elle s'éteint toute seule au bout de 30 minutes.</p>"
+            "q": "Combien de temps dois-je la porter ?",
+            "a": "<p>Compte <strong>30 minutes par séance</strong>, puis fais une pause. Tu peux recommencer 2 à 3 fois dans la journée. De toute façon, elle s'éteint toute seule au bout de 30 minutes.</p>"
           }
         },
         "question_2": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Est-ce que ça marche vraiment ?",
-            "answer": "<p>La chaleur est l'un des gestes les plus utilisés pour apaiser la sensation de crampes : elle aide les muscles du ventre à se détendre. Le massage par vibration complète cette sensation de relâchement. Chaque corps est différent : c'est pour ça que tu as 30 jours pour l'essayer.</p>"
+            "q": "Est-ce que ça marche vraiment ?",
+            "a": "<p>La chaleur est l'un des gestes les plus utilisés pour apaiser la sensation de crampes : elle aide les muscles du ventre à se détendre. Le massage par vibration complète cette sensation de relâchement. Chaque corps est différent : c'est pour ça que tu as 30 jours pour l'essayer.</p>"
           }
         },
         "question_3": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Je peux la porter sous mes vêtements ?",
-            "answer": "<p>Oui. Elle est fine et sans fil : elle se glisse sous un pull, une chemise ou un sweat. Pour ton confort, porte-la par-dessus un vêtement fin plutôt que directement sur la peau.</p>"
+            "q": "Je peux la porter sous mes vêtements ?",
+            "a": "<p>Oui. Elle est fine et sans fil : elle se glisse sous un pull, une chemise ou un sweat. Pour ton confort, porte-la par-dessus un vêtement fin plutôt que directement sur la peau.</p>"
           }
         },
         "question_4": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Est-ce que ça chauffe trop ?",
-            "answer": "<p>Tu choisis entre 50, 55 et 60 °C, et elle s'éteint automatiquement au bout de 30 minutes. Commence par 50 °C, par-dessus un vêtement fin, et ne t'endors pas avec la ceinture allumée.</p>"
+            "q": "Est-ce que ça chauffe trop ?",
+            "a": "<p>Tu choisis entre 50, 55 et 60 °C, et elle s'éteint automatiquement au bout de 30 minutes. Commence par 50 °C, par-dessus un vêtement fin, et ne t'endors pas avec la ceinture allumée.</p>"
           }
         },
         "question_5": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Peut-on l'utiliser sur le bas du dos ?",
-            "answer": "<p>Oui : il suffit de tourner la ceinture pour placer le boîtier dans le bas du dos, là où les douleurs de règles se font souvent sentir aussi.</p>"
+            "q": "Peut-on l'utiliser sur le bas du dos ?",
+            "a": "<p>Oui : il suffit de tourner la ceinture pour placer le boîtier dans le bas du dos, là où les douleurs de règles se font souvent sentir aussi.</p>"
           }
         },
         "question_6": {
-          "type": "question",
+          "type": "q",
           "settings": {
-            "question": "Y a-t-il des contre-indications ?",
-            "answer": "<p>N'utilise pas la ceinture si tu es enceinte, si tu as une maladie cardiaque, une tumeur du col de l'utérus, une crise de goutte, ou une plaie ou une anomalie de la peau à cet endroit. En cas de doute, demande l'avis d'un professionnel de santé.</p><p>Si tes douleurs sont très intenses ou inhabituelles, consulte : la ceinture VELEA est un accessoire de bien-être, elle ne remplace pas un avis médical.</p>"
+            "q": "Y a-t-il des contre-indications ?",
+            "a": "<p>N'utilise pas la ceinture si tu es enceinte, si tu as une maladie cardiaque, une tumeur du col de l'utérus, une crise de goutte, ou une plaie ou une anomalie de la peau à cet endroit. En cas de doute, demande l'avis d'un professionnel de santé.</p><p>Si tes douleurs sont très intenses ou inhabituelles, consulte : la ceinture VELEA est un accessoire de bien-être, elle ne remplace pas un avis médical.</p>"
           }
         }
       },
@@ -279,154 +264,16 @@
         "question_5",
         "question_6"
       ]
-    },
-    "newsletter": {
-      "type": "vl-newsletter",
-      "settings": {
-        "eyebrow": "Rejoins le cocon",
-        "title": "-10 % sur ta <em>première commande</em>",
-        "text": "<p>Des conseils doux pour tes règles, nos nouveautés en avant-première, et ton code de bienvenue tout de suite.</p>",
-        "button_label": "Je m'inscris",
-        "code": "BIENVENUE10",
-        "color_scheme": "scheme-2",
-        "padding_top": 72,
-        "padding_bottom": 72
-      }
-    },
-    "anatomy": {
-      "type": "vl-anatomy",
-      "settings": {
-        "image": "shopify://shop_images/velea-ceinture-detail.png",
-        "eyebrow": "Simple comme bonjour",
-        "title": "Ta ceinture en un coup d'œil",
-        "text": "Pas de notice compliquée : tout se règle en un appui.",
-        "color_scheme": "scheme-3",
-        "padding_top": 80,
-        "padding_bottom": 64
-      },
-      "blocks": {
-        "a1": {
-          "type": "pin",
-          "settings": {
-            "title": "L'écran",
-            "text": "Tu vois d'un coup d'œil ta température et ton mode de massage.",
-            "x": 49,
-            "y": 68
-          }
-        },
-        "a2": {
-          "type": "pin",
-          "settings": {
-            "title": "3 boutons simples",
-            "text": "Marche/arrêt, chaleur et vibration : un appui suffit.",
-            "x": 47,
-            "y": 56
-          }
-        },
-        "a3": {
-          "type": "pin",
-          "settings": {
-            "title": "Recharge USB",
-            "text": "Branche-la comme ton téléphone. Voyant rouge pendant la charge, vert quand c'est prêt.",
-            "x": 61,
-            "y": 56
-          }
-        },
-        "a4": {
-          "type": "pin",
-          "settings": {
-            "title": "La sangle réglable",
-            "text": "Elle s'ajuste à ta taille et tient en place, sur le ventre ou le bas du dos.",
-            "x": 11,
-            "y": 45
-          }
-        },
-        "a5": {
-          "type": "pin",
-          "settings": {
-            "title": "Le coussin chauffant",
-            "text": "Une grande surface douce qui diffuse la chaleur sur tout le bas du ventre.",
-            "x": 28,
-            "y": 74
-          }
-        }
-      },
-      "block_order": [
-        "a1",
-        "a2",
-        "a3",
-        "a4",
-        "a5"
-      ]
-    },
-    "zigzag": {
-      "type": "vl-zigzag",
-      "settings": {
-        "eyebrow": "Comment elle t'aide",
-        "title": "Pensée pour ces jours-là",
-        "product": "ceinture-chauffante-regles",
-        "button_label": "Je veux ma ceinture",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
-      },
-      "blocks": {
-        "z1": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/velea-ceinture-detail.png",
-            "badge": "Prête en 5 secondes",
-            "title": "Une chaleur douce, presque instantanée",
-            "text": "Plus besoin d'attendre que la bouilloire chauffe. Tu allumes, et en quelques secondes une chaleur enveloppante se diffuse sur ton bas du ventre. C'est elle qui aide tes muscles à se relâcher.",
-            "points": "3 niveaux : 50, 55 ou 60 °C\nTu commences doux, tu montes si besoin\nUne grande surface chauffante"
-          }
-        },
-        "z2": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/velea-hero-cocon.webp",
-            "badge": "4 modes",
-            "title": "Un massage qui détend, en plus de la chaleur",
-            "text": "Choisis parmi 4 rythmes de vibration, seuls ou avec la chaleur. Le massage complète la sensation de détente sur le ventre ou dans le bas du dos.",
-            "points": "4 modes de vibration (M1 à M4)\nChaleur et massage en même temps\nVentre ou bas du dos"
-          }
-        },
-        "z3": {
-          "type": "row",
-          "settings": {
-            "badge": "Sans fil",
-            "title": "Elle te suit partout, sans que personne ne la voie",
-            "text": "Seulement 142 g et sans fil : tu la glisses sous un pull ou un sweat, et tu continues ta journée, au bureau, en cours ou dans les transports.",
-            "points": "Batterie 1800 mAh, environ 2 h d'utilisation\nRecharge USB, comme ton téléphone\nFine et silencieuse en mode chaleur"
-          }
-        },
-        "z4": {
-          "type": "row",
-          "settings": {
-            "badge": "Sécurité",
-            "title": "Pensée pour ta sécurité",
-            "text": "Elle s'éteint toute seule au bout de 30 minutes, et ne chauffe jamais pendant la charge. Tu peux te détendre sans surveiller l'heure.",
-            "points": "Arrêt automatique après 30 minutes\nNe fonctionne pas pendant la charge\n30 jours pour l'essayer, satisfaite ou remboursée"
-          }
-        }
-      },
-      "block_order": [
-        "z1",
-        "z2",
-        "z3",
-        "z4"
-      ]
     }
   },
   "order": [
-    "banner",
-    "needs",
-    "intro",
-    "feature",
-    "anatomy",
-    "zigzag",
+    "hero",
+    "usp",
+    "product",
+    "steps",
+    "rows",
     "reviews",
-    "faq",
-    "newsletter"
+    "guarantee",
+    "faq"
   ]
 }

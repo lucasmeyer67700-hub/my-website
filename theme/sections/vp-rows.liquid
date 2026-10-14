@@ -1,0 +1,37 @@
+<section class="vp vp-sec vp-bg-{{ section.settings.bg }}"><div class="vp-wrap">
+  <div class="vp-head">{%- if section.settings.kicker != blank %}<span class="vp-kicker">{{ section.settings.kicker | escape }}</span>{% endif -%}<h2 class="vp-h2">{{ section.settings.title }}</h2></div>
+  <div class="vp-rows">
+    {%- for block in section.blocks -%}
+      <article class="vp-row" {{ block.shopify_attributes }}>
+        <div class="vp-row__media{% if block.settings.contain %} vp-row__media--contain{% endif %}">
+          {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '500, 800, 1200', sizes: '(min-width: 990px) 45vw, 90vw', alt: block.settings.title }}{%- else -%}<span class="vp-placeholder">{% if request.design_mode %}Ajoute une photo{% endif %}</span>{%- endif -%}
+          {%- if block.settings.tag != blank %}<span class="vp-row__tag">{{ block.settings.tag | escape }}</span>{% endif -%}
+        </div>
+        <div>
+          <h3 class="vp-row__title">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.text != blank %}<p class="vp-row__text">{{ block.settings.text | escape }}</p>{% endif -%}
+          {%- if block.settings.points != blank -%}<ul class="vp-checks">{%- assign ls = block.settings.points | newline_to_br | split: '<br />' -%}{%- for l in ls -%}{%- assign t = l | strip -%}{%- if t != blank -%}<li>{{ t | escape }}</li>{%- endif -%}{%- endfor -%}</ul>{%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</div></section>
+{% schema %}
+{
+  "name": "VELEA+ · Photos et textes",
+  "tag": "div",
+  "settings": [
+    { "type": "select", "id": "bg", "label": "Fond", "default": "cream", "options": [{ "value": "cream", "label": "Crème" }, { "value": "blush", "label": "Rose" }, { "value": "white", "label": "Blanc" }] },
+    { "type": "text", "id": "kicker", "label": "Petit titre", "default": "Pensée pour ces jours-là" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Pourquoi elles <em>l'adorent</em>" }
+  ],
+  "blocks": [{ "type": "row", "name": "Ligne", "limit": 6, "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "checkbox", "id": "contain", "label": "Photo détourée (produit seul)", "default": false },
+    { "type": "text", "id": "tag", "label": "Étiquette sur la photo" },
+    { "type": "text", "id": "title", "label": "Titre" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "textarea", "id": "points", "label": "Points clés (un par ligne)" } ] }],
+  "presets": [{ "name": "VELEA+ · Photos et textes" }]
+}
+{% endschema %}

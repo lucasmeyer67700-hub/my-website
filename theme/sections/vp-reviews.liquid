@@ -1,0 +1,57 @@
+{%- comment -%}
+  Avis : app d'avis ou blocs « Avis réel ». Simulation affichée UNIQUEMENT tant que le thème n'est pas publié.
+{%- endcomment -%}
+{%- liquid
+  assign apps = section.blocks | where: 'type', '@app'
+  assign real = section.blocks | where: 'type', 'review'
+  assign photos = section.blocks | where: 'type', 'photo'
+  assign sim = false
+  if section.settings.simulate and real.size == 0 and apps.size == 0 and theme.role != 'main'
+    assign sim = true
+  endif
+-%}
+{%- if sim or real.size > 0 or apps.size > 0 -%}
+<section class="vp vp-sec vp-bg-blush" id="avis"><div class="vp-wrap">
+  <div class="vp-head"><h2 class="vp-h2">{{ section.settings.title }}</h2>
+    {%- if sim %}<div class="vp-score"><span class="vp-score__big">{{ section.settings.sim_rating }}</span><span class="vp-stars">★★★★★</span><small>Basé sur {{ section.settings.sim_count }} avis</small></div>{% endif -%}
+  </div>
+  {%- for b in apps -%}{% render b %}{%- endfor -%}
+  <ul class="vp-reviews">
+    {%- if sim -%}
+      {%- capture demo -%}Camille|Enfin un truc qui me permet de bosser pendant mes règles. Je la mets sous mon pull au bureau et personne ne voit rien.|5~Sarah|La chaleur est douce, je reste à 50 °C et ça me suffit. Le massage est un vrai plus le soir.|5~Inès|Livraison un peu longue mais le produit est top. Je ne ressors plus la bouillotte.|4~Julie|Je l'ai offerte à ma sœur, elle en a recommandé une pour sa fille.|5~Manon|Discrète, rechargeable, elle tient bien en place. Mon rituel du soir avec une tisane.|5~Léa|Très agréable sur le bas du dos aussi, je ne m'y attendais pas.|5~Chloé|Elle chauffe vraiment en quelques secondes. Je l'emmène partout.|5~Emma|Simple à utiliser, trois boutons et c'est parti. Je la conseille.|4~Nora|Je la porte en cours, elle est fine sous un sweat.|5~Lucie|Le meilleur achat de l'année pour mes règles. Merci VELEA !|5{%- endcapture -%}
+      {%- assign items = demo | split: '~' -%}
+      {%- for it in items -%}{%- assign f = it | split: '|' -%}
+        <li class="vp-review"><span class="vp-stars">{% if f[2] == '5' %}★★★★★{% else %}★★★★☆{% endif %}</span><p class="vp-review__text">{{ f[1] }}</p><p class="vp-review__who">{{ f[0] }}</p></li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for b in real -%}
+        <li class="vp-review" {{ b.shopify_attributes }}><span class="vp-stars">{% for i in (1..5) %}{% if i <= b.settings.rating %}★{% else %}☆{% endif %}{% endfor %}</span><p class="vp-review__text">{{ b.settings.text | escape }}</p><p class="vp-review__who">{{ b.settings.author | escape }}{% if b.settings.detail != blank %} <span>{{ b.settings.detail | escape }}</span>{% endif %}</p></li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+  <p class="vp-swipe">Fais glisser →</p>
+  <div class="vp-photos">
+    {%- for n in (1..2) -%}{%- assign pb = photos[forloop.index0] -%}
+      <figure {% if pb %}{{ pb.shopify_attributes }}{% endif %}>{%- if pb.settings.image != blank -%}{{ pb.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 800', sizes: '(min-width: 990px) 40rem, 45vw', alt: 'Cliente VELEA' }}{%- else -%}<span class="vp-placeholder">Photo cliente {{ n }}</span>{%- endif -%}</figure>
+    {%- endfor -%}
+  </div>
+</div></section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "VELEA+ · Avis",
+  "tag": "div",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Ce qu'en disent <em>nos clientes</em>" },
+    { "type": "checkbox", "id": "simulate", "label": "Simulation (thème non publié uniquement)", "default": true, "info": "Disparaît automatiquement quand le thème est publié : de faux avis en ligne sont interdits." },
+    { "type": "text", "id": "sim_rating", "label": "Note simulée", "default": "4,7" },
+    { "type": "text", "id": "sim_count", "label": "Nombre d'avis simulé", "default": "298" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "review", "name": "Avis réel", "settings": [{ "type": "text", "id": "author", "label": "Prénom" }, { "type": "text", "id": "detail", "label": "Détail" }, { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 }, { "type": "textarea", "id": "text", "label": "Avis" }] },
+    { "type": "photo", "name": "Photo cliente", "limit": 2, "settings": [{ "type": "image_picker", "id": "image", "label": "Photo (avec accord)" }] }
+  ],
+  "presets": [{ "name": "VELEA+ · Avis" }]
+}
+{% endschema %}

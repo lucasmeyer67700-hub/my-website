@@ -1,0 +1,18 @@
+<section class="vp vp-sec vp-bg-cream" id="faq"><div class="vp-wrap">
+  <div class="vp-head"><h2 class="vp-h2">{{ section.settings.title }}</h2></div>
+  <div class="vp-faq">
+    {%- for block in section.blocks -%}
+      <details {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}><summary>{{ block.settings.q | escape }}</summary><div class="vp-faq__answer">{{ block.settings.a }}</div></details>
+    {%- endfor -%}
+  </div>
+</div></section>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{%- for block in section.blocks -%}{"@type":"Question","name":{{ block.settings.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ block.settings.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}</script>
+{% schema %}
+{
+  "name": "VELEA+ · FAQ",
+  "tag": "div",
+  "settings": [{ "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Tes <em>questions</em>" }],
+  "blocks": [{ "type": "q", "name": "Question", "settings": [{ "type": "text", "id": "q", "label": "Question" }, { "type": "richtext", "id": "a", "label": "Réponse" }] }],
+  "presets": [{ "name": "VELEA+ · FAQ" }]
+}
+{% endschema %}
