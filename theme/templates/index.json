@@ -15,15 +15,13 @@
     "hero": {
       "type": "vp-hero",
       "settings": {
-        "image": "shopify://shop_images/velea-hero-cocon.webp",
-        "focal": "center center",
-        "focal_mobile": "42% center",
+        "image": "shopify://shop_images/velea-ceinture-clean.png",
         "product": "ceinture-chauffante-regles",
-        "title": "Tes règles ne devraient pas <em>te clouer au lit.</em>",
-        "text": "La ceinture chauffante et massante qui t'enveloppe de chaleur en quelques secondes. Sans fil, discrète, partout avec toi.",
-        "button_label": "Je découvre la ceinture",
+        "title": "Tes règles, sans rester au lit.",
+        "text": "Une ceinture chauffante et massante qui chauffe en 5 secondes. Sans fil, tu la gardes sous ton pull toute la journée.",
+        "button_label": "Découvrir la ceinture",
         "show_price": true,
-        "ticks": "Livraison offerte | Satisfaite ou remboursée 30 j",
+        "ticks": "Livraison offerte | 30 jours pour l'essayer, remboursée si elle ne te convient pas",
         "sim_rating": "4,7",
         "sim_count": "298"
       }
@@ -31,15 +29,15 @@
     "usp": {
       "type": "vp-usp",
       "settings": {
-        "bg": "cream",
-        "pad": 40
+        "bg": "white",
+        "pad": 48
       },
       "blocks": {
         "u1": {
           "type": "item",
           "settings": {
             "icon": "heat",
-            "title": "Prête en 5 secondes",
+            "title": "Chaude en 5 secondes",
             "text": "50, 55 ou 60 °C"
           }
         },
@@ -47,8 +45,8 @@
           "type": "item",
           "settings": {
             "icon": "massage",
-            "title": "4 modes de massage",
-            "text": "Seuls ou avec la chaleur"
+            "title": "4 massages",
+            "text": "Avec ou sans la chaleur"
           }
         },
         "u3": {
@@ -56,15 +54,15 @@
           "settings": {
             "icon": "battery",
             "title": "Sans fil, 142 g",
-            "text": "Discrète sous un pull"
+            "text": "Invisible sous un pull"
           }
         },
         "u4": {
           "type": "item",
           "settings": {
             "icon": "shield",
-            "title": "Arrêt auto 30 min",
-            "text": "Tu te détends sereine"
+            "title": "S'éteint seule",
+            "text": "Au bout de 30 minutes"
           }
         }
       },
@@ -84,23 +82,23 @@
         "title": "Ceinture chauffante Cocon",
         "price_note": "TTC · livraison offerte",
         "points": "Chaleur douce réglable : 50, 55 ou 60 °C\nMassage par vibration, 4 modes\nBatterie 1800 mAh, environ 2 h d'utilisation\n30 jours pour l'essayer, satisfaite ou remboursée",
-        "button_label": "Je la veux",
+        "button_label": "Ajouter au panier",
         "under": "",
         "sticky": true,
         "sticky_label": "Je la veux",
         "sim_rating": "4,7",
         "sim_count": "298",
         "heading": "Reprends le contrôle de tes règles",
-        "note_tag": "PACK",
-        "note": "Ceinture + 10 patchs + pochette dans le Pack Cocon"
+        "note_tag": "Pack",
+        "note": "Ceinture, 10 patchs et pochette dans le Pack Cocon"
       }
     },
     "steps": {
       "type": "vp-steps",
       "settings": {
         "bg": "blush",
-        "kicker": "Simple comme bonjour",
-        "title": "Ton rituel <em>en 3 gestes</em>"
+        "kicker": "",
+        "title": "Ton rituel en 3 gestes"
       },
       "blocks": {
         "s1": {
@@ -134,9 +132,9 @@
     "rows": {
       "type": "vp-rows",
       "settings": {
-        "bg": "cream",
-        "kicker": "Pensée pour ces jours-là",
-        "title": "Pourquoi elles <em>l'adorent</em>"
+        "bg": "white",
+        "kicker": "",
+        "title": "Pourquoi elles l'adorent"
       },
       "blocks": {
         "r1": {
@@ -181,7 +179,7 @@
     "reviews": {
       "type": "vp-reviews",
       "settings": {
-        "title": "Ce qu'en disent <em>nos clientes</em>",
+        "title": "Ce qu'en disent nos clientes",
         "simulate": true,
         "sim_rating": "4,7",
         "sim_count": "298"
@@ -205,15 +203,15 @@
       "type": "vp-guarantee",
       "settings": {
         "days": "30",
-        "title": "Essaie-la. <em>Adopte-la.</em>",
-        "text": "Si elle ne te convient pas, tu as 30 jours pour la renvoyer. On te rembourse.",
-        "button_label": "Je l'essaie sans risque"
+        "title": "30 jours pour l'adopter.",
+        "text": "Si elle ne te convient pas, renvoie-la dans les 30 jours. On te rembourse.",
+        "button_label": "Essayer la ceinture"
       }
     },
     "faq": {
       "type": "vp-faq",
       "settings": {
-        "title": "Tes <em>questions</em>"
+        "title": "Tes questions"
       },
       "blocks": {
         "question_1": {
@@ -267,10 +265,19 @@
         "question_5",
         "question_6"
       ]
+    },
+    "photo": {
+      "type": "vp-photo",
+      "settings": {
+        "image": "shopify://shop_images/velea-hero-cocon.webp",
+        "focal": "42% center",
+        "caption": "Le réconfort d'une bouillotte, sans attendre qu'elle chauffe."
+      }
     }
   },
   "order": [
     "hero",
+    "photo",
     "usp",
     "product",
     "steps",

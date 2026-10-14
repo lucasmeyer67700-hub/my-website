@@ -4,7 +4,7 @@
 {%- endcomment -%}
 {%- if product.metafields.reviews.rating_count.value > 0 -%}
   {%- assign r = product.metafields.reviews.rating.value -%}
-  <p class="{{ class }}"><span class="vp-stars">★★★★★</span> {{ r.rating | round: 1 }}/5 · {{ product.metafields.reviews.rating_count.value }} avis</p>
+  <p class="{{ class }}"><span class="vp-stars">★★★★★</span> {{ r.rating | round: 1 }} sur 5, d'après {{ product.metafields.reviews.rating_count.value }} avis</p>
 {%- elsif sim_rating != blank and theme.role != 'main' -%}
-  <p class="{{ class }}"><span class="vp-stars">★★★★★</span> {{ sim_rating }}/5 · {{ sim_count }} avis</p>
+  <p class="{{ class }}"><span class="vp-stars">★★★★★</span> {{ sim_rating }} sur 5, d'après {{ sim_count }} avis</p>
 {%- endif -%}

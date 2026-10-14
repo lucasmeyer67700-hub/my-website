@@ -1,9 +1,8 @@
 <section class="vp vp-sec vp-bg-{{ section.settings.bg }}"><div class="vp-wrap">
   <div class="vp-head">{%- if section.settings.kicker != blank %}<span class="vp-kicker">{{ section.settings.kicker | escape }}</span>{% endif -%}<h2 class="vp-h2">{{ section.settings.title }}</h2></div>
-  <ul class="vp-steps">
-    {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span class="vp-steps__num">{{ forloop.index | prepend: '0' }}</span><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.text | escape }}</span></li>{%- endfor -%}
-  </ul>
-  {%- if section.blocks.size > 1 %}<p class="vp-swipe">Fais glisser →</p>{% endif -%}
+  <ol class="vp-steps">
+    {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span class="vp-steps__num">{{ forloop.index }}</span><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.text | escape }}</span></li>{%- endfor -%}
+  </ol>
 </div></section>
 {% schema %}
 {

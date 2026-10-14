@@ -21,7 +21,7 @@
     </ul>
     {%- form 'product', p, class: 'vp-product__form' -%}
       <input type="hidden" name="id" value="{{ v.id }}">
-      <button type="submit" class="vp-btn vp-btn--dark"{% unless v.available %} disabled{% endunless %}>{% if v.available %}<strong>{{ section.settings.button_label | escape }}</strong> <span class="vp-btn__sep">–</span> <em class="vp-btn__price">{{ v.price | money }}</em>{% else %}Bientôt de retour{% endif %}</button>
+      <button type="submit" class="vp-btn vp-btn--dark"{% unless v.available %} disabled{% endunless %}>{% if v.available %}{{ section.settings.button_label | escape }}, {{ v.price | money }}{% else %}Bientôt de retour{% endif %}</button>
     {%- endform -%}
     {%- if section.settings.note != blank %}<p class="vp-note">{% if section.settings.note_tag != blank %}<span>{{ section.settings.note_tag | escape }}</span>{% endif %}{{ section.settings.note | escape }}</p>{% endif -%}
     {%- if section.settings.under != blank %}<ul class="vp-ticks" style="justify-content:flex-start">{%- assign ls = section.settings.under | split: '|' -%}{%- for t in ls -%}<li>{{ t | strip | escape }}</li>{%- endfor -%}</ul>{%- endif -%}

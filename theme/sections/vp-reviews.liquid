@@ -13,7 +13,7 @@
 {%- if sim or real.size > 0 or apps.size > 0 -%}
 <section class="vp vp-sec vp-bg-blush" id="avis"><div class="vp-wrap">
   <div class="vp-head"><h2 class="vp-h2">{{ section.settings.title }}</h2>
-    {%- if sim %}<div class="vp-score"><span class="vp-score__big">{{ section.settings.sim_rating }}</span><span class="vp-stars">★★★★★</span><small>Basé sur {{ section.settings.sim_count }} avis</small></div>{% endif -%}
+    {%- if sim %}<p class="vp-score"><span class="vp-score__big">{{ section.settings.sim_rating }}</span><span class="vp-stars">★★★★★</span> d'après {{ section.settings.sim_count }} avis</p>{% endif -%}
   </div>
   {%- for b in apps -%}{% render b %}{%- endfor -%}
   <ul class="vp-reviews">
@@ -29,7 +29,7 @@
       {%- endfor -%}
     {%- endif -%}
   </ul>
-  <p class="vp-swipe">Fais glisser →</p>
+  
   <div class="vp-photos">
     {%- for n in (1..2) -%}{%- assign pb = photos[forloop.index0] -%}
       <figure {% if pb %}{{ pb.shopify_attributes }}{% endif %}>{%- if pb.settings.image != blank -%}{{ pb.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 800', sizes: '(min-width: 990px) 40rem, 45vw', alt: 'Cliente VELEA' }}{%- else -%}<span class="vp-placeholder">Photo cliente {{ n }}</span>{%- endif -%}</figure>

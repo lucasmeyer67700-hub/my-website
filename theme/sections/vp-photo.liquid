@@ -1,0 +1,17 @@
+{%- assign fp = 'object-position: ' | append: section.settings.focal -%}
+<figure class="vp vp-photo">
+  {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '600, 900, 1400, 2000, 2400', sizes: '100vw', alt: section.settings.image.alt | default: '', style: fp }}{%- endif -%}
+  {%- if section.settings.caption != blank %}<figcaption>{{ section.settings.caption | escape }}</figcaption>{% endif -%}
+</figure>
+{% schema %}
+{
+  "name": "VELEA+ · Photo pleine page",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "focal", "label": "Cadrage", "default": "42% center" },
+    { "type": "text", "id": "caption", "label": "Phrase", "default": "Le réconfort d'une bouillotte, sans attendre qu'elle chauffe." }
+  ],
+  "presets": [{ "name": "VELEA+ · Photo pleine page" }]
+}
+{% endschema %}
