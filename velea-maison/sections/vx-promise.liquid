@@ -1,0 +1,51 @@
+{%- render 'vx-space' -%}
+<section class="vx-promise color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width vx-space-{{ section.id }}">
+    {%- if section.settings.title != blank -%}<h2 class="vx-h2 vx-center">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <ul class="vx-promise__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="vx-promise__item" {{ block.shopify_attributes }}>
+          {%- render 'vx-icon', icon: block.settings.icon -%}
+          <h3 class="vx-promise__title">{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.text | escape }}</p>
+          {%- if block.settings.link != blank and block.settings.link_label != blank -%}
+            <a class="vx-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Engagements",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 96 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Engagement",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "truck",
+          "options": [
+            { "value": "truck", "label": "Livraison" }, { "value": "return", "label": "Retour" },
+            { "value": "lock", "label": "Paiement" }, { "value": "chat", "label": "Contact" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+        { "type": "text", "id": "text", "label": "Texte" },
+        { "type": "text", "id": "link_label", "label": "Texte du lien" },
+        { "type": "url", "id": "link", "label": "Lien" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Engagements", "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }] }]
+}
+{% endschema %}

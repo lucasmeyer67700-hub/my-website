@@ -1,0 +1,51 @@
+{%- if product -%}
+  <div class="vx-sticky" data-vx-sticky hidden>
+    <div class="vx-sticky__inner page-width">
+      <p class="vx-sticky__info">
+        <strong>{{ product.title | escape }}</strong>
+        <span data-vx-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+      </p>
+      <button type="button" class="vx-btn vx-sticky__btn" data-vx-sticky-btn>{{ section.settings.button_label | escape }}</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var bar = document.querySelector('[data-vx-sticky]');
+      var target = document.querySelector('[data-vx-submit]');
+      if (!bar || !target || bar.dataset.ready) return;
+      bar.dataset.ready = '1';
+      var price = bar.querySelector('[data-vx-sticky-price]');
+      var footer = document.querySelector('.footer');
+      var ticking = false;
+      function update() {
+        var past = target.getBoundingClientRect().bottom < 0;
+        var atFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
+        bar.hidden = !(past && !atFooter);
+      }
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { ticking = false; update(); });
+      }, { passive: true });
+      update();
+      document.addEventListener('vx:price', function (e) { price.textContent = e.detail.text; });
+      bar.querySelector('[data-vx-sticky-btn]').addEventListener('click', function () {
+        var buy = document.querySelector('[data-vx-buy]');
+        buy.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        var first = buy.querySelector('.vx-offer__input:checked') || target;
+        first.focus({ preventScroll: true });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Barre d'achat",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Choisir mon offre" }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

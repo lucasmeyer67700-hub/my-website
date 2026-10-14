@@ -1,0 +1,9 @@
+{%- doc -%}
+  Logo VELEA (emblème + nom) affiché dans l'en-tête quand aucun logo image n'est choisi.
+
+  @param {string} [uid] - Identifiant unique pour le dégradé de l'emblème.
+{%- enddoc -%}
+<span class="vx-logo">
+  {%- render 'vx-mark', uid: uid -%}
+  <span class="vx-logo__name">{{ shop.name | default: 'Velea' }}</span>
+</span>

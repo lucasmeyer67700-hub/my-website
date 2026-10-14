@@ -1,0 +1,298 @@
+{%- render 'vx-space' -%}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- liquid
+  assign p = product | default: section.settings.product
+  assign variant = p.selected_or_first_available_variant
+  assign offers = section.blocks | where: 'type', 'offer'
+  assign tabs = section.blocks | where: 'type', 'tab'
+  assign default_qty = 1
+  for o in offers
+    if o.settings.selected
+      assign default_qty = o.settings.quantity
+    endif
+  endfor
+  assign form_id = 'vx-form-' | append: section.id
+  if template.name == 'product'
+    assign title_tag = 'h1'
+  else
+    assign title_tag = 'h2'
+  endif
+-%}
+{%- if p != blank -%}
+<section class="vx-buy color-{{ section.settings.color_scheme }} gradient" id="vx-buy-{{ section.id }}" data-vx-buy>
+  <div class="page-width vx-space-{{ section.id }}">
+    <div class="vx-buy__grid">
+
+      <div class="vx-gallery">
+        <div class="vx-gallery__stage">
+          {%- assign shown = 0 -%}
+          {%- for media in p.media -%}
+            {%- if media.media_type == 'image' -%}
+              {%- assign media_alt = media.alt | default: p.title -%}
+              <figure class="vx-gallery__slide{% if shown == 0 %} is-active{% endif %}" data-index="{{ shown }}">
+                {%- if shown == 0 -%}
+                  {{ media | image_url: width: 1600 | image_tag: loading: 'eager', sizes: '(min-width: 990px) 52vw, 100vw', widths: '500, 800, 1200, 1600', alt: media_alt }}
+                {%- else -%}
+                  {{ media | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 52vw, 100vw', widths: '500, 800, 1200, 1600', alt: media_alt }}
+                {%- endif -%}
+              </figure>
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if shown == 0 -%}
+            <figure class="vx-gallery__slide is-active">{{ 'product-1' | placeholder_svg_tag: 'vx-placeholder' }}</figure>
+          {%- endif -%}
+        </div>
+        {%- if shown > 1 -%}
+          <ul class="vx-gallery__thumbs" role="list">
+            {%- assign i = 0 -%}
+            {%- for media in p.media -%}
+              {%- if media.media_type == 'image' -%}
+                <li>
+                  <button type="button" class="vx-gallery__thumb" data-go="{{ i }}" aria-label="Afficher l'image {{ i | plus: 1 }} sur {{ shown }}"{% if i == 0 %} aria-current="true"{% endif %}>
+                    {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                  </button>
+                </li>
+                {%- assign i = i | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <div class="vx-buy__info">
+        <{{ title_tag }} class="vx-buy__title">{{ p.title | escape }}</{{ title_tag }}>
+        {%- if section.settings.subtitle != blank -%}<p class="vx-buy__subtitle">{{ section.settings.subtitle | escape }}</p>{%- endif -%}
+
+        <p class="vx-buy__price" aria-live="polite">
+          <span class="vx-buy__now" data-now>{{ variant.price | times: default_qty | money }}</span>
+          <s class="vx-buy__was" data-was hidden></s>
+          <span class="vx-buy__save" data-save hidden></span>
+        </p>
+
+        {%- if section.settings.points != blank -%}
+          <ul class="vx-list" role="list">
+            {%- assign lines = section.settings.points | newline_to_br | split: '<br />' -%}
+            {%- for line in lines -%}
+              {%- assign l = line | strip -%}
+              {%- if l != blank -%}<li>{%- render 'vx-icon', icon: 'check' -%}{{ l | escape }}</li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <product-form class="vx-buy__form product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+          {%- form 'product', p, id: form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" data-variant>
+            <input type="hidden" name="quantity" value="{{ default_qty }}" data-qty>
+
+            {%- unless p.has_only_default_variant -%}
+              <div class="vx-field">
+                <label class="vx-field__label" for="vx-variant-{{ section.id }}">{{ p.options.first }}</label>
+                <div class="select">
+                  <select id="vx-variant-{{ section.id }}" class="select__select" data-variant-select>
+                    {%- for v in p.variants -%}
+                      <option value="{{ v.id }}" data-price="{{ v.price }}" {% if v.id == variant.id %}selected{% endif %}{% unless v.available %} disabled{% endunless %}>{{ v.title | escape }}{% unless v.available %} (épuisé){% endunless %}</option>
+                    {%- endfor -%}
+                  </select>
+                  <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                </div>
+              </div>
+            {%- endunless -%}
+
+            {%- if offers.size > 0 -%}
+              <fieldset class="vx-offers" data-unit="{{ variant.price }}">
+                <legend class="vx-offers__legend">{{ section.settings.offers_title | escape }}</legend>
+                {%- for o in offers -%}
+                  {%- liquid
+                    assign q = o.settings.quantity
+                    assign full = variant.price | times: q
+                    assign off = o.settings.discount | times: 100 | round
+                    assign total = full | minus: off
+                    assign oid = 'vx-offer-' | append: section.id | append: '-' | append: forloop.index
+                  -%}
+                  <div class="vx-offer" {{ o.shopify_attributes }}>
+                    <input class="vx-offer__input" type="radio" id="{{ oid }}" name="vx-offer-{{ section.id }}" value="{{ q }}" data-off="{{ off }}"{% if o.settings.selected %} checked{% endif %}>
+                    <label class="vx-offer__label" for="{{ oid }}">
+                      <span class="vx-offer__copy">
+                        <span class="vx-offer__title">{{ o.settings.title | escape }}</span>
+                        {%- if o.settings.subtitle != blank %}<span class="vx-offer__sub">{{ o.settings.subtitle | escape }}</span>{% endif -%}
+                      </span>
+                      <span class="vx-offer__price">
+                        <span data-total>{{ total | money }}</span>
+                        {%- if off > 0 %}<s data-full>{{ full | money }}</s>{% endif -%}
+                      </span>
+                      {%- if o.settings.badge != blank %}<span class="vx-offer__badge">{{ o.settings.badge | escape }}</span>{% endif -%}
+                    </label>
+                  </div>
+                {%- endfor -%}
+                {%- if section.settings.offers_note != blank %}<p class="vx-offers__note">{{ section.settings.offers_note | escape }}</p>{% endif -%}
+              </fieldset>
+            {%- endif -%}
+
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <span class="svg-wrapper">{{ 'icon-error.svg' | inline_asset_content }}</span>
+              <span class="product-form__error-message"></span>
+            </div>
+
+            <button type="submit" name="add" class="product-form__submit vx-btn vx-btn--full" data-vx-submit{% unless variant.available %} disabled{% endunless %}>
+              <span>{% if variant.available %}{{ section.settings.button_label | escape }}{% else %}Bientôt de retour{% endif %}</span>
+              {%- render 'loading-spinner' -%}
+            </button>
+            {%- if section.settings.show_dynamic_checkout -%}
+              <div class="vx-buy__express">{{ form | payment_button }}</div>
+            {%- endif -%}
+          {%- endform -%}
+        </product-form>
+
+        {%- if section.settings.show_delivery -%}
+          <p class="vx-eta" data-eta data-min="{{ section.settings.delivery_min }}" data-max="{{ section.settings.delivery_max }}">
+            {%- render 'vx-icon', icon: 'truck' -%}
+            <span>Livraison offerte, chez vous entre le <strong data-from>{{ section.settings.delivery_min }} jours</strong> et le <strong data-to>{{ section.settings.delivery_max }} jours ouvrés</strong></span>
+          </p>
+        {%- endif -%}
+
+        <ul class="vx-buy__assure" role="list">
+          <li>{%- render 'vx-icon', icon: 'return' -%}<span>{{ section.settings.assure_1 | escape }}</span></li>
+          <li>{%- render 'vx-icon', icon: 'lock' -%}<span>{{ section.settings.assure_2 | escape }}</span></li>
+          <li>{%- render 'vx-icon', icon: 'chat' -%}<span>{{ section.settings.assure_3 | escape }}</span></li>
+        </ul>
+
+        {%- if tabs.size > 0 or section.settings.show_description -%}
+          <div class="vx-tabs">
+            {%- if section.settings.show_description and p.description != blank -%}
+              <details class="vx-tab">
+                <summary class="vx-tab__summary"><span>{{ section.settings.description_title | escape }}</span>{%- render 'vx-icon', icon: 'plus' -%}</summary>
+                <div class="vx-tab__body rte">{{ p.description }}</div>
+              </details>
+            {%- endif -%}
+            {%- for t in tabs -%}
+              <details class="vx-tab" {{ t.shopify_attributes }}>
+                <summary class="vx-tab__summary"><span>{{ t.settings.title | escape }}</span>{%- render 'vx-icon', icon: 'plus' -%}</summary>
+                <div class="vx-tab__body rte">{{ t.settings.content }}</div>
+              </details>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if template.name == 'product' -%}
+  <script type="application/ld+json">{{ p | structured_data }}</script>
+{%- endif -%}
+
+<script>
+  (function () {
+    var root = document.getElementById('vx-buy-{{ section.id }}');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    var fmt = function (c) {
+      return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: {{ cart.currency.iso_code | json }} }).format(c / 100);
+    };
+
+    var slides = root.querySelectorAll('.vx-gallery__slide');
+    var thumbs = root.querySelectorAll('.vx-gallery__thumb');
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        slides.forEach(function (s) { s.classList.toggle('is-active', s.dataset.index === t.dataset.go); });
+        thumbs.forEach(function (x) { if (x === t) { x.setAttribute('aria-current', 'true'); } else { x.removeAttribute('aria-current'); } });
+      });
+    });
+
+    var fs = root.querySelector('.vx-offers');
+    var qty = root.querySelector('[data-qty]');
+    var idInput = root.querySelector('[data-variant]');
+    var select = root.querySelector('[data-variant-select]');
+    var unit = fs ? parseInt(fs.dataset.unit, 10) : {{ variant.price | default: 0 }};
+    var now = root.querySelector('[data-now]'), was = root.querySelector('[data-was]'), save = root.querySelector('[data-save]');
+
+    function refresh() {
+      var r = fs ? fs.querySelector('input:checked') : null;
+      var q = r ? parseInt(r.value, 10) : 1;
+      var off = r ? parseInt(r.dataset.off, 10) || 0 : 0;
+      qty.value = q;
+      now.textContent = fmt(unit * q - off);
+      if (off > 0) {
+        was.textContent = fmt(unit * q); was.hidden = false;
+        save.textContent = fmt(off) + ' économisés'; save.hidden = false;
+      } else { was.hidden = true; save.hidden = true; }
+      if (fs) fs.querySelectorAll('.vx-offer').forEach(function (o) {
+        var i = o.querySelector('input'), qq = parseInt(i.value, 10), d = parseInt(i.dataset.off, 10) || 0;
+        o.querySelector('[data-total]').textContent = fmt(unit * qq - d);
+        var f = o.querySelector('[data-full]'); if (f) f.textContent = fmt(unit * qq);
+      });
+      document.dispatchEvent(new CustomEvent('vx:price', { detail: { text: now.textContent } }));
+    }
+    if (fs) fs.addEventListener('change', refresh);
+    if (select) select.addEventListener('change', function () {
+      idInput.value = select.value;
+      unit = parseInt(select.options[select.selectedIndex].dataset.price, 10);
+      refresh();
+    });
+    refresh();
+
+    var eta = root.querySelector('[data-eta]');
+    if (eta) {
+      var add = function (d, n) { var r = new Date(d); while (n > 0) { r.setDate(r.getDate() + 1); var w = r.getDay(); if (w !== 0 && w !== 6) n--; } return r; };
+      var o = { weekday: 'long', day: 'numeric', month: 'long' };
+      eta.querySelector('[data-from]').textContent = add(new Date(), parseInt(eta.dataset.min, 10)).toLocaleDateString('fr-FR', o);
+      eta.querySelector('[data-to]').textContent = add(new Date(), parseInt(eta.dataset.max, 10)).toLocaleDateString('fr-FR', o);
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Achat",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit (hors page produit)" },
+    { "type": "text", "id": "subtitle", "label": "Sous-titre" },
+    { "type": "textarea", "id": "points", "label": "Points forts (un par ligne)" },
+    { "type": "header", "content": "Offres" },
+    { "type": "text", "id": "offers_title", "label": "Titre des offres", "default": "Votre commande" },
+    { "type": "text", "id": "offers_note", "label": "Note sous les offres", "info": "La remise affichée doit exister en remise automatique dans Shopify." },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Ajouter au panier" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Paiement express", "default": true },
+    { "type": "header", "content": "Livraison et confiance" },
+    { "type": "checkbox", "id": "show_delivery", "label": "Date de livraison estimée", "default": true },
+    { "type": "number", "id": "delivery_min", "label": "Délai minimum (jours ouvrés)", "default": 7 },
+    { "type": "number", "id": "delivery_max", "label": "Délai maximum (jours ouvrés)", "default": 14 },
+    { "type": "text", "id": "assure_1", "label": "Engagement 1", "default": "30 jours pour changer d'avis" },
+    { "type": "text", "id": "assure_2", "label": "Engagement 2", "default": "Paiement sécurisé" },
+    { "type": "text", "id": "assure_3", "label": "Engagement 3", "default": "Réponse sous 24 h" },
+    { "type": "header", "content": "Description" },
+    { "type": "checkbox", "id": "show_description", "label": "Afficher la description du produit", "default": true },
+    { "type": "text", "id": "description_title", "label": "Titre de la description", "default": "Description" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 96 }
+  ],
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offre",
+      "limit": 3,
+      "settings": [
+        { "type": "number", "id": "quantity", "label": "Quantité", "default": 1 },
+        { "type": "text", "id": "title", "label": "Titre", "default": "1 ceinture" },
+        { "type": "text", "id": "subtitle", "label": "Sous-titre" },
+        { "type": "text", "id": "badge", "label": "Badge" },
+        { "type": "number", "id": "discount", "label": "Remise affichée (€)", "default": 0 },
+        { "type": "checkbox", "id": "selected", "label": "Sélectionnée par défaut", "default": false }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Onglet",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Utilisation" },
+        { "type": "richtext", "id": "content", "label": "Contenu" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Achat", "blocks": [{ "type": "offer" }] }]
+}
+{% endschema %}

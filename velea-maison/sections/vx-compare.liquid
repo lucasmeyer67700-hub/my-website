@@ -1,0 +1,71 @@
+{%- render 'vx-space' -%}
+<section class="vx-compare color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width page-width--narrow vx-space-{{ section.id }}">
+    <h2 class="vx-h2 vx-center">{{ section.settings.title | escape }}</h2>
+    {%- if section.settings.text != blank -%}<p class="vx-lead vx-center">{{ section.settings.text | escape }}</p>{%- endif -%}
+    <div class="vx-compare__wrap">
+      <table class="vx-compare__table">
+        <caption class="visually-hidden">{{ section.settings.title | escape }}</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col" class="vx-compare__ours">{{ section.settings.col_1 | escape }}</th>
+            <th scope="col">{{ section.settings.col_2 | escape }}</th>
+            <th scope="col">{{ section.settings.col_3 | escape }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.label | escape }}</th>
+              {%- assign cells = block.settings.value_1 | append: '|' | append: block.settings.value_2 | append: '|' | append: block.settings.value_3 | split: '|' -%}
+              {%- for c in cells -%}
+                {%- assign v = c | strip | downcase -%}
+                <td{% if forloop.first %} class="vx-compare__ours"{% endif %}>
+                  {%- if v == 'oui' -%}
+                    <span class="vx-yes">{%- render 'vx-icon', icon: 'check' -%}<span class="visually-hidden">Oui</span></span>
+                  {%- elsif v == 'non' -%}
+                    <span class="vx-no" aria-hidden="true">–</span><span class="visually-hidden">Non</span>
+                  {%- else -%}
+                    {{ c | strip | escape }}
+                  {%- endif -%}
+                </td>
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Comparatif",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Et la bouillotte, alors ?" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "col_1", "label": "Colonne 1 (VELEA)", "default": "Ceinture VELEA" },
+    { "type": "text", "id": "col_2", "label": "Colonne 2", "default": "Bouillotte" },
+    { "type": "text", "id": "col_3", "label": "Colonne 3", "default": "Patch jetable" },
+    { "type": "paragraph", "content": "Écrivez « oui » ou « non » dans une case pour afficher une coche ou un tiret." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Critère", "default": "Chaleur réglable" },
+        { "type": "text", "id": "value_1", "label": "VELEA", "default": "oui" },
+        { "type": "text", "id": "value_2", "label": "Colonne 2", "default": "non" },
+        { "type": "text", "id": "value_3", "label": "Colonne 3", "default": "non" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Comparatif", "blocks": [{ "type": "row" }] }]
+}
+{% endschema %}

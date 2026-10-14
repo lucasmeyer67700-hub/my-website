@@ -1,0 +1,37 @@
+{%- render 'vx-space' -%}
+{%- liquid
+  assign p = section.settings.product
+  assign link = section.settings.button_link | default: p.url | default: routes.all_products_collection_url
+-%}
+<section class="vx-closing color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width vx-space-{{ section.id }}">
+    <div class="vx-closing__inner">
+      {%- render 'vx-mark', uid: section.id, class: 'vx-closing__mark' -%}
+      <h2 class="vx-closing__title">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank -%}<p class="vx-lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+      <a class="vx-btn vx-btn--light" href="{{ link }}">{{ section.settings.button_label | escape }}</a>
+      {%- if p != blank and section.settings.price_note != blank -%}
+        <p class="vx-closing__price">{{ p.price | money }} {{ section.settings.price_note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Dernier mot",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Votre prochain cycle peut être plus doux" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Choisir ma ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "text", "id": "price_note", "label": "Mention après le prix", "default": "avec livraison offerte" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-5" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 120 }
+  ],
+  "presets": [{ "name": "VELEA · Dernier mot" }]
+}
+{% endschema %}

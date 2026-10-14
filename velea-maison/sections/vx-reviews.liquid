@@ -1,0 +1,56 @@
+{%- comment -%}
+  Avis clientes : uniquement de vrais avis (Code de la consommation, art. L121-4).
+  La section n'apparaît pas en boutique tant qu'elle ne contient aucun avis.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
+  {%- render 'vx-space' -%}
+  <section class="vx-reviews color-{{ section.settings.color_scheme }} gradient" id="avis">
+    <div class="page-width vx-space-{{ section.id }}">
+      <h2 class="vx-h2 vx-center">{{ section.settings.title | escape }}</h2>
+      {%- if section.blocks.size == 0 -%}
+        <p class="vx-note vx-center">Ajoutez ici de vrais avis de clientes (blocs « Avis »). Cette section reste cachée en boutique tant qu'elle est vide.</p>
+      {%- else -%}
+        <ul class="vx-reviews__list" role="list">
+          {%- for block in section.blocks -%}
+            <li class="vx-review" {{ block.shopify_attributes }}>
+              <p class="vx-review__stars" role="img" aria-label="{{ block.settings.rating }} sur 5">
+                {%- for i in (1..5) -%}<span{% if i > block.settings.rating %} class="is-off"{% endif %} aria-hidden="true">★</span>{%- endfor -%}
+              </p>
+              <blockquote class="vx-review__text">{{ block.settings.text | escape }}</blockquote>
+              <p class="vx-review__by">{{ block.settings.author | escape }}{% if block.settings.detail != blank %}, {{ block.settings.detail | escape }}{% endif %}</p>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if section.settings.source != blank -%}<p class="vx-note vx-center">{{ section.settings.source | escape }}</p>{%- endif -%}
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Avis",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Uniquement des avis réels. La section est cachée tant qu'elle est vide." },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Elles l'ont adoptée" },
+    { "type": "textarea", "id": "source", "label": "Origine des avis" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        { "type": "text", "id": "author", "label": "Prénom" },
+        { "type": "text", "id": "detail", "label": "Ville ou date" },
+        { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Avis" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Avis" }]
+}
+{% endschema %}

@@ -1,0 +1,14 @@
+{%- doc -%}
+  Marges haute et basse d'une section, réduites d'un tiers sur téléphone.
+  Lit section.settings.padding_top et section.settings.padding_bottom.
+{%- enddoc -%}
+{%- style -%}
+  .vx-space-{{ section.id }} {
+    padding-block: {{ section.settings.padding_top | times: 0.66 | round }}px {{ section.settings.padding_bottom | times: 0.66 | round }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .vx-space-{{ section.id }} {
+      padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}

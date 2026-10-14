@@ -1,0 +1,55 @@
+{%- render 'vx-space' -%}
+<section class="vx-details color-{{ section.settings.color_scheme }} gradient" id="caracteristiques">
+  <div class="page-width vx-space-{{ section.id }}">
+    <div class="vx-details__grid">
+      <div class="vx-details__media">
+        {%- if section.settings.image != blank -%}
+          {%- assign details_alt = section.settings.image.alt | default: section.settings.title -%}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 46vw, 100vw', widths: '500, 800, 1100, 1400', alt: details_alt }}
+        {%- else -%}
+          {{ 'product-2' | placeholder_svg_tag: 'vx-placeholder' }}
+        {%- endif -%}
+      </div>
+      <div class="vx-details__copy">
+        <h2 class="vx-h2">{{ section.settings.title | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p class="vx-lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+        <dl class="vx-specs">
+          {%- for block in section.blocks -%}
+            <div class="vx-specs__row" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label | escape }}</dt>
+              <dd>{{ block.settings.value | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+        {%- if section.settings.note != blank -%}<p class="vx-note">{{ section.settings.note | escape }}</p>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Caractéristiques",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo du produit" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Dans le détail" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "textarea", "id": "note", "label": "Note" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-3" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Libellé", "default": "Poids" },
+        { "type": "text", "id": "value", "label": "Valeur", "default": "142 g" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Caractéristiques", "blocks": [{ "type": "row" }] }]
+}
+{% endschema %}

@@ -1,0 +1,61 @@
+{%- render 'vx-space' -%}
+<section class="vx-thermal color-{{ section.settings.color_scheme }} gradient" aria-labelledby="vx-thermal-{{ section.id }}">
+  <div class="page-width vx-space-{{ section.id }}">
+    <div class="vx-thermal__head">
+      <h2 class="vx-h2" id="vx-thermal-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank -%}<p class="vx-lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+    </div>
+    <div class="vx-thermal__scale" data-vx-reveal>
+      <span class="vx-thermal__bar" aria-hidden="true"></span>
+      <ol class="vx-thermal__levels" role="list">
+        {%- for block in section.blocks -%}
+          <li class="vx-thermal__level" {{ block.shopify_attributes }}>
+            <span class="vx-thermal__deg">{{ block.settings.degrees | escape }}<sup>°C</sup></span>
+            <span class="vx-thermal__name">{{ block.settings.name | escape }}</span>
+            <span class="vx-thermal__desc">{{ block.settings.text | escape }}</span>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+    {%- if section.settings.note != blank -%}<p class="vx-thermal__note">{{ section.settings.note | escape }}</p>{%- endif -%}
+  </div>
+</section>
+<script>
+  (function () {
+    var el = document.querySelector('#shopify-section-{{ section.id }} [data-vx-reveal]');
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { el.classList.add('is-in'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { el.classList.add('is-in'); io.disconnect(); }
+    }, { threshold: 0.4 });
+    io.observe(el);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "VELEA · Trois chaleurs",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Trois chaleurs, au choix" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "note", "label": "Note sous l'échelle" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "level",
+      "name": "Niveau",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "degrees", "label": "Température", "default": "50" },
+        { "type": "text", "id": "name", "label": "Nom", "default": "Douce" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Trois chaleurs", "blocks": [{ "type": "level" }, { "type": "level" }, { "type": "level" }] }]
+}
+{% endschema %}

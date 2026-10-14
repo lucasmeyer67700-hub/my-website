@@ -1,0 +1,59 @@
+{%- render 'vx-space' -%}
+<section class="vx-moments color-{{ section.settings.color_scheme }} gradient" id="utilisation">
+  <div class="page-width vx-space-{{ section.id }}">
+    <div class="vx-moments__grid">
+      <div class="vx-moments__media">
+        {%- if section.settings.image != blank -%}
+          {%- assign moments_alt = section.settings.image.alt | default: section.settings.title -%}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 44vw, 100vw', widths: '500, 800, 1100, 1400', alt: moments_alt }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'vx-placeholder' }}
+        {%- endif -%}
+      </div>
+      <div class="vx-moments__copy">
+        <h2 class="vx-h2">{{ section.settings.title | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p class="vx-lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+        <ol class="vx-timeline" role="list">
+          {%- for block in section.blocks -%}
+            <li class="vx-timeline__step" {{ block.shopify_attributes }}>
+              <span class="vx-timeline__time">{{ block.settings.time | escape }}</span>
+              <span class="vx-timeline__body">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {{ block.settings.text | escape }}
+              </span>
+            </li>
+          {%- endfor -%}
+        </ol>
+        {%- if section.settings.note != blank -%}<p class="vx-note">{{ section.settings.note | escape }}</p>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Une séance",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Une séance, du début à la fin" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "textarea", "id": "note", "label": "Note" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "settings": [
+        { "type": "text", "id": "time", "label": "Moment", "default": "0 s" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Vous l'attachez" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Une séance", "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }] }]
+}
+{% endschema %}

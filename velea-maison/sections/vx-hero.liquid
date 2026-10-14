@@ -1,0 +1,60 @@
+{%- render 'vx-space' -%}
+{%- liquid
+  assign p = section.settings.product
+  assign img = section.settings.image | default: p.featured_image
+  assign link = section.settings.button_link | default: p.url | default: routes.all_products_collection_url
+  assign focal = 'object-position: ' | append: section.settings.focal
+  assign hero_alt = img.alt | default: section.settings.title
+-%}
+<section class="vx-hero color-{{ section.settings.color_scheme }} gradient">
+  <div class="vx-hero__media">
+    {%- if img != blank -%}
+      {{ img | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 58vw, 100vw', widths: '600, 900, 1200, 1600, 2000', class: 'vx-hero__img', alt: hero_alt, style: focal }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'vx-hero__img vx-placeholder' }}
+    {%- endif -%}
+  </div>
+  <div class="vx-hero__copy vx-space-{{ section.id }}">
+    <h1 class="vx-hero__title">{{ section.settings.title | escape }}</h1>
+    {%- if section.settings.text != blank -%}
+      <p class="vx-hero__text">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+    <div class="vx-hero__buy">
+      <a class="vx-btn" href="{{ link }}">{{ section.settings.button_label | escape }}</a>
+      {%- if p != blank -%}
+        <p class="vx-hero__price">{{ p.price | money }}<span>{{ section.settings.price_note | escape }}</span></p>
+      {%- endif -%}
+    </div>
+    {%- if section.blocks.size > 0 -%}
+      <ul class="vx-hero__points" role="list">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}>{%- render 'vx-icon', icon: 'check' -%}{{ block.settings.text | escape }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Ouverture",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Sinon : photo principale du produit." },
+    { "type": "text", "id": "focal", "label": "Cadrage de la photo", "default": "center center", "info": "Exemple : 40% center" },
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Une chaleur douce pour vos jours de règles" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Choisir ma ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton", "info": "Vide : page du produit." },
+    { "type": "text", "id": "price_note", "label": "Mention après le prix", "default": "livraison offerte" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute du texte", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse du texte", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 96 }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Réassurance", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Livraison offerte en France" }] }
+  ],
+  "presets": [{ "name": "VELEA · Ouverture", "blocks": [{ "type": "point" }, { "type": "point" }] }]
+}
+{% endschema %}
