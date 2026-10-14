@@ -179,7 +179,7 @@ write("templates/index.json",
 BUY = section("vl-buybox", {
     "eyebrow": "Spécial douleurs de règles",
     "subtitle": "Chaleur douce + massage, sans fil. À porter 30 min à 1 h, 2 à 3 fois par jour.",
-    "media_badge": "Chaleur douce + massage",
+    "media_badge": "",
     "points": "Chaleur douce réglable sur 3 niveaux\nMassage par vibration, 3 modes\nSans fil, rechargeable en USB-C\nDiscrète sous les vêtements, sur le ventre ou le dos",
     "offers_title": "Choisissez votre offre",
     "offers_note": "La remise duo s'applique automatiquement dans le panier.",
@@ -236,7 +236,7 @@ write("templates/page.faq.json",
 
 # ---------------------------------------------------------------- Groupes en-tête / pied de page
 announce = section("vl-announce", {"interval": 4, "color_scheme": "scheme-5"}, "message", [
-    {"text": "Livraison offerte en France métropolitaine", "icon": "truck", "link": ""},
+    {"text": "Livraison offerte en France métropolitaine", "icon": "truck"},
     {"text": "30 jours satisfaite ou remboursée", "icon": "return", "link": "shopify://pages/livraison-et-retours"},
     {"text": "−10 € sur le duo : une pour vous, une à partager", "icon": "gift", "link": f"shopify://products/{HANDLE}"},
 ])
@@ -244,7 +244,7 @@ header = {"type": "header", "settings": {
     "color_scheme": "scheme-3", "menu_color_scheme": "scheme-3", "logo_position": "middle-left",
     "menu": "main-menu", "menu_type_desktop": "dropdown", "sticky_header_type": "on-scroll-up",
     "show_line_separator": False, "enable_country_selector": False, "enable_language_selector": False,
-    "mobile_logo_position": "center", "margin_bottom": 0, "padding_top": 14, "padding_bottom": 14}}
+    "mobile_logo_position": "center", "margin_bottom": 0, "padding_top": 12, "padding_bottom": 12}}
 with open(os.path.join(OUT, "sections/header-group.json"), "w") as f:
     f.write(HEADER + json.dumps({"name": "t:sections.header.name", "type": "header",
                                  "sections": {"announce": announce, "header": header},

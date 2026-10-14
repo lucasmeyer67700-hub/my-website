@@ -24,15 +24,21 @@
       var btn = bar.querySelector('[data-vl-sticky-btn]');
       var price = bar.querySelector('[data-vl-sticky-price]');
       var footer = document.querySelector('.footer');
-      var targetVisible = true, footerVisible = false;
+      var ticking = false;
       function update() {
-        var show = !targetVisible && !footerVisible && target.getBoundingClientRect().top < 0;
+        var pastButton = target.getBoundingClientRect().bottom < 0;
+        var atFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
+        var show = pastButton && !atFooter;
         bar.classList.toggle('is-visible', show);
         bar.setAttribute('aria-hidden', show ? 'false' : 'true');
         btn.tabIndex = show ? 0 : -1;
       }
-      new IntersectionObserver(function (e) { targetVisible = e[0].isIntersecting; update(); }).observe(target);
-      if (footer) new IntersectionObserver(function (e) { footerVisible = e[0].isIntersecting; update(); }).observe(footer);
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { ticking = false; update(); });
+      }, { passive: true });
+      update();
       document.addEventListener('vl:price', function (e) { price.textContent = e.detail.text; });
       btn.addEventListener('click', function () {
         document.getElementById('vl-buy').scrollIntoView({ behavior: 'smooth', block: 'start' });

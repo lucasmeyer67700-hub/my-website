@@ -342,6 +342,14 @@ thead .vl-versus__ours { border-radius: var(--vl-radius) var(--vl-radius) 0 0; }
 .vl-yes { background: var(--vl-berry); color: var(--vl-white); }
 .vl-no { background: var(--vl-blush); color: var(--vl-mute); }
 .vl-yes .vl-icon, .vl-no .vl-icon { width: 1.6rem; height: 1.6rem; stroke-width: 2.4; }
+@media screen and (max-width: 749px) {
+  .vl-versus__table { min-width: 0; font-size: 1.3rem; }
+  .vl-versus__table th, .vl-versus__table td { padding: 1.2rem 0.6rem; }
+  .vl-versus__table tbody th { padding-left: 1.4rem; }
+  .vl-versus__table thead th { font-size: 1.2rem; line-height: 1.25; }
+  .vl-versus__ours .vl-logo__name { display: none; }
+  .vl-yes, .vl-no { width: 2.4rem; height: 2.4rem; }
+}
 
 /* ---------- Caractéristiques ---------- */
 .vl-specs__grid { display: grid; gap: 4rem; align-items: center; }
@@ -553,7 +561,8 @@ details[open] > summary .vl-faq__toggle { transform: rotate(45deg); }
 .vl-buy__trust { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .vl-buy__trust li { display: grid; justify-items: center; gap: 0.6rem; text-align: center; font-size: 1.25rem; line-height: 1.3; color: rgba(var(--color-foreground), 0.78); }
 .vl-buy__trust .vl-icon { color: var(--vl-berry); }
-.vl-buy__payments { justify-content: center; margin-top: 1.6rem; }
+.vl-buy__payments { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; list-style: none; margin: 1.6rem 0 0; padding: 0; }
+.vl-buy__payments .icon { width: 3.8rem; height: 2.4rem; }
 
 .vl-tabs { display: grid; gap: 1rem; margin-top: 2.8rem; }
 .vl-tab summary { padding: 1.6rem 2rem; font-size: 1.55rem; }
