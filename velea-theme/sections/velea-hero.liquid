@@ -4,7 +4,9 @@
     assign p = collections.all.products.first
   endif
   assign v = p.selected_or_first_available_variant
+  assign hero_img = section.settings.image | default: images['velea-hero.webp']
 -%}
+<style>.v-hero__visual .v-slot img { object-position: 50% 30%; }</style>
 <section class="v-hero" aria-labelledby="hero-title-{{ section.id }}">
   <div class="v-wrap v-hero__grid">
     <div class="v-hero__copy">
@@ -30,7 +32,7 @@
     </div>
     <div class="v-hero__visual">
       <div class="v-heat" aria-hidden="true"></div>
-      {% render 'velea-slot', image: section.settings.image, label: 'Photo principale : une femme détendue qui porte la ceinture (format portrait 4:5)', loading: 'eager', sizes: '(min-width: 900px) 45vw, 100vw' %}
+      {% render 'velea-slot', image: hero_img, label: 'Photo principale : une femme détendue qui porte la ceinture (format portrait 4:5)', loading: 'eager', sizes: '(min-width: 900px) 45vw, 100vw' %}
     </div>
   </div>
 </section>
