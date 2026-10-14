@@ -1,0 +1,131 @@
+/* VELEA — couche premium : touches dorées, sections sombres, finitions mobile */
+:root {
+  --or: #C9A15B;
+  --or-clair: #E9D3A1;
+  --or-fonce: #9C7A3C;
+  --or-grad: linear-gradient(115deg, #9C7A3C 0%, #E9D3A1 38%, #C9A15B 62%, #F3E3BC 100%);
+  --nuit: #1A1013;
+  --nuit-2: #26171C;
+}
+
+/* Bandeau + header sombres, logo doré */
+.v-announce { background: var(--or-grad); color: var(--nuit); font-weight: 600; letter-spacing: .02em; }
+.v-header { background: rgba(26, 16, 19, .92); border-bottom: 1px solid rgba(201, 161, 91, .28); }
+.v-logo { background: var(--or-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.v-nav a { color: rgba(251, 233, 236, .82); }
+.v-nav a:hover { color: var(--or-clair); }
+.v-cart { color: var(--or-clair); }
+
+/* Filet doré sous les titres de section */
+.v-section__head .v-h2::after,
+.v-story .v-h2::after { content: ""; display: block; width: 56px; height: 2px; margin-top: 18px; background: var(--or-grad); border-radius: 2px; }
+.v-section__head--center .v-h2::after { margin-inline: auto; }
+
+/* Hero : cadre doré autour de la photo */
+.v-hero__visual .v-slot { box-shadow: 0 0 0 1px rgba(201, 161, 91, .55), 0 30px 60px -30px rgba(26, 16, 19, .45); }
+.v-hero__visual::after { content: ""; position: absolute; z-index: 2; inset: 10px; border-radius: 190px 190px 20px 20px; border: 1px solid rgba(233, 211, 161, .7); pointer-events: none; }
+.v-hero__price { background: var(--or-grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 600; }
+.v-hero__dot { background: var(--or); }
+
+/* Boutons : liseré doré */
+.v-btn--main { box-shadow: inset 0 0 0 1px rgba(233, 211, 161, .55), 0 14px 30px -14px rgba(214, 63, 120, .75); }
+.v-btn--main:hover { box-shadow: inset 0 0 0 1px var(--or-clair), 0 16px 34px -14px rgba(214, 63, 120, .85); }
+
+/* Bande de confiance sombre */
+.v-trust { background: var(--nuit); border-block: 1px solid rgba(201, 161, 91, .25); color: rgba(251, 233, 236, .7); }
+.v-trust__item strong { color: var(--blanc); }
+.v-trust__icon { background: transparent; color: var(--or-clair); box-shadow: inset 0 0 0 1px rgba(201, 161, 91, .5); }
+
+/* Bénéfices : version sombre et dorée */
+.v-section--blanc:has(.v-benefits) { background: var(--nuit-2); }
+.v-section--blanc:has(.v-benefits) .v-h2 { color: var(--blanc); }
+.v-section--blanc:has(.v-benefits) .v-lead { color: rgba(251, 233, 236, .7); }
+.v-benefits { background: rgba(201, 161, 91, .22); }
+.v-benefit { background: var(--nuit-2); }
+.v-benefit .v-h3 { color: var(--blanc); }
+.v-benefit p { color: rgba(251, 233, 236, .68); }
+.v-benefit__icon { background: rgba(201, 161, 91, .1); color: var(--or-clair); box-shadow: inset 0 0 0 1px rgba(201, 161, 91, .45); }
+
+/* Étapes : chiffres dorés */
+.v-section--noir { background: var(--nuit); }
+.v-step { border-color: rgba(201, 161, 91, .22); }
+.v-step__n { background: var(--or-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Achat : prix et garantie dorés */
+.v-buy__price .now { background: var(--or-grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 600; }
+.v-buy__save { background: var(--nuit); color: var(--or-clair); }
+.v-buy__points svg { color: var(--or); }
+.v-guarantee { box-shadow: inset 0 0 0 1px rgba(201, 161, 91, .45); }
+.v-guarantee svg { color: var(--or-fonce); }
+.v-gallery__main { box-shadow: 0 0 0 1px rgba(201, 161, 91, .4); }
+
+/* Comparatif : en-tête noir et or */
+.v-compare thead th.is-velea { background: var(--nuit); color: var(--or-clair); }
+.v-yes { color: var(--or-fonce); }
+
+/* FAQ */
+.v-acc[open] .v-acc__icon { background: var(--or-clair); }
+
+/* Dernier appel : sombre avec halo doré */
+.v-final { background: var(--nuit); }
+.v-final .v-h2 { color: var(--blanc); }
+.v-final .v-lead { color: rgba(251, 233, 236, .75); }
+.v-final .v-heat { background: radial-gradient(closest-side, rgba(201, 161, 91, .28), rgba(214, 63, 120, .18) 50%, rgba(26, 16, 19, 0) 78%); }
+
+/* Footer */
+.v-footer { background: #120A0D; border-top: 1px solid rgba(201, 161, 91, .25); }
+.v-footer__title { color: var(--or-clair); }
+.v-footer a:hover { color: var(--or-clair); }
+
+/* Barre collante */
+.v-sticky { background: rgba(26, 16, 19, .94); border-top: 1px solid rgba(201, 161, 91, .35); }
+.v-sticky__info strong { color: var(--blanc); }
+.v-sticky__info span { color: var(--or-clair); font-weight: 600; }
+
+/* ---------- Finitions mobile ---------- */
+@media (max-width: 600px) {
+  body.v-body { font-size: 16px; }
+  .v-announce { font-size: 11.5px; padding: 8px 12px; }
+  .v-header__inner { height: 58px; }
+  .v-logo { font-size: 1.4rem; }
+
+  .v-hero { padding: 18px 0 44px; }
+  .v-hero__grid { gap: 22px; }
+  .v-hero__visual { order: -1; margin-inline: 8px; }
+  .v-hero__visual .v-slot { aspect-ratio: 4 / 4.6; }
+  .v-hero .v-h1 { font-size: clamp(2.2rem, 10.5vw, 2.8rem); margin-bottom: 12px; }
+  .v-hero .v-lead { margin-bottom: 20px; font-size: 1.02rem; }
+  .v-hero__buy { flex-direction: column; align-items: stretch; gap: 10px; }
+  .v-hero__buy .v-btn { width: 100%; }
+  .v-hero__price { text-align: center; }
+  .v-hero__reassure { justify-content: center; font-size: 13px; gap: 6px 14px; }
+
+  .v-trust__item { padding: 14px 6px; font-size: 13px; gap: 10px; }
+  .v-trust__icon { width: 36px; height: 36px; }
+
+  .v-section { padding: 56px 0; }
+  .v-section__head { margin-bottom: 28px; }
+  .v-h2 { font-size: clamp(1.8rem, 8.2vw, 2.2rem); }
+  .v-story__quote { font-size: 1.4rem; }
+  .v-benefit { padding: 22px 20px; }
+
+  .v-buy__grid { gap: 22px; }
+  .v-gallery__thumbs { gap: 8px; }
+  .v-buy__panel .v-h2 { font-size: 1.9rem; }
+  .v-qty-row { gap: 8px; }
+  .v-qty button { width: 40px; }
+  .v-qty-row .v-btn { font-size: 15px; padding: 0 12px; }
+
+  .v-compare { font-size: 13.5px; }
+  .v-compare th, .v-compare td { padding: 13px 6px; }
+  .v-compare th:first-child, .v-compare td:first-child { padding-left: 14px; }
+  .v-compare thead th { font-size: 12.5px; }
+
+  .v-acc summary { font-size: 16px; padding: 18px 0; }
+  .v-acc__body { padding-right: 8px; }
+  .v-footer { padding-top: 48px; }
+}
+
+/* Évite le zoom iOS et le flash bleu au toucher */
+input, select { font-size: 16px; }
+a, button { -webkit-tap-highlight-color: transparent; }

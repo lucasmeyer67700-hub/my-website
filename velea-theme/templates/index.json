@@ -4,7 +4,8 @@
   "hero": {
    "type": "velea-hero",
    "settings": {
-    "product": "ceinture-chauffante-regles"
+    "product": "ceinture-chauffante-regles",
+    "image": "shopify://shop_images/velea-hero.webp"
    }
   },
   "trust": {
@@ -383,9 +384,9 @@
   "trust",
   "story",
   "benefits",
+  "buy",
   "steps",
   "ages",
-  "buy",
   "compare",
   "faq",
   "final"
