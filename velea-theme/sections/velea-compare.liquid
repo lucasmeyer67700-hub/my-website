@@ -1,0 +1,47 @@
+<section class="v-section v-section--blanc">
+  <div class="v-wrap" style="max-width:860px">
+    <div class="v-section__head v-section__head--center v-reveal">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      <p class="v-lead v-muted">{{ section.settings.text }}</p>
+    </div>
+    <div class="v-reveal" style="overflow-x:auto">
+      <table class="v-compare">
+        <thead><tr><th scope="col"><span class="v-skip-sr">Critère</span></th><th scope="col" class="is-velea">VELEA</th><th scope="col">{{ section.settings.other_1 }}</th><th scope="col">{{ section.settings.other_2 }}</th></tr></thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <td>{{ block.settings.label }}</td>
+              {%- assign cols = 'velea,a,b' | split: ',' -%}
+              {%- for c in cols -%}
+                {%- assign val = block.settings[c] -%}
+                <td{% if c == 'velea' %} class="is-velea"{% endif %}>{% if val %}<span class="v-yes" aria-label="Oui">✓</span>{% else %}<span class="v-no" aria-label="Non">—</span>{% endif %}</td>
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Comparatif",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Pourquoi elle remplace la bouillotte." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "On a comparé ce que tu utilises peut-être déjà." },
+    { "type": "text", "id": "other_1", "label": "Colonne 2", "default": "Bouillotte" },
+    { "type": "text", "id": "other_2", "label": "Colonne 3", "default": "Antidouleurs" }
+  ],
+  "blocks": [{
+    "type": "row", "name": "Ligne",
+    "settings": [
+      { "type": "text", "id": "label", "label": "Critère", "default": "Utilisable en bougeant" },
+      { "type": "checkbox", "id": "velea", "label": "VELEA", "default": true },
+      { "type": "checkbox", "id": "a", "label": "Colonne 2", "default": false },
+      { "type": "checkbox", "id": "b", "label": "Colonne 3", "default": true }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Comparatif" }]
+}
+{% endschema %}

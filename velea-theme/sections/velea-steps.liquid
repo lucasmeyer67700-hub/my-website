@@ -1,0 +1,39 @@
+<section id="fonctionnement" class="v-section v-section--noir v-how">
+  <div class="v-wrap v-how__grid">
+    <div class="v-reveal">
+      <div class="v-section__head">
+        <h2 class="v-h2">{{ section.settings.title }}</h2>
+        <p class="v-lead" style="color:rgba(251,233,236,.75)">{{ section.settings.text }}</p>
+      </div>
+      <ol class="v-steps">
+        {%- for block in section.blocks -%}
+          <li class="v-step" {{ block.shopify_attributes }}>
+            <span class="v-step__n" aria-hidden="true">{{ forloop.index }}</span>
+            <h3 class="v-h3">{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+    {% render 'velea-slot', image: section.settings.image, label: 'Photo ou vidéo : gros plan de la ceinture portée, on voit la télécommande (portrait 4:5)', sizes: '(min-width: 900px) 45vw, 100vw' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Comment ça marche",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Soulagée en trois gestes." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Pas de prise à chercher, pas d'eau à faire chauffer." },
+    { "type": "image_picker", "id": "image", "label": "Photo (portrait 4:5)" }
+  ],
+  "blocks": [{
+    "type": "step", "name": "Étape",
+    "settings": [
+      { "type": "text", "id": "title", "label": "Titre", "default": "Attache-la" },
+      { "type": "textarea", "id": "text", "label": "Texte", "default": "Ajuste la ceinture autour de ta taille, sur ou sous tes vêtements." }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Comment ça marche" }]
+}
+{% endschema %}

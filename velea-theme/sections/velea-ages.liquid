@@ -1,0 +1,36 @@
+<section class="v-section">
+  <div class="v-wrap">
+    <div class="v-section__head v-reveal">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      <p class="v-lead v-muted">{{ section.settings.text }}</p>
+    </div>
+    <div class="v-ages v-reveal">
+      {%- for block in section.blocks -%}
+        <figure class="v-age" style="margin:0" {{ block.shopify_attributes }}>
+          {%- capture lbl %}Photo : {{ block.settings.title | downcase }} (portrait 3:4){% endcapture -%}
+          {% render 'velea-slot', image: block.settings.image, label: lbl, sizes: '(min-width: 900px) 25vw, 50vw' %}
+          <figcaption class="v-age__txt"><strong>{{ block.settings.title }}</strong><span>{{ block.settings.text }}</span></figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Pour toutes",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "De tes premières règles aux dernières." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Une seule taille réglable, un geste simple. Elle se partage entre une mère et sa fille, ou s'offre à une amie." }
+  ],
+  "blocks": [{
+    "type": "age", "name": "Profil",
+    "settings": [
+      { "type": "text", "id": "title", "label": "Titre", "default": "Ado" },
+      { "type": "text", "id": "text", "label": "Texte", "default": "Pour le collège et le lycée" },
+      { "type": "image_picker", "id": "image", "label": "Photo (portrait 3:4)" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Pour toutes" }]
+}
+{% endschema %}

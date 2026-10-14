@@ -1,0 +1,30 @@
+<section id="faq" class="v-section">
+  <div class="v-wrap">
+    <div class="v-section__head v-section__head--center v-reveal">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+    </div>
+    <div class="v-faq">
+      {%- for block in section.blocks -%}
+        <details class="v-acc" {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.q }}<span class="v-acc__icon" aria-hidden="true"></span></summary>
+          <div class="v-acc__body">{{ block.settings.a }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Questions",
+  "settings": [{ "type": "text", "id": "title", "label": "Titre", "default": "Tes questions, nos réponses." }],
+  "blocks": [{
+    "type": "qa", "name": "Question",
+    "settings": [
+      { "type": "text", "id": "q", "label": "Question", "default": "Question" },
+      { "type": "richtext", "id": "a", "label": "Réponse", "default": "<p>Réponse</p>" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Questions" }]
+}
+{% endschema %}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#FBE9EC">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.className += ' js';</script>
+  {{ 'velea.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+</head>
+<body class="v-body">
+  <a class="v-skip" href="#contenu">Aller au contenu</a>
+
+  <div class="v-announce" role="region" aria-label="Informations livraison">
+    <p>Livraison offerte en France · Paiement 100 % sécurisé · Satisfaite ou remboursée 30 jours</p>
+  </div>
+
+  <header class="v-header">
+    <div class="v-wrap v-header__inner">
+      <a href="{{ routes.root_url }}" class="v-logo" aria-label="{{ shop.name }}, accueil">VELEA</a>
+      <nav class="v-nav" aria-label="Navigation principale">
+        <a href="{{ routes.root_url }}#ceinture">La ceinture</a>
+        <a href="{{ routes.root_url }}#fonctionnement">Comment ça marche</a>
+        <a href="{{ routes.root_url }}#faq">Questions</a>
+      </nav>
+      <a href="{{ routes.cart_url }}" class="v-cart" aria-label="Panier, {{ cart.item_count }} article(s)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        {% if cart.item_count > 0 %}<span class="v-cart__count">{{ cart.item_count }}</span>{% endif %}
+      </a>
+    </div>
+  </header>
+
+  <main id="contenu" class="v-main">
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="v-footer">
+    <div class="v-wrap v-footer__grid">
+      <div>
+        <p class="v-logo v-logo--footer">VELEA</p>
+        <p class="v-footer__tag">La chaleur qui apaise, quand ton corps en a besoin.</p>
+      </div>
+      <div>
+        <p class="v-footer__title">Aide</p>
+        <ul>
+          <li><a href="{{ routes.root_url }}#faq">Questions fréquentes</a></li>
+          {% if shop.policies.size > 0 %}{% for policy in shop.policies %}<li><a href="{{ policy.url }}">{{ policy.title }}</a></li>{% endfor %}{% endif %}
+          <li><a href="mailto:{{ shop.email }}">Nous écrire</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="v-footer__title">Paiement sécurisé</p>
+        <ul class="v-pay" aria-label="Moyens de paiement acceptés">
+          {% for type in shop.enabled_payment_types %}<li>{{ type | payment_type_svg_tag }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+    <p class="v-wrap v-footer__legal">© {{ 'now' | date: '%Y' }} VELEA. Tous droits réservés.</p>
+  </footer>
+
+  <script src="{{ 'velea.js' | asset_url }}" defer></script>
+</body>
+</html>

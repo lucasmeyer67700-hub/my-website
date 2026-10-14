@@ -1,0 +1,35 @@
+<section class="v-trust" aria-label="Nos engagements">
+  <ul class="v-wrap v-trust__list">
+    {%- for block in section.blocks -%}
+      <li class="v-trust__item" {{ block.shopify_attributes }}>
+        <span class="v-trust__icon" aria-hidden="true">
+          {%- case block.settings.icon -%}
+            {%- when 'truck' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+            {%- when 'lock' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            {%- when 'return' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9h11a5 5 0 0 1 0 10H9"/><path d="m8 5-4 4 4 4"/></svg>
+            {%- else -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16v10H8l-4 4z"/></svg>
+          {%- endcase -%}
+        </span>
+        <span><strong>{{ block.settings.title }}</strong>{{ block.settings.text }}</span>
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Engagements",
+  "max_blocks": 4,
+  "blocks": [{
+    "type": "item", "name": "Engagement",
+    "settings": [
+      { "type": "select", "id": "icon", "label": "Icône", "options": [
+        { "value": "truck", "label": "Livraison" }, { "value": "lock", "label": "Cadenas" },
+        { "value": "return", "label": "Retour" }, { "value": "chat", "label": "Message" } ], "default": "truck" },
+      { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+      { "type": "text", "id": "text", "label": "Texte", "default": "Partout en France" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Engagements" }]
+}
+{% endschema %}

@@ -1,0 +1,118 @@
+{%- liquid
+  assign p = product | default: section.settings.product
+  if p == blank
+    assign p = collections.all.products.first
+  endif
+  assign v = p.selected_or_first_available_variant
+  if v.compare_at_price > v.price
+    assign saving = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price
+  endif
+-%}
+<section id="ceinture" class="v-section v-section--coquille v-buy" aria-labelledby="buy-title-{{ section.id }}">
+  <div class="v-wrap v-buy__grid">
+    <div class="v-gallery">
+      {% render 'velea-slot', class: 'v-gallery__main', image: section.settings.image_1, label: 'Photo produit : la ceinture seule sur fond clair (format carré)', sizes: '(min-width: 900px) 52vw, 100vw' %}
+      <div class="v-gallery__thumbs">
+        {% render 'velea-slot', image: section.settings.image_2, label: 'Portée', sizes: '25vw' %}
+        {% render 'velea-slot', image: section.settings.image_3, label: 'Détail', sizes: '25vw' %}
+        {% render 'velea-slot', image: section.settings.image_4, label: 'Télécommande', sizes: '25vw' %}
+        {% render 'velea-slot', image: section.settings.image_5, label: 'Coffret', sizes: '25vw' %}
+      </div>
+    </div>
+
+    <div class="v-buy__panel">
+      <h2 id="buy-title-{{ section.id }}" class="v-h2">{{ section.settings.title | default: p.title }}</h2>
+      <p class="v-muted" style="margin:0">{{ section.settings.subtitle }}</p>
+
+      {%- if v -%}
+        <div class="v-buy__price">
+          <span class="now">{{ v.price | money }}</span>
+          {%- if v.compare_at_price > v.price -%}
+            <s>{{ v.compare_at_price | money }}</s>
+            <span class="v-buy__save">−{{ saving }} %</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <ul class="v-buy__points">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>{{ block.settings.text }}</li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if p != blank -%}
+        {%- form 'product', p, id: 'velea-form', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ v.id }}">
+          {%- if p.variants.size > 1 -%}
+            <label class="v-muted" for="velea-variant" style="display:block;font-size:14px;margin-bottom:6px">Choix</label>
+            <select id="velea-variant" onchange="this.form.id.value=this.value" style="width:100%;min-height:52px;border-radius:14px;border:1.5px solid rgba(34,21,25,.15);padding:0 14px;margin-bottom:12px;font:inherit;background:#fff">
+              {%- for variant in p.variants -%}<option value="{{ variant.id }}" {% if variant == v %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title }} · {{ variant.price | money }}</option>{%- endfor -%}
+            </select>
+          {%- endif -%}
+          <div class="v-qty-row">
+            <div class="v-qty" data-qty>
+              <button type="button" data-step="-1" aria-label="Retirer une ceinture">−</button>
+              <input type="number" name="quantity" value="1" min="1" max="10" aria-label="Quantité" inputmode="numeric">
+              <button type="button" data-step="1" aria-label="Ajouter une ceinture">+</button>
+            </div>
+            <button type="submit" name="add" class="v-btn v-btn--main" {% unless v.available %}disabled{% endunless %}>
+              {%- if v.available -%}Ajouter au panier{%- else -%}Bientôt de retour{%- endif -%}
+            </button>
+          </div>
+          {{ form | payment_button }}
+        {%- endform -%}
+      {%- else -%}
+        <p class="v-muted">Choisis le produit dans l'éditeur de thème pour activer l'achat.</p>
+      {%- endif -%}
+
+      <p class="v-buy__secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Paiement chiffré et sécurisé</p>
+      <ul class="v-buy__pay" aria-label="Moyens de paiement acceptés">
+        {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+      </ul>
+
+      {%- if section.settings.guarantee != blank -%}
+        <div class="v-guarantee">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div>{{ section.settings.guarantee }}</div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_description and p.description != blank -%}
+        <details class="v-acc v-details">
+          <summary>Description complète<span class="v-acc__icon" aria-hidden="true"></span></summary>
+          <div class="v-acc__body">{{ p.description }}</div>
+        </details>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if p != blank and v -%}
+<div class="v-sticky" data-sticky>
+  <div class="v-sticky__info">
+    <strong>{{ p.title }}</strong>
+    <span>{{ v.price | money }}</span>
+  </div>
+  <a href="#ceinture" class="v-btn v-btn--main">Je la veux</a>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Achat",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit (page d'accueil)" },
+    { "type": "text", "id": "title", "label": "Titre (vide = nom du produit)" },
+    { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Ceinture chauffante sans fil pour les règles douloureuses" },
+    { "type": "richtext", "id": "guarantee", "label": "Garantie", "default": "<p><strong>Essai 30 jours.</strong> Si elle ne te soulage pas, on te rembourse.</p>" },
+    { "type": "checkbox", "id": "show_description", "label": "Afficher la description Shopify", "default": false },
+    { "type": "image_picker", "id": "image_1", "label": "Photo principale (carrée)" },
+    { "type": "image_picker", "id": "image_2", "label": "Photo 2" },
+    { "type": "image_picker", "id": "image_3", "label": "Photo 3" },
+    { "type": "image_picker", "id": "image_4", "label": "Photo 4" },
+    { "type": "image_picker", "id": "image_5", "label": "Photo 5" }
+  ],
+  "blocks": [{ "type": "point", "name": "Point fort", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Chaleur prête en quelques secondes" }] }],
+  "presets": [{ "name": "VELEA · Achat" }]
+}
+{% endschema %}

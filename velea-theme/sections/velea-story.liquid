@@ -1,0 +1,27 @@
+<section class="v-section v-section--coquille v-story">
+  <div class="v-wrap v-story__grid">
+    <div class="v-reveal">
+      <h2 class="v-h2" style="margin-bottom:22px">{{ section.settings.title }}</h2>
+      <p class="v-story__quote">{{ section.settings.quote }}</p>
+      <p class="v-lead">{{ section.settings.text }}</p>
+      <ul class="v-story__list">
+        {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endfor -%}
+      </ul>
+    </div>
+    {% render 'velea-slot', image: section.settings.image, label: 'Photo : une femme sur son canapé, main sur le ventre, avant la ceinture (format carré)', sizes: '(min-width: 900px) 45vw, 100vw' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · La douleur",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Tu connais ce moment." },
+    { "type": "textarea", "id": "quote", "label": "Phrase forte", "default": "Le ventre qui se serre, le dos qui tire, et une journée qui continue sans toi." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Chaque mois, des millions de femmes serrent les dents en silence. La chaleur est l'un des gestes les plus simples pour aider les muscles à se détendre. On l'a rendue mobile, douce et toujours prête." },
+    { "type": "image_picker", "id": "image", "label": "Photo (carrée)" }
+  ],
+  "blocks": [{ "type": "line", "name": "Situation", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Les crampes qui reviennent au pire moment" }] }],
+  "presets": [{ "name": "VELEA · La douleur" }]
+}
+{% endschema %}

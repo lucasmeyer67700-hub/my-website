@@ -1,0 +1,393 @@
+{
+ "layout": "velea",
+ "sections": {
+  "hero": {
+   "type": "velea-hero",
+   "settings": {
+    "product": "ceinture-chauffante-regles"
+   }
+  },
+  "trust": {
+   "type": "velea-trust",
+   "blocks": {
+    "item-1": {
+     "type": "item",
+     "settings": {
+      "icon": "truck",
+      "title": "Livraison offerte",
+      "text": "Partout en France"
+     }
+    },
+    "item-2": {
+     "type": "item",
+     "settings": {
+      "icon": "return",
+      "title": "Essai 30 jours",
+      "text": "Satisfaite ou remboursée"
+     }
+    },
+    "item-3": {
+     "type": "item",
+     "settings": {
+      "icon": "lock",
+      "title": "Paiement sécurisé",
+      "text": "Données chiffrées"
+     }
+    },
+    "item-4": {
+     "type": "item",
+     "settings": {
+      "icon": "chat",
+      "title": "Une vraie équipe",
+      "text": "Réponse sous 24 h"
+     }
+    }
+   },
+   "block_order": [
+    "item-1",
+    "item-2",
+    "item-3",
+    "item-4"
+   ]
+  },
+  "story": {
+   "type": "velea-story",
+   "blocks": {
+    "line-1": {
+     "type": "line",
+     "settings": {
+      "text": "Les crampes qui reviennent au pire moment"
+     }
+    },
+    "line-2": {
+     "type": "line",
+     "settings": {
+      "text": "Le bas du dos qui tire toute la journée"
+     }
+    },
+    "line-3": {
+     "type": "line",
+     "settings": {
+      "text": "La bouillotte qui refroidit et qu'on ne peut pas emporter"
+     }
+    },
+    "line-4": {
+     "type": "line",
+     "settings": {
+      "text": "Les cours, le travail ou les sorties qu'on annule"
+     }
+    }
+   },
+   "block_order": [
+    "line-1",
+    "line-2",
+    "line-3",
+    "line-4"
+   ]
+  },
+  "benefits": {
+   "type": "velea-benefits",
+   "blocks": {
+    "benefit-1": {
+     "type": "benefit",
+     "settings": {
+      "icon": "heat",
+      "title": "Chaleur douce et réglable",
+      "text": "Plusieurs niveaux pour trouver la température qui te fait du bien, du ventre aux lombaires."
+     }
+    },
+    "benefit-2": {
+     "type": "benefit",
+     "settings": {
+      "icon": "wave",
+      "title": "Vibrations apaisantes",
+      "text": "Un massage léger qui accompagne la chaleur quand les crampes se réveillent."
+     }
+    },
+    "benefit-3": {
+     "type": "benefit",
+     "settings": {
+      "icon": "battery",
+      "title": "Sans fil",
+      "text": "Rechargeable : tu bouges, elle te suit, au lit comme au bureau."
+     }
+    },
+    "benefit-4": {
+     "type": "benefit",
+     "settings": {
+      "icon": "feather",
+      "title": "Fine et discrète",
+      "text": "Elle se glisse sous un pull ou un t-shirt sans se voir."
+     }
+    },
+    "benefit-5": {
+     "type": "benefit",
+     "settings": {
+      "icon": "leaf",
+      "title": "Sans médicament",
+      "text": "Un geste simple, à utiliser aussi souvent que tu en as besoin."
+     }
+    },
+    "benefit-6": {
+     "type": "benefit",
+     "settings": {
+      "icon": "clock",
+      "title": "Arrêt automatique",
+      "text": "Elle s'éteint seule après un moment, pour l'utiliser l'esprit tranquille."
+     }
+    }
+   },
+   "block_order": [
+    "benefit-1",
+    "benefit-2",
+    "benefit-3",
+    "benefit-4",
+    "benefit-5",
+    "benefit-6"
+   ]
+  },
+  "steps": {
+   "type": "velea-steps",
+   "blocks": {
+    "step-1": {
+     "type": "step",
+     "settings": {
+      "title": "Attache-la",
+      "text": "Ajuste la ceinture autour de ta taille, sur ou sous tes vêtements."
+     }
+    },
+    "step-2": {
+     "type": "step",
+     "settings": {
+      "title": "Choisis ta chaleur",
+      "text": "Sélectionne le niveau de chaleur, et le massage si tu en as envie."
+     }
+    },
+    "step-3": {
+     "type": "step",
+     "settings": {
+      "title": "Respire",
+      "text": "La chaleur se diffuse en quelques secondes. Continue ta journée."
+     }
+    }
+   },
+   "block_order": [
+    "step-1",
+    "step-2",
+    "step-3"
+   ]
+  },
+  "ages": {
+   "type": "velea-ages",
+   "blocks": {
+    "age-1": {
+     "type": "age",
+     "settings": {
+      "title": "Ado",
+      "text": "Pour le collège et le lycée"
+     }
+    },
+    "age-2": {
+     "type": "age",
+     "settings": {
+      "title": "Étudiante",
+      "text": "En amphi ou à la bibliothèque"
+     }
+    },
+    "age-3": {
+     "type": "age",
+     "settings": {
+      "title": "Femme active",
+      "text": "Au bureau, en télétravail"
+     }
+    },
+    "age-4": {
+     "type": "age",
+     "settings": {
+      "title": "Maman",
+      "text": "Et à partager avec sa fille"
+     }
+    }
+   },
+   "block_order": [
+    "age-1",
+    "age-2",
+    "age-3",
+    "age-4"
+   ]
+  },
+  "buy": {
+   "type": "velea-buy",
+   "settings": {
+    "product": "ceinture-chauffante-regles"
+   },
+   "blocks": {
+    "point-1": {
+     "type": "point",
+     "settings": {
+      "text": "Chaleur prête en quelques secondes"
+     }
+    },
+    "point-2": {
+     "type": "point",
+     "settings": {
+      "text": "Ceinture réglable, une taille pour toutes"
+     }
+    },
+    "point-3": {
+     "type": "point",
+     "settings": {
+      "text": "Rechargeable en USB-C, câble inclus"
+     }
+    },
+    "point-4": {
+     "type": "point",
+     "settings": {
+      "text": "Expédiée sous 24 à 48 h dans un colis discret"
+     }
+    }
+   },
+   "block_order": [
+    "point-1",
+    "point-2",
+    "point-3",
+    "point-4"
+   ]
+  },
+  "compare": {
+   "type": "velea-compare",
+   "blocks": {
+    "row-1": {
+     "type": "row",
+     "settings": {
+      "label": "Chaleur constante",
+      "velea": true,
+      "a": false,
+      "b": false
+     }
+    },
+    "row-2": {
+     "type": "row",
+     "settings": {
+      "label": "Utilisable en bougeant",
+      "velea": true,
+      "a": false,
+      "b": true
+     }
+    },
+    "row-3": {
+     "type": "row",
+     "settings": {
+      "label": "Massage intégré",
+      "velea": true,
+      "a": false,
+      "b": false
+     }
+    },
+    "row-4": {
+     "type": "row",
+     "settings": {
+      "label": "Sans médicament",
+      "velea": true,
+      "a": true,
+      "b": false
+     }
+    },
+    "row-5": {
+     "type": "row",
+     "settings": {
+      "label": "Réutilisable chaque mois",
+      "velea": true,
+      "a": true,
+      "b": false
+     }
+    }
+   },
+   "block_order": [
+    "row-1",
+    "row-2",
+    "row-3",
+    "row-4",
+    "row-5"
+   ]
+  },
+  "faq": {
+   "type": "velea-faq",
+   "blocks": {
+    "qa-1": {
+     "type": "qa",
+     "settings": {
+      "q": "Est-ce que ça marche vraiment ?",
+      "a": "<p>La chaleur aide les muscles du ventre à se relâcher, c'est pour ça que la bouillotte est un réflexe depuis toujours. VELEA garde cette chaleur stable et te laisse bouger. Chaque corps est différent : c'est pour ça que tu as 30 jours pour l'essayer.</p>"
+     }
+    },
+    "qa-2": {
+     "type": "qa",
+     "settings": {
+      "q": "À partir de quel âge peut-on l'utiliser ?",
+      "a": "<p>Dès les premières règles, avec une ceinture réglable qui s'adapte aux tailles fines comme aux plus larges. Pour une ado, on conseille de commencer au niveau de chaleur le plus doux.</p>"
+     }
+    },
+    "qa-3": {
+     "type": "qa",
+     "settings": {
+      "q": "Combien de temps tient la batterie ?",
+      "a": "<p>Assez pour t'accompagner plusieurs heures selon le niveau choisi. Elle se recharge en USB-C, comme un téléphone.</p>"
+     }
+    },
+    "qa-4": {
+     "type": "qa",
+     "settings": {
+      "q": "Est-ce qu'elle se voit sous les vêtements ?",
+      "a": "<p>Elle est fine et se porte sous un pull, une robe ou un t-shirt ample sans attirer l'attention.</p>"
+     }
+    },
+    "qa-5": {
+     "type": "qa",
+     "settings": {
+      "q": "Quand vais-je recevoir ma commande ?",
+      "a": "<p>Ta commande est préparée sous 24 à 48 h, dans un colis neutre. Tu reçois un numéro de suivi par e-mail dès l'expédition.</p>"
+     }
+    },
+    "qa-6": {
+     "type": "qa",
+     "settings": {
+      "q": "Et si elle ne me convient pas ?",
+      "a": "<p>Tu as 30 jours pour l'essayer. Si elle ne te soulage pas, écris-nous et on te rembourse.</p>"
+     }
+    },
+    "qa-7": {
+     "type": "qa",
+     "settings": {
+      "q": "Le paiement est-il sécurisé ?",
+      "a": "<p>Oui. Le paiement passe par Shopify, avec une connexion chiffrée. Nous ne voyons jamais tes coordonnées bancaires.</p>"
+     }
+    }
+   },
+   "block_order": [
+    "qa-1",
+    "qa-2",
+    "qa-3",
+    "qa-4",
+    "qa-5",
+    "qa-6",
+    "qa-7"
+   ]
+  },
+  "final": {
+   "type": "velea-final"
+  }
+ },
+ "order": [
+  "hero",
+  "trust",
+  "story",
+  "benefits",
+  "steps",
+  "ages",
+  "buy",
+  "compare",
+  "faq",
+  "final"
+ ]
+}

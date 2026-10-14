@@ -1,0 +1,16 @@
+{%- comment -%}
+  Emplacement photo. Paramètres : image (optionnelle), label (texte affiché tant qu'il n'y a pas de photo), sizes.
+{%- endcomment -%}
+{%- assign ld = loading | default: 'lazy' -%}
+{%- assign alt_txt = image.alt | default: label -%}
+{%- assign sz = sizes | default: '100vw' -%}
+<div class="v-slot{% if class %} {{ class }}{% endif %}">
+  {%- if image != blank -%}
+    {{ image | image_url: width: 1600 | image_tag: loading: ld, sizes: sz, widths: '400, 600, 800, 1000, 1200, 1600', alt: alt_txt }}
+  {%- else -%}
+    <div class="v-slot__label">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg>
+      <span>{{ label }}</span>
+    </div>
+  {%- endif -%}
+</div>

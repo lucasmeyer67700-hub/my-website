@@ -1,0 +1,54 @@
+{%- liquid
+  assign p = product | default: section.settings.product
+  if p == blank
+    assign p = collections.all.products.first
+  endif
+  assign v = p.selected_or_first_available_variant
+-%}
+<section class="v-hero" aria-labelledby="hero-title-{{ section.id }}">
+  <div class="v-wrap v-hero__grid">
+    <div class="v-hero__copy">
+      {%- if section.settings.kicker != blank -%}
+        <p class="v-hero__rating"><span class="v-hero__dot" aria-hidden="true"></span>{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      <h1 id="hero-title-{{ section.id }}" class="v-h1">{{ section.settings.title }}</h1>
+      <p class="v-lead">{{ section.settings.text }}</p>
+      <div class="v-hero__buy">
+        <a href="#ceinture" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
+        {%- if v -%}
+          <p class="v-hero__price" style="margin:0">{{ v.price | money }}{% if v.compare_at_price > v.price %}<s>{{ v.compare_at_price | money }}</s>{% endif %}</p>
+        {%- endif -%}
+      </div>
+      <ul class="v-hero__reassure">
+        {%- for i in (1..3) -%}
+          {%- capture key %}point_{{ i }}{% endcapture -%}
+          {%- if section.settings[key] != blank -%}
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D63F78" stroke-width="2.2" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>{{ section.settings[key] }}</li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="v-hero__visual">
+      <div class="v-heat" aria-hidden="true"></div>
+      {% render 'velea-slot', image: section.settings.image, label: 'Photo principale : une femme détendue qui porte la ceinture (format portrait 4:5)', loading: 'eager', sizes: '(min-width: 900px) 45vw, 100vw' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Accueil",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "text", "id": "kicker", "label": "Petite phrase au-dessus", "default": "Pensée pour les règles douloureuses" },
+    { "type": "textarea", "id": "title", "label": "Titre", "default": "Tes règles ne devraient pas t'arrêter." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "La ceinture chauffante VELEA diffuse une chaleur douce sur ton ventre et tes lombaires. Sans fil, discrète sous un pull, prête en quelques secondes." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Je veux être soulagée" },
+    { "type": "text", "id": "point_1", "label": "Rassurance 1", "default": "Livraison offerte" },
+    { "type": "text", "id": "point_2", "label": "Rassurance 2", "default": "Essai 30 jours" },
+    { "type": "text", "id": "point_3", "label": "Rassurance 3", "default": "Paiement sécurisé" },
+    { "type": "image_picker", "id": "image", "label": "Photo principale (portrait 4:5)" }
+  ],
+  "presets": [{ "name": "VELEA · Accueil" }]
+}
+{% endschema %}
