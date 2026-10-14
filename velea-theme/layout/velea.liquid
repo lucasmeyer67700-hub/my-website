@@ -5,23 +5,37 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#E9DCCB">
   <link rel="canonical" href="{{ canonical_url }}">
-  <title>{{ page_title }}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}</title>
-  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  {%- if template.name == 'index' -%}
+    <title>VELEA | Ceinture chauffante menstruelle avec massage vibrant</title>
+  {%- else -%}
+    <title>{{ page_title }}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}</title>
+  {%- endif %}
+  {%- liquid
+    assign seo_desc = page_description
+    if template.name == 'index' and seo_desc == blank
+      assign seo_desc = 'Ceinture chauffante menstruelle rechargeable avec massage vibrant. Découvrez une nouvelle routine de confort pendant les règles avec VELEA.'
+    endif
+  -%}
+  {% if seo_desc %}<meta name="description" content="{{ seo_desc | escape }}">{% endif %}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:type" content="{% if template.name == 'product' %}product{% else %}website{% endif %}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {% if seo_desc %}<meta property="og:description" content="{{ seo_desc | escape }}">{% endif %}
+  {%- if page_image %}<meta property="og:image" content="https:{{ page_image | image_url: width: 1200 }}">{% endif %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <script>document.documentElement.className += ' js';</script>
   {{ 'velea.css' | asset_url | stylesheet_tag }}
   {{ 'velea-premium.css' | asset_url | stylesheet_tag }}
+  {{ 'velea-ui.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="v-body">
   <a class="v-skip" href="#contenu">Aller au contenu</a>
 
-  <div class="v-announce" role="region" aria-label="Informations livraison">
-    <p class="v-skip-sr">Livraison offerte en France · Paiement 100 % sécurisé · Satisfaite ou remboursée 30 jours · Expédition sous 24 à 48 h</p>
-    <div class="v-announce__track" aria-hidden="true"><span class="v-announce__item">Livraison offerte en France</span><span class="v-announce__item">Paiement 100 % sécurisé</span><span class="v-announce__item">Satisfaite ou remboursée 30 jours</span><span class="v-announce__item">Expédition sous 24 à 48 h</span><span class="v-announce__item">Livraison offerte en France</span><span class="v-announce__item">Paiement 100 % sécurisé</span><span class="v-announce__item">Satisfaite ou remboursée 30 jours</span><span class="v-announce__item">Expédition sous 24 à 48 h</span><span class="v-announce__item">Livraison offerte en France</span><span class="v-announce__item">Paiement 100 % sécurisé</span><span class="v-announce__item">Satisfaite ou remboursée 30 jours</span><span class="v-announce__item">Expédition sous 24 à 48 h</span><span class="v-announce__item">Livraison offerte en France</span><span class="v-announce__item">Paiement 100 % sécurisé</span><span class="v-announce__item">Satisfaite ou remboursée 30 jours</span><span class="v-announce__item">Expédition sous 24 à 48 h</span></div>
-  </div>
+  {% sections 'velea-announce-group' %}
 
   <header class="v-header">
     <div class="v-wrap v-header__inner">
@@ -30,9 +44,9 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
         <nav class="v-nav" aria-label="Navigation principale">
-          <a href="{{ routes.root_url }}#ceinture">La ceinture</a>
-          <a href="{{ routes.root_url }}#fonctionnement">Comment ça marche</a>
-          <a href="{{ routes.root_url }}#faq">Questions</a>
+          {%- for link in linklists['main-menu'].links -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+          {%- endfor -%}
         </nav>
       </div>
       <a href="{{ routes.root_url }}" class="v-logo" aria-label="{{ shop.name }}, accueil">VELEA</a>
@@ -69,14 +83,13 @@
         </button>
       </div>
       <ul class="v-drawer__links">
-        <li><a href="{{ routes.root_url }}" data-drawer-close>Accueil</a></li>
-        <li><a href="{{ routes.root_url }}#ceinture" data-drawer-close>La ceinture</a></li>
-        <li><a href="{{ routes.root_url }}#fonctionnement" data-drawer-close>Comment ça marche</a></li>
-        <li><a href="{{ routes.root_url }}#faq" data-drawer-close>Questions</a></li>
+        {%- for link in linklists['main-menu'].links -%}
+          <li><a href="{{ link.url }}" data-drawer-close>{{ link.title }}</a></li>
+        {%- endfor -%}
         <li><a href="{{ routes.cart_url }}">Mon panier</a></li>
-        <li><a href="mailto:{{ shop.email }}">Nous écrire</a></li>
       </ul>
-      <a href="{{ routes.root_url }}#ceinture" class="v-btn v-btn--main v-btn--full" data-drawer-close>Commander ma ceinture</a>
+      {%- assign main_product = all_products['ceinture-chauffante-regles'] -%}
+      <a href="{{ main_product.url | default: routes.all_products_collection_url }}" class="v-btn v-btn--main v-btn--full">Découvrir la ceinture</a>
     </nav>
   </div>
 
@@ -88,16 +101,20 @@
     <div class="v-wrap v-footer__grid">
       <div>
         <p class="v-logo v-logo--footer">VELEA</p>
-        <p class="v-footer__tag">La chaleur qui apaise, quand ton corps en a besoin.</p>
+        <p class="v-footer__tag">Accessoires de confort pour les jours de règles.</p>
       </div>
-      <div>
-        <p class="v-footer__title">Aide</p>
-        <ul>
-          <li><a href="{{ routes.root_url }}#faq">Questions fréquentes</a></li>
-          {% if shop.policies.size > 0 %}{% for policy in shop.policies %}<li><a href="{{ policy.url }}">{{ policy.title }}</a></li>{% endfor %}{% endif %}
-          <li><a href="mailto:{{ shop.email }}">Nous écrire</a></li>
-        </ul>
-      </div>
+      {%- assign footer_menus = 'pied-de-page-aide,pied-de-page-legal' | split: ',' -%}
+      {%- for handle in footer_menus -%}
+        {%- assign menu = linklists[handle] -%}
+        {%- if menu.links.size > 0 -%}
+          <div>
+            <p class="v-footer__title">{{ menu.title | remove: 'Pied de page – ' }}</p>
+            <ul>
+              {%- for link in menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
       <div>
         <p class="v-footer__title">Paiement sécurisé</p>
         <ul class="v-pay" aria-label="Moyens de paiement acceptés">

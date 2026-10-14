@@ -8,7 +8,7 @@
         {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endfor -%}
       </ul>
     </div>
-    {% render 'velea-slot', image: section.settings.image, label: 'Photo : une femme sur son canapé, main sur le ventre, avant la ceinture (format carré)', sizes: '(min-width: 900px) 45vw, 100vw' %}
+    {% render 'velea-slot', image: section.settings.image, label: 'Photo : une femme adulte dans un intérieur confortable', sizes: '(min-width: 900px) 45vw, 100vw' %}
   </div>
 </section>
 
@@ -16,12 +16,12 @@
 {
   "name": "VELEA · La douleur",
   "settings": [
-    { "type": "text", "id": "title", "label": "Titre", "default": "Tu connais ce moment." },
-    { "type": "textarea", "id": "quote", "label": "Phrase forte", "default": "Le ventre qui se serre, le dos qui tire, et une journée qui continue sans toi." },
-    { "type": "textarea", "id": "text", "label": "Texte", "default": "Chaque mois, des millions de femmes serrent les dents en silence. La chaleur est l'un des gestes les plus simples pour aider les muscles à se détendre. On l'a rendue mobile, douce et toujours prête." },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ces jours-là, on a besoin de douceur." },
+    { "type": "textarea", "id": "quote", "label": "Phrase forte", "default": "Chaque mois, le corps demande un peu plus d'attention." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Une ceinture chauffante rechargeable pour s'accorder un moment de confort, à la maison ou ailleurs." },
     { "type": "image_picker", "id": "image", "label": "Photo (carrée)" }
   ],
-  "blocks": [{ "type": "line", "name": "Situation", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Les crampes qui reviennent au pire moment" }] }],
+  "blocks": [{ "type": "line", "name": "Situation", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Situation" }] }],
   "presets": [{ "name": "VELEA · La douleur" }]
 }
 {% endschema %}

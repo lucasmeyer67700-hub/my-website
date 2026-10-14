@@ -1,0 +1,26 @@
+<section class="v-section v-page">
+  <div class="v-wrap">
+    <h1 class="v-h2 v-page__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}<div class="v-rte v-muted">{{ collection.description }}</div>{%- endif -%}
+    {%- paginate collection.products by 12 -%}
+      <ul class="v-grid">
+        {%- for p in collection.products -%}
+          <li class="v-card">
+            <a href="{{ p.url }}">
+              <div class="v-slot v-card__img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 30vw, 50vw', widths: '300, 500, 700', alt: p.featured_image.alt }}{%- endif -%}</div>
+              <p class="v-card__title">{{ p.title }}</p>
+              <p class="v-card__price">{{ p.price | money }}</p>
+            </a>
+          </li>
+        {%- else -%}
+          <li>Aucun produit pour le moment.</li>
+        {%- endfor -%}
+      </ul>
+      {%- if paginate.pages > 1 -%}<nav class="v-pagination" aria-label="Pagination">{{ paginate | default_pagination: previous: 'Précédent', next: 'Suivant' }}</nav>{%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "VELEA · Collection", "settings": [] }
+{% endschema %}

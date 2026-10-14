@@ -1,0 +1,15 @@
+{
+ "layout": "velea",
+ "sections": {
+  "main": {
+   "type": "velea-main-page"
+  },
+  "form": {
+   "type": "velea-contact"
+  }
+ },
+ "order": [
+  "main",
+  "form"
+ ]
+}

@@ -1,12 +1,11 @@
 {%- liquid
-  assign p = product | default: section.settings.product
+  assign p = section.settings.product | default: product
   if p == blank
     assign p = collections.all.products.first
   endif
-  assign v = p.selected_or_first_available_variant
-  assign hero_img = section.settings.image | default: images['velea-hero.webp']
+  assign cta_url = section.settings.cta_link | default: p.url
 -%}
-<style>.v-hero__visual .v-slot img { object-position: 50% 30%; }</style>
+<style>.v-hero__visual .v-slot img { object-position: 50% {{ section.settings.focus }}%; }</style>
 <section class="v-hero" aria-labelledby="hero-title-{{ section.id }}">
   <div class="v-wrap v-hero__grid">
     <div class="v-hero__copy">
@@ -16,41 +15,36 @@
       <h1 id="hero-title-{{ section.id }}" class="v-h1">{{ section.settings.title }}</h1>
       <p class="v-lead">{{ section.settings.text }}</p>
       <div class="v-hero__buy">
-        <a href="#ceinture" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
-        {%- if v -%}
-          <p class="v-hero__price" style="margin:0">{{ v.price | money }}{% if v.compare_at_price > v.price %}<s>{{ v.compare_at_price | money }}</s>{% endif %}</p>
+        {%- if section.settings.cta != blank -%}
+          <a href="{{ cta_url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank -%}
+          <a href="{{ section.settings.link_url | default: '#caracteristiques' }}" class="v-link">{{ section.settings.link_label }}</a>
         {%- endif -%}
       </div>
-      <ul class="v-hero__reassure">
-        {%- for i in (1..3) -%}
-          {%- capture key %}point_{{ i }}{% endcapture -%}
-          {%- if section.settings[key] != blank -%}
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A15B" stroke-width="2.2" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>{{ section.settings[key] }}</li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
     </div>
     <div class="v-hero__visual">
       <div class="v-heat" aria-hidden="true"></div>
-      {% render 'velea-slot', image: hero_img, label: 'Photo principale : une femme détendue qui porte la ceinture (format portrait 4:5)', loading: 'eager', sizes: '(min-width: 900px) 45vw, 100vw' %}
+      {% render 'velea-slot', image: section.settings.image, label: 'Image principale : une femme adulte, détendue, qui porte la ceinture rose', loading: 'eager', sizes: '(min-width: 900px) 400px, 72vw' %}
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "VELEA · Accueil",
+  "name": "VELEA · Bannière",
   "settings": [
-    { "type": "product", "id": "product", "label": "Produit" },
-    { "type": "text", "id": "kicker", "label": "Petite phrase au-dessus", "default": "Pensée pour les règles douloureuses" },
-    { "type": "textarea", "id": "title", "label": "Titre", "default": "Tes règles ne devraient pas t'arrêter." },
-    { "type": "textarea", "id": "text", "label": "Texte", "default": "La ceinture chauffante VELEA diffuse une chaleur douce sur ton ventre et tes lombaires. Sans fil, discrète sous un pull, prête en quelques secondes." },
-    { "type": "text", "id": "cta", "label": "Bouton", "default": "Je veux être soulagée" },
-    { "type": "text", "id": "point_1", "label": "Rassurance 1", "default": "Livraison offerte" },
-    { "type": "text", "id": "point_2", "label": "Rassurance 2", "default": "Essai 30 jours" },
-    { "type": "text", "id": "point_3", "label": "Rassurance 3", "default": "Paiement sécurisé" },
-    { "type": "image_picker", "id": "image", "label": "Photo principale (portrait 4:5)" }
+    { "type": "product", "id": "product", "label": "Produit mis en avant" },
+    { "type": "text", "id": "kicker", "label": "Petite phrase au-dessus", "default": "Confort menstruel" },
+    { "type": "textarea", "id": "title", "label": "Titre", "default": "Un moment de confort, même pendant les règles" },
+    { "type": "textarea", "id": "text", "label": "Sous-titre", "default": "Découvrez une ceinture chauffante rechargeable avec massage vibrant, pensée pour accompagner vos moments de détente pendant la période menstruelle." },
+    { "type": "text", "id": "cta", "label": "Bouton principal", "default": "Découvrir la ceinture" },
+    { "type": "url", "id": "cta_link", "label": "Lien du bouton (vide = fiche produit)" },
+    { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Voir les caractéristiques" },
+    { "type": "url", "id": "link_url", "label": "Destination du lien secondaire (vide = caractéristiques)" },
+    { "type": "image_picker", "id": "image", "label": "Image principale" },
+    { "type": "range", "id": "focus", "label": "Cadrage vertical de l'image", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 30 }
   ],
-  "presets": [{ "name": "VELEA · Accueil" }]
+  "presets": [{ "name": "VELEA · Bannière" }]
 }
 {% endschema %}

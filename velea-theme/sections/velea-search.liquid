@@ -1,0 +1,29 @@
+<section class="v-section v-page">
+  <div class="v-wrap v-page__wrap">
+    <h1 class="v-h2 v-page__title">Recherche</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="v-search__form v-search__form--page">
+      <label for="search-page-input" class="v-skip-sr">Rechercher</label>
+      <input id="search-page-input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Rechercher sur VELEA">
+      <button type="submit" class="v-btn v-btn--main">Chercher</button>
+    </form>
+    {%- if search.performed -%}
+      <p class="v-muted">{{ search.results_count }} résultat{% if search.results_count > 1 %}s{% endif %} pour « {{ search.terms | escape }} »</p>
+      {%- if search.results_count > 0 -%}
+        <ul class="v-results">
+          {%- for item in search.results limit: 24 -%}
+            <li><a href="{{ item.url }}">
+              {%- if item.featured_image -%}{{ item.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: item.title }}{%- endif -%}
+              <span><strong>{{ item.title }}</strong>{%- if item.price -%} <span class="v-muted">{{ item.price | money }}</span>{%- endif -%}</span>
+            </a></li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <p>Aucun résultat. Essayez un autre mot, ou <a href="{{ routes.root_url }}">revenez à l'accueil</a>.</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "VELEA · Recherche", "settings": [] }
+{% endschema %}

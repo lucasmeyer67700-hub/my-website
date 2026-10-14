@@ -3,7 +3,8 @@
   <div class="v-wrap v-final__inner v-reveal">
     <h2 class="v-h2">{{ section.settings.title }}</h2>
     <p class="v-lead">{{ section.settings.text }}</p>
-    <a href="#ceinture" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
+    {%- assign fp = section.settings.product | default: all_products['ceinture-chauffante-regles'] -%}
+    <a href="{{ section.settings.link | default: fp.url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
   </div>
 </section>
 
@@ -11,9 +12,11 @@
 {
   "name": "VELEA · Dernier appel",
   "settings": [
-    { "type": "text", "id": "title", "label": "Titre", "default": "Le mois prochain, ce sera différent." },
-    { "type": "textarea", "id": "text", "label": "Texte", "default": "Commande aujourd'hui, et garde-la près de toi pour tes prochaines règles." },
-    { "type": "text", "id": "cta", "label": "Bouton", "default": "Commander ma ceinture" }
+    { "type": "text", "id": "title", "label": "Titre", "default": "Prête pour votre prochaine routine de confort ?" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Découvrez la ceinture chauffante avec massage vibrant." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir la ceinture" },
+    { "type": "product", "id": "product", "label": "Produit lié au bouton" },
+    { "type": "url", "id": "link", "label": "Lien du bouton (remplace le produit)" }
   ],
   "presets": [{ "name": "VELEA · Dernier appel" }]
 }

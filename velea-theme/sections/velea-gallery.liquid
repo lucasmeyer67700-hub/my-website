@@ -1,0 +1,35 @@
+<section class="v-section v-gallery-sec">
+  <div class="v-wrap">
+    <div class="v-section__head v-section__head--center v-reveal">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<p class="v-lead v-muted">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="v-gal" role="list">
+      {%- for block in section.blocks -%}
+        <figure class="v-gal__item v-reveal" role="listitem" {{ block.shopify_attributes }}>
+          {% render 'velea-slot', image: block.settings.image, label: block.settings.placeholder, sizes: '(min-width: 900px) 30vw, 80vw' %}
+          {%- if block.settings.caption != blank -%}<figcaption>{{ block.settings.caption }}</figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Galerie",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "La ceinture en images" },
+    { "type": "textarea", "id": "text", "label": "Texte" }
+  ],
+  "blocks": [{
+    "type": "photo", "name": "Photo",
+    "settings": [
+      { "type": "image_picker", "id": "image", "label": "Photo" },
+      { "type": "text", "id": "caption", "label": "Légende" },
+      { "type": "text", "id": "placeholder", "label": "Texte de l'emplacement vide", "default": "Photo à ajouter" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Galerie" }]
+}
+{% endschema %}

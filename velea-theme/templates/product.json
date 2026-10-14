@@ -1,141 +1,133 @@
 {
  "layout": "velea",
  "sections": {
-  "hero": {
-   "type": "velea-hero",
+  "buy": {
+   "type": "velea-buy",
    "settings": {
-    "product": "ceinture-chauffante-regles",
-    "image": "shopify://shop_images/velea-hero.webp"
-   }
-  },
-  "trust": {
-   "type": "velea-trust",
+    "anchor": "ceinture",
+    "subtitle": "Chaleur réglable, massage vibrant et batterie rechargeable",
+    "media_limit": 4
+   },
    "blocks": {
-    "item-1": {
-     "type": "item",
+    "point-1": {
+     "type": "point",
+     "settings": {
+      "text": "Trois réglages de chaleur : 50, 55 et 60 °C selon le fabricant"
+     }
+    },
+    "point-2": {
+     "type": "point",
+     "settings": {
+      "text": "Fonction de massage vibrant"
+     }
+    },
+    "point-3": {
+     "type": "point",
+     "settings": {
+      "text": "Batterie rechargeable 1 800 mAh annoncée"
+     }
+    },
+    "point-4": {
+     "type": "point",
+     "settings": {
+      "text": "Tissu effet velours, coloris rose"
+     }
+    },
+    "info-1": {
+     "type": "info",
      "settings": {
       "icon": "truck",
-      "title": "Livraison offerte",
-      "text": "Partout en France"
+      "title": "Livraison :",
+      "text": "délais et frais affichés avant le paiement.",
+      "link": "/pages/livraison-et-retours",
+      "link_label": "Conditions de livraison"
      }
     },
-    "item-2": {
-     "type": "item",
+    "info-2": {
+     "type": "info",
      "settings": {
       "icon": "return",
-      "title": "Essai 30 jours",
-      "text": "Satisfaite ou remboursée"
+      "title": "Retours :",
+      "text": "droit de rétractation de 14 jours après réception.",
+      "link": "/pages/politique-de-retour",
+      "link_label": "Politique de retour"
      }
     },
-    "item-3": {
-     "type": "item",
+    "info-3": {
+     "type": "info",
      "settings": {
       "icon": "lock",
       "title": "Paiement sécurisé",
-      "text": "Données chiffrées"
+      "text": "par Shopify.",
+      "link": "",
+      "link_label": ""
      }
     },
-    "item-4": {
-     "type": "item",
+    "info-4": {
+     "type": "info",
      "settings": {
       "icon": "chat",
-      "title": "Une vraie équipe",
-      "text": "Réponse sous 24 h"
+      "title": "Une question ?",
+      "text": "",
+      "link": "/pages/contact",
+      "link_label": "Nous écrire"
      }
     }
    },
    "block_order": [
-    "item-1",
-    "item-2",
-    "item-3",
-    "item-4"
-   ],
-   "disabled": true
-  },
-  "story": {
-   "type": "velea-story",
-   "blocks": {
-    "line-1": {
-     "type": "line",
-     "settings": {
-      "text": "Les crampes qui reviennent au pire moment"
-     }
-    },
-    "line-2": {
-     "type": "line",
-     "settings": {
-      "text": "Le bas du dos qui tire toute la journée"
-     }
-    },
-    "line-3": {
-     "type": "line",
-     "settings": {
-      "text": "La bouillotte qui refroidit et qu'on ne peut pas emporter"
-     }
-    },
-    "line-4": {
-     "type": "line",
-     "settings": {
-      "text": "Les cours, le travail ou les sorties qu'on annule"
-     }
-    }
-   },
-   "block_order": [
-    "line-1",
-    "line-2",
-    "line-3",
-    "line-4"
+    "point-1",
+    "point-2",
+    "point-3",
+    "point-4",
+    "info-1",
+    "info-2",
+    "info-3",
+    "info-4"
    ]
+  },
+  "description": {
+   "type": "velea-description",
+   "settings": {
+    "title": "Tout savoir sur la ceinture"
+   }
   },
   "benefits": {
    "type": "velea-benefits",
+   "settings": {
+    "title": "Ce que la ceinture vous apporte",
+    "text": "Trois fonctions réunies dans un seul accessoire."
+   },
    "blocks": {
     "benefit-1": {
      "type": "benefit",
      "settings": {
       "icon": "heat",
-      "title": "Chaleur douce et réglable",
-      "text": "Plusieurs niveaux pour trouver la température qui te fait du bien, du ventre aux lombaires."
+      "title": "Chaleur réglable",
+      "text": "Trois réglages de chaleur annoncés par le fabricant, pour choisir l'intensité qui vous convient."
      }
     },
     "benefit-2": {
      "type": "benefit",
      "settings": {
       "icon": "wave",
-      "title": "Vibrations apaisantes",
-      "text": "Un massage léger qui accompagne la chaleur quand les crampes se réveillent."
+      "title": "Massage vibrant",
+      "text": "Une fonction de vibration qui accompagne la chaleur pendant vos moments de détente."
      }
     },
     "benefit-3": {
      "type": "benefit",
      "settings": {
       "icon": "battery",
-      "title": "Sans fil",
-      "text": "Rechargeable : tu bouges, elle te suit, au lit comme au bureau."
+      "title": "Batterie rechargeable",
+      "text": "Une batterie intégrée de 1 800 mAh annoncée : pas besoin de rester branchée pendant l'utilisation."
      }
     },
     "benefit-4": {
      "type": "benefit",
      "settings": {
       "icon": "feather",
-      "title": "Fine et discrète",
-      "text": "Elle se glisse sous un pull ou un t-shirt sans se voir."
-     }
-    },
-    "benefit-5": {
-     "type": "benefit",
-     "settings": {
-      "icon": "leaf",
-      "title": "Sans médicament",
-      "text": "Un geste simple, à utiliser aussi souvent que tu en as besoin."
-     }
-    },
-    "benefit-6": {
-     "type": "benefit",
-     "settings": {
-      "icon": "clock",
-      "title": "Arrêt automatique",
-      "text": "Elle s'éteint seule après un moment, pour l'utiliser l'esprit tranquille."
+      "title": "Pensée pour la détente",
+      "text": "Un tissu effet velours et une ceinture à ajuster, pour un moment de confort à la maison ou ailleurs."
      }
     }
    },
@@ -143,33 +135,36 @@
     "benefit-1",
     "benefit-2",
     "benefit-3",
-    "benefit-4",
-    "benefit-5",
-    "benefit-6"
+    "benefit-4"
    ]
   },
   "steps": {
    "type": "velea-steps",
+   "settings": {
+    "anchor": "fonctionnement",
+    "title": "Comment l'utiliser ?",
+    "text": "Trois étapes simples. Référez-vous toujours à la notice fournie avec la ceinture."
+   },
    "blocks": {
     "step-1": {
      "type": "step",
      "settings": {
-      "title": "Attache-la",
-      "text": "Ajuste la ceinture autour de ta taille, sur ou sous tes vêtements."
+      "title": "Chargez la ceinture",
+      "text": "Rechargez la batterie avant la première utilisation, en suivant la notice fournie."
      }
     },
     "step-2": {
      "type": "step",
      "settings": {
-      "title": "Choisis ta chaleur",
-      "text": "Sélectionne le niveau de chaleur, et le massage si tu en as envie."
+      "title": "Ajustez-la",
+      "text": "Positionnez la ceinture et réglez la sangle selon les instructions du fabricant."
      }
     },
     "step-3": {
      "type": "step",
      "settings": {
-      "title": "Respire",
-      "text": "La chaleur se diffuse en quelques secondes. Continue ta journée."
+      "title": "Choisissez vos réglages",
+      "text": "Sélectionnez la chaleur et le massage en respectant les consignes de sécurité de la notice."
      }
     }
    },
@@ -179,190 +174,200 @@
     "step-3"
    ]
   },
-  "ages": {
-   "type": "velea-ages",
-   "blocks": {
-    "age-1": {
-     "type": "age",
-     "settings": {
-      "title": "Ado",
-      "text": "Pour le collège et le lycée"
-     }
-    },
-    "age-2": {
-     "type": "age",
-     "settings": {
-      "title": "Étudiante",
-      "text": "En amphi ou à la bibliothèque"
-     }
-    },
-    "age-3": {
-     "type": "age",
-     "settings": {
-      "title": "Femme active",
-      "text": "Au bureau, en télétravail"
-     }
-    },
-    "age-4": {
-     "type": "age",
-     "settings": {
-      "title": "Maman",
-      "text": "Et à partager avec sa fille"
-     }
-    }
-   },
-   "block_order": [
-    "age-1",
-    "age-2",
-    "age-3",
-    "age-4"
-   ]
-  },
-  "buy": {
-   "type": "velea-buy",
+  "specs": {
+   "type": "velea-specs",
    "settings": {
-    "product": "ceinture-chauffante-regles"
+    "anchor": "caracteristiques",
+    "title": "Caractéristiques techniques",
+    "text": "Les informations ci-dessous sont celles communiquées par le fabricant.",
+    "note": "Données indicatives du fabricant. Les températures correspondent aux réglages annoncés de l'appareil : reportez-vous à la notice pour les conditions d'utilisation.",
+    "safety_title": "Précautions d'utilisation",
+    "safety": "<ul><li>Lisez la notice et les consignes du fabricant avant la première utilisation.</li><li>N'utilisez pas la ceinture en dormant, sous une couverture épaisse, ni sur une peau irritée, lésée ou peu sensible à la chaleur.</li><li>Commencez par le réglage le plus doux et arrêtez en cas d'inconfort.</li><li>En cas de grossesse, de problème de santé, de dispositif médical implanté ou de doute, demandez l'avis d'un professionnel de santé.</li><li>Des douleurs menstruelles intenses ou inhabituelles justifient un avis médical : la ceinture est un accessoire de confort et ne remplace pas un traitement.</li><li>N'utilisez pas l'appareil s'il est endommagé et tenez-le hors de portée des jeunes enfants.</li></ul>"
    },
    "blocks": {
-    "point-1": {
-     "type": "point",
+    "spec-1": {
+     "type": "spec",
      "settings": {
-      "text": "Chaleur prête en quelques secondes"
+      "label": "Type de produit",
+      "value": "Ceinture chauffante avec massage vibrant"
      }
     },
-    "point-2": {
-     "type": "point",
+    "spec-2": {
+     "type": "spec",
      "settings": {
-      "text": "Ceinture réglable, une taille pour toutes"
+      "label": "Couleur",
+      "value": "Rose"
      }
     },
-    "point-3": {
-     "type": "point",
+    "spec-3": {
+     "type": "spec",
      "settings": {
-      "text": "Rechargeable en USB-C, câble inclus"
+      "label": "Matériaux",
+      "value": "ABS et tissu effet velours"
      }
     },
-    "point-4": {
-     "type": "point",
+    "spec-4": {
+     "type": "spec",
      "settings": {
-      "text": "Expédiée sous 24 à 48 h dans un colis discret"
+      "label": "Réglages de chaleur",
+      "value": "3 réglages : 50, 55 et 60 °C"
+     }
+    },
+    "spec-5": {
+     "type": "spec",
+     "settings": {
+      "label": "Batterie",
+      "value": "Rechargeable, 1 800 mAh"
+     }
+    },
+    "spec-6": {
+     "type": "spec",
+     "settings": {
+      "label": "Alimentation",
+      "value": "5 V"
+     }
+    },
+    "spec-7": {
+     "type": "spec",
+     "settings": {
+      "label": "Puissance",
+      "value": "5 W"
+     }
+    },
+    "spec-8": {
+     "type": "spec",
+     "settings": {
+      "label": "Autonomie",
+      "value": "Environ 2 heures, selon les réglages"
+     }
+    },
+    "spec-9": {
+     "type": "spec",
+     "settings": {
+      "label": "Temps de recharge",
+      "value": "Environ 2 heures"
+     }
+    },
+    "spec-10": {
+     "type": "spec",
+     "settings": {
+      "label": "Dimensions",
+      "value": "18,5 × 8 × 2,5 cm"
+     }
+    },
+    "spec-11": {
+     "type": "spec",
+     "settings": {
+      "label": "Poids",
+      "value": "142 g"
      }
     }
    },
    "block_order": [
-    "point-1",
-    "point-2",
-    "point-3",
-    "point-4"
-   ]
-  },
-  "compare": {
-   "type": "velea-compare",
-   "blocks": {
-    "row-1": {
-     "type": "row",
-     "settings": {
-      "label": "Chaleur constante",
-      "velea": true,
-      "a": false,
-      "b": false
-     }
-    },
-    "row-2": {
-     "type": "row",
-     "settings": {
-      "label": "Utilisable en bougeant",
-      "velea": true,
-      "a": false,
-      "b": true
-     }
-    },
-    "row-3": {
-     "type": "row",
-     "settings": {
-      "label": "Massage intégré",
-      "velea": true,
-      "a": false,
-      "b": false
-     }
-    },
-    "row-4": {
-     "type": "row",
-     "settings": {
-      "label": "Sans médicament",
-      "velea": true,
-      "a": true,
-      "b": false
-     }
-    },
-    "row-5": {
-     "type": "row",
-     "settings": {
-      "label": "Réutilisable chaque mois",
-      "velea": true,
-      "a": true,
-      "b": false
-     }
-    }
-   },
-   "block_order": [
-    "row-1",
-    "row-2",
-    "row-3",
-    "row-4",
-    "row-5"
+    "spec-1",
+    "spec-2",
+    "spec-3",
+    "spec-4",
+    "spec-5",
+    "spec-6",
+    "spec-7",
+    "spec-8",
+    "spec-9",
+    "spec-10",
+    "spec-11"
    ]
   },
   "faq": {
    "type": "velea-faq",
+   "settings": {
+    "anchor": "faq",
+    "title": "Questions fréquentes",
+    "link_label": "",
+    "link": ""
+   },
    "blocks": {
     "qa-1": {
      "type": "qa",
      "settings": {
-      "q": "Est-ce que ça marche vraiment ?",
-      "a": "<p>La chaleur aide les muscles du ventre à se relâcher, c'est pour ça que la bouillotte est un réflexe depuis toujours. VELEA garde cette chaleur stable et te laisse bouger. Chaque corps est différent : c'est pour ça que tu as 30 jours pour l'essayer.</p>"
+      "q": "Comment fonctionne la ceinture ?",
+      "a": "<p>La ceinture associe un élément chauffant et une fonction de massage par vibration. Elle fonctionne sur batterie : une fois chargée, elle s'utilise sans être branchée. Les réglages se font depuis les commandes intégrées, comme indiqué dans la notice.</p>"
      }
     },
     "qa-2": {
      "type": "qa",
      "settings": {
-      "q": "À partir de quel âge peut-on l'utiliser ?",
-      "a": "<p>Dès les premières règles, avec une ceinture réglable qui s'adapte aux tailles fines comme aux plus larges. Pour une ado, on conseille de commencer au niveau de chaleur le plus doux.</p>"
+      "q": "Quels réglages de température sont annoncés ?",
+      "a": "<p>Le fabricant annonce trois réglages : 50 °C, 55 °C et 60 °C. Commencez par le réglage le plus bas et suivez les consignes de la notice.</p>"
      }
     },
     "qa-3": {
      "type": "qa",
      "settings": {
-      "q": "Combien de temps tient la batterie ?",
-      "a": "<p>Assez pour t'accompagner plusieurs heures selon le niveau choisi. Elle se recharge en USB-C, comme un téléphone.</p>"
+      "q": "Comment fonctionne le massage vibrant ?",
+      "a": "<p>La ceinture intègre une fonction de vibration qui accompagne la chaleur. Les modes disponibles et leur utilisation sont détaillés dans la notice fournie.</p>"
      }
     },
     "qa-4": {
      "type": "qa",
      "settings": {
-      "q": "Est-ce qu'elle se voit sous les vêtements ?",
-      "a": "<p>Elle est fine et se porte sous un pull, une robe ou un t-shirt ample sans attirer l'attention.</p>"
+      "q": "La ceinture est-elle rechargeable ?",
+      "a": "<p>Oui. Elle intègre une batterie rechargeable d'une capacité annoncée de 1 800 mAh, avec une recharge en 5 V.</p>"
      }
     },
     "qa-5": {
      "type": "qa",
      "settings": {
-      "q": "Quand vais-je recevoir ma commande ?",
-      "a": "<p>Ta commande est préparée sous 24 à 48 h, dans un colis neutre. Tu reçois un numéro de suivi par e-mail dès l'expédition.</p>"
+      "q": "Quelle est l'autonomie annoncée ?",
+      "a": "<p>Le fabricant annonce environ 2 heures d'autonomie. Elle peut varier selon les réglages utilisés.</p>"
      }
     },
     "qa-6": {
      "type": "qa",
      "settings": {
-      "q": "Et si elle ne me convient pas ?",
-      "a": "<p>Tu as 30 jours pour l'essayer. Si elle ne te soulage pas, écris-nous et on te rembourse.</p>"
+      "q": "Combien de temps dure la recharge ?",
+      "a": "<p>Le fabricant annonce un temps de recharge d'environ 2 heures.</p>"
      }
     },
     "qa-7": {
      "type": "qa",
      "settings": {
-      "q": "Le paiement est-il sécurisé ?",
-      "a": "<p>Oui. Le paiement passe par Shopify, avec une connexion chiffrée. Nous ne voyons jamais tes coordonnées bancaires.</p>"
+      "q": "Comment ajuster la ceinture ?",
+      "a": "<p>La ceinture se place autour de la taille et se règle grâce à sa sangle. Suivez les instructions de la notice pour la positionner correctement.</p>"
+     }
+    },
+    "qa-8": {
+     "type": "qa",
+     "settings": {
+      "q": "Que contient le colis ?",
+      "a": "<p>Le contenu du colis est indiqué sur l'emballage et dans la notice. Pour toute question avant l'achat, <a href=\"/pages/contact\">contactez-nous</a>.</p>"
+     }
+    },
+    "qa-9": {
+     "type": "qa",
+     "settings": {
+      "q": "Quels sont les délais de livraison ?",
+      "a": "<p>Les délais et les frais de livraison sont affichés avant le paiement et détaillés sur notre page <a href=\"/pages/livraison-et-retours\">Livraison et retours</a>.</p>"
+     }
+    },
+    "qa-10": {
+     "type": "qa",
+     "settings": {
+      "q": "Comment demander un retour ?",
+      "a": "<p>Vous disposez d'un droit de rétractation de 14 jours à compter de la réception. La démarche est décrite dans notre <a href=\"/pages/politique-de-retour\">politique de retour</a> ; vous pouvez aussi utiliser le <a href=\"/pages/formulaire-de-retractation\">formulaire de rétractation</a>.</p>"
+     }
+    },
+    "qa-11": {
+     "type": "qa",
+     "settings": {
+      "q": "Quelles précautions prendre avant utilisation ?",
+      "a": "<p>Lisez la notice avant la première utilisation. N'utilisez pas la ceinture en dormant, sous une couverture épaisse, ni sur une peau irritée ou lésée. En cas de grossesse, de problème de santé ou de doute, demandez l'avis d'un professionnel de santé. La ceinture est un accessoire de confort : elle ne remplace pas un avis médical.</p>"
+     }
+    },
+    "qa-12": {
+     "type": "qa",
+     "settings": {
+      "q": "Comment contacter le service client ?",
+      "a": "<p>Par notre <a href=\"/pages/contact\">formulaire de contact</a>. Indiquez votre numéro de commande si votre question la concerne.</p>"
      }
     }
    },
@@ -373,23 +378,21 @@
     "qa-4",
     "qa-5",
     "qa-6",
-    "qa-7"
+    "qa-7",
+    "qa-8",
+    "qa-9",
+    "qa-10",
+    "qa-11",
+    "qa-12"
    ]
-  },
-  "final": {
-   "type": "velea-final"
   }
  },
  "order": [
-  "hero",
-  "trust",
-  "story",
-  "benefits",
   "buy",
+  "description",
+  "benefits",
   "steps",
-  "ages",
-  "compare",
-  "faq",
-  "final"
+  "specs",
+  "faq"
  ]
 }

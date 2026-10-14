@@ -1,4 +1,4 @@
-<section id="faq" class="v-section">
+<section id="{{ section.settings.anchor | default: 'faq' }}" class="v-section">
   <div class="v-wrap">
     <div class="v-section__head v-section__head--center v-reveal">
       <h2 class="v-h2">{{ section.settings.title }}</h2>
@@ -10,6 +10,9 @@
           <div class="v-acc__body">{{ block.settings.a }}</div>
         </details>
       {%- endfor -%}
+      {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+        <p class="v-faq__more"><a class="v-link" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a></p>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -17,7 +20,12 @@
 {% schema %}
 {
   "name": "VELEA · Questions",
-  "settings": [{ "type": "text", "id": "title", "label": "Titre", "default": "Tes questions, nos réponses." }],
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "faq" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Questions fréquentes" },
+    { "type": "text", "id": "link_label", "label": "Texte du lien sous la FAQ" },
+    { "type": "url", "id": "link", "label": "Lien sous la FAQ" }
+  ],
   "blocks": [{
     "type": "qa", "name": "Question",
     "settings": [

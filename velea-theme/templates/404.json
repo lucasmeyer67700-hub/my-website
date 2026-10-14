@@ -1,0 +1,11 @@
+{
+ "layout": "velea",
+ "sections": {
+  "main": {
+   "type": "velea-404"
+  }
+ },
+ "order": [
+  "main"
+ ]
+}

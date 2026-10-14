@@ -1,0 +1,22 @@
+{%- assign p = product | default: section.settings.product -%}
+{%- if p.description != blank -%}
+<section id="description" class="v-section v-section--blanc">
+  <div class="v-wrap v-desc">
+    <div class="v-section__head v-reveal">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+    </div>
+    <div class="v-rte v-desc__body">{{ p.description }}</div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Description",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit (hors fiche produit)" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Tout savoir sur la ceinture" }
+  ],
+  "presets": [{ "name": "VELEA · Description" }]
+}
+{% endschema %}

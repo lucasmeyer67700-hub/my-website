@@ -72,4 +72,39 @@
   if (searchBtn) searchBtn.addEventListener('click', function () { setSearch(search.hidden); });
   document.querySelectorAll('[data-search-close]').forEach(function (el) { el.addEventListener('click', function () { setSearch(false); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setDrawer(false); setSearch(false); } });
+
+  // Galerie produit : miniatures et défilement
+  document.querySelectorAll('[data-gallery]').forEach(function (g) {
+    var track = g.querySelector('[data-gallery-track]');
+    var thumbs = g.querySelectorAll('[data-gallery-thumb]');
+    if (!track || !thumbs.length) return;
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        track.scrollTo({ left: track.clientWidth * Number(t.dataset.galleryThumb), behavior: 'smooth' });
+      });
+    });
+    var raf;
+    track.addEventListener('scroll', function () {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function () {
+        var i = Math.round(track.scrollLeft / track.clientWidth);
+        thumbs.forEach(function (t, n) { t.classList.toggle('is-active', n === i); });
+      });
+    }, { passive: true });
+  });
+
+  // Variantes et état de chargement du bouton d'ajout
+  document.querySelectorAll('form[action*="/cart/add"]').forEach(function (form) {
+    var select = form.querySelector('[data-variant-select]');
+    if (select) select.addEventListener('change', function () { form.querySelector('input[name="id"]').value = select.value; });
+    form.addEventListener('submit', function () {
+      var btn = form.querySelector('[data-add-btn]');
+      if (btn) { btn.classList.add('is-loading'); btn.setAttribute('aria-busy', 'true'); }
+    });
+  });
+
+  // Retour arrière : on réactive les boutons
+  window.addEventListener('pageshow', function () {
+    document.querySelectorAll('[data-add-btn].is-loading').forEach(function (b) { b.classList.remove('is-loading'); b.removeAttribute('aria-busy'); });
+  });
 })();

@@ -1,0 +1,52 @@
+<section id="{{ section.settings.anchor | default: 'caracteristiques' }}" class="v-section v-section--blanc v-specs">
+  <div class="v-wrap v-specs__grid">
+    <div class="v-reveal">
+      <div class="v-section__head">
+        <h2 class="v-h2">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank -%}<p class="v-lead v-muted">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+      {%- if section.settings.safety != blank -%}
+        <div class="v-safety">
+          <p class="v-safety__title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="M12 8v5M12 16h.01"/></svg>
+            {{ section.settings.safety_title }}
+          </p>
+          <div class="v-rte">{{ section.settings.safety }}</div>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="v-reveal">
+      <table class="v-spec-table">
+        <caption class="v-skip-sr">{{ section.settings.title }}</caption>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.label }}</th><td>{{ block.settings.value }}</td></tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+      {%- if section.settings.note != blank -%}<p class="v-spec-note">{{ section.settings.note }}</p>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Caractéristiques",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "caracteristiques" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Caractéristiques techniques" },
+    { "type": "textarea", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "note", "label": "Note sous le tableau", "default": "Informations communiquées par le fabricant." },
+    { "type": "text", "id": "safety_title", "label": "Titre des précautions", "default": "Précautions d'utilisation" },
+    { "type": "richtext", "id": "safety", "label": "Précautions (reprendre les consignes officielles du fabricant)" }
+  ],
+  "blocks": [{
+    "type": "spec", "name": "Caractéristique",
+    "settings": [
+      { "type": "text", "id": "label", "label": "Intitulé", "default": "Couleur" },
+      { "type": "text", "id": "value", "label": "Valeur", "default": "Rose" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Caractéristiques" }]
+}
+{% endschema %}

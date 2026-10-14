@@ -1,0 +1,37 @@
+<section class="v-section v-section--blanc v-page">
+  <div class="v-wrap v-page__wrap">
+    {%- form 'contact', class: 'v-form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="v-form__ok" role="status" tabindex="-1">Merci, votre message a bien été envoyé.</p>
+      {%- elsif form.errors -%}
+        <div class="v-form__err" role="alert">
+          <p>Le message n'a pas pu être envoyé. Vérifiez les champs suivants :</p>
+          <ul>{%- for field in form.errors -%}<li>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</li>{%- endfor -%}</ul>
+        </div>
+      {%- endif -%}
+      <div class="v-form__row">
+        <p class="v-form__field">
+          <label for="c-name">Nom</label>
+          <input id="c-name" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+        </p>
+        <p class="v-form__field">
+          <label for="c-email">E-mail <span aria-hidden="true">*</span></label>
+          <input id="c-email" type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+        </p>
+      </div>
+      <p class="v-form__field">
+        <label for="c-order">Numéro de commande (facultatif)</label>
+        <input id="c-order" type="text" name="contact[Numéro de commande]">
+      </p>
+      <p class="v-form__field">
+        <label for="c-msg">Message <span aria-hidden="true">*</span></label>
+        <textarea id="c-msg" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+      </p>
+      <button type="submit" class="v-btn v-btn--main">Envoyer le message</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "VELEA · Contact", "settings": [] }
+{% endschema %}

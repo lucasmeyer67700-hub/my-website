@@ -1,0 +1,11 @@
+{
+ "layout": "velea",
+ "sections": {
+  "main": {
+   "type": "velea-cart"
+  }
+ },
+ "order": [
+  "main"
+ ]
+}
