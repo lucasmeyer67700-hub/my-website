@@ -1,0 +1,8 @@
+{%- comment -%}Transforme un texte multiligne (champ personnalisé) en liste à puces.{%- endcomment -%}
+{%- assign vl_lines = text | newline_to_br | split: '<br />' -%}
+<ul>
+  {%- for line in vl_lines -%}
+    {%- assign l = line | strip -%}
+    {%- if l != blank -%}<li>{{ l | escape }}</li>{%- endif -%}
+  {%- endfor -%}
+</ul>

@@ -1,0 +1,400 @@
+{%- render 'vl-padding' -%}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign offers = section.blocks | where: 'type', 'offer'
+  assign tabs = section.blocks | where: 'type', 'tab'
+  assign default_qty = 1
+  for o in offers
+    if o.settings.selected
+      assign default_qty = o.settings.quantity
+    endif
+  endfor
+  assign form_id = 'vl-form-' | append: section.id
+-%}
+
+<section class="vl-buy color-{{ section.settings.color_scheme }} gradient" id="vl-buy" data-section="{{ section.id }}">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-buy__grid">
+
+      {%- comment -%} Galerie {%- endcomment -%}
+      <div class="vl-gallery" data-gallery>
+        <div class="vl-gallery__main">
+          {%- if product.media.size > 0 -%}
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                <div class="vl-gallery__slide{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}">
+                  {%- if forloop.first -%}
+                    {{ media | image_url: width: 1400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 50vw, 100vw', widths: '500, 750, 1000, 1400', alt: media.alt | default: product.title }}
+                  {%- else -%}
+                    {{ media | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '500, 750, 1000, 1400', alt: media.alt | default: product.title }}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            <div class="vl-gallery__slide is-active vl-gallery__slide--illu">{% render 'vl-belt-illustration', uid: section.id %}</div>
+          {%- endif -%}
+          {%- if section.settings.media_badge != blank -%}
+            <p class="vl-float vl-float--1">{% render 'vl-icon', icon: 'heat' %}{{ section.settings.media_badge | escape }}</p>
+          {%- endif -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <ul class="vl-gallery__thumbs" role="list">
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                <li>
+                  <button type="button" class="vl-gallery__thumb{% if forloop.first %} is-active{% endif %}" data-go="{{ forloop.index0 }}" aria-label="Voir l'image {{ forloop.index }}">
+                    {{ media | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}
+                  </button>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Informations et achat {%- endcomment -%}
+      <div class="vl-buy__info">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="vl-pill">{% render 'vl-icon', icon: 'heart' %}{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="vl-buy__title">{{ product.title | escape }}</h1>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="vl-buy__subtitle">{{ section.settings.subtitle | escape }}</p>
+        {%- endif -%}
+
+        <div class="vl-buy__price" data-price-box>
+          <span class="vl-buy__price-now" data-price-now>{{ variant.price | times: default_qty | money }}</span>
+          <s class="vl-buy__price-was" data-price-was hidden></s>
+          <span class="vl-buy__save" data-price-save hidden></span>
+        </div>
+        {%- if section.settings.tax_note != blank -%}<p class="vl-buy__tax">{{ section.settings.tax_note | escape }}</p>{%- endif -%}
+
+        {%- assign mf_benefits = product.metafields.velea.benefices.value -%}
+        {%- if mf_benefits != blank -%}
+          <ul class="vl-checks vl-checks--compact" role="list">
+            {%- for l in mf_benefits -%}
+              <li><span class="vl-checks__mark">{% render 'vl-icon', icon: 'check' %}</span>{{ l | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- elsif section.settings.points != blank -%}
+          <ul class="vl-checks vl-checks--compact" role="list">
+            {%- assign lines = section.settings.points | newline_to_br | split: '<br />' -%}
+            {%- for line in lines -%}
+              {%- assign l = line | strip -%}
+              {%- if l != blank -%}<li><span class="vl-checks__mark">{% render 'vl-icon', icon: 'check' %}</span>{{ l | escape }}</li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <product-form class="vl-buy__form product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+          {%- form 'product', product, id: form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" data-variant-input>
+            <input type="hidden" name="quantity" value="{{ default_qty }}" data-qty-input>
+            {%- if section.settings.show_installments -%}
+              <div class="vl-buy__installments">{{ form | payment_terms }}</div>
+            {%- endif -%}
+
+            {%- unless product.has_only_default_variant -%}
+              <div class="vl-variant">
+                <label class="vl-variant__label" for="vl-variant-{{ section.id }}">{{ product.options.first }}</label>
+                <div class="select">
+                  <select id="vl-variant-{{ section.id }}" class="select__select" data-variant-select>
+                    {%- for v in product.variants -%}
+                      <option value="{{ v.id }}" data-price="{{ v.price }}" {% if v.id == variant.id %}selected{% endif %}{% unless v.available %} disabled{% endunless %}>
+                        {{ v.title | escape }}{% unless v.available %} · épuisé{% endunless %}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                  <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                </div>
+              </div>
+            {%- endunless -%}
+
+            {%- if offers.size > 0 -%}
+              <fieldset class="vl-offers" data-unit-price="{{ variant.price }}">
+                <legend class="vl-offers__legend">{{ section.settings.offers_title | escape }}</legend>
+                {%- for o in offers -%}
+                  {%- assign q = o.settings.quantity -%}
+                  {%- assign full = variant.price | times: q -%}
+                  {%- assign off = o.settings.discount | times: 100 | round -%}
+                  {%- assign total = full | minus: off -%}
+                  {%- assign o_variant = blank -%}
+                  {%- if o.settings.product != blank and o.settings.product.id != product.id -%}
+                    {%- assign o_variant = o.settings.product.selected_or_first_available_variant -%}
+                    {%- assign q = 1 -%}
+                    {%- assign off = 0 -%}
+                    {%- assign total = o_variant.price -%}
+                    {%- assign full = o_variant.compare_at_price | default: 0 -%}
+                    {%- if full > total -%}{%- assign off = full | minus: total -%}{%- endif -%}
+                  {%- endif -%}
+                  <label class="vl-offer{% if o.settings.selected %} is-selected{% endif %}" {{ o.shopify_attributes }}>
+                    <input type="radio" name="vl-offer-{{ section.id }}" value="{{ q }}" data-discount="{{ off }}"{% if o_variant != blank %} data-variant-id="{{ o_variant.id }}" data-price="{{ total }}"{% if off > 0 %} data-full="{{ full }}"{% endif %}{% endif %} {% if o.settings.selected %}checked{% endif %}{% if o_variant != blank and o_variant.available == false %} disabled{% endif %}>
+                    <span class="vl-offer__radio" aria-hidden="true"></span>
+                    <span class="vl-offer__copy">
+                      <span class="vl-offer__title">{{ o.settings.title | escape }}</span>
+                      {%- if o.settings.subtitle != blank %}<span class="vl-offer__sub">{{ o.settings.subtitle | escape }}</span>{% endif -%}
+                    </span>
+                    <span class="vl-offer__price">
+                      <strong data-offer-total>{{ total | money }}</strong>
+                      {%- if off > 0 %}<s data-offer-full>{{ full | money }}</s>{% endif -%}
+                    </span>
+                    {%- if o.settings.badge != blank %}<span class="vl-offer__badge">{{ o.settings.badge | escape }}</span>{% endif -%}
+                  </label>
+                {%- endfor -%}
+                {%- if section.settings.offers_note != blank %}<p class="vl-offers__note">{{ section.settings.offers_note | escape }}</p>{% endif -%}
+              </fieldset>
+            {%- endif -%}
+
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <span class="svg-wrapper">{{ 'icon-error.svg' | inline_asset_content }}</span>
+              <span class="product-form__error-message"></span>
+            </div>
+
+            <button type="submit" name="add" class="product-form__submit button button--full-width button--primary vl-buy__submit" {% unless variant.available %}disabled{% endunless %} data-main-submit>
+              <span>
+                {%- if variant.available -%}{{ section.settings.button_label | escape }}{%- else -%}Épuisé{%- endif -%}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+            {%- if section.settings.show_dynamic_checkout -%}
+              <div class="vl-buy__express">{{ form | payment_button }}</div>
+            {%- endif -%}
+          {%- endform -%}
+        </product-form>
+
+        {%- if section.settings.show_delivery -%}
+          <p class="vl-eta" data-eta data-min="{{ section.settings.delivery_min }}" data-max="{{ section.settings.delivery_max }}">
+            {% render 'vl-icon', icon: 'truck' %}
+            <span>{{ section.settings.delivery_label | escape }} <strong data-eta-from>…</strong> et le <strong data-eta-to>…</strong></span>
+          </p>
+        {%- endif -%}
+
+        <ul class="vl-buy__trust" role="list">
+          <li>{% render 'vl-icon', icon: 'return' %}<span>{{ section.settings.trust_1 | escape }}</span></li>
+          <li>{% render 'vl-icon', icon: 'lock' %}<span>{{ section.settings.trust_2 | escape }}</span></li>
+          <li>{% render 'vl-icon', icon: 'chat' %}<span>{{ section.settings.trust_3 | escape }}</span></li>
+        </ul>
+
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          <ul class="vl-buy__payments list-payment" role="list" aria-label="Moyens de paiement acceptés">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="list-payment__item">{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <div class="vl-tabs">
+          {%- if product.description != blank and section.settings.show_description -%}
+            <details class="vl-tab" open>
+              <summary>{% render 'vl-icon', icon: 'sparkle' %}<span>{{ section.settings.description_title | escape }}</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+              <div class="vl-tab__content rte">{{ product.description }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.show_metafields -%}
+            {%- assign mf = product.metafields.velea -%}
+            {%- if mf.caracteristiques != blank -%}
+              <details class="vl-tab">
+                <summary>{% render 'vl-icon', icon: 'battery' %}<span>Caractéristiques</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+                <div class="vl-tab__content rte">{% render 'vl-lines', text: mf.caracteristiques.value %}</div>
+              </details>
+            {%- endif -%}
+            {%- if mf.utilisation != blank -%}
+              <details class="vl-tab">
+                <summary>{% render 'vl-icon', icon: 'clock' %}<span>Utilisation et entretien</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+                <div class="vl-tab__content rte">{% render 'vl-lines', text: mf.utilisation.value %}</div>
+              </details>
+            {%- endif -%}
+            {%- if mf.securite != blank -%}
+              <details class="vl-tab">
+                <summary>{% render 'vl-icon', icon: 'shield' %}<span>Sécurité et précautions</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+                <div class="vl-tab__content rte">{% render 'vl-lines', text: mf.securite.value %}<p><em>Accessoire de bien-être, ne remplace pas un avis médical.</em></p></div>
+              </details>
+            {%- endif -%}
+          {%- endif -%}
+          {%- for t in tabs -%}
+            <details class="vl-tab" {{ t.shopify_attributes }}>
+              <summary>{% render 'vl-icon', icon: t.settings.icon %}<span>{{ t.settings.title | escape }}</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+              <div class="vl-tab__content rte">{{ t.settings.content }}</div>
+            </details>
+          {%- endfor -%}
+          {%- if section.settings.show_metafields -%}
+            {%- if mf.faq.value != blank -%}
+              <details class="vl-tab">
+                <summary>{% render 'vl-icon', icon: 'chat' %}<span>Tes questions</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+                <div class="vl-tab__content rte">
+                  {%- for item in mf.faq.value -%}
+                    <p><strong>{{ item.q | escape }}</strong><br>{{ item.r | escape }}</p>
+                  {%- endfor -%}
+                </div>
+              </details>
+            {%- endif -%}
+            {%- if mf.gpsr != blank -%}
+              <details class="vl-tab">
+                <summary>{% render 'vl-icon', icon: 'feather' %}<span>Informations produit et sécurité</span><span class="vl-faq__toggle" aria-hidden="true">{% render 'vl-icon', icon: 'plus' %}</span></summary>
+                <div class="vl-tab__content rte">{% render 'vl-lines', text: mf.gpsr.value %}</div>
+              </details>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+<script>
+  (function () {
+    var root = document.querySelector('#shopify-section-{{ section.id }} .vl-buy');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    var fmt = function (cents) {
+      return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: {{ cart.currency.iso_code | json }} }).format(cents / 100);
+    };
+
+    /* Galerie */
+    var slides = root.querySelectorAll('.vl-gallery__slide');
+    var thumbs = root.querySelectorAll('.vl-gallery__thumb');
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var i = t.dataset.go;
+        slides.forEach(function (s) { s.classList.toggle('is-active', s.dataset.index === i); });
+        thumbs.forEach(function (x) { x.classList.toggle('is-active', x === t); });
+      });
+    });
+
+    /* Offres, variante et prix */
+    var fieldset = root.querySelector('.vl-offers');
+    var qtyInput = root.querySelector('[data-qty-input]');
+    var idInput = root.querySelector('[data-variant-input]');
+    var select = root.querySelector('[data-variant-select]');
+    var unit = fieldset ? parseInt(fieldset.dataset.unitPrice, 10) : {{ variant.price }};
+    var now = root.querySelector('[data-price-now]');
+    var was = root.querySelector('[data-price-was]');
+    var save = root.querySelector('[data-price-save]');
+
+    var baseId = idInput.value;
+    function refresh() {
+      var radio = fieldset ? fieldset.querySelector('input:checked') : null;
+      var qty = radio ? parseInt(radio.value, 10) : 1;
+      var off = radio ? parseInt(radio.dataset.discount, 10) || 0 : 0;
+      var other = radio && radio.dataset.variantId;
+      qtyInput.value = qty;
+      idInput.value = other ? radio.dataset.variantId : (select ? select.value : baseId);
+      var price = other ? parseInt(radio.dataset.price, 10) : unit * qty - off;
+      var full = other ? parseInt(radio.dataset.full, 10) || price : unit * qty;
+      now.textContent = fmt(price);
+      if (off > 0 && full > price) {
+        was.textContent = fmt(full); was.hidden = false;
+        save.textContent = 'Tu économises ' + fmt(full - price); save.hidden = false;
+      } else { was.hidden = true; save.hidden = true; }
+      if (fieldset) {
+        fieldset.querySelectorAll('.vl-offer').forEach(function (label) {
+          var r = label.querySelector('input');
+          label.classList.toggle('is-selected', r.checked);
+          if (r.dataset.variantId) return;
+          var q = parseInt(r.value, 10), d = parseInt(r.dataset.discount, 10) || 0;
+          label.querySelector('[data-offer-total]').textContent = fmt(unit * q - d);
+          var fullEl = label.querySelector('[data-offer-full]');
+          if (fullEl) fullEl.textContent = fmt(unit * q);
+        });
+      }
+      document.dispatchEvent(new CustomEvent('vl:price', { detail: { text: now.textContent } }));
+    }
+    if (fieldset) fieldset.addEventListener('change', refresh);
+    if (select) select.addEventListener('change', function () {
+      var opt = select.options[select.selectedIndex];
+      unit = parseInt(opt.dataset.price, 10);
+      refresh();
+    });
+    refresh();
+
+    /* Date de livraison estimée (jours ouvrés) */
+    var eta = root.querySelector('[data-eta]');
+    if (eta) {
+      var addBusinessDays = function (d, n) {
+        var r = new Date(d);
+        while (n > 0) { r.setDate(r.getDate() + 1); if (r.getDay() !== 0 && r.getDay() !== 6) n--; }
+        return r;
+      };
+      var opts = { weekday: 'long', day: 'numeric', month: 'long' };
+      var today = new Date();
+      eta.querySelector('[data-eta-from]').textContent = addBusinessDays(today, parseInt(eta.dataset.min, 10)).toLocaleDateString('fr-FR', opts);
+      eta.querySelector('[data-eta-to]').textContent = addBusinessDays(today, parseInt(eta.dataset.max, 10)).toLocaleDateString('fr-FR', opts);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "VELEA · Achat produit",
+  "tag": "div",
+  "class": "vl-buy-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Spécial douleurs de règles" },
+    { "type": "text", "id": "subtitle", "label": "Sous-titre" },
+    { "type": "text", "id": "media_badge", "label": "Étiquette sur la photo" },
+    { "type": "textarea", "id": "points", "label": "Points forts (un par ligne)" },
+    { "type": "header", "content": "Offres" },
+    { "type": "text", "id": "tax_note", "label": "Mention sous le prix", "default": "TTC · Livraison offerte" },
+    { "type": "checkbox", "id": "show_installments", "label": "Afficher le paiement en plusieurs fois", "info": "S'affiche seulement si un paiement fractionné est activé dans Shopify.", "default": true },
+    { "type": "text", "id": "offers_title", "label": "Titre des offres", "default": "Choisis ton offre" },
+    { "type": "text", "id": "offers_note", "label": "Note sous les offres", "info": "La remise doit exister en remise automatique dans Shopify." },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Ajouter au panier" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Boutons de paiement express", "default": true },
+    { "type": "header", "content": "Livraison et confiance" },
+    { "type": "checkbox", "id": "show_delivery", "label": "Afficher la date de livraison estimée", "default": true },
+    { "type": "number", "id": "delivery_min", "label": "Délai minimum (jours ouvrés)", "default": 5 },
+    { "type": "number", "id": "delivery_max", "label": "Délai maximum (jours ouvrés)", "default": 10 },
+    { "type": "text", "id": "delivery_label", "label": "Texte de livraison", "default": "Livraison offerte, estimée entre le" },
+    { "type": "text", "id": "trust_1", "label": "Confiance 1", "default": "30 jours satisfaite ou remboursée" },
+    { "type": "text", "id": "trust_2", "label": "Confiance 2", "default": "Paiement 100 % sécurisé" },
+    { "type": "text", "id": "trust_3", "label": "Confiance 3", "default": "Réponse sous 24 h" },
+    { "type": "header", "content": "Description" },
+    { "type": "checkbox", "id": "show_description", "label": "Afficher la description du produit", "default": true },
+    { "type": "text", "id": "description_title", "label": "Titre de la description", "default": "Description" },
+    { "type": "checkbox", "id": "show_metafields", "label": "Afficher les infos des champs personnalisés", "info": "Caractéristiques, utilisation, sécurité, FAQ et informations GPSR (champs velea.*).", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offre",
+      "limit": 4,
+      "settings": [
+        { "type": "product", "id": "product", "label": "Autre produit (pack)", "info": "Laisse vide pour une offre en quantité. Sinon, choisir l'offre ajoute ce produit au panier." },
+        { "type": "number", "id": "quantity", "label": "Quantité", "default": 1 },
+        { "type": "text", "id": "title", "label": "Titre", "default": "1 ceinture" },
+        { "type": "text", "id": "subtitle", "label": "Sous-titre" },
+        { "type": "text", "id": "badge", "label": "Badge" },
+        { "type": "number", "id": "discount", "label": "Remise sur l'offre (€)", "default": 0, "info": "Affichage seulement : créez la même remise automatique dans Shopify." },
+        { "type": "checkbox", "id": "selected", "label": "Sélectionnée par défaut", "default": false }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Onglet",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "clock",
+          "options": [
+            { "value": "clock", "label": "Horloge" }, { "value": "heat", "label": "Chaleur" },
+            { "value": "shield", "label": "Sécurité" }, { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" }, { "value": "thermo", "label": "Thermomètre" },
+            { "value": "gift", "label": "Cadeau" }, { "value": "battery", "label": "Batterie" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Utilisation" },
+        { "type": "richtext", "id": "content", "label": "Contenu" }
+      ]
+    }
+  ]
+}
+{% endschema %}

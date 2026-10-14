@@ -1,0 +1,29 @@
+{%- render 'vl-padding' -%}
+<section class="vl-404 color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-404__box">
+      <p class="vl-404__code" aria-hidden="true">404</p>
+      <h1 class="h1">{{ section.settings.title }}</h1>
+      <div class="rte vl-404__text">{{ section.settings.text }}</div>
+      <div class="vl-404__actions">
+        <a class="button button--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+        <a class="button button--secondary" href="{{ routes.root_url }}">Retour à l'accueil</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Page 404",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Oups, cette page s'est <em>glissée sous le plaid</em>" },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Pas de panique, ça arrive même aux meilleures. La page que tu cherches a peut-être changé d'adresse. On te ramène au chaud ?</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Voir nos produits" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 96 }
+  ]
+}
+{% endschema %}

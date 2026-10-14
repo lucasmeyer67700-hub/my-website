@@ -1,0 +1,58 @@
+{%- render 'vl-padding' -%}
+{%- assign img = section.settings.image -%}
+<section class="vl-specs color-{{ section.settings.color_scheme }} gradient"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handle }}"{% endif %}>
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-specs__grid">
+      <div class="vl-specs__visual">
+        {%- if img != blank -%}
+          {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1200', alt: img.alt | default: section.settings.title }}
+        {%- else -%}
+          {% render 'vl-belt-illustration', uid: section.id %}
+        {%- endif -%}
+      </div>
+      <div class="vl-specs__copy">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h1">{{ section.settings.title | escape }}</h2>
+        {%- if section.settings.text != blank %}<div class="vl-heading__text rte">{{ section.settings.text }}</div>{% endif -%}
+        <dl class="vl-specs__list">
+          {%- for block in section.blocks -%}
+            <div class="vl-specs__row" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label | escape }}</dt>
+              <dd>{{ block.settings.value | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+        {%- if section.settings.note != blank %}<p class="vl-specs__note">{{ section.settings.note | escape }}</p>{% endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Caractéristiques",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (ex. caracteristiques)" },
+    { "type": "image_picker", "id": "image", "label": "Visuel" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Dans le détail" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Caractéristiques" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "note", "label": "Note sous le tableau" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Libellé", "default": "Chaleur" },
+        { "type": "text", "id": "value", "label": "Valeur", "default": "3 niveaux" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Caractéristiques", "blocks": [{ "type": "row" }, { "type": "row" }] }]
+}
+{% endschema %}

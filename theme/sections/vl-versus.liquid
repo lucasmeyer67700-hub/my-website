@@ -1,0 +1,74 @@
+{%- render 'vl-padding' -%}
+<section class="vl-versus color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width page-width--narrow section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank %}<div class="vl-heading__text rte">{{ section.settings.text }}</div>{% endif -%}
+    </div>
+    <div class="vl-versus__wrap">
+      <table class="vl-versus__table">
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Critère</span></th>
+            <th scope="col" class="vl-versus__ours">{% render 'vl-logo', uid: section.id %}<span class="visually-hidden">{{ section.settings.col_1 | escape }}</span></th>
+            <th scope="col">{{ section.settings.col_2 | escape }}</th>
+            <th scope="col">{{ section.settings.col_3 | escape }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.label | escape }}</th>
+              {%- assign values = block.settings.value_1 | append: '|' | append: block.settings.value_2 | append: '|' | append: block.settings.value_3 | split: '|' -%}
+              {%- for v in values -%}
+                {%- assign vv = v | strip | downcase -%}
+                <td{% if forloop.first %} class="vl-versus__ours"{% endif %}>
+                  {%- if vv == 'oui' -%}
+                    <span class="vl-yes" aria-label="Oui">{% render 'vl-icon', icon: 'check' %}</span>
+                  {%- elsif vv == 'non' -%}
+                    <span class="vl-no" aria-label="Non">{% render 'vl-icon', icon: 'minus' %}</span>
+                  {%- else -%}
+                    {{ v | strip | escape }}
+                  {%- endif -%}
+                </td>
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Comparatif",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Pourquoi pas une simple bouillotte ?" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "col_1", "label": "Colonne 1 (vous)", "default": "Ceinture VELEA" },
+    { "type": "text", "id": "col_2", "label": "Colonne 2", "default": "Bouillotte" },
+    { "type": "text", "id": "col_3", "label": "Colonne 3", "default": "Patch jetable" },
+    { "type": "paragraph", "content": "Dans les lignes, écrivez « oui » ou « non » pour afficher une coche ou un tiret." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Critère", "default": "Chaleur réglable" },
+        { "type": "text", "id": "value_1", "label": "Colonne 1", "default": "oui" },
+        { "type": "text", "id": "value_2", "label": "Colonne 2", "default": "non" },
+        { "type": "text", "id": "value_3", "label": "Colonne 3", "default": "non" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Comparatif", "blocks": [{ "type": "row" }, { "type": "row" }] }]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+{%- render 'vl-padding' -%}
+<section class="vl-news color-{{ section.settings.color_scheme }} gradient" id="newsletter">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-news__box">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank %}<div class="rte vl-news__text">{{ section.settings.text }}</div>{% endif -%}
+      {%- assign fid = 'vl-news-' | append: section.id -%}
+      {%- render 'vl-signup-form', form_id: fid, button_label: section.settings.button_label, code: section.settings.code -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Newsletter",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Rejoins le cocon" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "-10 % sur ta <em>première commande</em>" },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Des conseils doux pour tes règles, nos nouveautés en avant-première, et ton code de bienvenue tout de suite.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je m'inscris" },
+    { "type": "text", "id": "code", "label": "Code de bienvenue affiché", "default": "BIENVENUE10", "info": "Crée ce code dans Shopify (Réductions) avant de publier." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "presets": [{ "name": "VELEA · Newsletter" }]
+}
+{% endschema %}

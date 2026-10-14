@@ -1,0 +1,72 @@
+{%- render 'vl-padding' -%}
+{%- assign img = section.settings.image -%}
+<section class="vl-benefits color-{{ section.settings.color_scheme }} gradient"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handle }}"{% endif %}>
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank %}<div class="vl-heading__text rte">{{ section.settings.text }}</div>{% endif -%}
+    </div>
+    <div class="vl-benefits__layout{% if section.settings.show_visual %} vl-benefits__layout--visual{% endif %}">
+      {%- if section.settings.show_visual -%}
+        <div class="vl-benefits__visual">
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 100vw', widths: '500, 800, 1200', alt: img.alt | default: section.settings.title }}
+          {%- else -%}
+            {% render 'vl-belt-illustration', uid: section.id %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <ul class="vl-benefits__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="vl-benefit scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ forloop.index }};" {{ block.shopify_attributes }}>
+            <span class="vl-benefit__icon">{% render 'vl-icon', icon: block.settings.icon %}</span>
+            <h3 class="vl-benefit__title">{{ block.settings.title | escape }}</h3>
+            <div class="vl-benefit__text rte">{{ block.settings.text }}</div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Bienfaits",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (ex. bienfaits)" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Pensée pour ces jours-là" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "checkbox", "id": "show_visual", "label": "Afficher un visuel", "default": false },
+    { "type": "image_picker", "id": "image", "label": "Visuel" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Bienfait",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "heat",
+          "options": [
+            { "value": "heat", "label": "Chaleur" }, { "value": "massage", "label": "Massage" },
+            { "value": "battery", "label": "Batterie" }, { "value": "cable", "label": "Recharge" },
+            { "value": "feather", "label": "Légèreté" }, { "value": "shield", "label": "Sécurité" },
+            { "value": "clock", "label": "Horloge" }, { "value": "body", "label": "Silhouette" },
+            { "value": "heart", "label": "Cœur" }, { "value": "leaf", "label": "Feuille" },
+            { "value": "thermo", "label": "Thermomètre" }, { "value": "power", "label": "Arrêt auto" },
+            { "value": "sparkle", "label": "Éclat" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Chaleur apaisante" },
+        { "type": "richtext", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Bienfaits", "blocks": [{ "type": "benefit" }, { "type": "benefit" }, { "type": "benefit" }] }]
+}
+{% endschema %}

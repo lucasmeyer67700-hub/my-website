@@ -1,0 +1,46 @@
+{%- render 'vl-padding' -%}
+<section class="vl-guarantee color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-guarantee__box">
+      <div class="vl-seal" aria-hidden="true">
+        <svg class="vl-seal__ring" viewBox="0 0 200 200">
+          <defs><path id="vlSealPath{{ section.id }}" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs>
+          <text><textPath href="#vlSealPath{{ section.id }}">{{ section.settings.seal_ring | escape }}</textPath></text>
+        </svg>
+        <span class="vl-seal__core">
+          <strong>{{ section.settings.seal_number | escape }}</strong>
+          <span>{{ section.settings.seal_unit | escape }}</span>
+        </span>
+      </div>
+      <div class="vl-guarantee__copy">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h1">{{ section.settings.title | escape }}</h2>
+        <div class="rte">{{ section.settings.text }}</div>
+        {%- if section.settings.button_label != blank -%}
+          <a class="button button--secondary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Garantie",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "seal_number", "label": "Chiffre du sceau", "default": "30" },
+    { "type": "text", "id": "seal_unit", "label": "Unité du sceau", "default": "jours" },
+    { "type": "text", "id": "seal_ring", "label": "Texte circulaire", "default": "SATISFAITE OU REMBOURSÉE · SATISFAITE OU REMBOURSÉE · " },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Notre promesse" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Essayez-la pendant 30 jours" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-5" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "presets": [{ "name": "VELEA · Garantie" }]
+}
+{% endschema %}

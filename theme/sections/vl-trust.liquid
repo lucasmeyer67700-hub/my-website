@@ -1,0 +1,50 @@
+{%- render 'vl-padding' -%}
+<section class="vl-trust color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <ul class="vl-trust__list vl-trust__list--{{ section.blocks.size | at_most: 4 }}" role="list">
+      {%- for block in section.blocks -%}
+        <li class="vl-trust__item" {{ block.shopify_attributes }}>
+          <span class="vl-trust__icon">{% render 'vl-icon', icon: block.settings.icon %}</span>
+          <span class="vl-trust__copy">
+            <strong>{{ block.settings.title | escape }}</strong>
+            {%- if block.settings.text != blank %}<span>{{ block.settings.text | escape }}</span>{% endif -%}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Réassurance",
+  "tag": "div",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 28 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Élément",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "truck",
+          "options": [
+            { "value": "truck", "label": "Livraison" }, { "value": "return", "label": "Retour" },
+            { "value": "lock", "label": "Paiement" }, { "value": "chat", "label": "Service client" },
+            { "value": "heat", "label": "Chaleur" }, { "value": "massage", "label": "Massage" },
+            { "value": "battery", "label": "Batterie" }, { "value": "shield", "label": "Sécurité" },
+            { "value": "heart", "label": "Cœur" }, { "value": "clock", "label": "Horloge" },
+            { "value": "leaf", "label": "Feuille" }, { "value": "feather", "label": "Légèreté" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Réassurance", "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }, { "type": "item" }] }]
+}
+{% endschema %}

@@ -1,0 +1,525 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * VELEA : modèle généré. Modifiable depuis l'éditeur de thème.
+ */
+{
+  "sections": {
+    "main": {
+      "type": "vl-buybox",
+      "settings": {
+        "eyebrow": "Ton cocon pendant tes règles",
+        "subtitle": "Chaleur douce + massage, sans fil. À porter 30 min à 1 h, 2 à 3 fois par jour.",
+        "media_badge": "",
+        "points": "",
+        "offers_title": "Choisis ton offre",
+        "offers_note": "",
+        "button_label": "Ajouter au panier",
+        "show_dynamic_checkout": true,
+        "show_delivery": true,
+        "delivery_min": 7,
+        "delivery_max": 14,
+        "trust_1": "30 jours satisfaite ou remboursée",
+        "trust_2": "Paiement 100 % sécurisé",
+        "trust_3": "Réponse sous 24 h",
+        "show_description": true,
+        "description_title": "Description",
+        "color_scheme": "scheme-1",
+        "padding_top": 32,
+        "padding_bottom": 64,
+        "tax_note": "TTC · Livraison offerte",
+        "show_installments": true,
+        "show_metafields": true,
+        "delivery_label": "Livraison offerte, estimée entre le"
+      },
+      "blocks": {
+        "offer_1": {
+          "type": "offer",
+          "settings": {
+            "quantity": 1,
+            "title": "La ceinture seule",
+            "subtitle": "Pour la maison et le bureau",
+            "badge": "",
+            "discount": 0,
+            "selected": true
+          }
+        },
+        "offer_2": {
+          "type": "offer",
+          "settings": {
+            "product": "pack-cocon",
+            "quantity": 1,
+            "title": "Le Pack Cocon",
+            "subtitle": "Ceinture + 10 patchs + pochette, pour être prête partout",
+            "badge": "Notre préféré",
+            "discount": 0,
+            "selected": false
+          }
+        },
+        "tab_4": {
+          "type": "tab",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison et retours",
+            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi, en 7 à 14 jours ouvrés.</p><p>14 jours de rétractation, et 30 jours satisfaite ou remboursée sur la ceinture : écris-nous, on organise le retour. <a href=\"/pages/livraison-et-retours\">Toutes les conditions</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "offer_1",
+        "offer_2",
+        "tab_4"
+      ]
+    },
+    "trust": {
+      "type": "vl-trust",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 28,
+        "padding_bottom": 28
+      },
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison offerte",
+            "text": "En France métropolitaine, avec suivi"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "30 jours pour l'essayer",
+            "text": "Satisfaite ou remboursée"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement sécurisé",
+            "text": "Carte bancaire, Apple Pay, Google Pay"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "Une vraie équipe",
+            "text": "Réponse sous 24 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ]
+    },
+    "problem": {
+      "type": "vl-problem",
+      "settings": {
+        "eyebrow": "Tu te reconnais ?",
+        "title": "Chaque mois, la même histoire",
+        "text": "<p>Les crampes qui te plient en deux, la bouillotte qui refroidit trop vite, la journée qu'il faut tenir quand même… Tu mérites mieux que « ça va passer ».</p>",
+        "before_label": "Sans VELEA",
+        "before_lines": "Des crampes qui te coupent dans ta journée\nUne bouillotte froide au bout de 20 minutes\nImpossible de bouger avec la bouillotte sur le ventre\nLe bas du dos tendu, du matin au soir",
+        "after_label": "Avec VELEA",
+        "after_lines": "Une chaleur douce et régulière, que tu règles toi-même\nUn massage léger qui aide ton ventre à se détendre\nSans fil : tu la gardes en bougeant, même sous un pull\nUn vrai moment pour toi, 2 à 3 fois par jour",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "benefits": {
+      "type": "vl-benefits",
+      "settings": {
+        "anchor": "bienfaits",
+        "eyebrow": "Ses atouts",
+        "title": "Pensée pour ces jours-là",
+        "text": "<p>Une ceinture, deux gestes qui font du bien : la chaleur et le massage. Rien de compliqué.</p>",
+        "show_visual": false,
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "heat",
+            "title": "Chaleur douce réglable",
+            "text": "<p>3 niveaux pour trouver la chaleur qui te fait du bien. La chaleur aide les muscles du ventre à se relâcher : le réflexe bouillotte, en bien plus pratique.</p>"
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "massage",
+            "title": "Massage apaisant",
+            "text": "<p>3 modes de vibration qui massent doucement le bas du ventre ou le bas du dos, seuls ou avec la chaleur.</p>"
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "battery",
+            "title": "Sans fil, rechargeable",
+            "text": "<p>Une recharge en USB-C, puis tu la portes partout : canapé, bureau, transports, cours.</p>"
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "feather",
+            "title": "Discrète et légère",
+            "text": "<p>Fine et souple, elle se glisse sous un pull ou une chemise. Personne n'a besoin de savoir.</p>"
+          }
+        },
+        "benefit_5": {
+          "type": "benefit",
+          "settings": {
+            "icon": "power",
+            "title": "Arrêt automatique",
+            "text": "<p>Elle s'éteint toute seule au bout d'un moment : tu te détends sans surveiller l'heure.</p>"
+          }
+        },
+        "benefit_6": {
+          "type": "benefit",
+          "settings": {
+            "icon": "body",
+            "title": "Ventre ou bas du dos",
+            "text": "<p>Tourne la ceinture : la chaleur se place exactement là où ça tire le plus.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4",
+        "benefit_5",
+        "benefit_6"
+      ]
+    },
+    "how": {
+      "type": "vl-how",
+      "settings": {
+        "anchor": "utilisation",
+        "eyebrow": "Mode d'emploi",
+        "title": "Ton rituel douceur en 4 étapes",
+        "text": "<p>Aussi simple qu'une bouillotte. En mieux.</p>",
+        "ritual_title": "Le rituel conseillé",
+        "stat_1_value": "30 min à 1 h",
+        "stat_1_label": "par séance",
+        "stat_2_value": "2 à 3 fois",
+        "stat_2_label": "par jour",
+        "stat_3_value": "Dès les premiers signes",
+        "stat_3_label": "et pendant tes règles",
+        "ritual_note": "Écoute ton corps : si la chaleur devient inconfortable, baisse le niveau ou retire la ceinture. Ne t'endors jamais avec la ceinture allumée.",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "icon": "cable",
+            "title": "Recharge",
+            "text": "<p>Branche la ceinture avec le câble USB-C fourni, sur n'importe quel chargeur USB.</p>"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "icon": "body",
+            "title": "Attache-la",
+            "text": "<p>Place le boîtier sur le bas du ventre (ou le bas du dos) et ajuste la sangle, par-dessus un vêtement fin.</p>"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "icon": "heat",
+            "title": "Règle",
+            "text": "<p>Allume, choisis ta chaleur et ton massage. Commence doucement, monte si besoin.</p>"
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "icon": "clock",
+            "title": "Laisse agir",
+            "text": "<p>Garde-la 30 minutes à 1 heure, fais une pause, et recommence 2 à 3 fois dans la journée.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ]
+    },
+    "versus": {
+      "type": "vl-versus",
+      "settings": {
+        "eyebrow": "Comparatif",
+        "title": "Ceinture, bouillotte ou antidouleur ?",
+        "text": "<p>Chacun a sa place. Les antidouleurs se prennent sur conseil de ton médecin ou de ton pharmacien. La chaleur, elle, est un geste de confort que tu peux utiliser seule ou en complément.</p>",
+        "col_1": "Ceinture VELEA",
+        "col_2": "Bouillotte",
+        "col_3": "Antidouleur",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Chaleur douce réglable",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Massage par vibration",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Tu peux bouger avec",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "oui"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Sans rien avaler",
+            "value_1": "oui",
+            "value_2": "oui",
+            "value_3": "non"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Réutilisable des centaines de fois",
+            "value_1": "oui",
+            "value_2": "oui",
+            "value_3": "non"
+          }
+        },
+        "row_6": {
+          "type": "row",
+          "settings": {
+            "label": "Utilisable en complément d'un traitement",
+            "value_1": "oui",
+            "value_2": "oui",
+            "value_3": "oui"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "row_6"
+      ]
+    },
+    "reviews": {
+      "type": "vl-reviews",
+      "settings": {
+        "anchor": "avis",
+        "eyebrow": "Elles l'ont adoptée",
+        "title": "Ce qu'elles en disent",
+        "source_note": "",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "guarantee": {
+      "type": "vl-guarantee",
+      "settings": {
+        "seal_number": "30",
+        "seal_unit": "jours",
+        "seal_ring": "SATISFAITE OU REMBOURSÉE · SATISFAITE OU REMBOURSÉE · ",
+        "eyebrow": "Notre promesse",
+        "title": "30 jours pour l'adopter",
+        "text": "<p>Essaie la ceinture pendant tes prochaines règles. Si elle ne te convient pas, écris-nous dans les 30 jours qui suivent la réception : on organise le retour et on te rembourse.</p>",
+        "button_label": "Lire nos conditions",
+        "button_link": "shopify://pages/livraison-et-retours",
+        "color_scheme": "scheme-5",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "faq": {
+      "type": "vl-faq",
+      "settings": {
+        "anchor": "faq",
+        "eyebrow": "Tes questions",
+        "title": "Questions fréquentes",
+        "open_first": true,
+        "schema_markup": true,
+        "contact_text": "Une autre question ?",
+        "contact_label": "Écris-nous",
+        "contact_link": "shopify://pages/contact",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps dois-je la porter ?",
+            "answer": "<p>Compte <strong>30 minutes à 1 heure par séance</strong>, <strong>2 à 3 fois par jour</strong> pendant tes règles. Fais une pause entre deux séances pour laisser ta peau respirer.</p>"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "Est-ce que ça marche vraiment ?",
+            "answer": "<p>La chaleur est l'un des gestes les plus utilisés pour apaiser la sensation de crampes : elle aide les muscles du ventre à se détendre. Le massage par vibration complète cette sensation de relâchement. Chaque corps est différent : c'est pour ça que tu as 30 jours pour l'essayer.</p>"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "question": "Je peux la porter sous mes vêtements ?",
+            "answer": "<p>Oui. Elle est fine et sans fil : elle se glisse sous un pull, une chemise ou un sweat. Pour ton confort, porte-la par-dessus un vêtement fin plutôt que directement sur la peau.</p>"
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "question": "Est-ce que ça chauffe trop ?",
+            "answer": "<p>Tu choisis parmi 3 niveaux, et la ceinture s'éteint automatiquement. Commence par le niveau le plus doux, surtout si tu as la peau sensible, et ne t'endors pas avec la ceinture allumée.</p>"
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on l'utiliser sur le bas du dos ?",
+            "answer": "<p>Oui : il suffit de tourner la ceinture pour placer le boîtier dans le bas du dos, là où les douleurs de règles se font souvent sentir aussi.</p>"
+          }
+        },
+        "question_6": {
+          "type": "question",
+          "settings": {
+            "question": "Y a-t-il des contre-indications ?",
+            "answer": "<p>Demande l'avis d'un professionnel de santé avant utilisation si tu es enceinte, si tu portes un dispositif médical implanté (pacemaker…), si tu as des troubles de la sensibilité ou de la circulation (diabète par exemple) ou une peau abîmée à cet endroit.</p><p>Si tes douleurs sont très intenses ou inhabituelles, consulte : cela peut être le signe d'une endométriose. La ceinture VELEA est un accessoire de bien-être, elle ne remplace pas un avis médical.</p>"
+          }
+        },
+        "question_7": {
+          "type": "question",
+          "settings": {
+            "question": "Comment la recharger ?",
+            "answer": "<p>Avec le câble USB-C fourni, sur n'importe quel chargeur USB (téléphone, ordinateur). Autonomie : [À COMPLÉTER selon la fiche fournisseur].</p>"
+          }
+        },
+        "question_8": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les délais de livraison ?",
+            "answer": "<p>La livraison est <strong>offerte</strong> en France métropolitaine. Chaque commande part avec un numéro de suivi et arrive en <strong>7 à 14 jours ouvrés</strong>.</p>"
+          }
+        },
+        "question_9": {
+          "type": "question",
+          "settings": {
+            "question": "Et si elle ne me convient pas ?",
+            "answer": "<p>Tu as <strong>30 jours</strong> après réception pour changer d'avis. Écris-nous : on t'indique comment la renvoyer et on te rembourse dès réception du retour.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "question_6",
+        "question_7",
+        "question_8",
+        "question_9"
+      ]
+    },
+    "sticky": {
+      "type": "vl-sticky-atc",
+      "settings": {
+        "button_label": "Choisir mon offre",
+        "color_scheme": "scheme-6"
+      }
+    },
+    "why": {
+      "type": "vl-why",
+      "settings": {
+        "eyebrow": "Le petit plus",
+        "title": "Pourquoi elles <em>l'adorent</em>",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {},
+      "block_order": []
+    },
+    "xsell": {
+      "type": "vl-cross-sell",
+      "settings": {
+        "eyebrow": "Pour aller plus loin",
+        "title": "Complète ton <em>cocon</em>",
+        "text": "Les patchs pour tes déplacements, le Doudou pour tes soirées canapé.",
+        "products": [
+          "patchs-chauffants-regles",
+          "coussin-chauffant-doudou"
+        ],
+        "limit": 3,
+        "quick_add": true,
+        "button_label": "Ajouter au panier",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trust",
+    "why",
+    "problem",
+    "benefits",
+    "how",
+    "versus",
+    "reviews",
+    "xsell",
+    "guarantee",
+    "faq",
+    "sticky"
+  ]
+}

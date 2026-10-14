@@ -1,0 +1,73 @@
+{%- comment -%}
+  Vidéos format TikTok / Reels (9:16). Lecture au clic uniquement : aucune vidéo n'est chargée avant.
+  N'utilise que des vidéos de vraies clientes ou créatrices, avec leur accord écrit.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
+  {%- render 'vl-padding' -%}
+  <section class="vl-ugc color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      <div class="vl-heading vl-heading--center">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h1">{{ section.settings.title }}</h2>
+        {%- if section.settings.handle != blank %}<p class="vl-heading__text">{{ section.settings.handle | escape }}</p>{% endif -%}
+      </div>
+      <ul class="vl-ugc__track" role="list">
+        {%- for block in section.blocks -%}
+          <li class="vl-ugc__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.video != blank -%}
+              <button type="button" class="vl-ugc__play" data-ugc-play aria-label="Lire la vidéo{% if block.settings.caption != blank %} : {{ block.settings.caption | escape }}{% endif %}">
+                {%- if block.settings.video.preview_image -%}
+                  {{ block.settings.video.preview_image | image_url: width: 540 | image_tag: loading: 'lazy', widths: '270, 405, 540', sizes: '(min-width: 990px) 20vw, 60vw', alt: '' }}
+                {%- endif -%}
+                <span class="vl-ugc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+              </button>
+              <template>{{ block.settings.video | video_tag: controls: true, playsinline: true, preload: 'none', autoplay: true }}</template>
+            {%- elsif block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 540 | image_tag: loading: 'lazy', widths: '270, 405, 540', sizes: '(min-width: 990px) 20vw, 60vw', alt: block.settings.image.alt | default: block.settings.caption }}
+            {%- else -%}
+              <div class="vl-ugc__placeholder"><span>Vidéo 9:16 à venir</span></div>
+            {%- endif -%}
+            {%- if block.settings.caption != blank %}<p class="vl-ugc__caption">{{ block.settings.caption | escape }}</p>{% endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('#shopify-section-{{ section.id }} [data-ugc-play]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var tpl = btn.nextElementSibling;
+        btn.replaceWith(tpl.content.cloneNode(true));
+      }, { once: true });
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Vidéos clientes",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Masquée tant qu'il n'y a aucune vidéo. Uniquement de vrais contenus, avec l'accord de leur autrice." },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Sur TikTok et Instagram" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Elles en <em>parlent</em>" },
+    { "type": "text", "id": "handle", "label": "Compte à suivre", "default": "Suis-nous sur @velea.officiel" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    {
+      "type": "clip",
+      "name": "Vidéo",
+      "limit": 10,
+      "settings": [
+        { "type": "video", "id": "video", "label": "Vidéo (9:16)" },
+        { "type": "image_picker", "id": "image", "label": "Ou image (9:16)" },
+        { "type": "text", "id": "caption", "label": "Légende" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Vidéos clientes" }]
+}
+{% endschema %}

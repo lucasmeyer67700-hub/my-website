@@ -1,0 +1,45 @@
+{%- comment -%}
+  Tiroir panier : barre vers la livraison offerte + suggestion d'ajout en un clic.
+  Le seuil se règle dans Paramètres du thème > VELEA · Panier. Il doit correspondre à tes tarifs d'expédition.
+{%- endcomment -%}
+{%- if cart != empty -%}
+  {%- assign threshold = settings.vl_free_shipping_threshold | times: 100 -%}
+  <div class="vl-perks">
+    {%- if settings.vl_free_shipping_bar -%}
+      {%- if threshold <= 0 or cart.total_price >= threshold -%}
+        <p class="vl-perks__ship is-done">{% render 'vl-icon', icon: 'truck' %}<span>{{ settings.vl_free_shipping_done | escape }}</span></p>
+        <div class="vl-perks__bar" aria-hidden="true"><span style="width: 100%"></span></div>
+      {%- else -%}
+        {%- assign remaining = threshold | minus: cart.total_price -%}
+        {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+        {%- assign todo_parts = settings.vl_free_shipping_todo | split: '[montant]' -%}
+        <p class="vl-perks__ship">{% render 'vl-icon', icon: 'truck' %}<span>{{ todo_parts[0] | escape }}<strong>{{ remaining | money }}</strong>{{ todo_parts[1] | escape }}</span></p>
+        <div class="vl-perks__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Progression vers la livraison offerte"><span style="width: {{ pct }}%"></span></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- assign up = settings.vl_cart_upsell -%}
+    {%- if up != blank and up.available -%}
+      {%- assign in_cart = false -%}
+      {%- for item in cart.items -%}{%- if item.product_id == up.id -%}{%- assign in_cart = true -%}{%- endif -%}{%- endfor -%}
+      {%- unless in_cart -%}
+        {%- assign uv = up.selected_or_first_available_variant -%}
+        <product-form class="vl-perks__upsell product-form" data-section-id="cart-drawer">
+          {%- form 'product', up, id: 'vl-cart-upsell', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ uv.id }}">
+            {%- if up.featured_image -%}{{ up.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', class: 'vl-perks__thumb' }}{%- endif -%}
+            <span class="vl-perks__copy">
+              <span class="vl-perks__label">{{ settings.vl_cart_upsell_label | escape }}</span>
+              <span class="vl-perks__name">{{ up.title | escape }} · {{ uv.price | money }}</span>
+            </span>
+            <div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+            <button type="submit" name="add" class="product-form__submit button button--secondary vl-perks__add" aria-label="Ajouter {{ up.title | escape }} au panier">
+              <span>Ajouter</span>
+              {%- render 'loading-spinner' -%}
+            </button>
+          {%- endform -%}
+        </product-form>
+      {%- endunless -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

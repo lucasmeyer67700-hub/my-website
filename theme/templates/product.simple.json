@@ -1,0 +1,146 @@
+{
+  "sections": {
+    "main": {
+      "type": "vl-buybox",
+      "settings": {
+        "eyebrow": "Ton cocon pendant tes règles",
+        "subtitle": "",
+        "media_badge": "",
+        "points": "",
+        "offers_title": "Choisis ton offre",
+        "offers_note": "",
+        "button_label": "Ajouter au panier",
+        "show_dynamic_checkout": true,
+        "show_delivery": true,
+        "delivery_min": 7,
+        "delivery_max": 14,
+        "trust_1": "30 jours satisfaite ou remboursée",
+        "trust_2": "Paiement 100 % sécurisé",
+        "trust_3": "Réponse sous 24 h",
+        "show_description": true,
+        "description_title": "Description",
+        "color_scheme": "scheme-1",
+        "padding_top": 32,
+        "padding_bottom": 64,
+        "tax_note": "TTC · Livraison offerte",
+        "show_installments": true,
+        "show_metafields": true,
+        "delivery_label": "Livraison offerte, estimée entre le"
+      },
+      "blocks": {
+        "tab_4": {
+          "type": "tab",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison et retours",
+            "content": "<p>Livraison offerte en France métropolitaine, avec numéro de suivi, en 7 à 14 jours ouvrés.</p><p>14 jours pour changer d'avis. <a href=\"/pages/livraison-et-retours\">Toutes les conditions</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "tab_4"
+      ]
+    },
+    "trust": {
+      "type": "vl-trust",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 28,
+        "padding_bottom": 28
+      },
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison offerte",
+            "text": "En France métropolitaine, avec suivi"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "30 jours pour l'essayer",
+            "text": "Satisfaite ou remboursée"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement sécurisé",
+            "text": "Carte bancaire, Apple Pay, Google Pay"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "Une vraie équipe",
+            "text": "Réponse sous 24 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ]
+    },
+    "why": {
+      "type": "vl-why",
+      "settings": {
+        "eyebrow": "Le petit plus",
+        "title": "Pourquoi elles <em>l'adorent</em>",
+        "color_scheme": "scheme-2",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {},
+      "block_order": []
+    },
+    "reviews": {
+      "type": "vl-reviews",
+      "settings": {
+        "anchor": "avis",
+        "eyebrow": "Elles l'ont adoptée",
+        "title": "Ce qu'elles en disent",
+        "source_note": "",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "xsell": {
+      "type": "vl-cross-sell",
+      "settings": {
+        "eyebrow": "Pour aller plus loin",
+        "title": "Complète ton <em>cocon</em>",
+        "text": "",
+        "limit": 3,
+        "quick_add": true,
+        "button_label": "Ajouter au panier",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "sticky": {
+      "type": "vl-sticky-atc",
+      "settings": {
+        "button_label": "Choisir mon offre",
+        "color_scheme": "scheme-6"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trust",
+    "why",
+    "reviews",
+    "xsell",
+    "sticky"
+  ]
+}

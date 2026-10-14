@@ -1,0 +1,29 @@
+{%- comment -%}
+  Formulaire newsletter avec consentement explicite (RGPD), partagé par la section et le pop-up.
+  Paramètres : form_id, button_label, code (code promo affiché après inscription).
+{%- endcomment -%}
+{%- form 'customer', id: form_id, class: 'vl-signup' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter,bienvenue">
+  {%- if form.posted_successfully? -%}
+    <div class="vl-signup__success" role="status" tabindex="-1" autofocus>
+      <p class="vl-signup__thanks">{% render 'vl-icon', icon: 'heart' %} Bienvenue dans le cocon !</p>
+      {%- if code != blank -%}
+        <p>Ton code de bienvenue : <strong class="vl-signup__code">{{ code | escape }}</strong></p>
+        <p class="vl-signup__small">À saisir au moment du paiement.</p>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="vl-signup__row">
+      <label class="visually-hidden" for="{{ form_id }}-email">Ton adresse e-mail</label>
+      <input id="{{ form_id }}-email" class="vl-signup__input" type="email" name="contact[email]" required autocomplete="email" placeholder="Ton adresse e-mail" aria-required="true"{% if form.errors %} aria-invalid="true" aria-describedby="{{ form_id }}-error"{% endif %}>
+      <button type="submit" class="button button--primary vl-signup__button">{{ button_label | escape }}</button>
+    </div>
+    <label class="vl-signup__consent">
+      <input type="checkbox" name="contact[accepts_marketing]" value="true" required>
+      <span>J'accepte de recevoir les e-mails de VELEA (conseils, nouveautés et offres). Désinscription en un clic. <a href="/pages/confidentialite-et-cookies">Confidentialité</a></span>
+    </label>
+    {%- if form.errors -%}
+      <p class="vl-signup__error" id="{{ form_id }}-error" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+    {%- endif -%}
+  {%- endif -%}
+{%- endform -%}

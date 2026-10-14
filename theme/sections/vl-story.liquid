@@ -1,0 +1,44 @@
+{%- render 'vl-padding' -%}
+<section class="vl-story color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-story__grid{% if section.settings.image_right %} vl-story__grid--reverse{% endif %}">
+      <div class="vl-story__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 750, 1000', alt: section.settings.image.alt | default: '' }}
+        {%- else -%}
+          <div class="vl-why__placeholder" aria-hidden="true">{% render 'vl-icon', icon: 'feather' %}<span>Photo : la fondatrice, lumière naturelle, ambiance douce</span></div>
+        {%- endif -%}
+      </div>
+      <div class="vl-story__copy">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h1">{{ section.settings.title }}</h2>
+        <div class="rte vl-story__text">{{ section.settings.text }}</div>
+        {%- if section.settings.signature != blank %}<p class="vl-story__signature">{{ section.settings.signature | escape }}</p>{% endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a class="button button--secondary" href="{{ section.settings.button_link | default: '/pages/notre-histoire' }}">{{ section.settings.button_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Notre histoire",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "checkbox", "id": "image_right", "label": "Photo à droite", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Notre histoire" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Née d'une conviction : <em>tu mérites mieux</em> que « ça va passer »" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "signature", "label": "Signature" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Lire notre histoire" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "VELEA · Notre histoire" }]
+}
+{% endschema %}

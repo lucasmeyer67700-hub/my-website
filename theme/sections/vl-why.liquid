@@ -1,0 +1,47 @@
+{%- comment -%} « Pourquoi elles l'adorent » : champ velea.pourquoi du produit, ou blocs. {%- endcomment -%}
+{%- assign mf_why = product.metafields.velea.pourquoi.value -%}
+{%- if mf_why != blank or section.blocks.size > 0 or request.design_mode -%}
+  {%- render 'vl-padding' -%}
+  <section class="vl-why color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      <div class="vl-why__grid">
+        <div class="vl-why__media">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 750, 1000', alt: section.settings.image.alt | default: '' }}
+          {%- else -%}
+            <div class="vl-why__placeholder" aria-hidden="true">{% render 'vl-icon', icon: 'heart' %}<span>Photo : une femme détendue sur son canapé, la ceinture sous un pull</span></div>
+          {%- endif -%}
+        </div>
+        <div class="vl-why__copy">
+          {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+          <h2 class="h1">{{ section.settings.title }}</h2>
+          <ul class="vl-why__list" role="list">
+            {%- if mf_why != blank -%}
+              {%- for l in mf_why -%}<li><span class="vl-why__num">{{ forloop.index | prepend: '0' }}</span><span>{{ l | escape }}</span></li>{%- endfor -%}
+            {%- else -%}
+              {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span class="vl-why__num">{{ forloop.index | prepend: '0' }}</span><span>{{ block.settings.text | escape }}</span></li>{%- endfor -%}
+            {%- endif -%}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Pourquoi elles l'adorent",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Sur une page produit, la liste vient du champ personnalisé « Pourquoi elles l'adorent ». Sinon, ajoute des blocs." },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Le petit plus" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Pourquoi elles <em>l'adorent</em>" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [{ "type": "point", "name": "Raison", "settings": [{ "type": "text", "id": "text", "label": "Texte" }] }],
+  "presets": [{ "name": "VELEA · Pourquoi elles l'adorent" }]
+}
+{% endschema %}

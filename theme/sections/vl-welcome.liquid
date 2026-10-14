@@ -1,0 +1,85 @@
+{%- comment -%}
+  Pop-up de bienvenue : une seule fois, après X secondes ou à l'intention de sortie (ordinateur),
+  jamais avant le choix sur les cookies, jamais sur le panier. Se ferme avec Échap, la croix ou le fond.
+{%- endcomment -%}
+{%- if section.settings.enabled and template.name != 'cart' and template.name != 'password' -%}
+  {%- assign fid = 'vl-welcome-form' -%}
+  <div class="vl-welcome" id="vl-welcome" role="dialog" aria-modal="true" aria-labelledby="vl-welcome-title" hidden data-delay="{{ section.settings.delay }}" data-design="{{ request.design_mode }}">
+    <div class="vl-welcome__backdrop" data-welcome-close></div>
+    <div class="vl-welcome__panel color-{{ section.settings.color_scheme }} gradient">
+      <button type="button" class="vl-welcome__close" data-welcome-close aria-label="Fermer">{% render 'vl-icon', icon: 'cross' %}</button>
+      {%- if section.settings.image != blank -%}
+        <div class="vl-welcome__media">{{ section.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '(min-width: 750px) 340px, 0px', alt: '' }}</div>
+      {%- endif -%}
+      <div class="vl-welcome__copy">
+        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+        <h2 class="h2" id="vl-welcome-title">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank %}<p class="vl-welcome__text">{{ section.settings.text | escape }}</p>{% endif -%}
+        {%- render 'vl-signup-form', form_id: fid, button_label: section.settings.button_label, code: section.settings.code -%}
+        <button type="button" class="vl-welcome__later link" data-welcome-close>Non merci, plus tard</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var el = document.getElementById('vl-welcome');
+      if (!el) return;
+      var KEY = 'vl-welcome-seen', shown = false, lastFocus = null;
+      var store = { get: function () { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
+                    set: function () { try { localStorage.setItem(KEY, '1'); } catch (e) {} } };
+      var posted = el.querySelector('.vl-signup__success');
+      if (posted) { el.hidden = false; document.body.classList.add('overflow-hidden'); store.set(); }
+      else if (store.get() && el.dataset.design !== 'true') return;
+
+      function open() {
+        if (shown) return; shown = true; store.set();
+        lastFocus = document.activeElement;
+        el.hidden = false; document.body.classList.add('overflow-hidden');
+        var input = el.querySelector('input[type=email]'); if (input) input.focus();
+      }
+      function close() {
+        el.hidden = true; document.body.classList.remove('overflow-hidden');
+        if (lastFocus) lastFocus.focus();
+      }
+      el.querySelectorAll('[data-welcome-close]').forEach(function (b) { b.addEventListener('click', close); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !el.hidden) close(); });
+      if (posted) return;
+
+      function arm() {
+        setTimeout(open, (parseInt(el.dataset.delay, 10) || 8) * 1000);
+        if (window.matchMedia('(pointer: fine)').matches) {
+          document.addEventListener('mouseout', function (e) { if (!e.relatedTarget && e.clientY <= 0) open(); });
+        }
+      }
+      /* Attendre le choix sur les cookies si la bannière Shopify est affichée. */
+      function consentReady(cb) {
+        var cp = window.Shopify && window.Shopify.customerPrivacy;
+        if (!cp || typeof cp.shouldShowBanner !== 'function' || !cp.shouldShowBanner()) return cb();
+        var c = typeof cp.currentVisitorConsent === 'function' ? cp.currentVisitorConsent() : null;
+        if (c && c.marketing !== '' && c.marketing !== undefined) return cb();
+        document.addEventListener('visitorConsentCollected', function () { cb(); }, { once: true });
+      }
+      if (window.Shopify && typeof window.Shopify.loadFeatures === 'function') {
+        window.Shopify.loadFeatures([{ name: 'consent-tracking-api', version: '0.1' }], function () { consentReady(arm); });
+      } else { arm(); }
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Pop-up de bienvenue",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Activer le pop-up", "default": true },
+    { "type": "range", "id": "delay", "label": "Délai avant affichage", "min": 3, "max": 30, "step": 1, "unit": "s", "default": 8 },
+    { "type": "image_picker", "id": "image", "label": "Photo (ordinateur)" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Bienvenue chez VELEA" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "-10 % pour ton <em>premier cocon</em>" },
+    { "type": "text", "id": "text", "label": "Texte", "default": "Inscris-toi et reçois des conseils doux pour tes règles, et ton code de bienvenue." },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je veux mon code" },
+    { "type": "text", "id": "code", "label": "Code affiché après inscription", "default": "BIENVENUE10" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

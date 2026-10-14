@@ -1,0 +1,53 @@
+{%- render 'vl-padding' -%}
+{%- liquid
+  assign p = section.settings.product
+  assign link = section.settings.button_link
+  if link == blank and p != blank
+    assign link = p.url
+  endif
+-%}
+<section class="vl-cta color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-cta__box">
+      <div class="vl-cta__copy">
+        <h2 class="h1">{{ section.settings.title | escape }}</h2>
+        {%- if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a class="button button--primary vl-button-lg" href="{{ link | default: routes.all_products_collection_url }}">
+            {{ section.settings.button_label | escape }}
+            {%- if p != blank and section.settings.show_price %} · {{ p.price | money }}{% endif -%}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.reassurance != blank %}<p class="vl-cta__reassure">{{ section.settings.reassurance | escape }}</p>{% endif -%}
+      </div>
+      <div class="vl-cta__media" aria-hidden="true">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 35vw, 80vw', widths: '400, 600, 900', alt: '' }}
+        {%- else -%}
+          {% render 'vl-belt-illustration', uid: section.id %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Appel à l'action",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "image_picker", "id": "image", "label": "Visuel" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce mois-ci, prenez soin de vous" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je commande ma ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "checkbox", "id": "show_price", "label": "Afficher le prix dans le bouton", "default": true },
+    { "type": "text", "id": "reassurance", "label": "Réassurance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-4" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "presets": [{ "name": "VELEA · Appel à l'action" }]
+}
+{% endschema %}

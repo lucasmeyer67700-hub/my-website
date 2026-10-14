@@ -1,0 +1,60 @@
+{%- comment -%} Grille de produits (accueil, pages). {%- endcomment -%}
+{%- liquid
+  if section.settings.products.count > 0
+    assign items = section.settings.products
+  else
+    assign items = section.settings.collection.products
+  endif
+-%}
+{%- render 'vl-padding' -%}
+<section class="vl-xsell vl-products color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank %}<p class="vl-heading__text">{{ section.settings.text | escape }}</p>{% endif -%}
+    </div>
+    <ul class="vl-xsell__grid vl-xsell__grid--4" role="list">
+      {%- for p in items limit: 8 -%}
+        <li class="vl-pcard">
+          <a class="vl-pcard__media" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+            {%- if p.featured_image -%}
+              {{ p.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 70vw', widths: '350, 500, 700', alt: '' }}
+            {%- else -%}
+              <span class="vl-pcard__placeholder">{% render 'vl-icon', icon: 'heart' %}</span>
+            {%- endif -%}
+            {%- if p.metafields.velea.badge != blank %}<span class="vl-pcard__badge">{{ p.metafields.velea.badge | escape }}</span>{% endif -%}
+          </a>
+          <div class="vl-pcard__body">
+            <h3 class="vl-pcard__title"><a href="{{ p.url }}">{{ p.title | escape }}</a></h3>
+            {%- assign first_benefit = p.metafields.velea.benefices.value | first -%}
+            {%- if first_benefit != blank %}<p class="vl-pcard__text">{{ first_benefit | escape }}</p>{% endif -%}
+            <p class="vl-pcard__price">{%- if p.price_varies %}Dès {% endif -%}{{ p.price | money }}</p>
+            <a class="button button--primary button--full-width" href="{{ p.url }}">{{ section.settings.button_label | escape }}</a>
+          </div>
+        </li>
+      {%- else -%}
+        <li class="vl-pcard"><div class="vl-pcard__body"><p>Choisis une collection ou des produits dans l'éditeur.</p></div></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Nos produits",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Nos essentiels" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Choisis <em>ton cocon</em>" },
+    { "type": "text", "id": "text", "label": "Texte" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "product_list", "id": "products", "label": "Ou produits choisis", "limit": 8 },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Découvrir" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "presets": [{ "name": "VELEA · Nos produits" }]
+}
+{% endschema %}
