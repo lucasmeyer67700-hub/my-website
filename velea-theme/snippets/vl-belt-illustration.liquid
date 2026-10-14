@@ -1,0 +1,45 @@
+{%- comment -%}
+  Illustration de la ceinture chauffante, affichée tant qu'aucune photo n'est choisie.
+  Usage : {% render 'vl-belt-illustration', uid: 'hero' %}
+{%- endcomment -%}
+<svg class="vl-illu" viewBox="0 0 640 480" role="img" aria-label="Ceinture chauffante VELEA" focusable="false">
+  <defs>
+    <radialGradient id="vlGlow{{ uid }}" cx="50%" cy="55%" r="55%">
+      <stop offset="0" stop-color="#F7B9A3" stop-opacity=".75"/>
+      <stop offset=".6" stop-color="#F6D3CB" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#FFF8F4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="vlStrap{{ uid }}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EBC3BA"/>
+      <stop offset="1" stop-color="#D9A69B"/>
+    </linearGradient>
+    <linearGradient id="vlPad{{ uid }}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F6E3DE"/>
+    </linearGradient>
+    <linearGradient id="vlWave{{ uid }}" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#E9785E"/>
+      <stop offset="1" stop-color="#C24B6E" stop-opacity=".15"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="320" cy="270" rx="300" ry="210" fill="url(#vlGlow{{ uid }})"/>
+  <g class="vl-illu__waves" fill="none" stroke="url(#vlWave{{ uid }})" stroke-width="9" stroke-linecap="round">
+    <path d="M250 190c-16-18 16-36 0-54s16-36 0-54"/>
+    <path d="M320 182c-16-18 16-36 0-54s16-36 0-54"/>
+    <path d="M390 190c-16-18 16-36 0-54s16-36 0-54"/>
+  </g>
+  <path d="M40 300c80-36 190-52 280-52s200 16 280 52v62c-80-36-190-52-280-52S120 326 40 362z" fill="url(#vlStrap{{ uid }})"/>
+  <path d="M40 318c80-36 190-52 280-52s200 16 280 52" fill="none" stroke="#FFF8F4" stroke-opacity=".55" stroke-width="2" stroke-dasharray="6 8"/>
+  <path d="M40 346c80-36 190-52 280-52s200 16 280 52" fill="none" stroke="#FFF8F4" stroke-opacity=".55" stroke-width="2" stroke-dasharray="6 8"/>
+  <rect x="24" y="296" width="34" height="74" rx="10" fill="#C98E83"/>
+  <rect x="582" y="296" width="34" height="74" rx="10" fill="#C98E83"/>
+  <rect x="190" y="222" width="260" height="140" rx="58" fill="url(#vlPad{{ uid }})" stroke="#E6C4BC" stroke-width="2"/>
+  <rect x="250" y="250" width="140" height="84" rx="34" fill="#FFF8F4" stroke="#F0D3CC" stroke-width="2"/>
+  <circle cx="285" cy="292" r="13" fill="#C24B6E"/>
+  <path d="M285 284v8M279.5 287.5a8 8 0 1 0 11 0" fill="none" stroke="#FFF8F4" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="320" cy="292" r="13" fill="#F2D3CD"/>
+  <path d="M314 292c2-3 4 3 6 0s4 3 6 0" fill="none" stroke="#A63D5F" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="355" cy="292" r="13" fill="#F2D3CD"/>
+  <path d="M352 298c-1.4-1.6 1.4-3.2 0-4.8s1.4-3.2 0-4.8M358 298c-1.4-1.6 1.4-3.2 0-4.8s1.4-3.2 0-4.8" fill="none" stroke="#E9785E" stroke-width="2.2" stroke-linecap="round"/>
+  <g fill="#E9785E"><circle cx="300" cy="320" r="3"/><circle cx="312" cy="320" r="3"/><circle cx="324" cy="320" r="3" fill-opacity=".35"/></g>
+</svg>

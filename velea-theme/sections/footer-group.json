@@ -1,0 +1,57 @@
+/*
+ * VELEA : modèle généré. Modifiable depuis l'éditeur de thème.
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "newsletter_enable": true,
+        "newsletter_heading": "Conseils bien-être et offres en avant-première",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 56,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "brand": {
+          "type": "text",
+          "settings": {
+            "heading": "VELEA",
+            "subtext": "<p>La ceinture chauffante et massante qui accompagne vos règles. Pensée par des femmes, pour les jours où l'on a besoin d'un peu de douceur.</p>"
+          }
+        },
+        "shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "La boutique",
+            "menu": "main-menu"
+          }
+        },
+        "help": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Aide et informations",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "brand",
+        "shop",
+        "help"
+      ]
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

@@ -1,0 +1,53 @@
+{%- render 'vl-padding' -%}
+<section class="vl-problem color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank %}<div class="vl-heading__text rte">{{ section.settings.text }}</div>{% endif -%}
+    </div>
+    <div class="vl-problem__grid">
+      <div class="vl-problem__card vl-problem__card--before scroll-trigger animate--slide-in">
+        <p class="vl-problem__label">{{ section.settings.before_label | escape }}</p>
+        <ul class="vl-problem__list" role="list">
+          {%- assign lines = section.settings.before_lines | newline_to_br | split: '<br />' -%}
+          {%- for line in lines -%}
+            {%- assign l = line | strip -%}
+            {%- if l != blank -%}<li><span class="vl-problem__mark">{% render 'vl-icon', icon: 'cross' %}</span>{{ l | escape }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+      <div class="vl-problem__arrow" aria-hidden="true">{% render 'vl-icon', icon: 'arrow' %}</div>
+      <div class="vl-problem__card vl-problem__card--after scroll-trigger animate--slide-in" data-cascade>
+        <p class="vl-problem__label">{{ section.settings.after_label | escape }}</p>
+        <ul class="vl-problem__list" role="list">
+          {%- assign lines = section.settings.after_lines | newline_to_br | split: '<br />' -%}
+          {%- for line in lines -%}
+            {%- assign l = line | strip -%}
+            {%- if l != blank -%}<li><span class="vl-problem__mark">{% render 'vl-icon', icon: 'check' %}</span>{{ l | escape }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Avant / après",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Chaque mois, la même histoire ?" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "before_label", "label": "Titre colonne « avant »", "default": "Sans VELEA" },
+    { "type": "textarea", "id": "before_lines", "label": "Points « avant » (un par ligne)" },
+    { "type": "text", "id": "after_label", "label": "Titre colonne « après »", "default": "Avec VELEA" },
+    { "type": "textarea", "id": "after_lines", "label": "Points « après » (un par ligne)" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "VELEA · Avant / après" }]
+}
+{% endschema %}

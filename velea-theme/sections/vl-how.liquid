@@ -1,0 +1,92 @@
+{%- render 'vl-padding' -%}
+<section class="vl-how color-{{ section.settings.color_scheme }} gradient"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handle }}"{% endif %}>
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-heading vl-heading--center">
+      {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
+      <h2 class="h1">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank %}<div class="vl-heading__text rte">{{ section.settings.text }}</div>{% endif -%}
+    </div>
+
+    <ol class="vl-steps" role="list">
+      {%- for block in section.blocks -%}
+        <li class="vl-step scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ forloop.index }};" {{ block.shopify_attributes }}>
+          <span class="vl-step__num">{{ forloop.index }}</span>
+          <span class="vl-step__icon">{% render 'vl-icon', icon: block.settings.icon %}</span>
+          <h3 class="vl-step__title">{{ block.settings.title | escape }}</h3>
+          <div class="vl-step__text rte">{{ block.settings.text }}</div>
+        </li>
+      {%- endfor -%}
+    </ol>
+
+    {%- if section.settings.ritual_title != blank -%}
+      <div class="vl-ritual">
+        <p class="vl-ritual__title">{{ section.settings.ritual_title | escape }}</p>
+        <div class="vl-ritual__stats">
+          <div class="vl-ritual__stat">
+            <span class="vl-ritual__icon">{% render 'vl-icon', icon: 'clock' %}</span>
+            <strong>{{ section.settings.stat_1_value | escape }}</strong>
+            <span>{{ section.settings.stat_1_label | escape }}</span>
+          </div>
+          <div class="vl-ritual__stat">
+            <span class="vl-ritual__icon">{% render 'vl-icon', icon: 'repeat' %}</span>
+            <strong>{{ section.settings.stat_2_value | escape }}</strong>
+            <span>{{ section.settings.stat_2_label | escape }}</span>
+          </div>
+          <div class="vl-ritual__stat">
+            <span class="vl-ritual__icon">{% render 'vl-icon', icon: 'calendar' %}</span>
+            <strong>{{ section.settings.stat_3_value | escape }}</strong>
+            <span>{{ section.settings.stat_3_label | escape }}</span>
+          </div>
+        </div>
+        {%- if section.settings.ritual_note != blank -%}
+          <p class="vl-ritual__note">{{ section.settings.ritual_note | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Mode d'emploi",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre (ex. utilisation)" },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Mode d'emploi" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Simple comme une bouillotte, en mieux" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "header", "content": "Le rituel" },
+    { "type": "text", "id": "ritual_title", "label": "Titre du rituel", "default": "Le rituel conseillé" },
+    { "type": "text", "id": "stat_1_value", "label": "Chiffre 1", "default": "30 min à 1 h" },
+    { "type": "text", "id": "stat_1_label", "label": "Légende 1", "default": "par séance" },
+    { "type": "text", "id": "stat_2_value", "label": "Chiffre 2", "default": "2 à 3 fois" },
+    { "type": "text", "id": "stat_2_label", "label": "Légende 2", "default": "par jour" },
+    { "type": "text", "id": "stat_3_value", "label": "Chiffre 3", "default": "Dès les premiers signes" },
+    { "type": "text", "id": "stat_3_label", "label": "Légende 3", "default": "et pendant vos règles" },
+    { "type": "text", "id": "ritual_note", "label": "Note" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "cable",
+          "options": [
+            { "value": "cable", "label": "Recharge" }, { "value": "body", "label": "Silhouette" },
+            { "value": "heat", "label": "Chaleur" }, { "value": "massage", "label": "Massage" },
+            { "value": "clock", "label": "Horloge" }, { "value": "heart", "label": "Cœur" },
+            { "value": "power", "label": "Marche" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Rechargez" },
+        { "type": "richtext", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "VELEA · Mode d'emploi", "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }] }]
+}
+{% endschema %}

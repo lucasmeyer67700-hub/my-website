@@ -1,0 +1,91 @@
+{%- render 'vl-padding' -%}
+{%- liquid
+  assign p = section.settings.product
+  assign link = section.settings.button_link
+  if link == blank and p != blank
+    assign link = p.url
+  endif
+  assign img = section.settings.image
+  if img == blank and p != blank
+    assign img = p.featured_image
+  endif
+-%}
+<section class="vl-hero color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="vl-hero__grid">
+      <div class="vl-hero__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="vl-pill">{% render 'vl-icon', icon: 'heart' %}{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="vl-hero__title">
+          {{ section.settings.title | escape }}
+          {%- if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent | escape }}</em>{% endif -%}
+        </h1>
+        {%- if section.settings.text != blank -%}
+          <div class="vl-hero__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <ul class="vl-checks" role="list">
+            {%- for block in section.blocks -%}
+              <li {{ block.shopify_attributes }}><span class="vl-checks__mark">{% render 'vl-icon', icon: 'check' %}</span>{{ block.settings.text | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        <div class="vl-hero__actions">
+          {%- if section.settings.button_label != blank -%}
+            <a class="button button--primary vl-button-lg" href="{{ link | default: routes.all_products_collection_url }}">
+              {{ section.settings.button_label | escape }}
+              {%- if p != blank and section.settings.show_price %} · {{ p.price | money }}{% endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.reassurance != blank -%}
+          <p class="vl-hero__reassure">{{ section.settings.reassurance | escape }}</p>
+        {%- endif -%}
+      </div>
+      <div class="vl-hero__media">
+        <div class="vl-hero__frame">
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 50vw, 100vw', widths: '500, 750, 1000, 1400', class: 'vl-hero__img', alt: img.alt | default: section.settings.title }}
+          {%- else -%}
+            {% render 'vl-belt-illustration', uid: section.id %}
+          {%- endif -%}
+        </div>
+        {%- if section.settings.badge_1 != blank -%}
+          <p class="vl-float vl-float--1">{% render 'vl-icon', icon: 'heat' %}{{ section.settings.badge_1 | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.badge_2 != blank -%}
+          <p class="vl-float vl-float--2">{% render 'vl-icon', icon: 'clock' %}{{ section.settings.badge_2 | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Bannière",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit mis en avant" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Sinon : photo principale du produit, puis illustration." },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Spécial douleurs de règles" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Vos règles, sans" },
+    { "type": "text", "id": "title_accent", "label": "Fin du titre (italique)", "default": "subir la douleur" },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je découvre la ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton", "info": "Vide : page du produit." },
+    { "type": "checkbox", "id": "show_price", "label": "Afficher le prix dans le bouton", "default": true },
+    { "type": "text", "id": "reassurance", "label": "Réassurance sous le bouton" },
+    { "type": "text", "id": "badge_1", "label": "Étiquette 1 sur la photo", "default": "Chaleur douce" },
+    { "type": "text", "id": "badge_2", "label": "Étiquette 2 sur la photo", "default": "30 min à 1 h" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Point fort", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Chaleur apaisante sur le bas du ventre" }] }
+  ],
+  "presets": [{ "name": "VELEA · Bannière", "blocks": [{ "type": "point" }, { "type": "point" }] }]
+}
+{% endschema %}

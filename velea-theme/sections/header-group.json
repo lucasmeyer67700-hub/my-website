@@ -1,0 +1,69 @@
+/*
+ * VELEA : modèle généré. Modifiable depuis l'éditeur de thème.
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announce": {
+      "type": "vl-announce",
+      "settings": {
+        "interval": 4,
+        "color_scheme": "scheme-5"
+      },
+      "blocks": {
+        "message_1": {
+          "type": "message",
+          "settings": {
+            "text": "Livraison offerte en France métropolitaine",
+            "icon": "truck",
+            "link": ""
+          }
+        },
+        "message_2": {
+          "type": "message",
+          "settings": {
+            "text": "30 jours satisfaite ou remboursée",
+            "icon": "return",
+            "link": "shopify://pages/livraison-et-retours"
+          }
+        },
+        "message_3": {
+          "type": "message",
+          "settings": {
+            "text": "−10 € sur le duo : une pour vous, une à partager",
+            "icon": "gift",
+            "link": "shopify://products/ceinture-chauffante-regles"
+          }
+        }
+      },
+      "block_order": [
+        "message_1",
+        "message_2",
+        "message_3"
+      ]
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "menu_color_scheme": "scheme-3",
+        "logo_position": "middle-left",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 14,
+        "padding_bottom": 14
+      }
+    }
+  },
+  "order": [
+    "announce",
+    "header"
+  ]
+}

@@ -1,0 +1,54 @@
+{%- if product -%}
+  <div class="vl-sticky color-{{ section.settings.color_scheme }}" data-vl-sticky aria-hidden="true">
+    <div class="vl-sticky__inner page-width">
+      <div class="vl-sticky__product">
+        {%- if product.featured_image -%}
+          {{ product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'vl-sticky__img', alt: '' }}
+        {%- endif -%}
+        <span class="vl-sticky__copy">
+          <strong>{{ product.title | escape }}</strong>
+          <span data-vl-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+        </span>
+      </div>
+      <button type="button" class="button button--primary vl-sticky__btn" tabindex="-1" data-vl-sticky-btn>
+        {{ section.settings.button_label | escape }}
+      </button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var bar = document.querySelector('[data-vl-sticky]');
+      var target = document.querySelector('[data-main-submit]');
+      if (!bar || !target || bar.dataset.ready) return;
+      bar.dataset.ready = '1';
+      var btn = bar.querySelector('[data-vl-sticky-btn]');
+      var price = bar.querySelector('[data-vl-sticky-price]');
+      var footer = document.querySelector('.footer');
+      var targetVisible = true, footerVisible = false;
+      function update() {
+        var show = !targetVisible && !footerVisible && target.getBoundingClientRect().top < 0;
+        bar.classList.toggle('is-visible', show);
+        bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+        btn.tabIndex = show ? 0 : -1;
+      }
+      new IntersectionObserver(function (e) { targetVisible = e[0].isIntersecting; update(); }).observe(target);
+      if (footer) new IntersectionObserver(function (e) { footerVisible = e[0].isIntersecting; update(); }).observe(footer);
+      document.addEventListener('vl:price', function (e) { price.textContent = e.detail.text; });
+      btn.addEventListener('click', function () {
+        document.getElementById('vl-buy').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Barre d'achat",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Choisir mon offre" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-6" }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}
