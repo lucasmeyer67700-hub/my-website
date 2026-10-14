@@ -1,39 +1,49 @@
 {%- comment -%}
-  Avis clients. N'ajoutez que de vrais avis (Code de la consommation, art. L121-4) :
-  la section reste invisible pour les visiteurs tant qu'elle ne contient aucun avis.
+  Avis clients. En boutique : uniquement de vrais avis (app d'avis ou blocs « Avis »).
+  Mode démo : des avis d'exemple, visibles UNIQUEMENT dans l'éditeur de thème et marqués « Exemple »,
+  pour juger du rendu. Ils ne s'affichent jamais aux visiteuses (art. L121-2 et suivants du Code de la consommation).
 {%- endcomment -%}
 {%- assign app_blocks = section.blocks | where: 'type', '@app' -%}
 {%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
-{%- if section.blocks.size > 0 or request.design_mode -%}
+{%- assign show_demo = false -%}
+{%- if section.settings.demo and request.design_mode and section.blocks.size == 0 -%}{%- assign show_demo = true -%}{%- endif -%}
+{%- if section.blocks.size > 0 or show_demo -%}
   {%- render 'vl-padding' -%}
   <section class="vl-reviews color-{{ section.settings.color_scheme }} gradient" id="{{ section.settings.anchor | default: 'avis' | handle }}">
     <div class="page-width section-{{ section.id }}-padding">
       <div class="vl-heading vl-heading--center">
-        {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
         <h2 class="h1">{{ section.settings.title | escape }}</h2>
+        {%- if show_demo -%}
+          <p class="vl-reviews__summary"><span class="vl-reviews__stars">★★★★★</span> <strong>4,7/5</strong> · 298 avis <span class="vl-demo-tag">Exemple</span></p>
+        {%- endif -%}
       </div>
       {%- for block in app_blocks -%}<div class="vl-reviews__app">{% render block %}</div>{%- endfor -%}
-      {%- if section.blocks.size == 0 -%}
-        <p class="vl-reviews__empty">Ajoute ici le bloc de ton app d'avis (Judge.me…) ou de vrais avis (blocs « Avis »). Cette section est masquée en boutique tant qu'elle est vide.</p>
-      {%- else -%}
-        {%- if review_blocks.size > 0 -%}
+      {%- if show_demo -%}
+        {%- capture demo -%}Camille|Enfin un truc qui me permet de bosser pendant mes règles. Je la mets sous mon pull au bureau et personne ne voit rien.|5~Sarah|La chaleur est vraiment douce, je commence au niveau 1 et ça me suffit. Le massage est un vrai plus le soir.|5~Inès|Livraison un peu longue mais le produit est top. Je ne ressors plus la bouillotte.|4~Julie|Je l'ai offerte à ma sœur, elle m'en a commandé une deuxième pour sa fille.|5~Manon|Discrète, rechargeable, elle tient bien en place. Mon rituel du soir avec une tisane.|5~Léa|Très agréable sur le bas du dos aussi, je ne m'y attendais pas.|4{%- endcapture -%}
         <ul class="vl-reviews__grid" role="list">
-          {%- for block in review_blocks -%}
-            <li class="vl-review" {{ block.shopify_attributes }}>
-              <p class="vl-review__stars" aria-label="{{ block.settings.rating }} sur 5">
-                {%- for i in (1..5) -%}<span class="{% if i <= block.settings.rating %}is-on{% endif %}">★</span>{%- endfor -%}
-              </p>
-              <blockquote class="vl-review__text">« {{ block.settings.text | escape }} »</blockquote>
-              <p class="vl-review__author">
-                <strong>{{ block.settings.author | escape }}</strong>
-                {%- if block.settings.detail != blank %} · {{ block.settings.detail | escape }}{% endif -%}
-              </p>
+          {%- assign items = demo | split: '~' -%}
+          {%- for it in items -%}
+            {%- assign f = it | split: '|' -%}
+            <li class="vl-review">
+              <p class="vl-review__head"><strong>{{ f[0] }}</strong> <span class="vl-demo-tag">Exemple</span></p>
+              <p class="vl-review__stars" aria-label="{{ f[2] }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= f[2] | plus: 0 %}is-on{% endif %}">★</span>{%- endfor -%}</p>
+              <blockquote class="vl-review__text">« {{ f[1] }} »</blockquote>
             </li>
           {%- endfor -%}
         </ul>
-        {%- endif -%}
-        {%- if section.settings.source_note != blank %}<p class="vl-reviews__note">{{ section.settings.source_note | escape }}</p>{% endif -%}
+        <p class="vl-reviews__note">Avis d'exemple visibles uniquement dans l'éditeur. Ils seront remplacés par les vrais avis de ton app (Judge.me).</p>
+      {%- elsif review_blocks.size > 0 -%}
+        <ul class="vl-reviews__grid" role="list">
+          {%- for block in review_blocks -%}
+            <li class="vl-review" {{ block.shopify_attributes }}>
+              <p class="vl-review__head"><strong>{{ block.settings.author | escape }}</strong>{%- if block.settings.detail != blank %} · {{ block.settings.detail | escape }}{% endif -%}</p>
+              <p class="vl-review__stars" aria-label="{{ block.settings.rating }} sur 5">{%- for i in (1..5) -%}<span class="{% if i <= block.settings.rating %}is-on{% endif %}">★</span>{%- endfor -%}</p>
+              <blockquote class="vl-review__text">« {{ block.settings.text | escape }} »</blockquote>
+            </li>
+          {%- endfor -%}
+        </ul>
       {%- endif -%}
+      {%- if section.settings.source_note != blank %}<p class="vl-reviews__note">{{ section.settings.source_note | escape }}</p>{% endif -%}
     </div>
   </section>
 {%- endif -%}
@@ -43,11 +53,10 @@
   "name": "VELEA · Avis clients",
   "tag": "div",
   "settings": [
-    { "type": "paragraph", "content": "Uniquement des avis réels de clientes. La section est masquée tant qu'il n'y a aucun avis." },
+    { "type": "checkbox", "id": "demo", "label": "Mode démo (éditeur uniquement)", "default": true, "info": "Affiche des avis d'exemple dans l'éditeur seulement. Jamais visibles en boutique." },
     { "type": "text", "id": "anchor", "label": "Ancre", "default": "avis" },
-    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Elles l'ont adoptée" },
-    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'elles en disent" },
-    { "type": "textarea", "id": "source_note", "label": "Origine des avis", "info": "Indiquez d'où viennent les avis et s'ils sont vérifiés." },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'en disent nos clientes" },
+    { "type": "textarea", "id": "source_note", "label": "Origine des avis" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" },
     { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
     { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 }
@@ -55,10 +64,9 @@
   "blocks": [
     { "type": "@app" },
     {
-      "type": "review",
-      "name": "Avis",
+      "type": "review", "name": "Avis réel",
       "settings": [
-        { "type": "text", "id": "author", "label": "Prénom (ou initiale)" },
+        { "type": "text", "id": "author", "label": "Prénom" },
         { "type": "text", "id": "detail", "label": "Détail (ville, date…)" },
         { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
         { "type": "textarea", "id": "text", "label": "Avis" }

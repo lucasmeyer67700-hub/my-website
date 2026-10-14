@@ -1030,3 +1030,17 @@ h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
   .vl-banner--text-right .vl-banner__inner { justify-content: flex-start; }
   .vl-banner--text-right .vl-banner__bg::after { background: linear-gradient(0deg, rgba(58, 42, 48, 0.65) 0%, rgba(58, 42, 48, 0.1) 65%); }
 }
+
+/* v6 : pastilles rondes compactes (5) */
+.vl-needs--pills .vl-needs__grid { display: flex !important; flex-wrap: nowrap; justify-content: flex-start; gap: 1.6rem; overflow-x: auto; }
+@media screen and (min-width: 990px) { .vl-needs--pills .vl-needs__grid { flex-wrap: wrap; justify-content: center; overflow: visible; } }
+.vl-needs--pills .vl-needs__grid > li { flex: none; }
+.vl-needs--pills .vl-need { flex: none; min-height: 0; padding: 0.9rem 2.6rem 0.9rem 0.9rem; gap: 1.4rem; border-radius: 99rem; background: #fff; box-shadow: none; }
+.vl-needs--pills .vl-need__media { width: 7.2rem; height: 7.2rem; border-radius: 50%; overflow: hidden; background: var(--vl-blush); }
+.vl-needs--pills .vl-need__label { font-family: var(--font-heading-family); font-size: 2rem; font-weight: 600; white-space: nowrap; letter-spacing: 0; }
+
+/* Avis */
+.vl-reviews__summary { display: inline-flex; align-items: center; gap: 0.8rem; margin: 1.2rem 0 0; font-size: 1.7rem; }
+.vl-reviews__stars, .vl-review__stars .is-on { color: var(--vl-gold); letter-spacing: 0.1em; }
+.vl-review__head { display: flex; align-items: center; gap: 0.8rem; margin: 0 0 0.6rem; font-size: 1.7rem; }
+.vl-demo-tag { padding: 0.2rem 0.8rem; border-radius: 99rem; background: #fff3cd; color: #6b4e00; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
