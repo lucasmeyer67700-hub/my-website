@@ -1,0 +1,60 @@
+{%- comment -%}
+  Données structurées : Organization (accueil) et BreadcrumbList (produit, collection, article, page).
+  Product vient de la section VELEA · Achat produit, FAQPage de VELEA · FAQ,
+  AggregateRating de l'app d'avis (uniquement avec de vrais avis).
+{%- endcomment -%}
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ request.origin | append: routes.root_url | json }},
+      {%- if settings.logo -%}"logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }},{%- endif -%}
+      "email": {{ shop.email | json }},
+      "sameAs": [
+        {%- assign socials = '' -%}
+        {%- if settings.social_instagram_link != blank -%}{%- assign socials = socials | append: settings.social_instagram_link | append: '|' -%}{%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}{%- assign socials = socials | append: settings.social_tiktok_link | append: '|' -%}{%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}{%- assign socials = socials | append: settings.social_facebook_link | append: '|' -%}{%- endif -%}
+        {%- assign social_list = socials | split: '|' -%}
+        {%- for s in social_list -%}{{ s | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+{%- liquid
+  assign crumb_name = blank
+  assign parent_name = blank
+  case request.page_type
+    when 'product'
+      assign crumb_name = product.title
+      assign parent_name = 'Tous nos produits'
+      assign parent_url = routes.collections_url | append: '/tous-nos-produits'
+    when 'collection'
+      assign crumb_name = collection.title
+    when 'article'
+      assign crumb_name = article.title
+      assign parent_name = blog.title
+      assign parent_url = blog.url
+    when 'page'
+      assign crumb_name = page.title
+  endcase
+-%}
+{%- if crumb_name != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": {{ request.origin | append: routes.root_url | json }} },
+        {%- if parent_name != blank -%}
+          { "@type": "ListItem", "position": 2, "name": {{ parent_name | json }}, "item": {{ request.origin | append: parent_url | json }} },
+          { "@type": "ListItem", "position": 3, "name": {{ crumb_name | json }}, "item": {{ request.origin | append: request.path | json }} }
+        {%- else -%}
+          { "@type": "ListItem", "position": 2, "name": {{ crumb_name | json }}, "item": {{ request.origin | append: request.path | json }} }
+        {%- endif -%}
+      ]
+    }
+  </script>
+{%- endif -%}
