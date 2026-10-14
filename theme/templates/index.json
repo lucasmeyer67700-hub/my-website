@@ -12,49 +12,6 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "vl-hero",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "eyebrow": "Ton cocon pendant tes règles",
-        "title": "Tes règles ne devraient pas",
-        "title_accent": "te clouer au lit.",
-        "text": "<p>La ceinture chauffante VELEA enveloppe ton bas du ventre d'une chaleur douce et d'un léger massage. Sans fil et discrète, tu la portes du canapé au bureau, et tu reprends le fil de ta journée.</p>",
-        "button_label": "Je découvre ma ceinture",
-        "show_price": true,
-        "reassurance": "Livraison offerte · Paiement sécurisé · 30 jours satisfaite ou remboursée",
-        "badge_1": "Chaleur douce + massage",
-        "badge_2": "30 min à 1 h",
-        "color_scheme": "scheme-1",
-        "padding_top": 48,
-        "padding_bottom": 64
-      },
-      "blocks": {
-        "point_1": {
-          "type": "point",
-          "settings": {
-            "text": "Chaleur réglable sur 3 niveaux"
-          }
-        },
-        "point_2": {
-          "type": "point",
-          "settings": {
-            "text": "Massage par vibration pour détendre le ventre et le dos"
-          }
-        },
-        "point_3": {
-          "type": "point",
-          "settings": {
-            "text": "Sans fil et rechargeable : tu bouges librement"
-          }
-        }
-      },
-      "block_order": [
-        "point_1",
-        "point_2",
-        "point_3"
-      ]
-    },
     "problem": {
       "type": "vl-problem",
       "settings": {
@@ -515,11 +472,12 @@
     "needs": {
       "type": "vl-needs",
       "settings": {
-        "eyebrow": "Ton besoin du moment",
-        "title": "De quoi as-tu <em>besoin</em> aujourd'hui ?",
-        "color_scheme": "scheme-1",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "eyebrow": "",
+        "title": "",
+        "color_scheme": "scheme-2",
+        "padding_top": 56,
+        "padding_bottom": 24,
+        "style": "pills"
       },
       "blocks": {
         "n1": {
@@ -621,19 +579,124 @@
         "q2",
         "q3"
       ]
+    },
+    "banner": {
+      "type": "vl-banner",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "pill": "Nouvelle saison",
+        "title": "LA SAISON COCON",
+        "subtitle": "Ta chaleur douce pendant tes règles",
+        "button_label": "JE DÉCOUVRE",
+        "note": "Satisfaite ou remboursée 30 jours",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "intro": {
+      "type": "vl-intro",
+      "settings": {
+        "title": "VELEA, la douceur par la chaleur",
+        "text": "<p>Une petite marque française née d'une conviction : tes règles ne devraient pas te clouer au lit. Des objets chauds, doux et pratiques, pour un réconfort que tu ressens au quotidien.</p>",
+        "color_scheme": "scheme-2",
+        "padding_top": 48,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "text": "Marque française"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "text": "Chaleur douce réglable"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "text": "30 jours pour l'adopter"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "text": "Une vraie équipe à ton écoute"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "feature": {
+      "type": "vl-feature",
+      "settings": {
+        "heading": "Reprends le contrôle de tes règles",
+        "product": "ceinture-chauffante-regles",
+        "sticker_top": "3 niveaux",
+        "sticker_bottom": "de chaleur",
+        "title": "Ceinture chauffante Cocon",
+        "button_label": "Je découvre ma ceinture",
+        "show_price": true,
+        "note_tag": "PACK",
+        "note": "Ceinture + 10 patchs + pochette dans le Pack Cocon",
+        "color_scheme": "scheme-3",
+        "padding_top": 72,
+        "padding_bottom": 72
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Chaleur douce réglable sur 3 niveaux"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Massage par vibration, 3 modes"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "text": "Sans fil, discrète sous tes vêtements"
+          }
+        },
+        "p4": {
+          "type": "point",
+          "settings": {
+            "text": "30 jours satisfaite ou remboursée"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
     }
   },
   "order": [
-    "hero",
+    "banner",
     "marquee",
     "needs",
+    "intro",
+    "feature",
+    "reviews",
     "problem",
     "benefits",
     "how",
     "products",
     "quiz",
     "versus",
-    "reviews",
     "ugc",
     "story",
     "guarantee",

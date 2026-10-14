@@ -849,3 +849,82 @@ a:not(.button):focus-visible, button:focus-visible, input:focus-visible, summary
 .vl-quiz__pick-media img { width: 100%; height: 100%; object-fit: cover; }
 .vl-quiz__pick-copy .h2 { margin: 0 0 1rem; }
 @media (prefers-reduced-motion: reduce) { .vl-need, .vl-quiz__answer, .vl-quiz__progress span { transition: none; } }
+
+/* ==========================================================================
+   VELEA · Style épuré (accueil type grande marque bien-être)
+   ========================================================================== */
+.vl-announce__wrap { display: flex; align-items: center; justify-content: center; gap: 1.6rem; }
+.vl-announce__wrap .vl-announce__track { flex: 0 1 60rem; }
+.vl-announce__arrow { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+.vl-announce__item { font-weight: 600; letter-spacing: 0.02em; }
+
+/* ---------- Grande bannière ---------- */
+.vl-banner { position: relative; overflow: hidden; }
+.vl-banner__bg { position: absolute; inset: 0; }
+.vl-banner__bg img { width: 100%; height: 100%; object-fit: cover; }
+.vl-banner--image .vl-banner__bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(74, 44, 58, 0.35) 0%, rgba(74, 44, 58, 0) 60%); }
+.vl-banner__inner { position: relative; display: grid; gap: 2.4rem; align-items: center; min-height: 52rem; padding-top: 4.8rem; padding-bottom: 4.8rem; }
+@media screen and (min-width: 990px) { .vl-banner__inner { grid-template-columns: 1fr 1fr; min-height: 62rem; } }
+.vl-banner:not(.vl-banner--image) { background: radial-gradient(90% 120% at 85% 40%, var(--vl-petal) 0%, var(--vl-blush) 45%, var(--vl-cream) 100%); }
+.vl-banner__copy { max-width: 56rem; }
+.vl-banner--image .vl-banner__copy { color: #fff; }
+.vl-banner__pill { display: inline-block; margin: 0 0 2.4rem; padding: 0.9rem 2rem; border: 1.5px solid currentColor; border-radius: 99rem; font-size: 1.4rem; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.9; }
+.vl-banner__title { margin: 0 0 1.6rem; font-size: clamp(4rem, 8vw, 7.6rem); line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; color: var(--vl-berry); }
+.vl-banner--image .vl-banner__title { color: #fff; }
+.vl-banner__subtitle { margin: 0 0 3.2rem; font-size: clamp(1.6rem, 2.4vw, 2.2rem); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.vl-banner__button { display: inline-flex; align-items: center; justify-content: center; min-width: 26rem; min-height: 6rem; padding: 0 3.6rem; border-radius: 99rem; background: var(--vl-white); color: var(--vl-plum); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.18em; text-decoration: none; box-shadow: var(--vl-shadow-soft); transition: transform 0.2s ease; }
+.vl-banner:not(.vl-banner--image) .vl-banner__button { background: var(--vl-plum); color: var(--vl-cream); }
+.vl-banner__button:hover { transform: translateY(-2px); }
+.vl-banner__note { margin: 1.4rem 0 0; min-width: 26rem; display: inline-block; text-align: center; font-size: 1.5rem; opacity: 0.85; }
+.vl-banner__product { display: grid; place-items: center; }
+.vl-banner__product img { width: 100%; max-width: 56rem; height: auto; border-radius: var(--vl-radius-lg); box-shadow: var(--vl-shadow); }
+
+/* ---------- Pastilles « par besoin » ---------- */
+.vl-needs--pills .vl-needs__grid { display: flex; flex-wrap: nowrap; gap: 1.2rem; overflow-x: auto; padding-bottom: 0.8rem; scrollbar-width: none; justify-content: flex-start; }
+.vl-needs--pills .vl-needs__grid::-webkit-scrollbar { display: none; }
+@media screen and (min-width: 990px) { .vl-needs--pills .vl-needs__grid { flex-wrap: wrap; justify-content: center; gap: 2.4rem; overflow: visible; } }
+.vl-needs--pills .vl-need { flex-direction: row; align-items: center; gap: 1.4rem; padding: 0.8rem 2.4rem 0.8rem 0.8rem; border-radius: 99rem; white-space: nowrap; }
+.vl-needs--pills .vl-need__media { width: 6.4rem; height: 6.4rem; margin: 0; border-radius: 50%; flex: none; }
+.vl-needs--pills .vl-need__icon .vl-icon { width: 2.8rem; height: 2.8rem; }
+.vl-needs--pills .vl-need__label { padding: 0; font-family: var(--font-body-family); font-weight: 700; font-size: 1.8rem; }
+.vl-needs--pills .vl-need__text, .vl-needs--pills .vl-need__arrow { display: none; }
+
+/* ---------- Présentation ---------- */
+.vl-intro__title { max-width: 90rem; margin: 0 auto 2rem; text-align: center; font-size: clamp(2.8rem, 4.2vw, 4.4rem); font-weight: 700; line-height: 1.15; }
+.vl-intro__text { max-width: 86rem; margin: 0 auto; text-align: center; font-size: 1.8rem; line-height: 1.6; }
+.vl-intro__badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem 1.6rem; margin: 3.6rem 0 0; padding: 0; list-style: none; }
+.vl-intro__badges li { display: inline-flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1.6rem; border-radius: 0.8rem; background: var(--vl-white); font-size: 1.6rem; font-weight: 700; font-style: italic; }
+.vl-intro__badges .vl-icon { width: 2rem; height: 2rem; color: var(--vl-berry); }
+
+/* ---------- Produit vedette ---------- */
+.vl-feature__heading { margin-bottom: 4rem; }
+.vl-feature__card { display: grid; max-width: 140rem; margin: 0 auto; border-radius: var(--vl-radius-lg); overflow: hidden; background: var(--vl-cream); }
+@media screen and (min-width: 990px) { .vl-feature__card { grid-template-columns: 1fr 1fr; } }
+.vl-feature__media { position: relative; aspect-ratio: 1; background: var(--vl-blush); }
+.vl-feature__media img { width: 100%; height: 100%; object-fit: cover; }
+.vl-feature__sticker { position: absolute; top: 2.4rem; right: 2.4rem; display: grid; place-items: center; align-content: center; width: 11rem; height: 11rem; margin: 0; border-radius: 50%; background: var(--vl-petal); color: var(--vl-plum); text-align: center; line-height: 1.05; box-shadow: var(--vl-shadow-soft); transform: rotate(-8deg); }
+.vl-feature__sticker span { font-size: 1.5rem; }
+.vl-feature__sticker strong { font-size: 1.7rem; }
+.vl-feature__info { display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; padding: 3.2rem 2.4rem; }
+@media screen and (min-width: 990px) { .vl-feature__info { padding: 4.8rem 5.6rem; } }
+.vl-feature__title { margin: 0; font-size: clamp(2.8rem, 3.6vw, 4.2rem); font-weight: 700; line-height: 1.1; }
+.vl-feature__checks { display: grid; gap: 1.4rem; margin: 0.8rem 0; padding: 0; list-style: none; }
+.vl-feature__checks li { display: flex; align-items: center; gap: 1.2rem; font-size: 1.8rem; font-weight: 600; }
+.vl-feature__tick { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--vl-plum); color: var(--vl-white); flex: none; }
+.vl-feature__tick .vl-icon { width: 1.5rem; height: 1.5rem; }
+.vl-feature__cta { display: flex; align-items: center; justify-content: center; gap: 1.6rem; min-height: 6.4rem; padding: 0 3.2rem; border-radius: 99rem; background: var(--vl-plum); color: var(--vl-cream); font-size: 1.9rem; text-decoration: none; transition: transform 0.2s ease, background 0.2s ease; }
+.vl-feature__cta:hover { background: #3a2230; transform: translateY(-2px); }
+.vl-feature__cta em { font-weight: 400; }
+.vl-feature__note { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0; font-weight: 600; font-size: 1.5rem; text-align: center; }
+.vl-feature__tag { padding: 0.4rem 1rem; border-radius: 99rem; background: var(--vl-sage); font-weight: 700; font-size: 1.3rem; }
+.vl-feature__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.6rem; }
+.vl-feature__stats p { display: flex; align-items: center; gap: 1.2rem; margin: 0; }
+.vl-feature__stats strong { font-size: 4rem; line-height: 1; }
+.vl-feature__stats span { font-size: 1.5rem; }
+.vl-feature__source { margin: 0; text-align: center; font-size: 1.3rem; color: var(--vl-mute); }
+
+/* ---------- Titres plus épurés ---------- */
+.vl-heading .h1, .vl-why .h1, .vl-story .h1, .vl-news .h1 { font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .vl-banner__button, .vl-feature__cta { transition: none; } }
+h1 em, h2 em, h3 em, .h0 em, .h1 em, .h2 em { color: var(--vl-berry); }
+.color-scheme-5 h1 em, .color-scheme-5 h2 em, .color-scheme-7 h2 em { color: var(--vl-petal); }

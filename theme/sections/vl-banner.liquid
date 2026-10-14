@@ -1,0 +1,55 @@
+{%- comment -%} Grande bannière d'ouverture : pastille, titre en capitales, bouton blanc arrondi. {%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign img = section.settings.image
+  assign link = section.settings.button_link
+  if link == blank and p != blank
+    assign link = p.url
+  endif
+-%}
+<section class="vl-banner{% if img != blank %} vl-banner--image{% endif %} color-{{ section.settings.color_scheme }} gradient">
+  {%- if img != blank -%}
+    <div class="vl-banner__bg">
+      {{ img | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2400', alt: img.alt | default: '' }}
+    </div>
+  {%- endif -%}
+  <div class="page-width vl-banner__inner">
+    <div class="vl-banner__copy">
+      {%- if section.settings.pill != blank %}<p class="vl-banner__pill">{{ section.settings.pill | escape }}</p>{% endif -%}
+      <h1 class="vl-banner__title">{{ section.settings.title }}</h1>
+      {%- if section.settings.subtitle != blank %}<p class="vl-banner__subtitle">{{ section.settings.subtitle | escape }}</p>{% endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="vl-banner__button" href="{{ link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+      {%- if section.settings.note != blank %}<p class="vl-banner__note">{{ section.settings.note | escape }}</p>{% endif -%}
+    </div>
+    {%- if img == blank -%}
+      <div class="vl-banner__product">
+        {%- if p.featured_image -%}
+          {{ p.featured_image | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 50vw, 90vw', widths: '500, 800, 1200', alt: p.featured_image.alt | default: p.title }}
+        {%- else -%}
+          {% render 'vl-belt-illustration', uid: section.id %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Grande bannière",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo plein écran", "info": "Format paysage, 2400×1300. Sans photo : fond rose + photo du produit." },
+    { "type": "product", "id": "product", "label": "Produit (lien et photo de secours)" },
+    { "type": "text", "id": "pill", "label": "Pastille", "default": "Nouvelle saison" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "LA SAISON COCON" },
+    { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "LA CHALEUR DOUCE DE TES RÈGLES" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "JE DÉCOUVRE" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "text", "id": "note", "label": "Petite mention", "default": "Satisfaite ou remboursée 30 jours" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-2" }
+  ],
+  "presets": [{ "name": "VELEA · Grande bannière" }]
+}
+{% endschema %}

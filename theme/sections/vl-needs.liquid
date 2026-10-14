@@ -1,11 +1,13 @@
 {%- comment -%} « Ton besoin du moment » : tuiles qui orientent vers le bon produit. {%- endcomment -%}
 {%- render 'vl-padding' -%}
-<section class="vl-needs color-{{ section.settings.color_scheme }} gradient">
+<section class="vl-needs vl-needs--{{ section.settings.style }} color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.title != blank -%}
     <div class="vl-heading vl-heading--center">
       {%- if section.settings.eyebrow != blank %}<p class="vl-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif -%}
       <h2 class="h1">{{ section.settings.title }}</h2>
     </div>
+    {%- endif -%}
     <ul class="vl-needs__grid" role="list">
       {%- for block in section.blocks -%}
         {%- assign p = block.settings.product -%}
@@ -35,6 +37,7 @@
   "name": "VELEA · Par besoin",
   "tag": "div",
   "settings": [
+    { "type": "select", "id": "style", "label": "Style", "default": "pills", "options": [{ "value": "pills", "label": "Pastilles rondes" }, { "value": "tiles", "label": "Tuiles" }] },
     { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Ton besoin du moment" },
     { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "De quoi as-tu <em>besoin</em> aujourd'hui ?" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-1" },

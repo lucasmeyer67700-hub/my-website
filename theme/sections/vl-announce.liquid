@@ -1,6 +1,8 @@
 {%- if section.blocks.size > 0 -%}
   <div class="vl-announce color-{{ section.settings.color_scheme }}" role="region" aria-label="Annonces">
-    <div class="vl-announce__track page-width" data-interval="{{ section.settings.interval | times: 1000 }}">
+    <div class="vl-announce__wrap page-width">
+    {%- if section.blocks.size > 1 -%}<button type="button" class="vl-announce__arrow" data-dir="-1" aria-label="Annonce précédente"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>{%- endif -%}
+    <div class="vl-announce__track" data-interval="{{ section.settings.interval | times: 1000 }}">
       {%- for block in section.blocks -%}
         <p class="vl-announce__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
           {%- if block.settings.icon != 'none' -%}{% render 'vl-icon', icon: block.settings.icon %}{%- endif -%}
@@ -12,6 +14,8 @@
         </p>
       {%- endfor -%}
     </div>
+    {%- if section.blocks.size > 1 -%}<button type="button" class="vl-announce__arrow" data-dir="1" aria-label="Annonce suivante"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>{%- endif -%}
+    </div>
   </div>
   {%- if section.blocks.size > 1 -%}
     <script>
@@ -20,12 +24,18 @@
         if (!track || track.dataset.ready) return;
         track.dataset.ready = '1';
         var items = track.querySelectorAll('.vl-announce__item');
-        var i = 0;
-        setInterval(function () {
-          if (document.hidden) return;
+        var i = 0, paused = false;
+        function go(d) {
           items[i].classList.remove('is-active');
-          i = (i + 1) % items.length;
+          i = (i + d + items.length) % items.length;
           items[i].classList.add('is-active');
+        }
+        document.querySelectorAll('#shopify-section-{{ section.id }} .vl-announce__arrow').forEach(function (b) {
+          b.addEventListener('click', function () { paused = true; go(parseInt(b.dataset.dir, 10)); });
+        });
+        setInterval(function () {
+          if (document.hidden || paused) return;
+          go(1);
         }, parseInt(track.dataset.interval, 10) || 4000);
       })();
     </script>

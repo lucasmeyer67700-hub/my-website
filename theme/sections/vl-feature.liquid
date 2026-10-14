@@ -1,0 +1,94 @@
+{%- comment -%}
+  Produit vedette en grande carte : photo + pastille ronde à gauche ; note, titre, bénéfices,
+  gros bouton et chiffres à droite. Note : uniquement depuis l'app d'avis. Chiffres : uniquement
+  issus d'un vrai test, avec la source en mention.
+{%- endcomment -%}
+{%- assign p = section.settings.product -%}
+{%- if p != blank or request.design_mode -%}
+  {%- render 'vl-padding' -%}
+  <section class="vl-feature color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      {%- if section.settings.heading != blank %}<h2 class="vl-intro__title vl-feature__heading">{{ section.settings.heading }}</h2>{% endif -%}
+      <div class="vl-feature__card">
+        <div class="vl-feature__media">
+          {%- assign img = section.settings.image | default: p.featured_image -%}
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1200', alt: img.alt | default: p.title }}
+          {%- else -%}
+            {% render 'vl-belt-illustration', uid: section.id %}
+          {%- endif -%}
+          {%- if section.settings.sticker_top != blank -%}
+            <p class="vl-feature__sticker"><span>{{ section.settings.sticker_top | escape }}</span><strong>{{ section.settings.sticker_bottom | escape }}</strong></p>
+          {%- endif -%}
+        </div>
+        <div class="vl-feature__info">
+          {%- if p.metafields.reviews.rating_count.value > 0 -%}
+            {%- assign r = p.metafields.reviews.rating.value -%}
+            <a class="vl-rating" href="{{ p.url }}#avis">
+              <span class="vl-rating__stars" aria-hidden="true">★★★★★<span style="width: {{ r.rating | divided_by: r.scale_max | times: 100 }}%">★★★★★</span></span>
+              <span>{{ r.rating | round: 1 }}/5 · {{ p.metafields.reviews.rating_count.value }} avis vérifiés</span>
+            </a>
+          {%- endif -%}
+          <h3 class="vl-feature__title">{{ section.settings.title | default: p.title | escape }}</h3>
+          {%- assign mf_benefits = p.metafields.velea.benefices.value -%}
+          <ul class="vl-feature__checks" role="list">
+            {%- if section.blocks.size > 0 -%}
+              {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span class="vl-feature__tick">{% render 'vl-icon', icon: 'check' %}</span>{{ block.settings.text | escape }}</li>{%- endfor -%}
+            {%- else -%}
+              {%- for l in mf_benefits -%}<li><span class="vl-feature__tick">{% render 'vl-icon', icon: 'check' %}</span>{{ l | escape }}</li>{%- endfor -%}
+            {%- endif -%}
+          </ul>
+          <a class="vl-feature__cta" href="{{ section.settings.button_link | default: p.url }}">
+            <strong>{{ section.settings.button_label | escape }}</strong>
+            {%- if section.settings.show_price and p != blank %}<span aria-hidden="true">–</span><em>{% if p.price_varies %}dès {% endif %}{{ p.price | money }}</em>{% endif -%}
+          </a>
+          {%- if section.settings.note != blank -%}
+            <p class="vl-feature__note">
+              {%- if section.settings.note_tag != blank %}<span class="vl-feature__tag">{{ section.settings.note_tag | escape }}</span>{% endif -%}
+              {{ section.settings.note | escape }}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.stat_1_value != blank or section.settings.stat_2_value != blank -%}
+            <div class="vl-feature__stats">
+              {%- if section.settings.stat_1_value != blank %}<p><strong>{{ section.settings.stat_1_value | escape }}</strong><span>{{ section.settings.stat_1_label | escape }}</span></p>{% endif -%}
+              {%- if section.settings.stat_2_value != blank %}<p><strong>{{ section.settings.stat_2_value | escape }}</strong><span>{{ section.settings.stat_2_label | escape }}</span></p>{% endif -%}
+            </div>
+            {%- if section.settings.stats_source != blank %}<p class="vl-feature__source">{{ section.settings.stats_source | escape }}</p>{% endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Produit vedette",
+  "tag": "div",
+  "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "Titre au-dessus", "default": "Reprends le contrôle de tes règles" },
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "image_picker", "id": "image", "label": "Photo (sinon photo du produit)" },
+    { "type": "text", "id": "sticker_top", "label": "Pastille ronde : haut", "default": "3 niveaux" },
+    { "type": "text", "id": "sticker_bottom", "label": "Pastille ronde : bas", "default": "de chaleur" },
+    { "type": "text", "id": "title", "label": "Titre (sinon nom du produit)" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je découvre ma ceinture" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "checkbox", "id": "show_price", "label": "Prix dans le bouton", "default": true },
+    { "type": "text", "id": "note_tag", "label": "Étiquette de la mention", "default": "PACK" },
+    { "type": "text", "id": "note", "label": "Mention sous le bouton" },
+    { "type": "header", "content": "Chiffres (uniquement issus d'un vrai test)" },
+    { "type": "paragraph", "content": "Laisse vide tant que tu n'as pas de résultats réels et sourcés (DGCCRF : pratiques commerciales trompeuses)." },
+    { "type": "text", "id": "stat_1_value", "label": "Chiffre 1" },
+    { "type": "text", "id": "stat_1_label", "label": "Texte 1" },
+    { "type": "text", "id": "stat_2_value", "label": "Chiffre 2" },
+    { "type": "text", "id": "stat_2_label", "label": "Texte 2" },
+    { "type": "text", "id": "stats_source", "label": "Source des chiffres" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Couleurs", "default": "scheme-3" },
+    { "type": "range", "id": "padding_top", "label": "Marge haute", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Marge basse", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [{ "type": "point", "name": "Bénéfice", "limit": 5, "settings": [{ "type": "text", "id": "text", "label": "Texte" }] }],
+  "presets": [{ "name": "VELEA · Produit vedette" }]
+}
+{% endschema %}

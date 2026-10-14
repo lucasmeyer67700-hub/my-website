@@ -17,9 +17,9 @@
           "background": "#FBF6F1",
           "background_gradient": "",
           "text": "#4A2C3A",
-          "button": "#A9604F",
-          "button_label": "#FFFFFF",
-          "secondary_button_label": "#8E4E40",
+          "button": "#4A2C3A",
+          "button_label": "#FBF6F1",
+          "secondary_button_label": "#4A2C3A",
           "shadow": "#4A2C3A"
         }
       },
@@ -28,9 +28,9 @@
           "background": "#F3DAD3",
           "background_gradient": "",
           "text": "#4A2C3A",
-          "button": "#A9604F",
-          "button_label": "#FFFFFF",
-          "secondary_button_label": "#8E4E40",
+          "button": "#4A2C3A",
+          "button_label": "#FBF6F1",
+          "secondary_button_label": "#4A2C3A",
           "shadow": "#4A2C3A"
         }
       },
@@ -39,9 +39,9 @@
           "background": "#FFFFFF",
           "background_gradient": "",
           "text": "#4A2C3A",
-          "button": "#A9604F",
-          "button_label": "#FFFFFF",
-          "secondary_button_label": "#8E4E40",
+          "button": "#4A2C3A",
+          "button_label": "#FBF6F1",
+          "secondary_button_label": "#4A2C3A",
           "shadow": "#4A2C3A"
         }
       },
@@ -72,14 +72,25 @@
           "background": "#FFFFFF",
           "background_gradient": "",
           "text": "#4A2C3A",
-          "button": "#A9604F",
-          "button_label": "#FFFFFF",
-          "secondary_button_label": "#8E4E40",
+          "button": "#4A2C3A",
+          "button_label": "#FBF6F1",
+          "secondary_button_label": "#4A2C3A",
+          "shadow": "#4A2C3A"
+        }
+      },
+      "scheme-7": {
+        "settings": {
+          "background": "#A9604F",
+          "background_gradient": "",
+          "text": "#FFFFFF",
+          "button": "#FFFFFF",
+          "button_label": "#A9604F",
+          "secondary_button_label": "#FFFFFF",
           "shadow": "#4A2C3A"
         }
       }
     },
-    "type_header_font": "fraunces_n4",
+    "type_header_font": "poppins_n6",
     "heading_scale": 115,
     "type_body_font": "dm_sans_n4",
     "body_scale": 105,

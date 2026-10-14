@@ -15,30 +15,31 @@
       "type": "vl-announce",
       "settings": {
         "interval": 4,
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-7"
       },
       "blocks": {
         "message_1": {
           "type": "message",
           "settings": {
-            "text": "Livraison offerte en France métropolitaine",
-            "icon": "truck"
+            "text": "LIVRAISON OFFERTE EN FRANCE MÉTROPOLITAINE →",
+            "icon": "none",
+            "link": "shopify://pages/livraison-et-retours"
           }
         },
         "message_2": {
           "type": "message",
           "settings": {
-            "text": "30 jours satisfaite ou remboursée",
-            "icon": "return",
+            "text": "30 JOURS SATISFAITE OU REMBOURSÉE →",
+            "icon": "none",
             "link": "shopify://pages/livraison-et-retours"
           }
         },
         "message_3": {
           "type": "message",
           "settings": {
-            "text": "Paiement 100 % sécurisé",
-            "icon": "lock",
-            "link": "shopify://products/ceinture-chauffante-regles"
+            "text": "-10 % SUR TA PREMIÈRE COMMANDE →",
+            "icon": "none",
+            "link": "/#newsletter"
           }
         }
       },
@@ -53,7 +54,7 @@
       "settings": {
         "color_scheme": "scheme-3",
         "menu_color_scheme": "scheme-3",
-        "logo_position": "middle-left",
+        "logo_position": "middle-center",
         "menu": "menu-cocon",
         "menu_type_desktop": "dropdown",
         "sticky_header_type": "on-scroll-up",
