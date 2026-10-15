@@ -212,3 +212,11 @@ body { overscroll-behavior-x: none; touch-action: pan-y pinch-zoom; }
 .v-drawer__links a { display: block; padding: 16px 4px; font-size: 15px; letter-spacing: .14em; text-transform: uppercase; }
 html.v-lock, html.v-lock body { overflow: hidden; }
 .v-reviews__track--marquee { display: block !important; overflow: visible !important; padding: 0 !important; }
+
+/* Défilement des avis plus rapide sur PC */
+@media (min-width: 990px) { .v-marquee__lane { animation-duration: calc(var(--dur, 30s) * .55); } }
+/* Livraison estimée */
+.v-eta { display: flex; align-items: center; gap: 10px; margin: 14px 0 0; padding: 12px 14px; border-radius: 14px; font-size: 14px; color: #fff6ea;
+  background: rgba(217,178,106,.1); border: 1px solid rgba(217,178,106,.35); }
+.v-eta svg { flex: none; color: #d9b26a; }
+.v-eta strong { color: #f3dcae; font-weight: 500; }

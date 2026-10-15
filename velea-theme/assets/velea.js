@@ -243,4 +243,12 @@
     var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { run(); o.disconnect(); } }, { threshold: .4 });
     o.observe(box);
   });
+
+  // Date de livraison estimée (jours ouvrés)
+  document.querySelectorAll('[data-eta]').forEach(function (el) {
+    var add = function (n) { var d = new Date(); while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) n--; } return d; };
+    var f = function (d) { return d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'long' }); };
+    var out = el.querySelector('[data-eta-out]');
+    if (out) out.textContent = 'entre le ' + f(add(Number(el.dataset.min) || 0)) + ' et le ' + f(add(Number(el.dataset.max) || 0));
+  });
 })();

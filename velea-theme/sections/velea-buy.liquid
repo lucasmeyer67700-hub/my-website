@@ -64,7 +64,17 @@
               <span>{%- if v.available -%}Ajouter au panier{%- else -%}Temporairement indisponible{%- endif -%}</span>
             </button>
           </div>
-          {%- if v.available -%}<button type="submit" name="return_to" value="/checkout" class="v-btn v-btn--buynow v-btn--full">{{ section.settings.buynow | default: 'Soulagée dès maintenant' }}</button>{%- endif -%}
+          {%- if on_product_page -%}
+            {%- if v.available -%}<button type="submit" name="return_to" value="/checkout" class="v-btn v-btn--buynow v-btn--full">{{ section.settings.buynow | default: 'Soulagée dès maintenant' }}</button>{%- endif -%}
+          {%- else -%}
+            <a href="{{ p.url }}" class="v-btn v-btn--buynow v-btn--full">{{ section.settings.preview_label | default: 'Aperçu du produit' }}</a>
+          {%- endif -%}
+          {%- if section.settings.ship_max > 0 -%}
+            <p class="v-eta" data-eta data-min="{{ section.settings.ship_min }}" data-max="{{ section.settings.ship_max }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+              <span>Livraison estimée : <strong data-eta-out>{{ section.settings.ship_min }} à {{ section.settings.ship_max }} jours ouvrés</strong></span>
+            </p>
+          {%- endif -%}
           {%- unless v.available -%}<p class="v-buy__soldout" role="status">Ce produit est temporairement indisponible. Contactez-nous pour connaître la date de retour.</p>{%- endunless -%}
         {%- endform -%}
       {%- endif -%}
@@ -151,6 +161,9 @@
     { "type": "text", "id": "title", "label": "Titre sur l'accueil (vide = nom du produit)" },
     { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Chaleur réglable, massage vibrant et batterie rechargeable" },
     { "type": "text", "id": "buynow", "label": "Texte du bouton d'achat direct", "default": "Soulagée dès maintenant" },
+    { "type": "text", "id": "preview_label", "label": "Bouton sur l'accueil (vers la fiche produit)", "default": "Aperçu du produit" },
+    { "type": "number", "id": "ship_min", "label": "Livraison : jours ouvrés minimum", "default": 5 },
+    { "type": "number", "id": "ship_max", "label": "Livraison : jours ouvrés maximum (0 = masquer)", "default": 10 },
     { "type": "checkbox", "id": "show_visual", "label": "Afficher les photos", "default": true },
     { "type": "image_picker", "id": "visual", "label": "Photo principale" },
     { "type": "image_picker", "id": "visual_2", "label": "Photo 2" },
