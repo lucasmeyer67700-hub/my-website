@@ -1,10 +1,27 @@
 <section id="{{ section.settings.anchor | default: 'fonctionnement' }}" class="v-section v-section--noir v-how">
   <div class="v-wrap v-how__solo">
-    <div class="v-reveal">
-      <div class="v-section__head">
-        <h2 class="v-h2">{{ section.settings.title }}</h2>
-        <p class="v-lead" >{{ section.settings.text }}</p>
+    <div class="v-section__head v-section__head--center v-reveal">
+      {%- if section.settings.kicker != blank -%}<p class="v-kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<p class="v-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+
+    <figure class="v-vid v-reveal">
+      <div class="v-vid__frame">
+        {%- if section.settings.video != blank -%}
+          {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: true, preload: 'metadata', image_size: '1080x' }}
+        {%- else -%}
+          <div class="v-vid__empty">
+            <span class="v-vid__play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span>Votre vidéo ici</span>
+            <small>Format portrait 9:16</small>
+          </div>
+        {%- endif -%}
       </div>
+      {%- if section.settings.caption != blank -%}<figcaption>{{ section.settings.caption }}</figcaption>{%- endif -%}
+    </figure>
+
+    {%- if section.settings.show_steps -%}
       <ol class="v-steps">
         {%- for block in section.blocks -%}
           <li class="v-step" {{ block.shopify_attributes }}>
@@ -20,7 +37,7 @@
           </li>
         {%- endfor -%}
       </ol>
-    </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -29,9 +46,13 @@
   "name": "VELEA · Comment ça marche",
   "settings": [
     { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "fonctionnement" },
+    { "type": "text", "id": "kicker", "label": "Petite phrase", "default": "En vidéo" },
     { "type": "text", "id": "title", "label": "Titre", "default": "Comment l'utiliser ?" },
-    { "type": "textarea", "id": "text", "label": "Texte", "default": "Trois étapes simples, à adapter selon la notice du fabricant." },
-    { "type": "image_picker", "id": "image", "label": "Photo (portrait 4:5)" }
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Simple comme une bouillotte, sans fil." },
+    { "type": "video", "id": "video", "label": "Vidéo (format portrait 9:16)" },
+    { "type": "text", "id": "caption", "label": "Légende sous la vidéo", "default": "Mise en place, réglage de la chaleur et du massage : tout en moins d'une minute." },
+    { "type": "checkbox", "id": "show_steps", "label": "Afficher aussi les 3 étapes", "default": false },
+    { "type": "image_picker", "id": "image", "label": "(non utilisé)" }
   ],
   "blocks": [{
     "type": "step", "name": "Étape",

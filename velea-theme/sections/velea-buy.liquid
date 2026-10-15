@@ -9,17 +9,11 @@
   endif
   assign v = p.selected_or_first_available_variant
 -%}
-<section id="{{ section.settings.anchor | default: 'ceinture' }}" class="v-section v-section--coquille v-buy{% unless on_product_page %} v-buy--home{% endunless %}" aria-labelledby="buy-title-{{ section.id }}">
+<section id="{{ section.settings.anchor | default: 'ceinture' }}" class="v-section v-section--coquille v-buy" aria-labelledby="buy-title-{{ section.id }}">
   <div class="v-wrap v-buy__solo{% if section.settings.show_visual %} v-buy__duo{% endif %}">
     {%- if section.settings.show_visual -%}
       <div class="v-buy__visual v-reveal">
-        <div class="v-buy__stage">
-          {% render 'velea-slot', class: 'v-buy__main', image: section.settings.visual, label: 'Photo principale du produit', loading: 'eager', sizes: '(min-width: 990px) 620px, 100vw' %}
-          {%- if section.settings.visual_white != blank -%}
-            {%- assign alt_white = section.settings.visual_white.alt | default: 'Ceinture coloris blanc' -%}
-            <div class="v-buy__alt" aria-hidden="true">{{ section.settings.visual_white | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 620px, 100vw', widths: '600, 800, 1200, 1600', alt: alt_white }}</div>
-          {%- endif -%}
-        </div>
+        {% render 'velea-slot', class: 'v-buy__main', image: section.settings.visual, label: 'Photo principale du produit', loading: 'eager', sizes: '(min-width: 990px) 520px, 92vw' %}
         <div class="v-buy__thumbs">
           {% render 'velea-slot', image: section.settings.visual_2, label: 'Photo 2', sizes: '(min-width: 990px) 170px, 30vw' %}
           {% render 'velea-slot', image: section.settings.visual_3, label: 'Photo 3', sizes: '(min-width: 990px) 170px, 30vw' %}
@@ -138,7 +132,10 @@
       </ul>
 
       {%- unless on_product_page -%}
-        <a href="{{ p.url }}" class="v-link v-buy__more">Voir la fiche produit complète</a>
+        <a href="#fonctionnement" class="v-buy__video">
+          <span class="v-buy__video-ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          Voir la vidéo
+        </a>
       {%- endunless -%}
     </div>
   </div>
@@ -181,7 +178,6 @@
     { "type": "number", "id": "ship_max", "label": "Livraison : jours ouvrés maximum (0 = masquer)", "default": 10 },
     { "type": "checkbox", "id": "show_visual", "label": "Afficher les photos", "default": true },
     { "type": "image_picker", "id": "visual", "label": "Photo principale" },
-    { "type": "image_picker", "id": "visual_white", "label": "Photo principale – coloris blanc" },
     { "type": "image_picker", "id": "visual_2", "label": "Photo 2" },
     { "type": "image_picker", "id": "visual_3", "label": "Photo 3" },
     { "type": "image_picker", "id": "visual_4", "label": "Photo 4" },

@@ -13,8 +13,7 @@
     "ship_max": 10,
     "buynow": "Soulagée dès maintenant",
     "preview_label": "Aperçu du produit",
-    "visual": "shopify://shop_images/velea-produit-chambre.webp",
-    "visual_white": "shopify://shop_images/velea-produit-chambre-blanc.webp"
+    "visual": "shopify://shop_images/velea-produit-chambre.webp"
    },
    "blocks": {
     "spec-1": {
@@ -216,7 +215,10 @@
    "settings": {
     "anchor": "fonctionnement",
     "title": "Comment l'utiliser ?",
-    "text": "Simple comme une bouillotte, sans fil."
+    "text": "Simple comme une bouillotte, sans fil.",
+    "kicker": "En vidéo",
+    "caption": "Mise en place, réglage de la chaleur et du massage : tout en moins d'une minute.",
+    "show_steps": false
    },
    "blocks": {
     "step-1": {

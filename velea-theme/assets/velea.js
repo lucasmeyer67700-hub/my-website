@@ -101,8 +101,6 @@
       r.addEventListener('change', function () {
         form.querySelector('input[name="id"]').value = r.value;
         var n = form.querySelector('[data-swatch-name]'); if (n) n.textContent = r.dataset.name;
-        var vis = form.closest('.v-buy') && form.closest('.v-buy').querySelector('.v-buy__visual');
-        if (vis) vis.classList.toggle('is-blanc', /blanc/i.test(r.dataset.name));
       });
     });
     form.addEventListener('submit', function () {
