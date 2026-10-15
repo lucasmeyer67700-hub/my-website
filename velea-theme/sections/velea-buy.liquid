@@ -10,7 +10,12 @@
   assign v = p.selected_or_first_available_variant
 -%}
 <section id="{{ section.settings.anchor | default: 'ceinture' }}" class="v-section v-section--coquille v-buy" aria-labelledby="buy-title-{{ section.id }}">
-  <div class="v-wrap v-buy__solo">
+  <div class="v-wrap v-buy__solo{% if section.settings.show_visual %} v-buy__duo{% endif %}">
+    {%- if section.settings.show_visual -%}
+      <div class="v-buy__visual v-reveal">
+        {% render 'velea-slot', image: section.settings.visual, label: 'Photo du produit à ajouter (format carré ou portrait)', sizes: '(min-width: 990px) 520px, 1px' %}
+      </div>
+    {%- endif -%}
     <div class="v-buy__panel v-card-wood">
       {%- if on_product_page -%}
         <h1 id="buy-title-{{ section.id }}" class="v-h2">{{ p.title }}</h1>
@@ -149,6 +154,8 @@
     { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "ceinture" },
     { "type": "text", "id": "title", "label": "Titre sur l'accueil (vide = nom du produit)" },
     { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Chaleur réglable, massage vibrant et batterie rechargeable" },
+    { "type": "checkbox", "id": "show_visual", "label": "Afficher une image à côté (ordinateur)", "default": true },
+    { "type": "image_picker", "id": "visual", "label": "Image à côté du bloc d'achat" },
     { "type": "range", "id": "media_limit", "label": "(non utilisé)", "min": 1, "max": 10, "step": 1, "default": 6 }
   ],
   "blocks": [

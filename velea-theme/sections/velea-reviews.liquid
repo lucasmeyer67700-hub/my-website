@@ -1,0 +1,50 @@
+{%- if section.blocks.size > 0 or request.design_mode -%}
+<section id="avis" class="v-section v-reviews">
+  <div class="v-wrap">
+    <div class="v-section__head v-section__head--center v-reveal">
+      {%- if section.settings.kicker != blank -%}<p class="v-kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+    </div>
+    {%- if section.blocks.size == 0 -%}
+      <p class="v-reviews__empty">Ajoutez ici les avis de vos clientes (bloc « Avis »). Cette section reste invisible sur la boutique tant qu'elle est vide.</p>
+    {%- endif -%}
+    <div class="v-reviews__track">
+      {%- for block in section.blocks -%}
+        <figure class="v-review v-reveal" {{ block.shopify_attributes }}>
+          <div class="v-review__stars" role="img" aria-label="{{ block.settings.rating }} sur 5">
+            {%- for i in (1..5) -%}<span class="{% if i <= block.settings.rating %}is-on{% endif %}">★</span>{%- endfor -%}
+          </div>
+          {%- if block.settings.photo != blank -%}{{ block.settings.photo | image_url: width: 400 | image_tag: loading: 'lazy', class: 'v-review__photo', alt: '' }}{%- endif -%}
+          <blockquote>{{ block.settings.text }}</blockquote>
+          <figcaption>
+            <strong>{{ block.settings.name }}</strong>
+            {%- if block.settings.verified -%}<span class="v-review__badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Acheteuse vérifiée</span>{%- endif -%}
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VELEA · Avis clientes",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Petite phrase", "default": "Elles l'ont adoptée" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Avis clientes" }
+  ],
+  "blocks": [{
+    "type": "review", "name": "Avis",
+    "settings": [
+      { "type": "paragraph", "content": "Uniquement de vrais avis de clientes ayant acheté le produit." },
+      { "type": "text", "id": "name", "label": "Prénom et initiale", "default": "Prénom N." },
+      { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
+      { "type": "textarea", "id": "text", "label": "Avis" },
+      { "type": "checkbox", "id": "verified", "label": "Achat vérifié (commande retrouvée)", "default": false },
+      { "type": "image_picker", "id": "photo", "label": "Photo de la cliente (facultatif)" }
+    ]
+  }],
+  "presets": [{ "name": "VELEA · Avis clientes" }]
+}
+{% endschema %}
