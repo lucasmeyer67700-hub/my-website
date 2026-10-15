@@ -15,6 +15,9 @@
   --palette-brown-soft: #a88778;
   --palette-brown-deep: #49352f;
   --palette-ink: #302724;
+  --palette-warm-white-rgb: 255 252 250;
+  --palette-ink-rgb: 48 39 36;
+  --palette-scrim-rgb: 36 27 24;
 
   /* Feedback */
   --color-error: #9b2c2c;
@@ -32,6 +35,7 @@
   --space-3xl: 6rem;
 
   --gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
+  --gutter-wide: clamp(1rem, 0.4rem + 2.6vw, 3.5rem);
   --section-space: clamp(3.5rem, 2.25rem + 5vw, 7rem);
   --section-space-compact: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
 
@@ -345,6 +349,12 @@ a {
   max-width: calc(var(--page-width) + var(--gutter) * 2);
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+
+/* Full-bleed bars (header, full-screen banner): content runs to the screen edges. */
+.page-width--wide {
+  max-width: none;
+  padding-inline: var(--gutter-wide);
 }
 
 .page-width--narrow {

@@ -530,14 +530,102 @@ class SiteHeader extends HTMLElement {
       this.classList.toggle('is-scrolled', !entry.isIntersecting);
     });
     this.observer.observe(sentinel);
+
+    // Expose the height of the announcement bar + header so a full-screen
+    // banner can fill exactly the rest of the first screen.
+    const groups = document.querySelectorAll('.shopify-section-group-header-group');
+    const update = () => {
+      let height = 0;
+      for (const group of groups) height += group.offsetHeight;
+      document.documentElement.style.setProperty('--header-offset', `${height}px`);
+    };
+    update();
+    this.resizeObserver = new ResizeObserver(update);
+    for (const group of groups) this.resizeObserver.observe(group);
   }
 
   disconnectedCallback() {
     this.observer?.disconnect();
+    this.resizeObserver?.disconnect();
   }
 }
 
 customElements.define('site-header', SiteHeader);
+
+/* -------------------------------------------------------------------------- */
+/* Announcement bar: messages cross-fade in place                              */
+/* -------------------------------------------------------------------------- */
+
+class AnnouncementRotator extends HTMLElement {
+  connectedCallback() {
+    this.items = [...this.querySelectorAll('[data-announcement]')];
+    this.toggle = this.querySelector('[data-announcement-toggle]');
+    if (this.items.length < 2) return;
+
+    this.index = Math.max(0, this.items.findIndex((item) => item.classList.contains('is-active')));
+    this.delay = Number(this.dataset.interval) || 5000;
+    this.userPaused = false;
+    this.hovered = false;
+    this.focused = false;
+
+    // The pause button is only useful (and shown) once rotation is running.
+    if (this.toggle) this.toggle.hidden = false;
+    this.toggle?.addEventListener('click', () => {
+      this.userPaused = !this.userPaused;
+      this.toggle.setAttribute('aria-pressed', String(this.userPaused));
+      this.#schedule();
+    });
+
+    // Pause while the visitor reads or interacts with the bar (WCAG 2.2.2).
+    this.addEventListener('mouseenter', () => { this.hovered = true; this.#schedule(); });
+    this.addEventListener('mouseleave', () => { this.hovered = false; this.#schedule(); });
+    this.addEventListener('focusin', () => { this.focused = true; this.#schedule(); });
+    this.addEventListener('focusout', (event) => {
+      if (this.contains(event.relatedTarget)) return;
+      this.focused = false;
+      this.#schedule();
+    });
+    this.onVisibilityChange = () => this.#schedule();
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+
+    // Theme editor: show the selected message and stop rotating.
+    this.addEventListener('shopify:block:select', (event) => {
+      const index = this.items.indexOf(event.target.closest('[data-announcement]'));
+      if (index < 0) return;
+      this.userPaused = true;
+      this.show(index);
+      this.#schedule();
+    });
+
+    this.#schedule();
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.timer);
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  /** @param {number} index */
+  show(index) {
+    this.index = (index + this.items.length) % this.items.length;
+    for (const [i, item] of this.items.entries()) {
+      const active = i === this.index;
+      item.classList.toggle('is-active', active);
+      for (const link of item.querySelectorAll('a')) link.tabIndex = active ? 0 : -1;
+    }
+  }
+
+  #schedule() {
+    clearTimeout(this.timer);
+    if (this.userPaused || this.hovered || this.focused || document.hidden) return;
+    this.timer = setTimeout(() => {
+      this.show(this.index + 1);
+      this.#schedule();
+    }, this.delay);
+  }
+}
+
+customElements.define('announcement-rotator', AnnouncementRotator);
 
 /* -------------------------------------------------------------------------- */
 /* Misc                                                                        */

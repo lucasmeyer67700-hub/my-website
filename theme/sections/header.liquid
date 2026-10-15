@@ -7,8 +7,11 @@
   assign cta_product = section.settings.cta_product
 -%}
 
-<site-header class="site-header color-{{ section.settings.color_scheme }}">
-  <div class="site-header__inner page-width">
+<site-header
+  class="site-header color-{{ section.settings.color_scheme }}"
+  style="--wordmark-size: {{ section.settings.wordmark_size | divided_by: 16.0 }}rem;"
+>
+  <div class="site-header__inner page-width{% if section.settings.full_width %} page-width--wide{% endif %}">
     <div class="site-header__start">
       <button
         type="button"
@@ -64,7 +67,9 @@
       {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
         <a class="icon-button site-header__account" href="{{ routes.account_url }}">
           {% render 'icon', icon: 'user' %}
-          <span class="visually-hidden">{{ 'header.account' | t }}</span>
+          <span class="visually-hidden">
+            {%- if customer -%}{{ 'header.account' | t }}{%- else -%}{{ 'header.login' | t }}{%- endif -%}
+          </span>
         </a>
       {%- endif -%}
       <a
@@ -166,28 +171,25 @@
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--space-sm);
     min-height: var(--header-height);
 
     @media screen and (min-width: 990px) {
-      grid-template-columns: auto 1fr auto;
-      gap: var(--space-lg);
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: clamp(2rem, 3.5vw, 3.75rem);
     }
   }
 
   .site-header__start {
-    display: contents;
-
-    @media screen and (min-width: 990px) {
-      display: flex;
-      align-items: center;
-    }
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    min-width: 0;
   }
 
   .site-header__menu-toggle {
-    justify-self: start;
     margin-inline-start: -0.6rem;
 
     @media screen and (min-width: 990px) {
@@ -197,9 +199,9 @@
 
   .site-header__logo {
     display: inline-flex;
-    justify-self: center;
     align-items: center;
     min-height: var(--tap-target);
+    min-width: 0;
     text-decoration: none;
   }
 
@@ -211,9 +213,14 @@
 
   .site-header__wordmark {
     font-family: var(--font-heading-family);
-    font-size: 1.75rem;
+    font-size: max(1.625rem, calc(var(--wordmark-size, 2.25rem) * 0.82));
     line-height: 1;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.015em;
+    white-space: nowrap;
+
+    @media screen and (min-width: 990px) {
+      font-size: var(--wordmark-size, 2.25rem);
+    }
   }
 
   .site-header__nav {
@@ -221,13 +228,14 @@
 
     @media screen and (min-width: 990px) {
       display: block;
-      justify-self: center;
+      justify-self: start;
     }
   }
 
   .site-header__menu {
     display: flex;
-    gap: var(--space-lg);
+    flex-wrap: wrap;
+    gap: 0 clamp(1.25rem, 2.2vw, 2.25rem);
   }
 
   .site-header__menu-link {
@@ -235,6 +243,7 @@
     align-items: center;
     min-height: var(--tap-target);
     font-size: var(--text-base);
+    letter-spacing: 0.01em;
     text-decoration: none;
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 0 calc(100% - 0.55rem);
@@ -357,7 +366,25 @@
       "type": "checkbox",
       "id": "show_account",
       "label": "Afficher l'accès au compte client",
-      "default": false
+      "info": "Nécessite les comptes clients activés (Paramètres > Comptes clients).",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "En-tête pleine largeur",
+      "info": "Le logo se cale sur le bord gauche de l'écran, l'icône panier sur le bord droit.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "wordmark_size",
+      "label": "Taille du nom de la boutique (sans logo image)",
+      "min": 24,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "default": 38
     },
     {
       "type": "color_scheme",

@@ -10,6 +10,7 @@
   @param {string} [alt] - Alt text override (defaults to the image alt)
   @param {string} [class] - CSS class
   @param {string} [widths] - Comma-separated srcset widths
+  @param {string} [style] - Inline style (e.g. object-position from the image focal point)
 
   @example
   {% render 'responsive-image', image: section.settings.image, sizes: '(min-width: 990px) 50vw, 100vw', eager: true %}
@@ -38,5 +39,6 @@
     loading: loading_mode,
     fetchpriority: priority,
     alt: alt_text,
-    class: class
+    class: class,
+    style: style
 -}}

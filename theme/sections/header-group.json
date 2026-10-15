@@ -4,9 +4,36 @@
   "sections": {
     "announcement": {
       "type": "announcement-bar",
+      "blocks": {
+        "shipping": {
+          "type": "message",
+          "settings": {
+            "text": "Livraison offerte en France",
+            "link": ""
+          }
+        },
+        "returns": {
+          "type": "message",
+          "settings": {
+            "text": "14 jours pour changer d'avis",
+            "link": ""
+          }
+        },
+        "payment": {
+          "type": "message",
+          "settings": {
+            "text": "Paiement 100 % sécurisé",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "shipping",
+        "returns",
+        "payment"
+      ],
       "settings": {
-        "text": "Livraison offerte en France",
-        "link": "",
+        "interval": 5,
         "color_scheme": "scheme-3"
       }
     },
@@ -17,10 +44,15 @@
         "secondary_menu": "pied-de-page-aide",
         "cta_product": "ceinture-chauffante-regles",
         "cta_label": "Découvrir la ceinture",
-        "show_account": false,
-        "color_scheme": "scheme-1"
+        "show_account": true,
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "wordmark_size": 38
       }
     }
   },
-  "order": ["announcement", "header"]
+  "order": [
+    "announcement",
+    "header"
+  ]
 }

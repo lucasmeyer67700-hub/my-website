@@ -24,7 +24,8 @@
       "one": "Panier, {{ count }} article",
       "other": "Panier, {{ count }} articles"
     },
-    "account": "Mon compte"
+    "account": "Mon compte",
+    "login": "Se connecter"
   },
   "products": {
     "price_label": "Prix : {{ price }}",
@@ -131,6 +132,8 @@
   },
   "sections": {
     "testimonials_editor_empty": "Section masquée : aucun avis. Ajoutez uniquement des avis authentiques de vraies clientes, ou une application d'avis.",
-    "comparison_criterion": "Critère"
+    "comparison_criterion": "Critère",
+    "announcement_label": "Informations pratiques",
+    "announcement_pause": "Mettre en pause le défilement des annonces"
   }
 }

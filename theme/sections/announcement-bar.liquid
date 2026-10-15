@@ -1,15 +1,90 @@
-{%- if section.settings.text != blank -%}
+{%- liquid
+  assign messages = section.blocks | where: 'type', 'message'
+  assign interval = section.settings.interval | times: 1000
+  assign has_links = false
+  for block in messages
+    if block.settings.link != blank
+      assign has_links = true
+    endif
+  endfor
+  comment
+    Screen readers get every message at once (a static, visually hidden line)
+    instead of a rotating one, unless a message contains a link that must stay
+    reachable in the visible list.
+  endcomment
+  assign summarize = false
+  if messages.size > 1 and has_links == false
+    assign summarize = true
+  endif
+  capture summary
+    for block in messages
+      echo block.settings.text | escape
+      unless forloop.last
+        echo ' · '
+      endunless
+    endfor
+  endcapture
+-%}
+
+{%- if messages.size > 0 -%}
   <div class="announcement-bar color-{{ section.settings.color_scheme }}">
-    <p class="announcement-bar__text page-width">
-      {%- if section.settings.link != blank -%}
-        <a class="announcement-bar__link" href="{{ section.settings.link }}">
-          {{- section.settings.text | escape -}}
-          {% render 'icon', icon: 'arrow-right' %}
-        </a>
-      {%- else -%}
-        {{- section.settings.text | escape -}}
+    <announcement-rotator
+      class="announcement-bar__inner page-width page-width--wide"
+      data-interval="{{ interval }}"
+    >
+      {%- if summarize -%}
+        <p class="visually-hidden">{{ summary }}</p>
       {%- endif -%}
-    </p>
+      <ul
+        class="announcement-bar__list"
+        role="list"
+        aria-label="{{ 'sections.announcement_label' | t }}"
+        {% if summarize %}
+          aria-hidden="true"
+        {% endif %}
+      >
+        {%- for block in messages -%}
+          <li
+            class="announcement-bar__item{% if forloop.first %} is-active{% endif %}"
+            data-announcement
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.link != blank -%}
+              <a
+                class="announcement-bar__link"
+                href="{{ block.settings.link }}"
+                {% unless forloop.first %}
+                  tabindex="-1"
+                {% endunless %}
+              >
+                {{- block.settings.text | escape -}}
+                {% render 'icon', icon: 'arrow-right' %}
+              </a>
+            {%- else -%}
+              {{- block.settings.text | escape -}}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if messages.size > 1 -%}
+        <button
+          type="button"
+          class="icon-button announcement-bar__toggle"
+          data-announcement-toggle
+          aria-pressed="false"
+          hidden
+          aria-label="{{ 'sections.announcement_pause' | t }}"
+        >
+          <span class="announcement-bar__toggle-icon announcement-bar__toggle-icon--pause">
+            {%- render 'icon', icon: 'pause' -%}
+          </span>
+          <span class="announcement-bar__toggle-icon announcement-bar__toggle-icon--play">
+            {%- render 'icon', icon: 'play' -%}
+          </span>
+        </button>
+      {%- endif -%}
+    </announcement-rotator>
   </div>
 {%- endif -%}
 
@@ -18,15 +93,42 @@
     border-block-end: 1px solid var(--color-border);
   }
 
-  .announcement-bar__text {
+  .announcement-bar__inner {
+    position: relative;
+    display: block;
+    padding-inline: calc(var(--gutter-wide) + 2.5rem);
+  }
+
+  /* Every message sits in the same grid cell: they cross-fade in place,
+     and the bar keeps the height of the longest one (no layout shift). */
+  .announcement-bar__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .announcement-bar__item {
+    grid-area: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 2.5rem;
-    padding-block: 0.5rem;
+    padding-block: 0.45rem;
     font-size: var(--text-sm);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      visibility 0s linear var(--duration-slow);
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
   }
 
   .announcement-bar__link {
@@ -44,6 +146,35 @@
       text-underline-offset: 0.2em;
     }
   }
+
+  .announcement-bar__toggle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: calc(var(--gutter-wide) - 0.6rem);
+    margin-block: auto;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    opacity: 0.7;
+    --icon-size: 0.9rem;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+
+  .announcement-bar__toggle-icon {
+    display: inline-flex;
+  }
+
+  .announcement-bar__toggle .announcement-bar__toggle-icon--play,
+  .announcement-bar__toggle[aria-pressed='true'] .announcement-bar__toggle-icon--pause {
+    display: none;
+  }
+
+  .announcement-bar__toggle[aria-pressed='true'] .announcement-bar__toggle-icon--play {
+    display: inline-flex;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -52,21 +183,21 @@
   "tag": "aside",
   "class": "section-announcement",
   "enabled_on": { "groups": ["header"] },
+  "max_blocks": 4,
   "settings": [
     {
       "type": "paragraph",
-      "content": "Un seul message, sobre et vérifié (par exemple une politique de livraison réelle). Laissez vide pour masquer la barre."
+      "content": "Des messages courts et vérifiés, qui s'enchaînent en fondu. Les visiteurs peuvent mettre le défilement en pause."
     },
     {
-      "type": "text",
-      "id": "text",
-      "label": "Message",
-      "default": "Livraison offerte en France"
-    },
-    {
-      "type": "url",
-      "id": "link",
-      "label": "Lien (facultatif)"
+      "type": "range",
+      "id": "interval",
+      "label": "Durée d'affichage de chaque message",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
     },
     {
       "type": "color_scheme",
@@ -75,6 +206,31 @@
       "default": "scheme-3"
     }
   ],
-  "presets": [{ "name": "Barre d'annonce" }]
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "info": "Une promesse réelle uniquement (livraison, retours, paiement…).",
+          "default": "Livraison offerte en France"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien (facultatif)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barre d'annonce",
+      "blocks": [{ "type": "message" }]
+    }
+  ]
 }
 {% endschema %}

@@ -29,14 +29,19 @@
         "text": "Une ceinture chauffante sans fil, avec chaleur réglable et massage par vibration, pour vivre vos jours de règles plus confortablement.",
         "product": "ceinture-chauffante-regles",
         "show_price": true,
-        "fallback_media_position": 2,
+        "fallback_media_position": 1,
         "image_alt": "",
         "image_position": "right",
         "button_label": "Découvrir la ceinture",
         "button_link": "",
         "secondary_label": "Comment ça marche",
         "secondary_link": "/#fonctionnement",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "layout": "full",
+        "height": "full",
+        "content_position": "bottom-left",
+        "text_tone": "light",
+        "overlay_opacity": 35
       }
     },
     "benefits": {

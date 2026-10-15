@@ -6,109 +6,165 @@
     assign hero_media = product.media[media_index] | default: product.featured_media
     assign hero_image = hero_media.preview_image
   endif
+  assign mobile_image = section.settings.image_mobile
 
   assign primary_link = section.settings.button_link
   if primary_link == blank and product != blank
     assign primary_link = product.url
   endif
+  if primary_link == blank
+    assign primary_link = routes.all_products_collection_url
+  endif
 
   assign heading_tag = section.settings.heading_tag | default: 'h1'
+  assign layout = section.settings.layout | default: 'full'
+
+  assign tone = section.settings.text_tone
+  if hero_image == blank
+    assign tone = 'dark'
+  endif
 -%}
 
-<section
-  class="hero color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'left' %} hero--media-left{% endif %}"
-  aria-labelledby="HeroTitle-{{ section.id }}"
->
-  <div class="hero__grid page-width">
-    <div class="hero__content">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+{%- capture hero_content -%}
+  <div class="hero__content">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    <{{ heading_tag }} class="hero__title h1" id="HeroTitle-{{ section.id }}">
+      {{- section.settings.heading -}}
+    </{{ heading_tag }}>
+
+    {%- if section.settings.text != blank -%}
+      <p class="hero__text lead">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+
+    <div class="hero__actions">
+      {%- if section.settings.button_label != blank -%}
+        <a class="button hero__button" href="{{ primary_link }}">
+          {{- section.settings.button_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
       {%- endif -%}
-
-      <{{ heading_tag }} class="hero__title h1" id="HeroTitle-{{ section.id }}">
-        {{- section.settings.heading -}}
-      </{{ heading_tag }}>
-
-      {%- if section.settings.text != blank -%}
-        <p class="hero__text lead">{{ section.settings.text | escape }}</p>
+      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+        <a class="button button--secondary hero__button" href="{{ section.settings.secondary_link }}">
+          {{- section.settings.secondary_label | escape -}}
+        </a>
       {%- endif -%}
+    </div>
 
-      <div class="hero__actions">
-        {%- if section.settings.button_label != blank and primary_link != blank -%}
-          <a class="button" href="{{ primary_link }}">
-            {{- section.settings.button_label | escape -}}
-            {% render 'icon', icon: 'arrow-right' %}
-          </a>
+    {%- if section.settings.show_price and product != blank -%}
+      <p class="hero__price">
+        <span class="hero__price-amount">{{ product.price | money }}</span>
+        {%- if settings.shipping_info != blank %}
+          <span aria-hidden="true">·</span>
+          <span>{{ settings.shipping_info | escape }}</span>
         {%- endif -%}
-        {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
-          <a class="button button--secondary" href="{{ section.settings.secondary_link }}">
-            {{- section.settings.secondary_label | escape -}}
-          </a>
+      </p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="trust-list trust-list--inline hero__trust" role="list">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}>
+            {% render 'icon', icon: block.settings.icon %}
+            <span>{{ block.settings.text | escape }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+{%- endcapture -%}
+
+{%- if layout == 'full' -%}
+  {%- liquid
+    assign overlay = section.settings.overlay_opacity | divided_by: 100.0
+    if hero_image == blank
+      assign overlay = 0
+    endif
+  -%}
+  <section
+    id="Hero-{{ section.id }}"
+    class="hero hero--full hero--tone-{{ tone }} hero--{{ section.settings.content_position }} hero--height-{{ section.settings.height }} color-{{ section.settings.color_scheme }}{% if hero_image == blank %} hero--no-image{% endif %}"
+    style="--hero-overlay: {{ overlay }};"
+    aria-labelledby="HeroTitle-{{ section.id }}"
+  >
+    <div class="hero__backdrop">
+      {%- if hero_image != blank -%}
+        <picture>
+          {%- if mobile_image != blank -%}
+            {%- capture mobile_srcset -%}
+              {%- assign mobile_widths = '375,550,750,1100,1500' | split: ',' -%}
+              {%- for width in mobile_widths -%}
+                {%- assign width_number = width | plus: 0 -%}
+                {%- if width_number <= mobile_image.width or forloop.first -%}
+                  {%- unless forloop.first %}, {% endunless -%}
+                  {{ mobile_image | image_url: width: width_number }} {{ width_number }}w
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            <source media="(max-width: 749px)" srcset="{{ mobile_srcset | strip }}" sizes="100vw">
+          {%- endif -%}
+          {%- liquid
+            assign focal_point = hero_image.presentation.focal_point | default: '50% 50%'
+            assign focal_style = 'object-position: ' | append: focal_point
+          -%}
+          {% render 'responsive-image',
+            image: hero_image,
+            sizes: '100vw',
+            widths: '750, 1100, 1500, 1800, 2200, 2600, 3000',
+            eager: true,
+            alt: section.settings.image_alt,
+            class: 'hero__image',
+            style: focal_style
+          %}
+        </picture>
+        {%- if mobile_image != blank and mobile_image.presentation.focal_point -%}
+          {% style %}
+            @media screen and (max-width: 749px) {
+              #Hero-{{ section.id }} .hero__image {
+                object-position: {{ mobile_image.presentation.focal_point }};
+              }
+            }
+          {% endstyle %}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg hero__placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div class="hero__inner page-width page-width--wide">
+      {{ hero_content }}
+    </div>
+  </section>
+{%- else -%}
+  <section
+    class="hero hero--split color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'left' %} hero--media-left{% endif %}"
+    aria-labelledby="HeroTitle-{{ section.id }}"
+  >
+    <div class="hero__grid page-width">
+      {{ hero_content }}
+
+      <div class="hero__media media">
+        {%- if hero_image != blank -%}
+          {% render 'responsive-image',
+            image: hero_image,
+            sizes: '(min-width: 990px) 55vw, 100vw',
+            eager: true,
+            alt: section.settings.image_alt
+          %}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
         {%- endif -%}
       </div>
-
-      {%- if section.settings.show_price and product != blank -%}
-        <p class="hero__price">
-          <span class="hero__price-amount">{{ product.price | money }}</span>
-          {%- if settings.shipping_info != blank %}
-            <span aria-hidden="true">·</span>
-            <span>{{ settings.shipping_info | escape }}</span>
-          {%- endif -%}
-        </p>
-      {%- endif -%}
-
-      {%- if section.blocks.size > 0 -%}
-        <ul class="trust-list trust-list--inline hero__trust" role="list">
-          {%- for block in section.blocks -%}
-            <li {{ block.shopify_attributes }}>
-              {% render 'icon', icon: block.settings.icon %}
-              <span>{{ block.settings.text | escape }}</span>
-            </li>
-          {%- endfor -%}
-        </ul>
-      {%- endif -%}
     </div>
-
-    <div class="hero__media media">
-      {%- if hero_image != blank -%}
-        {% render 'responsive-image',
-          image: hero_image,
-          sizes: '(min-width: 990px) 55vw, 100vw',
-          eager: true,
-          alt: section.settings.image_alt
-        %}
-      {%- else -%}
-        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
-      {%- endif -%}
-    </div>
-  </div>
-</section>
+  </section>
+{%- endif -%}
 
 {% stylesheet %}
-  .hero {
-    padding-block: var(--space-lg) var(--section-space);
-
-    @media screen and (min-width: 990px) {
-      padding-block: var(--space-xl) var(--section-space);
-    }
-  }
-
-  .hero__grid {
-    display: grid;
-    gap: var(--space-md);
-    align-items: center;
-
-    @media screen and (min-width: 990px) {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      gap: clamp(3rem, 5vw, 6rem);
-    }
-  }
-
-  .hero--media-left .hero__media {
-    @media screen and (min-width: 990px) {
-      order: -1;
-    }
-  }
+  /* ------------------------------------------------------------------ */
+  /* Shared content                                                      */
+  /* ------------------------------------------------------------------ */
 
   .hero__content {
     display: grid;
@@ -119,6 +175,10 @@
 
   .hero__title em {
     color: var(--color-accent);
+  }
+
+  .hero--tone-light .hero__title em {
+    color: var(--palette-rose-soft);
   }
 
   .hero__actions {
@@ -154,6 +214,217 @@
     border-block-start: 1px solid var(--color-border);
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Full-screen layout: landscape visual with text on top               */
+  /* ------------------------------------------------------------------ */
+
+  .hero--full {
+    position: relative;
+    display: grid;
+    min-height: max(32rem, calc(100vh - var(--header-offset, 7rem)));
+    min-height: max(32rem, calc(100svh - var(--header-offset, 7rem)));
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--color-surface);
+  }
+
+  .hero--height-large {
+    min-height: max(30rem, calc((100svh - var(--header-offset, 7rem)) * 0.82));
+  }
+
+  .hero--height-medium {
+    min-height: max(28rem, calc((100svh - var(--header-offset, 7rem)) * 0.66));
+  }
+
+  .hero__backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    & picture,
+    & .hero__image,
+    & .hero__placeholder {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    & .hero__image {
+      object-fit: cover;
+    }
+  }
+
+  .hero__placeholder {
+    opacity: 0.3;
+  }
+
+  /* Legibility veil: neutral and soft. Two crossed gradients darken the text
+     column (left) and the bottom of the image, so the subject on the right
+     stays bright. Strength is set by --hero-overlay (theme editor). */
+  .hero--full::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        to right,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.9)) 0%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.4)) 40%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 0.6)) 60%,
+        rgb(var(--hero-scrim) / 0) 85%
+      ),
+      linear-gradient(
+        to top,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.6)) 0%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 0.9)) 50%,
+        rgb(var(--hero-scrim) / 0) 85%
+      );
+
+    @media screen and (max-width: 749px) {
+      background: linear-gradient(
+        to top,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 2.4)) 0%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 2)) 60%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.5)) 85%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 0.8)) 100%
+      );
+    }
+  }
+
+  .hero--center-left::after {
+    background: linear-gradient(
+      to right,
+      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.7)) 0%,
+      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 0.8)) 45%,
+      rgb(var(--hero-scrim) / 0) 80%
+    );
+  }
+
+  .hero--center::after {
+    background: rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.2));
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    align-content: end;
+    padding-block: clamp(2rem, 5vh, 4.5rem);
+  }
+
+  .hero--center-left .hero__inner {
+    @media screen and (min-width: 750px) {
+      align-content: center;
+    }
+  }
+
+  .hero--center .hero__inner {
+    align-content: center;
+    justify-items: center;
+
+    & .hero__content {
+      justify-items: center;
+      text-align: center;
+    }
+
+    & .hero__actions,
+    & .hero__trust {
+      justify-content: center;
+    }
+  }
+
+  .hero--full .hero__content {
+    max-width: 46rem;
+  }
+
+  .hero--full .hero__text {
+    max-width: 36rem;
+  }
+
+  .hero--full .hero__title {
+    font-size: calc(clamp(2.75rem, 1.7rem + 3.8vw, 5rem) * var(--font-heading-scale, 1));
+  }
+
+  .hero--full .hero__trust {
+    gap: var(--space-2xs) var(--space-md);
+
+    /* On phones the announcement bar already carries these reassurances. */
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  /* Light text over a darkened photo */
+  .hero--tone-light {
+    --hero-scrim: var(--palette-scrim-rgb);
+
+    & .hero__content {
+      --color-text: var(--palette-warm-white);
+      --color-text-rgb: var(--palette-warm-white-rgb);
+      --color-text-muted: rgb(var(--palette-warm-white-rgb) / 0.88);
+      --color-accent: rgb(var(--palette-warm-white-rgb) / 0.92);
+      --color-border: rgb(var(--palette-warm-white-rgb) / 0.28);
+      --color-button: var(--palette-warm-white);
+      --color-button-rgb: var(--palette-warm-white-rgb);
+      --color-button-label: var(--palette-ink);
+
+      color: var(--color-text);
+    }
+
+    & .hero__title,
+    & .hero__text,
+    & .hero__eyebrow {
+      text-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 0 28px rgb(0 0 0 / 0.2);
+    }
+
+    & .button--secondary {
+      border-color: rgb(var(--palette-warm-white-rgb) / 0.7);
+      background-color: rgb(var(--palette-ink-rgb) / 0.12);
+      backdrop-filter: blur(6px);
+
+      &:hover {
+        border-color: var(--palette-warm-white);
+        background-color: rgb(var(--palette-warm-white-rgb) / 0.14);
+      }
+    }
+  }
+
+  /* Dark text over a light photo (or when no photo is set yet) */
+  .hero--tone-dark {
+    --hero-scrim: var(--palette-warm-white-rgb);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Split layout: text and image side by side                          */
+  /* ------------------------------------------------------------------ */
+
+  .hero--split {
+    padding-block: var(--space-lg) var(--section-space);
+
+    @media screen and (min-width: 990px) {
+      padding-block: var(--space-xl) var(--section-space);
+    }
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--space-md);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(3rem, 5vw, 6rem);
+    }
+  }
+
+  .hero--media-left .hero__media {
+    @media screen and (min-width: 990px) {
+      order: -1;
+    }
+  }
+
   .hero__media {
     --media-ratio: 4 / 3;
     border-radius: var(--radius-lg);
@@ -165,27 +436,26 @@
     }
   }
 
-  /* Mobile: title first, then the visual, then the text and buttons,
-     so the product is visible on the first screen with the main button. */
+  /* Mobile split: title first, then the visual, then the text and buttons. */
   @media screen and (max-width: 989px) {
-    .hero__content {
+    .hero--split .hero__content {
       display: contents;
     }
 
-    .hero__content > * {
+    .hero--split .hero__content > * {
       order: 2;
     }
 
-    .hero__content > .eyebrow,
-    .hero__content > .hero__title {
+    .hero--split .hero__content > .eyebrow,
+    .hero--split .hero__content > .hero__title {
       order: 0;
     }
 
-    .hero__media {
+    .hero--split .hero__media {
       order: 1;
     }
 
-    .hero__content > .eyebrow {
+    .hero--split .hero__content > .eyebrow {
       margin-block-end: calc(var(--space-sm) * -1);
     }
   }
@@ -198,6 +468,16 @@
   "class": "section-hero",
   "max_blocks": 4,
   "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Mise en page",
+      "options": [
+        { "value": "full", "label": "Plein écran, texte sur l'image" },
+        { "value": "split", "label": "Image et texte côte à côte" }
+      ],
+      "default": "full"
+    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -230,33 +510,20 @@
     },
     {
       "type": "header",
-      "content": "Produit et visuel"
-    },
-    {
-      "type": "product",
-      "id": "product",
-      "label": "Produit"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_price",
-      "label": "Afficher le prix et la livraison",
-      "default": true
+      "content": "Visuel"
     },
     {
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Sans image, une photo du produit choisi est utilisée. Format portrait conseillé."
+      "info": "Plein écran : format paysage, 2400 × 1350 px minimum. Placez le point focal sur le sujet dans la bibliothèque d'images."
     },
     {
-      "type": "range",
-      "id": "fallback_media_position",
-      "label": "Photo du produit utilisée sans image",
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "default": 1
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image mobile (facultative)",
+      "info": "Format portrait conseillé (1080 × 1500 px). Sans image mobile, l'image principale est recadrée autour de son point focal.",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
     },
     {
       "type": "text",
@@ -266,13 +533,86 @@
     },
     {
       "type": "select",
+      "id": "height",
+      "label": "Hauteur",
+      "options": [
+        { "value": "full", "label": "Tout l'écran" },
+        { "value": "large", "label": "Grande" },
+        { "value": "medium", "label": "Moyenne" }
+      ],
+      "default": "full",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Position du texte",
+      "options": [
+        { "value": "bottom-left", "label": "En bas à gauche" },
+        { "value": "center-left", "label": "Au centre à gauche" },
+        { "value": "center", "label": "Au centre" }
+      ],
+      "default": "bottom-left",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_tone",
+      "label": "Couleur du texte",
+      "options": [
+        { "value": "light", "label": "Clair (sur photo foncée ou assombrie)" },
+        { "value": "dark", "label": "Foncé (sur photo claire)" }
+      ],
+      "default": "light",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Voile de lisibilité",
+      "info": "Assombrit (ou éclaircit) l'image derrière le texte pour garantir sa lisibilité.",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 35,
+      "visible_if": "{{ section.settings.layout == 'full' }}"
+    },
+    {
+      "type": "select",
       "id": "image_position",
       "label": "Position de l'image sur ordinateur",
       "options": [
         { "value": "right", "label": "À droite" },
         { "value": "left", "label": "À gauche" }
       ],
-      "default": "right"
+      "default": "right",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "header",
+      "content": "Produit"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit",
+      "info": "Sert de lien au bouton principal et de photo de secours."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Afficher le prix et la livraison",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "fallback_media_position",
+      "label": "Photo du produit utilisée sans image",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
     },
     {
       "type": "header",
@@ -288,7 +628,7 @@
       "type": "url",
       "id": "button_link",
       "label": "Lien du bouton principal",
-      "info": "Laissez vide pour pointer vers le produit choisi."
+      "info": "Laissez vide pour pointer vers le produit choisi (ou le catalogue)."
     },
     {
       "type": "text",
