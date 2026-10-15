@@ -106,28 +106,39 @@
             <source media="(max-width: 749px)" srcset="{{ mobile_srcset | strip }}" sizes="100vw">
           {%- endif -%}
           {%- liquid
-            assign focal_point = hero_image.presentation.focal_point | default: '50% 50%'
-            assign focal_style = 'object-position: ' | append: focal_point
+            comment
+              In portrait screens the landscape photo is cropped to fill the height,
+              so it renders wider than the viewport: request a matching width.
+            endcomment
+            assign portrait_vh = hero_image.aspect_ratio | times: 90 | round | at_least: 100
+            assign hero_sizes = '(orientation: portrait) ' | append: portrait_vh | append: 'vh, 100vw'
           -%}
           {% render 'responsive-image',
             image: hero_image,
-            sizes: '100vw',
-            widths: '750, 1100, 1500, 1800, 2200, 2600, 3000',
+            sizes: hero_sizes,
+            widths: '750, 1100, 1500, 1800, 2200, 2600, 3000, 3600',
             eager: true,
             alt: section.settings.image_alt,
-            class: 'hero__image',
-            style: focal_style
+            class: 'hero__image'
           %}
         </picture>
-        {%- if mobile_image != blank and mobile_image.presentation.focal_point -%}
-          {% style %}
+        {%- liquid
+          assign focal_point = hero_image.presentation.focal_point | default: '50% 50%'
+          assign mobile_focal_point = mobile_image.presentation.focal_point | default: '50% 50%'
+        -%}
+        {% style %}
+          /* !important: image_tag can write its own inline object-position. */
+          #Hero-{{ section.id }} .hero__image {
+            object-position: {{ focal_point }} !important;
+          }
+          {%- if mobile_image != blank %}
             @media screen and (max-width: 749px) {
               #Hero-{{ section.id }} .hero__image {
-                object-position: {{ mobile_image.presentation.focal_point }};
+                object-position: {{ mobile_focal_point }} !important;
               }
             }
-          {% endstyle %}
-        {%- endif -%}
+          {%- endif %}
+        {% endstyle %}
       {%- else -%}
         {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg hero__placeholder' }}
       {%- endif -%}
@@ -209,7 +220,8 @@
     color: var(--color-text);
   }
 
-  .hero__trust {
+  /* Two classes: must outrank the ul[role='list'] reset in base.css. */
+  .hero__content .hero__trust {
     padding-block-start: var(--space-md);
     border-block-start: 1px solid var(--color-border);
   }
@@ -293,17 +305,19 @@
     }
   }
 
-  .hero--center-left::after {
-    background: linear-gradient(
-      to right,
-      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.7)) 0%,
-      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 0.8)) 45%,
-      rgb(var(--hero-scrim) / 0) 80%
-    );
-  }
+  @media screen and (min-width: 750px) {
+    .hero--center-left::after {
+      background: linear-gradient(
+        to right,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.9)) 0%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.2)) 45%,
+        rgb(var(--hero-scrim) / 0) 80%
+      );
+    }
 
-  .hero--center::after {
-    background: rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.2));
+    .hero--center::after {
+      background: rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.6));
+    }
   }
 
   .hero__inner {
@@ -353,6 +367,44 @@
     /* On phones the announcement bar already carries these reassurances. */
     @media screen and (max-width: 749px) {
       display: none;
+    }
+  }
+
+  /* Soft halo attached to the text block: follows the text on every screen
+     size (the section veil alone depends on the image proportions). Fades out
+     at its edges so it reads as a shadow, not as a box. */
+  .hero--full .hero__content {
+    position: relative;
+  }
+
+  .hero--full .hero__content::before {
+    content: '';
+    position: absolute;
+    inset-block: -3rem;
+    inset-inline: calc(var(--gutter-wide) * -1 - 1px) -14rem;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.75)) 0%,
+      rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.75)) 70%,
+      rgb(var(--hero-scrim) / 0) 100%
+    );
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+  }
+
+  .hero--center .hero__content::before {
+    @media screen and (min-width: 750px) {
+      inset-inline: -10rem;
+      background: radial-gradient(
+        closest-side,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.75)) 0%,
+        rgb(var(--hero-scrim) / calc(var(--hero-overlay) * 1.75)) 60%,
+        rgb(var(--hero-scrim) / 0) 100%
+      );
+      -webkit-mask-image: none;
+      mask-image: none;
     }
   }
 

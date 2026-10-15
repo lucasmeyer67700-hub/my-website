@@ -15,14 +15,14 @@
         "returns": {
           "type": "message",
           "settings": {
-            "text": "14 jours pour changer d'avis",
+            "text": "Satisfaite ou remboursée 30 jours",
             "link": ""
           }
         },
         "payment": {
           "type": "message",
           "settings": {
-            "text": "Paiement 100 % sécurisé",
+            "text": "Paiement sécurisé",
             "link": ""
           }
         }

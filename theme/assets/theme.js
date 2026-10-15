@@ -533,20 +533,30 @@ class SiteHeader extends HTMLElement {
 
     // Expose the height of the announcement bar + header so a full-screen
     // banner can fill exactly the rest of the first screen.
-    const groups = document.querySelectorAll('.shopify-section-group-header-group');
+    this.abort = new AbortController();
+    const groups = () => document.querySelectorAll('.shopify-section-group-header-group');
     const update = () => {
       let height = 0;
-      for (const group of groups) height += group.offsetHeight;
+      for (const group of groups()) height += group.offsetHeight;
       document.documentElement.style.setProperty('--header-offset', `${height}px`);
     };
-    update();
     this.resizeObserver = new ResizeObserver(update);
-    for (const group of groups) this.resizeObserver.observe(group);
+    const observeAll = () => {
+      this.resizeObserver.disconnect();
+      for (const group of groups()) this.resizeObserver.observe(group);
+      update();
+    };
+    observeAll();
+    // Theme editor: header-group sections can be added or re-rendered.
+    const refresh = () => requestAnimationFrame(observeAll);
+    document.addEventListener('shopify:section:load', refresh, { signal: this.abort.signal });
+    document.addEventListener('shopify:section:unload', refresh, { signal: this.abort.signal });
   }
 
   disconnectedCallback() {
     this.observer?.disconnect();
     this.resizeObserver?.disconnect();
+    this.abort?.abort();
   }
 }
 
@@ -562,47 +572,68 @@ class AnnouncementRotator extends HTMLElement {
     this.toggle = this.querySelector('[data-announcement-toggle]');
     if (this.items.length < 2) return;
 
+    clearTimeout(this.timer);
+    this.abort?.abort();
+    this.abort = new AbortController();
+    const options = { signal: this.abort.signal };
+
     this.index = Math.max(0, this.items.findIndex((item) => item.classList.contains('is-active')));
     this.delay = Number(this.dataset.interval) || 5000;
-    this.userPaused = false;
     this.hovered = false;
     this.focused = false;
+    this.#setPaused(false);
 
     // The pause button is only useful (and shown) once rotation is running.
     if (this.toggle) this.toggle.hidden = false;
-    this.toggle?.addEventListener('click', () => {
-      this.userPaused = !this.userPaused;
-      this.toggle.setAttribute('aria-pressed', String(this.userPaused));
-      this.#schedule();
-    });
+    this.toggle?.addEventListener(
+      'click',
+      () => {
+        this.#setPaused(!this.userPaused);
+        // An explicit "play" wins over the hover/focus pause.
+        if (!this.userPaused) {
+          this.hovered = false;
+          this.focused = false;
+        }
+        this.#schedule();
+      },
+      options
+    );
 
     // Pause while the visitor reads or interacts with the bar (WCAG 2.2.2).
-    this.addEventListener('mouseenter', () => { this.hovered = true; this.#schedule(); });
-    this.addEventListener('mouseleave', () => { this.hovered = false; this.#schedule(); });
-    this.addEventListener('focusin', () => { this.focused = true; this.#schedule(); });
+    this.addEventListener('mouseenter', () => { this.hovered = true; this.#schedule(); }, options);
+    this.addEventListener('mouseleave', () => { this.hovered = false; this.#schedule(); }, options);
+    this.addEventListener('focusin', (event) => {
+      // Focusing the pause button itself must not freeze the rotation.
+      if (event.target === this.toggle) return;
+      this.focused = true;
+      this.#schedule();
+    }, options);
     this.addEventListener('focusout', (event) => {
-      if (this.contains(event.relatedTarget)) return;
+      if (this.contains(event.relatedTarget) && event.relatedTarget !== this.toggle) return;
       this.focused = false;
       this.#schedule();
-    });
-    this.onVisibilityChange = () => this.#schedule();
-    document.addEventListener('visibilitychange', this.onVisibilityChange);
+    }, options);
+    document.addEventListener('visibilitychange', () => this.#schedule(), options);
 
-    // Theme editor: show the selected message and stop rotating.
+    // Theme editor: show the selected message while it is being edited.
     this.addEventListener('shopify:block:select', (event) => {
       const index = this.items.indexOf(event.target.closest('[data-announcement]'));
       if (index < 0) return;
-      this.userPaused = true;
+      this.#setPaused(true);
       this.show(index);
       this.#schedule();
-    });
+    }, options);
+    this.addEventListener('shopify:block:deselect', () => {
+      this.#setPaused(false);
+      this.#schedule();
+    }, options);
 
     this.#schedule();
   }
 
   disconnectedCallback() {
     clearTimeout(this.timer);
-    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    this.abort?.abort();
   }
 
   /** @param {number} index */
@@ -613,6 +644,12 @@ class AnnouncementRotator extends HTMLElement {
       item.classList.toggle('is-active', active);
       for (const link of item.querySelectorAll('a')) link.tabIndex = active ? 0 : -1;
     }
+  }
+
+  /** @param {boolean} paused */
+  #setPaused(paused) {
+    this.userPaused = paused;
+    this.toggle?.setAttribute('aria-pressed', String(paused));
   }
 
   #schedule() {

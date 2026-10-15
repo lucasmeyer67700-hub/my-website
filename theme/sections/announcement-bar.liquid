@@ -2,9 +2,13 @@
   assign messages = section.blocks | where: 'type', 'message'
   assign interval = section.settings.interval | times: 1000
   assign has_links = false
+  assign message_count = 0
   for block in messages
-    if block.settings.link != blank
-      assign has_links = true
+    if block.settings.text != blank
+      assign message_count = message_count | plus: 1
+      if block.settings.link != blank
+        assign has_links = true
+      endif
     endif
   endfor
   comment
@@ -13,20 +17,22 @@
     reachable in the visible list.
   endcomment
   assign summarize = false
-  if messages.size > 1 and has_links == false
+  if message_count > 1 and has_links == false
     assign summarize = true
   endif
   capture summary
+    assign separator = ''
     for block in messages
-      echo block.settings.text | escape
-      unless forloop.last
-        echo ' · '
-      endunless
+      if block.settings.text != blank
+        echo separator
+        echo block.settings.text | escape
+        assign separator = ' · '
+      endif
     endfor
   endcapture
 -%}
 
-{%- if messages.size > 0 -%}
+{%- if message_count > 0 -%}
   <div class="announcement-bar color-{{ section.settings.color_scheme }}">
     <announcement-rotator
       class="announcement-bar__inner page-width page-width--wide"
@@ -43,9 +49,12 @@
           aria-hidden="true"
         {% endif %}
       >
+        {%- assign rendered = 0 -%}
         {%- for block in messages -%}
+          {%- if block.settings.text == blank -%}{%- continue -%}{%- endif -%}
+          {%- assign rendered = rendered | plus: 1 -%}
           <li
-            class="announcement-bar__item{% if forloop.first %} is-active{% endif %}"
+            class="announcement-bar__item{% if rendered == 1 %} is-active{% endif %}"
             data-announcement
             {{ block.shopify_attributes }}
           >
@@ -53,9 +62,9 @@
               <a
                 class="announcement-bar__link"
                 href="{{ block.settings.link }}"
-                {% unless forloop.first %}
+                {% if rendered > 1 %}
                   tabindex="-1"
-                {% endunless %}
+                {% endif %}
               >
                 {{- block.settings.text | escape -}}
                 {% render 'icon', icon: 'arrow-right' %}
@@ -67,7 +76,7 @@
         {%- endfor -%}
       </ul>
 
-      {%- if messages.size > 1 -%}
+      {%- if message_count > 1 -%}
         <button
           type="button"
           class="icon-button announcement-bar__toggle"
@@ -154,13 +163,7 @@
     margin-block: auto;
     min-width: 2.5rem;
     min-height: 2.5rem;
-    opacity: 0.7;
-    --icon-size: 0.9rem;
-
-    &:hover,
-    &:focus-visible {
-      opacity: 1;
-    }
+    --icon-size: 1.05rem;
   }
 
   .announcement-bar__toggle-icon {

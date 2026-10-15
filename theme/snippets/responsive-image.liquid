@@ -17,6 +17,14 @@
 {% enddoc %}
 {%- liquid
   assign srcset_widths = widths | default: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048'
+  assign max_width = 0
+  assign width_list = srcset_widths | split: ','
+  for width in width_list
+    assign width_number = width | strip | plus: 0
+    if width_number > max_width
+      assign max_width = width_number
+    endif
+  endfor
   assign alt_text = alt | default: image.alt
   if decorative
     assign alt_text = ''
@@ -32,7 +40,7 @@
 -%}
 {{-
   image
-  | image_url: width: 2048
+  | image_url: width: max_width
   | image_tag:
     widths: srcset_widths,
     sizes: sizes,
