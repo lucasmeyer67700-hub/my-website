@@ -8,9 +8,6 @@
       <li class="v-flow__line" aria-hidden="true"><span class="v-flow__arrow"></span></li>
       {%- for block in section.blocks -%}
         <li class="v-flow__node v-reveal" {{ block.shopify_attributes }}>
-          <div class="v-flow__media">
-            {% render 'velea-slot', image: block.settings.image, label: block.settings.placeholder, sizes: '(min-width: 900px) 360px, 80vw' %}
-          </div>
           <div class="v-flow__dot" aria-hidden="true"></div>
           <div class="v-flow__txt">
             <p class="v-flow__key">{{ block.settings.keyword }}</p>
@@ -37,8 +34,7 @@
       { "type": "text", "id": "keyword", "label": "Mot-clé", "default": "Chaleur" },
       { "type": "text", "id": "title", "label": "Titre court", "default": "3 niveaux" },
       { "type": "text", "id": "text", "label": "Une ligne (facultatif)" },
-      { "type": "image_picker", "id": "image", "label": "Image" },
-      { "type": "text", "id": "placeholder", "label": "Texte de l'emplacement vide", "default": "Image à ajouter" }
+      { "type": "text", "id": "placeholder", "label": "(non utilisé)", "default": "" }
     ]
   }],
   "presets": [{ "name": "VELEA · Schéma flèche" }]

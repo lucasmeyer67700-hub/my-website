@@ -124,4 +124,37 @@
   document.querySelectorAll('.v-steps, .v-faq, .v-buy__points, .v-infos').forEach(function (list) {
     Array.prototype.forEach.call(list.children, function (el, i) { el.classList.add('v-reveal'); el.style.transitionDelay = (i * 80) + 'ms'; if (io) io.observe(el); else el.classList.add('is-in'); });
   });
+
+  // Assistant VELEA
+  var bot = document.querySelector('[data-bot]');
+  if (bot) {
+    var panel = bot.querySelector('.v-bot__panel'), fab = bot.querySelector('.v-bot__fab');
+    var log = bot.querySelector('[data-bot-log]'), form = bot.querySelector('[data-bot-form]'), input = form.querySelector('input');
+    var kb = []; try { kb = JSON.parse(bot.querySelector('[data-bot-kb]').textContent); } catch (e) {}
+    var norm = function (t) { return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); };
+    var say = function (html, who) {
+      var p = document.createElement('p'); p.className = 'v-bot__msg v-bot__msg--' + who;
+      if (who === 'me') p.textContent = html; else p.innerHTML = html;
+      log.appendChild(p); log.scrollTop = log.scrollHeight;
+    };
+    var answer = function (q) {
+      var n = norm(q), best = null, score = 0;
+      kb.forEach(function (e) { var s = 0; e.k.forEach(function (k) { if (n.indexOf(norm(k)) > -1) s++; }); if (s > score) { score = s; best = e; } });
+      return best ? best.a : 'Je n\'ai pas la réponse à cette question. Écrivez-nous via le <a href="/pages/contact">formulaire de contact</a>, nous vous répondrons par e-mail.';
+    };
+    var ask = function (q) {
+      if (!q.trim()) return;
+      say(q, 'me');
+      var typing = document.createElement('p'); typing.className = 'v-bot__msg v-bot__msg--bot v-bot__typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+      log.appendChild(typing); log.scrollTop = log.scrollHeight;
+      setTimeout(function () { typing.remove(); say(answer(q), 'bot'); }, 650);
+    };
+    var toggle = function () {
+      var open = panel.hidden; panel.hidden = !open; fab.setAttribute('aria-expanded', open); bot.classList.toggle('is-open', open);
+      if (open) setTimeout(function () { input.focus(); }, 50);
+    };
+    bot.querySelectorAll('[data-bot-toggle]').forEach(function (b) { b.addEventListener('click', toggle); });
+    form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); input.value = ''; });
+    bot.querySelectorAll('[data-q]').forEach(function (c) { c.addEventListener('click', function () { ask(c.textContent); }); });
+  }
 })();

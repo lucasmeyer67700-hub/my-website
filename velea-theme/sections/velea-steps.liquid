@@ -8,7 +8,13 @@
       <ol class="v-steps">
         {%- for block in section.blocks -%}
           <li class="v-step" {{ block.shopify_attributes }}>
-            <span class="v-step__n" aria-hidden="true">{{ forloop.index }}</span>
+            <span class="v-step__circle">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 360 | image_tag: loading: 'lazy', alt: block.settings.title }}
+              {%- else -%}
+                <span class="v-step__n" aria-hidden="true">{{ forloop.index }}</span>
+              {%- endif -%}
+            </span>
             <h3 class="v-h3">{{ block.settings.title }}</h3>
             <p>{{ block.settings.text }}</p>
           </li>
@@ -31,7 +37,8 @@
     "type": "step", "name": "Étape",
     "settings": [
       { "type": "text", "id": "title", "label": "Titre", "default": "Étape" },
-      { "type": "textarea", "id": "text", "label": "Texte", "default": "Décrivez l’étape." }
+      { "type": "textarea", "id": "text", "label": "Texte", "default": "Décrivez l’étape." },
+      { "type": "image_picker", "id": "image", "label": "Image dans le rond (carrée)" }
     ]
   }],
   "presets": [{ "name": "VELEA · Comment ça marche" }]

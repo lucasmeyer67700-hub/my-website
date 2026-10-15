@@ -1,0 +1,42 @@
+{%- comment -%} Assistant VELEA : répond à partir des questions fréquentes, sinon redirige vers le contact. {%- endcomment -%}
+<div class="v-bot" data-bot>
+  <button type="button" class="v-bot__fab" aria-label="Ouvrir l'assistant VELEA" aria-expanded="false" aria-controls="v-bot-panel" data-bot-toggle>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg>
+    <span class="v-bot__ping" aria-hidden="true"></span>
+  </button>
+  <div class="v-bot__panel" id="v-bot-panel" role="dialog" aria-label="Assistant VELEA" hidden>
+    <div class="v-bot__head">
+      <span class="v-bot__avatar" aria-hidden="true">V</span>
+      <div><strong>Assistant VELEA</strong><span>Une question sur la ceinture ?</span></div>
+      <button type="button" class="v-bot__close" aria-label="Fermer" data-bot-toggle>×</button>
+    </div>
+    <div class="v-bot__log" data-bot-log aria-live="polite">
+      <p class="v-bot__msg v-bot__msg--bot">Bonjour ! Posez votre question ou choisissez un sujet ci-dessous.</p>
+    </div>
+    <div class="v-bot__chips" data-bot-chips>
+      <button type="button" data-q="chaleur">Températures</button>
+      <button type="button" data-q="batterie">Batterie</button>
+      <button type="button" data-q="livraison">Livraison</button>
+      <button type="button" data-q="retour">Retours</button>
+      <button type="button" data-q="précautions">Précautions</button>
+    </div>
+    <form class="v-bot__form" data-bot-form>
+      <label for="v-bot-input" class="v-skip-sr">Votre question</label>
+      <input id="v-bot-input" type="text" placeholder="Écrivez votre question…" autocomplete="off" maxlength="200">
+      <button type="submit" aria-label="Envoyer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </div>
+  <script type="application/json" data-bot-kb>
+    [
+      {"k":["chaleur","température","temperature","chaud","degré","°","niveau"],"a":"Le fabricant annonce trois réglages de chaleur : 50, 55 et 60 °C. Commencez toujours par le plus doux."},
+      {"k":["massage","vibration","vibrant","masser"],"a":"La ceinture intègre une fonction de massage par vibration, détaillée dans la notice."},
+      {"k":["batterie","autonomie","charge","recharge","usb","durée","dure"],"a":"Batterie rechargeable de 1 800 mAh annoncée : environ 2 h d'autonomie et environ 2 h de recharge (5 V)."},
+      {"k":["taille","ajuster","sangle","tour","grande","petite","dimension"],"a":"Elle se place autour de la taille et se règle avec sa sangle. Boîtier : 18,5 × 8 × 2,5 cm, 142 g."},
+      {"k":["livraison","délai","delai","expédition","colis","recevoir","suivi"],"a":"Les délais et frais de livraison sont affichés avant le paiement. Détails : <a href=\"/pages/livraison-et-retours\">Livraison et retours</a>."},
+      {"k":["retour","rembours","rétractation","changer d'avis","renvoyer"],"a":"Vous avez 14 jours après réception pour changer d'avis. Voir la <a href=\"/pages/politique-de-retour\">politique de retour</a>."},
+      {"k":["précaution","danger","enceinte","grossesse","dormir","sommeil","peau","sécurité","médical","douleur"],"a":"Lisez la notice avant usage. Pas d'utilisation en dormant ni sur peau irritée. En cas de grossesse, de problème de santé ou de douleurs inhabituelles, demandez l'avis d'un professionnel de santé."},
+      {"k":["prix","combien","coût","cout","tarif","payer","paiement"],"a":"Le prix est affiché sur la page, TTC. Le paiement est sécurisé par Shopify."},
+      {"k":["contact","humain","conseiller","mail","email","joindre","parler"],"a":"Écrivez-nous via le <a href=\"/pages/contact\">formulaire de contact</a>, nous vous répondons par e-mail."}
+    ]
+  </script>
+</div>

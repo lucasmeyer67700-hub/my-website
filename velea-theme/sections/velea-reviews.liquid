@@ -1,14 +1,22 @@
-{%- if section.blocks.size > 0 or request.design_mode -%}
+{%- if section.blocks.size > 0 or request.design_mode or section.settings.examples -%}
 <section id="avis" class="v-section v-reviews">
   <div class="v-wrap">
     <div class="v-section__head v-section__head--center v-reveal">
       {%- if section.settings.kicker != blank -%}<p class="v-kicker">{{ section.settings.kicker }}</p>{%- endif -%}
       <h2 class="v-h2">{{ section.settings.title }}</h2>
     </div>
-    {%- if section.blocks.size == 0 -%}
-      <p class="v-reviews__empty">Ajoutez ici les avis de vos clientes (bloc « Avis »). Cette section reste invisible sur la boutique tant qu'elle est vide.</p>
-    {%- endif -%}
     <div class="v-reviews__track">
+      {%- if section.blocks.size == 0 and section.settings.examples -%}
+        {%- for i in (1..3) -%}
+          <figure class="v-review v-review--example">
+            <span class="v-review__tag">Exemple</span>
+            <div class="v-review__stars" aria-hidden="true"><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span></div>
+            <div class="v-slot v-review__slot"><div class="v-slot__label"><span>Photo de la cliente</span></div></div>
+            <blockquote>Emplacement pour l'avis d'une cliente : son ressenti, en deux ou trois phrases.</blockquote>
+            <figcaption><strong>Prénom N.</strong><span class="v-review__badge">Acheteuse vérifiée</span></figcaption>
+          </figure>
+        {%- endfor -%}
+      {%- endif -%}
       {%- for block in section.blocks -%}
         <figure class="v-review v-reveal" {{ block.shopify_attributes }}>
           <div class="v-review__stars" role="img" aria-label="{{ block.settings.rating }} sur 5">
@@ -32,7 +40,8 @@
   "name": "VELEA · Avis clientes",
   "settings": [
     { "type": "text", "id": "kicker", "label": "Petite phrase", "default": "Elles l'ont adoptée" },
-    { "type": "text", "id": "title", "label": "Titre", "default": "Avis clientes" }
+    { "type": "text", "id": "title", "label": "Titre", "default": "Avis clientes" },
+    { "type": "checkbox", "id": "examples", "label": "Afficher des cartes d'exemple (à décocher avant la mise en ligne)", "default": false }
   ],
   "blocks": [{
     "type": "review", "name": "Avis",
