@@ -95,7 +95,7 @@
 
   .hero__grid {
     display: grid;
-    gap: var(--space-xl);
+    gap: var(--space-md);
     align-items: center;
 
     @media screen and (min-width: 990px) {
@@ -155,13 +155,38 @@
   }
 
   .hero__media {
-    --media-ratio: 4 / 5;
+    --media-ratio: 4 / 3;
     border-radius: var(--radius-lg);
 
     @media screen and (min-width: 990px) {
       --media-ratio: 5 / 6;
       max-height: calc(100dvh - var(--header-height) - 4rem);
       min-height: 32rem;
+    }
+  }
+
+  /* Mobile: title first, then the visual, then the text and buttons,
+     so the product is visible on the first screen with the main button. */
+  @media screen and (max-width: 989px) {
+    .hero__content {
+      display: contents;
+    }
+
+    .hero__content > * {
+      order: 2;
+    }
+
+    .hero__content > .eyebrow,
+    .hero__content > .hero__title {
+      order: 0;
+    }
+
+    .hero__media {
+      order: 1;
+    }
+
+    .hero__content > .eyebrow {
+      margin-block-end: calc(var(--space-sm) * -1);
     }
   }
 {% endstylesheet %}
@@ -201,7 +226,7 @@
       "type": "textarea",
       "id": "text",
       "label": "Texte",
-      "default": "Notre ceinture chauffante sans fil diffuse une chaleur réglable sur le bas du ventre, avec un massage par vibration si vous le souhaitez."
+      "default": "Une ceinture chauffante sans fil, avec chaleur réglable et massage par vibration, pour vivre vos jours de règles plus confortablement."
     },
     {
       "type": "header",

@@ -3,13 +3,6 @@
     "hero": {
       "type": "hero",
       "blocks": {
-        "trust-shipping": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "truck",
-            "text": "Livraison offerte en France"
-          }
-        },
         "trust-returns": {
           "type": "trust_item",
           "settings": {
@@ -26,7 +19,6 @@
         }
       },
       "block_order": [
-        "trust-shipping",
         "trust-returns",
         "trust-payment"
       ],
@@ -34,7 +26,7 @@
         "eyebrow": "Confort menstruel",
         "heading": "Une chaleur douce, <em>où que vous soyez.</em>",
         "heading_tag": "h1",
-        "text": "Notre ceinture chauffante sans fil diffuse une chaleur réglable sur le bas du ventre, avec un massage par vibration si vous le souhaitez. Pour traverser vos jours de règles plus confortablement, chez vous comme ailleurs.",
+        "text": "Une ceinture chauffante sans fil, avec chaleur réglable et massage par vibration, pour vivre vos jours de règles plus confortablement.",
         "product": "ceinture-chauffante-regles",
         "show_price": true,
         "fallback_media_position": 2,

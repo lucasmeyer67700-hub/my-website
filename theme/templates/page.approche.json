@@ -36,7 +36,7 @@
           "settings": {
             "icon": "info",
             "title": "Des informations claires",
-            "text": "Nous affichons les caractéristiques annoncées par le fabricant, sans les embellir ni promettre ce qu’elles ne garantissent pas."
+            "text": "Nous affichons les caractéristiques annoncées par le fabricant, telles quelles, sans les embellir."
           }
         },
         "safety": {
