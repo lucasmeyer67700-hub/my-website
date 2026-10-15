@@ -2,7 +2,7 @@
   <div class="v-heat" aria-hidden="true"></div>
   <div class="v-wrap v-final__inner v-reveal">
     <h2 class="v-h2">{{ section.settings.title }}</h2>
-    <p class="v-lead">{{ section.settings.text }}</p>
+    {%- if section.settings.text != blank -%}<p class="v-lead">{{ section.settings.text }}</p>{%- endif -%}
     {%- assign fp = section.settings.product | default: all_products['ceinture-chauffante-regles'] -%}
     <a href="{{ section.settings.link | default: fp.url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
   </div>

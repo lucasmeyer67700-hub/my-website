@@ -107,4 +107,21 @@
   window.addEventListener('pageshow', function () {
     document.querySelectorAll('[data-add-btn].is-loading').forEach(function (b) { b.classList.remove('is-loading'); b.removeAttribute('aria-busy'); });
   });
+
+  // Effet d'onde au clic sur les boutons
+  document.addEventListener('pointerdown', function (e) {
+    var b = e.target.closest('.v-btn');
+    if (!b || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var r = b.getBoundingClientRect(), d = Math.max(r.width, r.height);
+    var w = document.createElement('span');
+    w.className = 'v-ripple';
+    w.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d / 2) + 'px;top:' + (e.clientY - r.top - d / 2) + 'px';
+    b.appendChild(w);
+    setTimeout(function () { w.remove(); }, 650);
+  });
+
+  // Apparition en cascade des éléments d'une même liste
+  document.querySelectorAll('.v-steps, .v-faq, .v-buy__points, .v-infos').forEach(function (list) {
+    Array.prototype.forEach.call(list.children, function (el, i) { el.classList.add('v-reveal'); el.style.transitionDelay = (i * 80) + 'ms'; if (io) io.observe(el); else el.classList.add('is-in'); });
+  });
 })();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#F3EBE0">
+  <meta name="theme-color" content="#2A1B12">
   <link rel="canonical" href="{{ canonical_url }}">
   {%- if template.name == 'index' -%}
     <title>VELEA | Ceinture chauffante menstruelle avec massage vibrant</title>
@@ -31,9 +31,12 @@
   {{ 'velea-premium.css' | asset_url | stylesheet_tag }}
   {{ 'velea-ui.css' | asset_url | stylesheet_tag }}
   {{ 'velea-chalet.css' | asset_url | stylesheet_tag }}
+  {{ 'velea-automne.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="v-body">
+  <div class="v-glow" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="v-frame" aria-hidden="true"></div>
   <a class="v-skip" href="#contenu">Aller au contenu</a>
 
   {% sections 'velea-announce-group' %}

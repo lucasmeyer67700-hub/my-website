@@ -8,37 +8,10 @@
     assign p = collections.all.products.first
   endif
   assign v = p.selected_or_first_available_variant
-  assign media_limit = section.settings.media_limit
-  assign images = p.media | where: 'media_type', 'image'
 -%}
 <section id="{{ section.settings.anchor | default: 'ceinture' }}" class="v-section v-section--coquille v-buy" aria-labelledby="buy-title-{{ section.id }}">
-  <div class="v-wrap v-buy__grid">
-    <div class="v-gallery" data-gallery>
-      {%- if images.size > 0 -%}
-        <div class="v-gallery__track" data-gallery-track tabindex="0" aria-label="Photos du produit">
-          {%- for media in images limit: media_limit -%}
-            {%- assign media_alt = media.alt | default: p.title -%}
-            {%- if forloop.first and on_product_page -%}{%- assign media_ld = 'eager' -%}{%- else -%}{%- assign media_ld = 'lazy' -%}{%- endif -%}
-            <figure class="v-gallery__slide v-slot">
-              {{ media.preview_image | image_url: width: 1400 | image_tag: loading: media_ld, sizes: '(min-width: 900px) 480px, 86vw', widths: '400, 600, 800, 1000, 1400', alt: media_alt }}
-            </figure>
-          {%- endfor -%}
-        </div>
-        {%- if images.size > 1 and media_limit > 1 -%}
-          <div class="v-gallery__thumbs" role="group" aria-label="Choisir une photo">
-            {%- for media in images limit: media_limit -%}
-              <button type="button" class="v-gallery__thumb{% if forloop.first %} is-active{% endif %}" data-gallery-thumb="{{ forloop.index0 }}" aria-label="Afficher la photo {{ forloop.index }}">
-                {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
-              </button>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
-      {%- else -%}
-        {% render 'velea-slot', class: 'v-gallery__main', label: 'Photo produit : la ceinture rose seule sur fond clair', sizes: '480px' %}
-      {%- endif -%}
-    </div>
-
-    <div class="v-buy__panel">
+  <div class="v-wrap v-buy__solo">
+    <div class="v-buy__panel v-card-wood">
       {%- if on_product_page -%}
         <h1 id="buy-title-{{ section.id }}" class="v-h2">{{ p.title }}</h1>
       {%- else -%}
@@ -89,6 +62,22 @@
       <ul class="v-buy__pay" aria-label="Moyens de paiement acceptés">
         {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
       </ul>
+
+      {%- assign spec_count = 0 -%}
+      {%- for block in section.blocks -%}{%- if block.type == 'spec' -%}{%- assign spec_count = spec_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if spec_count > 0 -%}
+        <details class="v-acc v-specs-acc">
+          <summary>Fiche technique<span class="v-acc__icon" aria-hidden="true"></span></summary>
+          <div class="v-acc__body">
+            <dl class="v-specs-list">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'spec' -%}<div {{ block.shopify_attributes }}><dt>{{ block.settings.label }}</dt><dd>{{ block.settings.value }}</dd></div>{%- endif -%}
+              {%- endfor -%}
+            </dl>
+            <p class="v-spec-note">Données communiquées par le fabricant.</p>
+          </div>
+        </details>
+      {%- endif -%}
 
       <ul class="v-infos">
         {%- for block in section.blocks -%}
@@ -160,9 +149,13 @@
     { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "ceinture" },
     { "type": "text", "id": "title", "label": "Titre sur l'accueil (vide = nom du produit)" },
     { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Chaleur réglable, massage vibrant et batterie rechargeable" },
-    { "type": "range", "id": "media_limit", "label": "Nombre de photos produit affichées", "min": 1, "max": 10, "step": 1, "default": 6 }
+    { "type": "range", "id": "media_limit", "label": "(non utilisé)", "min": 1, "max": 10, "step": 1, "default": 6 }
   ],
   "blocks": [
+    { "type": "spec", "name": "Caractéristique", "settings": [
+      { "type": "text", "id": "label", "label": "Intitulé", "default": "Couleur" },
+      { "type": "text", "id": "value", "label": "Valeur", "default": "Rose" }
+    ] },
     { "type": "point", "name": "Point fort", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Batterie rechargeable intégrée" }] },
     { "type": "info", "name": "Information de confiance", "settings": [
       { "type": "select", "id": "icon", "label": "Icône", "options": [

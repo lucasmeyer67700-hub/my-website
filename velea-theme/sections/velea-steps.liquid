@@ -1,5 +1,5 @@
 <section id="{{ section.settings.anchor | default: 'fonctionnement' }}" class="v-section v-section--noir v-how">
-  <div class="v-wrap v-how__grid">
+  <div class="v-wrap v-how__solo">
     <div class="v-reveal">
       <div class="v-section__head">
         <h2 class="v-h2">{{ section.settings.title }}</h2>
@@ -15,7 +15,6 @@
         {%- endfor -%}
       </ol>
     </div>
-    {% render 'velea-slot', image: section.settings.image, label: 'Photo : gros plan sur les commandes de la ceinture', sizes: '(min-width: 900px) 45vw, 100vw' %}
   </div>
 </section>
 
