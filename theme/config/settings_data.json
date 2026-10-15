@@ -1,0 +1,112 @@
+{
+  "current": {
+    "logo_width": 120,
+    "brand_tagline": "Le confort menstruel, avec douceur.",
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#FFFCFA",
+          "text": "#302724",
+          "text_muted": "#6B615D",
+          "accent": "#7A5E52",
+          "surface": "#F8F4F0",
+          "border": "#E7DCD6",
+          "button": "#49352F",
+          "button_label": "#FFFCFA",
+          "background_gradient": ""
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#F8F4F0",
+          "text": "#302724",
+          "text_muted": "#6B615D",
+          "accent": "#7A5E52",
+          "surface": "#FFFCFA",
+          "border": "#E5D9D2",
+          "button": "#49352F",
+          "button_label": "#FFFCFA",
+          "background_gradient": ""
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#F3DFE2",
+          "text": "#302724",
+          "text_muted": "#5A4F4B",
+          "accent": "#6E5246",
+          "surface": "#FFFCFA",
+          "border": "#E3C8CC",
+          "button": "#49352F",
+          "button_label": "#FFFCFA",
+          "background_gradient": ""
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#E8C7CD",
+          "text": "#302724",
+          "text_muted": "#574C48",
+          "accent": "#5E4539",
+          "surface": "#F3DFE2",
+          "border": "#D7B1B8",
+          "button": "#49352F",
+          "button_label": "#FFFCFA",
+          "background_gradient": ""
+        }
+      },
+      "scheme-5": {
+        "settings": {
+          "background": "#49352F",
+          "text": "#FFFCFA",
+          "text_muted": "#D9C9C2",
+          "accent": "#E8C7CD",
+          "surface": "#57423B",
+          "border": "#6A544C",
+          "button": "#F3DFE2",
+          "button_label": "#302724",
+          "background_gradient": ""
+        }
+      }
+    },
+    "type_heading_font": "instrument_serif_n4",
+    "type_body_font": "dm_sans_n4",
+    "heading_scale": 100,
+    "page_width": 1280,
+    "animations_reveal": true,
+    "shipping_info": "Livraison offerte en France",
+    "shipping_delay": "",
+    "returns_info": "14 jours pour changer d'avis",
+    "warranty_info": "Garantie légale de conformité de 2 ans",
+    "shipping_page": "livraison-et-retours",
+    "returns_page": "politique-de-retour",
+    "health_notice": "Accessoire de confort, la ceinture ne remplace pas un avis médical. En cas de douleurs intenses, inhabituelles ou persistantes, consultez un professionnel de santé.",
+    "cart_type": "drawer",
+    "cart_note": false,
+    "cart_empty_product": "ceinture-chauffante-regles",
+    "social_instagram": "",
+    "social_tiktok": "",
+    "social_facebook": "",
+    "social_pinterest": "",
+    "social_youtube": ""
+  },
+  "presets": {
+    "Douceur": {
+      "color_schemes": {
+        "scheme-1": {
+          "settings": {
+            "background": "#FFFCFA",
+            "text": "#302724",
+            "text_muted": "#6B615D",
+            "accent": "#7A5E52",
+            "surface": "#F8F4F0",
+            "border": "#E7DCD6",
+            "button": "#49352F",
+            "button_label": "#FFFCFA",
+            "background_gradient": ""
+          }
+        }
+      }
+    }
+  }
+}

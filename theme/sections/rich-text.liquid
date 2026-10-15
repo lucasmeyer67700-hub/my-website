@@ -1,0 +1,108 @@
+{%- assign heading_tag = section.settings.heading_tag | default: 'h2' -%}
+
+<section class="rich-text section{% if section.settings.compact %} section--compact{% endif %} color-{{ section.settings.color_scheme }}">
+  <div class="page-width page-width--text rich-text__inner rich-text__inner--{{ section.settings.alignment }} reveal">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <{{ heading_tag }} class="h2">{{ section.settings.heading }}</{{ heading_tag }}>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="rte rich-text__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a class="button button--secondary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .rich-text__inner {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .rich-text__inner--center {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .rich-text__text {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Texte",
+  "tag": "div",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Un titre court"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Niveau du titre",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Bouton : texte"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Bouton : lien"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignement",
+      "options": [
+        { "value": "left", "label": "À gauche" },
+        { "value": "center", "label": "Centré" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "compact",
+      "label": "Espacement réduit",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Texte"
+    }
+  ]
+}
+{% endschema %}

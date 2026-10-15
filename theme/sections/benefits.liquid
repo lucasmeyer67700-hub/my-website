@@ -1,0 +1,223 @@
+{%- liquid
+  assign anchor = section.settings.anchor | handleize
+  assign columns = section.settings.columns
+-%}
+
+<section
+  class="benefits section{% if section.settings.compact %} section--compact{% endif %} color-{{ section.settings.color_scheme }}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  {% if section.settings.heading != blank %}
+    aria-labelledby="BenefitsTitle-{{ section.id }}"
+  {% endif %}
+>
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+      <div class="section-header{% if section.settings.center %} section-header--center{% endif %} reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2" id="BenefitsTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <p class="lead">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul
+      class="benefits__grid benefits__grid--{{ section.settings.style }}"
+      role="list"
+      style="--benefits-columns: {{ columns }};"
+    >
+      {%- for block in section.blocks -%}
+        <li class="benefits__item reveal" {{ block.shopify_attributes }}>
+          <span class="icon-badge">{% render 'icon', icon: block.settings.icon %}</span>
+          <div class="benefits__body">
+            <h3 class="title-sm">{{ block.settings.title | escape }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p class="benefits__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .benefits__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-lg) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: repeat(var(--benefits-columns, 4), minmax(0, 1fr));
+    }
+  }
+
+  .benefits__item {
+    display: grid;
+    align-content: start;
+    gap: var(--space-sm);
+  }
+
+  .benefits__grid--cards .benefits__item {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .benefits__grid--inline {
+    @media screen and (max-width: 749px) {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    & .benefits__item {
+      grid-template-columns: auto 1fr;
+      align-items: start;
+    }
+  }
+
+  .benefits__body {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .benefits__text {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bénéfices",
+  "tag": "div",
+  "class": "section-benefits",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Le confort de la chaleur, <em>sans les contraintes.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "cards", "label": "Cartes" },
+        { "value": "plain", "label": "Épuré" },
+        { "value": "inline", "label": "Icône à gauche" }
+      ],
+      "default": "cards"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Colonnes sur ordinateur",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "center",
+      "label": "Centrer l'en-tête",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "compact",
+      "label": "Espacement réduit",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "info": "Exemple : bienfaits, accessible via /#bienfaits"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Bénéfice",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "cloud", "label": "Douceur" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "clock", "label": "Durée" },
+            { "value": "home", "label": "Maison" },
+            { "value": "briefcase", "label": "Travail" },
+            { "value": "map-pin", "label": "Déplacement" },
+            { "value": "box", "label": "Colis" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" },
+            { "value": "lock", "label": "Paiement sécurisé" },
+            { "value": "shield", "label": "Garantie" },
+            { "value": "chat", "label": "Service client" },
+            { "value": "info", "label": "Information" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Bénéfice"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bénéfices",
+      "blocks": [
+        { "type": "benefit" },
+        { "type": "benefit" },
+        { "type": "benefit" }
+      ]
+    }
+  ]
+}
+{% endschema %}

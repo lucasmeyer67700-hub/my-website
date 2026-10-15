@@ -1,0 +1,320 @@
+{%- liquid
+  assign product = section.settings.product
+  assign hero_image = section.settings.image
+  if hero_image == blank and product != blank and product.media.size > 0
+    assign media_index = section.settings.fallback_media_position | minus: 1 | at_least: 0
+    assign hero_media = product.media[media_index] | default: product.featured_media
+    assign hero_image = hero_media.preview_image
+  endif
+
+  assign primary_link = section.settings.button_link
+  if primary_link == blank and product != blank
+    assign primary_link = product.url
+  endif
+
+  assign heading_tag = section.settings.heading_tag | default: 'h1'
+-%}
+
+<section
+  class="hero color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'left' %} hero--media-left{% endif %}"
+  aria-labelledby="HeroTitle-{{ section.id }}"
+>
+  <div class="hero__grid page-width">
+    <div class="hero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      <{{ heading_tag }} class="hero__title h1" id="HeroTitle-{{ section.id }}">
+        {{- section.settings.heading -}}
+      </{{ heading_tag }}>
+
+      {%- if section.settings.text != blank -%}
+        <p class="hero__text lead">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+
+      <div class="hero__actions">
+        {%- if section.settings.button_label != blank and primary_link != blank -%}
+          <a class="button" href="{{ primary_link }}">
+            {{- section.settings.button_label | escape -}}
+            {% render 'icon', icon: 'arrow-right' %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+          <a class="button button--secondary" href="{{ section.settings.secondary_link }}">
+            {{- section.settings.secondary_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_price and product != blank -%}
+        <p class="hero__price">
+          <span class="hero__price-amount">{{ product.price | money }}</span>
+          {%- if settings.shipping_info != blank %}
+            <span aria-hidden="true">·</span>
+            <span>{{ settings.shipping_info | escape }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="trust-list trust-list--inline hero__trust" role="list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>
+              {% render 'icon', icon: block.settings.icon %}
+              <span>{{ block.settings.text | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="hero__media media">
+      {%- if hero_image != blank -%}
+        {% render 'responsive-image',
+          image: hero_image,
+          sizes: '(min-width: 990px) 55vw, 100vw',
+          eager: true,
+          alt: section.settings.image_alt
+        %}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero {
+    padding-block: var(--space-lg) var(--section-space);
+
+    @media screen and (min-width: 990px) {
+      padding-block: var(--space-xl) var(--section-space);
+    }
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(3rem, 5vw, 6rem);
+    }
+  }
+
+  .hero--media-left .hero__media {
+    @media screen and (min-width: 990px) {
+      order: -1;
+    }
+  }
+
+  .hero__content {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+    max-width: 34rem;
+  }
+
+  .hero__title em {
+    color: var(--color-accent);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-2xs);
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+
+      & .button {
+        flex: 1 1 100%;
+      }
+    }
+  }
+
+  .hero__price {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .hero__price-amount {
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+  }
+
+  .hero__trust {
+    padding-block-start: var(--space-md);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .hero__media {
+    --media-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+
+    @media screen and (min-width: 990px) {
+      --media-ratio: 5 / 6;
+      max-height: calc(100dvh - var(--header-height) - 4rem);
+      min-height: 32rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bannière principale",
+  "tag": "div",
+  "class": "section-hero",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Confort menstruel"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Mettez un mot en italique pour l'accentuer.",
+      "default": "Une chaleur douce, <em>où que vous soyez.</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Niveau du titre",
+      "info": "Gardez H1 si cette bannière est en haut de la page.",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte",
+      "default": "Notre ceinture chauffante sans fil diffuse une chaleur réglable sur le bas du ventre, avec un massage par vibration si vous le souhaitez."
+    },
+    {
+      "type": "header",
+      "content": "Produit et visuel"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Afficher le prix et la livraison",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Sans image, une photo du produit choisi est utilisée. Format portrait conseillé."
+    },
+    {
+      "type": "range",
+      "id": "fallback_media_position",
+      "label": "Photo du produit utilisée sans image",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texte alternatif de l'image",
+      "info": "Décrivez ce que montre l'image. Laissez vide pour reprendre celui de la photo."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Position de l'image sur ordinateur",
+      "options": [
+        { "value": "right", "label": "À droite" },
+        { "value": "left", "label": "À gauche" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Boutons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Bouton principal",
+      "default": "Découvrir la ceinture"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton principal",
+      "info": "Laissez vide pour pointer vers le produit choisi."
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Bouton secondaire",
+      "default": "Comment ça marche"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Lien du bouton secondaire"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Réassurance",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" },
+            { "value": "lock", "label": "Paiement sécurisé" },
+            { "value": "shield", "label": "Garantie" },
+            { "value": "chat", "label": "Service client" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Information vérifiée"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bannière principale"
+    }
+  ]
+}
+{% endschema %}

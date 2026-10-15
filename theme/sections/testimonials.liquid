@@ -1,0 +1,132 @@
+{%- comment -%}
+  Authentic customer reviews only. Without blocks the section renders
+  nothing for visitors (an editor-only notice is shown in the theme editor).
+  Review apps can be added as app blocks.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <section class="testimonials section color-{{ section.settings.color_scheme }}" aria-labelledby="TestimonialsTitle-{{ section.id }}">
+    <div class="page-width">
+      <div class="section-header reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="h2" id="TestimonialsTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+
+      <ul class="testimonials__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              <li class="testimonials__app">{% render block %}</li>
+            {%- when 'testimonial' -%}
+              <li class="testimonials__item reveal" {{ block.shopify_attributes }}>
+                <figure class="testimonials__figure">
+                  <blockquote class="testimonials__quote">
+                    <p>{{ block.settings.quote | escape }}</p>
+                  </blockquote>
+                  <figcaption class="testimonials__author">
+                    <span class="title-sm">{{ block.settings.author | escape }}</span>
+                    {%- if block.settings.detail != blank -%}
+                      <span class="text-muted text-small">{{ block.settings.detail | escape }}</span>
+                    {%- endif -%}
+                  </figcaption>
+                </figure>
+              </li>
+          {%- endcase -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <div class="page-width section section--compact">
+    <p class="form-message">{% render 'icon', icon: 'info' %}{{ 'sections.testimonials_editor_empty' | t }}</p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .testimonials__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .testimonials__app {
+    grid-column: 1 / -1;
+  }
+
+  .testimonials__figure {
+    display: grid;
+    gap: var(--space-md);
+    height: 100%;
+    margin: 0;
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .testimonials__quote {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: var(--text-xl);
+    line-height: 1.4;
+  }
+
+  .testimonials__author {
+    display: grid;
+    align-self: end;
+    gap: 0.1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Avis clientes",
+  "tag": "div",
+  "class": "section-testimonials",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Ajoutez uniquement des avis authentiques, publiés avec l'accord des clientes, ou installez une application d'avis vérifiés. Sans avis, la section reste invisible."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Avis clientes"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Elles en parlent"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "testimonial",
+      "name": "Avis",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Avis (texte exact de la cliente)" },
+        { "type": "text", "id": "author", "label": "Prénom ou initiales" },
+        { "type": "text", "id": "detail", "label": "Détail (ex. : date de l'achat)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Avis clientes"
+    }
+  ]
+}
+{% endschema %}

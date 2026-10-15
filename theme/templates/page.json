@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": { "eyebrow": "", "intro": "", "show_content": true, "center": false, "compact": true, "color_scheme": "scheme-1" }
+    }
+  },
+  "order": ["main"]
+}

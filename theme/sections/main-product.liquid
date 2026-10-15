@@ -1,0 +1,623 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: section.id
+  assign submit_id = 'ProductSubmit-' | append: section.id
+  assign tagline = product.metafields.custom.accroche.value
+-%}
+
+<section class="product section section--compact color-{{ section.settings.color_scheme }}" data-product-section>
+  <div class="page-width product__grid">
+    <div class="product__media">
+      {% render 'product-gallery',
+        product: product,
+        fit: section.settings.gallery_fit,
+        ratio: section.settings.gallery_ratio
+      %}
+    </div>
+
+    <div class="product__info">
+      <div class="product__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="product__title">{{ product.title | escape }}</h1>
+        {%- if tagline != blank -%}
+          <p class="product__tagline">{{ tagline | escape }}</p>
+        {%- endif -%}
+        {% render 'price', product: product, class: 'product__price' %}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+
+          {%- when 'points' -%}
+            {%- assign points = product.metafields.custom.points_forts.value -%}
+            {%- if points != blank and points.size > 0 -%}
+              <ul class="check-list product__points" role="list" {{ block.shopify_attributes }}>
+                {%- for point in points -%}
+                  <li>{% render 'icon', icon: 'check' %}<span>{{ point | escape }}</span></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+          {%- when 'text' -%}
+            {%- if block.settings.text != blank -%}
+              <div class="rte product__text" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            {%- endif -%}
+
+          {%- when 'variant_picker' -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'variant-picker', product: product, section_id: section.id %}
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <product-form class="product-form" {{ block.shopify_attributes }}>
+              {%- form 'product', product, id: form_id, class: 'product-form__form', novalidate: 'novalidate' -%}
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ current_variant.id }}"
+                  data-variant-id-input
+                >
+                <noscript>
+                  {%- unless product.has_only_default_variant -%}
+                    <label class="field__label" for="NoscriptVariant-{{ section.id }}">{{ 'products.color_option' | t }}</label>
+                    <select class="field__input" id="NoscriptVariant-{{ section.id }}" name="id">
+                      {%- for variant in product.variants -%}
+                        <option
+                          value="{{ variant.id }}"
+                          {% if variant == current_variant %}
+                            selected
+                          {% endif %}
+                          {% unless variant.available %}
+                            disabled
+                          {% endunless %}
+                        >
+                          {{ variant.title | escape }} – {{ variant.price | money | strip_html }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                  {%- endunless -%}
+                </noscript>
+
+                <div class="product-form__row">
+                  {%- if block.settings.show_quantity -%}
+                    <div class="product-form__quantity">
+                      <label class="visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+                      <quantity-input class="quantity">
+                        <button type="button" class="icon-button" data-step="-1">
+                          {% render 'icon', icon: 'minus' %}
+                          <span class="visually-hidden">{{ 'products.decrease_quantity' | t }}</span>
+                        </button>
+                        <input
+                          class="quantity__input"
+                          type="number"
+                          id="Quantity-{{ section.id }}"
+                          name="quantity"
+                          value="1"
+                          min="1"
+                          inputmode="numeric"
+                        >
+                        <button type="button" class="icon-button" data-step="1">
+                          {% render 'icon', icon: 'plus' %}
+                          <span class="visually-hidden">{{ 'products.increase_quantity' | t }}</span>
+                        </button>
+                      </quantity-input>
+                    </div>
+                  {%- endif -%}
+
+                  <button
+                    id="{{ submit_id }}"
+                    type="submit"
+                    name="add"
+                    class="button product-form__submit"
+                    data-add-to-cart
+                    {% unless current_variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                    <span data-add-to-cart-label>
+                      {%- if current_variant.available -%}
+                        {{ 'products.add_to_cart' | t }}
+                      {%- else -%}
+                        {{ 'products.sold_out' | t }}
+                      {%- endif -%}
+                    </span>
+                    <span class="button__spinner" aria-hidden="true"></span>
+                  </button>
+                </div>
+
+                {%- if block.settings.show_dynamic_checkout -%}
+                  <div class="product-form__express">{{ form | payment_button }}</div>
+                {%- endif -%}
+
+                <div class="form-message form-message--error" role="alert" data-product-error hidden>
+                  {% render 'icon', icon: 'alert' %}
+                  <span data-error-message></span>
+                </div>
+              {%- endform -%}
+            </product-form>
+
+          {%- when 'trust' -%}
+            <div class="product__trust" {{ block.shopify_attributes }}>
+              <ul class="trust-list" role="list">
+                {%- if settings.shipping_info != blank -%}
+                  <li>
+                    {% render 'icon', icon: 'truck' %}
+                    <span>
+                      {%- if settings.shipping_page != blank -%}
+                        <a href="{{ settings.shipping_page.url }}">{{ settings.shipping_info | escape }}</a>
+                      {%- else -%}
+                        {{ settings.shipping_info | escape }}
+                      {%- endif -%}
+                      {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
+                    </span>
+                  </li>
+                {%- endif -%}
+                {%- if settings.returns_info != blank -%}
+                  <li>
+                    {% render 'icon', icon: 'return' %}
+                    <span>
+                      {%- if settings.returns_page != blank -%}
+                        <a href="{{ settings.returns_page.url }}">{{ settings.returns_info | escape }}</a>
+                      {%- else -%}
+                        {{ settings.returns_info | escape }}
+                      {%- endif -%}
+                    </span>
+                  </li>
+                {%- endif -%}
+                {%- if settings.warranty_info != blank -%}
+                  <li>{% render 'icon', icon: 'shield' %}<span>{{ settings.warranty_info | escape }}</span></li>
+                {%- endif -%}
+                <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
+              </ul>
+              {%- if block.settings.show_payment_icons -%}
+                {% render 'payment-icons', class: 'product__payments' %}
+              {%- endif -%}
+            </div>
+
+          {%- when 'accordion' -%}
+            {%- liquid
+              capture accordion_content
+                case block.settings.source
+                  when 'description'
+                    if product.description != blank
+                      echo '<div class="rte">'
+                      echo product.description
+                      echo '</div>'
+                    endif
+                  when 'specs'
+                    if product.metafields.custom.caracteristiques.value != blank
+                      render 'product-specs', product: product
+                      echo '<p class="text-small product__specs-note">'
+                      echo 'products.specs_note' | t
+                      echo '</p>'
+                    endif
+                  when 'usage'
+                    render 'metafield-lines', value: product.metafields.custom.mode_emploi.value, ordered: true
+                  when 'precautions'
+                    render 'metafield-lines', value: product.metafields.custom.precautions.value, ordered: false
+                  when 'box'
+                    render 'box-contents', product: product
+                  when 'safety_info'
+                    render 'metafield-lines', value: product.metafields.custom.informations_securite.value, ordered: false, plain: true
+                  when 'shipping'
+                    render 'shipping-summary'
+                  else
+                    if block.settings.content != blank
+                      echo '<div class="rte">'
+                      echo block.settings.content
+                      echo '</div>'
+                    endif
+                endcase
+              endcapture
+            -%}
+            {%- if accordion_content != blank -%}
+              <details class="accordion product__accordion" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
+                <summary class="accordion__summary">
+                  <span class="accordion__title">
+                    {% render 'icon', icon: block.settings.icon %}
+                    {{ block.settings.title | escape }}
+                  </span>
+                  {% render 'icon', icon: 'plus', class: 'icon--toggle' %}
+                </summary>
+                <div class="accordion__content">{{ accordion_content }}</div>
+              </details>
+            {%- endif -%}
+
+          {%- when 'notice' -%}
+            {%- if settings.health_notice != blank -%}
+              <p class="product__notice" {{ block.shopify_attributes }}>
+                {% render 'icon', icon: 'info' %}
+                <span>{{ settings.health_notice | escape }}</span>
+              </p>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if section.settings.sticky_bar -%}
+    <sticky-buy-bar class="sticky-buy-bar" data-watch="{{ submit_id }}">
+      <div class="sticky-buy-bar__inner">
+        <div class="sticky-buy-bar__info">
+          <p class="sticky-buy-bar__title">{{ product.title | escape }}</p>
+          <p class="sticky-buy-bar__meta">
+            {%- unless product.has_only_default_variant -%}
+              <span data-variant-title>{{ current_variant.title | escape }}</span>
+              <span aria-hidden="true"> · </span>
+            {%- endunless -%}
+            <span data-price-current>{{ current_variant.price | money }}</span>
+          </p>
+        </div>
+        <button
+          type="submit"
+          form="{{ form_id }}"
+          class="button button--small"
+          data-add-to-cart
+          {% unless current_variant.available %}
+            disabled
+          {% endunless %}
+        >
+          <span data-add-to-cart-label>
+            {%- if current_variant.available -%}
+              {{ 'products.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.sold_out' | t }}
+            {%- endif -%}
+          </span>
+          <span class="button__spinner" aria-hidden="true"></span>
+        </button>
+      </div>
+    </sticky-buy-bar>
+  {%- endif -%}
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</section>
+
+{% stylesheet %}
+  .product__grid {
+    display: grid;
+    gap: var(--space-lg);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: clamp(3rem, 5vw, 5.5rem);
+      align-items: start;
+    }
+  }
+
+  .product__media {
+    min-width: 0;
+
+    @media screen and (min-width: 990px) {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + 1.5rem);
+    }
+  }
+
+  .product__info {
+    display: grid;
+    gap: var(--space-md);
+    min-width: 0;
+  }
+
+  .product__header {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .product__title {
+    font-size: var(--heading-2);
+    line-height: var(--line-height-tight);
+  }
+
+  .product__tagline {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .product__price {
+    font-size: var(--text-xl);
+  }
+
+  .product__points {
+    padding-block: var(--space-md);
+    border-block: 1px solid var(--color-border);
+  }
+
+  .product-form__form {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .product-form__row {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .product-form__quantity .quantity {
+    height: 100%;
+    min-height: 3.25rem;
+  }
+
+  .product-form__submit {
+    flex: 1 1 auto;
+  }
+
+  .product-form__express:empty {
+    display: none;
+  }
+
+  .product-form__express .shopify-payment-button__button {
+    min-height: 3.25rem;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .product__trust {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .product__accordion .accordion__title .icon {
+    --icon-size: 1.2rem;
+    color: var(--color-accent);
+  }
+
+  .product__specs-note {
+    margin-block-start: var(--space-sm);
+  }
+
+  .product__notice {
+    display: flex;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 1.1rem;
+      margin-block-start: 0.15em;
+    }
+  }
+
+  .sticky-buy-bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--z-sticky-bar);
+    display: block;
+    padding: var(--space-xs) var(--gutter) calc(var(--space-xs) + env(safe-area-inset-bottom));
+    border-block-start: 1px solid var(--color-border);
+    background-color: rgb(var(--color-background-rgb) / 0.96);
+    box-shadow: 0 -8px 24px -16px rgb(48 39 36 / 0.25);
+    transform: translateY(110%);
+    transition: transform var(--duration-base) var(--ease-out);
+
+    &.is-visible {
+      transform: none;
+    }
+
+    @media screen and (min-width: 990px) {
+      display: none;
+    }
+  }
+
+  .sticky-buy-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .sticky-buy-bar__info {
+    min-width: 0;
+  }
+
+  .sticky-buy-bar__title {
+    overflow: hidden;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .sticky-buy-bar__meta {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  body.has-sticky-bar .site-footer {
+    @media screen and (max-width: 989px) {
+      padding-block-end: 6rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fiche produit",
+  "tag": "div",
+  "class": "section-main-product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Confort menstruel"
+    },
+    {
+      "type": "select",
+      "id": "gallery_ratio",
+      "label": "Format des photos",
+      "options": [
+        { "value": "1", "label": "Carré" },
+        { "value": "4 / 5", "label": "Portrait" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "gallery_fit",
+      "label": "Cadrage des photos",
+      "options": [
+        { "value": "contain", "label": "Photo entière" },
+        { "value": "cover", "label": "Remplir le cadre" }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_bar",
+      "label": "Barre d'achat fixe sur mobile",
+      "info": "Apparaît une fois le bouton principal dépassé.",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "points",
+      "name": "Points essentiels",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Affiche le champ méta produit « Points forts » (custom.points_forts)."
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texte",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Texte" }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "Sélecteur de variante",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Boutons d'achat",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_quantity",
+          "label": "Afficher le sélecteur de quantité",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "label": "Afficher le paiement express",
+          "info": "Shop Pay, Apple Pay, Google Pay… selon les moyens activés dans vos paramètres de paiement.",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "trust",
+      "name": "Réassurance",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Textes modifiables dans Paramètres du thème > Réassurance."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_icons",
+          "label": "Afficher les moyens de paiement",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Onglet repliable",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Informations"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "info", "label": "Information" },
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "check", "label": "Validation" },
+            { "value": "alert", "label": "Précaution" },
+            { "value": "box", "label": "Colis" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "shield", "label": "Sécurité" },
+            { "value": "cloud", "label": "Douceur" }
+          ],
+          "default": "info"
+        },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "Contenu",
+          "options": [
+            { "value": "description", "label": "Description du produit" },
+            { "value": "specs", "label": "Champ méta : Caractéristiques" },
+            { "value": "usage", "label": "Champ méta : Mode d'emploi" },
+            { "value": "precautions", "label": "Champ méta : Précautions" },
+            { "value": "box", "label": "Champ méta : Contenu du colis" },
+            { "value": "safety_info", "label": "Champ méta : Informations sécurité (fabricant)" },
+            { "value": "shipping", "label": "Livraison et retours (paramètres du thème)" },
+            { "value": "custom", "label": "Texte personnalisé" }
+          ],
+          "default": "custom"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Texte personnalisé",
+          "visible_if": "{{ block.settings.source == 'custom' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Ouvert par défaut",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "name": "Mention de prudence",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Texte modifiable dans Paramètres du thème > Réassurance."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

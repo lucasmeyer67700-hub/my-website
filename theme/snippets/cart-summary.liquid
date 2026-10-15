@@ -1,0 +1,91 @@
+{% doc %}
+  Cart totals, reassurance and checkout button, shared by the cart drawer
+  and the cart page. The checkout is Shopify's own secure checkout.
+
+  @param {string} form_id - id of the cart form the checkout button submits
+
+  @example
+  {% render 'cart-summary', form_id: 'CartDrawerForm' %}
+{% enddoc %}
+<div class="cart-summary">
+  <p class="form-message form-message--error" role="alert" data-cart-error hidden></p>
+
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="cart-summary__discounts" role="list">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li class="cart-summary__row">
+          <span>{{ 'cart.discount' | t }} – {{ discount.title | escape }}</span>
+          <span>−{{ discount.total_allocated_amount | money }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <p class="cart-summary__row cart-summary__subtotal">
+    <span>{{ 'cart.subtotal' | t }}</span>
+    <span>{{ cart.total_price | money_with_currency }}</span>
+  </p>
+
+  <p class="cart-summary__note text-muted text-small">
+    {%- if cart.taxes_included %}{{ 'cart.taxes_included' | t }} {% endif -%}
+    {{- 'cart.shipping_at_checkout' | t -}}
+  </p>
+
+  {%- if settings.shipping_info != blank -%}
+    <ul class="trust-list" role="list">
+      <li>
+        {% render 'icon', icon: 'truck' %}
+        <span>
+          {{- settings.shipping_info | escape -}}
+          {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
+        </span>
+      </li>
+    </ul>
+  {%- endif -%}
+
+  <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout">
+    {% render 'icon', icon: 'lock' %}
+    {{ 'cart.checkout' | t }}
+  </button>
+
+  <p class="cart-summary__hint text-muted text-small">{{ 'cart.discount_hint' | t }}</p>
+
+  {% render 'payment-icons', class: 'cart-summary__payments' %}
+</div>
+
+{% stylesheet %}
+  .cart-summary {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .cart-summary__discounts {
+    display: grid;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--color-success);
+  }
+
+  .cart-summary__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .cart-summary__subtotal {
+    font-size: var(--text-lg);
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .cart-summary__checkout .icon {
+    --icon-size: 1.05rem;
+  }
+
+  .cart-summary__hint {
+    text-align: center;
+  }
+
+  .cart-summary__payments {
+    justify-content: center;
+  }
+{% endstylesheet %}

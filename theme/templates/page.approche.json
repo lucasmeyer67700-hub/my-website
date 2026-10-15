@@ -1,0 +1,105 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "eyebrow": "Notre approche",
+        "intro": "Une marque de confort menstruel qui préfère la clarté aux grandes promesses.",
+        "show_content": true,
+        "center": true,
+        "compact": false,
+        "color_scheme": "scheme-2"
+      }
+    },
+    "what": {
+      "type": "image-with-text",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "fallback_media_position": 2,
+        "image_alt": "",
+        "ratio": "4 / 5",
+        "image_position": "left",
+        "eyebrow": "Ce que nous proposons",
+        "heading": "Un accessoire de confort, <em>simplement.</em>",
+        "text": "<p>Une ceinture chauffante sans fil, pensée pour accompagner vos jours de règles avec une chaleur douce et réglable, chez vous comme à l'extérieur.</p><p>Ce n'est ni un traitement ni un dispositif médical : c'est une source de chaleur pratique, que vous utilisez à votre rythme, en suivant ses précautions d'emploi.</p>",
+        "button_label": "Découvrir la ceinture",
+        "button_link": "/products/ceinture-chauffante-regles",
+        "anchor": "",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "commitments": {
+      "type": "benefits",
+      "blocks": {
+        "facts": {
+          "type": "benefit",
+          "settings": {
+            "icon": "info",
+            "title": "Des informations claires",
+            "text": "Nous affichons les caractéristiques annoncées par le fabricant, sans les embellir ni promettre ce qu’elles ne garantissent pas."
+          }
+        },
+        "safety": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shield",
+            "title": "Votre sécurité d'abord",
+            "text": "Mode d'emploi et précautions sont consultables avant l'achat, pas seulement dans la boîte."
+          }
+        },
+        "reviews": {
+          "type": "benefit",
+          "settings": {
+            "icon": "check",
+            "title": "Aucun faux avis",
+            "text": "Les avis publiés sur ce site viendront uniquement de vraies clientes."
+          }
+        },
+        "listening": {
+          "type": "benefit",
+          "settings": {
+            "icon": "chat",
+            "title": "Une vraie écoute",
+            "text": "Une question avant ou après votre commande ? Écrivez-nous, nous vous répondons."
+          }
+        }
+      },
+      "block_order": [
+        "facts",
+        "safety",
+        "reviews",
+        "listening"
+      ],
+      "settings": {
+        "eyebrow": "Nos engagements",
+        "heading": "Ce qui nous guide",
+        "text": "",
+        "style": "cards",
+        "columns": 4,
+        "center": true,
+        "compact": false,
+        "anchor": "engagements",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Un peu plus de douceur, <em>chaque mois.</em>",
+        "text": "Une chaleur réglable, sans fil, prête quand vous en avez besoin.",
+        "product": "ceinture-chauffante-regles",
+        "button_label": "Découvrir la ceinture",
+        "button_link": "",
+        "show_trust": true,
+        "color_scheme": "scheme-5"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "what",
+    "commitments",
+    "cta"
+  ]
+}

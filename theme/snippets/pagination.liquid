@@ -1,0 +1,39 @@
+{% doc %}
+  Accessible pagination for paginated lists.
+
+  @param {object} paginate - The paginate object
+
+  @example
+  {% render 'pagination', paginate: paginate %}
+{% enddoc %}
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" aria-label="{{ 'general.pagination_label' | t }}">
+    {%- if paginate.previous -%}
+      <a class="icon-button" href="{{ paginate.previous.url }}">
+        {% render 'icon', icon: 'chevron-left' %}
+        <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+      </a>
+    {%- endif -%}
+    <span class="pagination__status">
+      {{- 'general.page_x_of_y' | t: current: paginate.current_page, total: paginate.pages -}}
+    </span>
+    {%- if paginate.next -%}
+      <a class="icon-button" href="{{ paginate.next.url }}">
+        {% render 'icon', icon: 'chevron-right' %}
+        <span class="visually-hidden">{{ 'general.next' | t }}</span>
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-xl);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}

@@ -1,0 +1,144 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "eyebrow": "Aide",
+        "intro": "",
+        "show_content": true,
+        "center": false,
+        "compact": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "faq-product": {
+      "type": "faq",
+      "blocks": {
+        "how": {
+          "type": "question",
+          "settings": {
+            "question": "Comment fonctionne la ceinture ?",
+            "answer": "<p>Un élément chauffant intégré diffuse une chaleur réglable sur 3 niveaux (50, 55 ou 60 °C, selon le fabricant). La ceinture fonctionne sur batterie : une fois chargée, elle s'utilise sans fil. Le massage par vibration (4 modes) s'utilise avec ou sans la chaleur.</p>"
+          }
+        },
+        "start": {
+          "type": "question",
+          "settings": {
+            "question": "Comment l'utiliser la première fois ?",
+            "answer": "<p>Chargez-la complètement avant la première utilisation : le voyant est rouge pendant la charge, puis vert lorsqu'elle est prête. Placez-la sur le bas du ventre, par-dessus un vêtement fin, ajustez la sangle, puis allumez-la d'un appui long sur le bouton marche/arrêt. Commencez toujours par le niveau de chaleur le plus doux.</p>"
+          }
+        },
+        "massage-only": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on utiliser le massage sans la chaleur ?",
+            "answer": "<p>Oui. Les quatre modes de vibration s'utilisent avec ou sans la chaleur.</p>"
+          }
+        },
+        "battery": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps tient la batterie ?",
+            "answer": "<p>Environ 2 heures selon le fabricant, en fonction des réglages utilisés. La ceinture s'arrête automatiquement au bout de 30 minutes d'utilisation. Si vous l'utilisez rarement, rechargez-la au moins tous les deux mois.</p>"
+          }
+        },
+        "charging": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on l'utiliser pendant la charge ?",
+            "answer": "<p>Non : par sécurité, la ceinture ne fonctionne pas lorsqu'elle est branchée.</p>"
+          }
+        },
+        "clothes": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la porter sous ses vêtements ?",
+            "answer": "<p>Oui, sous un vêtement ample (pull, sweat, chemise). Portez-la par-dessus un vêtement fin et surveillez votre peau pendant l'utilisation.</p>"
+          }
+        },
+        "sleep": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la garder pour dormir ?",
+            "answer": "<p>Non, la ceinture ne doit pas être utilisée pendant le sommeil.</p>"
+          }
+        },
+        "pain": {
+          "type": "question",
+          "settings": {
+            "question": "La ceinture soulage-t-elle les douleurs de règles ?",
+            "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
+          }
+        },
+        "contraindications": {
+          "type": "question",
+          "settings": {
+            "question": "Y a-t-il des contre-indications ?",
+            "answer": "<p>Oui. Selon la notice du fabricant, la ceinture est contre-indiquée en cas de grossesse, de maladie cardiaque, de tumeur du col de l'utérus, de crise de goutte, ou de plaie ou anomalie de la peau. En cas de doute, demandez l'avis d'un professionnel de santé.</p>"
+          }
+        }
+      },
+      "block_order": ["how", "start", "massage-only", "battery", "charging", "clothes", "sleep", "pain", "contraindications"],
+      "settings": {
+        "eyebrow": "",
+        "heading": "La ceinture",
+        "text": "",
+        "link_label": "Voir la ceinture",
+        "link": "/products/ceinture-chauffante-regles",
+        "anchor": "ceinture",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "faq-order": {
+      "type": "faq",
+      "blocks": {
+        "shipping-cost": {
+          "type": "question",
+          "settings": {
+            "question": "Combien coûte la livraison ?",
+            "answer": "<p>La livraison est offerte en France. Les frais éventuels sont toujours affichés avant le paiement.</p>"
+          }
+        },
+        "tracking": {
+          "type": "question",
+          "settings": {
+            "question": "Comment suivre ma commande ?",
+            "answer": "<p>Toutes les informations sont sur notre page <a href=\"/pages/suivi-de-commande\" title=\"Suivi de commande\">Suivi de commande</a>.</p>"
+          }
+        },
+        "payment": {
+          "type": "question",
+          "settings": {
+            "question": "Quels moyens de paiement acceptez-vous ?",
+            "answer": "<p>Les moyens de paiement disponibles sont affichés en bas de page et à l'étape du paiement. Le paiement s'effectue sur la page sécurisée de Shopify.</p>"
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "Comment retourner un article ?",
+            "answer": "<p>Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation. La démarche est décrite dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a> ; vous pouvez aussi utiliser le <a href=\"/pages/formulaire-de-retractation\" title=\"Formulaire de rétractation\">formulaire de rétractation</a>.</p>"
+          }
+        },
+        "warranty": {
+          "type": "question",
+          "settings": {
+            "question": "Ma ceinture ne fonctionne pas correctement, que faire ?",
+            "answer": "<p>Écrivez-nous via le <a href=\"/pages/contact\" title=\"Contact\">formulaire de contact</a> en indiquant votre numéro de commande, avec une photo ou une courte vidéo si possible. Vous bénéficiez de la garantie légale de conformité de 2 ans.</p>"
+          }
+        }
+      },
+      "block_order": ["shipping-cost", "tracking", "payment", "returns", "warranty"],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Commande, livraison et retours",
+        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
+        "link_label": "Nous contacter",
+        "link": "/pages/contact",
+        "anchor": "commande",
+        "color_scheme": "scheme-2"
+      }
+    }
+  },
+  "order": ["main", "faq-product", "faq-order"]
+}

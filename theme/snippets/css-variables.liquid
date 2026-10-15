@@ -1,0 +1,75 @@
+{% doc %}
+  Outputs @font-face rules, global design tokens that depend on theme settings,
+  and one CSS class per color scheme.
+
+  @example
+  {% render 'css-variables' %}
+{% enddoc %}
+
+{%- liquid
+  assign heading_font = settings.type_heading_font
+  assign heading_font_italic = heading_font | font_modify: 'style', 'italic'
+  assign body_font = settings.type_body_font
+  assign body_font_medium = body_font | font_modify: 'weight', '500'
+  assign body_font_bold = body_font | font_modify: 'weight', '600'
+  assign body_font_italic = body_font | font_modify: 'style', 'italic'
+-%}
+
+{{ body_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
+{{ heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
+
+{% style %}
+  {{ heading_font | font_face: font_display: 'swap' }}
+  {{ body_font | font_face: font_display: 'swap' }}
+  {%- if heading_font_italic %}{{ heading_font_italic | font_face: font_display: 'swap' }}{% endif %}
+  {%- if body_font_medium %}{{ body_font_medium | font_face: font_display: 'swap' }}{% endif %}
+  {%- if body_font_bold %}{{ body_font_bold | font_face: font_display: 'swap' }}{% endif %}
+  {%- if body_font_italic %}{{ body_font_italic | font_face: font_display: 'swap' }}{% endif %}
+
+  :root {
+    --font-heading-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --font-heading-style: {{ heading_font.style }};
+    --font-heading-weight: {{ heading_font.weight }};
+    --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+
+    --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-body-style: {{ body_font.style }};
+    --font-body-weight: {{ body_font.weight }};
+    --font-body-weight-medium: {% if body_font_medium %}500{% else %}{{ body_font.weight }}{% endif %};
+    --font-body-weight-bold: {% if body_font_bold %}600{% else %}{{ body_font.weight | plus: 300 | at_most: 900 }}{% endif %};
+
+    --page-width: {{ settings.page_width | divided_by: 16.0 }}rem;
+    --logo-width: {{ settings.logo_width }}px;
+  }
+
+  {% for scheme in settings.color_schemes -%}
+    .color-{{ scheme.id }} {
+      --color-background: {{ scheme.settings.background }};
+      --color-background-rgb: {{ scheme.settings.background.rgb }};
+      --color-text: {{ scheme.settings.text }};
+      --color-text-rgb: {{ scheme.settings.text.rgb }};
+      --color-text-muted: {{ scheme.settings.text_muted }};
+      --color-accent: {{ scheme.settings.accent }};
+      --color-surface: {{ scheme.settings.surface }};
+      --color-border: {{ scheme.settings.border }};
+      --color-button: {{ scheme.settings.button }};
+      --color-button-rgb: {{ scheme.settings.button.rgb }};
+      --color-button-label: {{ scheme.settings.button_label }};
+    }
+  {% endfor %}
+
+  {% for scheme in settings.color_schemes -%}
+    .color-{{ scheme.id }}{% unless forloop.last %},{% endunless %}
+  {%- endfor %} {
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  {% for scheme in settings.color_schemes -%}
+    {%- if scheme.settings.background_gradient != blank -%}
+      .color-{{ scheme.id }} {
+        background: {{ scheme.settings.background_gradient }};
+      }
+    {%- endif -%}
+  {%- endfor %}
+{% endstyle %}

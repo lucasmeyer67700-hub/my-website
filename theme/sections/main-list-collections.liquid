@@ -1,0 +1,40 @@
+<section class="section section--compact color-{{ section.settings.color_scheme }}" aria-labelledby="CollectionsTitle">
+  <div class="page-width">
+    <header class="section-header">
+      <h1 class="h2" id="CollectionsTitle">{{ 'templates.collections_title' | t }}</h1>
+    </header>
+    <ul class="product-grid" role="list">
+      {%- for collection in collections -%}
+        <li>
+          <article class="product-card" aria-labelledby="CollectionCard-{{ collection.id }}">
+            <div class="product-card__media media">
+              {%- if collection.featured_image -%}
+                {% render 'responsive-image', image: collection.featured_image, sizes: '(min-width: 990px) 30vw, 90vw' %}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <h2 class="product-card__title" id="CollectionCard-{{ collection.id }}">
+              <a class="product-card__link" href="{{ collection.url }}">{{ collection.title | escape }}</a>
+            </h2>
+          </article>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Liste des collections",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

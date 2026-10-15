@@ -1,0 +1,45 @@
+{% doc %}
+  Lists what is in the box from the custom.contenu_colis metafield
+  (list of single-line texts). Renders nothing when empty.
+
+  @param {object} product - Product object
+  @param {string} [heading_tag] - Heading element (default p)
+
+  @example
+  {% render 'box-contents', product: product %}
+{% enddoc %}
+{%- assign box_items = product.metafields.custom.contenu_colis.value -%}
+{%- if box_items != blank and box_items.size > 0 -%}
+  {%- assign tag = heading_tag | default: 'p' -%}
+  <div class="box-contents">
+    <{{ tag }} class="box-contents__title title-sm">
+      {% render 'icon', icon: 'box' %}
+      {{ 'products.in_the_box' | t }}
+    </{{ tag }}>
+    <ul class="check-list" role="list">
+      {%- for item in box_items -%}
+        <li>{% render 'icon', icon: 'check' %}<span>{{ item | escape }}</span></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .box-contents {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .box-contents__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+
+    & .icon {
+      color: var(--color-accent);
+    }
+  }
+{% endstylesheet %}

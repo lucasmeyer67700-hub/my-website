@@ -1,0 +1,30 @@
+{% doc %}
+  Product card for grids (collection, search, empty cart). One tab stop:
+  the title link, stretched over the whole card.
+
+  @param {object} product - Product object
+  @param {string} [heading_tag] - Heading element for the title (default h3)
+  @param {string} [sizes] - sizes attribute for the image
+
+  @example
+  {% render 'product-card', product: product %}
+{% enddoc %}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign image_sizes = sizes | default: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 90vw'
+-%}
+<article class="product-card" aria-labelledby="CardTitle-{{ product.id }}">
+  <div class="product-card__media media">
+    {%- if product.featured_media -%}
+      {% render 'responsive-image', image: product.featured_media.preview_image, sizes: image_sizes, alt: product.featured_media.alt %}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  <div class="stack" style="--stack-gap: var(--space-3xs);">
+    <{{ tag }} class="product-card__title" id="CardTitle-{{ product.id }}">
+      <a class="product-card__link" href="{{ product.url }}">{{ product.title | escape }}</a>
+    </{{ tag }}>
+    {% render 'price', product: product, class: 'product-card__price' %}
+  </div>
+</article>

@@ -1,0 +1,247 @@
+{%- liquid
+  assign anchor = section.settings.anchor | handleize
+  assign visual = section.settings.image
+  assign product = section.settings.product
+  if visual == blank and product != blank and product.media.size > 0
+    assign media_index = section.settings.fallback_media_position | minus: 1 | at_least: 0
+    assign fallback_media = product.media[media_index] | default: product.featured_media
+    assign visual = fallback_media.preview_image
+  endif
+-%}
+
+<section
+  class="image-text section color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'right' %} image-text--media-right{% endif %}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  aria-labelledby="ImageTextTitle-{{ section.id }}"
+>
+  <div class="page-width image-text__grid">
+    <div class="image-text__media media reveal" style="--media-ratio: {{ section.settings.ratio }};">
+      {%- if visual != blank -%}
+        {% render 'responsive-image', image: visual, sizes: '(min-width: 990px) 50vw, 100vw', alt: section.settings.image_alt %}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <div class="image-text__content reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2" id="ImageTextTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <div class="rte image-text__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="image-text__list" role="list">
+          {%- for block in section.blocks -%}
+            <li class="image-text__list-item" {{ block.shopify_attributes }}>
+              <span class="icon-badge">{% render 'icon', icon: block.settings.icon %}</span>
+              <div>
+                <p class="title-sm">{{ block.settings.title | escape }}</p>
+                {%- if block.settings.text != blank -%}
+                  <p class="text-muted text-small">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a class="link link--arrow" href="{{ section.settings.button_link }}">
+          {{- section.settings.button_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .image-text__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+  }
+
+  .image-text--media-right .image-text__media {
+    @media screen and (min-width: 990px) {
+      order: 2;
+    }
+  }
+
+  .image-text__media {
+    border-radius: var(--radius-lg);
+  }
+
+  .image-text__content {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+    max-width: 34rem;
+  }
+
+  .image-text__text {
+    color: var(--color-text-muted);
+  }
+
+  .image-text__list {
+    display: grid;
+    gap: var(--space-md);
+    width: 100%;
+    padding-block-start: var(--space-xs);
+  }
+
+  .image-text__list-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image et texte",
+  "tag": "div",
+  "class": "section-image-text",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit (photo de secours)",
+      "info": "Utilisé si aucune image n'est choisie."
+    },
+    {
+      "type": "range",
+      "id": "fallback_media_position",
+      "label": "Photo du produit utilisée",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texte alternatif de l'image"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Format de l'image",
+      "options": [
+        { "value": "4 / 5", "label": "Portrait" },
+        { "value": "1", "label": "Carré" },
+        { "value": "4 / 3", "label": "Paysage" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Position de l'image sur ordinateur",
+      "options": [
+        { "value": "left", "label": "À gauche" },
+        { "value": "right", "label": "À droite" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Un titre <em>court et clair.</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Lien : texte"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien : destination"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Point clé",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "home", "label": "Maison" },
+            { "value": "briefcase", "label": "Travail" },
+            { "value": "map-pin", "label": "Déplacement" },
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "cloud", "label": "Douceur" },
+            { "value": "shield", "label": "Sécurité" },
+            { "value": "chat", "label": "Écoute" },
+            { "value": "info", "label": "Information" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Point clé"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image et texte"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,143 @@
+{%- assign anchor = section.settings.anchor | handleize -%}
+
+<section
+  class="faq section color-{{ section.settings.color_scheme }}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  aria-labelledby="FaqTitle-{{ section.id }}"
+>
+  <div class="page-width faq__grid">
+    <div class="faq__intro reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2" id="FaqTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="text-muted">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+        <a class="link link--arrow" href="{{ section.settings.link }}">
+          {{- section.settings.link_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="faq__list reveal">
+      {%- for block in section.blocks -%}
+        <details class="accordion" {{ block.shopify_attributes }}>
+          <summary class="accordion__summary">
+            <h3 class="accordion__title title-sm">{{ block.settings.question | escape }}</h3>
+            {% render 'icon', icon: 'plus', class: 'icon--toggle' %}
+          </summary>
+          <div class="accordion__content rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq__grid {
+    display: grid;
+    gap: var(--space-xl);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+  }
+
+  .faq__intro {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+
+    @media screen and (min-width: 990px) {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + 2rem);
+    }
+  }
+
+  .faq .accordion__title {
+    font-size: var(--text-md);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Questions fréquentes",
+  "tag": "div",
+  "class": "section-faq",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Questions fréquentes"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Vos questions, <em>nos réponses.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Lien : texte"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Lien : destination"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "default": "faq"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Votre question ?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Réponse",
+          "default": "<p>Une réponse claire et vérifiée.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Questions fréquentes",
+      "blocks": [{ "type": "question" }, { "type": "question" }, { "type": "question" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,136 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "close": "Close",
+    "main_navigation": "Main navigation",
+    "footer_navigation": "Footer navigation",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination_label": "Pagination",
+    "page_x_of_y": "Page {{ current }} of {{ total }}",
+    "page_number": "Page {{ number }}",
+    "new_window": "opens in a new tab",
+    "social_label": "Follow us",
+    "payment_methods": "Accepted payment methods",
+    "copyright": "© {{ year }} {{ shop }}",
+    "loading": "Loading…",
+    "required": "required"
+  },
+  "header": {
+    "cart": "Cart",
+    "cart_count": {
+      "one": "Cart, {{ count }} item",
+      "other": "Cart, {{ count }} items"
+    },
+    "account": "My account"
+  },
+  "products": {
+    "price_label": "Price: {{ price }}",
+    "sale_price_label": "Sale price: {{ sale_price }}, regular price {{ original_price }}",
+    "unit_price_label": "Unit price",
+    "taxes_included": "Tax included",
+    "add_to_cart": "Add to cart",
+    "adding": "Adding…",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "quantity": "Quantity",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "variant_selected": "{{ option }}: {{ value }}",
+    "gallery_label": "Product photos",
+    "media_x_of_y": "Image {{ index }} of {{ count }}",
+    "zoom": "Enlarge image",
+    "view_media": "Show image {{ index }}",
+    "previous_media": "Previous image",
+    "next_media": "Next image",
+    "error_generic": "The product couldn't be added to your cart. Please try again in a moment.",
+    "view_product": "View product",
+    "specs_note": "Specifications as stated by the manufacturer.",
+    "in_the_box": "In the box",
+    "secure_payment": "Secure payment",
+    "color_option": "Color"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Continue shopping",
+    "subtotal": "Subtotal",
+    "taxes_included": "Tax included.",
+    "shipping_at_checkout": "Shipping costs are confirmed at checkout.",
+    "checkout": "Check out",
+    "remove": "Remove {{ product }} from cart",
+    "remove_short": "Remove",
+    "note": "Anything we should know about your order?",
+    "discount_hint": "Have a discount code? You can enter it at checkout.",
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "error": "Your cart couldn't be updated. Please try again in a moment.",
+    "updated": "Cart updated",
+    "update": "Update cart",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total",
+    "discount": "Discount"
+  },
+  "newsletter": {
+    "label": "Email address",
+    "placeholder": "you@email.com",
+    "submit": "Subscribe",
+    "success": "Thank you, you're subscribed.",
+    "consent": "By subscribing, you agree to receive our emails. You can unsubscribe at any time using the link in every email."
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email address",
+    "order_number": "Order number (optional)",
+    "message": "Your message",
+    "submit": "Send message",
+    "success": "Thank you, your message has been sent. We'll get back to you as soon as possible."
+  },
+  "templates": {
+    "not_found_title": "Page not found",
+    "not_found_text": "The page you're looking for doesn't exist or has been moved.",
+    "back_home": "Back to home",
+    "search_title": "Search",
+    "search_label": "Search the store",
+    "search_submit": "Search",
+    "search_results": {
+      "one": "{{ count }} result for “{{ terms }}”",
+      "other": "{{ count }} results for “{{ terms }}”"
+    },
+    "search_empty": "No results for “{{ terms }}”. Try another word.",
+    "collection_empty": "No products in this collection yet.",
+    "collections_title": "Collections",
+    "blog_empty": "No articles yet.",
+    "read_article": "Read article",
+    "back_to_blog": "Back to the journal",
+    "published_on": "Published on {{ date }}"
+  },
+  "password": {
+    "title": "Coming soon",
+    "label": "Password",
+    "submit": "Enter",
+    "admin": "Do you manage this store?",
+    "login": "Log in"
+  },
+  "gift_card": {
+    "title": "Your gift card",
+    "balance": "Available balance",
+    "code": "Gift card code",
+    "expired": "This gift card has expired.",
+    "disabled": "This gift card is disabled.",
+    "expires_on": "Valid until {{ date }}",
+    "shop_link": "Use it on the store",
+    "print": "Print",
+    "copy": "Copy code",
+    "copied": "Code copied"
+  },
+  "sections": {
+    "testimonials_editor_empty": "Section hidden: no reviews. Only add genuine reviews from real customers, or a reviews app.",
+    "comparison_criterion": "Criterion"
+  }
+}

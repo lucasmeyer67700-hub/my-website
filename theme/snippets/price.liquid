@@ -1,0 +1,32 @@
+{% doc %}
+  Displays the price of a product or variant. A compare-at price is shown
+  only when it is genuinely higher than the selling price (never invented).
+  Elements carry data attributes so the variant picker can update them.
+
+  @param {object} product - Product object
+  @param {object} [variant] - Variant to price (defaults to the selected or first available variant)
+  @param {string} [class] - Extra CSS classes
+
+  @example
+  {% render 'price', product: product %}
+{% enddoc %}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign is_sale = false
+  if target.compare_at_price > target.price
+    assign is_sale = true
+  endif
+-%}
+<p class="price{% if class %} {{ class }}{% endif %}">
+  <span class="price__current" data-price-current>{{ target.price | money }}</span>
+  <s class="price__compare" data-price-compare {% unless is_sale %}hidden{% endunless %}>
+    {%- if is_sale %}{{ target.compare_at_price | money }}{% endif -%}
+  </s>
+  {%- if target.unit_price_measurement -%}
+    <span class="price__tax">
+      {{- target.unit_price | money }} /
+      {% if target.unit_price_measurement.reference_value != 1 %}{{ target.unit_price_measurement.reference_value }}{% endif %}
+      {{- target.unit_price_measurement.reference_unit -}}
+    </span>
+  {%- endif -%}
+</p>

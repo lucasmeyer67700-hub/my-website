@@ -1,0 +1,50 @@
+{% doc %}
+  JSON-LD for the home page: Organization and WebSite. Only real data is
+  used (shop name, URL, logo, social profiles configured in theme settings).
+
+  @example
+  {% render 'structured-data-organization' %}
+{% enddoc %}
+{%- liquid
+  assign same_as = ''
+  assign social_keys = 'social_instagram,social_tiktok,social_facebook,social_pinterest,social_youtube' | split: ','
+  for key in social_keys
+    assign profile = settings[key] | strip
+    if profile != blank
+      assign same_as = same_as | append: profile | append: '|'
+    endif
+  endfor
+  assign profiles = same_as | split: '|' | compact
+-%}
+{%- comment -%}
+  Built with capture: Shopify's parser rejects a closing brace inside an output tag string.
+{%- endcomment -%}
+{%- capture search_target -%}{{ request.origin }}{{ routes.search_url }}?q={search_term_string}{%- endcapture -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        "url": {{ request.origin | append: routes.root_url | json }}
+        {%- if settings.logo -%},
+          "logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+        {%- endif -%}
+        {%- if profiles.size > 0 -%},
+          "sameAs": {{ profiles | json }}
+        {%- endif %}
+      },
+      {
+        "@type": "WebSite",
+        "name": {{ shop.name | json }},
+        "url": {{ request.origin | append: routes.root_url | json }},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {{ search_target | json }},
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+</script>

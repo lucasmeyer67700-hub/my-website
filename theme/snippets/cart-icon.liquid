@@ -1,0 +1,12 @@
+{% doc %}
+  Cart icon with item count, used in the header and re-rendered after
+  every cart change.
+
+  @example
+  {% render 'cart-icon' %}
+{% enddoc %}
+{% render 'icon', icon: 'bag' %}
+{%- if cart.item_count > 0 -%}
+  <span class="cart-count" aria-hidden="true">{{ cart.item_count | at_most: 99 }}</span>
+{%- endif -%}
+<span class="visually-hidden">{{ 'header.cart_count' | t: count: cart.item_count }}</span>

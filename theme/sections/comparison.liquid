@@ -1,0 +1,206 @@
+{%- assign anchor = section.settings.anchor | handleize -%}
+
+{%- if section.blocks.size > 0 -%}
+  <section
+    class="comparison section color-{{ section.settings.color_scheme }}"
+    {% if anchor != blank %}
+      id="{{ anchor }}"
+    {% endif %}
+    aria-labelledby="ComparisonTitle-{{ section.id }}"
+  >
+    <div class="page-width page-width--narrow">
+      <div class="section-header section-header--center reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="h2" id="ComparisonTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p class="lead">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <div
+        class="comparison__scroller reveal"
+        role="region"
+        aria-labelledby="ComparisonTitle-{{ section.id }}"
+        tabindex="0"
+      >
+        <table class="comparison__table">
+          <caption class="visually-hidden">{{ section.settings.heading | strip_html }}</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">{{ 'sections.comparison_criterion' | t }}</span></th>
+              <th scope="col" class="comparison__highlight">{{ section.settings.column_1 | escape }}</th>
+              <th scope="col">{{ section.settings.column_2 | escape }}</th>
+              {%- if section.settings.column_3 != blank -%}
+                <th scope="col">{{ section.settings.column_3 | escape }}</th>
+              {%- endif -%}
+            </tr>
+          </thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              <tr {{ block.shopify_attributes }}>
+                <th scope="row">{{ block.settings.label | escape }}</th>
+                <td class="comparison__highlight">{{ block.settings.value_1 | escape }}</td>
+                <td>{{ block.settings.value_2 | escape }}</td>
+                {%- if section.settings.column_3 != blank -%}
+                  <td>{{ block.settings.value_3 | escape }}</td>
+                {%- endif -%}
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+
+      {%- if section.settings.note != blank -%}
+        <p class="comparison__note text-muted text-small">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .comparison__scroller {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comparison__table {
+    width: 100%;
+    min-width: 36rem;
+    font-size: var(--text-base);
+
+    & th,
+    & td {
+      padding: 1rem 1.1rem;
+      border-block-end: 1px solid var(--color-border);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    & tbody tr:last-child th,
+    & tbody tr:last-child td {
+      border-block-end: 0;
+    }
+
+    & thead th {
+      font-size: var(--text-sm);
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text-muted);
+    }
+
+    & tbody th {
+      position: sticky;
+      inset-inline-start: 0;
+      font-weight: var(--font-body-weight-medium);
+      background-color: var(--color-background);
+    }
+
+    & td {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .comparison__table .comparison__highlight {
+    color: var(--color-text);
+    background-color: rgb(var(--color-button-rgb) / 0.05);
+  }
+
+  .comparison__table thead .comparison__highlight {
+    font-family: var(--font-heading-family);
+    font-size: var(--text-xl);
+    font-weight: var(--font-heading-weight);
+    color: var(--color-text);
+  }
+
+  .comparison__note {
+    margin-block-start: var(--space-md);
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Comparatif",
+  "tag": "div",
+  "class": "section-comparison",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Comparez uniquement des faits vérifiables et restez juste avec les alternatives."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Bouillotte, patch ou ceinture ?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "text",
+      "id": "column_1",
+      "label": "Colonne 1 (mise en avant)",
+      "default": "Ceinture chauffante"
+    },
+    {
+      "type": "text",
+      "id": "column_2",
+      "label": "Colonne 2",
+      "default": "Bouillotte"
+    },
+    {
+      "type": "text",
+      "id": "column_3",
+      "label": "Colonne 3 (facultative)",
+      "default": "Patch chauffant"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note sous le tableau"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Critère", "default": "Critère" },
+        { "type": "text", "id": "value_1", "label": "Colonne 1" },
+        { "type": "text", "id": "value_2", "label": "Colonne 2" },
+        { "type": "text", "id": "value_3", "label": "Colonne 3" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparatif",
+      "blocks": [{ "type": "row" }, { "type": "row" }, { "type": "row" }]
+    }
+  ]
+}
+{% endschema %}

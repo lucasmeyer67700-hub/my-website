@@ -1,0 +1,43 @@
+{% doc %}
+  Social profile links configured in theme settings. Empty profiles are
+  not rendered, so no dead icon ever appears.
+
+  @example
+  {% render 'social-links' %}
+{% enddoc %}
+{%- liquid
+  assign networks = 'instagram,tiktok,facebook,pinterest,youtube' | split: ','
+  assign has_links = false
+  for network in networks
+    assign key = 'social_' | append: network
+    if settings[key] != blank
+      assign has_links = true
+    endif
+  endfor
+-%}
+{%- if has_links -%}
+  <ul class="social-links" role="list" aria-label="{{ 'general.social_label' | t }}">
+    {%- for network in networks -%}
+      {%- assign key = 'social_' | append: network -%}
+      {%- if settings[key] != blank -%}
+        <li>
+          <a class="icon-button" href="{{ settings[key] }}" target="_blank" rel="noopener">
+            {% render 'icon', icon: network %}
+            <span class="visually-hidden">{{ network | capitalize }} ({{ 'general.new_window' | t }})</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% stylesheet %}
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+{% endstylesheet %}

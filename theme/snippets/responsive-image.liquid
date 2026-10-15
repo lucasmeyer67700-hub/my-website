@@ -1,0 +1,42 @@
+{% doc %}
+  Renders a responsive <img> with srcset, intrinsic dimensions (no layout
+  shift) and lazy loading. Pass `eager: true` only for the main visual of
+  the page (LCP candidate).
+
+  @param {image} image - Shopify image object
+  @param {string} sizes - The sizes attribute matching the rendered width
+  @param {boolean} [eager] - Load immediately with high fetch priority
+  @param {boolean} [decorative] - Empty alt text for purely decorative images
+  @param {string} [alt] - Alt text override (defaults to the image alt)
+  @param {string} [class] - CSS class
+  @param {string} [widths] - Comma-separated srcset widths
+
+  @example
+  {% render 'responsive-image', image: section.settings.image, sizes: '(min-width: 990px) 50vw, 100vw', eager: true %}
+{% enddoc %}
+{%- liquid
+  assign srcset_widths = widths | default: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048'
+  assign alt_text = alt | default: image.alt
+  if decorative
+    assign alt_text = ''
+  endif
+
+  if eager
+    assign loading_mode = 'eager'
+    assign priority = 'high'
+  else
+    assign loading_mode = 'lazy'
+    assign priority = 'auto'
+  endif
+-%}
+{{-
+  image
+  | image_url: width: 2048
+  | image_tag:
+    widths: srcset_widths,
+    sizes: sizes,
+    loading: loading_mode,
+    fetchpriority: priority,
+    alt: alt_text,
+    class: class
+-}}

@@ -1,0 +1,263 @@
+{% doc %}
+  Product media gallery: swipeable slider (scroll-snap) with thumbnails,
+  previous/next controls and a zoom dialog. Works as a simple scrollable
+  list without JavaScript.
+
+  @param {object} product - Product object
+  @param {string} [fit] - 'contain' or 'cover'
+  @param {string} [ratio] - CSS aspect-ratio for slides
+
+  @example
+  {% render 'product-gallery', product: product %}
+{% enddoc %}
+{%- liquid
+  assign media_count = product.media.size
+  assign initial_media = product.selected_or_first_available_variant.featured_media
+  assign slide_ratio = ratio | default: '1'
+  assign slide_fit = fit | default: 'contain'
+-%}
+<media-gallery
+  class="gallery gallery--{{ slide_fit }}"
+  style="--gallery-ratio: {{ slide_ratio }};"
+  {% if initial_media %}
+    data-initial-media="{{ initial_media.id }}"
+  {% endif %}
+>
+  {%- if media_count == 0 -%}
+    <div class="gallery__slide media">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+  {%- else -%}
+    <ul
+      class="gallery__track"
+      role="list"
+      data-gallery-track
+      tabindex="0"
+      aria-label="{{ 'products.gallery_label' | t }}"
+    >
+      {%- for media in product.media -%}
+        <li
+          class="gallery__slide"
+          data-gallery-slide
+          data-media-id="{{ media.id }}"
+          aria-label="{{ 'products.media_x_of_y' | t: index: forloop.index, count: media_count }}"
+        >
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <button
+                type="button"
+                class="gallery__zoom"
+                data-gallery-zoom
+                data-zoom-src="{{ media.preview_image | image_url: width: 2000 }}"
+                data-zoom-alt="{{ media.alt | escape }}"
+              >
+                {%- if forloop.first -%}
+                  {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', eager: true, alt: media.alt %}
+                {%- else -%}
+                  {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+                {%- endif -%}
+                <span class="gallery__zoom-icon" aria-hidden="true">{% render 'icon', icon: 'zoom' %}</span>
+                <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
+              </button>
+            {%- when 'video' -%}
+              {{ media | video_tag: controls: true, preload: 'none', image_size: '1200x', class: 'gallery__video' }}
+            {%- when 'external_video' -%}
+              {{ media | external_video_tag: class: 'gallery__video', loading: 'lazy' }}
+            {%- else -%}
+              {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+          {%- endcase -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if media_count > 1 -%}
+      <div class="gallery__controls">
+        <button type="button" class="icon-button gallery__arrow" data-gallery-prev disabled>
+          {% render 'icon', icon: 'chevron-left' %}
+          <span class="visually-hidden">{{ 'products.previous_media' | t }}</span>
+        </button>
+        <span class="gallery__counter" data-gallery-counter aria-hidden="true">1 / {{ media_count }}</span>
+        <button type="button" class="icon-button gallery__arrow" data-gallery-next>
+          {% render 'icon', icon: 'chevron-right' %}
+          <span class="visually-hidden">{{ 'products.next_media' | t }}</span>
+        </button>
+      </div>
+
+      <ul class="gallery__thumbs" role="list">
+        {%- for media in product.media -%}
+          <li>
+            <button
+              type="button"
+              class="gallery__thumb"
+              data-gallery-thumb
+              {% if forloop.first %}
+                aria-current="true"
+              {% endif %}
+            >
+              {% render 'responsive-image', image: media.preview_image, sizes: '72px', widths: '72, 144, 216', decorative: true %}
+              <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <dialog class="gallery__lightbox" data-gallery-lightbox aria-label="{{ 'products.gallery_label' | t }}">
+      <button type="button" class="icon-button gallery__lightbox-close" data-lightbox-close>
+        {% render 'icon', icon: 'close' %}
+        <span class="visually-hidden">{{ 'general.close' | t }}</span>
+      </button>
+      <img class="gallery__lightbox-image" data-lightbox-image src="data:," alt="" width="2000" height="2000" loading="lazy">
+    </dialog>
+  {%- endif -%}
+</media-gallery>
+
+{% stylesheet %}
+  .gallery {
+    display: grid;
+    gap: var(--space-sm);
+    min-width: 0;
+  }
+
+  .gallery__track {
+    position: relative;
+    display: grid;
+    grid-auto-columns: 100%;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: var(--radius-md);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .gallery__slide {
+    position: relative;
+    overflow: hidden;
+    scroll-snap-align: start;
+    aspect-ratio: var(--gallery-ratio, 1);
+    background-color: var(--color-surface);
+
+    & img,
+    & video,
+    & iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .gallery--contain .gallery__slide img {
+    object-fit: contain;
+  }
+
+  .gallery__zoom {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .gallery__zoom-icon {
+    position: absolute;
+    inset-block-end: var(--space-sm);
+    inset-inline-end: var(--space-sm);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: var(--color-text);
+    background-color: rgb(var(--color-background-rgb) / 0.85);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .gallery__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-muted);
+
+    & [disabled] {
+      opacity: 0.35;
+      cursor: default;
+    }
+  }
+
+  .gallery__thumbs {
+    display: none;
+
+    @media screen and (min-width: 750px) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-2xs);
+    }
+  }
+
+  .gallery__thumb {
+    width: 4.5rem;
+    height: 4.5rem;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    opacity: 0.65;
+    transition:
+      opacity var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover,
+    &[aria-current='true'] {
+      opacity: 1;
+    }
+
+    &[aria-current='true'] {
+      border-color: var(--color-text);
+    }
+  }
+
+  .gallery__lightbox {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: var(--space-xl) var(--gutter);
+    border: 0;
+    background-color: var(--palette-warm-white);
+
+    &::backdrop {
+      background-color: rgb(48 39 36 / 0.6);
+    }
+  }
+
+  .gallery__lightbox-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .gallery__lightbox-close {
+    position: fixed;
+    inset-block-start: var(--space-sm);
+    inset-inline-end: var(--space-sm);
+    background-color: var(--palette-warm-white);
+    box-shadow: var(--shadow-sm);
+  }
+{% endstylesheet %}

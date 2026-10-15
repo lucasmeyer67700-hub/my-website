@@ -1,0 +1,63 @@
+{% doc %}
+  Renders the product's technical specifications from the
+  custom.caracteristiques metafield (one "Label : value" per line) as a
+  description list. Renders nothing when the metafield is empty.
+
+  @param {object} product - Product object
+  @param {number} [limit] - Maximum number of lines to show
+
+  @example
+  {% render 'product-specs', product: product, limit: 5 %}
+{% enddoc %}
+{%- assign specs_raw = product.metafields.custom.caracteristiques.value -%}
+{%- if specs_raw != blank -%}
+  {%- assign spec_lines = specs_raw | newline_to_br | split: '<br />' -%}
+  {%- assign max_lines = limit | default: 50 -%}
+  <dl class="specs">
+    {%- for raw_line in spec_lines limit: max_lines -%}
+      {%- assign line = raw_line | strip -%}
+      {%- if line == blank -%}{%- continue -%}{%- endif -%}
+      {%- assign parts = line | split: ' : ' -%}
+      <div class="specs__row">
+        {%- if parts.size > 1 -%}
+          <dt class="specs__label">{{ parts.first | escape }}</dt>
+          <dd class="specs__value">{{ line | remove_first: parts.first | remove_first: ' : ' | escape }}</dd>
+        {%- else -%}
+          <dd class="specs__value specs__value--full">{{ line | escape }}</dd>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </dl>
+{%- endif -%}
+
+{% stylesheet %}
+  .specs {
+    display: grid;
+    margin: 0;
+  }
+
+  .specs__row {
+    display: grid;
+    grid-template-columns: minmax(7.5rem, 2fr) 3fr;
+    gap: var(--space-sm);
+    padding-block: 0.85rem;
+    border-block-end: 1px solid var(--color-border);
+    font-size: var(--text-base);
+
+    &:first-child {
+      border-block-start: 1px solid var(--color-border);
+    }
+  }
+
+  .specs__label {
+    color: var(--color-text-muted);
+  }
+
+  .specs__value {
+    margin: 0;
+  }
+
+  .specs__value--full {
+    grid-column: 1 / -1;
+  }
+{% endstylesheet %}

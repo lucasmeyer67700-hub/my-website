@@ -1,0 +1,26 @@
+{
+  "type": "header",
+  "name": "En-tête",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Livraison offerte en France",
+        "link": "",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "navigation-principale",
+        "secondary_menu": "pied-de-page-aide",
+        "cta_product": "ceinture-chauffante-regles",
+        "cta_label": "Découvrir la ceinture",
+        "show_account": false,
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

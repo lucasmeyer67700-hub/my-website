@@ -1,0 +1,172 @@
+{% doc %}
+  Variant selector as radio buttons (pills, with a color dot for color
+  options). Real variant data only; unavailable values are marked.
+
+  @param {object} product - Product object
+  @param {string} section_id - Section id, for unique element ids
+
+  @example
+  {% render 'variant-picker', product: product, section_id: section.id %}
+{% enddoc %}
+{%- unless product.has_only_default_variant -%}
+  <variant-picker class="variant-picker">
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_handle = option.name | handleize
+        assign is_color = false
+        if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+          assign is_color = true
+        endif
+      -%}
+      <fieldset class="variant-picker__fieldset" data-option-name="{{ option.name | escape }}">
+        <legend class="variant-picker__legend">
+          {{ option.name | escape }} : <span class="variant-picker__selected" data-selected-value>{{ option.selected_value | escape }}</span>
+        </legend>
+        <div class="variant-picker__values">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign input_id = 'Option-' | append: section_id | append: '-' | append: forloop.parentloop.index | append: '-' | append: forloop.index
+              assign swatch_color = blank
+              if is_color
+                if value.swatch.color
+                  assign swatch_color = value.swatch.color
+                else
+                  assign value_handle = value.name | handleize
+                  case value_handle
+                    when 'rose'
+                      assign swatch_color = '#E8C7CD'
+                    when 'blanc'
+                      assign swatch_color = '#FFFFFF'
+                    when 'noir'
+                      assign swatch_color = '#2B2523'
+                    when 'gris'
+                      assign swatch_color = '#BDB6B3'
+                    when 'beige'
+                      assign swatch_color = '#E8DCCB'
+                  endcase
+                endif
+              endif
+            -%}
+            <input
+              class="variant-pill__input"
+              type="radio"
+              id="{{ input_id }}"
+              name="Option-{{ section_id }}-{{ forloop.parentloop.index }}"
+              value="{{ value | escape }}"
+              {% if value.selected %}
+                checked
+              {% endif %}
+            >
+            <label class="variant-pill{% unless value.available %} variant-pill--unavailable{% endunless %}" for="{{ input_id }}">
+              {%- if swatch_color != blank -%}
+                <span class="variant-pill__swatch" style="--swatch-color: {{ swatch_color }};" aria-hidden="true"></span>
+              {%- endif -%}
+              <span>{{ value | escape }}</span>
+              {%- unless value.available -%}
+                <span class="visually-hidden">({{ 'products.sold_out' | t }})</span>
+              {%- endunless -%}
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json" data-variants>
+      [
+        {%- for variant in product.variants -%}
+          {
+            "id": {{ variant.id }},
+            "title": {{ variant.title | json }},
+            "available": {{ variant.available | json }},
+            "price": {{ variant.price | money | strip_html | json }},
+            "compare_at_price": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | strip_html | json }}{% else %}null{% endif %},
+            "options": {{ variant.options | json }},
+            "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id }}{% else %}null{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+  </variant-picker>
+{%- endunless -%}
+
+{% stylesheet %}
+  .variant-picker {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .variant-picker__fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .variant-picker__legend {
+    margin-block-end: var(--space-xs);
+    padding: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .variant-picker__selected {
+    font-weight: var(--font-body-weight);
+    color: var(--color-text-muted);
+  }
+
+  .variant-picker__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .variant-pill__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .variant-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: var(--tap-target);
+    padding: 0.5rem 1.1rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.22);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease;
+
+    &:hover {
+      border-color: rgb(var(--color-text-rgb) / 0.55);
+    }
+  }
+
+  .variant-pill__input:checked + .variant-pill {
+    border-color: var(--color-text);
+    background-color: rgb(var(--color-text-rgb) / 0.04);
+    box-shadow: inset 0 0 0 1px var(--color-text);
+  }
+
+  .variant-pill__input:focus-visible + .variant-pill {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .variant-pill--unavailable {
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+  }
+
+  .variant-pill__swatch {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.25);
+    border-radius: 50%;
+    background-color: var(--swatch-color);
+  }
+{% endstylesheet %}

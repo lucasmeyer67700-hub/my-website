@@ -1,0 +1,86 @@
+<section class="section section--compact color-{{ section.settings.color_scheme }}" aria-labelledby="BlogTitle">
+  <div class="page-width">
+    <header class="section-header">
+      <h1 class="h2" id="BlogTitle">{{ blog.title | escape }}</h1>
+    </header>
+
+    {%- paginate blog.articles by 9 -%}
+      {%- if blog.articles.size > 0 -%}
+        <ul class="blog-grid" role="list">
+          {%- for article in blog.articles -%}
+            <li>
+              <article class="article-card" aria-labelledby="ArticleCard-{{ article.id }}">
+                {%- if article.image -%}
+                  <div class="article-card__media media">
+                    {% render 'responsive-image', image: article.image, sizes: '(min-width: 990px) 30vw, 90vw' %}
+                  </div>
+                {%- endif -%}
+                <p class="text-muted text-small">{{ article.published_at | time_tag: format: 'date' }}</p>
+                <h2 class="h4" id="ArticleCard-{{ article.id }}">
+                  <a class="article-card__link" href="{{ article.url }}">{{ article.title | escape }}</a>
+                </h2>
+                {%- if article.excerpt != blank -%}
+                  <p class="text-muted">{{ article.excerpt | strip_html | truncatewords: 28 }}</p>
+                {%- endif -%}
+              </article>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {% render 'pagination', paginate: paginate %}
+      {%- else -%}
+        <p class="text-muted">{{ 'templates.blog_empty' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-xl) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .article-card {
+    position: relative;
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .article-card__media {
+    --media-ratio: 4 / 3;
+    margin-block-end: var(--space-2xs);
+  }
+
+  .article-card__link {
+    text-decoration: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Journal",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

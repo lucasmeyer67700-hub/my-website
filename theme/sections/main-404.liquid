@@ -1,0 +1,46 @@
+<section class="section color-{{ section.settings.color_scheme }}" aria-labelledby="NotFoundTitle">
+  <div class="page-width page-width--text not-found">
+    <p class="eyebrow">404</p>
+    <h1 class="h2" id="NotFoundTitle">{{ 'templates.not_found_title' | t }}</h1>
+    <p class="lead">{{ 'templates.not_found_text' | t }}</p>
+    <div class="cluster">
+      <a class="button" href="{{ routes.root_url }}">{{ 'templates.back_home' | t }}</a>
+      {%- if section.settings.product != blank -%}
+        <a class="button button--secondary" href="{{ section.settings.product.url }}">{{ section.settings.product.title | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .not-found {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-md);
+    text-align: center;
+
+    & .cluster {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page introuvable",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit proposé"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-2"
+    }
+  ]
+}
+{% endschema %}

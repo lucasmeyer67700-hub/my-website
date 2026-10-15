@@ -1,0 +1,195 @@
+{%- assign anchor = section.settings.anchor | handleize -%}
+
+<section
+  class="steps section color-{{ section.settings.color_scheme }}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  aria-labelledby="StepsTitle-{{ section.id }}"
+>
+  <div class="page-width steps__layout{% if section.settings.image != blank %} steps__layout--with-media{% endif %}">
+    <div class="steps__content">
+      <div class="section-header reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="h2" id="StepsTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p class="lead">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <ol class="steps__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="steps__item reveal" {{ block.shopify_attributes }}>
+            <span class="steps__number" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <div class="steps__body">
+              <h3 class="title-sm">{{ block.settings.title | escape }}</h3>
+              {%- if block.settings.text != blank -%}
+                <p class="text-muted">{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+
+      {%- if section.settings.note != blank -%}
+        <p class="steps__note reveal">
+          {% render 'icon', icon: 'info' %}
+          <span>{{ section.settings.note | escape }}</span>
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.image != blank -%}
+      <div class="steps__media media reveal">
+        {% render 'responsive-image', image: section.settings.image, sizes: '(min-width: 990px) 45vw, 100vw' %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .steps__layout--with-media {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+  }
+
+  .steps__list {
+    display: grid;
+    gap: var(--space-md);
+    counter-reset: none;
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: var(--space-lg);
+    }
+  }
+
+  .steps__layout--with-media .steps__list {
+    grid-template-columns: 1fr;
+  }
+
+  .steps__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-sm);
+    padding-block-start: var(--space-md);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .steps__number {
+    font-family: var(--font-heading-family);
+    font-size: 2.25rem;
+    font-style: italic;
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  .steps__body {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .steps__note {
+    display: flex;
+    gap: var(--space-xs);
+    max-width: 40rem;
+    margin-block-start: var(--space-xl);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    background-color: var(--color-surface);
+
+    & .icon {
+      --icon-size: 1.15rem;
+      margin-block-start: 0.15em;
+      color: var(--color-accent);
+    }
+  }
+
+  .steps__media {
+    --media-ratio: 4 / 5;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Étapes",
+  "tag": "div",
+  "class": "section-steps",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Mode d'emploi"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Prête en <em>trois gestes.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (facultative)"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note de sécurité ou conseil"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "default": "fonctionnement"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Étape"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Étapes",
+      "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }]
+    }
+  ]
+}
+{% endschema %}

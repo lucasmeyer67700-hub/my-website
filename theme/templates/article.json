@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": { "type": "main-article", "settings": { "color_scheme": "scheme-1" } },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Une chaleur douce, <em>où que vous soyez.</em>",
+        "text": "Découvrez notre ceinture chauffante sans fil.",
+        "product": "ceinture-chauffante-regles",
+        "button_label": "Découvrir la ceinture",
+        "button_link": "",
+        "show_trust": false,
+        "color_scheme": "scheme-3"
+      }
+    }
+  },
+  "order": ["main", "cta"]
+}

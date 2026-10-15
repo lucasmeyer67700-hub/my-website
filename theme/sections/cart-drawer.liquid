@@ -1,0 +1,76 @@
+<cart-drawer class="cart-drawer" data-trigger="[data-cart-trigger]">
+  <dialog class="drawer color-scheme-1" aria-labelledby="CartDrawerTitle">
+    <div class="drawer__inner" data-cart-drawer-content>
+      <div class="drawer__header">
+        <h2 class="drawer__title" id="CartDrawerTitle" tabindex="-1" data-cart-title>
+          {{ 'cart.title' | t }}
+          {%- if cart.item_count > 0 %}
+            <span class="cart-drawer__count">({{ 'cart.item_count' | t: count: cart.item_count }})</span>
+          {%- endif -%}
+        </h2>
+        <button type="button" class="icon-button" data-drawer-close>
+          {% render 'icon', icon: 'close' %}
+          <span class="visually-hidden">{{ 'general.close' | t }}</span>
+        </button>
+      </div>
+
+      {%- if cart.item_count == 0 -%}
+        <div class="drawer__body cart-drawer__empty">
+          <p class="h4">{{ 'cart.empty' | t }}</p>
+          {%- assign suggested = settings.cart_empty_product -%}
+          {%- if suggested != blank -%}
+            {% render 'product-card', product: suggested, heading_tag: 'p', sizes: '(min-width: 480px) 380px, 90vw' %}
+          {%- endif -%}
+          <button type="button" class="button button--secondary button--full" data-drawer-close>
+            {{- 'cart.continue_shopping' | t -}}
+          </button>
+        </div>
+      {%- else -%}
+        <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm" class="drawer__body" novalidate>
+          <ul class="cart-lines" role="list">
+            {%- for item in cart.items -%}
+              {% render 'cart-line', item: item, index: forloop.index, context: 'drawer' %}
+            {%- endfor -%}
+          </ul>
+
+          {%- if settings.cart_note -%}
+            <div class="field cart-drawer__note">
+              <label class="field__label" for="CartDrawerNote">{{ 'cart.note' | t }}</label>
+              <textarea class="field__input" id="CartDrawerNote" name="note">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+        </form>
+
+        <div class="drawer__footer">
+          {% render 'cart-summary', form_id: 'CartDrawerForm' %}
+        </div>
+      {%- endif -%}
+    </div>
+  </dialog>
+</cart-drawer>
+
+{% stylesheet %}
+  .cart-drawer__count {
+    font-family: var(--font-body-family);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .cart-drawer__empty {
+    display: grid;
+    align-content: start;
+    gap: var(--space-lg);
+  }
+
+  .cart-drawer__note {
+    margin-block-start: var(--space-lg);
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Panier latéral",
+  "settings": []
+}
+{% endschema %}

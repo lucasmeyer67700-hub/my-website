@@ -1,0 +1,93 @@
+<section class="section section--compact color-{{ section.settings.color_scheme }}" aria-labelledby="SearchTitle">
+  <div class="page-width">
+    <header class="section-header">
+      <h1 class="h2" id="SearchTitle">{{ 'templates.search_title' | t }}</h1>
+      <search>
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+          <label class="visually-hidden" for="SearchInput">{{ 'templates.search_label' | t }}</label>
+          <input
+            class="field__input"
+            id="SearchInput"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'templates.search_label' | t }}"
+            autocomplete="off"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="submit" class="button">{{ 'templates.search_submit' | t }}</button>
+        </form>
+      </search>
+    </header>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 12 -%}
+        <p class="search__status text-muted" role="status">
+          {%- if search.results_count > 0 -%}
+            {{ 'templates.search_results' | t: count: search.results_count, terms: search.terms | escape }}
+          {%- else -%}
+            {{ 'templates.search_empty' | t: terms: search.terms | escape }}
+          {%- endif -%}
+        </p>
+
+        {%- if search.results_count > 0 -%}
+          <ul class="product-grid" role="list">
+            {%- for item in search.results -%}
+              <li>
+                {%- case item.object_type -%}
+                  {%- when 'product' -%}
+                    {% render 'product-card', product: item, heading_tag: 'h2' %}
+                  {%- else -%}
+                    <article class="search__result">
+                      <h2 class="h4"><a class="link" href="{{ item.url }}">{{ item.title | escape }}</a></h2>
+                      <p class="text-muted text-small">{{ item.content | strip_html | truncatewords: 24 }}</p>
+                    </article>
+                {%- endcase -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .search-form {
+    display: grid;
+    gap: var(--space-2xs);
+    width: min(100%, 36rem);
+
+    @media screen and (min-width: 480px) {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .search__status {
+    margin-block-end: var(--space-lg);
+  }
+
+  .search__result {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Résultats de recherche",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

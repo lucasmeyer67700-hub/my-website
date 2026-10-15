@@ -1,0 +1,110 @@
+{%- liquid
+  assign product = section.settings.product
+  assign link = section.settings.button_link
+  if link == blank and product != blank
+    assign link = product.url
+  endif
+-%}
+
+<section class="cta-banner section color-{{ section.settings.color_scheme }}" aria-labelledby="CtaTitle-{{ section.id }}">
+  <div class="page-width page-width--text cta-banner__inner reveal">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h2 class="h2" id="CtaTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+    {%- if section.settings.text != blank -%}
+      <p class="lead">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank and link != blank -%}
+      <a class="button" href="{{ link }}">
+        {{- section.settings.button_label | escape -}}
+        {% render 'icon', icon: 'arrow-right' %}
+      </a>
+    {%- endif -%}
+    {%- if section.settings.show_trust -%}
+      <ul class="trust-list trust-list--inline cta-banner__trust" role="list">
+        {%- if settings.shipping_info != blank -%}
+          <li>{% render 'icon', icon: 'truck' %}<span>{{ settings.shipping_info | escape }}</span></li>
+        {%- endif -%}
+        {%- if settings.returns_info != blank -%}
+          <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
+        {%- endif -%}
+        <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .cta-banner__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .cta-banner__trust {
+    justify-content: center;
+    margin-block-start: var(--space-xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Appel à l'action",
+  "tag": "div",
+  "class": "section-cta",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Un peu plus de douceur, <em>chaque mois.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Découvrir la ceinture"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Laissez vide pour pointer vers le produit choisi."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust",
+      "label": "Afficher la réassurance",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Appel à l'action"
+    }
+  ]
+}
+{% endschema %}

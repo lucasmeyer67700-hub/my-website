@@ -1,0 +1,375 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "points": {
+          "type": "points",
+          "settings": {}
+        },
+        "variant": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_payment_icons": true
+          }
+        },
+        "description": {
+          "type": "accordion",
+          "settings": {
+            "title": "Présentation",
+            "icon": "cloud",
+            "source": "description",
+            "open": false
+          }
+        },
+        "specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "Caractéristiques",
+            "icon": "heat",
+            "source": "specs",
+            "open": false
+          }
+        },
+        "usage": {
+          "type": "accordion",
+          "settings": {
+            "title": "Mode d'emploi",
+            "icon": "check",
+            "source": "usage",
+            "open": false
+          }
+        },
+        "precautions": {
+          "type": "accordion",
+          "settings": {
+            "title": "Précautions d'utilisation",
+            "icon": "alert",
+            "source": "precautions",
+            "open": false
+          }
+        },
+        "box": {
+          "type": "accordion",
+          "settings": {
+            "title": "Contenu du colis",
+            "icon": "box",
+            "source": "box",
+            "open": false
+          }
+        },
+        "shipping": {
+          "type": "accordion",
+          "settings": {
+            "title": "Livraison et retours",
+            "icon": "truck",
+            "source": "shipping",
+            "open": false
+          }
+        },
+        "safety": {
+          "type": "accordion",
+          "settings": {
+            "title": "Informations fabricant et sécurité",
+            "icon": "shield",
+            "source": "safety_info",
+            "open": false
+          }
+        },
+        "notice": {
+          "type": "notice",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "points",
+        "variant",
+        "buy",
+        "trust",
+        "description",
+        "specs",
+        "usage",
+        "precautions",
+        "box",
+        "shipping",
+        "safety",
+        "notice"
+      ],
+      "settings": {
+        "eyebrow": "Confort menstruel",
+        "gallery_ratio": "1",
+        "gallery_fit": "contain",
+        "sticky_bar": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "blocks": {
+        "heat": {
+          "type": "benefit",
+          "settings": {
+            "icon": "heat",
+            "title": "Une chaleur que vous choisissez",
+            "text": "Trois niveaux, 50, 55 ou 60 °C selon le fabricant. Commencez par le plus doux."
+          }
+        },
+        "massage": {
+          "type": "benefit",
+          "settings": {
+            "icon": "vibration",
+            "title": "Un massage, si vous le souhaitez",
+            "text": "Quatre modes de vibration, avec ou sans la chaleur."
+          }
+        },
+        "wireless": {
+          "type": "benefit",
+          "settings": {
+            "icon": "battery",
+            "title": "Aucun fil, aucune prise",
+            "text": "Batterie rechargeable par USB, environ 2 heures d'autonomie selon les réglages."
+          }
+        },
+        "auto-off": {
+          "type": "benefit",
+          "settings": {
+            "icon": "power",
+            "title": "Arrêt automatique",
+            "text": "La ceinture s'éteint seule au bout de 30 minutes d'utilisation."
+          }
+        }
+      },
+      "block_order": [
+        "heat",
+        "massage",
+        "wireless",
+        "auto-off"
+      ],
+      "settings": {
+        "eyebrow": "Les essentiels",
+        "heading": "Pensée pour votre <em>confort au quotidien.</em>",
+        "text": "",
+        "style": "inline",
+        "columns": 2,
+        "center": false,
+        "compact": false,
+        "anchor": "bienfaits",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "how-to": {
+      "type": "steps",
+      "blocks": {
+        "charge": {
+          "type": "step",
+          "settings": {
+            "title": "Chargez",
+            "text": "Une charge complète avant la première utilisation : le voyant passe du rouge au vert lorsqu'elle est prête."
+          }
+        },
+        "adjust": {
+          "type": "step",
+          "settings": {
+            "title": "Ajustez",
+            "text": "Placez la ceinture sur le bas du ventre, par-dessus un vêtement fin, puis réglez la sangle."
+          }
+        },
+        "set": {
+          "type": "step",
+          "settings": {
+            "title": "Réglez",
+            "text": "Choisissez la chaleur et le massage, en commençant toujours par le niveau le plus doux."
+          }
+        }
+      },
+      "block_order": [
+        "charge",
+        "adjust",
+        "set"
+      ],
+      "settings": {
+        "eyebrow": "Mode d'emploi",
+        "heading": "Prête en <em>trois gestes.</em>",
+        "text": "",
+        "note": "Ne l'utilisez pas pendant votre sommeil, et surveillez votre peau pendant l'utilisation.",
+        "anchor": "fonctionnement",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "adjustable": {
+          "type": "row",
+          "settings": {
+            "label": "Chaleur réglable",
+            "value_1": "Oui, 3 niveaux",
+            "value_2": "Selon l'eau versée",
+            "value_3": "Non"
+          }
+        },
+        "mobile": {
+          "type": "row",
+          "settings": {
+            "label": "Se porte en bougeant",
+            "value_1": "Oui, sans fil",
+            "value_2": "Difficilement",
+            "value_3": "Oui"
+          }
+        },
+        "duration": {
+          "type": "row",
+          "settings": {
+            "label": "Durée de chaleur",
+            "value_1": "Environ 2 h par charge",
+            "value_2": "Baisse à mesure que l'eau refroidit",
+            "value_3": "Plusieurs heures, selon le modèle"
+          }
+        },
+        "reusable": {
+          "type": "row",
+          "settings": {
+            "label": "Réutilisable",
+            "value_1": "Oui, rechargeable",
+            "value_2": "Oui",
+            "value_3": "Non, usage unique"
+          }
+        },
+        "massage": {
+          "type": "row",
+          "settings": {
+            "label": "Massage",
+            "value_1": "Oui, 4 modes",
+            "value_2": "Non",
+            "value_3": "Non"
+          }
+        }
+      },
+      "block_order": [
+        "adjustable",
+        "mobile",
+        "duration",
+        "reusable",
+        "massage"
+      ],
+      "settings": {
+        "eyebrow": "Bien choisir",
+        "heading": "Bouillotte, patch <em>ou ceinture ?</em>",
+        "text": "Chaque solution a ses atouts. Voici ce qui les distingue, simplement.",
+        "column_1": "Ceinture chauffante",
+        "column_2": "Bouillotte",
+        "column_3": "Patch chauffant",
+        "note": "Données de la ceinture annoncées par le fabricant. Bouillotte et patch : caractéristiques générales, variables selon les modèles.",
+        "anchor": "comparatif",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "reviews": {
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "Avis clientes",
+        "heading": "Elles en parlent",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "levels": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les réglages de chaleur ?",
+            "answer": "<p>Trois niveaux sont annoncés par le fabricant : 50, 55 et 60 °C. Commencez toujours par le plus doux, puis ajustez selon votre ressenti.</p>"
+          }
+        },
+        "massage-only": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on utiliser le massage sans la chaleur ?",
+            "answer": "<p>Oui. Les quatre modes de vibration s'utilisent avec ou sans la chaleur.</p>"
+          }
+        },
+        "charging": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on l'utiliser pendant la charge ?",
+            "answer": "<p>Non : par sécurité, la ceinture ne fonctionne pas lorsqu'elle est branchée. Rechargez-la complètement, puis débranchez-la avant de l'utiliser.</p>"
+          }
+        },
+        "sleep": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la garder pour dormir ?",
+            "answer": "<p>Non, la ceinture ne doit pas être utilisée pendant le sommeil. Elle s'arrête automatiquement au bout de 30 minutes, mais retirez-la avant de vous endormir.</p>"
+          }
+        },
+        "pain": {
+          "type": "question",
+          "settings": {
+            "question": "La ceinture soulage-t-elle les douleurs de règles ?",
+            "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
+          }
+        },
+        "contraindications": {
+          "type": "question",
+          "settings": {
+            "question": "Y a-t-il des contre-indications ?",
+            "answer": "<p>Oui. Selon la notice du fabricant, la ceinture est contre-indiquée en cas de grossesse, de maladie cardiaque, de tumeur du col de l'utérus, de crise de goutte, ou de plaie ou anomalie de la peau. En cas de doute, demandez l'avis d'un professionnel de santé.</p>"
+          }
+        },
+        "delivery": {
+          "type": "question",
+          "settings": {
+            "question": "Combien coûte la livraison ?",
+            "answer": "<p>La livraison est offerte en France. Les détails sont sur notre page <a href=\"/pages/livraison-et-retours\" title=\"Livraison et retours\">Livraison et retours</a>.</p>"
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "Et si elle ne me convient pas ?",
+            "answer": "<p>Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation. Toutes les modalités sont détaillées dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "levels",
+        "massage-only",
+        "charging",
+        "sleep",
+        "pain",
+        "contraindications",
+        "delivery",
+        "returns"
+      ],
+      "settings": {
+        "eyebrow": "Questions fréquentes",
+        "heading": "Avant de <em>commander.</em>",
+        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
+        "link_label": "Nous contacter",
+        "link": "/pages/contact",
+        "anchor": "faq",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "benefits",
+    "how-to",
+    "comparison",
+    "reviews",
+    "faq"
+  ]
+}

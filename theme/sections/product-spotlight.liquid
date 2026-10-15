@@ -1,0 +1,193 @@
+{%- liquid
+  assign product = section.settings.product
+  assign anchor = section.settings.anchor | handleize
+  if product != blank and product.media.size > 0
+    assign media_index = section.settings.media_position | minus: 1 | at_least: 0
+    assign spotlight_media = product.media[media_index] | default: product.featured_media
+  endif
+-%}
+
+<section
+  class="spotlight section color-{{ section.settings.color_scheme }}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  aria-labelledby="SpotlightTitle-{{ section.id }}"
+>
+  <div class="page-width spotlight__grid">
+    <div class="spotlight__media media media--contain reveal">
+      {%- if spotlight_media -%}
+        {% render 'responsive-image', image: spotlight_media.preview_image, sizes: '(min-width: 990px) 45vw, 100vw' %}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <div class="spotlight__content reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2" id="SpotlightTitle-{{ section.id }}">
+        {%- if section.settings.heading != blank -%}
+          {{ section.settings.heading }}
+        {%- else -%}
+          {{ product.title | escape }}
+        {%- endif -%}
+      </h2>
+      {%- if section.settings.text != blank -%}
+        <p class="text-muted">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+
+      {%- if product != blank -%}
+        {%- if section.settings.show_specs -%}
+          <div class="spotlight__specs">
+            {% render 'product-specs', product: product, limit: section.settings.specs_limit %}
+            <p class="text-muted text-small">{{ 'products.specs_note' | t }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_box -%}
+          {% render 'box-contents', product: product, heading_tag: 'h3' %}
+        {%- endif -%}
+
+        <div class="spotlight__buy">
+          {% render 'price', product: product, class: 'spotlight__price' %}
+          <a class="button" href="{{ product.url }}">
+            {%- if section.settings.button_label != blank -%}
+              {{- section.settings.button_label | escape -}}
+            {%- else -%}
+              {{- 'products.view_product' | t -}}
+            {%- endif -%}
+            {% render 'icon', icon: 'arrow-right' %}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .spotlight__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+  }
+
+  .spotlight__media {
+    --media-ratio: 1;
+    border-radius: var(--radius-lg);
+  }
+
+  .spotlight__content {
+    display: grid;
+    gap: var(--space-md);
+    max-width: 36rem;
+  }
+
+  .spotlight__specs {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .spotlight__buy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block-start: var(--space-xs);
+  }
+
+  .spotlight__price {
+    font-size: var(--text-xl);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Produit en détail",
+  "tag": "div",
+  "class": "section-spotlight",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "range",
+      "id": "media_position",
+      "label": "Photo du produit affichée",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Laissez vide pour afficher le nom du produit."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_specs",
+      "label": "Afficher les caractéristiques",
+      "info": "Issues du champ méta produit « Caractéristiques ».",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "specs_limit",
+      "label": "Nombre de caractéristiques",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_box",
+      "label": "Afficher le contenu du colis",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Voir tous les détails"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produit en détail"
+    }
+  ]
+}
+{% endschema %}

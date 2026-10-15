@@ -1,0 +1,370 @@
+{%- liquid
+  assign menu = section.settings.menu
+  if menu == blank or menu.links.size == 0
+    assign menu = linklists['main-menu']
+  endif
+  assign secondary_menu = section.settings.secondary_menu
+  assign cta_product = section.settings.cta_product
+-%}
+
+<site-header class="site-header color-{{ section.settings.color_scheme }}">
+  <div class="site-header__inner page-width">
+    <div class="site-header__start">
+      <button
+        type="button"
+        class="icon-button site-header__menu-toggle"
+        data-menu-trigger
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="MenuDrawer"
+      >
+        {% render 'icon', icon: 'menu' %}
+        <span class="visually-hidden">{{ 'general.open_menu' | t }}</span>
+      </button>
+
+      <a class="site-header__logo" href="{{ routes.root_url }}">
+        {%- if settings.logo -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {{
+            settings.logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'site-header__logo-image',
+              widths: '200, 300, 400, 600',
+              height: logo_height,
+              width: settings.logo_width,
+              alt: shop.name,
+              loading: 'eager'
+          }}
+        {%- else -%}
+          <span class="site-header__wordmark">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <nav class="site-header__nav" aria-label="{{ 'general.main_navigation' | t }}">
+      <ul class="site-header__menu" role="list">
+        {%- for link in menu.links -%}
+          <li>
+            <a
+              class="site-header__menu-link"
+              href="{{ link.url }}"
+              {% if link.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
+        <a class="icon-button site-header__account" href="{{ routes.account_url }}">
+          {% render 'icon', icon: 'user' %}
+          <span class="visually-hidden">{{ 'header.account' | t }}</span>
+        </a>
+      {%- endif -%}
+      <a
+        class="icon-button site-header__cart"
+        href="{{ routes.cart_url }}"
+        data-cart-trigger
+        {% if settings.cart_type == 'drawer' %}
+          aria-haspopup="dialog"
+        {% endif %}
+      >
+        <span class="site-header__cart-icon" data-cart-icon>
+          {% render 'cart-icon' %}
+        </span>
+      </a>
+    </div>
+  </div>
+</site-header>
+
+<modal-drawer class="menu-drawer" data-trigger="[data-menu-trigger]">
+  <dialog id="MenuDrawer" class="drawer drawer--left color-{{ section.settings.color_scheme }}" aria-labelledby="MenuDrawerTitle">
+    <div class="drawer__inner">
+      <div class="drawer__header">
+        <p class="menu-drawer__title" id="MenuDrawerTitle">{{ shop.name }}</p>
+        <button type="button" class="icon-button" data-drawer-close>
+          {% render 'icon', icon: 'close' %}
+          <span class="visually-hidden">{{ 'general.close_menu' | t }}</span>
+        </button>
+      </div>
+
+      <div class="drawer__body menu-drawer__body">
+        <nav aria-label="{{ 'general.main_navigation' | t }}">
+          <ul class="menu-drawer__menu" role="list">
+            {%- for link in menu.links -%}
+              <li>
+                <a
+                  class="menu-drawer__link"
+                  href="{{ link.url }}"
+                  {% if link.current %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        {%- if cta_product != blank and section.settings.cta_label != blank -%}
+          <a class="button button--full menu-drawer__cta" href="{{ cta_product.url }}">
+            {{- section.settings.cta_label | escape -}}
+          </a>
+        {%- endif -%}
+
+        {%- if secondary_menu != blank and secondary_menu.links.size > 0 -%}
+          <ul class="menu-drawer__secondary" role="list">
+            {%- for link in secondary_menu.links -%}
+              <li><a class="link" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- if settings.shipping_info != blank or settings.returns_info != blank -%}
+        <div class="drawer__footer">
+          <ul class="trust-list" role="list">
+            {%- if settings.shipping_info != blank -%}
+              <li>{% render 'icon', icon: 'truck' %}<span>{{ settings.shipping_info | escape }}</span></li>
+            {%- endif -%}
+            {%- if settings.returns_info != blank -%}
+              <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </dialog>
+</modal-drawer>
+
+{% stylesheet %}
+  .section-header-wrapper {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--z-header);
+  }
+
+  .site-header {
+    display: block;
+    border-block-end: 1px solid transparent;
+    transition:
+      border-color var(--duration-base) ease,
+      box-shadow var(--duration-base) ease;
+
+    &.is-scrolled {
+      border-block-end-color: var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+  .site-header__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: var(--header-height);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-lg);
+    }
+  }
+
+  .site-header__start {
+    display: contents;
+
+    @media screen and (min-width: 990px) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .site-header__menu-toggle {
+    justify-self: start;
+    margin-inline-start: -0.6rem;
+
+    @media screen and (min-width: 990px) {
+      display: none;
+    }
+  }
+
+  .site-header__logo {
+    display: inline-flex;
+    justify-self: center;
+    align-items: center;
+    min-height: var(--tap-target);
+    text-decoration: none;
+  }
+
+  .site-header__logo-image {
+    width: var(--logo-width);
+    max-width: 50vw;
+    height: auto;
+  }
+
+  .site-header__wordmark {
+    font-family: var(--font-heading-family);
+    font-size: 1.75rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+
+  .site-header__nav {
+    display: none;
+
+    @media screen and (min-width: 990px) {
+      display: block;
+      justify-self: center;
+    }
+  }
+
+  .site-header__menu {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .site-header__menu-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    font-size: var(--text-base);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 calc(100% - 0.55rem);
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size var(--duration-base) var(--ease-out);
+
+    &:hover,
+    &[aria-current='page'] {
+      background-size: 100% 1px;
+    }
+  }
+
+  .site-header__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-3xs);
+    margin-inline-end: -0.6rem;
+  }
+
+  .site-header__cart-icon {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .cart-count {
+    position: absolute;
+    inset-block-start: -0.45rem;
+    inset-inline-end: -0.6rem;
+    display: grid;
+    place-items: center;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding-inline: 0.25rem;
+    border-radius: var(--radius-round);
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1;
+    color: var(--color-button-label);
+    background-color: var(--color-button);
+  }
+
+  .menu-drawer__title {
+    font-family: var(--font-heading-family);
+    font-size: var(--heading-4);
+  }
+
+  .menu-drawer__body {
+    display: grid;
+    align-content: start;
+    gap: var(--space-xl);
+  }
+
+  .menu-drawer__menu {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .menu-drawer__link {
+    display: flex;
+    align-items: center;
+    min-height: 3.25rem;
+    font-family: var(--font-heading-family);
+    font-size: 1.875rem;
+    line-height: 1.1;
+    text-decoration: none;
+
+    &[aria-current='page'] {
+      font-style: italic;
+    }
+  }
+
+  .menu-drawer__secondary {
+    display: grid;
+    gap: var(--space-2xs);
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header-wrapper",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu principal",
+      "info": "Gardez 3 à 5 liens maximum pour une navigation claire."
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Liens secondaires du menu mobile",
+      "info": "Par exemple : contact, livraison et retours."
+    },
+    {
+      "type": "header",
+      "content": "Menu mobile"
+    },
+    {
+      "type": "product",
+      "id": "cta_product",
+      "label": "Produit mis en avant"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Découvrir la ceinture"
+    },
+    {
+      "type": "header",
+      "content": "Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Afficher l'accès au compte client",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

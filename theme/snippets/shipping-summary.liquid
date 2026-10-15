@@ -1,0 +1,41 @@
+{% doc %}
+  Shipping, returns and warranty summary built from theme settings
+  (Theme settings > Réassurance), with links to the detailed pages.
+
+  @example
+  {% render 'shipping-summary' %}
+{% enddoc %}
+<ul class="lines-list" role="list">
+  {%- if settings.shipping_info != blank -%}
+    <li>
+      {{- settings.shipping_info | escape -}}
+      {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
+    </li>
+  {%- endif -%}
+  {%- if settings.returns_info != blank -%}
+    <li>{{ settings.returns_info | escape }}</li>
+  {%- endif -%}
+  {%- if settings.warranty_info != blank -%}
+    <li>{{ settings.warranty_info | escape }}</li>
+  {%- endif -%}
+</ul>
+{%- if settings.shipping_page != blank or settings.returns_page != blank -%}
+  <p class="shipping-summary__links">
+    {%- if settings.shipping_page != blank -%}
+      <a class="link" href="{{ settings.shipping_page.url }}">{{ settings.shipping_page.title | escape }}</a>
+    {%- endif -%}
+    {%- if settings.returns_page != blank -%}
+      <a class="link" href="{{ settings.returns_page.url }}">{{ settings.returns_page.title | escape }}</a>
+    {%- endif -%}
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .shipping-summary__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-md);
+    margin-block-start: var(--space-sm);
+    font-size: var(--text-sm);
+  }
+{% endstylesheet %}

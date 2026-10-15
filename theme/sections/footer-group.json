@@ -1,0 +1,43 @@
+{
+  "type": "footer",
+  "name": "Pied de page",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "brand",
+          "settings": {
+            "text": ""
+          }
+        },
+        "menu-help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Aide",
+            "menu": "pied-de-page-aide"
+          }
+        },
+        "menu-legal": {
+          "type": "menu",
+          "settings": {
+            "heading": "Informations",
+            "menu": "pied-de-page-legal"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Restons en contact",
+            "text": "Conseils confort et nouveautés, de temps en temps."
+          }
+        }
+      },
+      "block_order": ["brand", "menu-help", "menu-legal", "newsletter"],
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
+    }
+  },
+  "order": ["footer"]
+}

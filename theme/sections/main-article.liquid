@@ -1,0 +1,86 @@
+<article class="section section--compact color-{{ section.settings.color_scheme }}" aria-labelledby="ArticleTitle">
+  <div class="page-width page-width--text article">
+    <header class="article__header">
+      <a class="link link--arrow article__back" href="{{ blog.url }}">
+        {%- render 'icon', icon: 'chevron-left' -%}
+        {{- 'templates.back_to_blog' | t -}}
+      </a>
+      <h1 class="h2" id="ArticleTitle">{{ article.title | escape }}</h1>
+      {%- assign published_date = article.published_at | date: format: 'date' -%}
+      <p class="text-muted text-small">{{ 'templates.published_on' | t: date: published_date }}</p>
+    </header>
+
+    {%- if article.image -%}
+      <div class="article__media media">
+        {% render 'responsive-image', image: article.image, sizes: '(min-width: 750px) 42rem, 100vw', eager: true %}
+      </div>
+    {%- endif -%}
+
+    <div class="rte article__content">{{ article.content }}</div>
+
+    {%- if settings.health_notice != blank -%}
+      <p class="article__notice">
+        {% render 'icon', icon: 'info' %}
+        <span>{{ settings.health_notice | escape }}</span>
+      </p>
+    {%- endif -%}
+  </div>
+  <script type="application/ld+json">
+    {{ article | structured_data }}
+  </script>
+</article>
+
+{% stylesheet %}
+  .article {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .article__header {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-sm);
+  }
+
+  .article__back {
+    font-size: var(--text-sm);
+  }
+
+  .article__media {
+    --media-ratio: 16 / 10;
+  }
+
+  .article__content {
+    font-size: var(--text-md);
+  }
+
+  .article__notice {
+    display: flex;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    background-color: var(--color-surface);
+
+    & .icon {
+      --icon-size: 1.1rem;
+      margin-block-start: 0.15em;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}
