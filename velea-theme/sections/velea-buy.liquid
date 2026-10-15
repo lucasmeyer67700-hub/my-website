@@ -49,10 +49,19 @@
         {%- form 'product', p, id: 'velea-form', novalidate: 'novalidate' -%}
           <input type="hidden" name="id" value="{{ v.id }}">
           {%- unless p.has_only_default_variant -%}
-            <label class="v-field-label" for="velea-variant-{{ section.id }}">{{ p.options.first }}</label>
-            <select id="velea-variant-{{ section.id }}" class="v-select" data-variant-select>
-              {%- for variant in p.variants -%}<option value="{{ variant.id }}" {% if variant == v %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title }}{% unless variant.available %} (épuisé){% endunless %}</option>{%- endfor -%}
-            </select>
+            <fieldset class="v-swatches">
+              <legend class="v-field-label">{{ p.options.first }} : <strong data-swatch-name>{{ v.title }}</strong></legend>
+              <div class="v-swatches__row">
+                {%- for variant in p.variants -%}
+                  {%- assign vt = variant.title | downcase -%}
+                  <label class="v-swatch{% unless variant.available %} is-off{% endunless %}">
+                    <input type="radio" name="velea-variant-{{ section.id }}" value="{{ variant.id }}" data-variant-radio data-name="{{ variant.title | escape }}" {% if variant == v %}checked{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                    <span class="v-swatch__dot v-swatch__dot--{% if vt contains 'blanc' %}blanc{% elsif vt contains 'rose' %}rose{% else %}autre{% endif %}" aria-hidden="true"></span>
+                    <span>{{ variant.title }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
           {%- endunless -%}
           <div class="v-qty-row">
             <div class="v-qty" data-qty>

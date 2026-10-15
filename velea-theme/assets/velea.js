@@ -97,6 +97,12 @@
   document.querySelectorAll('form[action*="/cart/add"]').forEach(function (form) {
     var select = form.querySelector('[data-variant-select]');
     if (select) select.addEventListener('change', function () { form.querySelector('input[name="id"]').value = select.value; });
+    form.querySelectorAll('[data-variant-radio]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        form.querySelector('input[name="id"]').value = r.value;
+        var n = form.querySelector('[data-swatch-name]'); if (n) n.textContent = r.dataset.name;
+      });
+    });
     form.addEventListener('submit', function () {
       var btn = form.querySelector('[data-add-btn]');
       if (btn) { btn.classList.add('is-loading'); btn.setAttribute('aria-busy', 'true'); }
