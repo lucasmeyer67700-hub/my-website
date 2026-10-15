@@ -13,7 +13,12 @@
   <div class="v-wrap v-buy__solo{% if section.settings.show_visual %} v-buy__duo{% endif %}">
     {%- if section.settings.show_visual -%}
       <div class="v-buy__visual v-reveal">
-        {% render 'velea-slot', image: section.settings.visual, label: 'Photo du produit à ajouter (format carré ou portrait)', sizes: '(min-width: 990px) 520px, 1px' %}
+        {% render 'velea-slot', class: 'v-buy__main', image: section.settings.visual, label: 'Photo principale du produit', loading: 'eager', sizes: '(min-width: 990px) 520px, 92vw' %}
+        <div class="v-buy__thumbs">
+          {% render 'velea-slot', image: section.settings.visual_2, label: 'Photo 2', sizes: '(min-width: 990px) 170px, 30vw' %}
+          {% render 'velea-slot', image: section.settings.visual_3, label: 'Photo 3', sizes: '(min-width: 990px) 170px, 30vw' %}
+          {% render 'velea-slot', image: section.settings.visual_4, label: 'Photo 4', sizes: '(min-width: 990px) 170px, 30vw' %}
+        </div>
       </div>
     {%- endif -%}
     <div class="v-buy__panel v-card-wood">
@@ -154,8 +159,11 @@
     { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "ceinture" },
     { "type": "text", "id": "title", "label": "Titre sur l'accueil (vide = nom du produit)" },
     { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Chaleur réglable, massage vibrant et batterie rechargeable" },
-    { "type": "checkbox", "id": "show_visual", "label": "Afficher une image à côté (ordinateur)", "default": true },
-    { "type": "image_picker", "id": "visual", "label": "Image à côté du bloc d'achat" },
+    { "type": "checkbox", "id": "show_visual", "label": "Afficher les photos", "default": true },
+    { "type": "image_picker", "id": "visual", "label": "Photo principale" },
+    { "type": "image_picker", "id": "visual_2", "label": "Photo 2" },
+    { "type": "image_picker", "id": "visual_3", "label": "Photo 3" },
+    { "type": "image_picker", "id": "visual_4", "label": "Photo 4" },
     { "type": "range", "id": "media_limit", "label": "(non utilisé)", "min": 1, "max": 10, "step": 1, "default": 6 }
   ],
   "blocks": [

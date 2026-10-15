@@ -106,9 +106,9 @@
      "settings": {
       "icon": "truck",
       "title": "Livraison",
-      "text": "délais et frais affichés avant paiement.",
+      "text": "Délais affichés au paiement",
       "link": "/pages/livraison-et-retours",
-      "link_label": "Détails"
+      "link_label": "En savoir plus"
      }
     },
     "info-2": {
@@ -116,9 +116,9 @@
      "settings": {
       "icon": "return",
       "title": "Retours",
-      "text": "14 jours pour changer d'avis.",
+      "text": "14 jours pour changer d'avis",
       "link": "/pages/politique-de-retour",
-      "link_label": "Détails"
+      "link_label": "En savoir plus"
      }
     },
     "info-3": {
@@ -126,9 +126,9 @@
      "settings": {
       "icon": "chat",
       "title": "Une question ?",
-      "text": "",
+      "text": "On vous répond",
       "link": "/pages/contact",
-      "link_label": "Nous écrire"
+      "link_label": "Écrivez-nous"
      }
     }
    },

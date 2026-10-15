@@ -32,6 +32,7 @@
   {{ 'velea-ui.css' | asset_url | stylesheet_tag }}
   {{ 'velea-chalet.css' | asset_url | stylesheet_tag }}
   {{ 'velea-automne.css' | asset_url | stylesheet_tag }}
+  {{ 'velea-v3.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="v-body">
@@ -127,6 +128,21 @@
         </ul>
       </div>
     </div>
+    {%- if localization.available_languages.size > 1 -%}
+      <div class="v-wrap v-lang">
+        {%- form 'localization', id: 'v-lang-form', class: 'v-lang__form' -%}
+          <span class="v-lang__label" id="v-lang-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>
+            Langue
+          </span>
+          <ul class="v-lang__list" role="list" aria-labelledby="v-lang-label">
+            {%- for language in localization.available_languages -%}
+              <li><button type="submit" name="language_code" value="{{ language.iso_code }}" class="v-lang__btn{% if language.iso_code == localization.language.iso_code %} is-current{% endif %}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>{{ language.endonym_name | capitalize }}</button></li>
+            {%- endfor -%}
+          </ul>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
     <p class="v-wrap v-footer__legal">© {{ 'now' | date: '%Y' }} VELEA. Tous droits réservés.</p>
   </footer>
 
