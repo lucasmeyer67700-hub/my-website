@@ -245,8 +245,11 @@
    "type": "velea-reviews",
    "settings": {
     "kicker": "Elles l'ont adoptée",
-    "title": "Avis clientes",
-    "examples": true
+    "title": "Ce qu’elles en pensent",
+    "examples": true,
+    "show_summary": true,
+    "rating": "4.7",
+    "count": 394
    }
   },
   "faq": {

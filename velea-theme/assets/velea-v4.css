@@ -158,3 +158,29 @@
 .v-cartpage .v-cart-item__img { width: 96px; height: 96px; }
 .v-cartpage .v-cart-item__actions { gap: 18px; }
 @media (min-width: 900px) { .v-cartpage .v-cart-summary { position: sticky; top: 110px; } }
+
+/* Résumé des avis animé */
+.v-rsum { display: grid; gap: 22px; max-width: 880px; margin: 0 auto 30px; padding: 26px; border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255,246,236,.1), rgba(255,246,236,.03)); box-shadow: inset 0 0 0 1px rgba(217,178,106,.35), 0 18px 40px rgba(0,0,0,.25); }
+.v-rsum__score { text-align: center; }
+.v-rsum__big { margin: 0; font: 300 64px/1 var(--sans, Jost, sans-serif); color: #f3dcae; text-shadow: 0 0 24px rgba(246,190,100,.35); }
+.v-rsum__big small { font-size: 22px; color: #cdb79c; margin-left: 4px; }
+.v-rsum__stars { position: relative; display: inline-block; margin: 8px 0 4px; font-size: 24px; letter-spacing: 3px; color: rgba(243,228,207,.2); }
+.v-rsum__fill { position: absolute; inset: 0; width: 0; overflow: hidden; white-space: nowrap; color: #f6be64; text-shadow: 0 0 12px rgba(246,190,100,.55); transition: width 1.6s cubic-bezier(.2,.8,.2,1) .2s; }
+.v-rsum.is-in .v-rsum__fill { width: var(--w); }
+.v-rsum__count { margin: 0; color: #fff6ea; letter-spacing: .08em; }
+.v-rsum__src { display: inline-flex; align-items: center; gap: 6px; margin: 10px 0 0; font-size: 12.5px; color: #cdb79c; }
+.v-rsum__bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; align-content: center; }
+.v-rsum__bars li { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; font-size: 14px; color: #fff6ea; }
+.v-rsum__bar { grid-column: 1 / -1; grid-row: 2; height: 8px; border-radius: 8px; background: rgba(255,246,236,.1); overflow: hidden; }
+.v-rsum__bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #f6cfd8, #d9b26a); box-shadow: 0 0 10px rgba(246,190,100,.5); transition: width 1.4s cubic-bezier(.2,.8,.2,1); }
+.v-rsum.is-in .v-rsum__bar i { width: var(--w); }
+.v-rsum__bars li:nth-child(2) i { transition-delay: .15s } .v-rsum__bars li:nth-child(3) i { transition-delay: .3s }
+.v-rsum__bars b { font-weight: 500; color: #f3dcae; }
+@media (min-width: 750px) { .v-rsum { grid-template-columns: 260px 1fr; padding: 34px 40px; gap: 40px; } .v-rsum__score { border-right: 1px solid rgba(217,178,106,.25); padding-right: 30px; } }
+/* Cartes : apparition et survol */
+.v-review { transition: transform .35s ease, box-shadow .35s ease; }
+.v-review:hover { transform: translateY(-6px); box-shadow: inset 0 0 0 1px rgba(217,178,106,.55), 0 20px 40px rgba(0,0,0,.35); }
+.v-reviews__track .v-review.v-reveal:nth-child(2) { transition-delay: .12s } .v-reviews__track .v-review.v-reveal:nth-child(3) { transition-delay: .24s }
+@media (min-width: 990px) { .v-reviews__track { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); overflow: visible; } }
+@media (prefers-reduced-motion: reduce) { .v-rsum__fill, .v-rsum__bar i { transition: none; } }

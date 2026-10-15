@@ -226,4 +226,21 @@
       });
     });
   }
+
+  // Résumé des avis : compteurs animés à l'apparition
+  document.querySelectorAll('[data-rsum]').forEach(function (box) {
+    var run = function () {
+      box.classList.add('is-in');
+      box.querySelectorAll('[data-count-to]').forEach(function (el) {
+        var to = parseFloat(String(el.dataset.countTo).replace(',', '.')), dec = Number(el.dataset.decimals || 0), t0 = null;
+        if (isNaN(to) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var step = function (t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400); k = 1 - Math.pow(1 - k, 3);
+          el.textContent = (to * k).toFixed(dec).replace('.', ','); if (k < 1) requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+      });
+    };
+    if (!('IntersectionObserver' in window)) return run();
+    var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { run(); o.disconnect(); } }, { threshold: .4 });
+    o.observe(box);
+  });
 })();
