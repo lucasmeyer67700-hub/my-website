@@ -64,7 +64,7 @@
               <span>{%- if v.available -%}Ajouter au panier{%- else -%}Temporairement indisponible{%- endif -%}</span>
             </button>
           </div>
-          {%- if v.available -%}{{ form | payment_button }}{%- endif -%}
+          {%- if v.available -%}<button type="submit" name="return_to" value="/checkout" class="v-btn v-btn--buynow v-btn--full">{{ section.settings.buynow | default: 'Soulagée dès maintenant' }}</button>{%- endif -%}
           {%- unless v.available -%}<p class="v-buy__soldout" role="status">Ce produit est temporairement indisponible. Contactez-nous pour connaître la date de retour.</p>{%- endunless -%}
         {%- endform -%}
       {%- endif -%}
@@ -119,15 +119,6 @@
   </div>
 </section>
 
-{%- if p != blank and v -%}
-<div class="v-sticky" data-sticky>
-  <div class="v-sticky__info">
-    <strong>{{ p.title }}</strong>
-    <span>{{ v.price | money }}</span>
-  </div>
-  <a href="#{{ section.settings.anchor | default: 'ceinture' }}" class="v-btn v-btn--main">Commander</a>
-</div>
-{%- endif -%}
 
 {%- if on_product_page -%}
 <script type="application/ld+json">
@@ -159,6 +150,7 @@
     { "type": "text", "id": "anchor", "label": "Ancre (lien interne)", "default": "ceinture" },
     { "type": "text", "id": "title", "label": "Titre sur l'accueil (vide = nom du produit)" },
     { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Chaleur réglable, massage vibrant et batterie rechargeable" },
+    { "type": "text", "id": "buynow", "label": "Texte du bouton d'achat direct", "default": "Soulagée dès maintenant" },
     { "type": "checkbox", "id": "show_visual", "label": "Afficher les photos", "default": true },
     { "type": "image_picker", "id": "visual", "label": "Photo principale" },
     { "type": "image_picker", "id": "visual_2", "label": "Photo 2" },

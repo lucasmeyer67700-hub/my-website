@@ -1,0 +1,47 @@
+<div class="v-cd__inner" data-cd-inner>
+  <div class="v-cd__head">
+    <p class="v-cd__title">Votre panier <span>({{ cart.item_count }})</span></p>
+    <button type="button" class="v-cd__close" aria-label="Fermer le panier" data-cd-close>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  {%- if cart.item_count > 0 -%}
+    <ul class="v-cd__list">
+      {%- for item in cart.items -%}
+        <li class="v-cd__item">
+          <a href="{{ item.url }}" class="v-cd__img">{%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: item.product.title }}{%- endif -%}</a>
+          <div class="v-cd__info">
+            <a href="{{ item.url }}" class="v-cd__name">{{ item.product.title }}</a>
+            {%- unless item.product.has_only_default_variant -%}<span class="v-cd__variant">{{ item.variant.title }}</span>{%- endunless -%}
+            <div class="v-cd__row">
+              <div class="v-cd__qty">
+                <button type="button" aria-label="Diminuer" data-cd-line="{{ forloop.index }}" data-cd-qty="{{ item.quantity | minus: 1 }}">−</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" aria-label="Augmenter" data-cd-line="{{ forloop.index }}" data-cd-qty="{{ item.quantity | plus: 1 }}">+</button>
+              </div>
+              <strong class="v-cd__price">{{ item.final_line_price | money }}</strong>
+            </div>
+            <button type="button" class="v-cd__remove" data-cd-line="{{ forloop.index }}" data-cd-qty="0">Retirer</button>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <div class="v-cd__foot">
+      <p class="v-cd__total"><span>Sous-total</span><strong>{{ cart.total_price | money }}</strong></p>
+      <p class="v-cd__note">{% if shop.taxes_included %}Prix TTC. {% endif %}Livraison calculée au paiement.</p>
+      <a href="{{ routes.root_url }}checkout" class="v-btn v-btn--main v-btn--full">Passer au paiement</a>
+      <a href="{{ routes.cart_url }}" class="v-cd__link">Voir le panier</a>
+    </div>
+  {%- else -%}
+    <div class="v-cd__empty">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <p>Votre panier est vide.</p>
+      {%- assign main_product = all_products['ceinture-chauffante-regles'] -%}
+      <a href="{{ main_product.url | default: routes.all_products_collection_url }}" class="v-btn v-btn--main">Découvrir la ceinture</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "VELEA · Panier latéral", "settings": [] }
+{% endschema %}

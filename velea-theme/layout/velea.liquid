@@ -63,9 +63,9 @@
         <button type="button" class="v-icon-btn" aria-label="Rechercher" aria-expanded="false" aria-controls="v-search" data-search-open>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
         </button>
-        <a href="{{ routes.cart_url }}" class="v-icon-btn v-cart" aria-label="Panier, {{ cart.item_count }} article(s)">
+        <a href="{{ routes.cart_url }}" class="v-icon-btn v-cart" data-cd-open aria-label="Panier, {{ cart.item_count }} article(s)">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-          {% if cart.item_count > 0 %}<span class="v-cart__count">{{ cart.item_count }}</span>{% endif %}
+          <span class="v-cart__count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
         </a>
       </div>
     </div>
@@ -136,6 +136,10 @@
     <p class="v-wrap v-footer__legal">© {{ 'now' | date: '%Y' }} VELEA. Tous droits réservés.</p>
   </footer>
 
+  <div class="v-cd" id="v-cart-drawer" hidden>
+    <div class="v-cd__backdrop" data-cd-close></div>
+    <aside class="v-cd__panel" role="dialog" aria-modal="true" aria-label="Panier" data-cd-panel>{% section 'velea-cart-drawer' %}</aside>
+  </div>
   {% render 'velea-assistant' %}
   <script src="{{ 'velea.js' | asset_url }}" defer></script>
 </body>

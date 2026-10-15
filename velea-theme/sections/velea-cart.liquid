@@ -2,7 +2,7 @@
   <div class="v-wrap v-page__wrap">
     <h1 class="v-h2 v-page__title">Votre panier</h1>
     {%- if cart.item_count > 0 -%}
-      <form action="{{ routes.cart_url }}" method="post" novalidate class="v-cart-form">
+      <form action="{{ routes.cart_url }}" method="post" novalidate class="v-cart-form" data-cart-page>
         <ul class="v-cart-list">
           {%- for item in cart.items -%}
             <li class="v-cart-item">
@@ -14,9 +14,13 @@
                 {%- unless item.product.has_only_default_variant -%}<p class="v-muted">{{ item.variant.title }}</p>{%- endunless -%}
                 <p class="v-cart-item__price">{{ item.final_line_price | money }}</p>
                 <div class="v-cart-item__actions">
-                  <label class="v-skip-sr" for="qty-{{ item.key }}">Quantité</label>
-                  <input class="v-cart-qty" id="qty-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
-                  <a href="{{ item.url_to_remove }}" class="v-link-small">Retirer</a>
+                  <div class="v-cd__qty">
+                    <button type="button" aria-label="Diminuer" data-cd-line="{{ forloop.index }}" data-cd-qty="{{ item.quantity | minus: 1 }}">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button type="button" aria-label="Augmenter" data-cd-line="{{ forloop.index }}" data-cd-qty="{{ item.quantity | plus: 1 }}">+</button>
+                  </div>
+                  <input type="hidden" name="updates[]" value="{{ item.quantity }}">
+                  <button type="button" class="v-cd__remove" data-cd-line="{{ forloop.index }}" data-cd-qty="0">Retirer</button>
                 </div>
               </div>
             </li>
@@ -25,7 +29,6 @@
         <div class="v-cart-summary">
           <p class="v-cart-summary__total"><span>Sous-total</span><strong>{{ cart.total_price | money }}</strong></p>
           <p class="v-muted v-cart-summary__note">{% if shop.taxes_included %}Prix TTC. {% endif %}Frais de livraison calculés à l'étape du paiement.</p>
-          <button type="submit" name="update" class="v-btn v-btn--ghost v-btn--full">Mettre à jour le panier</button>
           <button type="submit" name="checkout" class="v-btn v-btn--main v-btn--full">Passer au paiement</button>
           {%- if additional_checkout_buttons -%}<div class="v-cart-summary__dyn">{{ content_for_additional_checkout_buttons }}</div>{%- endif -%}
         </div>

@@ -177,4 +177,53 @@
     bar.addEventListener('mouseleave', start);
     start();
   });
+
+  // Panier latéral : ouverture, ajout sans quitter la page, quantités
+  var cd = document.getElementById('v-cart-drawer');
+  var cdTimer;
+  var setCd = function (open) {
+    if (!cd) return;
+    clearTimeout(cdTimer);
+    if (open) { cd.hidden = false; requestAnimationFrame(function () { cd.classList.add('is-open'); }); }
+    else { cd.classList.remove('is-open'); cdTimer = setTimeout(function () { cd.hidden = true; }, 350); }
+    document.documentElement.classList.toggle('v-lock', open);
+  };
+  var refreshCd = function (count) {
+    var badge = document.querySelector('[data-cart-count]');
+    if (badge && typeof count === 'number') { badge.textContent = count; badge.hidden = count === 0; }
+    if (document.querySelector('[data-cart-page]')) { location.reload(); return Promise.resolve(); }
+    return fetch('/?section_id=velea-cart-drawer').then(function (r) { return r.text(); }).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var fresh = doc.querySelector('[data-cd-inner]'), cur = cd && cd.querySelector('[data-cd-inner]');
+      if (fresh && cur) cur.replaceWith(fresh);
+    });
+  };
+  if (cd) {
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cd-open]')) { e.preventDefault(); setCd(true); return; }
+      if (e.target.closest('[data-cd-close]')) { setCd(false); return; }
+      var b = e.target.closest('[data-cd-line]');
+      if (!b) return;
+      b.disabled = true;
+      fetch('/cart/change.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ line: Number(b.dataset.cdLine), quantity: Math.max(0, Number(b.dataset.cdQty)) }) })
+        .then(function (r) { return r.json(); }).then(function (c) { return refreshCd(c.item_count); })
+        .catch(function () { location.href = '/cart'; });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !cd.hidden) setCd(false); });
+    document.querySelectorAll('form[action*="/cart/add"]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        if (e.submitter && e.submitter.name === 'return_to') return;
+        e.preventDefault();
+        var btn = form.querySelector('[data-add-btn]');
+        fetch('/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+          .then(function (r) { if (!r.ok) throw r; return fetch('/cart.js'); })
+          .then(function (r) { return r.json(); })
+          .then(function (c) { return refreshCd(c.item_count); })
+          .then(function () { setCd(true); })
+          .catch(function () { form.submit(); })
+          .then(function () { if (btn) { btn.classList.remove('is-loading'); btn.removeAttribute('aria-busy'); } });
+      });
+    });
+  }
 })();
