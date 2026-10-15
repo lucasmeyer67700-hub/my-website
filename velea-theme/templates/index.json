@@ -5,14 +5,14 @@
    "type": "velea-hero",
    "settings": {
     "product": "ceinture-chauffante-regles",
-    "image": "shopify://shop_images/velea-produit-rose.webp",
+    "image": "shopify://shop_images/velea-chalet.webp",
     "kicker": "Confort menstruel",
     "title": "Un moment de douceur, même pendant les règles",
     "text": "Chaleur réglable et massage vibrant, sans fil. Votre nouveau rituel cocooning.",
     "cta": "Découvrir la ceinture",
     "link_label": "Tout savoir",
-    "focus": 50,
-    "focus_x": 50,
+    "focus": 60,
+    "focus_x": 55,
     "link_url": "#details"
    }
   },
