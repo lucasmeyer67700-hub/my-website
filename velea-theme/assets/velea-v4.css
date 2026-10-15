@@ -240,3 +240,7 @@ html.v-lock, html.v-lock body { overflow: hidden; }
 
 /* Photo principale : produit entier visible */
 .v-buy__main img { object-fit: contain !important; background: #e9c7c2; }
+
+/* Photo principale au format paysage, image entière */
+.v-buy__visual .v-slot.v-buy__main { aspect-ratio: 3 / 2 !important; }
+.v-buy__main img { object-fit: cover !important; background: #2a1b12; }
