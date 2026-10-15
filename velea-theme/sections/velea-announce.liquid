@@ -1,27 +1,27 @@
-{%- liquid
-  assign msgs = section.blocks | map: 'settings' | map: 'text' | compact
--%}
 {%- if section.blocks.size > 0 -%}
-<div class="v-announce" role="region" aria-label="Annonce">
-  <p class="v-skip-sr">{{ msgs | join: ' · ' }}</p>
-  <div class="v-announce__track" aria-hidden="true">
-    {%- for i in (1..6) -%}
-      {%- for block in section.blocks -%}
-        {%- if block.settings.link != blank -%}
-          <a class="v-announce__item" href="{{ block.settings.link }}" tabindex="-1" {{ block.shopify_attributes }}>{{ block.settings.text }}</a>
-        {%- else -%}
-          <span class="v-announce__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
-        {%- endif -%}
-      {%- endfor -%}
+<div class="v-announce v-announce--slides" role="region" aria-label="Annonces" data-announce data-delay="{{ section.settings.delay | times: 1000 }}">
+  <div class="v-announce__slides">
+    {%- for block in section.blocks -%}
+      <p class="v-announce__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}</a>{%- else -%}{{ block.settings.text }}{%- endif -%}
+      </p>
     {%- endfor -%}
   </div>
+  {%- if section.blocks.size > 1 -%}
+    <button type="button" class="v-announce__next" aria-label="Annonce suivante" data-announce-next>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  {%- endif -%}
 </div>
 {%- endif -%}
 
 {% schema %}
 {
   "name": "VELEA · Barre d'annonce",
-  "max_blocks": 4,
+  "max_blocks": 6,
+  "settings": [
+    { "type": "range", "id": "delay", "label": "Durée par message", "min": 2, "max": 8, "step": 1, "unit": "s", "default": 3 }
+  ],
   "blocks": [{
     "type": "message", "name": "Message",
     "settings": [

@@ -155,6 +155,26 @@
     };
     bot.querySelectorAll('[data-bot-toggle]').forEach(function (b) { b.addEventListener('click', toggle); });
     form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); input.value = ''; });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) toggle(); });
+    document.addEventListener('click', function (e) { if (!panel.hidden && !bot.contains(e.target)) toggle(); });
     bot.querySelectorAll('[data-q]').forEach(function (c) { c.addEventListener('click', function () { ask(c.textContent); }); });
   }
+
+  // Barre d'annonce : un message à la fois, défilement automatique + flèche
+  document.querySelectorAll('[data-announce]').forEach(function (bar) {
+    var slides = bar.querySelectorAll('.v-announce__slide');
+    if (slides.length < 2) return;
+    var i = 0, delay = Number(bar.dataset.delay) || 3000, timer;
+    var go = function () {
+      var cur = slides[i]; cur.classList.remove('is-active'); cur.classList.add('is-out');
+      setTimeout(function () { cur.classList.remove('is-out'); }, 520);
+      i = (i + 1) % slides.length; slides[i].classList.add('is-active');
+    };
+    var start = function () { clearInterval(timer); if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(go, delay); };
+    var next = bar.querySelector('[data-announce-next]');
+    if (next) next.addEventListener('click', function () { go(); start(); });
+    bar.addEventListener('mouseenter', function () { clearInterval(timer); });
+    bar.addEventListener('mouseleave', start);
+    start();
+  });
 })();

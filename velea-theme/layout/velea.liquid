@@ -52,7 +52,9 @@
         </button>
         <nav class="v-nav" aria-label="Navigation principale">
           {%- for link in linklists['main-menu'].links -%}
-            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+            {%- assign lt = link.title | downcase -%}
+            {%- if lt contains 'comment' -%}{%- continue -%}{%- endif -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | remove_first: 'La ' }}</a>
           {%- endfor -%}
         </nav>
       </div>
@@ -91,7 +93,9 @@
       </div>
       <ul class="v-drawer__links">
         {%- for link in linklists['main-menu'].links -%}
-          <li><a href="{{ link.url }}" data-drawer-close>{{ link.title }}</a></li>
+          {%- assign lt = link.title | downcase -%}
+          {%- if lt contains 'comment' -%}{%- continue -%}{%- endif -%}
+          <li><a href="{{ link.url }}" data-drawer-close>{{ link.title | remove_first: 'La ' }}</a></li>
         {%- endfor -%}
         <li><a href="{{ routes.cart_url }}">Mon panier</a></li>
       </ul>

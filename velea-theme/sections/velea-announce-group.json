@@ -1,15 +1,43 @@
 {
-  "type": "custom.announcement",
-  "name": "VELEA · Annonce",
-  "sections": {
-    "announce": {
-      "type": "velea-announce",
-      "blocks": {
-        "message-1": { "type": "message", "settings": { "text": "Découvrez une nouvelle routine de confort pendant les règles", "link": "" } },
-        "message-2": { "type": "message", "settings": { "text": "Chaleur réglable, massage vibrant, batterie rechargeable", "link": "" } }
-      },
-      "block_order": ["message-1", "message-2"]
+ "type": "custom.announcement",
+ "name": "VELEA · Annonce",
+ "sections": {
+  "announce": {
+   "type": "velea-announce",
+   "blocks": {
+    "message-1": {
+     "type": "message",
+     "settings": {
+      "text": "Découvrez une nouvelle routine de confort pendant les règles",
+      "link": ""
+     }
+    },
+    "message-2": {
+     "type": "message",
+     "settings": {
+      "text": "Chaleur réglable, massage vibrant, batterie rechargeable",
+      "link": ""
+     }
+    },
+    "message-3": {
+     "type": "message",
+     "settings": {
+      "text": "Paiement sécurisé",
+      "link": ""
+     }
     }
-  },
-  "order": ["announce"]
+   },
+   "block_order": [
+    "message-1",
+    "message-2",
+    "message-3"
+   ],
+   "settings": {
+    "delay": 3
+   }
+  }
+ },
+ "order": [
+  "announce"
+ ]
 }
