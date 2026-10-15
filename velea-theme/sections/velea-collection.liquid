@@ -1,20 +1,33 @@
-<section class="v-section v-page">
+<section class="v-section v-cat v-cat--page">
   <div class="v-wrap">
-    <h1 class="v-h2 v-page__title">{{ collection.title }}</h1>
-    {%- if collection.description != blank -%}<div class="v-rte v-muted">{{ collection.description }}</div>{%- endif -%}
+    <div class="v-cat__head">
+      <h1 class="v-h2">{%- if collection.handle == 'all' or collection.handle == 'tous-nos-produits' -%}Catalogue{%- else -%}{{ collection.title }}{%- endif -%}</h1>
+      <p class="v-lead">{{ collection.description | strip_html | default: section.settings.text }}</p>
+    </div>
     {%- paginate collection.products by 12 -%}
-      <ul class="v-grid">
-        {%- for p in collection.products -%}
-          <li class="v-card">
-            <a href="{{ p.url }}">
-              <div class="v-slot v-card__img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 30vw, 50vw', widths: '300, 500, 700', alt: p.featured_image.alt }}{%- endif -%}</div>
-              <p class="v-card__title">{{ p.title }}</p>
-              <p class="v-card__price">{{ p.price | money }}</p>
+      <ul class="v-cat__grid">
+        {%- for item in collection.products -%}
+          {%- assign iv = item.selected_or_first_available_variant -%}
+          <li class="v-cat__item">
+            <a href="{{ item.url }}" class="v-cat__link">
+              <div class="v-cat__img">
+                {%- if item.featured_image -%}{{ item.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 33vw, 90vw', widths: '400, 600, 800', alt: item.title }}{%- else -%}<span class="v-feat__ph">Photo du produit</span>{%- endif -%}
+              </div>
+              <h2 class="v-cat__name">{{ item.title }}</h2>
+              <p class="v-cat__price">{{ iv.price | money }}</p>
             </a>
           </li>
-        {%- else -%}
-          <li>Aucun produit pour le moment.</li>
         {%- endfor -%}
+        {%- assign missing = section.settings.slots | minus: collection.products_count -%}
+        {%- if missing > 0 -%}
+          {%- for i in (1..missing) -%}
+            <li class="v-cat__item v-cat__item--soon">
+              <div class="v-cat__img"><span class="v-feat__ph">Bientôt disponible</span></div>
+              <h2 class="v-cat__name">Nouveau produit</h2>
+              <p class="v-cat__price">Prochainement</p>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
       </ul>
       {%- if paginate.pages > 1 -%}<nav class="v-pagination" aria-label="Pagination">{{ paginate | default_pagination: previous: 'Précédent', next: 'Suivant' }}</nav>{%- endif -%}
     {%- endpaginate -%}
@@ -22,5 +35,11 @@
 </section>
 
 {% schema %}
-{ "name": "VELEA · Collection", "settings": [] }
+{
+  "name": "VELEA · Collection",
+  "settings": [
+    { "type": "textarea", "id": "text", "label": "Texte d'introduction", "default": "Des accessoires de confort pensés pour les jours de règles." },
+    { "type": "range", "id": "slots", "label": "Nombre minimum de cases affichées", "min": 1, "max": 6, "step": 1, "default": 3 }
+  ]
+}
 {% endschema %}

@@ -1,0 +1,50 @@
+{%- liquid
+  assign p = section.settings.product | default: all_products['ceinture-chauffante-regles']
+  assign v = p.selected_or_first_available_variant
+-%}
+<section class="v-cap-hero" aria-labelledby="caph-{{ section.id }}" data-heat>
+  <div class="v-wrap v-cap-hero__grid">
+    <div class="v-cap-hero__copy">
+      <h1 id="caph-{{ section.id }}" class="v-cap-hero__title">{{ section.settings.title }}</h1>
+      <p class="v-cap-hero__text">{{ section.settings.text }}</p>
+      <div class="v-heatpick" role="radiogroup" aria-label="Choisir une chaleur">
+        <span class="v-heatpick__label">Essayez une chaleur</span>
+        <div class="v-heatpick__row">
+          <button type="button" role="radio" aria-checked="false" data-heat-set="50" data-heat-note="Douce, pour commencer en douceur.">50 °C</button>
+          <button type="button" role="radio" aria-checked="true" class="is-on" data-heat-set="55" data-heat-note="Moyenne, le réglage du quotidien.">55 °C</button>
+          <button type="button" role="radio" aria-checked="false" data-heat-set="60" data-heat-note="Intense, pour les jours difficiles.">60 °C</button>
+        </div>
+        <p class="v-heatpick__note" data-heat-note-out aria-live="polite">Moyenne, le réglage du quotidien.</p>
+      </div>
+      <div class="v-cap-hero__actions">
+        <a href="{{ section.settings.cta_link | default: p.url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
+        {%- if v -%}<p class="v-cap-hero__price"><strong>{{ v.price | money }}</strong> livraison suivie, retours 14 jours</p>{%- endif -%}
+      </div>
+    </div>
+    <div class="v-cap-hero__stage" aria-hidden="true">
+      <svg class="v-capsule" viewBox="0 0 640 380" role="img">
+        <rect class="v-capsule__strap" x="560" y="160" width="400" height="60" rx="18"/>
+        <rect class="v-capsule__body" x="40" y="30" width="560" height="320" rx="160"/>
+        <rect class="v-capsule__rim" x="78" y="66" width="484" height="248" rx="124"/>
+        <rect class="v-capsule__screen" x="246" y="108" width="148" height="78" rx="39"/>
+        <text class="v-capsule__digits" x="320" y="162" text-anchor="middle" data-heat-out>55</text>
+        <circle class="v-capsule__btn" cx="112" cy="190" r="16"/>
+      </svg>
+      <span class="v-cap-hero__glow"></span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Ouverture gélule",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Vos règles, en douceur." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "La ceinture qui chauffe et masse le bas du ventre, sans fil. Elle se porte sous les vêtements, chez vous comme au travail." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir la ceinture" },
+    { "type": "url", "id": "cta_link", "label": "Lien du bouton" }
+  ],
+  "presets": [{ "name": "VELEA · Ouverture gélule" }]
+}
+{% endschema %}

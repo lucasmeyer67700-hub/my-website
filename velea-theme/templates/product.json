@@ -335,48 +335,117 @@
     "qa-12"
    ]
   },
-  "why": {
-   "type": "velea-why",
+  "features": {
+   "type": "velea-features",
    "settings": {
-    "anchor": "pourquoi",
-    "title": "Pensée pour les jours difficiles",
-    "text": "<p>Pendant les règles, beaucoup de femmes sortent la bouillotte pour se détendre. VELEA reprend ce geste en plus pratique : la ceinture chauffe toute seule, sans eau ni prise, et reste en place autour de la taille. Vous continuez votre journée, elle reste là où vous en avez besoin.</p>"
+    "anchor": "atouts",
+    "title": "Ce qu'elle sait faire",
+    "text": "Une bouillotte plus pratique : elle chauffe seule, sans eau ni prise, et reste en place autour de la taille."
    },
    "blocks": {
-    "i1": {
-     "type": "item",
+    "t1": {
+     "type": "tile",
      "settings": {
-      "title": "Une chaleur que vous choisissez",
-      "text": "Trois réglages annoncés par le fabricant : 50, 55 et 60 °C. Commencez au plus doux, montez si besoin."
+      "name": "Trois chaleurs",
+      "fact": "50, 55 ou 60 °C, annoncées par le fabricant",
+      "hint": "l'écran et ses réglages"
      }
     },
-    "i2": {
-     "type": "item",
+    "t2": {
+     "type": "tile",
      "settings": {
-      "title": "Un massage par vibration",
-      "text": "La vibration s'utilise seule ou avec la chaleur, pour un vrai moment de détente."
+      "name": "Massage par vibration",
+      "fact": "Seul ou avec la chaleur, au choix",
+      "hint": "la ceinture portée, de profil"
      }
     },
-    "i3": {
-     "type": "item",
+    "t3": {
+     "type": "tile",
      "settings": {
-      "title": "Sans fil, toute la journée",
-      "text": "Batterie rechargeable en USB, environ 2 h d'autonomie annoncée. Assez fine pour se glisser sous un pull."
+      "name": "Sans fil",
+      "fact": "Batterie de 1 800 mAh intégrée",
+      "hint": "la ceinture sous un pull"
+     }
+    },
+    "t4": {
+     "type": "tile",
+     "settings": {
+      "name": "Recharge USB",
+      "fact": "Environ 2 h pour une charge complète",
+      "hint": "le câble branché"
+     }
+    },
+    "t5": {
+     "type": "tile",
+     "settings": {
+      "name": "142 grammes",
+      "fact": "18,5 × 8 × 2,5 cm, sangle réglable",
+      "hint": "la ceinture dans la main"
      }
     }
    },
    "block_order": [
-    "i1",
-    "i2",
-    "i3"
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "t5"
    ]
+  },
+  "stages": {
+   "type": "velea-stages",
+   "settings": {
+    "anchor": "gestes",
+    "title": "Prête en trois gestes"
+   },
+   "blocks": {
+    "s1": {
+     "type": "stage",
+     "settings": {
+      "name": "D'abord, chargez",
+      "text": "Une recharge complète avant la première utilisation, avec le câble fourni.",
+      "hint": "le câble USB"
+     }
+    },
+    "s2": {
+     "type": "stage",
+     "settings": {
+      "name": "Puis attachez",
+      "text": "Placez-la sur le bas du ventre et serrez la sangle à votre taille.",
+      "hint": "la sangle qui se règle"
+     }
+    },
+    "s3": {
+     "type": "stage",
+     "settings": {
+      "name": "Enfin, réglez",
+      "text": "Choisissez la chaleur et le massage, en commençant par le plus doux.",
+      "hint": "un moment de détente"
+     }
+    }
+   },
+   "block_order": [
+    "s1",
+    "s2",
+    "s3"
+   ]
+  },
+  "catalogue": {
+   "type": "velea-catalogue",
+   "settings": {
+    "title": "Le catalogue VELEA",
+    "soon": "Nouveau produit",
+    "collection": "tous-nos-produits"
+   }
   }
  },
  "order": [
   "buy",
-  "why",
+  "features",
+  "stages",
   "steps",
   "reviews",
-  "faq"
+  "faq",
+  "catalogue"
  ]
 }

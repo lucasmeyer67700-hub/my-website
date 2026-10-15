@@ -1,0 +1,183 @@
+/* =====================================================================
+   VELEA — direction « Un motif » : la gélule de la ceinture
+   La forme du coussin chauffant (une gélule) sert de masque aux photos,
+   de bouton, de puce et de grande forme d'ouverture.
+   ===================================================================== */
+:root {
+  --gelule: 999px;
+  --champ-1: #82294A;   /* framboise clair */
+  --champ-2: #F7DCE1;   /* poudré */
+  --champ-3: #FFFFFF;
+}
+
+/* Sections plus aérées entre elles */
+.v-section { padding: clamp(72px, 11vw, 168px) 0; }
+
+/* ---------- Ouverture : la ceinture dessinée ---------- */
+.v-cap-hero { position: relative; z-index: 1; overflow: hidden; padding: clamp(40px, 6vw, 88px) 0 clamp(64px, 9vw, 128px); }
+.v-cap-hero__grid { display: grid; gap: 28px; align-items: center; }
+.v-cap-hero__title { margin: 0 0 20px; font: 500 clamp(3.2rem, 13vw, 6.2rem)/.95 var(--serif); letter-spacing: -.03em; color: #fff; }
+@media (min-width: 990px) { .v-cap-hero__title { font-size: clamp(4rem, 5.6vw, 6.2rem); } }
+.v-cap-hero__text { margin: 0 0 30px; max-width: 32em; font-size: 1.15rem; line-height: 1.6; color: rgba(255,255,255,.92); }
+.v-heatpick { margin: 0 0 32px; }
+.v-heatpick__label { display: block; margin-bottom: 10px; font-size: 15px; color: var(--poudre); }
+.v-heatpick__row { display: inline-flex; gap: 6px; padding: 6px; border-radius: var(--gelule); background: rgba(255,255,255,.12); }
+.v-heatpick__row button { min-width: 84px; height: 46px; padding: 0 16px; border: 0; border-radius: var(--gelule); background: transparent; color: #fff; font: 500 16px var(--sans); cursor: pointer; transition: background .25s, color .25s, transform .2s; }
+.v-heatpick__row button:hover { background: rgba(255,255,255,.12); }
+.v-heatpick__row button:active { transform: scale(.96); }
+.v-heatpick__row button.is-on { background: var(--poudre); color: var(--framboise); }
+.v-heatpick__note { margin: 10px 0 0; font-size: 15px; color: rgba(255,255,255,.85); min-height: 1.5em; }
+.v-cap-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+.v-cap-hero__price { margin: 0; font-size: 15px; color: rgba(255,255,255,.85); }
+.v-cap-hero__price strong { display: block; font: 500 1.7rem/1.1 var(--serif); color: #fff; }
+
+.v-cap-hero__stage { position: relative; margin-right: calc(var(--gutter) * -1 - 12vw); }
+.v-capsule { position: relative; z-index: 1; width: 100%; height: auto; overflow: visible; }
+.v-capsule__strap { fill: #C99AA6; }
+.v-capsule__body { fill: var(--poudre); transition: fill .5s ease; }
+.v-capsule__rim { fill: none; stroke: #EBB9C4; stroke-width: 10; stroke-dasharray: 2 12; stroke-linecap: round; }
+.v-capsule__screen { fill: var(--cacao); }
+.v-capsule__digits { fill: #fff; font: 600 46px var(--sans); letter-spacing: .04em; }
+.v-capsule__btn { fill: #EBB9C4; }
+.v-cap-hero__glow { position: absolute; z-index: 0; left: 8%; right: 8%; top: 18%; bottom: 18%; border-radius: var(--gelule); background: var(--rose); opacity: .35; filter: blur(40px); transition: opacity .5s, background .5s; }
+[data-level="50"] .v-cap-hero__glow { opacity: .22; }
+[data-level="60"] .v-cap-hero__glow { opacity: .6; background: #F09AB0; }
+[data-level="60"] .v-capsule__body { fill: #FBE6EA; }
+.v-capsule__digits { transition: opacity .2s; }
+@media (min-width: 990px) {
+  .v-cap-hero__grid { grid-template-columns: 1fr 1.05fr; gap: 40px; }
+  .v-cap-hero__stage { margin-right: -18vw; }
+}
+@media (max-width: 749px) {
+  .v-cap-hero__stage { order: -1; margin: 0 -30vw 0 -6vw; }
+  .v-cap-hero__actions { flex-direction: column; align-items: stretch; }
+  .v-cap-hero__actions .v-btn { width: 100%; }
+  .v-heatpick__row { display: flex; }
+  .v-heatpick__row button { flex: 1; min-width: 0; }
+}
+
+/* ---------- Photos à prévoir (emplacements) ---------- */
+.v-feat__ph { display: grid; place-items: center; width: 100%; height: 100%; padding: 18px; text-align: center; font-size: 15px; line-height: 1.4; color: var(--cacao); }
+
+/* ---------- Atouts : spécimens sur tuiles de couleur ---------- */
+.v-feat { background: var(--poudre-2); color: var(--cacao); }
+.v-feat__grid { display: grid; gap: 36px; }
+.v-feat__head .v-h2 { color: var(--framboise); }
+.v-feat__head .v-lead { color: var(--cacao); opacity: 1; }
+.v-feat__tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 10px; }
+.v-feat__item--wide { grid-column: 1 / -1; order: -1; }
+.v-feat__tile { aspect-ratio: 4 / 5; border-radius: var(--gelule); overflow: hidden; display: grid; place-items: center; }
+.v-feat__item--wide .v-feat__tile { aspect-ratio: 8 / 5; }
+.v-feat__tile img { width: 100%; height: 100%; object-fit: cover; }
+.v-feat__tile--1 { background: var(--champ-2); }
+.v-feat__tile--2 { background: #F3C7D1; }
+.v-feat__tile--0 { background: #fff; }
+.v-feat__name { margin: 14px 0 4px; font: 500 18px/1.3 var(--sans); color: var(--cacao); }
+.v-feat__fact { margin: 0; font-size: 15.5px; line-height: 1.5; color: var(--cacao-doux); }
+@media (min-width: 990px) {
+  .v-feat__grid { grid-template-columns: 3fr 9fr; gap: 48px; align-items: start; }
+  .v-feat__head { position: sticky; top: 110px; }
+  .v-feat__tiles { grid-template-columns: repeat(3, 1fr); gap: 34px 12px; }
+  .v-feat__item--wide { grid-column: span 2; order: 0; }
+  .v-feat__item--wide .v-feat__tile { aspect-ratio: 8 / 5; }
+  .v-feat__tiles { align-items: end; }
+  .v-feat__name { font-size: 20px; }
+}
+
+/* ---------- Bloc d'achat : la gélule en masque ---------- */
+.v-buy__main { border-radius: 260px 260px var(--r-xl) var(--r-xl); box-shadow: none; background: var(--champ-2); }
+.v-buy__thumbs .v-slot { border-radius: var(--gelule); aspect-ratio: 3 / 4; background: #F3C7D1; box-shadow: none; }
+.v-card-wood, .v-buy__panel { box-shadow: none; }
+.v-buy__points svg { border-radius: var(--gelule); width: 30px; height: 18px; padding: 2px 8px; }
+
+/* ---------- Trois gestes : des tuiles qui grandissent ---------- */
+.v-stages { color: #fff; }
+.v-stages__row { display: grid; gap: 30px; }
+.v-stages__title { color: #fff; }
+.v-stage__tile { border-radius: var(--gelule); overflow: hidden; display: grid; place-items: center; }
+.v-stage__tile img { width: 100%; height: 100%; object-fit: cover; }
+.v-stage--1 .v-stage__tile { height: 34vw; background: var(--champ-2); }
+.v-stage--2 .v-stage__tile { height: 46vw; background: #F3C7D1; }
+.v-stage--3 .v-stage__tile { height: 62vw; background: #fff; }
+.v-stage .v-feat__name { color: #fff; }
+.v-stage .v-feat__fact { color: rgba(255,255,255,.88); }
+@media (min-width: 990px) {
+  .v-stages__row { grid-template-columns: repeat(12, 1fr); column-gap: 12px; align-items: end; }
+  .v-stages__title { grid-column: 1 / 8; grid-row: 1; align-self: start; margin: 0; }
+  .v-stage--1 { grid-column: 1 / 4; grid-row: 2; }
+  .v-stage--2 { grid-column: 4 / 8; grid-row: 2; }
+  .v-stage--3 { grid-column: 8 / 13; grid-row: 1 / 3; }
+  .v-stage--1 .v-stage__tile { height: 30vh; }
+  .v-stage--2 .v-stage__tile { height: 44vh; }
+  .v-stage--3 .v-stage__tile { height: 60vh; }
+}
+
+/* ---------- Vidéo, avis : sans ombres, gélule ---------- */
+.v-vid__frame { box-shadow: 0 0 0 10px rgba(255,255,255,.1); border-radius: 180px 180px 34px 34px; }
+.v-rsum, .v-review, .v-faq { box-shadow: none; }
+
+/* ---------- Catalogue ---------- */
+.v-cat { background: var(--poudre-2); color: var(--cacao); }
+.v-cat--page { background: transparent; color: #fff; }
+.v-cat__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 30px; margin-bottom: 40px; }
+.v-cat__head .v-h2 { margin: 0; color: var(--framboise); }
+.v-cat--page .v-cat__head .v-h2 { color: #fff; }
+.v-cat--page .v-cat__head .v-lead { color: rgba(255,255,255,.9); }
+.v-cat__head .v-link { color: var(--framboise); }
+.v-cat__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 34px 18px; grid-template-columns: 1fr; }
+.v-cat__link { display: block; color: inherit; text-decoration: none; }
+.v-cat__img { aspect-ratio: 4 / 5; border-radius: 240px 240px var(--r-xl) var(--r-xl); overflow: hidden; background: #F3C7D1; display: grid; place-items: center; transition: transform .35s var(--ease); }
+.v-cat__img img { width: 100%; height: 100%; object-fit: cover; }
+.v-cat__link:hover .v-cat__img, .v-cat__link:focus-visible .v-cat__img { transform: translateY(-6px); }
+.v-cat__item--soon .v-cat__img { background: #fff; }
+.v-cat--page .v-cat__item--soon .v-cat__img { background: rgba(255,255,255,.14); }
+.v-cat--page .v-cat__item--soon .v-feat__ph { color: #fff; }
+.v-cat__name { margin: 16px 0 4px; font: 500 1.35rem/1.25 var(--serif); }
+.v-cat__price { margin: 0; font-size: 16px; color: var(--framboise); font-weight: 500; }
+.v-cat--page .v-cat__price { color: var(--poudre); }
+.v-cat__item--soon .v-cat__price { color: var(--cacao-doux); font-weight: 400; }
+.v-cat--page .v-cat__item--soon .v-cat__price { color: rgba(255,255,255,.75); }
+@media (min-width: 750px) { .v-cat__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 749px) { .v-cat__grid { grid-template-columns: repeat(2, 1fr); gap: 26px 12px; } .v-cat__name { font-size: 1.1rem; } .v-cat__grid > :first-child { grid-column: 1 / -1; } }
+
+/* ---------- FAQ : titre collant, tuiles pleines ---------- */
+#faq.v-section > .v-wrap { display: grid; gap: 28px; }
+#faq .v-section__head { text-align: left; margin: 0; }
+#faq .v-faq { max-width: none; margin: 0; padding: 0; background: none; display: grid; gap: 8px; }
+#faq .v-acc { border: 0; border-radius: 28px; background: #fff; color: var(--cacao); padding: 0 24px; transition: background .25s, color .25s; }
+#faq .v-acc summary { min-height: 72px; font-size: 18px; }
+#faq .v-acc[open] { background: var(--poudre); }
+#faq .v-faq__more { text-align: left; }
+#faq .v-faq__more .v-link { color: #fff; }
+@media (min-width: 990px) {
+  #faq.v-section > .v-wrap { grid-template-columns: 4fr 8fr; gap: 48px; align-items: start; }
+  #faq .v-section__head { position: sticky; top: 110px; }
+}
+
+/* ---------- Grand bouton ---------- */
+.v-ctaband { position: relative; z-index: 1; padding: 0 var(--gutter); }
+.v-ctaband__link { position: relative; display: block; max-width: calc(var(--wrap) + 200px); margin: 0 auto; min-height: 56svh; padding: 28px clamp(20px, 3vw, 40px);
+  border-radius: 280px 280px 40px 40px; background: var(--poudre); color: var(--framboise); text-decoration: none; overflow: hidden; transition: background .2s, color .2s; }
+.v-ctaband__link:hover, .v-ctaband__link:focus-visible { background: var(--framboise); color: var(--poudre); box-shadow: inset 0 0 0 3px var(--poudre); }
+.v-ctaband__note { position: absolute; left: clamp(28px, 5vw, 80px); top: clamp(60px, 8vw, 110px); max-width: 22em; font-size: 18px; line-height: 1.4; }
+.v-ctaband__arrow { position: absolute; right: clamp(28px, 5vw, 80px); top: clamp(56px, 8vw, 104px); }
+.v-ctaband__word { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font: 500 clamp(64px, 17vw, 260px)/.8 var(--serif); letter-spacing: -.04em; white-space: nowrap; }
+@media (max-width: 749px) { .v-ctaband__link { min-height: 46svh; border-radius: 160px 160px 28px 28px; } .v-ctaband__note { font-size: 16px; right: 80px; } .v-ctaband__arrow { width: 32px; height: 32px; } }
+
+/* ---------- Pied de page : la marque construite ---------- */
+.v-footer { margin-top: clamp(72px, 10vw, 140px); }
+.v-footer__mark { display: flex; align-items: flex-end; gap: 4px; height: clamp(120px, 26vw, 34svh); margin-bottom: 56px; }
+.v-footer__block { flex: 1; display: grid; place-items: center; border-radius: var(--gelule); font: 500 clamp(36px, 9vw, 140px)/1 var(--serif); color: var(--cacao); }
+.v-footer__block--1 { height: 100%; background: var(--poudre); }
+.v-footer__block--2 { height: 72%; background: #F3C7D1; }
+.v-footer__block--3 { height: 88%; background: var(--or); }
+.v-footer__block--4 { height: 64%; background: var(--rose); }
+.v-footer__block--5 { height: 94%; background: #fff; }
+
+/* ---------- Entrées en cascade ---------- */
+.js .v-feat__item, .js .v-stage, .js .v-cat__item { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js .is-shown { opacity: 1 !important; transform: none !important; }
+@media (prefers-reduced-motion: reduce) { .js .v-feat__item, .js .v-stage, .js .v-cat__item { opacity: 1; transform: none; } }
+
+@media (max-width: 749px) { .v-vid { width: 78%; } }
+@media (min-width: 750px) { .v-ctaband__note { left: 9vw; top: 120px; } .v-ctaband__arrow { right: 9vw; top: 116px; } }

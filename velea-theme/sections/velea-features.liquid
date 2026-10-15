@@ -1,0 +1,41 @@
+<section id="{{ section.settings.anchor }}" class="v-section v-feat">
+  <div class="v-wrap v-feat__grid">
+    <div class="v-feat__head">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      <p class="v-lead">{{ section.settings.text }}</p>
+    </div>
+    <ul class="v-feat__tiles">
+      {%- for block in section.blocks -%}
+        <li class="v-feat__item{% if forloop.index == 2 %} v-feat__item--wide{% endif %}" {{ block.shopify_attributes }}>
+          <div class="v-feat__tile v-feat__tile--{{ forloop.index | modulo: 3 }}">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.name }}
+            {%- else -%}
+              <span class="v-feat__ph">Photo : {{ block.settings.hint }}</span>
+            {%- endif -%}
+          </div>
+          <h3 class="v-feat__name">{{ block.settings.name }}</h3>
+          <p class="v-feat__fact">{{ block.settings.fact }}</p>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Atouts",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre", "default": "atouts" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'elle sait faire" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Texte" }
+  ],
+  "blocks": [{ "type": "tile", "name": "Atout", "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "hint", "label": "Photo à prévoir (indication)", "default": "la ceinture" },
+    { "type": "text", "id": "name", "label": "Nom", "default": "Atout" },
+    { "type": "text", "id": "fact", "label": "Précision", "default": "Précision" }
+  ] }],
+  "presets": [{ "name": "VELEA · Atouts" }]
+}
+{% endschema %}

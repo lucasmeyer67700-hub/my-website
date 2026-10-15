@@ -1,0 +1,37 @@
+<section id="{{ section.settings.anchor }}" class="v-section v-stages">
+  <div class="v-wrap">
+    <div class="v-stages__row">
+      <h2 class="v-h2 v-stages__title">{{ section.settings.title }}</h2>
+      {%- for block in section.blocks -%}
+        <div class="v-stage v-stage--{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="v-stage__tile">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.name }}
+            {%- else -%}
+              <span class="v-feat__ph">Photo : {{ block.settings.hint }}</span>
+            {%- endif -%}
+          </div>
+          <h3 class="v-feat__name">{{ block.settings.name }}</h3>
+          <p class="v-feat__fact">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · En 3 gestes",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre", "default": "gestes" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Prête en trois gestes" }
+  ],
+  "blocks": [{ "type": "stage", "name": "Geste", "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "hint", "label": "Photo à prévoir", "default": "le geste" },
+    { "type": "text", "id": "name", "label": "Nom", "default": "Geste" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Texte" }
+  ] }],
+  "presets": [{ "name": "VELEA · En 3 gestes" }]
+}
+{% endschema %}

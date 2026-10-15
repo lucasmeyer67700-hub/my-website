@@ -257,4 +257,32 @@
     var out = el.querySelector('[data-eta-out]');
     if (out) out.textContent = 'entre le ' + f(add(Number(el.dataset.min) || 0)) + ' et le ' + f(add(Number(el.dataset.max) || 0));
   });
+
+  // Sélecteur de chaleur de l'ouverture : change l'écran de la ceinture dessinée
+  document.querySelectorAll('[data-heat]').forEach(function (box) {
+    var out = box.querySelector('[data-heat-out]'), note = box.querySelector('[data-heat-note-out]');
+    box.querySelectorAll('[data-heat-set]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        box.querySelectorAll('[data-heat-set]').forEach(function (o) { o.classList.remove('is-on'); o.setAttribute('aria-checked', 'false'); });
+        b.classList.add('is-on'); b.setAttribute('aria-checked', 'true');
+        if (out) out.textContent = b.dataset.heatSet;
+        if (note) note.textContent = b.dataset.heatNote;
+        box.dataset.level = b.dataset.heatSet;
+      });
+    });
+  });
+
+  // Entrées en cascade (atouts, gestes, catalogue)
+  var casc = document.querySelectorAll('.v-feat__item, .v-stage, .v-cat__item');
+  if ('IntersectionObserver' in window) {
+    var co = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var sib = Array.prototype.indexOf.call(e.target.parentNode.children, e.target);
+        e.target.style.transitionDelay = (Math.max(0, sib) * 80) + 'ms';
+        e.target.classList.add('is-shown'); co.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -6% 0px' });
+    casc.forEach(function (el) { co.observe(el); });
+  } else { casc.forEach(function (el) { el.classList.add('is-shown'); }); }
 })();

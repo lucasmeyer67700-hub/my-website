@@ -28,6 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <script>document.documentElement.className += ' js';</script>
   {{ 'velea-studio.css' | asset_url | stylesheet_tag }}
+  {{ 'velea-motif.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="v-body">
@@ -103,6 +104,7 @@
   </main>
 
   <footer class="v-footer">
+    <div class="v-wrap v-footer__mark" aria-hidden="true">{%- assign letters = "V,E,L,E,A" | split: "," -%}{%- for l in letters -%}<span class="v-footer__block v-footer__block--{{ forloop.index }}">{{ l }}</span>{%- endfor -%}</div>
     <div class="v-wrap v-footer__grid">
       <div>
         <p class="v-logo v-logo--footer">VELEA</p>

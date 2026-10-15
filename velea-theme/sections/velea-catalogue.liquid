@@ -1,0 +1,46 @@
+{%- assign col = collections[section.settings.collection] | default: collections.all -%}
+<section id="catalogue" class="v-section v-cat">
+  <div class="v-wrap">
+    <div class="v-cat__head">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      <a class="v-link" href="{{ col.url | default: routes.all_products_collection_url }}">Voir tout le catalogue</a>
+    </div>
+    <ul class="v-cat__grid">
+      {%- for item in col.products limit: 3 -%}
+        {%- assign iv = item.selected_or_first_available_variant -%}
+        <li class="v-cat__item">
+          <a href="{{ item.url }}" class="v-cat__link">
+            <div class="v-cat__img">
+              {%- if item.featured_image -%}{{ item.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: item.title }}{%- else -%}<span class="v-feat__ph">Photo du produit</span>{%- endif -%}
+            </div>
+            <h3 class="v-cat__name">{{ item.title }}</h3>
+            <p class="v-cat__price">{{ iv.price | money }}</p>
+          </a>
+        </li>
+      {%- endfor -%}
+      {%- assign shown = col.products.size | at_most: 3 -%}
+      {%- assign missing = 3 | minus: shown -%}
+      {%- if missing > 0 -%}
+        {%- for i in (1..missing) -%}
+          <li class="v-cat__item v-cat__item--soon">
+            <div class="v-cat__img"><span class="v-feat__ph">Bientôt disponible</span></div>
+            <h3 class="v-cat__name">{{ section.settings.soon }}</h3>
+            <p class="v-cat__price">Prochainement</p>
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Catalogue",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Le catalogue VELEA" },
+    { "type": "collection", "id": "collection", "label": "Collection (vide = tous les produits)" },
+    { "type": "text", "id": "soon", "label": "Nom des emplacements vides", "default": "Nouveau produit" }
+  ],
+  "presets": [{ "name": "VELEA · Catalogue" }]
+}
+{% endschema %}
