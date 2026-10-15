@@ -1,0 +1,47 @@
+{%- liquid
+  assign p = section.settings.product | default: all_products['ceinture-chauffante-regles']
+  assign v = p.selected_or_first_available_variant
+-%}
+<section class="v-intro" aria-labelledby="intro-{{ section.id }}">
+  <div class="v-wrap v-intro__grid">
+    <div class="v-intro__copy">
+      {%- if section.settings.kicker != blank -%}<p class="v-intro__kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+      <h1 id="intro-{{ section.id }}" class="v-intro__title">{{ section.settings.title }}</h1>
+      <p class="v-intro__text">{{ section.settings.text }}</p>
+      <ul class="v-intro__facts">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><span>{{ block.settings.label }}</span></li>
+        {%- endfor -%}
+      </ul>
+      <div class="v-intro__actions">
+        <a href="{{ section.settings.cta_link | default: p.url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
+        {%- if v -%}<p class="v-intro__price">{{ v.price | money }}<span>livraison suivie</span></p>{%- endif -%}
+      </div>
+    </div>
+    <div class="v-intro__media">
+      {% render 'velea-slot', class: 'v-arch', image: section.settings.image, label: section.settings.image_label, loading: 'eager', sizes: '(min-width: 990px) 480px, 86vw' %}
+      <span class="v-intro__seal" aria-hidden="true">Chaleur<br>douce</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Accueil",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit" },
+    { "type": "text", "id": "kicker", "label": "Petite phrase", "default": "Ceinture chauffante menstruelle" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Vos règles, en douceur." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Une ceinture qui chauffe et masse le bas du ventre, sans fil. Vous la portez sous vos vêtements, chez vous comme au travail." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir la ceinture" },
+    { "type": "url", "id": "cta_link", "label": "Lien du bouton" },
+    { "type": "image_picker", "id": "image", "label": "Image (portrait)" },
+    { "type": "text", "id": "image_label", "label": "Texte de l'emplacement vide", "default": "Votre photo ici (portrait 4:5)" }
+  ],
+  "blocks": [{ "type": "fact", "name": "Repère", "settings": [
+    { "type": "text", "id": "value", "label": "Valeur", "default": "3" },
+    { "type": "text", "id": "label", "label": "Libellé", "default": "niveaux de chaleur" }
+  ] }],
+  "presets": [{ "name": "VELEA · Accueil" }]
+}
+{% endschema %}

@@ -1,0 +1,34 @@
+<section id="{{ section.settings.anchor | default: 'pourquoi' }}" class="v-section v-why">
+  <div class="v-wrap">
+    <div class="v-why__intro">
+      <h2 class="v-h2">{{ section.settings.title }}</h2>
+      <div class="v-why__text">{{ section.settings.text }}</div>
+    </div>
+    <div class="v-why__list">
+      {%- for block in section.blocks -%}
+        <article class="v-why__item" {{ block.shopify_attributes }}>
+          {% render 'velea-slot', class: 'v-why__img', image: block.settings.image, label: 'Photo à ajouter', sizes: '(min-width: 990px) 360px, 86vw' %}
+          <h3 class="v-h3">{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VELEA · Pourquoi",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancre", "default": "pourquoi" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Pensée pour les jours difficiles" },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Texte d'introduction.</p>" }
+  ],
+  "blocks": [{ "type": "item", "name": "Point", "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (4:3)" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Titre" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Texte" }
+  ] }],
+  "presets": [{ "name": "VELEA · Pourquoi" }]
+}
+{% endschema %}

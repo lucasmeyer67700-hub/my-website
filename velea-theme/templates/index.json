@@ -1,21 +1,6 @@
 {
  "layout": "velea",
  "sections": {
-  "hero": {
-   "type": "velea-hero",
-   "settings": {
-    "product": "ceinture-chauffante-regles",
-    "image": "shopify://shop_images/velea-chalet.webp",
-    "kicker": "Confort menstruel",
-    "title": "Un moment de douceur, même pendant les règles",
-    "text": "Chaleur réglable et massage vibrant, sans fil. Votre nouveau rituel cocooning.",
-    "cta": "Découvrir la ceinture",
-    "link_label": "Tout savoir",
-    "focus": 60,
-    "focus_x": 55,
-    "link_url": "#details"
-   }
-  },
   "buy": {
    "type": "velea-buy",
    "settings": {
@@ -28,8 +13,7 @@
     "ship_min": 5,
     "ship_max": 10,
     "buynow": "Soulagée dès maintenant",
-    "preview_label": "Aperçu du produit",
-    "visual": "shopify://shop_images/velea-produit-chambre.webp"
+    "preview_label": "Aperçu du produit"
    },
    "blocks": {
     "spec-1": {
@@ -152,78 +136,6 @@
     "info-1",
     "info-2",
     "info-3"
-   ]
-  },
-  "flow": {
-   "type": "velea-flow",
-   "settings": {
-    "anchor": "details",
-    "kicker": "En un coup d'œil",
-    "title": "Tout ce qu'elle fait pour vous"
-   },
-   "blocks": {
-    "node-1": {
-     "type": "node",
-     "settings": {
-      "keyword": "Chaleur",
-      "title": "3 niveaux",
-      "text": "50, 55 ou 60 °C selon le fabricant",
-      "placeholder": "Image : l'écran et les niveaux de chaleur"
-     }
-    },
-    "node-2": {
-     "type": "node",
-     "settings": {
-      "keyword": "Massage",
-      "title": "Vibration douce",
-      "text": "",
-      "placeholder": "Image : la ceinture en mode massage"
-     }
-    },
-    "node-3": {
-     "type": "node",
-     "settings": {
-      "keyword": "Liberté",
-      "title": "Sans fil",
-      "text": "Batterie intégrée de 1 800 mAh",
-      "placeholder": "Image : la ceinture portée, en mouvement"
-     }
-    },
-    "node-4": {
-     "type": "node",
-     "settings": {
-      "keyword": "Autonomie",
-      "title": "Environ 2 h",
-      "text": "Recharge en environ 2 h",
-      "placeholder": "Image : la ceinture en recharge"
-     }
-    },
-    "node-5": {
-     "type": "node",
-     "settings": {
-      "keyword": "Légère",
-      "title": "142 g",
-      "text": "18,5 × 8 × 2,5 cm",
-      "placeholder": "Image : la ceinture tenue dans la main"
-     }
-    },
-    "node-6": {
-     "type": "node",
-     "settings": {
-      "keyword": "Douceur",
-      "title": "Effet velours",
-      "text": "Coloris rose",
-      "placeholder": "Image : gros plan sur le tissu"
-     }
-    }
-   },
-   "block_order": [
-    "node-1",
-    "node-2",
-    "node-3",
-    "node-4",
-    "node-5",
-    "node-6"
    ]
   },
   "steps": {
@@ -376,12 +288,87 @@
     "text": "",
     "cta": "Découvrir la ceinture"
    }
+  },
+  "intro": {
+   "type": "velea-intro",
+   "settings": {
+    "product": "ceinture-chauffante-regles",
+    "kicker": "Ceinture chauffante menstruelle",
+    "title": "Vos règles, en douceur.",
+    "text": "Une ceinture qui chauffe et masse le bas du ventre, sans fil. Vous la portez sous vos vêtements, chez vous comme au travail.",
+    "cta": "Découvrir la ceinture",
+    "image_label": "Votre photo ici (portrait 4:5)"
+   },
+   "blocks": {
+    "f1": {
+     "type": "fact",
+     "settings": {
+      "value": "3",
+      "label": "niveaux de chaleur"
+     }
+    },
+    "f2": {
+     "type": "fact",
+     "settings": {
+      "value": "2 h",
+      "label": "d'autonomie annoncée"
+     }
+    },
+    "f3": {
+     "type": "fact",
+     "settings": {
+      "value": "142 g",
+      "label": "légère et sans fil"
+     }
+    }
+   },
+   "block_order": [
+    "f1",
+    "f2",
+    "f3"
+   ]
+  },
+  "why": {
+   "type": "velea-why",
+   "settings": {
+    "anchor": "pourquoi",
+    "title": "Pensée pour les jours difficiles",
+    "text": "<p>Pendant les règles, beaucoup de femmes sortent la bouillotte pour se détendre. VELEA reprend ce geste en plus pratique : la ceinture chauffe toute seule, sans eau ni prise, et reste en place autour de la taille. Vous continuez votre journée, elle reste là où vous en avez besoin.</p>"
+   },
+   "blocks": {
+    "i1": {
+     "type": "item",
+     "settings": {
+      "title": "Une chaleur que vous choisissez",
+      "text": "Trois réglages annoncés par le fabricant : 50, 55 et 60 °C. Commencez au plus doux, montez si besoin."
+     }
+    },
+    "i2": {
+     "type": "item",
+     "settings": {
+      "title": "Un massage par vibration",
+      "text": "La vibration s'utilise seule ou avec la chaleur, pour un vrai moment de détente."
+     }
+    },
+    "i3": {
+     "type": "item",
+     "settings": {
+      "title": "Sans fil, toute la journée",
+      "text": "Batterie rechargeable en USB, environ 2 h d'autonomie annoncée. Assez fine pour se glisser sous un pull."
+     }
+    }
+   },
+   "block_order": [
+    "i1",
+    "i2",
+    "i3"
+   ]
   }
  },
  "order": [
-  "hero",
+  "intro",
+  "why",
   "buy",
-  "flow",
   "steps",
   "reviews",
   "faq",

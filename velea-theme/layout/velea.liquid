@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#FFFFFF">
+  <meta name="theme-color" content="#5E1833">
   <link rel="canonical" href="{{ canonical_url }}">
   {%- if template.name == 'index' -%}
     <title>VELEA | Ceinture chauffante menstruelle avec massage vibrant</title>
@@ -27,14 +27,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <script>document.documentElement.className += ' js';</script>
-  {{ 'velea.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-premium.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-ui.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-blanc-1.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-blanc-2.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-blanc-3.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-blanc-4.css' | asset_url | stylesheet_tag }}
-  {{ 'velea-rose.css' | asset_url | stylesheet_tag }}
+  {{ 'velea-studio.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="v-body">
@@ -55,7 +48,7 @@
           {%- for link in linklists['main-menu'].links -%}
             {%- assign lt = link.title | downcase -%}
             {%- if lt contains 'comment' -%}{%- continue -%}{%- endif -%}
-            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | remove_first: 'La ' }}</a>
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | remove_first: 'La ' | capitalize }}</a>
           {%- endfor -%}
         </nav>
       </div>
@@ -96,7 +89,7 @@
         {%- for link in linklists['main-menu'].links -%}
           {%- assign lt = link.title | downcase -%}
           {%- if lt contains 'comment' -%}{%- continue -%}{%- endif -%}
-          <li><a href="{{ link.url }}" data-drawer-close>{{ link.title | remove_first: 'La ' }}</a></li>
+          <li><a href="{{ link.url }}" data-drawer-close>{{ link.title | remove_first: 'La ' | capitalize }}</a></li>
         {%- endfor -%}
         <li><a href="{{ routes.cart_url }}">Mon panier</a></li>
       </ul>
