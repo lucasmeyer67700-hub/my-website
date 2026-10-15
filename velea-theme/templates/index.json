@@ -5,13 +5,14 @@
    "type": "velea-hero",
    "settings": {
     "product": "ceinture-chauffante-regles",
-    "image": "shopify://shop_images/velea-hero.webp",
+    "image": "shopify://shop_images/velea-chalet.webp",
     "kicker": "Confort menstruel",
     "title": "Un moment de confort, même pendant les règles",
     "text": "Découvrez une ceinture chauffante rechargeable avec massage vibrant, pensée pour accompagner vos moments de détente pendant la période menstruelle.",
     "cta": "Découvrir la ceinture",
     "link_label": "Voir les caractéristiques",
-    "focus": 30
+    "focus": 60,
+    "focus_x": 55
    }
   },
   "story": {

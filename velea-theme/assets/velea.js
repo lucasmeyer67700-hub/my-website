@@ -28,7 +28,7 @@
   // Barre d'achat : visible quand le bloc d'achat n'est plus à l'écran
   var sticky = document.querySelector('[data-sticky]');
   var buy = document.getElementById('ceinture');
-  var hero = document.querySelector('.v-hero');
+  var hero = document.querySelector('.v-hero, .v-banner');
   if (sticky && buy && 'IntersectionObserver' in window) {
     var state = { buy: false, hero: true };
     var update = function () { sticky.classList.toggle('is-visible', !state.buy && !state.hero); };

@@ -4,28 +4,36 @@
     assign p = collections.all.products.first
   endif
   assign cta_url = section.settings.cta_link | default: p.url
+  assign img = section.settings.image
+  assign img_alt = img.alt | default: 'Ceinture chauffante dans un chalet chaleureux'
 -%}
-<style>.v-hero__visual .v-slot img { object-position: 50% {{ section.settings.focus }}%; }</style>
-<section class="v-hero" aria-labelledby="hero-title-{{ section.id }}">
-  <div class="v-wrap v-hero__grid">
-    <div class="v-hero__copy">
+<style>
+  #hero-{{ section.id }} .v-banner__img img { object-position: {{ section.settings.focus_x }}% {{ section.settings.focus }}%; }
+</style>
+<section id="hero-{{ section.id }}" class="v-banner" aria-labelledby="hero-title-{{ section.id }}">
+  <div class="v-banner__img">
+    {%- if img != blank -%}
+      {{ img | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '600, 900, 1200, 1600, 2000, 2400', alt: img_alt }}
+    {%- else -%}
+      {% render 'velea-slot', label: 'Image paysage : ambiance chalet avec la ceinture' %}
+    {%- endif -%}
+  </div>
+  <div class="v-banner__shade" aria-hidden="true"></div>
+  <div class="v-wrap v-banner__inner">
+    <div class="v-banner__copy">
       {%- if section.settings.kicker != blank -%}
-        <p class="v-hero__rating"><span class="v-hero__dot" aria-hidden="true"></span>{{ section.settings.kicker }}</p>
+        <p class="v-banner__kicker">{{ section.settings.kicker }}</p>
       {%- endif -%}
-      <h1 id="hero-title-{{ section.id }}" class="v-h1">{{ section.settings.title }}</h1>
-      <p class="v-lead">{{ section.settings.text }}</p>
-      <div class="v-hero__buy">
+      <h1 id="hero-title-{{ section.id }}" class="v-banner__title">{{ section.settings.title }}</h1>
+      <p class="v-banner__text">{{ section.settings.text }}</p>
+      <div class="v-banner__actions">
         {%- if section.settings.cta != blank -%}
           <a href="{{ cta_url }}" class="v-btn v-btn--main">{{ section.settings.cta }}</a>
         {%- endif -%}
         {%- if section.settings.link_label != blank -%}
-          <a href="{{ section.settings.link_url | default: '#caracteristiques' }}" class="v-link">{{ section.settings.link_label }}</a>
+          <a href="{{ section.settings.link_url | default: '#caracteristiques' }}" class="v-link v-link--light">{{ section.settings.link_label }}</a>
         {%- endif -%}
       </div>
-    </div>
-    <div class="v-hero__visual">
-      <div class="v-heat" aria-hidden="true"></div>
-      {% render 'velea-slot', image: section.settings.image, label: 'Image principale : une femme adulte, détendue, qui porte la ceinture rose', loading: 'eager', sizes: '(min-width: 900px) 400px, 72vw' %}
     </div>
   </div>
 </section>
@@ -35,15 +43,16 @@
   "name": "VELEA · Bannière",
   "settings": [
     { "type": "product", "id": "product", "label": "Produit mis en avant" },
+    { "type": "image_picker", "id": "image", "label": "Image (format paysage)" },
+    { "type": "range", "id": "focus_x", "label": "Cadrage horizontal", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 55 },
+    { "type": "range", "id": "focus", "label": "Cadrage vertical", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 60 },
     { "type": "text", "id": "kicker", "label": "Petite phrase au-dessus", "default": "Confort menstruel" },
     { "type": "textarea", "id": "title", "label": "Titre", "default": "Un moment de confort, même pendant les règles" },
     { "type": "textarea", "id": "text", "label": "Sous-titre", "default": "Découvrez une ceinture chauffante rechargeable avec massage vibrant, pensée pour accompagner vos moments de détente pendant la période menstruelle." },
     { "type": "text", "id": "cta", "label": "Bouton principal", "default": "Découvrir la ceinture" },
     { "type": "url", "id": "cta_link", "label": "Lien du bouton (vide = fiche produit)" },
     { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Voir les caractéristiques" },
-    { "type": "url", "id": "link_url", "label": "Destination du lien secondaire (vide = caractéristiques)" },
-    { "type": "image_picker", "id": "image", "label": "Image principale" },
-    { "type": "range", "id": "focus", "label": "Cadrage vertical de l'image", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 30 }
+    { "type": "url", "id": "link_url", "label": "Destination du lien secondaire (vide = caractéristiques)" }
   ],
   "presets": [{ "name": "VELEA · Bannière" }]
 }
