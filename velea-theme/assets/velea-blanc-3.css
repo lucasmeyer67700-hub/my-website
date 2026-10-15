@@ -1,0 +1,65 @@
+/* VELEA v3 — lisibilité, galerie produit, infos de confiance, langues */
+
+/* ---------- Lisibilité : texte plus clair, fonds de lecture ---------- */
+:root { --creme: #2B2326; --creme-doux: rgba(43, 35, 38, 0.9); }
+.v-lead, .v-muted, .v-acc__body, .v-step p, .v-flow__desc, .v-info, .v-buy__tax, .v-specs-list dt { color: var(--creme-doux); }
+.v-h2, .v-flow__title, .v-buy__panel .v-h2, .v-banner__title { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.225); }
+
+/* Les blocs de texte reposent sur un panneau sombre : plus jamais de texte « dans le décor » */
+.v-section__head, .v-faq, .v-flow__list, .v-reviews__track { position: relative; }
+.v-faq, .v-flow__list { padding: 8px 22px; border-radius: 24px; background: rgba(20, 12, 7, 0.36); box-shadow: inset 0 0 0 1px rgba(214, 168, 92, 0.22); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.v-flow__list { padding: 34px 22px; }
+.v-step { background: rgba(20, 12, 7, 0.39); }
+.v-section__head { padding: 0 6px; }
+@media (max-width: 749px) {
+  .v-glow span { opacity: .55; }
+  .v-bubbles i { opacity: .55; }
+  .v-section__head { padding: 18px 16px; border-radius: 20px; background: rgba(20, 12, 7, 0.31); }
+  .v-section__head .v-h2::after { margin-inline: auto; }
+  .v-section__head { text-align: center; }
+  .v-flow__line { left: 45px; }
+  .v-faq { padding: 4px 18px; }
+}
+@media (min-width: 990px) { .v-flow__line { left: 50%; } }
+
+/* ---------- Photos produit : 1 grande + 3 petites ---------- */
+.v-buy__visual { display: block; margin-bottom: 22px; }
+.v-buy__main { aspect-ratio: 1; border-radius: 26px; box-shadow: 0 0 0 1px rgba(214, 168, 92, 0.35), 0 0 0 6px rgba(20, 12, 7, 0.425), 0 0 0 7px rgba(231, 183, 174, 0.25), 0 30px 60px -30px rgba(0, 0, 0, 0.4); }
+.v-buy__thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.v-buy__thumbs .v-slot { aspect-ratio: 1; border-radius: 16px; }
+.v-buy__thumbs .v-slot__label { margin: 6px; padding: 6px; font-size: 11px; }
+.v-buy__thumbs .v-slot__label svg { width: 18px; height: 18px; }
+@media (min-width: 990px) {
+  .v-buy__visual { margin-bottom: 0; }
+  .v-buy__visual .v-slot.v-buy__main { aspect-ratio: 4 / 4.4; }
+  .v-buy__thumbs { gap: 14px; margin-top: 14px; }
+}
+
+/* ---------- Infos de confiance : 3 colonnes aérées ---------- */
+.v-infos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 26px 0 0; padding: 22px 0 0; border-top: 1px solid rgba(214, 168, 92, 0.22); }
+.v-info { flex-direction: column; align-items: center; justify-content: flex-start; gap: 10px; padding: 16px 8px; border: 0; border-radius: 18px; background: rgba(20, 12, 7, 0.225); box-shadow: inset 0 0 0 1px rgba(214, 168, 92, 0.18); text-align: center; font-size: 13px; line-height: 1.4; }
+.v-info > span:last-child { display: grid; gap: 4px; }
+.v-info strong { display: block; font-size: 13.5px; letter-spacing: .04em; color: #2B2326; }
+.v-info a { white-space: normal; color: var(--poudre); font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; }
+.v-info__icon { width: 40px; height: 40px; }
+.v-buy__duo .v-infos { text-align: center; }
+@media (max-width: 380px) { .v-infos { grid-template-columns: 1fr; } .v-info { flex-direction: row; text-align: left; } }
+
+/* Carte d'achat : plus d'air */
+.v-buy__panel .v-h2 { margin-bottom: 6px; }
+.v-buy__points { gap: 14px; }
+.v-qty-row { margin-top: 6px; }
+.v-buy__pay { margin-top: 18px; gap: 8px; }
+
+/* ---------- Sélecteur de langue ---------- */
+.v-lang { margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(214, 168, 92, 0.2); }
+.v-lang__form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.v-lang__label { display: inline-flex; align-items: center; gap: 8px; color: var(--or-clair); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+.v-lang__list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.v-lang__btn { min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: rgba(43, 35, 38, 0.06); box-shadow: inset 0 0 0 1px rgba(214, 168, 92, 0.35); color: var(--creme); font: 400 14px var(--sans); cursor: pointer; transition: background .25s, color .25s; }
+.v-lang__btn:hover { background: rgba(231, 183, 174, 0.16); }
+.v-lang__btn.is-current { background: var(--or-grad); color: #FFFFFF; box-shadow: none; font-weight: 500; }
+@media (max-width: 749px) { .v-lang__form { justify-content: center; } .v-lang__label { width: 100%; justify-content: center; } }
+
+/* Barre collante : ne cache pas le bouton du chat (coin bas droit) */
+@media (max-width: 749px) { .v-sticky { padding-right: 84px; } }
