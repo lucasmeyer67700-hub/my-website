@@ -249,8 +249,47 @@
     "examples": true,
     "show_summary": true,
     "rating": "4.7",
-    "count": 394
-   }
+    "count": 394,
+    "marquee": true,
+    "speed": 9
+   },
+   "blocks": {
+    "review-1": {
+     "type": "review",
+     "settings": {
+      "name": "Acheteur AliExpress",
+      "rating": 5,
+      "text": "C'est tellement bien que j'en ai acheté 3 de plus pour les offrir en cadeau. La chaleur est forte à très forte. Il vibre aussi, mais peut être utilisé uniquement en mode chaleur. Il se recharge avec USB-C.",
+      "verified": false,
+      "meta": "Coloris rose · 30 mars 2026"
+     }
+    },
+    "review-2": {
+     "type": "review",
+     "settings": {
+      "name": "Acheteur AliExpress",
+      "rating": 5,
+      "text": "C'est le deuxième que j'achète. Le produit est excellent, il faut juste faire attention au type que vous choisissez : lors de la deuxième commande, j'ai commandé un modèle sans minuteur, ce qui est dommage… Fortement recommandé.",
+      "verified": false,
+      "meta": "Coloris rose · 25 juin 2026"
+     }
+    },
+    "review-3": {
+     "type": "review",
+     "settings": {
+      "name": "Acheteur AliExpress",
+      "rating": 5,
+      "text": "Il est arrivé sans aucun problème. Il peut chauffer ou masser séparément ou ensemble. L'élastique est réglable. Il m'aide à soulager les douleurs pendant mes règles ou les douleurs lombaires.",
+      "verified": false,
+      "meta": "Coloris rose · 24 juin 2026"
+     }
+    }
+   },
+   "block_order": [
+    "review-1",
+    "review-2",
+    "review-3"
+   ]
   },
   "faq": {
    "type": "velea-faq",
