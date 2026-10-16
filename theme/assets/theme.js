@@ -797,6 +797,7 @@ customElements.define('video-player', VideoPlayer);
 /* -------------------------------------------------------------------------- */
 
 const WELCOME_KEY = 'velea:welcome';
+const VISIT_GAP = 30 * 60 * 1000;
 const welcomeStore = {
   get() {
     try {
@@ -846,6 +847,7 @@ class WelcomePopup extends HTMLElement {
     // After a sign-up (or an error), the page reloads: show the result at once.
     if (this.querySelector('[data-welcome-success]')) {
       welcomeStore.set({ subscribed: true });
+      track('theme:welcome_signup');
       this.open(true);
       return;
     }
@@ -865,21 +867,26 @@ class WelcomePopup extends HTMLElement {
     }
 
     const state = welcomeStore.get();
-    const snooze = (Number(this.dataset.snoozeDays) || 14) * 864e5;
     if (state.subscribed) return;
-    if (state.dismissedAt && Date.now() - state.dismissedAt < snooze) return;
+
+    // A visit ends after 30 minutes without a page view; the next one starts afresh.
+    const now = Date.now();
+    const sameVisit = state.visitStart && state.lastSeenAt && now - state.lastSeenAt < VISIT_GAP;
+    const visitStart = sameVisit ? state.visitStart : now;
+    welcomeStore.set({ visitStart, lastSeenAt: now });
+    window.addEventListener('pagehide', () => welcomeStore.set({ lastSeenAt: Date.now() }), { signal });
+
+    // Once closed, it comes back at the next visit, or after the chosen number of days.
+    if (state.dismissedAt) {
+      const snoozeDays = Math.max(0, Number.parseInt(this.dataset.snoozeDays, 10) || 0);
+      if (snoozeDays > 0 && now - state.dismissedAt < snoozeDays * 864e5) return;
+      if (state.dismissedAt >= visitStart) return;
+    }
     if (/\/(cart|account|checkouts?)(\/|$)/.test(window.location.pathname)) return;
 
     // Count the delay from the visitor's arrival on the site, across pages.
-    let arrival = Date.now();
-    try {
-      arrival = Number(window.sessionStorage.getItem('velea:arrival')) || arrival;
-      window.sessionStorage.setItem('velea:arrival', String(arrival));
-    } catch (error) {
-      // Without storage, the delay counts from this page.
-    }
-    const delay = Number(this.dataset.delay) || 10000;
-    this.#timer = setTimeout(() => this.open(), Math.max(1000, delay - (Date.now() - arrival)));
+    const delay = Number(this.dataset.delay) || 7000;
+    this.#timer = setTimeout(() => this.open(), Math.max(1000, delay - (now - visitStart)));
   }
 
   disconnectedCallback() {
@@ -897,6 +904,7 @@ class WelcomePopup extends HTMLElement {
     }
     this.#lastFocus = document.activeElement;
     this.dialog.showModal();
+    track('theme:welcome_view');
   }
 
   #remember() {

@@ -3,10 +3,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "points": {
-          "type": "points",
-          "settings": {}
-        },
         "variant": {
           "type": "variant_picker",
           "settings": {
@@ -30,12 +26,17 @@
             "show_payment_icons": true
           }
         },
+        "points": {
+          "type": "points",
+          "settings": {}
+        },
         "description": {
           "type": "accordion",
           "settings": {
             "title": "Présentation",
             "icon": "cloud",
             "source": "description",
+            "content": "",
             "open": false
           }
         },
@@ -45,6 +46,7 @@
             "title": "Caractéristiques",
             "icon": "heat",
             "source": "specs",
+            "content": "",
             "open": false
           }
         },
@@ -54,6 +56,7 @@
             "title": "Mode d'emploi",
             "icon": "check",
             "source": "usage",
+            "content": "",
             "open": false
           }
         },
@@ -63,6 +66,7 @@
             "title": "Précautions d'utilisation",
             "icon": "alert",
             "source": "precautions",
+            "content": "",
             "open": false
           }
         },
@@ -72,6 +76,7 @@
             "title": "Contenu du colis",
             "icon": "box",
             "source": "box",
+            "content": "",
             "open": false
           }
         },
@@ -81,6 +86,7 @@
             "title": "Livraison et retours",
             "icon": "truck",
             "source": "shipping",
+            "content": "",
             "open": false
           }
         },
@@ -90,6 +96,7 @@
             "title": "Informations fabricant et sécurité",
             "icon": "shield",
             "source": "safety_info",
+            "content": "",
             "open": false
           }
         },
@@ -114,10 +121,59 @@
       ],
       "settings": {
         "eyebrow": "Confort menstruel",
-        "gallery_ratio": "4 / 5",
+        "gallery_ratio": "1",
         "gallery_fit": "cover",
         "sticky_bar": true,
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-3"
+      }
+    },
+    "video": {
+      "type": "product-video",
+      "blocks": {
+        "heat": {
+          "type": "point",
+          "settings": {
+            "icon": "heat",
+            "text": "3 niveaux de chaleur : 50, 55 ou 60 °C"
+          }
+        },
+        "massage": {
+          "type": "point",
+          "settings": {
+            "icon": "vibration",
+            "text": "4 modes de massage, avec ou sans chaleur"
+          }
+        },
+        "battery": {
+          "type": "point",
+          "settings": {
+            "icon": "battery",
+            "text": "Sans fil, environ 2 h d'autonomie"
+          }
+        },
+        "power": {
+          "type": "point",
+          "settings": {
+            "icon": "power",
+            "text": "Arrêt automatique au bout de 30 minutes"
+          }
+        }
+      },
+      "block_order": [
+        "heat",
+        "massage",
+        "battery",
+        "power"
+      ],
+      "settings": {
+        "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+        "media_position": "left",
+        "eyebrow": "en vidéo",
+        "heading": "Sa douceur, <em>en vrai.</em>",
+        "text": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>",
+        "button_label": "Choisir mon coloris",
+        "button_link": "",
+        "color_scheme": "scheme-4"
       }
     },
     "benefits": {
@@ -170,9 +226,9 @@
         "columns": 2,
         "center": false,
         "compact": false,
+        "show_drops": false,
         "anchor": "bienfaits",
-        "color_scheme": "scheme-2",
-        "show_drops": false
+        "color_scheme": "scheme-2"
       }
     },
     "how-to": {
@@ -335,6 +391,13 @@
             "answer": "<p>Oui. Selon la notice du fabricant, la ceinture est contre-indiquée en cas de grossesse, de maladie cardiaque, de tumeur du col de l'utérus, de crise de goutte, ou de plaie ou anomalie de la peau. En cas de doute, demandez l'avis d'un professionnel de santé.</p>"
           }
         },
+        "duo": {
+          "type": "question",
+          "settings": {
+            "question": "Que contient le Duo ?",
+            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
+          }
+        },
         "delivery": {
           "type": "question",
           "settings": {
@@ -347,13 +410,6 @@
           "settings": {
             "question": "Et si elle ne me convient pas ?",
             "answer": "<p>Vous avez 30 jours après la réception pour l'essayer : si elle ne vous convient pas, notre garantie « Satisfaite ou remboursée 30 jours » s'applique. Elle s'ajoute à votre droit de rétractation de 14 jours et à la garantie légale de conformité de 2 ans. Toutes les conditions sont dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
-          }
-        },
-        "duo": {
-          "type": "question",
-          "settings": {
-            "question": "Que contient le Duo ?",
-            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
           }
         }
       },
@@ -376,55 +432,6 @@
         "link": "/pages/contact",
         "anchor": "faq",
         "color_scheme": "scheme-1"
-      }
-    },
-    "video": {
-      "type": "product-video",
-      "blocks": {
-        "heat": {
-          "type": "point",
-          "settings": {
-            "icon": "heat",
-            "text": "3 niveaux de chaleur : 50, 55 ou 60 °C"
-          }
-        },
-        "massage": {
-          "type": "point",
-          "settings": {
-            "icon": "vibration",
-            "text": "4 modes de massage, avec ou sans chaleur"
-          }
-        },
-        "battery": {
-          "type": "point",
-          "settings": {
-            "icon": "battery",
-            "text": "Sans fil, environ 2 h d'autonomie"
-          }
-        },
-        "power": {
-          "type": "point",
-          "settings": {
-            "icon": "power",
-            "text": "Arrêt automatique au bout de 30 minutes"
-          }
-        }
-      },
-      "block_order": [
-        "heat",
-        "massage",
-        "battery",
-        "power"
-      ],
-      "settings": {
-        "media_position": "left",
-        "eyebrow": "En vidéo",
-        "heading": "Sa douceur, <em>en vrai.</em>",
-        "text": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>",
-        "button_label": "Choisir mon coloris",
-        "button_link": "",
-        "color_scheme": "scheme-3",
-        "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
       }
     }
   },

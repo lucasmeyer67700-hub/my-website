@@ -2,86 +2,6 @@
   "current": {
     "logo_width": 120,
     "brand_tagline": "Le confort menstruel, avec douceur.",
-    "color_schemes": {
-      "scheme-1": {
-        "settings": {
-          "background": "#FFFCFA",
-          "text": "#302724",
-          "text_muted": "#6B615D",
-          "accent": "#7A5B26",
-          "surface": "#FBF2F3",
-          "border": "#EEDFDF",
-          "button": "#49352F",
-          "button_label": "#FFFCFA",
-          "background_gradient": ""
-        }
-      },
-      "scheme-2": {
-        "settings": {
-          "background": "#FBF2F3",
-          "text": "#302724",
-          "text_muted": "#6B615D",
-          "accent": "#7A5B26",
-          "surface": "#FFFCFA",
-          "border": "#EBD7DA",
-          "button": "#49352F",
-          "button_label": "#FFFCFA",
-          "background_gradient": ""
-        }
-      },
-      "scheme-3": {
-        "settings": {
-          "background": "#F3DFE2",
-          "text": "#302724",
-          "text_muted": "#5A4F4B",
-          "accent": "#7A5B26",
-          "surface": "#FFFCFA",
-          "border": "#E3C8CC",
-          "button": "#49352F",
-          "button_label": "#FFFCFA",
-          "background_gradient": ""
-        }
-      },
-      "scheme-4": {
-        "settings": {
-          "background": "#E8C7CD",
-          "text": "#302724",
-          "text_muted": "#4F4440",
-          "accent": "#6E5222",
-          "surface": "#F3DFE2",
-          "border": "#D7B1B8",
-          "button": "#49352F",
-          "button_label": "#FFFCFA",
-          "background_gradient": ""
-        }
-      },
-      "scheme-5": {
-        "settings": {
-          "background": "#49352F",
-          "text": "#FFFCFA",
-          "text_muted": "#D9C9C2",
-          "accent": "#D9BC82",
-          "surface": "#57423B",
-          "border": "#6A544C",
-          "button": "#F3DFE2",
-          "button_label": "#302724",
-          "background_gradient": ""
-        }
-      },
-      "scheme-6": {
-        "settings": {
-          "background": "#F8EBED",
-          "text": "#302724",
-          "text_muted": "#5A4F4B",
-          "accent": "#7A5B26",
-          "surface": "#FFFCFA",
-          "border": "#E9D3D6",
-          "button": "#49352F",
-          "button_label": "#FFFCFA",
-          "background_gradient": "linear-gradient(180deg, rgba(243, 223, 226, 1) 0%, rgba(247, 232, 234, 1) 40%, rgba(255, 252, 250, 1) 100%)"
-        }
-      }
-    },
     "type_heading_font": "instrument_serif_n4",
     "type_body_font": "dm_sans_n4",
     "heading_scale": 100,
@@ -102,11 +22,98 @@
     "social_facebook": "",
     "social_pinterest": "",
     "social_youtube": "",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
     "blocks": {
       "shopify-inbox-chat": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
         "settings": {}
+      }
+    },
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#fffcfa",
+          "background_gradient": "",
+          "text": "#302724",
+          "text_muted": "#6b615d",
+          "accent": "#7a5b26",
+          "surface": "#fbf2f3",
+          "border": "#eedfdf",
+          "button": "#49352f",
+          "button_label": "#fffcfa"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#fbf2f3",
+          "background_gradient": "",
+          "text": "#302724",
+          "text_muted": "#6b615d",
+          "accent": "#7a5b26",
+          "surface": "#fffcfa",
+          "border": "#ebd7da",
+          "button": "#49352f",
+          "button_label": "#fffcfa"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#f3dfe2",
+          "background_gradient": "",
+          "text": "#302724",
+          "text_muted": "#5a4f4b",
+          "accent": "#7a5b26",
+          "surface": "#fffcfa",
+          "border": "#e3c8cc",
+          "button": "#49352f",
+          "button_label": "#fffcfa"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#e8c7cd",
+          "background_gradient": "",
+          "text": "#302724",
+          "text_muted": "#4f4440",
+          "accent": "#6e5222",
+          "surface": "#f3dfe2",
+          "border": "#d7b1b8",
+          "button": "#49352f",
+          "button_label": "#fffcfa"
+        }
+      },
+      "scheme-5": {
+        "settings": {
+          "background": "#49352f",
+          "background_gradient": "",
+          "text": "#fffcfa",
+          "text_muted": "#d9c9c2",
+          "accent": "#d9bc82",
+          "surface": "#57423b",
+          "border": "#6a544c",
+          "button": "#f3dfe2",
+          "button_label": "#302724"
+        }
+      },
+      "scheme-6": {
+        "settings": {
+          "background": "#f8ebed",
+          "background_gradient": "linear-gradient(180deg, rgba(243, 223, 226, 1) 0%, rgba(247, 232, 234, 1) 40%, rgba(255, 252, 250, 1) 100%)",
+          "text": "#302724",
+          "text_muted": "#5a4f4b",
+          "accent": "#7a5b26",
+          "surface": "#fffcfa",
+          "border": "#e9d3d6",
+          "button": "#49352f",
+          "button_label": "#fffcfa"
+        }
       }
     }
   },

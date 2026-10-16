@@ -157,6 +157,14 @@
     "success_eyebrow": "Bienvenue",
     "use_code": "Utiliser mon code maintenant",
     "error": "Vérifiez votre adresse e-mail, puis réessayez.",
-    "no_thanks": "Non merci"
+    "no_thanks": "Non merci",
+    "use_code_price": "J'en profite : {{ price }}",
+    "auto_applied": "Le code s'ajoute automatiquement à votre panier.",
+    "keep_browsing": "Continuer ma visite",
+    "regular_price": "Prix habituel",
+    "price_with_code": "Prix avec le code",
+    "with_code": "avec le code",
+    "privacy": "Politique de confidentialité",
+    "consent": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque e-mail."
   }
 }

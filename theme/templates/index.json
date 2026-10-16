@@ -23,29 +23,29 @@
         "trust-payment"
       ],
       "settings": {
-        "eyebrow": "Confort menstruel",
+        "layout": "photo",
+        "show_drops": false,
+        "eyebrow": "",
         "heading": "Une chaleur douce, <em>où que vous soyez.</em>",
         "heading_tag": "h1",
         "text": "Une ceinture chauffante sans fil, avec chaleur réglable et massage par vibration, pour vivre vos jours de règles plus confortablement.",
-        "product": "ceinture-chauffante-regles",
-        "show_price": true,
-        "fallback_media_position": 1,
+        "image": "shopify://shop_images/velea-hero-chambre.jpg",
+        "photo_width": 70,
+        "photo_crop_x": 50,
         "image_alt": "Deux ceintures chauffantes VELEA, rose et blanche, posées sur un lit dans une chambre douce et lumineuse",
-        "image_position": "right",
-        "button_label": "Découvrir la ceinture",
-        "button_link": "",
-        "secondary_label": "Comment ça marche",
-        "secondary_link": "/#fonctionnement",
-        "color_scheme": "scheme-3",
-        "layout": "photo",
         "height": "full",
         "content_position": "bottom-left",
         "text_tone": "light",
         "overlay_opacity": 35,
-        "show_drops": false,
-        "image": "shopify://shop_images/velea-hero-chambre.jpg",
-        "photo_width": 70,
-        "photo_crop_x": 50
+        "image_position": "right",
+        "product": "ceinture-chauffante-regles",
+        "show_price": true,
+        "fallback_media_position": 1,
+        "button_label": "Découvrir la ceinture",
+        "button_link": "",
+        "secondary_label": "Comment ça marche",
+        "secondary_link": "/#fonctionnement",
+        "color_scheme": "scheme-3"
       }
     },
     "benefits": {
@@ -98,9 +98,9 @@
         "columns": 4,
         "center": false,
         "compact": false,
+        "show_drops": true,
         "anchor": "bienfaits",
-        "color_scheme": "scheme-6",
-        "show_drops": true
+        "color_scheme": "scheme-6"
       }
     },
     "everyday": {
@@ -263,7 +263,7 @@
           "type": "question",
           "settings": {
             "question": "Et si elle ne me convient pas ?",
-            "answer": "<p>Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation. Toutes les modalités sont détaillées dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
+            "answer": "<p>Vous avez 30 jours après la réception pour l'essayer : si elle ne vous convient pas, notre garantie « Satisfaite ou remboursée 30 jours » s'applique. Elle s'ajoute à votre droit de rétractation de 14 jours et à la garantie légale de conformité de 2 ans. Toutes les conditions sont dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
           }
         }
       },
@@ -294,8 +294,8 @@
         "button_label": "Découvrir la ceinture",
         "button_link": "",
         "show_trust": true,
-        "color_scheme": "scheme-3",
-        "show_drops": true
+        "show_drops": true,
+        "color_scheme": "scheme-3"
       }
     }
   },
