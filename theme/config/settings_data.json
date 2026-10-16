@@ -101,7 +101,14 @@
     "social_tiktok": "",
     "social_facebook": "",
     "social_pinterest": "",
-    "social_youtube": ""
+    "social_youtube": "",
+    "blocks": {
+      "shopify-inbox-chat": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   },
   "presets": {
     "Douceur": {
