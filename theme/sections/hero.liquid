@@ -76,7 +76,51 @@
   </div>
 {%- endcapture -%}
 
-{%- if layout == 'pink' -%}
+{%- if layout == 'photo' -%}
+  {%- liquid
+    assign photo_width = section.settings.photo_width | default: 70
+    assign photo_ratio = hero_image.aspect_ratio | default: 1.7778
+    assign photo_sizes = '(min-width: 990px) ' | append: photo_width | append: 'vw, 100vw'
+  -%}
+  <section
+    id="Hero-{{ section.id }}"
+    class="hero hero--photo color-{{ section.settings.color_scheme }}{% if hero_image == blank %} hero--no-image{% endif %}"
+    style="--photo-width: {{ photo_width }}%; --photo-ratio: {{ photo_ratio }}; --photo-crop-x: {{ section.settings.photo_crop_x | default: 50 }}%;"
+    aria-labelledby="HeroTitle-{{ section.id }}"
+  >
+    {%- if hero_image != blank -%}
+      <div class="hero__photo">
+        <picture>
+          {%- if mobile_image != blank -%}
+            {%- capture mobile_srcset -%}
+              {%- assign mobile_widths = '375,550,750,1100,1500' | split: ',' -%}
+              {%- for width in mobile_widths -%}
+                {%- assign width_number = width | plus: 0 -%}
+                {%- if width_number <= mobile_image.width or forloop.first -%}
+                  {%- unless forloop.first %}, {% endunless -%}
+                  {{ mobile_image | image_url: width: width_number }} {{ width_number }}w
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            <source media="(max-width: 989px)" srcset="{{ mobile_srcset | strip }}" sizes="100vw">
+          {%- endif -%}
+          {% render 'responsive-image',
+            image: hero_image,
+            sizes: photo_sizes,
+            widths: '600, 900, 1200, 1500, 1800, 2100, 2400',
+            eager: true,
+            alt: section.settings.image_alt,
+            class: 'hero__photo-image'
+          %}
+        </picture>
+      </div>
+    {%- endif -%}
+
+    <div class="hero__photo-inner page-width page-width--wide">
+      {{ hero_content }}
+    </div>
+  </section>
+{%- elsif layout == 'pink' -%}
   <section
     id="Hero-{{ section.id }}"
     class="hero hero--pink color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'left' %} hero--media-left{% endif %}{% if section.settings.show_drops %} has-drops{% endif %}"
@@ -483,6 +527,154 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Photo layout: a real photo that dissolves into the rose page.       */
+  /* Phones and tablets: photo on top, text over its faded foreground.   */
+  /* Computers: photo on the right, text on the rose on the left.        */
+  /* ------------------------------------------------------------------ */
+
+  .hero--photo {
+    --hero-h: max(34rem, calc(100svh - var(--header-offset, 7rem)));
+
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__photo {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    aspect-ratio: 1.2;
+    max-height: 46svh;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 60%, transparent 100%);
+
+    @media screen and (min-width: 750px) {
+      aspect-ratio: 1.75;
+      max-height: 58svh;
+    }
+
+    & picture,
+    & .hero__photo-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    & .hero__photo-image {
+      object-fit: cover;
+      /* !important: image_tag may write an inline focal point. */
+      object-position: var(--photo-crop-x, 50%) 32% !important;
+    }
+  }
+
+  .hero__photo-inner {
+    position: relative;
+    z-index: 2;
+    margin-block-start: clamp(-6rem, -12vw, -2.5rem);
+    padding-block-end: clamp(2.5rem, 7vw, 4rem);
+  }
+
+  .hero--photo .hero__content {
+    max-width: 34rem;
+  }
+
+  .hero--photo .hero__title {
+    font-size: calc(clamp(2.6rem, 1.2rem + 3.2vw, 4.5rem) * var(--font-heading-scale, 1));
+  }
+
+  /* Small phones: keep the main button on the first screen. */
+  @media screen and (max-width: 749px) and (max-height: 700px) {
+    .hero--photo .hero__photo {
+      max-height: 34svh;
+    }
+
+    .hero--photo .hero__content {
+      gap: var(--space-sm);
+    }
+  }
+
+  .hero--photo .hero__text {
+    max-width: 30rem;
+  }
+
+  .hero--photo .hero__trust {
+    gap: var(--space-2xs) var(--space-md);
+    border-block-start-color: var(--gold-hairline);
+
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  /* No photo yet: a clean rose banner that still fills the first screen. */
+  .hero--photo.hero--no-image {
+    min-height: var(--hero-h);
+  }
+
+  .hero--photo.hero--no-image .hero__photo-inner {
+    display: grid;
+    align-content: center;
+    margin-block-start: 0;
+    padding-block: clamp(3rem, 10vh, 6rem);
+  }
+
+  @media screen and (min-width: 990px) {
+    .hero--photo {
+      min-height: var(--hero-h);
+
+      /* Rose wash behind the text: keeps it legible where the photo fades in. */
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(
+          to right,
+          rgb(var(--color-background-rgb) / 0.94) 0%,
+          rgb(var(--color-background-rgb) / 0.8) 24%,
+          rgb(var(--color-background-rgb) / 0) 42%
+        );
+      }
+    }
+
+    .hero__photo {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-end: 0;
+      /* Never wider than the free space next to the text column. */
+      width: min(var(--photo-width, 70%), calc(var(--hero-h) * var(--photo-ratio)), calc(100% - 22rem));
+      max-height: none;
+      aspect-ratio: var(--photo-ratio);
+      -webkit-mask-image:
+        linear-gradient(to right, transparent 0, #000 20%),
+        linear-gradient(to bottom, #000 0, #000 76%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, transparent 0, #000 20%),
+        linear-gradient(to bottom, #000 0, #000 76%, transparent 100%);
+      mask-composite: intersect;
+
+      & .hero__photo-image {
+        object-position: 50% 50% !important;
+      }
+    }
+
+    .hero__photo-inner {
+      display: grid;
+      align-content: center;
+      margin-block-start: 0;
+      padding-block: clamp(2.5rem, 6vh, 5rem);
+    }
+
+    .hero--photo .hero__content {
+      max-width: min(34rem, 36vw);
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Pink layout: soft rose page, text on the left, arched visual        */
   /* ------------------------------------------------------------------ */
 
@@ -706,11 +898,12 @@
       "id": "layout",
       "label": "Mise en page",
       "options": [
+        { "value": "photo", "label": "Photo fondue dans le rose, texte à gauche" },
         { "value": "pink", "label": "Rose épuré, visuel en arche" },
         { "value": "full", "label": "Plein écran, texte sur l'image" },
         { "value": "split", "label": "Image et texte côte à côte" }
       ],
-      "default": "pink"
+      "default": "photo"
     },
     {
       "type": "checkbox",
@@ -757,14 +950,38 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Rose épuré : format portrait (1200 × 1500 px), recadré en arche. Plein écran : format paysage, 2400 × 1350 px minimum. Placez le point focal sur le sujet."
+      "info": "Photo fondue et plein écran : format paysage, 2400 px de large minimum. Rose épuré : format portrait (1200 × 1500 px), recadré en arche."
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Image mobile (facultative)",
       "info": "Format portrait conseillé (1080 × 1500 px). Sans image mobile, l'image principale est recadrée autour de son point focal.",
-      "visible_if": "{{ section.settings.layout == 'full' }}"
+      "visible_if": "{{ section.settings.layout == 'full' or section.settings.layout == 'photo' }}"
+    },
+    {
+      "type": "range",
+      "id": "photo_width",
+      "label": "Largeur de la photo sur ordinateur",
+      "info": "La photo se fond dans le rose à gauche, sous le texte. Réduisez si le texte touche le produit.",
+      "min": 55,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "visible_if": "{{ section.settings.layout == 'photo' }}"
+    },
+    {
+      "type": "range",
+      "id": "photo_crop_x",
+      "label": "Cadrage horizontal sur mobile",
+      "info": "0 % montre la gauche de la photo, 100 % la droite.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ section.settings.layout == 'photo' }}"
     },
     {
       "type": "text",
@@ -828,7 +1045,7 @@
         { "value": "left", "label": "À gauche" }
       ],
       "default": "right",
-      "visible_if": "{{ section.settings.layout != 'full' }}"
+      "visible_if": "{{ section.settings.layout == 'pink' or section.settings.layout == 'split' }}"
     },
     {
       "type": "header",

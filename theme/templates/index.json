@@ -30,19 +30,22 @@
         "product": "ceinture-chauffante-regles",
         "show_price": true,
         "fallback_media_position": 1,
-        "image_alt": "",
+        "image_alt": "Deux ceintures chauffantes VELEA, rose et blanche, posées sur un lit dans une chambre douce et lumineuse",
         "image_position": "right",
         "button_label": "Découvrir la ceinture",
         "button_link": "",
         "secondary_label": "Comment ça marche",
         "secondary_link": "/#fonctionnement",
         "color_scheme": "scheme-3",
-        "layout": "pink",
+        "layout": "photo",
         "height": "full",
         "content_position": "bottom-left",
         "text_tone": "light",
         "overlay_opacity": 35,
-        "show_drops": false
+        "show_drops": false,
+        "image": "shopify://shop_images/velea-hero-chambre.jpg",
+        "photo_width": 70,
+        "photo_crop_x": 50
       }
     },
     "benefits": {
