@@ -1,6 +1,7 @@
 {% doc %}
   Product card for grids (collection, search, empty cart). One tab stop:
-  the title link, stretched over the whole card.
+  the title link, stretched over the whole card. A second photo fades in on
+  hover (pointer devices only) and colour options show as small dots.
 
   @param {object} product - Product object
   @param {string} [heading_tag] - Heading element for the title (default h3)
@@ -11,20 +12,62 @@
 {% enddoc %}
 {%- liquid
   assign tag = heading_tag | default: 'h3'
-  assign image_sizes = sizes | default: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 90vw'
+  assign image_sizes = sizes | default: '(min-width: 990px) 30vw, (min-width: 600px) 45vw, 90vw'
+  assign second_media = blank
+  if product.media.size > 1
+    assign second_media = product.media[1]
+  endif
+  assign color_option = blank
+  for option in product.options_with_values
+    assign option_handle = option.name | handleize
+    if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+      assign color_option = option
+    endif
+  endfor
 -%}
 <article class="product-card" aria-labelledby="CardTitle-{{ product.id }}">
-  <div class="product-card__media media">
+  <div class="product-card__media media{% if second_media != blank %} product-card__media--swap{% endif %}">
     {%- if product.featured_media -%}
-      {% render 'responsive-image', image: product.featured_media.preview_image, sizes: image_sizes, alt: product.featured_media.alt %}
+      {% render 'responsive-image', image: product.featured_media.preview_image, sizes: image_sizes, alt: product.featured_media.alt, class: 'product-card__image' %}
+      {%- if second_media != blank -%}
+        {% render 'responsive-image', image: second_media.preview_image, sizes: image_sizes, decorative: true, class: 'product-card__image product-card__image--second' %}
+      {%- endif -%}
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     {%- endif -%}
   </div>
-  <div class="stack" style="--stack-gap: var(--space-3xs);">
+  <div class="product-card__body">
     <{{ tag }} class="product-card__title" id="CardTitle-{{ product.id }}">
       <a class="product-card__link" href="{{ product.url }}">{{ product.title | escape }}</a>
     </{{ tag }}>
     {% render 'price', product: product, class: 'product-card__price' %}
+    {%- if color_option != blank and color_option.values.size > 1 -%}
+      <p class="product-card__colors">
+        <span class="product-card__dots" aria-hidden="true">
+          {%- for value in color_option.values limit: 5 -%}
+            {%- liquid
+              assign swatch_color = value.swatch.color
+              if swatch_color == blank
+                assign value_handle = value.name | handleize
+                case value_handle
+                  when 'rose'
+                    assign swatch_color = '#E8C7CD'
+                  when 'blanc'
+                    assign swatch_color = '#FFFFFF'
+                  when 'noir'
+                    assign swatch_color = '#2B2523'
+                  when 'gris'
+                    assign swatch_color = '#BDB6B3'
+                  when 'beige'
+                    assign swatch_color = '#E8DCCB'
+                endcase
+              endif
+            -%}
+            <span class="product-card__dot" style="--swatch-color: {{ swatch_color | default: '#E8DCCB' }};"></span>
+          {%- endfor -%}
+        </span>
+        <span>{{ 'products.colors_count' | t: count: color_option.values.size }}</span>
+      </p>
+    {%- endif -%}
   </div>
 </article>

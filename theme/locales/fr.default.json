@@ -51,7 +51,11 @@
     "specs_note": "Caractéristiques annoncées par le fabricant.",
     "in_the_box": "Dans la boîte",
     "secure_payment": "Paiement sécurisé",
-    "color_option": "Coloris"
+    "color_option": "Coloris",
+    "colors_count": {
+      "one": "{{ count }} coloris",
+      "other": "{{ count }} coloris"
+    }
   },
   "cart": {
     "title": "Votre panier",
@@ -134,7 +138,19 @@
     "testimonials_editor_empty": "Section masquée : aucun avis. Ajoutez uniquement des avis authentiques de vraies clientes, ou une application d'avis.",
     "comparison_criterion": "Critère",
     "announcement_label": "Informations pratiques",
-    "announcement_pause": "Mettre en pause le défilement des annonces",
-    "drops_pause": "Mettre en pause l'animation des gouttes"
+    "drops_pause": "Mettre en pause l'animation des gouttes",
+    "video_pause": "Mettre la vidéo en pause",
+    "video_sound": "Activer le son de la vidéo",
+    "video_hint": "Ajoutez votre vidéo verticale (9:16) dans les réglages de cette section."
+  },
+  "collections": {
+    "coming_soon": "Bientôt",
+    "notify": "Être prévenue de la sortie"
+  },
+  "welcome": {
+    "success_eyebrow": "Bienvenue",
+    "use_code": "Utiliser mon code maintenant",
+    "error": "Vérifiez votre adresse e-mail, puis réessayez.",
+    "no_thanks": "Non merci"
   }
 }

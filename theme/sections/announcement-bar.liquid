@@ -76,23 +76,6 @@
         {%- endfor -%}
       </ul>
 
-      {%- if message_count > 1 -%}
-        <button
-          type="button"
-          class="icon-button announcement-bar__toggle"
-          data-announcement-toggle
-          aria-pressed="false"
-          hidden
-          aria-label="{{ 'sections.announcement_pause' | t }}"
-        >
-          <span class="announcement-bar__toggle-icon announcement-bar__toggle-icon--pause">
-            {%- render 'icon', icon: 'pause' -%}
-          </span>
-          <span class="announcement-bar__toggle-icon announcement-bar__toggle-icon--play">
-            {%- render 'icon', icon: 'play' -%}
-          </span>
-        </button>
-      {%- endif -%}
     </announcement-rotator>
   </div>
 {%- endif -%}
@@ -105,7 +88,7 @@
   .announcement-bar__inner {
     position: relative;
     display: block;
-    padding-inline: calc(var(--gutter-wide) + 2.5rem);
+    padding-inline: var(--gutter-wide);
   }
 
   /* Every message sits in the same grid cell: they cross-fade in place,
@@ -155,29 +138,6 @@
       text-underline-offset: 0.2em;
     }
   }
-
-  .announcement-bar__toggle {
-    position: absolute;
-    inset-block: 0;
-    inset-inline-end: calc(var(--gutter-wide) - 0.6rem);
-    margin-block: auto;
-    min-width: 2.5rem;
-    min-height: 2.5rem;
-    --icon-size: 1.05rem;
-  }
-
-  .announcement-bar__toggle-icon {
-    display: inline-flex;
-  }
-
-  .announcement-bar__toggle .announcement-bar__toggle-icon--play,
-  .announcement-bar__toggle[aria-pressed='true'] .announcement-bar__toggle-icon--pause {
-    display: none;
-  }
-
-  .announcement-bar__toggle[aria-pressed='true'] .announcement-bar__toggle-icon--play {
-    display: inline-flex;
-  }
 {% endstylesheet %}
 
 {% schema %}
@@ -190,17 +150,17 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Des messages courts et vérifiés, qui s'enchaînent en fondu. Les visiteurs peuvent mettre le défilement en pause."
+      "content": "Des messages courts et vérifiés, qui s'enchaînent en fondu en continu."
     },
     {
       "type": "range",
       "id": "interval",
       "label": "Durée d'affichage de chaque message",
-      "min": 3,
+      "min": 2,
       "max": 10,
       "step": 1,
       "unit": "s",
-      "default": 5
+      "default": 3
     },
     {
       "type": "color_scheme",

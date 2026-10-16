@@ -845,18 +845,42 @@ textarea.field__input {
   display: grid;
   gap: var(--space-sm);
   align-content: start;
+  height: 100%;
 }
 
 .product-card__media {
   --media-ratio: 4 / 5;
 
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
+  box-shadow: 0 0 0 1px rgb(var(--gold-rgb) / 0.18);
+
   & img {
-    transition: transform var(--duration-slow) var(--ease-out);
+    transition:
+      transform var(--duration-slow) var(--ease-out),
+      opacity var(--duration-slow) var(--ease-out);
   }
 }
 
-.product-card:hover .product-card__media img {
-  transform: scale(1.03);
+.product-card__image--second {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .product-card:hover .product-card__media img {
+    transform: scale(1.03);
+  }
+
+  .product-card:hover .product-card__media--swap .product-card__image--second {
+    opacity: 1;
+  }
+}
+
+.product-card__body {
+  display: grid;
+  gap: var(--space-3xs);
 }
 
 .product-card__title {
@@ -870,11 +894,114 @@ textarea.field__input {
     content: '';
     position: absolute;
     inset: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::after {
+      outline: 2px solid var(--color-text);
+      outline-offset: 4px;
+    }
   }
 }
 
 .product-card__price {
   color: var(--color-text-muted);
+}
+
+.product-card__colors {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.product-card__dots {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.product-card__dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background-color: var(--swatch-color);
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--color-text-rgb) / 0.18),
+    0 0 0 1px rgb(var(--gold-rgb) / 0.35);
+}
+
+/* "Coming soon" slot */
+.product-card__soon-media {
+  display: grid;
+  place-items: center;
+}
+
+.product-card__soon-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.product-card__soon-drop {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 26%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  rotate: -45deg;
+  border-radius: 50% 0 50% 50%;
+  background:
+    radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 5%, transparent 16%),
+    linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+    0 20px 34px -20px rgb(160 90 105 / 0.55);
+}
+
+.product-card__soon-ripple {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  width: 48%;
+  aspect-ratio: 4 / 1;
+  translate: -50% -50%;
+  border: 1px solid rgb(var(--gold-rgb) / 0.55);
+  border-radius: 50%;
+}
+
+.product-card__badge {
+  position: absolute;
+  inset-block-start: var(--space-sm);
+  inset-inline-start: var(--space-sm);
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--gold-hairline);
+  border-radius: var(--radius-round);
+  font-size: var(--text-xs);
+  font-weight: var(--font-body-weight-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+  background-color: rgb(var(--palette-warm-white-rgb) / 0.85);
+}
+
+.product-card__soon-text {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+}
+
+.product-card__notify {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-size: var(--text-base);
+  cursor: pointer;
 }
 
 .product-grid {
@@ -884,6 +1011,20 @@ textarea.field__input {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Catalogue: 1 card per row on phones, 2 on tablets, 3 on computers */
+.product-grid--catalogue {
+  grid-template-columns: 1fr;
+  gap: var(--space-xl) clamp(1rem, 2.5vw, 2rem);
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media screen and (min-width: 990px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* --------------------------------------------------------------------------

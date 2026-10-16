@@ -1,0 +1,367 @@
+{%- liquid
+  assign video = section.settings.video
+  assign fallback = section.settings.poster
+  if fallback == blank and product != blank
+    for media in product.media
+      if media.preview_image.aspect_ratio < 0.9
+        assign fallback = media.preview_image
+        break
+      endif
+    endfor
+    if fallback == blank
+      assign fallback = product.featured_media.preview_image
+    endif
+  endif
+  assign cta_link = section.settings.button_link | default: '#ProductInfo'
+-%}
+<section
+  class="product-video section color-{{ section.settings.color_scheme }}"
+  {% if section.settings.heading != blank %}
+    aria-labelledby="VideoTitle-{{ section.id }}"
+  {% endif %}
+>
+  <div class="page-width product-video__grid{% if section.settings.media_position == 'right' %} product-video__grid--media-right{% endif %}">
+    <div class="product-video__frame reveal">
+      {%- if video != blank -%}
+        <video-player class="product-video__player">
+          {{
+            video
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              preload: 'metadata',
+              image_size: '1080x',
+              class: 'product-video__video'
+          }}
+          <div class="product-video__controls">
+            <button
+              type="button"
+              class="icon-button product-video__control"
+              data-video-toggle
+              aria-pressed="false"
+              aria-label="{{ 'sections.video_pause' | t }}"
+            >
+              <span class="product-video__icon product-video__icon--pause">{% render 'icon', icon: 'pause' %}</span>
+              <span class="product-video__icon product-video__icon--play">{% render 'icon', icon: 'play' %}</span>
+            </button>
+            <button
+              type="button"
+              class="icon-button product-video__control"
+              data-video-sound
+              aria-pressed="false"
+              aria-label="{{ 'sections.video_sound' | t }}"
+            >
+              <span class="product-video__icon product-video__icon--muted">{% render 'icon', icon: 'volume-off' %}</span>
+              <span class="product-video__icon product-video__icon--sound">{% render 'icon', icon: 'volume' %}</span>
+            </button>
+          </div>
+        </video-player>
+      {%- elsif fallback != blank -%}
+        {% render 'responsive-image',
+          image: fallback,
+          sizes: '(min-width: 990px) 28rem, 80vw',
+          widths: '400, 600, 800, 1000, 1200',
+          class: 'product-video__poster'
+        %}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg product-video__poster' }}
+      {%- endif -%}
+
+      {%- if video == blank and request.design_mode -%}
+        <p class="product-video__hint">{{ 'sections.video_hint' | t }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="product-video__content reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h2" id="VideoTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rte lead">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="product-video__points" role="list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>
+              <span class="icon-badge">{% render 'icon', icon: block.settings.icon %}</span>
+              <span>{{ block.settings.text | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a class="button product-video__button" href="{{ cta_link }}">
+          {{- section.settings.button_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-video__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(2.5rem, 6vw, 6rem);
+    }
+  }
+
+  .product-video__grid--media-right .product-video__frame {
+    @media screen and (min-width: 750px) {
+      order: 1;
+    }
+  }
+
+  /* Portrait 9:16 frame with a fine offset gold outline */
+  .product-video__frame {
+    position: relative;
+    isolation: isolate;
+    justify-self: center;
+    width: min(100%, 24rem);
+    aspect-ratio: 9 / 16;
+    margin-inline-start: 0.8rem;
+
+    @media screen and (max-width: 749px) {
+      width: min(78%, 20rem);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      translate: -0.8rem 0.8rem;
+      border: 1px solid rgb(var(--gold-rgb) / 0.75);
+      border-radius: var(--radius-lg);
+      pointer-events: none;
+    }
+  }
+
+  .product-video__player,
+  .product-video__poster,
+  .product-video__frame > .placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 40px 80px -48px rgb(73 53 47 / 0.55);
+  }
+
+  .product-video__poster {
+    object-fit: cover;
+  }
+
+  .product-video__player {
+    position: relative;
+    background-color: var(--palette-rose-soft);
+  }
+
+  .product-video__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-video__controls {
+    position: absolute;
+    inset-block-end: var(--space-sm);
+    inset-inline-end: var(--space-sm);
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .product-video__control {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border: 1px solid var(--gold-hairline);
+    border-radius: 50%;
+    color: var(--gold-text);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.82);
+    backdrop-filter: blur(6px);
+    --icon-size: 1.05rem;
+
+    &:hover {
+      background-color: var(--palette-warm-white);
+    }
+  }
+
+  .product-video__icon {
+    display: inline-flex;
+  }
+
+  .product-video__icon--play,
+  .product-video__icon--sound,
+  [data-video-toggle][aria-pressed='true'] .product-video__icon--pause,
+  [data-video-sound][aria-pressed='true'] .product-video__icon--muted {
+    display: none;
+  }
+
+  [data-video-toggle][aria-pressed='true'] .product-video__icon--play,
+  [data-video-sound][aria-pressed='true'] .product-video__icon--sound {
+    display: inline-flex;
+  }
+
+  .product-video__hint {
+    position: absolute;
+    inset-inline: var(--space-sm);
+    inset-block-end: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px dashed rgb(var(--gold-rgb) / 0.8);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.9);
+  }
+
+  .product-video__content {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+    max-width: 34rem;
+  }
+
+  .product-video__points {
+    display: grid;
+    gap: var(--space-sm);
+
+    & li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: var(--font-body-weight-medium);
+    }
+
+    & .icon-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+      --icon-size: 1.15rem;
+    }
+  }
+
+  .product-video__button {
+    margin-block-start: var(--space-2xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Vidéo verticale",
+  "tag": "div",
+  "class": "section-product-video",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Vidéo",
+      "info": "Format vertical 9:16 (1080 × 1920 px), 15 à 45 secondes. Elle démarre sans le son ; la cliente peut l'activer."
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Image en attendant la vidéo (facultative)",
+      "info": "Sans image, une photo portrait du produit est utilisée."
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Position de la vidéo sur ordinateur",
+      "options": [
+        { "value": "left", "label": "À gauche" },
+        { "value": "right", "label": "À droite" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "En vidéo"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Sa douceur, <em>en vrai.</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte",
+      "default": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Bouton",
+      "default": "Choisir mon coloris"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Laissez vide pour remonter au choix du coloris et au panier."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Point fort",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Point fort vérifié"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vidéo verticale",
+      "blocks": [
+        { "type": "point", "settings": { "icon": "heat", "text": "3 niveaux de chaleur : 50, 55 ou 60 °C" } },
+        { "type": "point", "settings": { "icon": "vibration", "text": "4 modes de massage, avec ou sans chaleur" } },
+        { "type": "point", "settings": { "icon": "battery", "text": "Sans fil, environ 2 h d'autonomie" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["product", "index", "page"] }
+}
+{% endschema %}

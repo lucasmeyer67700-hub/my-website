@@ -1,6 +1,13 @@
+{%- liquid
+  assign slots = section.settings.slots
+  assign soon_blocks = section.blocks | where: 'type', 'coming_soon'
+-%}
 <section class="main-collection section section--compact color-{{ section.settings.color_scheme }}" aria-labelledby="CollectionTitle">
   <div class="page-width">
-    <header class="section-header">
+    <header class="section-header section-header--center main-collection__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
       <h1 class="h2" id="CollectionTitle">{{ collection.title | escape }}</h1>
       {%- if collection.description != blank -%}
         <div class="rte lead">{{ collection.description }}</div>
@@ -8,11 +15,33 @@
     </header>
 
     {%- paginate collection.products by section.settings.products_per_page -%}
-      {%- if collection.products.size > 0 -%}
-        <ul class="product-grid" role="list">
+      {%- liquid
+        comment
+          Free catalogue slots are filled with "coming soon" cards, on the first
+          page only, until real products take their place.
+        endcomment
+        assign free_slots = 0
+        if paginate.current_page == 1
+          assign free_slots = slots | minus: collection.products_count | at_least: 0
+        endif
+      -%}
+      {%- if collection.products.size > 0 or free_slots > 0 -%}
+        <ul class="product-grid product-grid--catalogue" role="list">
           {%- for product in collection.products -%}
-            <li>{% render 'product-card', product: product, heading_tag: 'h2' %}</li>
+            <li class="reveal">{% render 'product-card', product: product, heading_tag: 'h2' %}</li>
           {%- endfor -%}
+          {%- if free_slots > 0 -%}
+            {%- for block in soon_blocks limit: free_slots -%}
+              <li class="reveal">
+                {% render 'product-card-placeholder',
+                  title: block.settings.title,
+                  text: block.settings.text,
+                  image: block.settings.image,
+                  attributes: block.shopify_attributes
+                %}
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
         </ul>
         {% render 'pagination', paginate: paginate %}
       {%- else -%}
@@ -22,19 +51,42 @@
   </div>
 </section>
 
+{% stylesheet %}
+  .main-collection__header {
+    margin-block-end: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Collection",
   "tag": "div",
   "class": "section-main-collection",
+  "max_blocks": 6,
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Catalogue"
+    },
+    {
+      "type": "range",
+      "id": "slots",
+      "label": "Nombre de cases dans le catalogue",
+      "info": "Les cases sans produit affichent les blocs « Bientôt disponible ». Elles disparaissent d'elles-mêmes quand vous ajoutez des produits.",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
     {
       "type": "range",
       "id": "products_per_page",
       "label": "Produits par page",
-      "min": 4,
+      "min": 3,
       "max": 48,
-      "step": 4,
+      "step": 3,
       "default": 12
     },
     {
@@ -42,6 +94,31 @@
       "id": "color_scheme",
       "label": "Palette de couleurs",
       "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "coming_soon",
+      "name": "Bientôt disponible",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Bientôt disponible"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Une nouvelle création VELEA arrive bientôt."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image teaser (facultative)"
+        }
+      ]
     }
   ]
 }

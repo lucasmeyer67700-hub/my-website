@@ -362,10 +362,59 @@
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
+    },
+    "video": {
+      "type": "product-video",
+      "blocks": {
+        "heat": {
+          "type": "point",
+          "settings": {
+            "icon": "heat",
+            "text": "3 niveaux de chaleur : 50, 55 ou 60 °C"
+          }
+        },
+        "massage": {
+          "type": "point",
+          "settings": {
+            "icon": "vibration",
+            "text": "4 modes de massage, avec ou sans chaleur"
+          }
+        },
+        "battery": {
+          "type": "point",
+          "settings": {
+            "icon": "battery",
+            "text": "Sans fil, environ 2 h d'autonomie"
+          }
+        },
+        "power": {
+          "type": "point",
+          "settings": {
+            "icon": "power",
+            "text": "Arrêt automatique au bout de 30 minutes"
+          }
+        }
+      },
+      "block_order": [
+        "heat",
+        "massage",
+        "battery",
+        "power"
+      ],
+      "settings": {
+        "media_position": "left",
+        "eyebrow": "En vidéo",
+        "heading": "Sa douceur, <em>en vrai.</em>",
+        "text": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>",
+        "button_label": "Choisir mon coloris",
+        "button_link": "",
+        "color_scheme": "scheme-3"
+      }
     }
   },
   "order": [
     "main",
+    "video",
     "benefits",
     "how-to",
     "comparison",

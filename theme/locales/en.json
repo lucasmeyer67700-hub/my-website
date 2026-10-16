@@ -51,7 +51,11 @@
     "specs_note": "Specifications as stated by the manufacturer.",
     "in_the_box": "In the box",
     "secure_payment": "Secure payment",
-    "color_option": "Color"
+    "color_option": "Color",
+    "colors_count": {
+      "one": "{{ count }} colour",
+      "other": "{{ count }} colours"
+    }
   },
   "cart": {
     "title": "Your cart",
@@ -134,7 +138,19 @@
     "testimonials_editor_empty": "Section hidden: no reviews. Only add genuine reviews from real customers, or a reviews app.",
     "comparison_criterion": "Criterion",
     "announcement_label": "Store information",
-    "announcement_pause": "Pause the announcements",
-    "drops_pause": "Pause the drops animation"
+    "drops_pause": "Pause the drops animation",
+    "video_pause": "Pause the video",
+    "video_sound": "Turn the video sound on",
+    "video_hint": "Add your vertical video (9:16) in this section's settings."
+  },
+  "collections": {
+    "coming_soon": "Coming soon",
+    "notify": "Get notified at launch"
+  },
+  "welcome": {
+    "success_eyebrow": "Welcome",
+    "use_code": "Use my code now",
+    "error": "Please check your email address and try again.",
+    "no_thanks": "No thanks"
   }
 }

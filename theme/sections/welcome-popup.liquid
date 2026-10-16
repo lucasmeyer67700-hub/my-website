@@ -1,0 +1,373 @@
+{%- liquid
+  assign form_id = 'WelcomeForm-' | append: section.id
+  comment
+    Shopify applies a code from /discount/CODE and then opens the redirect page.
+  endcomment
+  assign discount_base = routes.root_url | append: '/discount/' | replace: '//', '/'
+  assign redirect_url = section.settings.redirect | default: routes.all_products_collection_url
+  assign show_popup = section.settings.enabled
+  if customer and customer.accepts_marketing
+    assign show_popup = false
+  endif
+  if request.page_type == 'password'
+    assign show_popup = false
+  endif
+-%}
+{%- if show_popup or request.design_mode -%}
+  <welcome-popup
+    data-delay="{{ section.settings.delay | times: 1000 }}"
+    data-snooze-days="{{ section.settings.snooze_days }}"
+    data-section-id="{{ section.id }}"
+    {% if request.design_mode %}
+      data-design-mode
+    {% endif %}
+  >
+    <dialog
+      class="welcome-popup color-{{ section.settings.color_scheme }}"
+      aria-labelledby="WelcomeTitle-{{ section.id }}"
+      data-welcome-dialog
+    >
+      <div class="welcome-popup__panel">
+        <button
+          type="button"
+          class="icon-button welcome-popup__close"
+          data-welcome-close
+          aria-label="{{ 'general.close' | t }}"
+        >
+          {% render 'icon', icon: 'close' %}
+        </button>
+
+        {%- if section.settings.image != blank -%}
+          <div class="welcome-popup__media">
+            {% render 'responsive-image',
+              image: section.settings.image,
+              sizes: '(min-width: 750px) 22rem, 100vw',
+              widths: '400, 600, 800, 1000',
+              decorative: true,
+              class: 'welcome-popup__image'
+            %}
+          </div>
+        {%- endif -%}
+
+        <div class="welcome-popup__body">
+          {%- form 'customer', id: form_id, class: 'welcome-popup__form', novalidate: 'novalidate' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="welcome-popup__success" data-welcome-success>
+                <p class="eyebrow eyebrow--center">{{ 'welcome.success_eyebrow' | t }}</p>
+                <h2 class="welcome-popup__title h3" id="WelcomeTitle-{{ section.id }}">
+                  {{- section.settings.success_heading | escape -}}
+                </h2>
+                <p class="welcome-popup__text">{{ section.settings.success_text | escape }}</p>
+                {%- if section.settings.code != blank -%}
+                  <copy-button class="welcome-popup__code" data-copy="{{ section.settings.code | escape }}">
+                    <span class="welcome-popup__code-value">{{ section.settings.code | escape }}</span>
+                    <button type="button" class="button button--secondary button--small">{{ 'gift_card.copy' | t }}</button>
+                    <span class="visually-hidden" data-copy-status hidden>{{ 'gift_card.copied' | t }}</span>
+                  </copy-button>
+                  <a
+                    class="button button--full"
+                    href="{{ discount_base }}{{ section.settings.code | url_encode }}?redirect={{ redirect_url | url_encode }}"
+                  >
+                    {{- 'welcome.use_code' | t -}}
+                    {% render 'icon', icon: 'arrow-right' %}
+                  </a>
+                {%- endif -%}
+                <p class="welcome-popup__legal">{{ section.settings.conditions | escape }}</p>
+              </div>
+            {%- else -%}
+              <input type="hidden" name="contact[tags]" value="newsletter,popup-bienvenue">
+              {%- if section.settings.eyebrow != blank -%}
+                <p class="eyebrow eyebrow--center">{{ section.settings.eyebrow | escape }}</p>
+              {%- endif -%}
+              <h2 class="welcome-popup__title h2" id="WelcomeTitle-{{ section.id }}">
+                {{- section.settings.heading -}}
+              </h2>
+              {%- if section.settings.text != blank -%}
+                <p class="welcome-popup__text">{{ section.settings.text | escape }}</p>
+              {%- endif -%}
+
+              {%- if form.errors -%}
+                <p class="form-message form-message--error" role="alert" id="WelcomeError-{{ section.id }}" data-welcome-error>
+                  {% render 'icon', icon: 'alert' %}
+                  <span>{{ 'welcome.error' | t }}</span>
+                </p>
+              {%- endif -%}
+
+              <div class="field">
+                <label class="visually-hidden" for="WelcomeEmail-{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+                <input
+                  class="field__input"
+                  type="email"
+                  id="WelcomeEmail-{{ section.id }}"
+                  name="contact[email]"
+                  autocomplete="email"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  required
+                  placeholder="{{ 'newsletter.placeholder' | t }}"
+                  {% if form.errors %}
+                    aria-invalid="true"
+                    aria-describedby="WelcomeError-{{ section.id }}"
+                  {% endif %}
+                >
+              </div>
+              <button type="submit" class="button button--full">{{ section.settings.button_label | escape }}</button>
+              <p class="welcome-popup__legal">
+                {{ 'newsletter.consent' | t }}
+                {%- if section.settings.conditions != blank %} {{ section.settings.conditions | escape }}{% endif -%}
+              </p>
+              <button type="button" class="text-button welcome-popup__later" data-welcome-close>
+                {{- 'welcome.no_thanks' | t -}}
+              </button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </dialog>
+  </welcome-popup>
+{%- endif -%}
+
+{% stylesheet %}
+  .welcome-popup {
+    width: min(100% - 2rem, 31rem);
+    max-height: min(100dvh - 2rem, 40rem);
+    padding: 0;
+    border: 1px solid var(--gold-hairline);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    box-shadow: 0 40px 100px -40px rgb(48 39 36 / 0.55);
+    overflow: auto;
+
+    &::backdrop {
+      background-color: rgb(var(--palette-scrim-rgb) / 0.45);
+      backdrop-filter: blur(3px);
+    }
+
+    &[open] {
+      animation: welcome-in var(--duration-slow) var(--ease-out);
+    }
+
+    /* Phones: a bottom sheet, easy to reach with the thumb */
+    @media screen and (max-width: 749px) {
+      width: 100%;
+      max-width: 100%;
+      max-height: 92dvh;
+      margin: auto 0 0;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-inline: 0;
+      border-block-end: 0;
+    }
+  }
+
+  @keyframes welcome-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  /* With a photo: photo on the left, form on the right (computers) */
+  .welcome-popup:has(.welcome-popup__media) {
+    @media screen and (min-width: 750px) {
+      width: min(100% - 2rem, 52rem);
+    }
+  }
+
+  .welcome-popup__panel {
+    position: relative;
+    display: grid;
+
+    &:has(.welcome-popup__media) {
+      @media screen and (min-width: 750px) {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      }
+    }
+  }
+
+  .welcome-popup__close {
+    position: absolute;
+    inset-block-start: var(--space-2xs);
+    inset-inline-end: var(--space-2xs);
+    z-index: 1;
+    border-radius: 50%;
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.8);
+  }
+
+  .welcome-popup__media {
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+
+    & .welcome-popup__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .welcome-popup__body {
+    padding: clamp(1.75rem, 1rem + 3vw, 3rem) clamp(1.25rem, 0.75rem + 2.5vw, 2.75rem);
+  }
+
+  .welcome-popup__form,
+  .welcome-popup__success {
+    display: grid;
+    gap: var(--space-sm);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .welcome-popup__form .field {
+    width: 100%;
+  }
+
+  .welcome-popup__title em {
+    color: var(--gold-text);
+  }
+
+  .welcome-popup__text {
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .welcome-popup__legal {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .welcome-popup__later {
+    min-height: var(--tap-target);
+  }
+
+  .welcome-popup__code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1px dashed rgb(var(--gold-rgb) / 0.8);
+    border-radius: var(--radius-md);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.7);
+  }
+
+  .welcome-popup__code-value {
+    font-family: var(--font-heading-family);
+    font-size: var(--heading-4);
+    letter-spacing: 0.12em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pop-up de bienvenue",
+  "tag": "div",
+  "class": "section-welcome-popup",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Afficher la pop-up",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Les inscrites sont enregistrées dans Clients (tags « newsletter » et « popup-bienvenue »), avec leur consentement marketing. Le code doit exister dans Réductions avec les mêmes conditions."
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Apparition après",
+      "min": 3,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "snooze_days",
+      "label": "Après fermeture, ne plus l'afficher pendant",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "unit": "j",
+      "default": 14
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (ordinateur)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Bienvenue chez VELEA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "<em>−10 %</em> sur votre commande"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texte",
+      "default": "Inscrivez-vous à nos e-mails et recevez tout de suite votre code de bienvenue."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Bouton",
+      "default": "Recevoir mon code"
+    },
+    {
+      "type": "header",
+      "content": "Après l'inscription"
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Code de réduction",
+      "default": "DOUCEUR10"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Titre",
+      "default": "Votre code est prêt"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Texte",
+      "default": "Merci pour votre inscription. Voici votre code : il s'applique au moment du paiement."
+    },
+    {
+      "type": "url",
+      "id": "redirect",
+      "label": "Page ouverte avec le code appliqué",
+      "info": "Par défaut, le catalogue."
+    },
+    {
+      "type": "text",
+      "id": "conditions",
+      "label": "Conditions de l'offre",
+      "default": "Code valable une fois par cliente, non cumulable avec d'autres codes."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [{ "name": "Pop-up de bienvenue" }]
+}
+{% endschema %}

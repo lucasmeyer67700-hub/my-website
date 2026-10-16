@@ -569,7 +569,6 @@ customElements.define('site-header', SiteHeader);
 class AnnouncementRotator extends HTMLElement {
   connectedCallback() {
     this.items = [...this.querySelectorAll('[data-announcement]')];
-    this.toggle = this.querySelector('[data-announcement-toggle]');
     if (this.items.length < 2) return;
 
     clearTimeout(this.timer);
@@ -578,38 +577,14 @@ class AnnouncementRotator extends HTMLElement {
     const options = { signal: this.abort.signal };
 
     this.index = Math.max(0, this.items.findIndex((item) => item.classList.contains('is-active')));
-    this.delay = Number(this.dataset.interval) || 5000;
-    this.hovered = false;
+    this.delay = Number(this.dataset.interval) || 3000;
     this.focused = false;
-    this.#setPaused(false);
+    this.editing = false;
 
-    // The pause button is only useful (and shown) once rotation is running.
-    if (this.toggle) this.toggle.hidden = false;
-    this.toggle?.addEventListener(
-      'click',
-      () => {
-        this.#setPaused(!this.userPaused);
-        // An explicit "play" wins over the hover/focus pause.
-        if (!this.userPaused) {
-          this.hovered = false;
-          this.focused = false;
-        }
-        this.#schedule();
-      },
-      options
-    );
-
-    // Pause while the visitor reads or interacts with the bar (WCAG 2.2.2).
-    this.addEventListener('mouseenter', () => { this.hovered = true; this.#schedule(); }, options);
-    this.addEventListener('mouseleave', () => { this.hovered = false; this.#schedule(); }, options);
-    this.addEventListener('focusin', (event) => {
-      // Focusing the pause button itself must not freeze the rotation.
-      if (event.target === this.toggle) return;
-      this.focused = true;
-      this.#schedule();
-    }, options);
+    // Keyboard users who tab onto a message link keep it in place while they read it.
+    this.addEventListener('focusin', () => { this.focused = true; this.#schedule(); }, options);
     this.addEventListener('focusout', (event) => {
-      if (this.contains(event.relatedTarget) && event.relatedTarget !== this.toggle) return;
+      if (this.contains(event.relatedTarget)) return;
       this.focused = false;
       this.#schedule();
     }, options);
@@ -619,12 +594,12 @@ class AnnouncementRotator extends HTMLElement {
     this.addEventListener('shopify:block:select', (event) => {
       const index = this.items.indexOf(event.target.closest('[data-announcement]'));
       if (index < 0) return;
-      this.#setPaused(true);
+      this.editing = true;
       this.show(index);
       this.#schedule();
     }, options);
     this.addEventListener('shopify:block:deselect', () => {
-      this.#setPaused(false);
+      this.editing = false;
       this.#schedule();
     }, options);
 
@@ -646,15 +621,9 @@ class AnnouncementRotator extends HTMLElement {
     }
   }
 
-  /** @param {boolean} paused */
-  #setPaused(paused) {
-    this.userPaused = paused;
-    this.toggle?.setAttribute('aria-pressed', String(paused));
-  }
-
   #schedule() {
     clearTimeout(this.timer);
-    if (this.userPaused || this.hovered || this.focused || document.hidden) return;
+    if (this.focused || this.editing || document.hidden) return;
     this.timer = setTimeout(() => {
       this.show(this.index + 1);
       this.#schedule();
@@ -711,6 +680,202 @@ class DropsLayer extends HTMLElement {
 }
 
 customElements.define('drops-layer', DropsLayer);
+
+/* -------------------------------------------------------------------------- */
+/* Portrait product video: muted autoplay, pause and sound buttons            */
+/* -------------------------------------------------------------------------- */
+
+class VideoPlayer extends HTMLElement {
+  #controller = null;
+  #observer = null;
+  #userPaused = false;
+
+  connectedCallback() {
+    this.video = this.querySelector('video');
+    if (!this.video) return;
+    this.#controller?.abort();
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+    const toggle = this.querySelector('[data-video-toggle]');
+    const sound = this.querySelector('[data-video-sound]');
+    const video = this.video;
+
+    video.muted = true;
+    video.playsInline = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.#userPaused = true;
+      video.removeAttribute('autoplay');
+      video.pause();
+    }
+
+    const sync = () => toggle?.setAttribute('aria-pressed', String(video.paused));
+    video.addEventListener('play', sync, { signal });
+    video.addEventListener('pause', sync, { signal });
+
+    toggle?.addEventListener(
+      'click',
+      () => {
+        this.#userPaused = !video.paused;
+        if (this.#userPaused) video.pause();
+        else video.play().catch(() => {});
+      },
+      { signal }
+    );
+    sound?.addEventListener(
+      'click',
+      () => {
+        video.muted = !video.muted;
+        sound.setAttribute('aria-pressed', String(!video.muted));
+        if (!video.muted && video.paused) {
+          this.#userPaused = false;
+          video.play().catch(() => {});
+        }
+      },
+      { signal }
+    );
+
+    // No playback (or battery use) while the video is off screen.
+    if ('IntersectionObserver' in window) {
+      this.#observer = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) video.pause();
+        else if (!this.#userPaused) video.play().catch(() => {});
+      }, { threshold: 0.25 });
+      this.#observer.observe(this);
+    }
+    sync();
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    this.#observer?.disconnect();
+  }
+}
+
+customElements.define('video-player', VideoPlayer);
+
+/* -------------------------------------------------------------------------- */
+/* Welcome pop-up: shown once, 10 s after the visitor arrives on the site     */
+/* -------------------------------------------------------------------------- */
+
+const WELCOME_KEY = 'velea:welcome';
+const welcomeStore = {
+  get() {
+    try {
+      return JSON.parse(window.localStorage.getItem(WELCOME_KEY)) || {};
+    } catch (error) {
+      return {};
+    }
+  },
+  set(value) {
+    try {
+      window.localStorage.setItem(WELCOME_KEY, JSON.stringify({ ...this.get(), ...value }));
+    } catch (error) {
+      // Storage can be blocked (private mode): the pop-up simply shows again later.
+    }
+  },
+};
+
+class WelcomePopup extends HTMLElement {
+  #controller = null;
+  #timer = null;
+  #lastFocus = null;
+
+  connectedCallback() {
+    this.dialog = this.querySelector('[data-welcome-dialog]');
+    if (!this.dialog) return;
+    this.#controller?.abort();
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+
+    for (const button of this.querySelectorAll('[data-welcome-close]')) {
+      button.addEventListener('click', () => this.#dismiss(), { signal });
+    }
+    // A click on the dimmed backdrop closes the pop-up.
+    this.dialog.addEventListener('click', (event) => {
+      if (event.target === this.dialog) this.#dismiss();
+    }, { signal });
+    // Escape: remember the choice right away ("close" fires a moment later).
+    this.dialog.addEventListener('cancel', () => this.#remember(), { signal });
+    this.dialog.addEventListener('close', () => this.#onClose(), { signal });
+
+    // "Get notified" links elsewhere on the page open the pop-up on demand.
+    for (const opener of document.querySelectorAll('[data-welcome-open]')) {
+      opener.hidden = false;
+      opener.addEventListener('click', () => this.open(true), { signal });
+    }
+
+    // After a sign-up (or an error), the page reloads: show the result at once.
+    if (this.querySelector('[data-welcome-success]')) {
+      welcomeStore.set({ subscribed: true });
+      this.open(true);
+      return;
+    }
+    if (this.querySelector('[data-welcome-error]')) {
+      this.open(true);
+      return;
+    }
+
+    if (this.hasAttribute('data-design-mode')) {
+      document.addEventListener('shopify:section:select', (event) => {
+        if (event.detail?.sectionId === this.dataset.sectionId) this.open(true);
+      }, { signal });
+      document.addEventListener('shopify:section:deselect', (event) => {
+        if (event.detail?.sectionId === this.dataset.sectionId) this.dialog.close();
+      }, { signal });
+      return;
+    }
+
+    const state = welcomeStore.get();
+    const snooze = (Number(this.dataset.snoozeDays) || 14) * 864e5;
+    if (state.subscribed) return;
+    if (state.dismissedAt && Date.now() - state.dismissedAt < snooze) return;
+    if (/\/(cart|account|checkouts?)(\/|$)/.test(window.location.pathname)) return;
+
+    // Count the delay from the visitor's arrival on the site, across pages.
+    let arrival = Date.now();
+    try {
+      arrival = Number(window.sessionStorage.getItem('velea:arrival')) || arrival;
+      window.sessionStorage.setItem('velea:arrival', String(arrival));
+    } catch (error) {
+      // Without storage, the delay counts from this page.
+    }
+    const delay = Number(this.dataset.delay) || 10000;
+    this.#timer = setTimeout(() => this.open(), Math.max(1000, delay - (Date.now() - arrival)));
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.#timer);
+    this.#controller?.abort();
+  }
+
+  /** @param {boolean} [force] - open even if another dialog is showing */
+  open(force = false) {
+    if (this.dialog.open) return;
+    // Never cover the cart or the menu: try again a little later.
+    if (!force && document.querySelector('dialog[open]')) {
+      this.#timer = setTimeout(() => this.open(), 5000);
+      return;
+    }
+    this.#lastFocus = document.activeElement;
+    this.dialog.showModal();
+  }
+
+  #remember() {
+    if (!this.querySelector('[data-welcome-success]')) welcomeStore.set({ dismissedAt: Date.now() });
+  }
+
+  #dismiss() {
+    this.#remember();
+    this.dialog.close();
+  }
+
+  #onClose() {
+    this.#remember();
+    if (this.#lastFocus instanceof HTMLElement) this.#lastFocus.focus({ preventScroll: true });
+  }
+}
+
+customElements.define('welcome-popup', WelcomePopup);
 
 /* -------------------------------------------------------------------------- */
 /* Misc                                                                        */

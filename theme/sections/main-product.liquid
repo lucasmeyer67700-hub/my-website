@@ -15,7 +15,7 @@
       %}
     </div>
 
-    <div class="product__info">
+    <div class="product__info" id="ProductInfo">
       <div class="product__header">
         {%- if section.settings.eyebrow != blank -%}
           <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
@@ -439,6 +439,13 @@
   .sticky-buy-bar__meta {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
+  }
+
+  /* Shopify Inbox chat bubble sits bottom-right: keep the bar's button clear of it. */
+  body:has(#shopify-chat, inbox-online-store-chat) .sticky-buy-bar {
+    @media screen and (max-width: 989px) {
+      padding-inline-end: calc(var(--gutter) + 4.25rem);
+    }
   }
 
   body.has-sticky-bar .site-footer {

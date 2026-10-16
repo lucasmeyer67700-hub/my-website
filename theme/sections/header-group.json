@@ -33,7 +33,7 @@
         "payment"
       ],
       "settings": {
-        "interval": 5,
+        "interval": 3,
         "color_scheme": "scheme-4"
       }
     },

@@ -33,11 +33,38 @@
           }
         }
       },
-      "block_order": ["brand", "menu-help", "menu-legal", "newsletter"],
+      "block_order": [
+        "brand",
+        "menu-help",
+        "menu-legal",
+        "newsletter"
+      ],
       "settings": {
         "color_scheme": "scheme-2"
       }
+    },
+    "welcome": {
+      "type": "welcome-popup",
+      "settings": {
+        "enabled": true,
+        "delay": 10,
+        "snooze_days": 14,
+        "image": "shopify://shop_images/velea-hero-cocon.webp",
+        "eyebrow": "Bienvenue chez VELEA",
+        "heading": "<em>−10 %</em> sur votre commande",
+        "text": "Inscrivez-vous à nos e-mails et recevez tout de suite votre code de bienvenue.",
+        "button_label": "Recevoir mon code",
+        "code": "DOUCEUR10",
+        "success_heading": "Votre code est prêt",
+        "success_text": "Merci pour votre inscription. Voici votre code : il s'applique au moment du paiement.",
+        "redirect": "/products/ceinture-chauffante-regles",
+        "conditions": "Code valable une fois par cliente, non cumulable avec d'autres codes.",
+        "color_scheme": "scheme-3"
+      }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer",
+    "welcome"
+  ]
 }
