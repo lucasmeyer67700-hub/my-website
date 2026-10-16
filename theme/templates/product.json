@@ -171,7 +171,8 @@
         "center": false,
         "compact": false,
         "anchor": "bienfaits",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-2",
+        "show_drops": false
       }
     },
     "how-to": {
@@ -422,7 +423,8 @@
         "text": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>",
         "button_label": "Choisir mon coloris",
         "button_link": "",
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
       }
     }
   },
