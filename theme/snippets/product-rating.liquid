@@ -1,0 +1,149 @@
+{% doc %}
+  Social proof under the product banner: the first reviewers and the
+  average rating with the number of reviews, linking to the reviews
+  section. Built only from real data: the product's "Avis clientes"
+  (custom.avis) entries, or the standard rating fields filled by a review
+  app. Renders nothing when there is no review.
+
+  @param {object} product - Product object
+  @param {string} [anchor] - Id of the reviews section to link to
+
+  @example
+  {% render 'product-rating', product: product, anchor: 'avis' %}
+{% enddoc %}
+{%- liquid
+  assign reviews = product.metafields.custom.avis.value
+  assign review_count = 0
+  assign rating_sum = 0
+  for review in reviews
+    assign review_count = review_count | plus: 1
+    assign rating_sum = rating_sum | plus: review.note.value.rating
+  endfor
+
+  assign average = 0
+  assign total = review_count
+  if review_count > 0
+    assign average = rating_sum | times: 1.0 | divided_by: review_count
+  elsif product.metafields.reviews.rating.value
+    assign average = product.metafields.reviews.rating.value.rating
+    assign total = product.metafields.reviews.rating_count.value | default: 0
+  endif
+  assign average_text = average | times: 10 | round | divided_by: 10.0 | append: '' | replace: '.', ','
+  assign link = '#' | append: anchor
+-%}
+{%- if total > 0 -%}
+  <div class="product-rating">
+    {%- if review_count > 0 -%}
+      {%- assign first_review = reviews | first -%}
+      <p class="product-rating__proof">
+        <span class="product-rating__avatars" aria-hidden="true">
+          {%- for review in reviews limit: 3 -%}
+            <span class="product-rating__avatar product-rating__avatar--{{ forloop.index }}">
+              {{- review.auteur.value | strip | slice: 0 | upcase -}}
+            </span>
+          {%- endfor -%}
+        </span>
+        <span>
+          <strong>{{ first_review.auteur.value | escape }}</strong>
+          {%- if first_review.achat_verifie.value -%}
+            <span class="product-rating__verified">
+              {%- render 'icon', icon: 'check' -%}
+              <span class="visually-hidden">{{ 'reviews.verified' | t }}</span>
+            </span>
+          {%- endif %}
+          {% if review_count == 1 -%}
+            {{ 'reviews.proof_one' | t }}
+          {%- else -%}
+            {%- assign others = review_count | minus: 1 -%}
+            {{ 'reviews.proof_other' | t: count: others }}
+          {%- endif -%}
+        </span>
+      </p>
+    {%- endif -%}
+    <a class="product-rating__summary" href="{{ link }}">
+      {% render 'stars', rating: average %}
+      <span>{{ average_text }}/5 {{ 'reviews.count_short' | t: count: total }}</span>
+    </a>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-rating {
+    display: grid;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+  }
+
+  .product-rating__proof {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+
+    & strong {
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text);
+    }
+  }
+
+  .product-rating__avatars {
+    display: flex;
+    flex: none;
+  }
+
+  .product-rating__avatar {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid var(--color-background);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+    background-color: #f3dfe2;
+
+    & + & {
+      margin-inline-start: -0.55rem;
+    }
+  }
+
+  .product-rating__avatar--2 {
+    background-color: #e8c7cd;
+  }
+
+  .product-rating__avatar--3 {
+    background-color: #f6e9dc;
+  }
+
+  .product-rating__verified {
+    display: inline-grid;
+    place-items: center;
+    width: 0.95rem;
+    height: 0.95rem;
+    margin-inline-start: 0.2rem;
+    vertical-align: -0.12em;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #3a86d1;
+
+    & .icon {
+      --icon-size: 0.6rem;
+      stroke-width: 3;
+    }
+  }
+
+  .product-rating__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    width: fit-content;
+    color: var(--color-text);
+    text-decoration: none;
+
+    &:hover span {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+{% endstylesheet %}

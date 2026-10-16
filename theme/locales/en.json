@@ -61,7 +61,8 @@
     "offer_reference_label": "Price of the items bought separately:",
     "choose_option": "Choose an option",
     "price_from": "From {{ price }}",
-    "media_slot_hint": "Add your photos: Products → this product → Media. The first photo shows here."
+    "media_slot_hint": "Add your photos: Products → this product → Media. The first photo shows here.",
+    "delivery_time": "Delivery in {{ delay }}"
   },
   "cart": {
     "title": "Your cart",
@@ -166,5 +167,51 @@
     "with_code": "with the code",
     "privacy": "Privacy policy",
     "consent": "By signing up, you agree to receive our emails. You can unsubscribe at any time using the link in every email."
+  },
+  "reviews": {
+    "stars_label": "Rated {{ rating }} out of 5",
+    "verified": "Verified purchase",
+    "proof_one": "left a review",
+    "proof_other": {
+      "one": "and {{ count }} other customer left a review",
+      "other": "and {{ count }} other customers left a review"
+    },
+    "count_short": {
+      "one": "({{ count }} review)",
+      "other": "({{ count }} reviews)"
+    },
+    "count": {
+      "one": "{{ count }} rating",
+      "other": "{{ count }} ratings"
+    },
+    "all_verified": "All from verified purchases",
+    "some_verified": {
+      "one": "{{ count }} verified purchase",
+      "other": "{{ count }} verified purchases"
+    },
+    "stars_row": {
+      "one": "{{ count }} star",
+      "other": "{{ count }} stars"
+    },
+    "filters_label": "Filter reviews",
+    "rating_filter": "Filter by rating",
+    "all_ratings": "All ratings",
+    "with_photos": "With photos",
+    "verified_filter": "Verified purchases",
+    "see_more_photos": "See more",
+    "photo_label": "Photo by {{ name }}",
+    "sort_label": "Sort by",
+    "sort_recent": "Most recent",
+    "sort_high": "Highest rated",
+    "sort_low": "Lowest rated",
+    "sort_photo": "With photos first",
+    "showing": "Showing {{ shown }} of {{ total }} reviews",
+    "color": "Colour: {{ color }}",
+    "none_match": "No review matches these filters.",
+    "reset": "Show all",
+    "more": "See more reviews",
+    "about_title": "How are reviews collected?",
+    "lightbox_label": "Review photo",
+    "editor_empty": "No reviews for this product: the section stays hidden for visitors. Add authentic reviews in Products > your product > Metafields > Customer reviews."
   }
 }

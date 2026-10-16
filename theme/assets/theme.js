@@ -432,6 +432,8 @@ customElements.define('variant-picker', VariantPicker);
 /* Product media gallery                                                       */
 /* -------------------------------------------------------------------------- */
 
+const GALLERY_CARD_KEY = 'velea:gallery-card-closed';
+
 class MediaGallery extends HTMLElement {
   connectedCallback() {
     this.track = this.querySelector('[data-gallery-track]');
@@ -442,6 +444,7 @@ class MediaGallery extends HTMLElement {
     this.next = this.querySelector('[data-gallery-next]');
     this.lightbox = this.querySelector('[data-gallery-lightbox]');
     this.index = 0;
+    this.#initCard();
     if (!this.track || this.slides.length === 0) return;
 
     this.observer = new IntersectionObserver(this.#onIntersect.bind(this), {
@@ -479,6 +482,26 @@ class MediaGallery extends HTMLElement {
 
   disconnectedCallback() {
     this.observer?.disconnect();
+  }
+
+  /** The overlay card can be closed; it stays closed for the visit. */
+  #initCard() {
+    const card = this.querySelector('[data-gallery-card]');
+    const close = card?.querySelector('[data-gallery-card-close]');
+    if (!card || !close) return;
+    try {
+      if (window.sessionStorage.getItem(GALLERY_CARD_KEY)) card.hidden = true;
+    } catch (error) {
+      // Storage blocked: the card simply shows again on the next page.
+    }
+    close.addEventListener('click', () => {
+      card.hidden = true;
+      try {
+        window.sessionStorage.setItem(GALLERY_CARD_KEY, '1');
+      } catch (error) {
+        // Ignored, see above.
+      }
+    });
   }
 
   /** @param {IntersectionObserverEntry[]} entries */
@@ -528,6 +551,154 @@ class MediaGallery extends HTMLElement {
 }
 
 customElements.define('media-gallery', MediaGallery);
+
+/* -------------------------------------------------------------------------- */
+/* Product reviews: filters, sorting, "see more", photo viewer                 */
+/* -------------------------------------------------------------------------- */
+
+class ProductReviews extends HTMLElement {
+  #filters = new Set();
+  #rating = 'all';
+  #sort = 'recent';
+  #limit = 5;
+
+  connectedCallback() {
+    this.items = [...this.querySelectorAll('[data-review]')];
+    this.list = this.querySelector('[data-reviews-list]');
+    this.status = this.querySelector('[data-reviews-status]');
+    this.more = this.querySelector('[data-reviews-more]');
+    this.empty = this.querySelector('[data-reviews-empty]');
+    this.lightbox = this.querySelector('[data-reviews-lightbox]');
+    this.ratingSelect = this.querySelector('[data-reviews-rating]');
+    this.pageSize = Number(this.dataset.pageSize) || 5;
+    this.#limit = this.pageSize;
+    if (!this.list) return;
+
+    this.addEventListener('click', this.#onClick.bind(this));
+    this.ratingSelect?.addEventListener('change', () => {
+      this.#rating = this.ratingSelect.value;
+      this.#limit = this.pageSize;
+      this.#render();
+    });
+    this.querySelector('[data-reviews-sort]')?.addEventListener('change', (event) => {
+      this.#sort = event.target.value;
+      this.#render();
+    });
+    this.#render();
+  }
+
+  /** @param {MouseEvent} event */
+  #onClick(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    const chip = target.closest('[data-reviews-filter]');
+    if (chip) {
+      const key = chip.dataset.reviewsFilter;
+      const pressed = chip.getAttribute('aria-pressed') !== 'true';
+      chip.setAttribute('aria-pressed', String(pressed));
+      if (pressed) this.#filters.add(key);
+      else this.#filters.delete(key);
+      this.#limit = this.pageSize;
+      this.#render();
+      return;
+    }
+    if (target.closest('[data-reviews-more]')) {
+      const firstNew = this.#limit;
+      this.#limit += this.pageSize;
+      this.#render();
+      // Move focus to the first review that just appeared.
+      const visible = [...this.list.children].filter((item) => !item.hidden);
+      const next = /** @type {HTMLElement | undefined} */ (visible[firstNew]);
+      if (next) {
+        next.tabIndex = -1;
+        next.focus({ preventScroll: false });
+      }
+      return;
+    }
+    if (target.closest('[data-reviews-reset]')) {
+      this.#filters.clear();
+      this.#rating = 'all';
+      if (this.ratingSelect) this.ratingSelect.value = 'all';
+      for (const pressed of this.querySelectorAll('[data-reviews-filter][aria-pressed="true"]')) {
+        pressed.setAttribute('aria-pressed', 'false');
+      }
+      this.#limit = this.pageSize;
+      this.#render();
+      return;
+    }
+    const photo = target.closest('[data-reviews-photo]');
+    if (photo && !photo.closest('[data-reviews-lightbox]')) {
+      this.#openPhoto(photo.dataset.reviewsPhoto);
+      return;
+    }
+    if (target.closest('[data-reviews-lightbox-close]') || target === this.lightbox) this.lightbox?.close();
+  }
+
+  /** @param {HTMLElement} item */
+  #matches(item) {
+    if (this.#rating !== 'all' && item.dataset.rating !== this.#rating) return false;
+    for (const key of this.#filters) {
+      if (key === 'photo' && item.dataset.photo !== '1') return false;
+      if (key === 'verified' && item.dataset.verified !== '1') return false;
+      if (key.startsWith('color:') && item.dataset.color !== key.slice(6)) return false;
+      if (key.startsWith('kw:') && !(item.dataset.text || '').includes(key.slice(3))) return false;
+    }
+    return true;
+  }
+
+  /** @param {HTMLElement[]} items */
+  #sorted(items) {
+    const recent = (a, b) =>
+      (b.dataset.date || '').localeCompare(a.dataset.date || '') || Number(a.dataset.index) - Number(b.dataset.index);
+    const compare = {
+      recent,
+      high: (a, b) => Number(b.dataset.rating) - Number(a.dataset.rating) || recent(a, b),
+      low: (a, b) => Number(a.dataset.rating) - Number(b.dataset.rating) || recent(a, b),
+      photo: (a, b) => Number(b.dataset.photo) - Number(a.dataset.photo) || recent(a, b),
+    };
+    return [...items].sort(compare[this.#sort] || recent);
+  }
+
+  #render() {
+    const ordered = this.#sorted(this.items);
+    let total = 0;
+    let shown = 0;
+    for (const item of ordered) {
+      this.list.append(item);
+      const match = this.#matches(item);
+      if (match) total += 1;
+      const visible = match && shown < this.#limit;
+      if (visible) shown += 1;
+      item.hidden = !visible;
+    }
+    if (this.more) this.more.hidden = total <= this.#limit;
+    if (this.empty) this.empty.hidden = total > 0;
+    if (this.status) {
+      this.status.textContent = (this.status.dataset.template || '')
+        .replace('[shown]', String(shown))
+        .replace('[total]', String(total));
+    }
+  }
+
+  /** @param {string | undefined} index */
+  #openPhoto(index) {
+    if (!this.lightbox || !index) return;
+    const content = this.lightbox.querySelector('[data-reviews-lightbox-content]');
+    const template = /** @type {HTMLTemplateElement | null} */ (this.querySelector('[data-reviews-photos]'));
+    const image = template?.content.querySelector(`[data-for="${index}"]`);
+    const review = this.items.find((item) => item.dataset.index === index);
+    content.replaceChildren();
+    if (image) content.append(image.cloneNode(true));
+    if (review) {
+      const copy = /** @type {HTMLElement} */ (review.cloneNode(true));
+      copy.hidden = false;
+      copy.removeAttribute('data-review');
+      content.append(copy);
+    }
+    this.lightbox.showModal();
+  }
+}
+
+customElements.define('product-reviews', ProductReviews);
 
 /* -------------------------------------------------------------------------- */
 /* Sticky add-to-cart bar (mobile)                                             */

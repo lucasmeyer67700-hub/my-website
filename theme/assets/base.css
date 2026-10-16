@@ -21,6 +21,14 @@
   --palette-rose-pale: #fbf2f3;
   --palette-rose-deep: #e2a2ae;
 
+  /* Strong rose for stars, savings and selected offers (5.2:1 on white) */
+  --rose-strong: #b4475f;
+  --rose-strong-rgb: 180 71 95;
+  --rose-soft: #fbe9ed;
+
+  /* Neutral frame behind product photos */
+  --gallery-bg: #f4f0ef;
+
   /* Gold accents. Text gold passes 4.5:1 on white and on soft rose; the light
      golds are for hairlines, ornaments and decorative strokes only. */
   --gold-text: #7a5b26;

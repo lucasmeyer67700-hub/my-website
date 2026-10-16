@@ -1,0 +1,852 @@
+{%- comment -%}
+  Customer reviews of the product, from its "Avis clientes" entries
+  (custom.avis metaobjects): average, star breakdown, filters, customer
+  photos, sorting and the list. Authentic reviews only. Without reviews the
+  section stays invisible for visitors (a notice shows in the theme editor).
+  Review apps can be added as app blocks.
+{%- endcomment -%}
+{%- liquid
+  assign reviews = product.metafields.custom.avis.value
+  assign review_count = 0
+  assign rating_sum = 0
+  assign verified_count = 0
+  assign photo_count = 0
+  assign c5 = 0
+  assign c4 = 0
+  assign c3 = 0
+  assign c2 = 0
+  assign c1 = 0
+  assign colors = ''
+  for review in reviews
+    assign review_count = review_count | plus: 1
+    assign note = review.note.value.rating | round
+    assign rating_sum = rating_sum | plus: review.note.value.rating
+    if review.achat_verifie.value
+      assign verified_count = verified_count | plus: 1
+    endif
+    if review.photo.value != blank
+      assign photo_count = photo_count | plus: 1
+    endif
+    case note
+      when 5
+        assign c5 = c5 | plus: 1
+      when 4
+        assign c4 = c4 | plus: 1
+      when 3
+        assign c3 = c3 | plus: 1
+      when 2
+        assign c2 = c2 | plus: 1
+      else
+        assign c1 = c1 | plus: 1
+    endcase
+    assign color = review.coloris.value | strip
+    if color != blank
+      assign color_token = '|' | append: color | append: '|'
+      unless colors contains color_token
+        assign colors = colors | append: color_token
+      endunless
+    endif
+  endfor
+
+  if review_count > 0
+    assign average = rating_sum | times: 1.0 | divided_by: review_count
+    assign average_text = average | times: 10 | round | divided_by: 10.0 | append: '' | replace: '.', ','
+  endif
+  assign color_list = colors | split: '|' | compact
+  assign keyword_lines = section.settings.keywords | newline_to_br | split: '<br />'
+  assign page_size = section.settings.per_page
+-%}
+
+{%- if review_count > 0 -%}
+  <section
+    class="reviews section color-{{ section.settings.color_scheme }}"
+    id="{{ section.settings.anchor | default: 'avis' | handle }}"
+    aria-labelledby="ReviewsTitle-{{ section.id }}"
+  >
+    <product-reviews class="page-width reviews__inner" data-page-size="{{ page_size }}">
+      <div class="reviews__head">
+        <h2 class="reviews__title" id="ReviewsTitle-{{ section.id }}">
+          {{- section.settings.heading | escape -}}
+          <span class="reviews__sep" aria-hidden="true">|</span>
+          <span class="reviews__average">{{ average_text }}</span>
+        </h2>
+        {% render 'stars', rating: average, class: 'reviews__stars' %}
+        <span class="reviews__total">{{ 'reviews.count' | t: count: review_count }}</span>
+        {%- if verified_count > 0 -%}
+          <span class="reviews__verified">
+            {% render 'icon', icon: 'check' %}
+            {%- if verified_count == review_count -%}
+              {{ 'reviews.all_verified' | t }}
+            {%- else -%}
+              {{ 'reviews.some_verified' | t: count: verified_count }}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_breakdown -%}
+        <ul class="reviews__bars" role="list">
+          {%- for stars in (1..5) reversed -%}
+            {%- liquid
+              case stars
+                when 5
+                  assign star_total = c5
+                when 4
+                  assign star_total = c4
+                when 3
+                  assign star_total = c3
+                when 2
+                  assign star_total = c2
+                else
+                  assign star_total = c1
+              endcase
+              assign star_percent = star_total | times: 100.0 | divided_by: review_count | round
+            -%}
+            <li class="reviews__bar">
+              <span class="reviews__bar-label">{{ 'reviews.stars_row' | t: count: stars }}</span>
+              <span class="reviews__bar-track" aria-hidden="true">
+                <span class="reviews__bar-fill" style="width: {{ star_percent }}%;"></span>
+              </span>
+              <span class="reviews__bar-value">{{ star_percent }}&nbsp;%</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="reviews__filters" role="group" aria-label="{{ 'reviews.filters_label' | t }}">
+        <label class="visually-hidden" for="ReviewsRating-{{ section.id }}">{{ 'reviews.rating_filter' | t }}</label>
+        <span class="reviews__select">
+          <select id="ReviewsRating-{{ section.id }}" data-reviews-rating>
+            <option value="all">{{ 'reviews.all_ratings' | t }}</option>
+            {%- for stars in (1..5) reversed -%}
+              {%- liquid
+                case stars
+                  when 5
+                    assign star_total = c5
+                  when 4
+                    assign star_total = c4
+                  when 3
+                    assign star_total = c3
+                  when 2
+                    assign star_total = c2
+                  else
+                    assign star_total = c1
+                endcase
+              -%}
+              {%- if star_total > 0 -%}
+                <option value="{{ stars }}">{{ 'reviews.stars_row' | t: count: stars }} ({{ star_total }})</option>
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+          {% render 'icon', icon: 'chevron-down' %}
+        </span>
+        {%- if photo_count > 0 -%}
+          <button type="button" class="reviews__chip" data-reviews-filter="photo" aria-pressed="false">
+            {% render 'icon', icon: 'image' %}
+            <span>{{ 'reviews.with_photos' | t }} ({{ photo_count }})</span>
+          </button>
+        {%- endif -%}
+        {%- if verified_count > 0 and verified_count < review_count -%}
+          <button type="button" class="reviews__chip" data-reviews-filter="verified" aria-pressed="false">
+            {% render 'icon', icon: 'check' %}
+            <span>{{ 'reviews.verified_filter' | t }} ({{ verified_count }})</span>
+          </button>
+        {%- endif -%}
+        {%- for color in color_list -%}
+          {%- if color == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- liquid
+            assign color_total = 0
+            for review in reviews
+              assign review_color = review.coloris.value | strip
+              if review_color == color
+                assign color_total = color_total | plus: 1
+              endif
+            endfor
+          -%}
+          <button type="button" class="reviews__chip" data-reviews-filter="color:{{ color | handle }}" aria-pressed="false">
+            <span>{{ color | escape }} ({{ color_total }})</span>
+          </button>
+        {%- endfor -%}
+        {%- for line in keyword_lines -%}
+          {%- liquid
+            assign keyword = line | strip | downcase
+            assign keyword_total = 0
+            if keyword != blank
+              for review in reviews
+                assign haystack = review.texte.value | append: ' ' | append: review.titre.value | downcase
+                if haystack contains keyword
+                  assign keyword_total = keyword_total | plus: 1
+                endif
+              endfor
+            endif
+          -%}
+          {%- if keyword_total > 0 -%}
+            <button type="button" class="reviews__chip reviews__chip--keyword" data-reviews-filter="kw:{{ keyword | escape }}" aria-pressed="false">
+              <span>{{ keyword | escape }} ({{ keyword_total }})</span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if photo_count > 0 -%}
+        <ul class="reviews__photos" role="list">
+          {%- assign shown_photos = 0 -%}
+          {%- for review in reviews -%}
+            {%- if review.photo.value != blank and shown_photos < 6 -%}
+              {%- assign shown_photos = shown_photos | plus: 1 -%}
+              <li>
+                <button
+                  type="button"
+                  class="reviews__photo"
+                  data-reviews-photo="{{ forloop.index }}"
+                >
+                  {{ review.photo.value | image_url: width: 480 | image_tag: width: 240, height: 240, alt: '', loading: 'lazy', class: 'reviews__photo-image' }}
+                  <span class="reviews__photo-rating">
+                    {% render 'icon', icon: 'star' %}
+                    {{- review.note.value.rating | round | append: ',0' -}}
+                  </span>
+                  {%- if shown_photos == 6 and photo_count > 6 -%}
+                    <span class="reviews__photo-more">{{ 'reviews.see_more_photos' | t }}</span>
+                  {%- endif -%}
+                  <span class="visually-hidden">{{ 'reviews.photo_label' | t: name: review.auteur.value }}</span>
+                </button>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="reviews__toolbar">
+        <label class="reviews__sort-label" for="ReviewsSort-{{ section.id }}">{{ 'reviews.sort_label' | t }}</label>
+        <span class="reviews__select reviews__select--plain">
+          <select id="ReviewsSort-{{ section.id }}" data-reviews-sort>
+            <option value="recent">{{ 'reviews.sort_recent' | t }}</option>
+            <option value="high">{{ 'reviews.sort_high' | t }}</option>
+            <option value="low">{{ 'reviews.sort_low' | t }}</option>
+            <option value="photo">{{ 'reviews.sort_photo' | t }}</option>
+          </select>
+          {% render 'icon', icon: 'chevron-down' %}
+        </span>
+        <p
+          class="reviews__status"
+          role="status"
+          data-reviews-status
+          data-template="{{ 'reviews.showing' | t: shown: '[shown]', total: '[total]' }}"
+        ></p>
+      </div>
+
+      <ul class="reviews__list" role="list" data-reviews-list>
+        {%- for review in reviews -%}
+          {%- liquid
+            assign review_note = review.note.value.rating
+            assign review_color = review.coloris.value | strip
+            assign review_text = review.texte.value | append: ' ' | append: review.titre.value | downcase | strip_newlines
+          -%}
+          <li
+            class="review"
+            data-review
+            data-index="{{ forloop.index }}"
+            data-rating="{{ review_note | round }}"
+            data-date="{{ review.date.value | date: '%Y%m%d' }}"
+            data-photo="{% if review.photo.value != blank %}1{% else %}0{% endif %}"
+            data-verified="{% if review.achat_verifie.value %}1{% else %}0{% endif %}"
+            data-color="{{ review_color | handle }}"
+            data-text="{{ review_text | escape }}"
+            {% if forloop.index > page_size %}
+              hidden
+            {% endif %}
+          >
+            <span class="review__avatar" aria-hidden="true">{{ review.auteur.value | strip | slice: 0 | upcase }}</span>
+            <div class="review__body">
+              {% render 'stars', rating: review_note, class: 'review__stars' %}
+              {%- if review_color != blank -%}
+                <p class="review__meta">{{ 'reviews.color' | t: color: review_color }}</p>
+              {%- endif -%}
+              {%- if review.titre.value != blank -%}
+                <p class="review__title">{{ review.titre.value | escape }}</p>
+              {%- endif -%}
+              <p class="review__text">{{ review.texte.value | escape | newline_to_br }}</p>
+              {%- if review.photo.value != blank -%}
+                <button type="button" class="review__photo" data-reviews-photo="{{ forloop.index }}">
+                  {{ review.photo.value | image_url: width: 240 | image_tag: width: 96, height: 96, alt: '', loading: 'lazy' }}
+                  <span class="visually-hidden">{{ 'reviews.photo_label' | t: name: review.auteur.value }}</span>
+                </button>
+              {%- endif -%}
+              <p class="review__footer">
+                <span class="review__author">{{ review.auteur.value | escape }}</span>
+                {%- if review.achat_verifie.value -%}
+                  <span class="review__verified">{% render 'icon', icon: 'check' %}{{ 'reviews.verified' | t }}</span>
+                {%- endif -%}
+                <span class="review__sep" aria-hidden="true">|</span>
+                <time datetime="{{ review.date.value | date: '%Y-%m-%d' }}">{{ review.date.value | date: '%d/%m/%Y' }}</time>
+              </p>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <p class="reviews__empty" data-reviews-empty hidden>
+        {{ 'reviews.none_match' | t }}
+        <button type="button" class="text-button" data-reviews-reset>{{ 'reviews.reset' | t }}</button>
+      </p>
+
+      <button
+        type="button"
+        class="button button--secondary reviews__more"
+        data-reviews-more
+        {% if review_count <= page_size %}
+          hidden
+        {% endif %}
+      >
+        {{ 'reviews.more' | t }}
+      </button>
+
+      {%- if section.settings.about != blank -%}
+        <details class="reviews__about">
+          <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
+          <div class="rte">{{ section.settings.about }}</div>
+        </details>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          <div class="reviews__app">{% render block %}</div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <dialog class="reviews__lightbox" data-reviews-lightbox aria-label="{{ 'reviews.lightbox_label' | t }}">
+        <button type="button" class="icon-button reviews__lightbox-close" data-reviews-lightbox-close>
+          {% render 'icon', icon: 'close' %}
+          <span class="visually-hidden">{{ 'general.close' | t }}</span>
+        </button>
+        <div class="reviews__lightbox-content" data-reviews-lightbox-content></div>
+      </dialog>
+
+      {%- comment -%} Large photos for the lightbox, loaded only when opened. {%- endcomment -%}
+      <template data-reviews-photos>
+        {%- for review in reviews -%}
+          {%- if review.photo.value != blank -%}
+            <img
+              data-for="{{ forloop.index }}"
+              src="{{ review.photo.value | image_url: width: 1400 }}"
+              alt="{{ 'reviews.photo_label' | t: name: review.auteur.value | escape }}"
+              width="1400"
+              height="1400"
+            >
+          {%- endif -%}
+        {%- endfor -%}
+      </template>
+    </product-reviews>
+  </section>
+{%- elsif request.design_mode -%}
+  <div class="page-width section section--compact">
+    <p class="form-message">{% render 'icon', icon: 'info' %}{{ 'reviews.editor_empty' | t }}</p>
+    {%- for block in section.blocks -%}
+      {%- if block.type == '@app' -%}
+        <div class="reviews__app">{% render block %}</div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- else -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == '@app' -%}
+      <div class="page-width section section--compact reviews__app">{% render block %}</div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .reviews__inner {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .reviews__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-sm);
+  }
+
+  .reviews__title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+    font-size: var(--heading-3);
+    line-height: 1.1;
+  }
+
+  .reviews__sep {
+    color: var(--color-text-muted);
+    font-weight: 300;
+  }
+
+  .reviews__average {
+    font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .reviews__stars {
+    --stars-size: 1.35rem;
+  }
+
+  .reviews__total {
+    font-size: var(--text-sm);
+  }
+
+  .reviews__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-success);
+
+    & .icon {
+      --icon-size: 1rem;
+      stroke-width: 2.5;
+    }
+  }
+
+  /* Star breakdown, in boxes */
+  .reviews__bars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .reviews__bar {
+    display: grid;
+    grid-template-columns: auto minmax(3rem, 1fr) auto;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-xs);
+    font-size: var(--text-sm);
+    background-color: #f6f3f2;
+  }
+
+  .reviews__bar-track {
+    height: 0.4rem;
+    overflow: hidden;
+    border-radius: var(--radius-round);
+    background-color: rgb(var(--color-text-rgb) / 0.1);
+  }
+
+  .reviews__bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--color-text);
+  }
+
+  .reviews__bar-value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Filters */
+  .reviews__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .reviews__select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    & select {
+      min-height: 2.75rem;
+      padding: 0 2.25rem 0 var(--space-sm);
+      border: 0;
+      border-radius: var(--radius-xs);
+      font: inherit;
+      font-size: var(--text-sm);
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text);
+      background-color: #f6f3f2;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    & .icon {
+      position: absolute;
+      inset-inline-end: 0.75rem;
+      --icon-size: 0.85rem;
+      pointer-events: none;
+    }
+  }
+
+  .reviews__select--plain select {
+    min-height: 2.25rem;
+    padding-inline-start: 0;
+    background: none;
+    color: var(--rose-strong);
+  }
+
+  .reviews__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding: 0 var(--space-sm);
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background-color: #f6f3f2;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+
+    &:hover {
+      border-color: rgb(var(--color-text-rgb) / 0.2);
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--rose-strong);
+      color: var(--rose-strong);
+      background-color: var(--rose-soft);
+    }
+  }
+
+  .reviews__chip--keyword {
+    background-color: #fdf3e7;
+  }
+
+  /* Customer photos */
+  .reviews__photos {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media screen and (max-width: 749px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .reviews__photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-xs);
+    background-color: var(--gallery-bg);
+    cursor: zoom-in;
+  }
+
+  .reviews__photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-base) var(--ease-out);
+
+    .reviews__photo:hover & {
+      transform: scale(1.04);
+    }
+  }
+
+  .reviews__photo-rating {
+    position: absolute;
+    inset-block-end: var(--space-2xs);
+    inset-inline-start: var(--space-2xs);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-bold);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-xs);
+    color: #fff;
+    background-color: rgb(30 24 22 / 0.55);
+
+    & .icon {
+      --icon-size: 0.95rem;
+      color: #f5c04a;
+    }
+  }
+
+  .reviews__photo-more {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: var(--text-lg);
+    color: #fff;
+    background-color: rgb(48 39 36 / 0.55);
+  }
+
+  /* Sort + count */
+  .reviews__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-xs);
+    font-size: var(--text-sm);
+  }
+
+  .reviews__status {
+    margin-inline-start: auto;
+    color: var(--color-text-muted);
+  }
+
+  /* Review list */
+  .reviews__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .review {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-sm);
+    padding-block: var(--space-md);
+    border-block-end: 1px solid var(--color-border);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .review__avatar {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    font-weight: var(--font-body-weight-medium);
+    color: var(--rose-strong);
+    background-color: var(--rose-soft);
+  }
+
+  .review__body {
+    display: grid;
+    gap: var(--space-2xs);
+    justify-items: start;
+  }
+
+  .review__meta {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .review__title {
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .review__text {
+    max-width: 75ch;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .review__photo {
+    width: 6rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-xs);
+    cursor: zoom-in;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .review__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .review__author {
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+  }
+
+  .review__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--color-success);
+
+    & .icon {
+      --icon-size: 0.85rem;
+      stroke-width: 2.5;
+    }
+  }
+
+  .reviews__empty {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .reviews__more {
+    justify-self: center;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .reviews__about {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+
+    & summary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      min-height: var(--tap-target);
+      cursor: pointer;
+    }
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+
+    & .rte {
+      max-width: 75ch;
+      padding-block-end: var(--space-sm);
+    }
+  }
+
+  .reviews__lightbox {
+    width: min(100% - 2rem, 46rem);
+    max-height: min(100dvh - 2rem, 52rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background-color: var(--palette-warm-white);
+
+    &::backdrop {
+      background-color: rgb(48 39 36 / 0.6);
+    }
+  }
+
+  .reviews__lightbox-close {
+    position: absolute;
+    inset-block-start: var(--space-xs);
+    inset-inline-end: var(--space-xs);
+    z-index: 1;
+    background-color: var(--palette-warm-white);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .reviews__lightbox-content {
+    display: grid;
+
+    & > img {
+      width: 100%;
+      height: auto;
+      max-height: 70dvh;
+      object-fit: contain;
+      background-color: var(--gallery-bg);
+    }
+
+    & .review {
+      padding: var(--space-md);
+      border: 0;
+    }
+
+    & .review__photo {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Avis clientes (produit)",
+  "tag": "div",
+  "class": "section-product-reviews",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Les avis viennent du champ méta « Avis clientes » du produit (Produits > votre produit > Champs méta). Uniquement des avis authentiques de vos clientes, publiés avec leur accord : jamais d'avis copiés d'un autre site. Sans avis, la section reste invisible."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Avis"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breakdown",
+      "label": "Afficher la répartition des notes",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "keywords",
+      "label": "Mots-clés à proposer en filtre",
+      "info": "Un mot par ligne. Seuls les mots présents dans les avis s'affichent, avec leur nombre.",
+      "default": "chaleur\nconfort\nbatterie\nlivraison"
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Avis affichés avant « Voir plus »",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "about",
+      "label": "Comment les avis sont-ils collectés ?",
+      "info": "Information obligatoire (article L111-7-2 du Code de la consommation). Décrivez votre vraie méthode.",
+      "default": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Achat vérifié » signifie que nous avons retrouvé la commande correspondante. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre",
+      "info": "Utilisée par le lien de la note en haut de la fiche produit.",
+      "default": "avis"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Avis clientes (produit)" }]
+}
+{% endschema %}

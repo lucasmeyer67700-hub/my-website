@@ -1,14 +1,17 @@
 {% doc %}
-  Product media gallery: swipeable slider (scroll-snap) with thumbnails,
-  previous/next controls and a zoom dialog. Works as a simple scrollable
-  list without JavaScript.
+  Product media gallery: a large photo in a light frame with previous/next
+  buttons on its sides, a strip of thumbnails below and a zoom dialog.
+  Optional overlays come from the product section's "gallery_card" and
+  "gallery_badge" blocks. Works as a simple scrollable list without
+  JavaScript. Without photos, empty photo slots are shown.
 
   @param {object} product - Product object
   @param {string} [fit] - 'contain' or 'cover'
   @param {string} [ratio] - CSS aspect-ratio for slides
+  @param {object} [overlays] - The section's blocks (gallery_card and gallery_badge are used)
 
   @example
-  {% render 'product-gallery', product: product %}
+  {% render 'product-gallery', product: product, overlays: section.blocks %}
 {% enddoc %}
 {%- liquid
   assign media_count = product.media.size
@@ -23,97 +26,171 @@
     data-initial-media="{{ initial_media.id }}"
   {% endif %}
 >
-  {%- if media_count == 0 -%}
-    {%- comment -%} Photo slots, ready for the merchant's own photos. {%- endcomment -%}
-    <div class="gallery__slot gallery__slot--main">
-      <span class="gallery__slot-art" aria-hidden="true">
-        <span class="gallery__slot-ripple"></span>
-        <span class="gallery__slot-drop"></span>
-      </span>
-      {%- if request.design_mode -%}
-        <p class="gallery__slot-hint">{{ 'products.media_slot_hint' | t }}</p>
-      {%- endif -%}
-    </div>
-    <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
-      {%- for i in (1..4) -%}
-        <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>
-      {%- endfor -%}
-    </ul>
-  {%- else -%}
-    <ul
-      class="gallery__track"
-      role="list"
-      data-gallery-track
-      tabindex="0"
-      aria-label="{{ 'products.gallery_label' | t }}"
-    >
-      {%- for media in product.media -%}
-        <li
-          class="gallery__slide"
-          data-gallery-slide
-          data-media-id="{{ media.id }}"
-          aria-label="{{ 'products.media_x_of_y' | t: index: forloop.index, count: media_count }}"
-        >
-          {%- case media.media_type -%}
-            {%- when 'image' -%}
-              <button
-                type="button"
-                class="gallery__zoom"
-                data-gallery-zoom
-                data-zoom-src="{{ media.preview_image | image_url: width: 2000 }}"
-                data-zoom-alt="{{ media.alt | escape }}"
-              >
-                {%- if forloop.first -%}
-                  {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', eager: true, alt: media.alt %}
-                {%- else -%}
-                  {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
-                {%- endif -%}
-                <span class="gallery__zoom-icon" aria-hidden="true">{% render 'icon', icon: 'zoom' %}</span>
-                <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
-              </button>
-            {%- when 'video' -%}
-              {{ media | video_tag: controls: true, preload: 'none', image_size: '1200x', class: 'gallery__video' }}
-            {%- when 'external_video' -%}
-              {{ media | external_video_tag: class: 'gallery__video', loading: 'lazy' }}
-            {%- else -%}
-              {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
-          {%- endcase -%}
-        </li>
-      {%- endfor -%}
-    </ul>
-
-    {%- if media_count > 1 -%}
-      <div class="gallery__controls">
-        <button type="button" class="icon-button gallery__arrow" data-gallery-prev disabled>
-          {% render 'icon', icon: 'chevron-left' %}
-          <span class="visually-hidden">{{ 'products.previous_media' | t }}</span>
-        </button>
-        <span class="gallery__counter" data-gallery-counter aria-hidden="true">1 / {{ media_count }}</span>
-        <button type="button" class="icon-button gallery__arrow" data-gallery-next>
-          {% render 'icon', icon: 'chevron-right' %}
-          <span class="visually-hidden">{{ 'products.next_media' | t }}</span>
-        </button>
+  <div class="gallery__stage">
+    {%- if media_count == 0 -%}
+      {%- comment -%} Photo slot, ready for the merchant's own photos. {%- endcomment -%}
+      <div class="gallery__slot gallery__slot--main">
+        <span class="gallery__slot-art" aria-hidden="true">
+          <span class="gallery__slot-ripple"></span>
+          <span class="gallery__slot-drop"></span>
+        </span>
+        {%- if request.design_mode -%}
+          <p class="gallery__slot-hint">{{ 'products.media_slot_hint' | t }}</p>
+        {%- endif -%}
       </div>
-
-      <ul class="gallery__thumbs" role="list">
+    {%- else -%}
+      <ul
+        class="gallery__track"
+        role="list"
+        data-gallery-track
+        tabindex="0"
+        aria-label="{{ 'products.gallery_label' | t }}"
+      >
         {%- for media in product.media -%}
-          <li>
-            <button
-              type="button"
-              class="gallery__thumb"
-              data-gallery-thumb
-              {% if forloop.first %}
-                aria-current="true"
-              {% endif %}
-            >
-              {% render 'responsive-image', image: media.preview_image, sizes: '72px', widths: '72, 144, 216', decorative: true %}
-              <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
-            </button>
+          <li
+            class="gallery__slide"
+            data-gallery-slide
+            data-media-id="{{ media.id }}"
+            aria-label="{{ 'products.media_x_of_y' | t: index: forloop.index, count: media_count }}"
+          >
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                <button
+                  type="button"
+                  class="gallery__zoom"
+                  data-gallery-zoom
+                  data-zoom-src="{{ media.preview_image | image_url: width: 2000 }}"
+                  data-zoom-alt="{{ media.alt | escape }}"
+                >
+                  {%- if forloop.first -%}
+                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', eager: true, alt: media.alt %}
+                  {%- else -%}
+                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+                  {%- endif -%}
+                  <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
+                </button>
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, preload: 'none', image_size: '1200x', class: 'gallery__video' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: class: 'gallery__video', loading: 'lazy' }}
+              {%- else -%}
+                {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+            {%- endcase -%}
           </li>
         {%- endfor -%}
       </ul>
     {%- endif -%}
 
+    {%- liquid
+      assign has_badges = false
+      for block in overlays
+        if block.type == 'gallery_badge'
+          assign has_badges = true
+        endif
+      endfor
+    -%}
+    {%- for block in overlays -%}
+      {%- if block.type == 'gallery_card' -%}
+        {%- liquid
+          assign card_link = block.settings.link
+          if card_link == blank and settings.returns_page != blank
+            assign card_link = settings.returns_page.url
+          endif
+        -%}
+        <aside class="gallery-card" data-gallery-card {{ block.shopify_attributes }}>
+          <span class="gallery-card__icon" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
+          <p class="gallery-card__title">{{ block.settings.title | escape }}</p>
+          <div class="gallery-card__body">
+            {%- if block.settings.text != blank -%}
+              <p class="gallery-card__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if card_link != blank and block.settings.link_label != blank -%}
+              <a class="gallery-card__link" href="{{ card_link }}">{{ block.settings.link_label | escape }}</a>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.dismissible -%}
+            <button type="button" class="gallery-card__close" data-gallery-card-close>
+              {% render 'icon', icon: 'close' %}
+              <span class="visually-hidden">{{ 'general.close' | t }}</span>
+            </button>
+          {%- endif -%}
+        </aside>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_badges -%}
+      <ul class="gallery-badges" role="list">
+        {%- for block in overlays -%}
+          {%- if block.type == 'gallery_badge' -%}
+            <li class="gallery-badge gallery-badge--{{ block.settings.style }}" {{ block.shopify_attributes }}>
+              <span class="gallery-badge__circle">
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 240 | image_tag: width: 120, height: 120, alt: '', loading: 'lazy', class: 'gallery-badge__image' }}
+                {%- elsif block.settings.style == 'light' and block.settings.icon != 'none' -%}
+                  {% render 'icon', icon: block.settings.icon %}
+                {%- endif -%}
+                {%- if block.settings.style == 'filled' -%}
+                  {%- if block.settings.title != blank -%}
+                    <span class="gallery-badge__title">{{ block.settings.title | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="gallery-badge__subtitle">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              </span>
+              {%- if block.settings.style == 'light' -%}
+                {%- if block.settings.title != blank -%}
+                  <span class="gallery-badge__caption gallery-badge__caption--strong">{{ block.settings.title | escape }}</span>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <span class="gallery-badge__caption">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if media_count > 1 -%}
+      <button type="button" class="gallery__arrow gallery__arrow--prev" data-gallery-prev disabled>
+        {% render 'icon', icon: 'chevron-left' %}
+        <span class="visually-hidden">{{ 'products.previous_media' | t }}</span>
+      </button>
+      <button type="button" class="gallery__arrow gallery__arrow--next" data-gallery-next>
+        {% render 'icon', icon: 'chevron-right' %}
+        <span class="visually-hidden">{{ 'products.next_media' | t }}</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  {%- if media_count == 0 -%}
+    <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
+      {%- for i in (1..6) -%}
+        <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>
+      {%- endfor -%}
+    </ul>
+  {%- elsif media_count > 1 -%}
+    <ul class="gallery__thumbs" role="list">
+      {%- for media in product.media -%}
+        <li>
+          <button
+            type="button"
+            class="gallery__thumb"
+            data-gallery-thumb
+            {% if forloop.first %}
+              aria-current="true"
+            {% endif %}
+          >
+            {% render 'responsive-image', image: media.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
+            <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if media_count > 0 -%}
     <dialog class="gallery__lightbox" data-gallery-lightbox aria-label="{{ 'products.gallery_label' | t }}">
       <button type="button" class="icon-button gallery__lightbox-close" data-lightbox-close>
         {% render 'icon', icon: 'close' %}
@@ -131,6 +208,11 @@
     min-width: 0;
   }
 
+  /* The large photo, in a light frame, with the overlays and side arrows */
+  .gallery__stage {
+    position: relative;
+  }
+
   .gallery__track {
     position: relative;
     display: grid;
@@ -141,6 +223,7 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     border-radius: var(--radius-md);
+    background-color: var(--gallery-bg);
 
     &::-webkit-scrollbar {
       display: none;
@@ -152,7 +235,7 @@
     overflow: hidden;
     scroll-snap-align: start;
     aspect-ratio: var(--gallery-ratio, 1);
-    background-color: var(--color-surface);
+    background-color: var(--gallery-bg);
 
     & img,
     & video,
@@ -177,86 +260,88 @@
     cursor: zoom-in;
   }
 
-  .gallery__zoom-icon {
+  .gallery__arrow {
     position: absolute;
-    inset-block-end: var(--space-sm);
-    inset-inline-end: var(--space-sm);
+    inset-block-start: 50%;
+    z-index: 2;
     display: grid;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    translate: 0 -50%;
+    border: 0;
     border-radius: 50%;
     color: var(--color-text);
-    background-color: rgb(var(--color-background-rgb) / 0.85);
-    box-shadow: var(--shadow-sm);
-  }
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgb(48 39 36 / 0.16);
+    cursor: pointer;
+    transition: opacity var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 
-  .gallery__controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    font-size: var(--text-sm);
-    font-variant-numeric: tabular-nums;
-    color: var(--color-text-muted);
+    &:hover {
+      box-shadow: 0 4px 16px rgb(48 39 36 / 0.24);
+    }
 
-    & [disabled] {
-      opacity: 0.35;
+    &[disabled] {
+      opacity: 0.45;
       cursor: default;
     }
-  }
 
-  .gallery__thumbs {
-    display: none;
-
-    @media screen and (min-width: 750px) {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--space-2xs);
+    & .icon {
+      --icon-size: 1.1rem;
     }
   }
 
-  /* Computers: thumbnails in a column on the left of the main photo */
-  @media screen and (min-width: 990px) {
-    .gallery:has(.gallery__thumbs) {
-      grid-template-columns: 4.75rem minmax(0, 1fr);
-      align-items: start;
-      column-gap: var(--space-md);
+  .gallery__arrow--prev {
+    inset-inline-start: var(--space-2xs);
 
-      & > .gallery__track,
-      & > .gallery__controls,
-      & > .gallery__slot--main {
-        grid-column: 2;
-      }
+    @media screen and (min-width: 990px) {
+      inset-inline-start: -1.375rem;
+    }
+  }
 
-      & > .gallery__thumbs {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        max-height: min(80vh, 46rem);
-        overflow-y: auto;
-        scrollbar-width: none;
-      }
+  .gallery__arrow--next {
+    inset-inline-end: var(--space-2xs);
+
+    @media screen and (min-width: 990px) {
+      inset-inline-end: -1.375rem;
+    }
+  }
+
+  /* Thumbnails: one row below the photo, scrollable */
+  .gallery__thumbs {
+    position: relative;
+    display: flex;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0 0 2px;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    & > li {
+      flex: none;
+      scroll-snap-align: start;
     }
   }
 
   .gallery__thumb {
-    width: 4.5rem;
-    height: auto;
-    aspect-ratio: var(--gallery-ratio, 1);
+    position: relative;
+    display: block;
+    width: clamp(3.75rem, 2.75rem + 3vw, 5.75rem);
+    aspect-ratio: 1;
     overflow: hidden;
     padding: 0;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: var(--radius-sm);
-    background-color: var(--color-surface);
-    opacity: 0.65;
-    transition:
-      opacity var(--duration-fast) ease,
-      border-color var(--duration-fast) ease;
+    background-color: var(--gallery-bg);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) ease;
 
     & img {
       width: 100%;
@@ -264,14 +349,213 @@
       object-fit: cover;
     }
 
-    &:hover,
-    &[aria-current='true'] {
-      opacity: 1;
+    &:hover {
+      border-color: rgb(var(--color-text-rgb) / 0.25);
     }
 
     &[aria-current='true'] {
       border-color: var(--color-text);
     }
+  }
+
+  /* Overlay card, top left (e.g. the 30-day guarantee) */
+  .gallery-card {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-2xs) var(--space-sm);
+    max-width: min(34rem, 82%);
+    padding: var(--space-sm) calc(var(--space-lg) + 0.75rem) var(--space-sm) var(--space-sm);
+    border-start-start-radius: var(--radius-md);
+    border-end-end-radius: var(--radius-md);
+    background-color: #fff;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+
+    &[hidden] {
+      display: none;
+    }
+
+    @media screen and (max-width: 749px) {
+      grid-template-columns: auto minmax(0, 1fr);
+      max-width: 88%;
+      padding: var(--space-xs) calc(var(--space-lg) + 0.5rem) var(--space-xs) var(--space-xs);
+    }
+  }
+
+  .gallery-card__icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: var(--rose-strong);
+    background-color: var(--rose-soft);
+
+    & .icon {
+      --icon-size: 1.1rem;
+    }
+  }
+
+  .gallery-card__title {
+    max-width: 11ch;
+    font-family: var(--font-heading-family);
+    font-size: var(--text-xl);
+    line-height: 1.05;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+    text-wrap: balance;
+
+    @media screen and (max-width: 749px) {
+      max-width: none;
+      font-size: var(--text-lg);
+    }
+  }
+
+  .gallery-card__body {
+    display: grid;
+    gap: 0.15rem;
+    font-size: var(--text-sm);
+    line-height: 1.4;
+
+    @media screen and (max-width: 749px) {
+      grid-column: 1 / -1;
+      font-size: var(--text-xs);
+    }
+  }
+
+  .gallery-card__link {
+    width: fit-content;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .gallery-card__close {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: var(--space-xs);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    color: var(--color-text-muted);
+    background: none;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background-color: #f1eeed;
+      transition: background-color var(--duration-fast) ease;
+    }
+
+    &:hover::before {
+      background-color: #e8e2e0;
+    }
+
+    & .icon {
+      position: relative;
+      --icon-size: 0.7rem;
+    }
+  }
+
+  /* Round badges, top right */
+  .gallery-badges {
+    position: absolute;
+    inset-block-start: clamp(4.5rem, 3rem + 5vw, 7.5rem);
+    inset-inline-end: var(--space-md);
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+
+    @media screen and (max-width: 749px) {
+      inset-block-start: auto;
+      inset-block-end: var(--space-sm);
+      inset-inline-end: var(--space-sm);
+      gap: var(--space-xs);
+    }
+  }
+
+  .gallery-badge {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3xs);
+    max-width: 9.5rem;
+    text-align: center;
+  }
+
+  .gallery-badge__circle {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    width: clamp(4.25rem, 3rem + 4vw, 7rem);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    color: var(--rose-strong);
+    background-color: #fff;
+    box-shadow: 0 6px 20px -8px rgb(48 39 36 / 0.3);
+
+    & .icon {
+      --icon-size: clamp(1.5rem, 1rem + 1.4vw, 2.5rem);
+    }
+  }
+
+  .gallery-badge__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-badge--filled .gallery-badge__circle {
+    gap: 0.1rem;
+    color: #fff;
+    background-color: var(--rose-strong);
+  }
+
+  .gallery-badge__title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.15rem, 0.85rem + 1vw, 1.75rem);
+    line-height: 1;
+  }
+
+  .gallery-badge__subtitle {
+    max-width: 8ch;
+    font-size: clamp(0.625rem, 0.55rem + 0.25vw, 0.75rem);
+    line-height: 1.2;
+
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  .gallery-badge__caption {
+    font-size: var(--text-sm);
+    line-height: 1.25;
+    color: var(--color-text);
+
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  .gallery-badge__caption--strong {
+    font-weight: var(--font-body-weight-medium);
   }
 
   /* Empty photo slots */
@@ -280,9 +564,8 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    border: 1px solid rgb(var(--gold-rgb) / 0.22);
     border-radius: var(--radius-md);
-    background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
+    background: linear-gradient(180deg, var(--gallery-bg) 0%, #f6e4e7 100%);
     color: rgb(var(--gold-rgb) / 0.8);
   }
 
@@ -291,16 +574,10 @@
   }
 
   .gallery__slot--thumb {
-    width: 4.5rem;
-    aspect-ratio: var(--gallery-ratio, 1);
+    width: clamp(3.75rem, 2.75rem + 3vw, 5.75rem);
+    aspect-ratio: 1;
     border-radius: var(--radius-sm);
     --icon-size: 1.25rem;
-  }
-
-  .gallery__thumbs--slots {
-    display: flex;
-    gap: var(--space-2xs);
-    justify-content: center;
   }
 
   .gallery__slot-art {
@@ -310,8 +587,8 @@
 
   .gallery__slot-drop {
     position: absolute;
-    top: 40%;
-    left: 50%;
+    top: 42%;
+    left: 42%;
     width: 22%;
     aspect-ratio: 1;
     translate: -50% -50%;
@@ -327,8 +604,8 @@
 
   .gallery__slot-ripple {
     position: absolute;
-    top: 68%;
-    left: 50%;
+    top: 70%;
+    left: 42%;
     width: 40%;
     aspect-ratio: 4 / 1;
     translate: -50% -50%;
@@ -340,6 +617,7 @@
     position: absolute;
     inset-inline: var(--space-sm);
     inset-block-end: var(--space-sm);
+    z-index: 2;
     padding: var(--space-xs) var(--space-sm);
     border: 1px dashed rgb(var(--gold-rgb) / 0.8);
     border-radius: var(--radius-md);

@@ -3,6 +3,7 @@
   assign form_id = 'ProductForm-' | append: section.id
   assign submit_id = 'ProductSubmit-' | append: section.id
   assign tagline = product.metafields.custom.accroche.value
+  assign installments_id = 'ProductInstallments-' | append: section.id
 -%}
 
 <section class="product section section--compact color-{{ section.settings.color_scheme }}" data-product-section>
@@ -11,26 +12,89 @@
       {% render 'product-gallery',
         product: product,
         fit: section.settings.gallery_fit,
-        ratio: section.settings.gallery_ratio
+        ratio: section.settings.gallery_ratio,
+        overlays: section.blocks
       %}
     </div>
 
     <div class="product__info" id="ProductInfo">
       <div class="product__header">
-        {%- if section.settings.eyebrow != blank -%}
-          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- if section.settings.banner != blank -%}
+          <p class="product__banner">{{ section.settings.banner | escape }}</p>
         {%- endif -%}
+        {% render 'product-rating', product: product, anchor: 'avis' %}
         <h1 class="product__title">{{ product.title | escape }}</h1>
+        <div class="product__price-row">
+          {% render 'price', product: product, class: 'product__price' %}
+          {%- if section.settings.price_badge != blank -%}
+            <span class="product__badge">{{ section.settings.price_badge | escape }}</span>
+          {%- endif -%}
+        </div>
+        {%- comment -%} Pay in installments: shown only when Shopify offers it for the store. {%- endcomment -%}
+        {%- form 'product', product, id: installments_id, class: 'product__installments' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+          {{ form | payment_terms }}
+        {%- endform -%}
         {%- if tagline != blank -%}
           <p class="product__tagline">{{ tagline | escape }}</p>
         {%- endif -%}
-        {% render 'price', product: product, class: 'product__price' %}
       </div>
 
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when '@app' -%}
             {% render block %}
+
+          {%- when 'guarantee' -%}
+            {%- liquid
+              assign guarantee_title = block.settings.title | default: settings.returns_info
+              assign guarantee_link = block.settings.link
+              if guarantee_link == blank and settings.returns_page != blank
+                assign guarantee_link = settings.returns_page.url
+              endif
+            -%}
+            {%- if guarantee_title != blank -%}
+              <div class="product__guarantee" {{ block.shopify_attributes }}>
+                <span class="product__guarantee-icon" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
+                <span class="product__guarantee-body">
+                  {%- if guarantee_link != blank -%}
+                    <a class="product__guarantee-title" href="{{ guarantee_link }}">{{ guarantee_title | escape }}</a>
+                  {%- else -%}
+                    <span class="product__guarantee-title">{{ guarantee_title | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="product__guarantee-text">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'delivery' -%}
+            {%- liquid
+              assign delivery_left = block.settings.left_text
+              if delivery_left == blank and settings.shipping_delay != blank
+                assign delivery_left = 'products.delivery_time' | t: delay: settings.shipping_delay
+              endif
+              assign delivery_right = block.settings.right_text | default: settings.shipping_info
+            -%}
+            <div class="product__delivery" {{ block.shopify_attributes }}>
+              {%- if delivery_left != blank -%}
+                <p class="product__delivery-time"><span class="product__delivery-dot" aria-hidden="true"></span>{{ delivery_left | escape }}</p>
+              {%- endif -%}
+              {%- if delivery_right != blank -%}
+                <p class="product__delivery-shipping">
+                  {%- if block.settings.show_flag -%}
+                    <svg class="product__flag" viewBox="0 0 3 2" aria-hidden="true" focusable="false"><path fill="#0055a4" d="M0 0h1v2H0z"/><path fill="#fff" d="M1 0h1v2H1z"/><path fill="#ef4135" d="M2 0h1v2H2z"/></svg>
+                    <span class="product__delivery-sep" aria-hidden="true">|</span>
+                  {%- endif -%}
+                  {%- if settings.shipping_page != blank -%}
+                    <a href="{{ settings.shipping_page.url }}">{{ delivery_right | escape }}</a>
+                  {%- else -%}
+                    <span>{{ delivery_right | escape }}</span>
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </div>
 
           {%- when 'points' -%}
             {%- assign points = product.metafields.custom.points_forts.value -%}
@@ -56,7 +120,10 @@
                 offer_note_single: block.settings.offer_note_single,
                 offer_note_multi: block.settings.offer_note_multi,
                 multi_hint: block.settings.multi_hint,
-                unit_label: block.settings.unit_label
+                unit_label: block.settings.unit_label,
+                best_label: block.settings.best_label,
+                perks_single: block.settings.perks_single,
+                perks_multi: block.settings.perks_multi
               %}
             </div>
 
@@ -149,7 +216,8 @@
             </product-form>
 
           {%- when 'trust' -%}
-            <div class="product__trust" {{ block.shopify_attributes }}>
+            <div class="product__trust{% unless block.settings.show_lines %} product__trust--compact{% endunless %}" {{ block.shopify_attributes }}>
+              {%- if block.settings.show_lines -%}
               <ul class="trust-list" role="list">
                 {%- if settings.shipping_info != blank -%}
                   <li>
@@ -181,6 +249,9 @@
                 {%- endif -%}
                 <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
               </ul>
+              {%- else -%}
+                <p class="product__secure">{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></p>
+              {%- endif -%}
               {%- if block.settings.show_payment_icons -%}
                 {% render 'payment-icons', class: 'product__payments' %}
               {%- endif -%}
@@ -315,7 +386,7 @@
 
   .product__info {
     display: grid;
-    gap: var(--space-md);
+    gap: var(--space-sm);
     min-width: 0;
   }
 
@@ -324,19 +395,160 @@
     gap: var(--space-xs);
   }
 
+  .product__banner {
+    padding: 0.55rem var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    text-align: center;
+    color: var(--color-text);
+    background-color: #f2eeed;
+  }
+
   .product__title {
-    font-size: var(--heading-2);
+    font-size: calc(clamp(2rem, 1.6rem + 1.4vw, 2.75rem) * var(--font-heading-scale, 1));
     line-height: var(--line-height-tight);
   }
 
-  .product__tagline {
-    font-size: var(--text-lg);
-    color: var(--color-text-muted);
-    text-wrap: pretty;
+  .product__price-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
   }
 
   .product__price {
     font-size: var(--text-xl);
+
+    & .price__current {
+      font-weight: var(--font-body-weight-bold);
+    }
+
+    & .price__compare {
+      order: -1;
+      font-weight: var(--font-body-weight);
+      color: var(--rose-strong);
+    }
+  }
+
+  .product__badge {
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: var(--rose-strong);
+  }
+
+  /* Shopify fills the payment terms itself (empty when not offered): no box of our own. */
+  .product__installments {
+    display: contents;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .product__tagline {
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--color-text);
+    text-wrap: pretty;
+  }
+
+  /* Guarantee box, dashed (under the offers) */
+  .product__guarantee {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border: 2px dashed rgb(var(--rose-strong-rgb) / 0.55);
+    border-radius: var(--radius-sm);
+    background-color: #fff;
+  }
+
+  .product__guarantee-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-xs);
+    color: var(--rose-strong);
+    background-color: var(--rose-soft);
+
+    & .icon {
+      --icon-size: 1.15rem;
+    }
+  }
+
+  .product__guarantee-body {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .product__guarantee-title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-bold);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  a.product__guarantee-title:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .product__guarantee-text {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Delivery line under the button */
+  .product__delivery {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-md);
+    font-size: var(--text-sm);
+  }
+
+  .product__delivery-time {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--color-success);
+  }
+
+  .product__delivery-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 0 3px rgb(47 107 74 / 0.15);
+  }
+
+  .product__delivery-shipping {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  .product__flag {
+    width: 1.1rem;
+    height: auto;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08);
+  }
+
+  .product__delivery-sep {
+    color: var(--color-text-muted);
   }
 
   .product__points {
@@ -361,6 +573,11 @@
 
   .product-form__submit {
     flex: 1 1 auto;
+    min-height: 3.5rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .product-form__express:empty {
@@ -379,6 +596,25 @@
     padding: var(--space-md);
     border-radius: var(--radius-md);
     background-color: var(--color-surface);
+  }
+
+  .product__trust--compact {
+    justify-items: center;
+    gap: var(--space-2xs);
+    padding: 0;
+    background: none;
+  }
+
+  .product__secure {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 0.9rem;
+    }
   }
 
   .product__accordion .accordion__title .icon {
@@ -476,9 +712,16 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Surtitre",
-      "default": "Confort menstruel"
+      "id": "banner",
+      "label": "Bandeau au-dessus du titre",
+      "default": "La ceinture chauffante sans fil, pour vos jours de règles"
+    },
+    {
+      "type": "text",
+      "id": "price_badge",
+      "label": "Pastille à côté du prix",
+      "info": "Une information vraie (ex. : Nouveauté). Laissez vide pour la masquer.",
+      "default": "Nouveauté"
     },
     {
       "type": "select",
@@ -516,6 +759,190 @@
   ],
   "blocks": [
     { "type": "@app" },
+    {
+      "type": "gallery_card",
+      "name": "Galerie : encart en haut à gauche",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "S'affiche sur la photo principale. Uniquement des informations vraies (garantie, livraison…)."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "return", "label": "Retour" },
+            { "value": "shield", "label": "Bouclier" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "lock", "label": "Paiement sécurisé" },
+            { "value": "check", "label": "Validation" },
+            { "value": "chat", "label": "Conseil" }
+          ],
+          "default": "return"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Satisfaite ou remboursée"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "30 jours pour l'essayer chez vous."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Texte du lien",
+          "default": "Voir les conditions"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien",
+          "info": "Par défaut, la page des retours (Paramètres du thème)."
+        },
+        {
+          "type": "checkbox",
+          "id": "dismissible",
+          "label": "Bouton pour fermer l'encart",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "gallery_badge",
+      "name": "Galerie : pastille ronde",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Pastilles empilées à droite de la photo principale. Caractéristiques réelles uniquement."
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "light", "label": "Blanc, avec icône et légende" },
+            { "value": "filled", "label": "Rose, avec texte" }
+          ],
+          "default": "filled"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône (style blanc)",
+          "options": [
+            { "value": "none", "label": "Aucune" },
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" },
+            { "value": "shield", "label": "Bouclier" }
+          ],
+          "default": "heat"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image dans le rond (facultatif)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Texte principal",
+          "default": "Sans fil"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte secondaire",
+          "default": "rechargeable USB"
+        }
+      ]
+    },
+    {
+      "type": "guarantee",
+      "name": "Encadré garantie",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "return", "label": "Retour" },
+            { "value": "shield", "label": "Bouclier" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "lock", "label": "Paiement sécurisé" },
+            { "value": "check", "label": "Validation" },
+            { "value": "chat", "label": "Conseil" }
+          ],
+          "default": "return"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "info": "Par défaut, le texte « Retours » des Paramètres du thème."
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Essayez-la chez vous | Garantie légale de 2 ans | Paiement sécurisé"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien",
+          "info": "Par défaut, la page des retours."
+        }
+      ]
+    },
+    {
+      "type": "delivery",
+      "name": "Ligne de livraison",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "left_text",
+          "label": "Texte à gauche (point vert)",
+          "info": "Par défaut : « Livraison en » + le délai des Paramètres du thème."
+        },
+        {
+          "type": "text",
+          "id": "right_text",
+          "label": "Texte à droite",
+          "info": "Par défaut, le texte « Livraison » des Paramètres du thème."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_flag",
+          "label": "Afficher le drapeau français",
+          "default": true
+        }
+      ]
+    },
     {
       "type": "points",
       "name": "Points essentiels",
@@ -572,6 +999,26 @@
           "id": "multi_hint",
           "label": "Aide sous les coloris (offres à plusieurs)",
           "default": "Duo : deux roses, deux blanches, ou une de chaque."
+        },
+        {
+          "type": "text",
+          "id": "best_label",
+          "label": "Onglet de l'offre à plusieurs",
+          "info": "Affiché seulement si l'offre fait vraiment économiser.",
+          "default": "Meilleur prix"
+        },
+        {
+          "type": "textarea",
+          "id": "perks_single",
+          "label": "Inclus dans l'offre à l'unité",
+          "info": "Une ligne par avantage. Texte à droite après « | » (ex. : Livraison offerte | Offerte)."
+        },
+        {
+          "type": "textarea",
+          "id": "perks_multi",
+          "label": "Inclus dans les offres à plusieurs",
+          "info": "Une ligne par avantage. Texte à droite après « | ».",
+          "default": "Deux ensembles complets : câbles USB et notices\nLivraison offerte en France | Offerte"
         }
       ]
     },
@@ -603,6 +1050,13 @@
         {
           "type": "paragraph",
           "content": "Textes modifiables dans Paramètres du thème > Réassurance."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_lines",
+          "label": "Afficher livraison, retours et garantie",
+          "info": "Décochez si l'encadré garantie et la ligne de livraison les affichent déjà.",
+          "default": true
         },
         {
           "type": "checkbox",

@@ -1,0 +1,49 @@
+{% doc %}
+  Five stars filled to the given rating (partial stars supported), with a
+  text alternative for screen readers.
+
+  @param {number} rating - Rating out of 5
+  @param {string} [class] - Extra CSS classes
+
+  @example
+  {% render 'stars', rating: 4.5 %}
+{% enddoc %}
+{%- liquid
+  assign stars_percent = rating | times: 20.0
+  if stars_percent > 100
+    assign stars_percent = 100
+  endif
+  assign stars_text = rating | times: 10 | round | divided_by: 10.0 | append: '' | replace: '.', ','
+-%}
+<span
+  class="stars{% if class %} {{ class }}{% endif %}"
+  style="--stars-fill: {{ stars_percent }}%;"
+  role="img"
+  aria-label="{{ 'reviews.stars_label' | t: rating: stars_text }}"
+></span>
+
+{% stylesheet %}
+  .stars {
+    --stars-size: 1rem;
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: calc(var(--stars-size) * 5);
+    height: var(--stars-size);
+    vertical-align: middle;
+    background-color: rgb(var(--rose-strong-rgb) / 0.2);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.95 6.2 6.75.8-4.98 4.62 1.3 6.78L12 17.27 5.98 20.6l1.3-6.78L2.3 9.2l6.75-.8z'/%3E%3C/svg%3E")
+      0 0 / var(--stars-size) var(--stars-size) repeat-x;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.95 6.2 6.75.8-4.98 4.62 1.3 6.78L12 17.27 5.98 20.6l1.3-6.78L2.3 9.2l6.75-.8z'/%3E%3C/svg%3E")
+      0 0 / var(--stars-size) var(--stars-size) repeat-x;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: var(--stars-fill, 0%);
+      background-color: var(--rose-strong);
+    }
+  }
+{% endstylesheet %}

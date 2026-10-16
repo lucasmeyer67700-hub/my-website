@@ -61,7 +61,8 @@
     "offer_reference_label": "Prix des articles achetés à l'unité :",
     "choose_option": "Choisissez une option",
     "price_from": "À partir de {{ price }}",
-    "media_slot_hint": "Ajoutez vos photos : Produits → ce produit → Médias. La première photo apparaît ici."
+    "media_slot_hint": "Ajoutez vos photos : Produits → ce produit → Médias. La première photo apparaît ici.",
+    "delivery_time": "Livraison en {{ delay }}"
   },
   "cart": {
     "title": "Votre panier",
@@ -166,5 +167,51 @@
     "with_code": "avec le code",
     "privacy": "Politique de confidentialité",
     "consent": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque e-mail."
+  },
+  "reviews": {
+    "stars_label": "Note : {{ rating }} sur 5",
+    "verified": "Achat vérifié",
+    "proof_one": "a donné son avis",
+    "proof_other": {
+      "one": "et {{ count }} autre cliente ont donné leur avis",
+      "other": "et {{ count }} autres clientes ont donné leur avis"
+    },
+    "count_short": {
+      "one": "({{ count }} avis)",
+      "other": "({{ count }} avis)"
+    },
+    "count": {
+      "one": "{{ count }} évaluation",
+      "other": "{{ count }} évaluations"
+    },
+    "all_verified": "Tous issus d'achats vérifiés",
+    "some_verified": {
+      "one": "{{ count }} achat vérifié",
+      "other": "{{ count }} achats vérifiés"
+    },
+    "stars_row": {
+      "one": "{{ count }} étoile",
+      "other": "{{ count }} étoiles"
+    },
+    "filters_label": "Filtrer les avis",
+    "rating_filter": "Filtrer par note",
+    "all_ratings": "Toutes les notes",
+    "with_photos": "Avec photos",
+    "verified_filter": "Achats vérifiés",
+    "see_more_photos": "Voir plus",
+    "photo_label": "Photo de {{ name }}",
+    "sort_label": "Trier par",
+    "sort_recent": "Plus récents",
+    "sort_high": "Mieux notés",
+    "sort_low": "Moins bien notés",
+    "sort_photo": "Avec photos d'abord",
+    "showing": "Avis affichés : {{ shown }} sur {{ total }}",
+    "color": "Coloris : {{ color }}",
+    "none_match": "Aucun avis ne correspond à ces filtres.",
+    "reset": "Tout afficher",
+    "more": "Voir plus d'avis",
+    "about_title": "Comment les avis sont-ils collectés ?",
+    "lightbox_label": "Photo de l'avis",
+    "editor_empty": "Aucun avis pour ce produit : la section reste invisible pour vos visiteuses. Ajoutez des avis authentiques dans Produits > votre produit > Champs méta > Avis clientes."
   }
 }
