@@ -55,7 +55,13 @@
     "colors_count": {
       "one": "{{ count }} coloris",
       "other": "{{ count }} coloris"
-    }
+    },
+    "offer_saving": "Économisez {{ amount }}",
+    "offer_unit": "l'unité",
+    "offer_reference_label": "Prix des articles achetés à l'unité :",
+    "choose_option": "Choisissez une option",
+    "price_from": "À partir de {{ price }}",
+    "media_slot_hint": "Ajoutez vos photos : Produits → ce produit → Médias. La première photo apparaît ici."
   },
   "cart": {
     "title": "Votre panier",

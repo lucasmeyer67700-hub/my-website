@@ -319,6 +319,44 @@ class VariantPicker extends HTMLElement {
     this.variants = data ? JSON.parse(data.textContent) : [];
     this.section = this.closest('[data-product-section]');
     this.addEventListener('change', this.#onChange.bind(this));
+    this.#syncOptions();
+  }
+
+  /**
+   * Shows only the values that exist with the options chosen before them
+   * (e.g. "Rose + Blanc" only for the Duo) and keeps a valid value checked.
+   */
+  #syncOptions() {
+    const fieldsets = [...this.querySelectorAll('fieldset')];
+    const selected = this.#selectedOptions();
+    fieldsets.forEach((fieldset, index) => {
+      if (index === 0) return;
+      const before = selected.slice(0, index);
+      let checkedIsValid = false;
+      const inputs = [...fieldset.querySelectorAll('input[type="radio"]')];
+      for (const input of inputs) {
+        const exists = this.variants.some(
+          (variant) => before.every((value, i) => variant.options[i] === value) && variant.options[index] === input.value
+        );
+        input.disabled = !exists;
+        const wrapper = input.closest('[data-option-value]');
+        if (wrapper) wrapper.hidden = !exists;
+        if (input.checked && exists) checkedIsValid = true;
+      }
+      if (!checkedIsValid) {
+        const first = inputs.find((input) => !input.disabled);
+        if (first) {
+          first.checked = true;
+          const label = fieldset.querySelector('[data-selected-value]');
+          if (label) label.textContent = first.value;
+        }
+      }
+      selected[index] = fieldset.querySelector('input:checked')?.value;
+    });
+
+    // Help line under the colours when a multi-item offer is chosen.
+    const offerQty = Number(this.querySelector('[data-offer-qty]:checked')?.dataset.offerQty || 1);
+    for (const hint of this.querySelectorAll('[data-multi-hint]')) hint.hidden = offerQty < 2;
   }
 
   #selectedOptions() {
@@ -332,6 +370,7 @@ class VariantPicker extends HTMLElement {
     const label = fieldset?.querySelector('[data-selected-value]');
     if (label) label.textContent = event.target.value;
 
+    this.#syncOptions();
     const options = this.#selectedOptions();
     const variant = this.variants.find((candidate) =>
       candidate.options.every((value, index) => value === options[index])

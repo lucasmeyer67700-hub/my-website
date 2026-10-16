@@ -941,9 +941,8 @@ textarea.field__input {
 }
 
 .product-card__soon-art {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
 }
 
 .product-card__soon-drop {

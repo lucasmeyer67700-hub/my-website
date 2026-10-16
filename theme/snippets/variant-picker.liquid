@@ -1,32 +1,93 @@
 {% doc %}
-  Variant selector as radio buttons (pills, with a color dot for color
-  options). Real variant data only; unavailable values are marked.
+  Variant selector as radio buttons. An "Offre" option (1 ceinture, Duo…)
+  shows as large offer cards with the price per unit and the real saving
+  compared with buying the items one by one; other options show as pills
+  (with a colour dot for colour options). Values that do not exist for the
+  selected offer are hidden. Real variant data only.
 
   @param {object} product - Product object
   @param {string} section_id - Section id, for unique element ids
+  @param {string} [offer_heading] - Title above the offer cards
+  @param {string} [offer_note_single] - Line under the single-item offer
+  @param {string} [offer_note_multi] - Line under the multi-item offers
+  @param {string} [multi_hint] - Help line under the colours for multi-item offers
+  @param {string} [unit_label] - Unit after the per-item price (e.g. "la ceinture")
 
   @example
   {% render 'variant-picker', product: product, section_id: section.id %}
 {% enddoc %}
 {%- unless product.has_only_default_variant -%}
+  {%- liquid
+    comment
+      Reference unit price: the cheapest variant of the first offer value,
+      one item. Used to show the saving of multi-item offers.
+    endcomment
+    assign offer_index = -1
+    for option in product.options_with_values
+      assign option_handle = option.name | handleize
+      if option_handle == 'offre' or option_handle == 'offer' or option_handle == 'pack' or option_handle == 'lot'
+        assign offer_index = forloop.index0
+      endif
+    endfor
+    assign unit_text = unit_label
+    if unit_text == blank
+      assign unit_text = 'products.offer_unit' | t
+    endif
+    assign unit_price = 0
+    if offer_index >= 0
+      assign first_offer = product.options_with_values[offer_index].values.first.name
+      for variant in product.variants
+        if variant.options[offer_index] == first_offer
+          if unit_price == 0 or variant.price < unit_price
+            assign unit_price = variant.price
+          endif
+        endif
+      endfor
+    endif
+  -%}
   <variant-picker class="variant-picker">
     {%- for option in product.options_with_values -%}
       {%- liquid
+        comment
+          Kept in a variable: nested loops below must not change it.
+        endcomment
+        assign option_position = forloop.index
         assign option_handle = option.name | handleize
         assign is_color = false
         if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
           assign is_color = true
         endif
+        assign is_offer = false
+        assign offer_position = offer_index | plus: 1
+        if option_position == offer_position
+          assign is_offer = true
+        endif
       -%}
-      <fieldset class="variant-picker__fieldset" data-option-name="{{ option.name | escape }}">
-        <legend class="variant-picker__legend">
-          {{ option.name | escape }} : <span class="variant-picker__selected" data-selected-value>{{ option.selected_value | escape }}</span>
-        </legend>
-        <div class="variant-picker__values">
+      <fieldset
+        class="variant-picker__fieldset{% if is_offer %} variant-picker__fieldset--offers{% endif %}"
+        data-option-name="{{ option.name | escape }}"
+      >
+        {%- if is_offer -%}
+          <legend class="variant-picker__offers-title">
+            <span>{{ offer_heading | default: option.name | escape }}</span>
+          </legend>
+        {%- else -%}
+          <legend class="variant-picker__legend">
+            {{ option.name | escape }} : <span class="variant-picker__selected" data-selected-value>{{ option.selected_value | escape }}</span>
+          </legend>
+        {%- endif -%}
+
+        <div class="variant-picker__values{% if is_offer %} variant-picker__values--offers{% endif %}">
           {%- for value in option.values -%}
             {%- liquid
-              assign input_id = 'Option-' | append: section_id | append: '-' | append: forloop.parentloop.index | append: '-' | append: forloop.index
+              assign input_id = 'Option-' | append: section_id | append: '-' | append: option_position | append: '-' | append: forloop.index
+              assign value_exists = true
+              if option_position > 1 and value.variant == blank
+                assign value_exists = false
+              endif
+
               assign swatch_color = blank
+              assign swatch_color_2 = blank
               if is_color
                 if value.swatch.color
                   assign swatch_color = value.swatch.color
@@ -34,9 +95,12 @@
                   assign value_handle = value.name | handleize
                   case value_handle
                     when 'rose'
-                      assign swatch_color = '#E8C7CD'
+                      assign swatch_color = '#E5AEB9'
                     when 'blanc'
                       assign swatch_color = '#FFFFFF'
+                    when 'rose-blanc'
+                      assign swatch_color = '#E5AEB9'
+                      assign swatch_color_2 = '#FFFFFF'
                     when 'noir'
                       assign swatch_color = '#2B2523'
                     when 'gris'
@@ -46,28 +110,104 @@
                   endcase
                 endif
               endif
+
+              if is_offer
+                assign offer_qty = 1
+                if value.name contains '2'
+                  assign offer_qty = 2
+                elsif value.name contains '3'
+                  assign offer_qty = 3
+                endif
+                assign offer_price = 0
+                for variant in product.variants
+                  if variant.options[offer_index] == value.name
+                    if offer_price == 0 or variant.price < offer_price
+                      assign offer_price = variant.price
+                    endif
+                  endif
+                endfor
+                assign offer_reference = unit_price | times: offer_qty
+                assign offer_saving = offer_reference | minus: offer_price
+                assign offer_unit = offer_price | divided_by: offer_qty
+              endif
             -%}
-            <input
-              class="variant-pill__input"
-              type="radio"
-              id="{{ input_id }}"
-              name="Option-{{ section_id }}-{{ forloop.parentloop.index }}"
-              value="{{ value | escape }}"
-              {% if value.selected %}
-                checked
-              {% endif %}
-            >
-            <label class="variant-pill{% unless value.available %} variant-pill--unavailable{% endunless %}" for="{{ input_id }}">
-              {%- if swatch_color != blank -%}
-                <span class="variant-pill__swatch" style="--swatch-color: {{ swatch_color }};" aria-hidden="true"></span>
-              {%- endif -%}
-              <span>{{ value | escape }}</span>
-              {%- unless value.available -%}
-                <span class="visually-hidden">({{ 'products.sold_out' | t }})</span>
-              {%- endunless -%}
-            </label>
+            {%- if is_offer -%}
+              <span class="variant-picker__value" data-option-value>
+                <input
+                  class="offer-card__input"
+                  type="radio"
+                  id="{{ input_id }}"
+                  name="Option-{{ section_id }}-{{ option_position }}"
+                  value="{{ value | escape }}"
+                  data-offer-qty="{{ offer_qty }}"
+                  {% if value.selected %}
+                    checked
+                  {% endif %}
+                >
+                <label class="offer-card{% if offer_saving > 0 %} offer-card--deal{% endif %}" for="{{ input_id }}">
+                  {%- if offer_saving > 0 -%}
+                    {%- assign saving_text = offer_saving | money_without_trailing_zeros -%}
+                    <span class="offer-card__badge">{{ 'products.offer_saving' | t: amount: saving_text }}</span>
+                  {%- endif -%}
+                  <span class="offer-card__radio" aria-hidden="true"></span>
+                  <span class="offer-card__body">
+                    <span class="offer-card__title">{{ value | escape }}</span>
+                    <span class="offer-card__unit">{{ offer_unit | money }} {{ unit_text | escape }}</span>
+                    {%- if offer_qty > 1 -%}
+                      {%- if offer_note_multi != blank -%}
+                        <span class="offer-card__note">{{ offer_note_multi | escape }}</span>
+                      {%- endif -%}
+                    {%- elsif offer_note_single != blank -%}
+                      <span class="offer-card__note">{{ offer_note_single | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                  <span class="offer-card__price">
+                    <span class="offer-card__amount">{{ offer_price | money_without_trailing_zeros }}</span>
+                    {%- if offer_saving > 0 -%}
+                      <span class="offer-card__reference">
+                        <span class="visually-hidden">{{ 'products.offer_reference_label' | t }}</span>
+                        <s>{{ offer_reference | money }}</s>
+                      </span>
+                    {%- endif -%}
+                  </span>
+                </label>
+              </span>
+            {%- else -%}
+              <span class="variant-picker__value" data-option-value {% unless value_exists %}hidden{% endunless %}>
+                <input
+                  class="variant-pill__input"
+                  type="radio"
+                  id="{{ input_id }}"
+                  name="Option-{{ section_id }}-{{ option_position }}"
+                  value="{{ value | escape }}"
+                  {% if value.selected %}
+                    checked
+                  {% endif %}
+                  {% unless value_exists %}
+                    disabled
+                  {% endunless %}
+                >
+                <label class="variant-pill{% unless value.available %} variant-pill--unavailable{% endunless %}" for="{{ input_id }}">
+                  {%- if swatch_color != blank -%}
+                    <span
+                      class="variant-pill__swatch"
+                      style="--swatch-color: {{ swatch_color }};{% if swatch_color_2 != blank %} --swatch-color-2: {{ swatch_color_2 }};{% endif %}"
+                      aria-hidden="true"
+                    ></span>
+                  {%- endif -%}
+                  <span>{{ value | escape }}</span>
+                  {%- unless value.available -%}
+                    <span class="visually-hidden">({{ 'products.sold_out' | t }})</span>
+                  {%- endunless -%}
+                </label>
+              </span>
+            {%- endif -%}
           {%- endfor -%}
         </div>
+
+        {%- if is_color and offer_index >= 0 and multi_hint != blank -%}
+          <p class="variant-picker__hint" data-multi-hint hidden>{{ multi_hint | escape }}</p>
+        {%- endif -%}
       </fieldset>
     {%- endfor -%}
 
@@ -167,6 +307,158 @@
     height: 1.1rem;
     border: 1px solid rgb(var(--color-text-rgb) / 0.25);
     border-radius: 50%;
-    background-color: var(--swatch-color);
+    background: linear-gradient(90deg, var(--swatch-color) 50%, var(--swatch-color-2, var(--swatch-color)) 50%);
   }
+
+  /* Offer cards ("Choisissez votre offre") */
+  .variant-picker__offers-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    margin-block-end: var(--space-sm);
+    padding: 0;
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold-gradient);
+      opacity: 0.6;
+    }
+  }
+
+  .variant-picker__values--offers {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .variant-picker__value[hidden] {
+    display: none;
+  }
+
+  .offer-card__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .offer-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-md);
+    border: 1px solid rgb(var(--color-text-rgb) / 0.18);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease,
+      background-color var(--duration-fast) ease;
+
+    &:hover {
+      border-color: rgb(var(--gold-rgb) / 0.8);
+    }
+  }
+
+  .offer-card--deal {
+    margin-block-start: 0.6rem;
+  }
+
+  .offer-card__input:checked + .offer-card {
+    border-color: var(--color-text);
+    background-color: var(--palette-rose-pale);
+    box-shadow: inset 0 0 0 1px var(--color-text), 0 14px 30px -22px rgb(73 53 47 / 0.45);
+  }
+
+  .offer-card__input:focus-visible + .offer-card {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .offer-card__radio {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.4);
+    border-radius: 50%;
+    background-color: var(--palette-warm-white);
+    transition: box-shadow var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .offer-card__input:checked + .offer-card .offer-card__radio {
+    border-color: var(--color-text);
+    box-shadow: inset 0 0 0 0.3rem var(--color-text);
+  }
+
+  .offer-card__body {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .offer-card__title {
+    font-size: var(--text-md);
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .offer-card__unit {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .offer-card__note {
+    font-family: var(--font-heading-family);
+    font-size: var(--text-md);
+    font-style: italic;
+    color: var(--gold-text);
+  }
+
+  .offer-card__price {
+    display: grid;
+    justify-items: end;
+    gap: 0.1rem;
+    text-align: end;
+  }
+
+  .offer-card__amount {
+    font-size: var(--text-xl);
+    font-weight: var(--font-body-weight-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .offer-card__reference {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .offer-card__badge {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: var(--space-md);
+    translate: 0 -55%;
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-bold);
+    letter-spacing: 0.04em;
+    color: var(--palette-warm-white);
+    background-color: var(--palette-brown-deep);
+    box-shadow: inset 0 0 0 1px rgb(var(--gold-rgb) / 0.7);
+  }
+
+  .variant-picker__hint {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
 {% endstylesheet %}

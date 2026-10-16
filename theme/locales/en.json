@@ -55,7 +55,13 @@
     "colors_count": {
       "one": "{{ count }} colour",
       "other": "{{ count }} colours"
-    }
+    },
+    "offer_saving": "Save {{ amount }}",
+    "offer_unit": "each",
+    "offer_reference_label": "Price of the items bought separately:",
+    "choose_option": "Choose an option",
+    "price_from": "From {{ price }}",
+    "media_slot_hint": "Add your photos: Products → this product → Media. The first photo shows here."
   },
   "cart": {
     "title": "Your cart",

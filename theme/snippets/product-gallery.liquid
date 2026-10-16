@@ -24,7 +24,21 @@
   {% endif %}
 >
   {%- if media_count == 0 -%}
-    <div class="gallery__slide media">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {%- comment -%} Photo slots, ready for the merchant's own photos. {%- endcomment -%}
+    <div class="gallery__slot gallery__slot--main">
+      <span class="gallery__slot-art" aria-hidden="true">
+        <span class="gallery__slot-ripple"></span>
+        <span class="gallery__slot-drop"></span>
+      </span>
+      {%- if request.design_mode -%}
+        <p class="gallery__slot-hint">{{ 'products.media_slot_hint' | t }}</p>
+      {%- endif -%}
+    </div>
+    <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
+      {%- for i in (1..4) -%}
+        <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>
+      {%- endfor -%}
+    </ul>
   {%- else -%}
     <ul
       class="gallery__track"
@@ -203,9 +217,37 @@
     }
   }
 
+  /* Computers: thumbnails in a column on the left of the main photo */
+  @media screen and (min-width: 990px) {
+    .gallery:has(.gallery__thumbs) {
+      grid-template-columns: 4.75rem minmax(0, 1fr);
+      align-items: start;
+      column-gap: var(--space-md);
+
+      & > .gallery__track,
+      & > .gallery__controls,
+      & > .gallery__slot--main {
+        grid-column: 2;
+      }
+
+      & > .gallery__thumbs {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        max-height: min(80vh, 46rem);
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+    }
+  }
+
   .gallery__thumb {
     width: 4.5rem;
-    height: 4.5rem;
+    height: auto;
+    aspect-ratio: var(--gallery-ratio, 1);
     overflow: hidden;
     padding: 0;
     border: 1px solid transparent;
@@ -230,6 +272,81 @@
     &[aria-current='true'] {
       border-color: var(--color-text);
     }
+  }
+
+  /* Empty photo slots */
+  .gallery__slot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgb(var(--gold-rgb) / 0.22);
+    border-radius: var(--radius-md);
+    background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
+    color: rgb(var(--gold-rgb) / 0.8);
+  }
+
+  .gallery__slot--main {
+    aspect-ratio: var(--gallery-ratio, 1);
+  }
+
+  .gallery__slot--thumb {
+    width: 4.5rem;
+    aspect-ratio: var(--gallery-ratio, 1);
+    border-radius: var(--radius-sm);
+    --icon-size: 1.25rem;
+  }
+
+  .gallery__thumbs--slots {
+    display: flex;
+    gap: var(--space-2xs);
+    justify-content: center;
+  }
+
+  .gallery__slot-art {
+    position: absolute;
+    inset: 0;
+  }
+
+  .gallery__slot-drop {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 22%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    rotate: -45deg;
+    border-radius: 50% 0 50% 50%;
+    background:
+      radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 5%, transparent 16%),
+      linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
+    box-shadow:
+      inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+      0 20px 34px -20px rgb(160 90 105 / 0.55);
+  }
+
+  .gallery__slot-ripple {
+    position: absolute;
+    top: 68%;
+    left: 50%;
+    width: 40%;
+    aspect-ratio: 4 / 1;
+    translate: -50% -50%;
+    border: 1px solid rgb(var(--gold-rgb) / 0.55);
+    border-radius: 50%;
+  }
+
+  .gallery__slot-hint {
+    position: absolute;
+    inset-inline: var(--space-sm);
+    inset-block-end: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px dashed rgb(var(--gold-rgb) / 0.8);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+    color: var(--color-text);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.9);
   }
 
   .gallery__lightbox {

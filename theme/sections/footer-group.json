@@ -49,7 +49,7 @@
         "enabled": true,
         "delay": 10,
         "snooze_days": 14,
-        "image": "shopify://shop_images/velea-hero-cocon.webp",
+        "image": "",
         "eyebrow": "Bienvenue chez VELEA",
         "heading": "<em>−10 %</em> sur votre commande",
         "text": "Inscrivez-vous à nos e-mails et recevez tout de suite votre code de bienvenue.",

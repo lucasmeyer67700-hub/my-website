@@ -9,7 +9,13 @@
         },
         "variant": {
           "type": "variant_picker",
-          "settings": {}
+          "settings": {
+            "offer_heading": "Choisissez votre offre",
+            "unit_label": "la ceinture",
+            "offer_note_single": "L'essentiel, pour vous",
+            "offer_note_multi": "Une pour vous, une à offrir",
+            "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque."
+          }
         },
         "buy": {
           "type": "buy_buttons",
@@ -93,10 +99,10 @@
         }
       },
       "block_order": [
-        "points",
         "variant",
         "buy",
         "trust",
+        "points",
         "description",
         "specs",
         "usage",
@@ -108,8 +114,8 @@
       ],
       "settings": {
         "eyebrow": "Confort menstruel",
-        "gallery_ratio": "1",
-        "gallery_fit": "contain",
+        "gallery_ratio": "4 / 5",
+        "gallery_fit": "cover",
         "sticky_bar": true,
         "color_scheme": "scheme-1"
       }
@@ -267,7 +273,7 @@
         "eyebrow": "Bien choisir",
         "heading": "Bouillotte, patch <em>ou ceinture ?</em>",
         "text": "Chaque solution a ses atouts. Voici ce qui les distingue, simplement.",
-        "column_1": "Ceinture chauffante",
+        "column_1": "Ceinture VELEA",
         "column_2": "Bouillotte",
         "column_3": "Patch chauffant",
         "note": "Données de la ceinture annoncées par le fabricant. Bouillotte et patch : caractéristiques générales, variables selon les modèles.",
@@ -332,14 +338,21 @@
           "type": "question",
           "settings": {
             "question": "Combien coûte la livraison ?",
-            "answer": "<p>La livraison est offerte en France. Les détails sont sur notre page <a href=\"/pages/livraison-et-retours\" title=\"Livraison et retours\">Livraison et retours</a>.</p>"
+            "answer": "<p>La livraison est offerte en France métropolitaine, en 7 à 14 jours ouvrés, avec un numéro de suivi. Les détails sont sur notre page <a href=\"/pages/livraison-et-retours\" title=\"Livraison et retours\">Livraison et retours</a>.</p>"
           }
         },
         "returns": {
           "type": "question",
           "settings": {
             "question": "Et si elle ne me convient pas ?",
-            "answer": "<p>Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation. Toutes les modalités sont détaillées dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
+            "answer": "<p>Vous avez 30 jours après la réception pour l'essayer : si elle ne vous convient pas, notre garantie « Satisfaite ou remboursée 30 jours » s'applique. Elle s'ajoute à votre droit de rétractation de 14 jours et à la garantie légale de conformité de 2 ans. Toutes les conditions sont dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
+          }
+        },
+        "duo": {
+          "type": "question",
+          "settings": {
+            "question": "Que contient le Duo ?",
+            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
           }
         }
       },
@@ -350,6 +363,7 @@
         "sleep",
         "pain",
         "contraindications",
+        "duo",
         "delivery",
         "returns"
       ],

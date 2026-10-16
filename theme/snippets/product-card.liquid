@@ -33,25 +33,49 @@
         {% render 'responsive-image', image: second_media.preview_image, sizes: image_sizes, decorative: true, class: 'product-card__image product-card__image--second' %}
       {%- endif -%}
     {%- else -%}
-      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      <span class="product-card__soon-art" aria-hidden="true">
+        <span class="product-card__soon-ripple"></span>
+        <span class="product-card__soon-drop"></span>
+      </span>
     {%- endif -%}
   </div>
   <div class="product-card__body">
     <{{ tag }} class="product-card__title" id="CardTitle-{{ product.id }}">
       <a class="product-card__link" href="{{ product.url }}">{{ product.title | escape }}</a>
     </{{ tag }}>
-    {% render 'price', product: product, class: 'product-card__price' %}
-    {%- if color_option != blank and color_option.values.size > 1 -%}
+    {%- if product.price_varies -%}
+      {%- assign price_min_text = product.price_min | money -%}
+      <p class="price product-card__price">
+        <span class="price__current">{{ 'products.price_from' | t: price: price_min_text }}</span>
+      </p>
+    {%- else -%}
+      {% render 'price', product: product, class: 'product-card__price' %}
+    {%- endif -%}
+    {%- liquid
+      comment
+        Count real colours only ("Rose + Blanc" is a combination, not a colour).
+      endcomment
+      assign single_colors = 0
+      if color_option != blank
+        for value in color_option.values
+          unless value.name contains '+'
+            assign single_colors = single_colors | plus: 1
+          endunless
+        endfor
+      endif
+    -%}
+    {%- if single_colors > 1 -%}
       <p class="product-card__colors">
         <span class="product-card__dots" aria-hidden="true">
           {%- for value in color_option.values limit: 5 -%}
+            {%- if value.name contains '+' -%}{%- continue -%}{%- endif -%}
             {%- liquid
               assign swatch_color = value.swatch.color
               if swatch_color == blank
                 assign value_handle = value.name | handleize
                 case value_handle
                   when 'rose'
-                    assign swatch_color = '#E8C7CD'
+                    assign swatch_color = '#E5AEB9'
                   when 'blanc'
                     assign swatch_color = '#FFFFFF'
                   when 'noir'
@@ -66,7 +90,7 @@
             <span class="product-card__dot" style="--swatch-color: {{ swatch_color | default: '#E8DCCB' }};"></span>
           {%- endfor -%}
         </span>
-        <span>{{ 'products.colors_count' | t: count: color_option.values.size }}</span>
+        <span>{{ 'products.colors_count' | t: count: single_colors }}</span>
       </p>
     {%- endif -%}
   </div>

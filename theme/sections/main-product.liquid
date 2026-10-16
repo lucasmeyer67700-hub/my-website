@@ -49,7 +49,15 @@
 
           {%- when 'variant_picker' -%}
             <div {{ block.shopify_attributes }}>
-              {% render 'variant-picker', product: product, section_id: section.id %}
+              {% render 'variant-picker',
+                product: product,
+                section_id: section.id,
+                offer_heading: block.settings.offer_heading,
+                offer_note_single: block.settings.offer_note_single,
+                offer_note_multi: block.settings.offer_note_multi,
+                multi_hint: block.settings.multi_hint,
+                unit_label: block.settings.unit_label
+              %}
             </div>
 
           {%- when 'buy_buttons' -%}
@@ -63,7 +71,7 @@
                 >
                 <noscript>
                   {%- unless product.has_only_default_variant -%}
-                    <label class="field__label" for="NoscriptVariant-{{ section.id }}">{{ 'products.color_option' | t }}</label>
+                    <label class="field__label" for="NoscriptVariant-{{ section.id }}">{{ 'products.choose_option' | t }}</label>
                     <select class="field__input" id="NoscriptVariant-{{ section.id }}" name="id">
                       {%- for variant in product.variants -%}
                         <option
@@ -183,9 +191,14 @@
               capture accordion_content
                 case block.settings.source
                   when 'description'
+                    comment
+                      Only the introduction: the other accordions already cover
+                      use, precautions, box contents and delivery.
+                    endcomment
                     if product.description != blank
+                      assign description_intro = product.description | split: '<h3>' | first
                       echo '<div class="rte">'
-                      echo product.description
+                      echo description_intro
                       echo '</div>'
                     endif
                   when 'specs'
@@ -524,7 +537,43 @@
     {
       "type": "variant_picker",
       "name": "Sélecteur de variante",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Une option nommée « Offre » (1 ceinture, Duo · 2 ceintures…) s'affiche en cartes, avec le prix à l'unité et l'économie réelle par rapport à l'achat à l'unité."
+        },
+        {
+          "type": "text",
+          "id": "offer_heading",
+          "label": "Titre des offres",
+          "default": "Choisissez votre offre"
+        },
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Unité",
+          "default": "la ceinture"
+        },
+        {
+          "type": "text",
+          "id": "offer_note_single",
+          "label": "Phrase de l'offre à l'unité",
+          "default": "L'essentiel, pour vous"
+        },
+        {
+          "type": "text",
+          "id": "offer_note_multi",
+          "label": "Phrase des offres à plusieurs",
+          "default": "Une pour vous, une à offrir"
+        },
+        {
+          "type": "text",
+          "id": "multi_hint",
+          "label": "Aide sous les coloris (offres à plusieurs)",
+          "default": "Duo : deux roses, deux blanches, ou une de chaque."
+        }
+      ]
     },
     {
       "type": "buy_buttons",
