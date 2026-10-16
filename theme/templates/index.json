@@ -36,12 +36,13 @@
         "button_link": "",
         "secondary_label": "Comment ça marche",
         "secondary_link": "/#fonctionnement",
-        "color_scheme": "scheme-1",
-        "layout": "full",
+        "color_scheme": "scheme-3",
+        "layout": "pink",
         "height": "full",
         "content_position": "bottom-left",
         "text_tone": "light",
-        "overlay_opacity": 35
+        "overlay_opacity": 35,
+        "show_drops": false
       }
     },
     "benefits": {
@@ -95,7 +96,8 @@
         "center": false,
         "compact": false,
         "anchor": "bienfaits",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-6",
+        "show_drops": true
       }
     },
     "everyday": {
@@ -289,7 +291,8 @@
         "button_label": "Découvrir la ceinture",
         "button_link": "",
         "show_trust": true,
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-3",
+        "show_drops": true
       }
     }
   },

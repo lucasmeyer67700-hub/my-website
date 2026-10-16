@@ -17,7 +17,7 @@
   endif
 
   assign heading_tag = section.settings.heading_tag | default: 'h1'
-  assign layout = section.settings.layout | default: 'full'
+  assign layout = section.settings.layout | default: 'pink'
 
   assign tone = section.settings.text_tone
   if hero_image == blank
@@ -76,7 +76,41 @@
   </div>
 {%- endcapture -%}
 
-{%- if layout == 'full' -%}
+{%- if layout == 'pink' -%}
+  <section
+    id="Hero-{{ section.id }}"
+    class="hero hero--pink color-{{ section.settings.color_scheme }}{% if section.settings.image_position == 'left' %} hero--media-left{% endif %}{% if section.settings.show_drops %} has-drops{% endif %}"
+    aria-labelledby="HeroTitle-{{ section.id }}"
+  >
+    {%- if section.settings.show_drops -%}
+      {% render 'drops', animated: true, density: 'light' %}
+    {%- endif -%}
+    <div class="hero__pink-grid page-width page-width--wide">
+      {{ hero_content }}
+
+      <div class="hero__visual">
+        <div class="hero__arch">
+          {%- if hero_image != blank -%}
+            {% render 'responsive-image',
+              image: hero_image,
+              sizes: '(min-width: 990px) 36vw, (min-width: 750px) 60vw, 80vw',
+              widths: '400, 600, 800, 1000, 1300, 1600',
+              eager: true,
+              alt: section.settings.image_alt,
+              class: 'hero__arch-image'
+            %}
+          {%- else -%}
+            <div class="hero__arch-art" aria-hidden="true">
+              <span class="hero__arch-ripple hero__arch-ripple--outer"></span>
+              <span class="hero__arch-ripple"></span>
+              <span class="hero__arch-drop"></span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- elsif layout == 'full' -%}
   {%- liquid
     assign overlay = section.settings.overlay_opacity | divided_by: 100.0
     if hero_image == blank
@@ -449,6 +483,153 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Pink layout: soft rose page, text on the left, arched visual        */
+  /* ------------------------------------------------------------------ */
+
+  .hero--pink {
+    position: relative;
+    display: grid;
+    min-height: max(34rem, calc(100svh - var(--header-offset, 7rem)));
+
+    /* Soft light behind the visual: depth without changing the pink. */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(55% 60% at 74% 42%, rgb(255 255 255 / 0.55), transparent 70%);
+    }
+  }
+
+  .hero__pink-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-items: center;
+    gap: var(--space-xl);
+    padding-block: clamp(2.5rem, 7vh, 5.5rem) clamp(3rem, 9vh, 6.5rem);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: clamp(3rem, 6vw, 8rem);
+    }
+  }
+
+  .hero--pink .hero__content {
+    max-width: 40rem;
+  }
+
+  .hero--pink .hero__title {
+    font-size: calc(clamp(2.75rem, 1.5rem + 4.2vw, 5.25rem) * var(--font-heading-scale, 1));
+  }
+
+  .hero--pink .hero__text {
+    max-width: 34rem;
+  }
+
+  .hero--pink .hero__trust {
+    gap: var(--space-2xs) var(--space-md);
+    border-block-start-color: var(--gold-hairline);
+
+    /* On phones the announcement bar already carries these reassurances. */
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  .hero--pink.hero--media-left .hero__visual {
+    @media screen and (min-width: 990px) {
+      order: -1;
+    }
+  }
+
+  .hero__visual {
+    --arch-radius: 50% 50% var(--radius-lg) var(--radius-lg) / 40% 40% var(--radius-lg) var(--radius-lg);
+
+    position: relative;
+    isolation: isolate;
+    justify-self: center;
+    width: min(76%, 22rem);
+    margin-inline-start: 0.9rem;
+
+    @media screen and (min-width: 750px) {
+      width: min(60%, 26rem);
+    }
+
+    @media screen and (min-width: 990px) {
+      width: min(100%, 31rem);
+    }
+
+    /* Fine gold arch, offset behind the visual */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      translate: -0.9rem 0.9rem;
+      border: 1px solid rgb(var(--gold-rgb) / 0.75);
+      border-radius: var(--arch-radius);
+      pointer-events: none;
+    }
+  }
+
+  .hero__arch {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--arch-radius);
+    background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f8e6e9 100%);
+    box-shadow: 0 40px 80px -48px rgb(73 53 47 / 0.5);
+  }
+
+  .hero__arch-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Without a photo: one glossy drop above two gold ripples */
+  .hero__arch-art {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__arch-drop {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: 30%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    rotate: -45deg;
+    border-radius: 50% 0 50% 50%;
+    background:
+      radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 5%, transparent 16%),
+      radial-gradient(circle at 70% 70%, rgb(255 255 255 / 0.25) 0 10%, transparent 30%),
+      linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
+    box-shadow:
+      inset -2px 2px 0 rgb(255 255 255 / 0.6),
+      inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+      0 26px 40px -22px rgb(160 90 105 / 0.55);
+  }
+
+  .hero__arch-ripple {
+    position: absolute;
+    top: 74%;
+    left: 50%;
+    width: 44%;
+    aspect-ratio: 4 / 1;
+    translate: -50% -50%;
+    border: 1px solid rgb(var(--gold-rgb) / 0.6);
+    border-radius: 50%;
+  }
+
+  .hero__arch-ripple--outer {
+    width: 70%;
+    border-color: rgb(var(--gold-rgb) / 0.3);
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Split layout: text and image side by side                          */
   /* ------------------------------------------------------------------ */
 
@@ -525,10 +706,18 @@
       "id": "layout",
       "label": "Mise en page",
       "options": [
+        { "value": "pink", "label": "Rose épuré, visuel en arche" },
         { "value": "full", "label": "Plein écran, texte sur l'image" },
         { "value": "split", "label": "Image et texte côte à côte" }
       ],
-      "default": "full"
+      "default": "pink"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_drops",
+      "label": "Gouttes roses décoratives",
+      "info": "Quelques gouttes qui tombent lentement, avec un bouton pause.",
+      "default": false
     },
     {
       "type": "text",
@@ -568,7 +757,7 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Plein écran : format paysage, 2400 × 1350 px minimum. Placez le point focal sur le sujet dans la bibliothèque d'images."
+      "info": "Rose épuré : format portrait (1200 × 1500 px), recadré en arche. Plein écran : format paysage, 2400 × 1350 px minimum. Placez le point focal sur le sujet."
     },
     {
       "type": "image_picker",
@@ -639,7 +828,7 @@
         { "value": "left", "label": "À gauche" }
       ],
       "default": "right",
-      "visible_if": "{{ section.settings.layout == 'split' }}"
+      "visible_if": "{{ section.settings.layout != 'full' }}"
     },
     {
       "type": "header",

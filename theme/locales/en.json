@@ -134,6 +134,7 @@
     "testimonials_editor_empty": "Section hidden: no reviews. Only add genuine reviews from real customers, or a reviews app.",
     "comparison_criterion": "Criterion",
     "announcement_label": "Store information",
-    "announcement_pause": "Pause the announcements"
+    "announcement_pause": "Pause the announcements",
+    "drops_pause": "Pause the drops animation"
   }
 }

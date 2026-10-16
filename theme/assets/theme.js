@@ -665,6 +665,54 @@ class AnnouncementRotator extends HTMLElement {
 customElements.define('announcement-rotator', AnnouncementRotator);
 
 /* -------------------------------------------------------------------------- */
+/* Decorative drops: pause button, and no work while off screen               */
+/* -------------------------------------------------------------------------- */
+
+class DropsLayer extends HTMLElement {
+  #controller = null;
+  #observer = null;
+  #paused = false;
+
+  connectedCallback() {
+    if (!this.classList.contains('drops--animated')) return;
+    const toggle = this.querySelector('[data-drops-toggle]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+
+    const sync = () => {
+      if (toggle) toggle.hidden = reduced.matches;
+    };
+    sync();
+    reduced.addEventListener('change', sync, { signal });
+
+    toggle?.addEventListener(
+      'click',
+      () => {
+        this.#paused = !this.#paused;
+        toggle.setAttribute('aria-pressed', String(this.#paused));
+        this.classList.toggle('is-paused', this.#paused);
+      },
+      { signal }
+    );
+
+    if ('IntersectionObserver' in window) {
+      this.#observer = new IntersectionObserver(([entry]) => {
+        this.classList.toggle('is-paused', this.#paused || !entry.isIntersecting);
+      });
+      this.#observer.observe(this);
+    }
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    this.#observer?.disconnect();
+  }
+}
+
+customElements.define('drops-layer', DropsLayer);
+
+/* -------------------------------------------------------------------------- */
 /* Misc                                                                        */
 /* -------------------------------------------------------------------------- */
 

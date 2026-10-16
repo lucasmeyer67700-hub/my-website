@@ -34,7 +34,7 @@
       ],
       "settings": {
         "interval": 5,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-4"
       }
     },
     "header": {
@@ -45,7 +45,7 @@
         "cta_product": "ceinture-chauffante-regles",
         "cta_label": "Découvrir la ceinture",
         "show_account": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-3",
         "full_width": true,
         "wordmark_size": 38
       }

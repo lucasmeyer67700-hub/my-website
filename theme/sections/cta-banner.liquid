@@ -6,7 +6,13 @@
   endif
 -%}
 
-<section class="cta-banner section color-{{ section.settings.color_scheme }}" aria-labelledby="CtaTitle-{{ section.id }}">
+<section
+  class="cta-banner section color-{{ section.settings.color_scheme }}{% if section.settings.show_drops %} has-drops{% endif %}"
+  aria-labelledby="CtaTitle-{{ section.id }}"
+>
+  {%- if section.settings.show_drops -%}
+    {% render 'drops', density: 'light' %}
+  {%- endif -%}
   <div class="page-width page-width--text cta-banner__inner reveal">
     {%- if section.settings.eyebrow != blank -%}
       <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
@@ -41,6 +47,14 @@
     justify-items: center;
     gap: var(--space-md);
     text-align: center;
+  }
+
+  .cta-banner .eyebrow::after {
+    content: '';
+    flex: none;
+    width: 1.75rem;
+    height: 1px;
+    background: var(--gold-gradient);
   }
 
   .cta-banner__trust {
@@ -93,6 +107,12 @@
       "id": "show_trust",
       "label": "Afficher la réassurance",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_drops",
+      "label": "Gouttes roses décoratives (immobiles)",
+      "default": false
     },
     {
       "type": "color_scheme",

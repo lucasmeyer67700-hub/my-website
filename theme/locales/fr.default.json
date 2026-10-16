@@ -134,6 +134,7 @@
     "testimonials_editor_empty": "Section masquée : aucun avis. Ajoutez uniquement des avis authentiques de vraies clientes, ou une application d'avis.",
     "comparison_criterion": "Critère",
     "announcement_label": "Informations pratiques",
-    "announcement_pause": "Mettre en pause le défilement des annonces"
+    "announcement_pause": "Mettre en pause le défilement des annonces",
+    "drops_pause": "Mettre en pause l'animation des gouttes"
   }
 }
