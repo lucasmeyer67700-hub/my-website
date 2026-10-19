@@ -110,63 +110,185 @@
   </div>
 </site-header>
 
-<modal-drawer class="menu-drawer" data-trigger="[data-menu-trigger]">
-  <dialog id="MenuDrawer" class="drawer drawer--left color-{{ section.settings.color_scheme }}" aria-labelledby="MenuDrawerTitle">
+{%- liquid
+  comment
+    Mobile menu: its own links (falls back to the main menu), a button, an
+    editorial card, help links and the shop's reassurance lines. Fonts and
+    colours are set in the section so the menu keeps its own look.
+  endcomment
+  assign drawer_menu = section.settings.drawer_menu
+  if drawer_menu == blank or drawer_menu.links.size == 0
+    assign drawer_menu = menu
+  endif
+
+  assign cta_url = section.settings.cta_link
+  if cta_url == blank and cta_product != blank
+    assign cta_url = cta_product.url
+  endif
+
+  assign editorial_image = section.settings.editorial_image
+  assign editorial_title = section.settings.editorial_title
+  assign editorial_text = section.settings.editorial_text
+  assign editorial_link = section.settings.editorial_link
+
+  assign menu_heading_font = section.settings.menu_heading_font
+  assign menu_heading_italic = menu_heading_font | font_modify: 'style', 'italic'
+  assign menu_body_font = section.settings.menu_body_font
+  assign menu_body_medium = menu_body_font | font_modify: 'weight', '500'
+
+  capture warm_fonts
+    unless menu_heading_font.system?
+      echo '|' | append: menu_heading_font.weight | append: ' 1em ' | append: menu_heading_font.family
+    endunless
+    unless menu_body_font.system?
+      echo '|' | append: menu_body_font.weight | append: ' 1em ' | append: menu_body_font.family
+      if menu_body_medium
+        echo '|500 1em ' | append: menu_body_font.family
+      endif
+    endunless
+  endcapture
+-%}
+
+{%- style -%}
+  {{ menu_heading_font | font_face: font_display: 'swap' }}
+  {%- if menu_heading_italic %}{{ menu_heading_italic | font_face: font_display: 'swap' }}{% endif %}
+  {{ menu_body_font | font_face: font_display: 'swap' }}
+  {%- if menu_body_medium %}{{ menu_body_medium | font_face: font_display: 'swap' }}{% endif %}
+
+  .velea-menu {
+    --velea-menu-background: {{ section.settings.menu_background }};
+    --velea-menu-text: {{ section.settings.menu_text }};
+    --velea-menu-text-muted: {{ section.settings.menu_text_muted }};
+    --velea-menu-border: {{ section.settings.menu_border }};
+    --velea-menu-button: {{ section.settings.menu_button }};
+    --velea-menu-button-label: {{ section.settings.menu_button_label }};
+    --velea-menu-font-heading: {{ menu_heading_font.family }}, {{ menu_heading_font.fallback_families }};
+    --velea-menu-font-heading-weight: {{ menu_heading_font.weight }};
+    --velea-menu-font-body: {{ menu_body_font.family }}, {{ menu_body_font.fallback_families }};
+    --velea-menu-font-body-weight: {{ menu_body_font.weight }};
+    --velea-menu-font-body-weight-medium: {% if menu_body_medium %}500{% else %}{{ menu_body_font.weight }}{% endif %};
+  }
+{%- endstyle -%}
+
+<modal-drawer
+  class="velea-menu-drawer"
+  data-trigger="[data-menu-trigger]"
+  data-warm-fonts="{{ warm_fonts | strip | remove_first: '|' | escape }}"
+>
+  <dialog
+    id="MenuDrawer"
+    class="drawer drawer--left velea-menu color-{{ section.settings.color_scheme }}"
+    aria-labelledby="MenuDrawerTitle"
+  >
     <div class="drawer__inner">
-      <div class="drawer__header">
-        <p class="menu-drawer__title" id="MenuDrawerTitle">{{ shop.name }}</p>
-        <button type="button" class="icon-button" data-drawer-close>
+      <div class="velea-menu__header">
+        <p class="velea-menu__logo" id="MenuDrawerTitle">{{ shop.name | escape }}</p>
+        <button type="button" class="velea-menu__close" data-drawer-close>
           {% render 'icon', icon: 'close' %}
           <span class="visually-hidden">{{ 'general.close_menu' | t }}</span>
         </button>
       </div>
 
-      <div class="drawer__body menu-drawer__body">
-        <nav aria-label="{{ 'general.main_navigation' | t }}">
-          <ul class="menu-drawer__menu" role="list">
-            {%- for link in menu.links -%}
-              <li>
+      <div class="velea-menu__body">
+        <nav class="velea-menu__nav" aria-label="{{ 'general.main_navigation' | t }}">
+          <ul class="velea-menu__list" role="list">
+            {%- for link in drawer_menu.links -%}
+              <li class="velea-menu__item" style="--velea-menu-index: {{ forloop.index }};">
                 <a
-                  class="menu-drawer__link"
+                  class="velea-menu__link"
                   href="{{ link.url }}"
                   {% if link.current %}
                     aria-current="page"
                   {% endif %}
                 >
-                  {{- link.title | escape -}}
+                  <span class="velea-menu__link-label">{{ link.title | escape }}</span>
+                  {% render 'icon', icon: 'chevron-right', class: 'velea-menu__chevron' %}
                 </a>
               </li>
             {%- endfor -%}
           </ul>
         </nav>
 
-        {%- if cta_product != blank and section.settings.cta_label != blank -%}
-          <a class="button button--full menu-drawer__cta" href="{{ cta_product.url }}">
+        {%- if cta_url != blank and section.settings.cta_label != blank -%}
+          <a class="velea-menu__cta velea-menu__reveal" href="{{ cta_url }}" style="--velea-menu-index: 4;">
             {{- section.settings.cta_label | escape -}}
           </a>
         {%- endif -%}
 
+        {%- if editorial_image != blank or editorial_title != blank -%}
+          {%- if editorial_link != blank -%}
+            <a class="velea-menu__editorial velea-menu__editorial--link velea-menu__reveal" href="{{ editorial_link }}" style="--velea-menu-index: 5;">
+          {%- else -%}
+            <div class="velea-menu__editorial velea-menu__reveal" style="--velea-menu-index: 5;">
+          {%- endif -%}
+          {%- if editorial_image != blank -%}
+            <div class="velea-menu__editorial-media">
+              {{
+                editorial_image
+                | image_url: width: 1000
+                | image_tag:
+                  class: 'velea-menu__editorial-image',
+                  widths: '400, 600, 800, 1000',
+                  sizes: '(min-width: 480px) 25rem, calc(100vw - 5.5rem)',
+                  loading: 'lazy',
+                  alt: editorial_image.alt
+              }}
+            </div>
+          {%- endif -%}
+          {%- if editorial_title != blank or editorial_text != blank -%}
+            <div class="velea-menu__editorial-text">
+              {%- if editorial_title != blank -%}
+                <p class="velea-menu__editorial-title">{{ editorial_title | escape }}</p>
+              {%- endif -%}
+              {%- if editorial_text != blank -%}
+                <p class="velea-menu__editorial-subtitle">{{ editorial_text | escape }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- if editorial_link != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
         {%- if secondary_menu != blank and secondary_menu.links.size > 0 -%}
-          <ul class="menu-drawer__secondary" role="list">
-            {%- for link in secondary_menu.links -%}
-              <li><a class="link" href="{{ link.url }}">{{ link.title | escape }}</a></li>
-            {%- endfor -%}
+          <nav class="velea-menu__help velea-menu__reveal" aria-label="{{ 'general.help_navigation' | t }}" style="--velea-menu-index: 6;">
+            <ul class="velea-menu__secondary" role="list">
+              {%- for link in secondary_menu.links -%}
+                <li>
+                  <a
+                    class="velea-menu__secondary-link"
+                    href="{{ link.url }}"
+                    {% if link.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- link.title | escape -}}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+
+        {%- if settings.shipping_info != blank or settings.returns_info != blank -%}
+          <ul class="velea-menu__trust velea-menu__reveal" role="list" style="--velea-menu-index: 7;">
+            {%- if settings.shipping_info != blank -%}
+              <li class="velea-menu__trust-item">
+                <span class="velea-menu__trust-icon">{% render 'icon', icon: 'truck' %}</span>
+                <span>{{ settings.shipping_info | escape }}</span>
+              </li>
+            {%- endif -%}
+            {%- if settings.returns_info != blank -%}
+              <li class="velea-menu__trust-item">
+                <span class="velea-menu__trust-icon">{% render 'icon', icon: 'return' %}</span>
+                <span>{{ settings.returns_info | escape }}</span>
+              </li>
+            {%- endif -%}
           </ul>
         {%- endif -%}
       </div>
-
-      {%- if settings.shipping_info != blank or settings.returns_info != blank -%}
-        <div class="drawer__footer">
-          <ul class="trust-list" role="list">
-            {%- if settings.shipping_info != blank -%}
-              <li>{% render 'icon', icon: 'truck' %}<span>{{ settings.shipping_info | escape }}</span></li>
-            {%- endif -%}
-            {%- if settings.returns_info != blank -%}
-              <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
-            {%- endif -%}
-          </ul>
-        </div>
-      {%- endif -%}
     </div>
   </dialog>
 </modal-drawer>
@@ -320,41 +442,300 @@
     background-color: var(--color-button);
   }
 
-  .menu-drawer__title {
-    font-family: var(--font-heading-family);
-    font-size: var(--heading-4);
-  }
+  /* Mobile menu ------------------------------------------------------------ */
 
-  .menu-drawer__body {
-    display: grid;
-    align-content: start;
-    gap: var(--space-xl);
-  }
+  .drawer.velea-menu {
+    --color-text: var(--velea-menu-text);
+    width: min(28rem, calc(100vw - 2.5rem));
+    font-family: var(--velea-menu-font-body);
+    font-weight: var(--velea-menu-font-body-weight);
+    color: var(--velea-menu-text);
+    background-color: var(--velea-menu-background);
+    box-shadow: 0 0 3rem rgb(73 53 47 / 0.16);
 
-  .menu-drawer__menu {
-    display: grid;
-    gap: var(--space-3xs);
-  }
-
-  .menu-drawer__link {
-    display: flex;
-    align-items: center;
-    min-height: 3.25rem;
-    font-family: var(--font-heading-family);
-    font-size: 1.875rem;
-    line-height: 1.1;
-    text-decoration: none;
-
-    &[aria-current='page'] {
-      font-style: italic;
+    &::backdrop {
+      background-color: rgb(73 53 47 / 0.32);
     }
   }
 
-  .menu-drawer__secondary {
+  .velea-menu__header {
     display: grid;
-    gap: var(--space-2xs);
-    font-size: var(--text-base);
-    color: var(--color-text-muted);
+    grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: max(0.875rem, env(safe-area-inset-top)) 1.25rem 0.875rem;
+    border-block-end: 1px solid var(--velea-menu-border);
+
+    @media screen and (min-width: 375px) {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .velea-menu__logo {
+    grid-column: 2;
+    margin: 0;
+    padding-inline-start: 0.22em; /* balances the trailing letter spacing */
+    font-family: var(--velea-menu-font-heading);
+    font-size: 1.625rem;
+    font-weight: var(--velea-menu-font-heading-weight);
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .velea-menu__close {
+    grid-column: 3;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--velea-menu-border);
+    border-radius: 0.75rem;
+    color: var(--velea-menu-text);
+    background-color: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) ease,
+      border-color var(--duration-base) ease;
+
+    & .icon {
+      --icon-size: 1.125rem;
+    }
+
+    &:hover {
+      border-color: var(--velea-menu-text-muted);
+      background-color: rgb(255 255 255 / 0.7);
+    }
+  }
+
+  .velea-menu__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+
+    @media screen and (min-width: 375px) {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .velea-menu__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .velea-menu__link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    min-height: 3.25rem;
+    padding-block: 0.25rem;
+    font-family: var(--velea-menu-font-heading);
+    font-size: clamp(1.5rem, 1.1rem + 1.5vw, 1.625rem);
+    font-weight: var(--velea-menu-font-heading-weight);
+    line-height: 1.15;
+    color: inherit;
+    text-decoration: none;
+
+    &[aria-current='page'] .velea-menu__link-label {
+      font-style: italic;
+    }
+
+    &:hover .velea-menu__chevron {
+      color: var(--velea-menu-text);
+      transform: translateX(0.2rem);
+    }
+  }
+
+  .velea-menu__link-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .velea-menu__chevron {
+    --icon-size: 1.125rem;
+    flex: none;
+    color: var(--velea-menu-text-muted);
+    transition:
+      color var(--duration-base) ease,
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .velea-menu__cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-family: var(--velea-menu-font-heading);
+    font-size: 1rem;
+    font-weight: var(--velea-menu-font-heading-weight);
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-decoration: none;
+    color: var(--velea-menu-button-label);
+    background-color: var(--velea-menu-button);
+    transition:
+      background-color var(--duration-base) ease,
+      transform var(--duration-fast) ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--velea-menu-button) 86%, black);
+    }
+
+    &:active {
+      transform: scale(0.99);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--velea-menu-button);
+      outline-offset: 3px;
+    }
+  }
+
+  .velea-menu__editorial {
+    display: grid;
+    gap: 0.875rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .velea-menu__editorial-media {
+    overflow: hidden;
+    aspect-ratio: 19 / 10;
+    border-radius: 0.625rem;
+    background-color: var(--velea-menu-border);
+  }
+
+  .velea-menu__editorial-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .velea-menu__editorial--link:hover .velea-menu__editorial-image {
+    transform: scale(1.03);
+  }
+
+  .velea-menu__editorial-text {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .velea-menu__editorial-title {
+    margin: 0;
+    font-family: var(--velea-menu-font-heading);
+    font-size: 1.375rem;
+    font-weight: var(--velea-menu-font-heading-weight);
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .velea-menu__editorial-subtitle {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--velea-menu-text-muted);
+  }
+
+  .velea-menu__help {
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--velea-menu-border);
+  }
+
+  .velea-menu__secondary {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .velea-menu__secondary-link {
+    display: flex;
+    align-items: center;
+    min-height: 2.25rem;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    color: var(--velea-menu-text-muted);
+    text-decoration: none;
+    transition: color var(--duration-base) ease;
+
+    &:hover,
+    &[aria-current='page'] {
+      color: var(--velea-menu-text);
+    }
+  }
+
+  .velea-menu__trust {
+    display: grid;
+    gap: 0.875rem;
+    margin: auto 0 0;
+    padding: 1.25rem 0 0;
+    border-block-start: 1px solid var(--velea-menu-border);
+    list-style: none;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--velea-menu-text-muted);
+  }
+
+  .velea-menu__trust-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .velea-menu__trust-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--velea-menu-text);
+
+    & .icon {
+      --icon-size: 1.25rem;
+    }
+  }
+
+  /* Phone held sideways: shorter rows and a side-by-side editorial card. */
+  @media screen and (orientation: landscape) and (max-height: 32rem) {
+    .velea-menu__link {
+      min-height: 2.75rem;
+    }
+
+    .velea-menu__editorial {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      align-items: center;
+    }
+
+    .velea-menu__body {
+      gap: 1.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .velea-menu[open] .velea-menu__item,
+    .velea-menu[open] .velea-menu__reveal {
+      animation: velea-menu-rise 0.5s var(--ease-out) both;
+      animation-delay: calc(60ms + var(--velea-menu-index, 1) * 45ms);
+    }
+  }
+
+  @keyframes velea-menu-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
   }
 {% endstylesheet %}
 
@@ -372,14 +753,32 @@
       "info": "Gardez 3 à 5 liens maximum pour une navigation claire."
     },
     {
+      "type": "header",
+      "content": "Menu mobile"
+    },
+    {
+      "type": "link_list",
+      "id": "drawer_menu",
+      "label": "Liens principaux du menu mobile",
+      "info": "Laissez vide pour reprendre le menu principal."
+    },
+    {
       "type": "link_list",
       "id": "secondary_menu",
       "label": "Liens secondaires du menu mobile",
-      "info": "Par exemple : contact, livraison et retours."
+      "info": "Par exemple : contact, suivi de commande, livraison et retours, FAQ."
     },
     {
-      "type": "header",
-      "content": "Menu mobile"
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Découvrir la collection"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien du bouton",
+      "info": "Laissez vide pour ouvrir le produit mis en avant ci-dessous."
     },
     {
       "type": "product",
@@ -387,10 +786,82 @@
       "label": "Produit mis en avant"
     },
     {
+      "type": "header",
+      "content": "Menu mobile : bloc éditorial"
+    },
+    {
+      "type": "image_picker",
+      "id": "editorial_image",
+      "label": "Image"
+    },
+    {
       "type": "text",
-      "id": "cta_label",
+      "id": "editorial_title",
+      "label": "Titre",
+      "default": "Le bien-être, dans les moindres détails."
+    },
+    {
+      "type": "text",
+      "id": "editorial_text",
+      "label": "Sous-titre",
+      "default": "Une beauté plus consciente, pour aujourd'hui et demain."
+    },
+    {
+      "type": "url",
+      "id": "editorial_link",
+      "label": "Lien (facultatif)"
+    },
+    {
+      "type": "header",
+      "content": "Menu mobile : style"
+    },
+    {
+      "type": "font_picker",
+      "id": "menu_heading_font",
+      "label": "Police des titres et liens",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "font_picker",
+      "id": "menu_body_font",
+      "label": "Police des textes",
+      "default": "inter_n4"
+    },
+    {
+      "type": "color",
+      "id": "menu_background",
+      "label": "Fond",
+      "default": "#FAF7F3"
+    },
+    {
+      "type": "color",
+      "id": "menu_text",
+      "label": "Texte",
+      "default": "#49352F"
+    },
+    {
+      "type": "color",
+      "id": "menu_text_muted",
+      "label": "Texte secondaire",
+      "default": "#80665E"
+    },
+    {
+      "type": "color",
+      "id": "menu_border",
+      "label": "Bordures et séparateurs",
+      "default": "#E8DED7"
+    },
+    {
+      "type": "color",
+      "id": "menu_button",
+      "label": "Bouton",
+      "default": "#49352F"
+    },
+    {
+      "type": "color",
+      "id": "menu_button_label",
       "label": "Texte du bouton",
-      "default": "Découvrir la ceinture"
+      "default": "#FFFDFC"
     },
     {
       "type": "header",

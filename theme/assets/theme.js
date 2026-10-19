@@ -119,14 +119,40 @@ class ModalDrawer extends HTMLElement {
       if (event.target.closest('[data-drawer-close]')) this.close();
     });
 
+    // Escape closes the dialog natively, without going through close().
+    this.dialog.addEventListener('close', () => {
+      this.trigger?.setAttribute?.('aria-expanded', 'false');
+    });
+
     const triggerSelector = this.dataset.trigger;
-    if (triggerSelector) {
-      for (const trigger of document.querySelectorAll(triggerSelector)) {
-        trigger.addEventListener('click', (event) => {
-          event.preventDefault();
-          this.open(trigger);
-        });
-      }
+    const triggers = triggerSelector ? [...document.querySelectorAll(triggerSelector)] : [];
+    for (const trigger of triggers) {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.open(trigger);
+      });
+    }
+
+    this.#warmFonts(triggers);
+  }
+
+  /**
+   * Fonts used only inside the drawer are fetched once the page is idle, and
+   * only where the drawer can be opened, so it opens with its final typography.
+   * @param {HTMLElement[]} triggers
+   */
+  #warmFonts(triggers) {
+    const fonts = (this.dataset.warmFonts || '').split('|').filter(Boolean);
+    if (!fonts.length || !document.fonts) return;
+
+    const warm = () => {
+      if (!triggers.some((trigger) => trigger.getClientRects().length > 0)) return;
+      for (const font of fonts) document.fonts.load(font).catch(() => {});
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(warm, { timeout: 4000 });
+    } else {
+      setTimeout(warm, 2000);
     }
   }
 

@@ -6,6 +6,7 @@
     "close": "Fermer",
     "main_navigation": "Navigation principale",
     "footer_navigation": "Navigation du pied de page",
+    "help_navigation": "Aide et informations",
     "previous": "Précédent",
     "next": "Suivant",
     "pagination_label": "Pagination",
@@ -184,7 +185,7 @@
   },
   "reviews": {
     "stars_label": "Note : {{ rating }} sur 5",
-    "verified": "Achat vérifié",
+    "verified": "Évaluation vérifiée",
     "proof_one": "a donné son avis",
     "proof_other": {
       "one": "et {{ count }} autre cliente ont donné leur avis",
@@ -198,10 +199,10 @@
       "one": "{{ count }} évaluation",
       "other": "{{ count }} évaluations"
     },
-    "all_verified": "Tous issus d'achats vérifiés",
+    "all_verified": "Toutes les évaluations sont vérifiées",
     "some_verified": {
-      "one": "{{ count }} achat vérifié",
-      "other": "{{ count }} achats vérifiés"
+      "one": "{{ count }} évaluation vérifiée",
+      "other": "{{ count }} évaluations vérifiées"
     },
     "stars_row": {
       "one": "{{ count }} étoile",
@@ -211,7 +212,7 @@
     "rating_filter": "Filtrer par note",
     "all_ratings": "Toutes les notes",
     "with_photos": "Avec photos",
-    "verified_filter": "Achats vérifiés",
+    "verified_filter": "Évaluations vérifiées",
     "see_more_photos": "Voir plus",
     "photo_label": "Photo de {{ name }}",
     "sort_label": "Trier par",

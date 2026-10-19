@@ -43,13 +43,18 @@
         "menu": "menu-velea",
         "secondary_menu": "pied-de-page-aide",
         "cta_product": "ceinture-chauffante-regles",
-        "cta_label": "Découvrir la ceinture",
+        "cta_label": "Découvrir la collection",
         "show_account": true,
         "color_scheme": "scheme-1",
         "full_width": true,
         "wordmark_size": 38,
         "logo_mark": "shopify://shop_images/velea-monogramme.png",
-        "logo_mark_size": 44
+        "logo_mark_size": 44,
+        "drawer_menu": "menu-mobile-velea",
+        "cta_link": "shopify://collections/tous-nos-produits",
+        "editorial_image": "shopify://shop_images/velea-hero-cocon.webp",
+        "editorial_title": "Le bien-être, dans les moindres détails.",
+        "editorial_text": "Une beauté plus consciente, pour aujourd'hui et demain."
       }
     }
   },

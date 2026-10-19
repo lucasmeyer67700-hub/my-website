@@ -171,7 +171,7 @@
         "show_breakdown": true,
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
-        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Achat vérifié » signifie que nous avons retrouvé la commande correspondante. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
+        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
         "color_scheme": "scheme-1"
       }
     },
