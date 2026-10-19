@@ -6,19 +6,22 @@
         "soon-1": {
           "type": "coming_soon",
           "settings": {
-            "title": "Bientôt disponible",
-            "text": "Une nouvelle création VELEA arrive bientôt."
+            "title": "Culotte menstruelle",
+            "text": "Bientôt dans la boutique VELEA."
           }
         },
         "soon-2": {
           "type": "coming_soon",
           "settings": {
-            "title": "Bientôt disponible",
-            "text": "Une nouvelle création VELEA arrive bientôt."
+            "title": "Serviette menstruelle",
+            "text": "Bientôt dans la boutique VELEA."
           }
         }
       },
-      "block_order": ["soon-1", "soon-2"],
+      "block_order": [
+        "soon-1",
+        "soon-2"
+      ],
       "settings": {
         "eyebrow": "Catalogue",
         "slots": 3,
@@ -27,5 +30,7 @@
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

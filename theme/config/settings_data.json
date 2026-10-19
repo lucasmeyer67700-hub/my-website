@@ -2,7 +2,7 @@
   "current": {
     "logo_width": 120,
     "brand_tagline": "Le confort menstruel, avec douceur.",
-    "type_heading_font": "instrument_serif_n4",
+    "type_heading_font": "serif",
     "type_body_font": "dm_sans_n4",
     "heading_scale": 100,
     "page_width": 1280,
@@ -39,97 +39,99 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#fffcfa",
-          "background_gradient": "",
-          "text": "#302724",
-          "text_muted": "#6b615d",
-          "accent": "#7a5b26",
-          "surface": "#fbf2f3",
-          "border": "#eedfdf",
-          "button": "#49352f",
-          "button_label": "#fffcfa"
+          "background": "#FCF9F7",
+          "text": "#49352F",
+          "text_muted": "#6E574C",
+          "accent": "#725A4E",
+          "surface": "#FFFFFF",
+          "border": "#EDE2DE",
+          "button": "#49352F",
+          "button_label": "#FFFFFF",
+          "background_gradient": ""
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#fbf2f3",
-          "background_gradient": "",
-          "text": "#302724",
-          "text_muted": "#6b615d",
-          "accent": "#7a5b26",
-          "surface": "#fffcfa",
-          "border": "#ebd7da",
-          "button": "#49352f",
-          "button_label": "#fffcfa"
+          "background": "#F8E9EA",
+          "text": "#49352F",
+          "text_muted": "#6B5449",
+          "accent": "#725A4E",
+          "surface": "#FFFFFF",
+          "border": "#EDD5D8",
+          "button": "#49352F",
+          "button_label": "#FFFFFF",
+          "background_gradient": ""
         }
       },
       "scheme-3": {
         "settings": {
-          "background": "#f3dfe2",
-          "background_gradient": "",
-          "text": "#302724",
-          "text_muted": "#5a4f4b",
-          "accent": "#7a5b26",
-          "surface": "#fffcfa",
-          "border": "#e3c8cc",
-          "button": "#49352f",
-          "button_label": "#fffcfa"
+          "background": "#F3DADD",
+          "text": "#49352F",
+          "text_muted": "#5E4A41",
+          "accent": "#725A4E",
+          "surface": "#FCF9F7",
+          "border": "#E5C6CB",
+          "button": "#49352F",
+          "button_label": "#FFFFFF",
+          "background_gradient": ""
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#e8c7cd",
-          "background_gradient": "",
-          "text": "#302724",
-          "text_muted": "#4f4440",
-          "accent": "#6e5222",
-          "surface": "#f3dfe2",
-          "border": "#d7b1b8",
-          "button": "#49352f",
-          "button_label": "#fffcfa"
+          "background": "#EECFD3",
+          "text": "#49352F",
+          "text_muted": "#574339",
+          "accent": "#6A5248",
+          "surface": "#F8E9EA",
+          "border": "#DDB9BF",
+          "button": "#49352F",
+          "button_label": "#FFFFFF",
+          "background_gradient": ""
         }
       },
       "scheme-5": {
         "settings": {
-          "background": "#49352f",
-          "background_gradient": "",
-          "text": "#fffcfa",
-          "text_muted": "#d9c9c2",
-          "accent": "#d9bc82",
-          "surface": "#57423b",
-          "border": "#6a544c",
-          "button": "#f3dfe2",
-          "button_label": "#302724"
+          "background": "#49352F",
+          "text": "#FCF9F7",
+          "text_muted": "#E3D3CC",
+          "accent": "#F3DADD",
+          "surface": "#57423B",
+          "border": "#6A544C",
+          "button": "#F3DADD",
+          "button_label": "#49352F",
+          "background_gradient": ""
         }
       },
       "scheme-6": {
         "settings": {
-          "background": "#f8ebed",
-          "background_gradient": "linear-gradient(180deg, rgba(243, 223, 226, 1) 0%, rgba(247, 232, 234, 1) 40%, rgba(255, 252, 250, 1) 100%)",
-          "text": "#302724",
-          "text_muted": "#5a4f4b",
-          "accent": "#7a5b26",
-          "surface": "#fffcfa",
-          "border": "#e9d3d6",
-          "button": "#49352f",
-          "button_label": "#fffcfa"
+          "background": "#F8E9EA",
+          "text": "#49352F",
+          "text_muted": "#5E4A41",
+          "accent": "#725A4E",
+          "surface": "#FFFFFF",
+          "border": "#EAD3D6",
+          "button": "#49352F",
+          "button_label": "#FFFFFF",
+          "background_gradient": "linear-gradient(180deg, rgba(243, 218, 221, 1) 0%, rgba(248, 233, 234, 1) 40%, rgba(252, 249, 247, 1) 100%)"
         }
       }
-    }
+    },
+    "seo_home_title": "Ceinture chauffante pour les règles",
+    "seo_description": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France."
   },
   "presets": {
     "Douceur": {
       "color_schemes": {
         "scheme-1": {
           "settings": {
-            "background": "#FFFCFA",
-            "text": "#302724",
-            "text_muted": "#6B615D",
-            "accent": "#7A5B26",
-            "surface": "#FBF2F3",
-            "border": "#EEDFDF",
+            "background": "#FCF9F7",
+            "text": "#49352F",
+            "text_muted": "#6E574C",
+            "accent": "#725A4E",
+            "surface": "#FFFFFF",
+            "border": "#EDE2DE",
             "button": "#49352F",
-            "button_label": "#FFFCFA",
+            "button_label": "#FFFFFF",
             "background_gradient": ""
           }
         }

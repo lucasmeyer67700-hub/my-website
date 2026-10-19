@@ -62,7 +62,12 @@
     "choose_option": "Choose an option",
     "price_from": "From {{ price }}",
     "media_slot_hint": "Add your photos: Products → this product → Media. The first photo shows here.",
-    "delivery_time": "Delivery in {{ delay }}"
+    "availability_in_stock": "In stock",
+    "availability_available": "Available",
+    "availability_unavailable": "Unavailable",
+    "usage_heading": "How to use",
+    "precautions_heading": "Precautions",
+    "shipping_conditions": "Shipping conditions"
   },
   "cart": {
     "title": "Your cart",
@@ -148,7 +153,9 @@
     "drops_pause": "Pause the drops animation",
     "video_pause": "Pause the video",
     "video_sound": "Turn the video sound on",
-    "video_hint": "Add your vertical video (9:16) in this section's settings."
+    "video_hint": "Add your vertical video (9:16) in this section's settings.",
+    "journey_step": "Step {{ number }}",
+    "journey_image_hint": "Add this step's photo (\"Step\" block)."
   },
   "collections": {
     "coming_soon": "Coming soon",

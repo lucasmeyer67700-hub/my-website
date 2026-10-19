@@ -34,18 +34,18 @@
       ],
       "settings": {
         "interval": 3,
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-3"
       }
     },
     "header": {
       "type": "header",
       "settings": {
-        "menu": "navigation-principale",
+        "menu": "menu-velea",
         "secondary_menu": "pied-de-page-aide",
         "cta_product": "ceinture-chauffante-regles",
         "cta_label": "Découvrir la ceinture",
         "show_account": true,
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-1",
         "full_width": true,
         "wordmark_size": 38
       }

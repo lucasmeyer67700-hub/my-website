@@ -44,6 +44,24 @@
         "id": "share_image",
         "label": "Image de partage par défaut",
         "info": "Utilisée quand une page partagée sur les réseaux n'a pas d'image propre. 1200 × 630 px recommandé."
+      },
+      {
+        "type": "header",
+        "content": "Référencement"
+      },
+      {
+        "type": "text",
+        "id": "seo_home_title",
+        "label": "Titre de la page d'accueil",
+        "info": "Utilisé si le titre de la page d'accueil n'est pas renseigné dans Préférences (il vaut alors le nom de la boutique).",
+        "default": "Ceinture chauffante pour les règles"
+      },
+      {
+        "type": "textarea",
+        "id": "seo_description",
+        "label": "Description par défaut",
+        "info": "Utilisée quand une page n'a pas de description (par exemple l'accueil). Environ 155 caractères.",
+        "default": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France."
       }
     ]
   },
@@ -58,7 +76,7 @@
             "type": "color",
             "id": "background",
             "label": "Arrière-plan",
-            "default": "#FFFCFA"
+            "default": "#FCF9F7"
           },
           {
             "type": "color_background",
@@ -70,31 +88,31 @@
             "type": "color",
             "id": "text",
             "label": "Texte",
-            "default": "#302724"
+            "default": "#49352F"
           },
           {
             "type": "color",
             "id": "text_muted",
             "label": "Texte secondaire",
-            "default": "#6B615D"
+            "default": "#6E574C"
           },
           {
             "type": "color",
             "id": "accent",
             "label": "Accent (surtitres, détails)",
-            "default": "#7A5E52"
+            "default": "#725A4E"
           },
           {
             "type": "color",
             "id": "surface",
             "label": "Surface (cartes, encadrés)",
-            "default": "#F8F4F0"
+            "default": "#FFFFFF"
           },
           {
             "type": "color",
             "id": "border",
             "label": "Bordures",
-            "default": "#E7DCD6"
+            "default": "#EDE2DE"
           },
           {
             "type": "color",
@@ -106,7 +124,7 @@
             "type": "color",
             "id": "button_label",
             "label": "Texte du bouton principal",
-            "default": "#FFFCFA"
+            "default": "#FFFFFF"
           }
         ],
         "role": {
@@ -193,7 +211,7 @@
         "type": "text",
         "id": "shipping_delay",
         "label": "Délai de livraison",
-        "info": "Laissez vide tant que le délai n'est pas confirmé par votre fournisseur. Exemple : Livrée en 7 à 14 jours ouvrés."
+        "info": "Laissez vide tant que le délai n'est pas confirmé par votre fournisseur. Exemple : 7 à 14 jours ouvrés."
       },
       {
         "type": "text",

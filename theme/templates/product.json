@@ -11,9 +11,9 @@
             "offer_note_single": "L'essentiel, pour vous",
             "offer_note_multi": "Une pour vous, une à offrir",
             "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
-            "best_label": "Meilleur prix",
+            "best_label": "Le plus avantageux",
             "perks_single": "",
-            "perks_multi": "Deux ensembles complets : câbles USB et notices\nLivraison offerte en France | Offerte"
+            "perks_multi": "Deux ensembles complets : câbles USB et notices"
           }
         },
         "buy": {
@@ -30,25 +30,11 @@
             "show_lines": false
           }
         },
-        "points": {
-          "type": "points",
-          "settings": {}
-        },
-        "description": {
-          "type": "accordion",
-          "settings": {
-            "title": "Présentation",
-            "icon": "cloud",
-            "source": "description",
-            "content": "",
-            "open": false
-          }
-        },
         "specs": {
           "type": "accordion",
           "settings": {
             "title": "Caractéristiques",
-            "icon": "heat",
+            "icon": "none",
             "source": "specs",
             "content": "",
             "open": false
@@ -57,19 +43,9 @@
         "usage": {
           "type": "accordion",
           "settings": {
-            "title": "Mode d'emploi",
-            "icon": "check",
-            "source": "usage",
-            "content": "",
-            "open": false
-          }
-        },
-        "precautions": {
-          "type": "accordion",
-          "settings": {
-            "title": "Précautions d'utilisation",
-            "icon": "alert",
-            "source": "precautions",
+            "title": "Utilisation et précautions",
+            "icon": "none",
+            "source": "usage_precautions",
             "content": "",
             "open": false
           }
@@ -78,18 +54,8 @@
           "type": "accordion",
           "settings": {
             "title": "Contenu du colis",
-            "icon": "box",
+            "icon": "none",
             "source": "box",
-            "content": "",
-            "open": false
-          }
-        },
-        "shipping": {
-          "type": "accordion",
-          "settings": {
-            "title": "Livraison et retours",
-            "icon": "truck",
-            "source": "shipping",
             "content": "",
             "open": false
           }
@@ -98,7 +64,7 @@
           "type": "accordion",
           "settings": {
             "title": "Informations fabricant et sécurité",
-            "icon": "shield",
+            "icon": "none",
             "source": "safety_info",
             "content": "",
             "open": false
@@ -108,43 +74,12 @@
           "type": "notice",
           "settings": {}
         },
-        "gallery-card": {
-          "type": "gallery_card",
-          "settings": {
-            "icon": "return",
-            "title": "Satisfaite ou remboursée",
-            "text": "30 jours pour l'essayer chez vous.",
-            "link_label": "Voir les conditions",
-            "link": "",
-            "dismissible": true
-          }
-        },
-        "badge-heat": {
-          "type": "gallery_badge",
-          "settings": {
-            "style": "light",
-            "icon": "heat",
-            "image": "",
-            "title": "3 niveaux",
-            "text": "de 50 à 60 °C"
-          }
-        },
-        "badge-wireless": {
-          "type": "gallery_badge",
-          "settings": {
-            "style": "filled",
-            "icon": "none",
-            "image": "",
-            "title": "Sans fil",
-            "text": "rechargeable USB"
-          }
-        },
         "guarantee": {
           "type": "guarantee",
           "settings": {
             "icon": "return",
             "title": "",
-            "text": "Essayez-la chez vous | Garantie légale de 2 ans | Paiement sécurisé",
+            "text": "Essayez-la chez vous | Garantie légale de 2 ans",
             "link": ""
           }
         },
@@ -155,245 +90,63 @@
             "right_text": "",
             "show_flag": true
           }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "heading": "Au quotidien",
+            "icon_1": "heat",
+            "title_1": "Une chaleur que vous choisissez",
+            "text_1": "Commencez tout en douceur, puis ajustez selon votre ressenti.",
+            "icon_2": "feather",
+            "title_2": "Libre de vos mouvements",
+            "text_2": "Sans fil ni prise : elle vous suit du canapé au bureau.",
+            "icon_3": "home",
+            "title_3": "Discrète sous un vêtement ample",
+            "text_3": "Portée sur un vêtement fin, elle se glisse sous un pull ou une chemise."
+          }
         }
       },
       "block_order": [
-        "gallery-card",
-        "badge-heat",
-        "badge-wireless",
         "variant",
-        "guarantee",
+        "inventory",
         "buy",
+        "guarantee",
         "delivery",
         "trust",
-        "points",
-        "description",
+        "benefits",
         "specs",
         "usage",
-        "precautions",
         "box",
-        "shipping",
         "safety",
         "notice"
       ],
       "settings": {
-        "banner": "La ceinture chauffante sans fil, pour vos jours de règles",
+        "banner": "",
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
-        "gallery_fit": "cover",
+        "gallery_fit": "contain",
         "sticky_bar": true,
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-4"
       }
     },
     "video": {
       "type": "product-video",
-      "blocks": {
-        "heat": {
-          "type": "point",
-          "settings": {
-            "icon": "heat",
-            "text": "3 niveaux de chaleur : 50, 55 ou 60 °C"
-          }
-        },
-        "massage": {
-          "type": "point",
-          "settings": {
-            "icon": "vibration",
-            "text": "4 modes de massage, avec ou sans chaleur"
-          }
-        },
-        "battery": {
-          "type": "point",
-          "settings": {
-            "icon": "battery",
-            "text": "Sans fil, environ 2 h d'autonomie"
-          }
-        },
-        "power": {
-          "type": "point",
-          "settings": {
-            "icon": "power",
-            "text": "Arrêt automatique au bout de 30 minutes"
-          }
-        }
-      },
-      "block_order": [
-        "heat",
-        "massage",
-        "battery",
-        "power"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
         "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
         "media_position": "left",
         "eyebrow": "en vidéo",
         "heading": "Sa douceur, <em>en vrai.</em>",
-        "text": "<p>Découvrez la ceinture portée : sans fil, elle se glisse sous un vêtement ample et vous laisse libre de vos mouvements.</p>",
+        "text": "<p>Regardez-la en situation, portée comme au quotidien.</p>",
         "button_label": "Choisir mon coloris",
         "button_link": "",
         "color_scheme": "scheme-4"
-      }
-    },
-    "benefits": {
-      "type": "benefits",
-      "blocks": {
-        "heat": {
-          "type": "benefit",
-          "settings": {
-            "icon": "heat",
-            "title": "Une chaleur que vous choisissez",
-            "text": "Trois niveaux, 50, 55 ou 60 °C selon le fabricant. Commencez par le plus doux."
-          }
-        },
-        "massage": {
-          "type": "benefit",
-          "settings": {
-            "icon": "vibration",
-            "title": "Un massage, si vous le souhaitez",
-            "text": "Quatre modes de vibration, avec ou sans la chaleur."
-          }
-        },
-        "wireless": {
-          "type": "benefit",
-          "settings": {
-            "icon": "battery",
-            "title": "Aucun fil, aucune prise",
-            "text": "Batterie rechargeable par USB, environ 2 heures d'autonomie selon les réglages."
-          }
-        },
-        "auto-off": {
-          "type": "benefit",
-          "settings": {
-            "icon": "power",
-            "title": "Arrêt automatique",
-            "text": "La ceinture s'éteint seule au bout de 30 minutes d'utilisation."
-          }
-        }
-      },
-      "block_order": [
-        "heat",
-        "massage",
-        "wireless",
-        "auto-off"
-      ],
-      "settings": {
-        "eyebrow": "Les essentiels",
-        "heading": "Pensée pour votre <em>confort au quotidien.</em>",
-        "text": "",
-        "style": "inline",
-        "columns": 2,
-        "center": false,
-        "compact": false,
-        "show_drops": false,
-        "anchor": "bienfaits",
-        "color_scheme": "scheme-2"
-      }
-    },
-    "how-to": {
-      "type": "steps",
-      "blocks": {
-        "charge": {
-          "type": "step",
-          "settings": {
-            "title": "Chargez",
-            "text": "Une charge complète avant la première utilisation : le voyant passe du rouge au vert lorsqu'elle est prête."
-          }
-        },
-        "adjust": {
-          "type": "step",
-          "settings": {
-            "title": "Ajustez",
-            "text": "Placez la ceinture sur le bas du ventre, par-dessus un vêtement fin, puis réglez la sangle."
-          }
-        },
-        "set": {
-          "type": "step",
-          "settings": {
-            "title": "Réglez",
-            "text": "Choisissez la chaleur et le massage, en commençant toujours par le niveau le plus doux."
-          }
-        }
-      },
-      "block_order": [
-        "charge",
-        "adjust",
-        "set"
-      ],
-      "settings": {
-        "eyebrow": "Mode d'emploi",
-        "heading": "Prête en <em>trois gestes.</em>",
-        "text": "",
-        "note": "Ne l'utilisez pas pendant votre sommeil, et surveillez votre peau pendant l'utilisation.",
-        "anchor": "fonctionnement",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "comparison": {
-      "type": "comparison",
-      "blocks": {
-        "adjustable": {
-          "type": "row",
-          "settings": {
-            "label": "Chaleur réglable",
-            "value_1": "Oui, 3 niveaux",
-            "value_2": "Selon l'eau versée",
-            "value_3": "Non"
-          }
-        },
-        "mobile": {
-          "type": "row",
-          "settings": {
-            "label": "Se porte en bougeant",
-            "value_1": "Oui, sans fil",
-            "value_2": "Difficilement",
-            "value_3": "Oui"
-          }
-        },
-        "duration": {
-          "type": "row",
-          "settings": {
-            "label": "Durée de chaleur",
-            "value_1": "Environ 2 h par charge",
-            "value_2": "Baisse à mesure que l'eau refroidit",
-            "value_3": "Plusieurs heures, selon le modèle"
-          }
-        },
-        "reusable": {
-          "type": "row",
-          "settings": {
-            "label": "Réutilisable",
-            "value_1": "Oui, rechargeable",
-            "value_2": "Oui",
-            "value_3": "Non, usage unique"
-          }
-        },
-        "massage": {
-          "type": "row",
-          "settings": {
-            "label": "Massage",
-            "value_1": "Oui, 4 modes",
-            "value_2": "Non",
-            "value_3": "Non"
-          }
-        }
-      },
-      "block_order": [
-        "adjustable",
-        "mobile",
-        "duration",
-        "reusable",
-        "massage"
-      ],
-      "settings": {
-        "eyebrow": "Bien choisir",
-        "heading": "Bouillotte, patch <em>ou ceinture ?</em>",
-        "text": "Chaque solution a ses atouts. Voici ce qui les distingue, simplement.",
-        "column_1": "Ceinture VELEA",
-        "column_2": "Bouillotte",
-        "column_3": "Patch chauffant",
-        "note": "Données de la ceinture annoncées par le fabricant. Bouillotte et patch : caractéristiques générales, variables selon les modèles.",
-        "anchor": "comparatif",
-        "color_scheme": "scheme-2"
       }
     },
     "reviews": {
@@ -406,53 +159,17 @@
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
         "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Achat vérifié » signifie que nous avons retrouvé la commande correspondante. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
-        "anchor": "avis",
         "color_scheme": "scheme-1"
       }
     },
     "faq": {
       "type": "faq",
       "blocks": {
-        "levels": {
-          "type": "question",
-          "settings": {
-            "question": "Quels sont les réglages de chaleur ?",
-            "answer": "<p>Trois niveaux sont annoncés par le fabricant : 50, 55 et 60 °C. Commencez toujours par le plus doux, puis ajustez selon votre ressenti.</p>"
-          }
-        },
-        "massage-only": {
-          "type": "question",
-          "settings": {
-            "question": "Peut-on utiliser le massage sans la chaleur ?",
-            "answer": "<p>Oui. Les quatre modes de vibration s'utilisent avec ou sans la chaleur.</p>"
-          }
-        },
-        "charging": {
-          "type": "question",
-          "settings": {
-            "question": "Peut-on l'utiliser pendant la charge ?",
-            "answer": "<p>Non : par sécurité, la ceinture ne fonctionne pas lorsqu'elle est branchée. Rechargez-la complètement, puis débranchez-la avant de l'utiliser.</p>"
-          }
-        },
-        "sleep": {
-          "type": "question",
-          "settings": {
-            "question": "Peut-on la garder pour dormir ?",
-            "answer": "<p>Non, la ceinture ne doit pas être utilisée pendant le sommeil. Elle s'arrête automatiquement au bout de 30 minutes, mais retirez-la avant de vous endormir.</p>"
-          }
-        },
         "pain": {
           "type": "question",
           "settings": {
             "question": "La ceinture soulage-t-elle les douleurs de règles ?",
             "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
-          }
-        },
-        "contraindications": {
-          "type": "question",
-          "settings": {
-            "question": "Y a-t-il des contre-indications ?",
-            "answer": "<p>Oui. Selon la notice du fabricant, la ceinture est contre-indiquée en cas de grossesse, de maladie cardiaque, de tumeur du col de l'utérus, de crise de goutte, ou de plaie ou anomalie de la peau. En cas de doute, demandez l'avis d'un professionnel de santé.</p>"
           }
         },
         "duo": {
@@ -461,32 +178,11 @@
             "question": "Que contient le Duo ?",
             "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
           }
-        },
-        "delivery": {
-          "type": "question",
-          "settings": {
-            "question": "Combien coûte la livraison ?",
-            "answer": "<p>La livraison est offerte en France métropolitaine, en 7 à 14 jours ouvrés, avec un numéro de suivi. Les détails sont sur notre page <a href=\"/pages/livraison-et-retours\" title=\"Livraison et retours\">Livraison et retours</a>.</p>"
-          }
-        },
-        "returns": {
-          "type": "question",
-          "settings": {
-            "question": "Et si elle ne me convient pas ?",
-            "answer": "<p>Vous avez 30 jours après la réception pour l'essayer : si elle ne vous convient pas, notre garantie « Satisfaite ou remboursée 30 jours » s'applique. Elle s'ajoute à votre droit de rétractation de 14 jours et à la garantie légale de conformité de 2 ans. Toutes les conditions sont dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
-          }
         }
       },
       "block_order": [
-        "levels",
-        "massage-only",
-        "charging",
-        "sleep",
         "pain",
-        "contraindications",
-        "duo",
-        "delivery",
-        "returns"
+        "duo"
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",
@@ -502,9 +198,6 @@
   "order": [
     "main",
     "video",
-    "benefits",
-    "how-to",
-    "comparison",
     "reviews",
     "faq"
   ]

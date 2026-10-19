@@ -259,6 +259,8 @@ class ProductForm extends HTMLElement {
     this.form = this.querySelector('form');
     this.error = this.querySelector('[data-product-error]');
     if (!this.form) return;
+    // Not form.id: the form has an input named "id", which shadows that property.
+    this.formId = this.form.getAttribute('id');
     // Without the cart drawer, the native form post to /cart is kept.
     if (theme.cartType !== 'drawer' || !document.querySelector('cart-drawer')) return;
     this.form.addEventListener('submit', this.#onSubmit.bind(this));
@@ -267,8 +269,25 @@ class ProductForm extends HTMLElement {
   get submitButtons() {
     return [
       ...this.form.querySelectorAll('[type="submit"]'),
-      ...document.querySelectorAll(`[type="submit"][form="${this.form.id}"]`),
+      ...document.querySelectorAll(`[type="submit"][form="${this.formId}"]`),
     ];
+  }
+
+  /**
+   * Shows (or clears, with an empty message) the error under the main button
+   * and in the floating bar, which may be the only one in view.
+   * @param {string} message
+   */
+  #showError(message) {
+    if (this.error) {
+      const text = this.error.querySelector('[data-error-message]');
+      if (text) text.textContent = message;
+      this.error.hidden = !message;
+    }
+    for (const box of document.querySelectorAll(`[data-product-error-for="${this.formId}"]`)) {
+      box.textContent = message;
+      box.hidden = !message;
+    }
   }
 
   /** @param {boolean} busy */
@@ -284,7 +303,7 @@ class ProductForm extends HTMLElement {
     if (this.form.querySelector('[name="id"]')?.disabled) return;
 
     this.#setBusy(true);
-    if (this.error) this.error.hidden = true;
+    this.#showError('');
 
     const formData = new FormData(this.form);
     formData.append('sections', getCartSectionIds().join(','));
@@ -295,12 +314,9 @@ class ProductForm extends HTMLElement {
       renderCartSections(result.sections);
       document.querySelector('cart-drawer')?.open(event.submitter || this.submitButtons[0]);
     } catch (error) {
-      if (this.error) {
-        this.error.querySelector('[data-error-message]').textContent =
-          error.data?.description || theme.strings.productError;
-        this.error.hidden = false;
-      }
-      announce(error.data?.description || theme.strings.productError);
+      const message = error.data?.description || theme.strings.productError;
+      this.#showError(message);
+      announce(message);
     } finally {
       this.#setBusy(false);
     }
@@ -414,6 +430,20 @@ class VariantPicker extends HTMLElement {
       title.textContent = variant ? variant.title : '';
     }
 
+    // Real availability of the chosen variant (never a forced "in stock").
+    const state = variant ? variant.availability || (variant.available ? 'available' : 'unavailable') : 'unavailable';
+    const labelKeys = { in_stock: 'labelInStock', available: 'labelAvailable', unavailable: 'labelUnavailable' };
+    for (const status of scope.querySelectorAll('[data-availability]')) {
+      status.dataset.state = state;
+      const label = status.querySelector('[data-availability-label]');
+      const text = status.dataset[labelKeys[state]];
+      if (label && text && label.textContent.trim() !== text) label.textContent = text;
+    }
+
+    if (variant?.image) {
+      for (const image of scope.querySelectorAll('[data-variant-image]')) image.src = variant.image;
+    }
+
     if (variant) {
       const url = new URL(window.location.href);
       url.searchParams.set('variant', variant.id);
@@ -484,18 +514,29 @@ class MediaGallery extends HTMLElement {
     this.observer?.disconnect();
   }
 
-  /** The overlay card can be closed; it stays closed for the visit. */
+  /**
+   * The overlay card can be closed; it stays closed for the visit. In the
+   * theme editor nothing is remembered, and selecting the block shows it again.
+   */
   #initCard() {
     const card = this.querySelector('[data-gallery-card]');
     const close = card?.querySelector('[data-gallery-card-close]');
     if (!card || !close) return;
-    try {
-      if (window.sessionStorage.getItem(GALLERY_CARD_KEY)) card.hidden = true;
-    } catch (error) {
-      // Storage blocked: the card simply shows again on the next page.
+    const designMode = Boolean(window.Shopify?.designMode);
+    if (designMode) {
+      document.addEventListener('shopify:block:select', (event) => {
+        if (card.contains(/** @type {Node} */ (event.target)) || event.target === card) card.hidden = false;
+      });
+    } else {
+      try {
+        if (window.sessionStorage.getItem(GALLERY_CARD_KEY)) card.hidden = true;
+      } catch (error) {
+        // Storage blocked: the card simply shows again on the next page.
+      }
     }
     close.addEventListener('click', () => {
       card.hidden = true;
+      if (designMode) return;
       try {
         window.sessionStorage.setItem(GALLERY_CARD_KEY, '1');
       } catch (error) {

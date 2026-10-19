@@ -47,6 +47,7 @@
         aria-label="{{ 'products.gallery_label' | t }}"
       >
         {%- for media in product.media -%}
+          {%- assign media_alt = media.alt | default: product.title -%}
           <li
             class="gallery__slide"
             data-gallery-slide
@@ -60,12 +61,12 @@
                   class="gallery__zoom"
                   data-gallery-zoom
                   data-zoom-src="{{ media.preview_image | image_url: width: 2000 }}"
-                  data-zoom-alt="{{ media.alt | escape }}"
+                  data-zoom-alt="{{ media_alt | escape }}"
                 >
                   {%- if forloop.first -%}
-                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', eager: true, alt: media.alt %}
+                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', eager: true, alt: media_alt %}
                   {%- else -%}
-                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+                    {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media_alt %}
                   {%- endif -%}
                   <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
                 </button>
@@ -74,7 +75,7 @@
               {%- when 'external_video' -%}
                 {{ media | external_video_tag: class: 'gallery__video', loading: 'lazy' }}
               {%- else -%}
-                {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt %}
+                {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media_alt %}
             {%- endcase -%}
           </li>
         {%- endfor -%}
@@ -525,7 +526,7 @@
   .gallery-badge--filled .gallery-badge__circle {
     gap: 0.1rem;
     color: #fff;
-    background-color: var(--rose-strong);
+    background-color: var(--rose-text);
   }
 
   .gallery-badge__title {
@@ -566,7 +567,7 @@
     overflow: hidden;
     border-radius: var(--radius-md);
     background: linear-gradient(180deg, var(--gallery-bg) 0%, #f6e4e7 100%);
-    color: rgb(var(--gold-rgb) / 0.8);
+    color: rgb(var(--warm-rgb) / 0.8);
   }
 
   .gallery__slot--main {
@@ -598,7 +599,7 @@
       radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 5%, transparent 16%),
       linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
     box-shadow:
-      inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+      inset 0 0 0 1px rgb(var(--warm-rgb) / 0.5),
       0 20px 34px -20px rgb(160 90 105 / 0.55);
   }
 
@@ -609,7 +610,7 @@
     width: 40%;
     aspect-ratio: 4 / 1;
     translate: -50% -50%;
-    border: 1px solid rgb(var(--gold-rgb) / 0.55);
+    border: 1px solid rgb(var(--warm-rgb) / 0.55);
     border-radius: 50%;
   }
 
@@ -619,7 +620,7 @@
     inset-block-end: var(--space-sm);
     z-index: 2;
     padding: var(--space-xs) var(--space-sm);
-    border: 1px dashed rgb(var(--gold-rgb) / 0.8);
+    border: 1px dashed rgb(var(--warm-rgb) / 0.8);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     text-align: center;

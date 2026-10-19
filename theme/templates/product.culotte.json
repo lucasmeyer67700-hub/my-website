@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "variant": {
+          "type": "variant_picker",
+          "settings": {
+            "offer_heading": "",
+            "unit_label": "",
+            "offer_note_single": "",
+            "offer_note_multi": "",
+            "multi_hint": "",
+            "best_label": "",
+            "perks_single": "",
+            "perks_multi": ""
+          }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true
+          }
+        },
+        "delivery": {
+          "type": "delivery",
+          "settings": {
+            "left_text": "",
+            "right_text": "",
+            "show_flag": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_lines": false,
+            "show_payment_icons": true
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "heading": "Au quotidien",
+            "icon_1": "check",
+            "title_1": "",
+            "text_1": "",
+            "icon_2": "check",
+            "title_2": "",
+            "text_2": "",
+            "icon_3": "check",
+            "title_3": "",
+            "text_3": ""
+          }
+        },
+        "specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "Caractéristiques",
+            "icon": "none",
+            "source": "specs",
+            "content": "",
+            "open": false
+          }
+        },
+        "care": {
+          "type": "accordion",
+          "settings": {
+            "title": "Entretien",
+            "icon": "none",
+            "source": "care",
+            "content": "",
+            "open": false
+          }
+        },
+        "shipping": {
+          "type": "accordion",
+          "settings": {
+            "title": "Livraison et retours",
+            "icon": "none",
+            "source": "shipping",
+            "content": "",
+            "open": false,
+            "show_returns_offer": false
+          }
+        },
+        "safety": {
+          "type": "accordion",
+          "settings": {
+            "title": "Informations fabricant et sécurité",
+            "icon": "none",
+            "source": "safety_info",
+            "content": "",
+            "open": false
+          }
+        },
+        "size_guide": {
+          "type": "accordion",
+          "settings": {
+            "title": "Guide des tailles",
+            "icon": "none",
+            "source": "size_guide",
+            "content": "",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "variant",
+        "inventory",
+        "buy",
+        "delivery",
+        "trust",
+        "benefits",
+        "specs",
+        "size_guide",
+        "care",
+        "shipping",
+        "safety"
+      ],
+      "settings": {
+        "banner": "",
+        "price_badge": "",
+        "gallery_ratio": "1",
+        "gallery_fit": "cover",
+        "sticky_bar": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "Avis",
+        "show_breakdown": true,
+        "keywords": "confort\nlivraison",
+        "per_page": 5,
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reviews"
+  ]
+}

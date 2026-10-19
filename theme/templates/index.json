@@ -2,36 +2,18 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {
-        "trust-returns": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "return",
-            "text": "Satisfaite ou remboursée 30 jours"
-          }
-        },
-        "trust-payment": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "lock",
-            "text": "Paiement sécurisé"
-          }
-        }
-      },
-      "block_order": [
-        "trust-returns",
-        "trust-payment"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
         "layout": "photo",
         "show_drops": false,
         "eyebrow": "",
-        "heading": "Une chaleur douce, <em>où que vous soyez.</em>",
+        "heading": "Un peu plus de douceur <em>pendant vos règles.</em>",
         "heading_tag": "h1",
-        "text": "Une ceinture chauffante sans fil, avec chaleur réglable et massage par vibration, pour vivre vos jours de règles plus confortablement.",
+        "text": "Découvrez la ceinture chauffante VELEA, pensée pour accompagner vos moments de confort.",
         "image": "shopify://shop_images/velea-hero-chambre.jpg",
         "photo_width": 70,
-        "photo_crop_x": 50,
+        "photo_crop_x": 75,
         "image_alt": "Deux ceintures chauffantes VELEA, rose et blanche, posées sur un lit dans une chambre douce et lumineuse",
         "height": "full",
         "content_position": "bottom-left",
@@ -39,155 +21,58 @@
         "overlay_opacity": 35,
         "image_position": "right",
         "product": "ceinture-chauffante-regles",
-        "show_price": true,
-        "fallback_media_position": 1,
+        "show_price": false,
+        "fallback_media_position": 2,
         "button_label": "Découvrir la ceinture",
         "button_link": "",
-        "secondary_label": "Comment ça marche",
-        "secondary_link": "/#fonctionnement",
+        "secondary_label": "",
+        "secondary_link": "",
         "color_scheme": "scheme-3"
       }
     },
-    "benefits": {
-      "type": "benefits",
+    "journey": {
+      "type": "journey",
       "blocks": {
-        "heat": {
-          "type": "benefit",
+        "step-1": {
+          "type": "step",
           "settings": {
+            "image": "",
+            "icon": "cloud",
+            "title": "Quand les règles compliquent la journée.",
+            "text": "Certains jours, on a surtout envie de ralentir, de s'allonger et de prendre un moment pour soi."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "image": "",
             "icon": "heat",
-            "title": "Trois niveaux de chaleur",
-            "text": "50, 55 ou 60 °C : commencez en douceur, puis ajustez selon votre ressenti."
+            "title": "Une nouvelle façon de prendre du temps pour soi.",
+            "text": "La ceinture VELEA diffuse une chaleur douce sur le bas du ventre. Sans fil, elle vous laisse libre de vos mouvements."
           }
         },
-        "wireless": {
-          "type": "benefit",
+        "step-3": {
+          "type": "step",
           "settings": {
-            "icon": "battery",
-            "title": "Sans fil, rechargeable",
-            "text": "Une batterie intégrée pour environ 2 heures d'utilisation, sans prise ni eau chaude."
-          }
-        },
-        "massage": {
-          "type": "benefit",
-          "settings": {
-            "icon": "vibration",
-            "title": "Massage par vibration",
-            "text": "Quatre modes, à utiliser avec ou sans la chaleur, selon vos envies."
-          }
-        },
-        "light": {
-          "type": "benefit",
-          "settings": {
+            "image": "",
             "icon": "feather",
-            "title": "Légère et ajustable",
-            "text": "142 g et une sangle réglable, pour la porter sous un vêtement ample."
+            "title": "Retrouvez votre moment de douceur.",
+            "text": "Un plaid, une tisane, quelques minutes rien qu'à vous : le temps de souffler, à votre rythme."
           }
         }
       },
       "block_order": [
-        "heat",
-        "wireless",
-        "massage",
-        "light"
+        "step-1",
+        "step-2",
+        "step-3"
       ],
       "settings": {
-        "eyebrow": "Pensée pour vos jours de règles",
-        "heading": "Le confort de la chaleur, <em>sans les contraintes.</em>",
-        "text": "Le réflexe de la bouillotte, en plus pratique : la ceinture chauffe seule, reste en place et vous laisse libre de vos mouvements.",
-        "style": "cards",
-        "columns": 4,
-        "center": false,
-        "compact": false,
-        "show_drops": true,
-        "anchor": "bienfaits",
-        "color_scheme": "scheme-6"
-      }
-    },
-    "everyday": {
-      "type": "image-with-text",
-      "blocks": {
-        "home": {
-          "type": "point",
-          "settings": {
-            "icon": "home",
-            "title": "À la maison",
-            "text": "Pour un moment de calme, sur le canapé ou au lit — sans vous endormir avec."
-          }
-        },
-        "work": {
-          "type": "point",
-          "settings": {
-            "icon": "briefcase",
-            "title": "Au travail",
-            "text": "Discrète sous un pull ou une chemise ample."
-          }
-        },
-        "travel": {
-          "type": "point",
-          "settings": {
-            "icon": "map-pin",
-            "title": "En déplacement",
-            "text": "Ni prise ni bouillotte à remplir : la chaleur vous suit."
-          }
-        }
-      },
-      "block_order": [
-        "home",
-        "work",
-        "travel"
-      ],
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "fallback_media_position": 4,
-        "image_alt": "",
-        "ratio": "4 / 5",
-        "image_position": "left",
-        "eyebrow": "Au quotidien",
-        "heading": "Chez vous, au bureau, <em>en déplacement.</em>",
-        "text": "<p>Sans fil et légère, la ceinture se glisse sous un vêtement ample. Vous gardez la chaleur avec vous, que vous soyez chez vous, à votre bureau ou dans les transports.</p>",
-        "button_label": "",
-        "button_link": "",
-        "anchor": "",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "how-it-works": {
-      "type": "steps",
-      "blocks": {
-        "charge": {
-          "type": "step",
-          "settings": {
-            "title": "Chargez",
-            "text": "Une charge complète avant la première utilisation, avec le câble USB fourni."
-          }
-        },
-        "adjust": {
-          "type": "step",
-          "settings": {
-            "title": "Ajustez",
-            "text": "Placez la ceinture sur le bas du ventre, par-dessus un vêtement fin, et réglez la sangle."
-          }
-        },
-        "set": {
-          "type": "step",
-          "settings": {
-            "title": "Réglez",
-            "text": "Choisissez la chaleur et le massage, en commençant toujours par le niveau le plus doux."
-          }
-        }
-      },
-      "block_order": [
-        "charge",
-        "adjust",
-        "set"
-      ],
-      "settings": {
-        "eyebrow": "Comment ça marche",
-        "heading": "Prête en <em>trois gestes.</em>",
+        "eyebrow": "Votre parcours",
+        "heading": "Des jours plus doux, <em>étape par étape.</em>",
         "text": "",
-        "note": "La ceinture s'arrête automatiquement au bout de 30 minutes. Ne l'utilisez pas pendant votre sommeil.",
-        "anchor": "fonctionnement",
-        "color_scheme": "scheme-2"
+        "show_drops": true,
+        "anchor": "parcours",
+        "color_scheme": "scheme-6"
       }
     },
     "spotlight": {
@@ -195,47 +80,45 @@
       "settings": {
         "product": "ceinture-chauffante-regles",
         "media_position": 1,
-        "eyebrow": "La ceinture",
+        "eyebrow": "La ceinture VELEA",
         "heading": "L'essentiel, <em>rien de superflu.</em>",
         "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
         "show_specs": true,
-        "specs_limit": 5,
-        "show_box": true,
-        "button_label": "Voir tous les détails",
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
         "anchor": "",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "approach": {
-      "type": "rich-text",
-      "settings": {
-        "eyebrow": "Notre approche",
-        "heading": "Le confort, <em>sans fausse promesse.</em>",
-        "heading_tag": "h2",
-        "text": "<p>La chaleur est un geste de confort que l’on connaît bien, comme la bouillotte. Nous l’avons rendue pratique : sans fil, réglable et facile à emporter. Et nous vous présentons la ceinture telle qu’elle est, avec ses caractéristiques, son mode d’emploi et ses précautions.</p>",
-        "button_label": "Découvrir notre approche",
-        "button_link": "/pages/notre-approche",
-        "alignment": "center",
-        "compact": false,
-        "color_scheme": "scheme-3"
-      }
-    },
-    "reviews": {
-      "type": "testimonials",
-      "settings": {
-        "eyebrow": "Avis clientes",
-        "heading": "Elles en parlent",
         "color_scheme": "scheme-1"
       }
     },
     "faq": {
       "type": "faq",
       "blocks": {
-        "how": {
-          "type": "question",
+        "reassure-shipping": {
+          "type": "reassurance",
           "settings": {
-            "question": "Comment fonctionne la ceinture ?",
-            "answer": "<p>Un élément chauffant intégré diffuse une chaleur réglable sur 3 niveaux (50, 55 ou 60 °C, selon le fabricant). La ceinture fonctionne sur batterie : une fois chargée, elle s'utilise sans fil. Le massage par vibration (4 modes) s'utilise avec ou sans la chaleur.</p>"
+            "icon": "truck",
+            "title": "Livraison offerte en France",
+            "text": "En 7 à 14 jours ouvrés, avec un numéro de suivi.",
+            "link": "/pages/livraison-et-retours"
+          }
+        },
+        "reassure-returns": {
+          "type": "reassurance",
+          "settings": {
+            "icon": "return",
+            "title": "Satisfaite ou remboursée 30 jours",
+            "text": "Le temps de l'essayer chez vous, en plus de vos droits légaux.",
+            "link": "/pages/politique-de-retour"
+          }
+        },
+        "reassure-contact": {
+          "type": "reassurance",
+          "settings": {
+            "icon": "chat",
+            "title": "Une question ?",
+            "text": "Écrivez-nous : nous vous répondons par e-mail.",
+            "link": "/pages/contact"
           }
         },
         "pain": {
@@ -259,55 +142,38 @@
             "answer": "<p>Environ 2 heures selon le fabricant, en fonction des réglages utilisés. Par sécurité, la ceinture s'arrête automatiquement au bout de 30 minutes et ne fonctionne pas pendant la charge.</p>"
           }
         },
-        "returns": {
+        "precautions": {
           "type": "question",
           "settings": {
-            "question": "Et si elle ne me convient pas ?",
-            "answer": "<p>Vous avez 30 jours après la réception pour l'essayer : si elle ne vous convient pas, notre garantie « Satisfaite ou remboursée 30 jours » s'applique. Elle s'ajoute à votre droit de rétractation de 14 jours et à la garantie légale de conformité de 2 ans. Toutes les conditions sont dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a>.</p>"
+            "question": "Y a-t-il des précautions d'utilisation ?",
+            "answer": "<p>Oui. Ne l'utilisez pas pendant votre sommeil, commencez toujours par la chaleur la plus douce et surveillez votre peau. Elle est déconseillée dans certaines situations, par exemple pendant la grossesse. Toutes les précautions du fabricant sont sur la <a href=\"/products/ceinture-chauffante-regles\" title=\"Ceinture chauffante menstruelle\">fiche de la ceinture</a>.</p>"
           }
         }
       },
       "block_order": [
-        "how",
+        "reassure-shipping",
+        "reassure-returns",
+        "reassure-contact",
         "pain",
         "clothes",
         "battery",
-        "returns"
+        "precautions"
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",
         "heading": "Vos questions, <em>nos réponses.</em>",
-        "text": "Vous ne trouvez pas votre réponse ? Notre FAQ complète et notre formulaire de contact sont là pour vous.",
+        "text": "",
         "link_label": "Toutes les questions",
         "link": "/pages/faq",
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
-    },
-    "final-cta": {
-      "type": "cta-banner",
-      "settings": {
-        "eyebrow": "",
-        "heading": "Un peu plus de douceur, <em>chaque mois.</em>",
-        "text": "Une chaleur réglable, sans fil, prête quand vous en avez besoin.",
-        "product": "ceinture-chauffante-regles",
-        "button_label": "Découvrir la ceinture",
-        "button_link": "",
-        "show_trust": true,
-        "show_drops": true,
-        "color_scheme": "scheme-3"
-      }
     }
   },
   "order": [
     "hero",
-    "benefits",
-    "everyday",
-    "how-it-works",
+    "journey",
     "spotlight",
-    "approach",
-    "reviews",
-    "faq",
-    "final-cta"
+    "faq"
   ]
 }

@@ -62,7 +62,12 @@
     "choose_option": "Choisissez une option",
     "price_from": "À partir de {{ price }}",
     "media_slot_hint": "Ajoutez vos photos : Produits → ce produit → Médias. La première photo apparaît ici.",
-    "delivery_time": "Livraison en {{ delay }}"
+    "availability_in_stock": "En stock",
+    "availability_available": "Disponible",
+    "availability_unavailable": "Indisponible",
+    "usage_heading": "Mode d'emploi",
+    "precautions_heading": "Précautions",
+    "shipping_conditions": "Conditions de livraison"
   },
   "cart": {
     "title": "Votre panier",
@@ -148,7 +153,9 @@
     "drops_pause": "Mettre en pause l'animation des gouttes",
     "video_pause": "Mettre la vidéo en pause",
     "video_sound": "Activer le son de la vidéo",
-    "video_hint": "Ajoutez votre vidéo verticale (9:16) dans les réglages de cette section."
+    "video_hint": "Ajoutez votre vidéo verticale (9:16) dans les réglages de cette section.",
+    "journey_step": "Étape {{ number }}",
+    "journey_image_hint": "Ajoutez la photo de cette étape (bloc « Étape »)."
   },
   "collections": {
     "coming_soon": "Bientôt",

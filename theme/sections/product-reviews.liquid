@@ -6,61 +6,86 @@
   Review apps can be added as app blocks.
 {%- endcomment -%}
 {%- liquid
-  assign reviews = product.metafields.custom.avis.value
-  assign review_count = 0
-  assign rating_sum = 0
-  assign verified_count = 0
-  assign photo_count = 0
-  assign c5 = 0
-  assign c4 = 0
-  assign c3 = 0
-  assign c2 = 0
-  assign c1 = 0
-  assign colors = ''
-  for review in reviews
-    assign review_count = review_count | plus: 1
-    assign note = review.note.value.rating | round
-    assign rating_sum = rating_sum | plus: review.note.value.rating
-    if review.achat_verifie.value
-      assign verified_count = verified_count | plus: 1
-    endif
-    if review.photo.value != blank
-      assign photo_count = photo_count | plus: 1
-    endif
-    case note
-      when 5
-        assign c5 = c5 | plus: 1
-      when 4
-        assign c4 = c4 | plus: 1
-      when 3
-        assign c3 = c3 | plus: 1
-      when 2
-        assign c2 = c2 | plus: 1
-      else
-        assign c1 = c1 | plus: 1
-    endcase
-    assign color = review.coloris.value | strip
-    if color != blank
-      assign color_token = '|' | append: color | append: '|'
-      unless colors contains color_token
-        assign colors = colors | append: color_token
-      endunless
+  comment
+    custom.avis can hold up to 250 reviews (list.max): one paginate page
+    covers them all. Without paginate, Liquid would only loop over 50.
+  endcomment
+  assign has_reviews = false
+  if product.metafields.custom.avis.value.size > 0
+    assign has_reviews = true
+  endif
+  assign has_app_reviews = false
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_reviews = true
     endif
   endfor
-
-  if review_count > 0
-    assign average = rating_sum | times: 1.0 | divided_by: review_count
-    assign average_text = average | times: 10 | round | divided_by: 10.0 | append: '' | replace: '.', ','
-  endif
-  assign color_list = colors | split: '|' | compact
-  assign keyword_lines = section.settings.keywords | newline_to_br | split: '<br />'
-  assign page_size = section.settings.per_page
 -%}
 
-{%- if review_count > 0 -%}
+{%- if has_reviews -%}
+  {%- paginate product.metafields.custom.avis.value by 250 -%}
+    {%- liquid
+      assign review_count = 0
+      assign rating_sum = 0
+      assign verified_count = 0
+      assign photo_count = 0
+      assign c5 = 0
+      assign c4 = 0
+      assign c3 = 0
+      assign c2 = 0
+      assign c1 = 0
+      assign color_handles = '|'
+      assign color_labels = ''
+      for review in product.metafields.custom.avis.value
+        assign review_count = review_count | plus: 1
+        comment
+          A 4.5/5 counts as a 4-star review: a rating is never moved up.
+        endcomment
+        assign note = review.note.value.rating | floor
+        assign rating_sum = rating_sum | plus: review.note.value.rating
+        if review.achat_verifie.value
+          assign verified_count = verified_count | plus: 1
+        endif
+        if review.photo.value != blank
+          assign photo_count = photo_count | plus: 1
+        endif
+        case note
+          when 5
+            assign c5 = c5 | plus: 1
+          when 4
+            assign c4 = c4 | plus: 1
+          when 3
+            assign c3 = c3 | plus: 1
+          when 2
+            assign c2 = c2 | plus: 1
+          else
+            assign c1 = c1 | plus: 1
+        endcase
+        assign color = review.coloris.value | strip
+        if color != blank
+          assign color_handle = color | handle
+          assign color_token = '|' | append: color_handle | append: '|'
+          unless color_handles contains color_token
+            assign color_handles = color_handles | append: color_handle | append: '|'
+            assign color_labels = color_labels | append: color | append: '|'
+          endunless
+        endif
+      endfor
+
+      assign average = rating_sum | times: 1.0 | divided_by: review_count
+      assign average_text_x10 = average | times: 10 | round
+      assign average_text_int = average_text_x10 | divided_by: 10
+      assign average_text_dec = average_text_x10 | modulo: 10
+      assign average_text = average_text_int | append: ',' | append: average_text_dec
+      assign color_handle_list = color_handles | remove_first: '|' | split: '|'
+      assign color_label_list = color_labels | split: '|'
+      assign keyword_lines = section.settings.keywords | newline_to_br | split: '<br />'
+      assign page_size = section.settings.per_page
+    -%}
+
   <section
     class="reviews section color-{{ section.settings.color_scheme }}"
-    id="{{ section.settings.anchor | default: 'avis' | handle }}"
+    id="avis"
     aria-labelledby="ReviewsTitle-{{ section.id }}"
   >
     <product-reviews class="page-width reviews__inner" data-page-size="{{ page_size }}">
@@ -152,21 +177,19 @@
             <span>{{ 'reviews.verified_filter' | t }} ({{ verified_count }})</span>
           </button>
         {%- endif -%}
-        {%- for color in color_list -%}
-          {%- if color == blank -%}
-            {%- continue -%}
-          {%- endif -%}
+        {%- for color_handle in color_handle_list -%}
           {%- liquid
+            assign color_label = color_label_list[forloop.index0]
             assign color_total = 0
-            for review in reviews
-              assign review_color = review.coloris.value | strip
-              if review_color == color
+            for review in product.metafields.custom.avis.value
+              assign review_color = review.coloris.value | strip | handle
+              if review_color == color_handle
                 assign color_total = color_total | plus: 1
               endif
             endfor
           -%}
-          <button type="button" class="reviews__chip" data-reviews-filter="color:{{ color | handle }}" aria-pressed="false">
-            <span>{{ color | escape }} ({{ color_total }})</span>
+          <button type="button" class="reviews__chip" data-reviews-filter="color:{{ color_handle }}" aria-pressed="false">
+            <span>{{ color_label | escape }} ({{ color_total }})</span>
           </button>
         {%- endfor -%}
         {%- for line in keyword_lines -%}
@@ -174,7 +197,7 @@
             assign keyword = line | strip | downcase
             assign keyword_total = 0
             if keyword != blank
-              for review in reviews
+              for review in product.metafields.custom.avis.value
                 assign haystack = review.texte.value | append: ' ' | append: review.titre.value | downcase
                 if haystack contains keyword
                   assign keyword_total = keyword_total | plus: 1
@@ -193,7 +216,7 @@
       {%- if photo_count > 0 -%}
         <ul class="reviews__photos" role="list">
           {%- assign shown_photos = 0 -%}
-          {%- for review in reviews -%}
+          {%- for review in product.metafields.custom.avis.value -%}
             {%- if review.photo.value != blank and shown_photos < 6 -%}
               {%- assign shown_photos = shown_photos | plus: 1 -%}
               <li>
@@ -205,7 +228,12 @@
                   {{ review.photo.value | image_url: width: 480 | image_tag: width: 240, height: 240, alt: '', loading: 'lazy', class: 'reviews__photo-image' }}
                   <span class="reviews__photo-rating">
                     {% render 'icon', icon: 'star' %}
-                    {{- review.note.value.rating | round | append: ',0' -}}
+                    {%- liquid
+                      assign badge_x10 = review.note.value.rating | times: 10 | round
+                      assign badge_int = badge_x10 | divided_by: 10
+                      assign badge_dec = badge_x10 | modulo: 10
+                      echo badge_int | append: ',' | append: badge_dec
+                    -%}
                   </span>
                   {%- if shown_photos == 6 and photo_count > 6 -%}
                     <span class="reviews__photo-more">{{ 'reviews.see_more_photos' | t }}</span>
@@ -238,7 +266,7 @@
       </div>
 
       <ul class="reviews__list" role="list" data-reviews-list>
-        {%- for review in reviews -%}
+        {%- for review in product.metafields.custom.avis.value -%}
           {%- liquid
             assign review_note = review.note.value.rating
             assign review_color = review.coloris.value | strip
@@ -248,7 +276,7 @@
             class="review"
             data-review
             data-index="{{ forloop.index }}"
-            data-rating="{{ review_note | round }}"
+            data-rating="{{ review_note | floor }}"
             data-date="{{ review.date.value | date: '%Y%m%d' }}"
             data-photo="{% if review.photo.value != blank %}1{% else %}0{% endif %}"
             data-verified="{% if review.achat_verifie.value %}1{% else %}0{% endif %}"
@@ -326,12 +354,12 @@
 
       {%- comment -%} Large photos for the lightbox, loaded only when opened. {%- endcomment -%}
       <template data-reviews-photos>
-        {%- for review in reviews -%}
+        {%- for review in product.metafields.custom.avis.value -%}
           {%- if review.photo.value != blank -%}
             <img
               data-for="{{ forloop.index }}"
               src="{{ review.photo.value | image_url: width: 1400 }}"
-              alt="{{ 'reviews.photo_label' | t: name: review.auteur.value | escape }}"
+              alt="{{ 'reviews.photo_label' | t: name: review.auteur.value }}"
               width="1400"
               height="1400"
             >
@@ -340,21 +368,29 @@
       </template>
     </product-reviews>
   </section>
+  {%- endpaginate -%}
+{%- elsif has_app_reviews or product.metafields.reviews.rating_count.value > 0 -%}
+  {%- comment -%} Reviews from an app: its block, and how reviews are collected. {%- endcomment -%}
+  <section class="reviews section color-{{ section.settings.color_scheme }}" id="avis" aria-labelledby="ReviewsTitle-{{ section.id }}">
+    <div class="page-width reviews__inner">
+      <h2 class="reviews__title" id="ReviewsTitle-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          <div class="reviews__app">{% render block %}</div>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if section.settings.about != blank -%}
+        <details class="reviews__about">
+          <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
+          <div class="rte">{{ section.settings.about }}</div>
+        </details>
+      {%- endif -%}
+    </div>
+  </section>
 {%- elsif request.design_mode -%}
   <div class="page-width section section--compact">
     <p class="form-message">{% render 'icon', icon: 'info' %}{{ 'reviews.editor_empty' | t }}</p>
-    {%- for block in section.blocks -%}
-      {%- if block.type == '@app' -%}
-        <div class="reviews__app">{% render block %}</div>
-      {%- endif -%}
-    {%- endfor -%}
   </div>
-{%- else -%}
-  {%- for block in section.blocks -%}
-    {%- if block.type == '@app' -%}
-      <div class="page-width section section--compact reviews__app">{% render block %}</div>
-    {%- endif -%}
-  {%- endfor -%}
 {%- endif -%}
 
 {% stylesheet %}
@@ -487,7 +523,7 @@
     min-height: 2.25rem;
     padding-inline-start: 0;
     background: none;
-    color: var(--rose-strong);
+    color: var(--rose-text);
   }
 
   .reviews__chip {
@@ -515,7 +551,7 @@
 
     &[aria-pressed='true'] {
       border-color: var(--rose-strong);
-      color: var(--rose-strong);
+      color: var(--rose-text);
       background-color: var(--rose-soft);
     }
   }
@@ -633,7 +669,7 @@
     height: 2.75rem;
     border-radius: 50%;
     font-weight: var(--font-body-weight-medium);
-    color: var(--rose-strong);
+    color: var(--rose-text);
     background-color: var(--rose-soft);
   }
 
@@ -831,13 +867,6 @@
       "label": "Comment les avis sont-ils collectés ?",
       "info": "Information obligatoire (article L111-7-2 du Code de la consommation). Décrivez votre vraie méthode.",
       "default": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Achat vérifié » signifie que nous avons retrouvé la commande correspondante. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>"
-    },
-    {
-      "type": "text",
-      "id": "anchor",
-      "label": "Ancre",
-      "info": "Utilisée par le lien de la note en haut de la fiche produit.",
-      "default": "avis"
     },
     {
       "type": "color_scheme",

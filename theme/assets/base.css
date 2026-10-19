@@ -7,40 +7,46 @@
    ========================================================================== */
 
 :root {
-  /* Brand palette (reference only — components use scheme variables) */
-  --palette-rose-powder: #e8c7cd;
-  --palette-rose-soft: #f3dfe2;
-  --palette-warm-white: #fffcfa;
-  --palette-ivory: #f8f4f0;
-  --palette-brown-soft: #a88778;
+  /* VELEA palette (brief). Components use the scheme variables; these are
+     for brand details. Rose accent is for graphics only (2.6:1 on white). */
+  --palette-rose-powder: #f3dadd;
+  --palette-rose-light: #f8e9ea;
+  --palette-rose-accent: #d98d96;
+  --palette-white: #ffffff;
+  --palette-warm-white: #fcf9f7;
+  --palette-ivory: #f7f1ef;
+  --palette-brown-soft: #896f61;
   --palette-brown-deep: #49352f;
-  --palette-ink: #302724;
-  --palette-warm-white-rgb: 255 252 250;
-  --palette-ink-rgb: 48 39 36;
+  --palette-ink: #3a2a25;
+  --palette-warm-white-rgb: 252 249 247;
+  --palette-ink-rgb: 58 42 37;
   --palette-scrim-rgb: 36 27 24;
-  --palette-rose-pale: #fbf2f3;
-  --palette-rose-deep: #e2a2ae;
+  --palette-rose-pale: #f8e9ea;
+  --palette-rose-deep: #d98d96;
 
-  /* Strong rose for stars, savings and selected offers (5.2:1 on white) */
-  --rose-strong: #b4475f;
-  --rose-strong-rgb: 180 71 95;
-  --rose-soft: #fbe9ed;
+  /* Rose for the interface: graphics (stars, radios, dots: 3.4:1 on white)
+     and text (5.3:1 on white, 4.7:1 on rose clair). */
+  --rose-strong: #c9727e;
+  --rose-strong-rgb: 201 114 126;
+  --rose-text: #9c5261;
+  --rose-soft: #f8e9ea;
 
-  /* Neutral frame behind product photos */
-  --gallery-bg: #f4f0ef;
+  /* Light warm frame behind product photos */
+  --gallery-bg: #f7f1ef;
 
-  /* Gold accents. Text gold passes 4.5:1 on white and on soft rose; the light
-     golds are for hairlines, ornaments and decorative strokes only. */
-  --gold-text: #7a5b26;
-  --gold: #b08d4f;
-  --gold-light: #d9bc82;
-  --gold-rgb: 176 141 79;
-  --gold-gradient: linear-gradient(100deg, #a88443 0%, #dcc28c 45%, #b08d4f 70%, #9c7a3c 100%);
-  --gold-hairline: rgb(var(--gold-rgb) / 0.45);
+  /* Warm brown accents (eyebrows, ornaments, hairlines). Text brown passes
+     4.5:1 on blanc cassé and on rose poudré; the light tints are for
+     hairlines and decorative strokes only. */
+  --warm-text: #725a4e;
+  --warm: #896f61;
+  --warm-light: #c9b3a8;
+  --warm-rgb: 137 111 97;
+  --warm-gradient: linear-gradient(90deg, #896f61 0%, #c9b3a8 50%, #896f61 100%);
+  --warm-hairline: rgb(var(--warm-rgb) / 0.35);
 
   /* Feedback */
   --color-error: #9b2c2c;
-  --color-success: #2f6b4a;
+  --color-success: #2b6545;
 
   /* Spacing scale */
   --space-3xs: 0.25rem;
@@ -220,7 +226,7 @@ h3 {
 
   & em {
     font-style: italic;
-    color: var(--color-heading-accent, var(--gold-text));
+    color: var(--color-heading-accent, var(--warm-text));
   }
 }
 
@@ -271,7 +277,7 @@ h3 {
     flex: none;
     width: 1.75rem;
     height: 1px;
-    background: var(--gold-gradient);
+    background: var(--warm-gradient);
   }
 }
 
@@ -281,7 +287,7 @@ h3 {
   flex: none;
   width: 1.75rem;
   height: 1px;
-  background: var(--gold-gradient);
+  background: var(--warm-gradient);
 }
 
 .lead {
@@ -475,12 +481,12 @@ a {
   &:hover {
     background-color: rgb(var(--color-button-rgb) / 0.9);
     box-shadow:
-      inset 0 0 0 1px rgb(var(--gold-rgb) / 0.9),
+      inset 0 0 0 1px rgb(var(--warm-rgb) / 0.9),
       var(--shadow-md);
   }
 
   &:active {
-    box-shadow: inset 0 0 0 1px rgb(var(--gold-rgb) / 0.9);
+    box-shadow: inset 0 0 0 1px rgb(var(--warm-rgb) / 0.9);
   }
 
   &[disabled],
@@ -503,7 +509,7 @@ a {
   &:hover {
     color: var(--color-text);
     background-color: rgb(var(--palette-warm-white-rgb) / 0.45);
-    border-color: var(--gold);
+    border-color: var(--warm);
     box-shadow: none;
   }
 }
@@ -592,9 +598,9 @@ a {
   place-items: center;
   width: 3rem;
   height: 3rem;
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--warm-hairline);
   border-radius: 50%;
-  color: var(--gold-text);
+  color: var(--warm-text);
   background-color: var(--palette-warm-white);
   --icon-size: 1.35rem;
 }
@@ -634,7 +640,7 @@ a {
 .placeholder-svg {
   width: 100%;
   height: 100%;
-  fill: rgb(var(--gold-rgb) / 0.18);
+  fill: rgb(var(--warm-rgb) / 0.18);
   background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
 }
 
@@ -861,7 +867,7 @@ textarea.field__input {
 
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
-  box-shadow: 0 0 0 1px rgb(var(--gold-rgb) / 0.18);
+  box-shadow: 0 0 0 1px rgb(var(--warm-rgb) / 0.18);
 
   & img {
     transition:
@@ -939,7 +945,7 @@ textarea.field__input {
   background-color: var(--swatch-color);
   box-shadow:
     inset 0 0 0 1px rgb(var(--color-text-rgb) / 0.18),
-    0 0 0 1px rgb(var(--gold-rgb) / 0.35);
+    0 0 0 1px rgb(var(--warm-rgb) / 0.35);
 }
 
 /* "Coming soon" slot */
@@ -966,7 +972,7 @@ textarea.field__input {
     radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 5%, transparent 16%),
     linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
   box-shadow:
-    inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+    inset 0 0 0 1px rgb(var(--warm-rgb) / 0.5),
     0 20px 34px -20px rgb(160 90 105 / 0.55);
 }
 
@@ -977,7 +983,7 @@ textarea.field__input {
   width: 48%;
   aspect-ratio: 4 / 1;
   translate: -50% -50%;
-  border: 1px solid rgb(var(--gold-rgb) / 0.55);
+  border: 1px solid rgb(var(--warm-rgb) / 0.55);
   border-radius: 50%;
 }
 
@@ -986,13 +992,13 @@ textarea.field__input {
   inset-block-start: var(--space-sm);
   inset-inline-start: var(--space-sm);
   padding: 0.3rem 0.75rem;
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--warm-hairline);
   border-radius: var(--radius-round);
   font-size: var(--text-xs);
   font-weight: var(--font-body-weight-medium);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold-text);
+  color: var(--warm-text);
   background-color: rgb(var(--palette-warm-white-rgb) / 0.85);
 }
 
@@ -1263,8 +1269,8 @@ body:has(dialog[open]) {
       0 6px 14px -6px rgb(160 90 105 / 0.45);
   }
 
-  &.drops__drop--gold::before {
-    outline: 1px solid rgb(var(--gold-rgb) / 0.7);
+  &.drops__drop--accent::before {
+    outline: 1px solid rgb(var(--warm-rgb) / 0.7);
     outline-offset: -1px;
   }
 
@@ -1311,9 +1317,9 @@ body:has(dialog[open]) {
   z-index: 2;
   min-width: 2.5rem;
   min-height: 2.5rem;
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--warm-hairline);
   border-radius: 50%;
-  color: var(--gold-text);
+  color: var(--warm-text);
   background-color: rgb(var(--palette-warm-white-rgb) / 0.75);
   backdrop-filter: blur(6px);
   pointer-events: auto;

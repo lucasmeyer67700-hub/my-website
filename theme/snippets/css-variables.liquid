@@ -15,8 +15,9 @@
   assign body_font_italic = body_font | font_modify: 'style', 'italic'
 -%}
 
-{{ body_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
-{{ heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
+{%- comment -%} System fonts (e.g. "Serif") are already on the device: preloading them would be a dead request. {%- endcomment -%}
+{%- unless body_font.system? %}{{ body_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}{% endunless %}
+{%- unless heading_font.system? %}{{ heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2' }}{% endunless %}
 
 {% style %}
   {{ heading_font | font_face: font_display: 'swap' }}

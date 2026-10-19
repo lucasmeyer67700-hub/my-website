@@ -2,6 +2,9 @@
   Shipping, returns and warranty summary built from theme settings
   (Theme settings > Réassurance), with links to the detailed pages.
 
+  @param {boolean} [returns_offer] - false hides the commercial returns offer
+    (e.g. for hygiene products whose return conditions differ)
+
   @example
   {% render 'shipping-summary' %}
 {% enddoc %}
@@ -12,7 +15,7 @@
       {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
     </li>
   {%- endif -%}
-  {%- if settings.returns_info != blank -%}
+  {%- if settings.returns_info != blank and returns_offer != false -%}
     <li>{{ settings.returns_info | escape }}</li>
   {%- endif -%}
   {%- if settings.warranty_info != blank -%}
@@ -22,7 +25,13 @@
 {%- if settings.shipping_page != blank or settings.returns_page != blank -%}
   <p class="shipping-summary__links">
     {%- if settings.shipping_page != blank -%}
-      <a class="link" href="{{ settings.shipping_page.url }}">{{ settings.shipping_page.title | escape }}</a>
+      <a class="link" href="{{ settings.shipping_page.url }}">
+        {%- if returns_offer == false -%}
+          {{- 'products.shipping_conditions' | t -}}
+        {%- else -%}
+          {{- settings.shipping_page.title | escape -}}
+        {%- endif -%}
+      </a>
     {%- endif -%}
     {%- if settings.returns_page != blank -%}
       <a class="link" href="{{ settings.returns_page.url }}">{{ settings.returns_page.title | escape }}</a>

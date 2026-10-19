@@ -12,7 +12,7 @@
   @param {string} [offer_note_multi] - Line under the multi-item offers
   @param {string} [multi_hint] - Help line under the colours for multi-item offers
   @param {string} [unit_label] - Unit after the per-item price (e.g. "la ceinture")
-  @param {string} [best_label] - Tab on the multi-item offer with a real saving (e.g. "Meilleur prix")
+  @param {string} [best_label] - Tab on the multi-item offer with a real saving (e.g. "Le plus avantageux")
   @param {string} [perks_single] - Lines listed in the single-item offer card ("Text | Right text")
   @param {string} [perks_multi] - Lines listed in the multi-item offer cards ("Text | Right text")
 
@@ -267,8 +267,18 @@
     <script type="application/json" data-variants>
       [
         {%- for variant in product.variants -%}
+          {%- liquid
+            assign variant_availability = 'available'
+            if variant.available == false
+              assign variant_availability = 'unavailable'
+            elsif variant.inventory_management == 'shopify' and variant.inventory_quantity > 0
+              assign variant_availability = 'in_stock'
+            endif
+          -%}
           {
             "id": {{ variant.id }},
+            "availability": {{ variant_availability | json }},
+            "image": {% if variant.featured_media %}{{ variant.featured_media.preview_image | image_url: width: 120, height: 120, crop: 'center' | json }}{% else %}null{% endif %},
             "title": {{ variant.title | json }},
             "available": {{ variant.available | json }},
             "price": {{ variant.price | money | strip_html | json }},
@@ -382,7 +392,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--gold-gradient);
+      background: var(--warm-gradient);
       opacity: 0.6;
     }
   }
@@ -479,8 +489,9 @@
     font-weight: var(--font-body-weight-medium);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #fff;
-    background-color: var(--rose-strong);
+    color: var(--rose-text);
+    background-color: var(--rose-soft);
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
   }
 
   .offer-card__sub {
@@ -560,7 +571,7 @@
     font-weight: var(--font-body-weight-medium);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--rose-strong);
+    color: var(--rose-text);
   }
 
   .variant-picker__hint {

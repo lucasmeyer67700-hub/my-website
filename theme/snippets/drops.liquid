@@ -25,7 +25,7 @@
     {%- for preset in presets limit: limit -%}
       {%- assign values = preset | split: ',' -%}
       <span
-        class="drops__drop{% if forloop.index == 3 or forloop.index == 7 %} drops__drop--gold{% endif %}"
+        class="drops__drop{% if forloop.index == 3 or forloop.index == 7 %} drops__drop--accent{% endif %}"
         style="--x: {{ values[0] }}%; --size: {{ values[1] }}px; --o: {{ values[2] }}; --rest: {{ values[3] }}%; --duration: {{ values[4] }}s; --delay: {{ values[5] }}s;"
       ></span>
     {%- endfor -%}

@@ -14,15 +14,22 @@
       <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
     {%- endif -%}
 
+    {%- liquid
+      assign meta_title = page_title
+      if request.page_type == 'index' and page_title == shop.name and settings.seo_home_title != blank
+        assign meta_title = settings.seo_home_title
+      endif
+      assign meta_description = page_description | default: settings.seo_description
+    -%}
     <title>
-      {{- page_title -}}
+      {{- meta_title -}}
       {%- if current_tags %} – {{ current_tags | join: ', ' }}{% endif -%}
       {%- if current_page != 1 %} – {{ 'general.page_number' | t: number: current_page }}{% endif -%}
-      {%- unless page_title contains shop.name %} – {{ shop.name }}{% endunless -%}
+      {%- unless meta_title contains shop.name %} – {{ shop.name }}{% endunless -%}
     </title>
 
-    {%- if page_description -%}
-      <meta name="description" content="{{ page_description | escape }}">
+    {%- if meta_description != blank -%}
+      <meta name="description" content="{{ meta_description | escape }}">
     {%- endif -%}
 
     {% render 'meta-tags' %}

@@ -4,6 +4,19 @@
   assign submit_id = 'ProductSubmit-' | append: section.id
   assign tagline = product.metafields.custom.accroche.value
   assign installments_id = 'ProductInstallments-' | append: section.id
+
+  comment
+    Real availability of the selected variant: "En stock" only when Shopify
+    tracks the inventory and has some; "Disponible" when the variant can be
+    ordered but the stock is not tracked (or sold beyond zero).
+  endcomment
+  assign availability = 'available'
+  if current_variant.available == false
+    assign availability = 'unavailable'
+  elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0
+    assign availability = 'in_stock'
+  endif
+  assign sticky_media = current_variant.featured_media | default: product.featured_media
 -%}
 
 <section class="product section section--compact color-{{ section.settings.color_scheme }}" data-product-section>
@@ -71,30 +84,83 @@
 
           {%- when 'delivery' -%}
             {%- liquid
-              assign delivery_left = block.settings.left_text
-              if delivery_left == blank and settings.shipping_delay != blank
-                assign delivery_left = 'products.delivery_time' | t: delay: settings.shipping_delay
-              endif
-              assign delivery_right = block.settings.right_text | default: settings.shipping_info
+              assign delivery_text = block.settings.right_text | default: settings.shipping_info
+              assign delivery_delay = block.settings.left_text | default: settings.shipping_delay
             -%}
-            <div class="product__delivery" {{ block.shopify_attributes }}>
-              {%- if delivery_left != blank -%}
-                <p class="product__delivery-time"><span class="product__delivery-dot" aria-hidden="true"></span>{{ delivery_left | escape }}</p>
-              {%- endif -%}
-              {%- if delivery_right != blank -%}
-                <p class="product__delivery-shipping">
-                  {%- if block.settings.show_flag -%}
-                    <svg class="product__flag" viewBox="0 0 3 2" aria-hidden="true" focusable="false"><path fill="#0055a4" d="M0 0h1v2H0z"/><path fill="#fff" d="M1 0h1v2H1z"/><path fill="#ef4135" d="M2 0h1v2H2z"/></svg>
-                    <span class="product__delivery-sep" aria-hidden="true">|</span>
-                  {%- endif -%}
+            {%- if delivery_text != blank -%}
+              <p class="product__delivery" {{ block.shopify_attributes }}>
+                {% render 'icon', icon: 'truck' %}
+                <span>
                   {%- if settings.shipping_page != blank -%}
-                    <a href="{{ settings.shipping_page.url }}">{{ delivery_right | escape }}</a>
+                    <a href="{{ settings.shipping_page.url }}">{{ delivery_text | escape }}</a>
                   {%- else -%}
-                    <span>{{ delivery_right | escape }}</span>
+                    {{ delivery_text | escape }}
                   {%- endif -%}
-                </p>
-              {%- endif -%}
-            </div>
+                  {%- if delivery_delay != blank -%}
+                    <span class="product__delivery-delay"> · {{ delivery_delay | escape }}</span>
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.show_flag -%}
+                  <svg class="product__flag" viewBox="0 0 3 2" aria-hidden="true" focusable="false"><path fill="#0055a4" d="M0 0h1v2H0z"/><path fill="#fff" d="M1 0h1v2H1z"/><path fill="#ef4135" d="M2 0h1v2H2z"/></svg>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+
+          {%- when 'inventory' -%}
+            <p
+              class="product-availability"
+              data-availability
+              data-state="{{ availability }}"
+              data-label-in-stock="{{ 'products.availability_in_stock' | t }}"
+              data-label-available="{{ 'products.availability_available' | t }}"
+              data-label-unavailable="{{ 'products.availability_unavailable' | t }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="product-availability__dot" aria-hidden="true"></span>
+              <span data-availability-label aria-live="polite">
+                {%- case availability -%}
+                  {%- when 'in_stock' -%}
+                    {{ 'products.availability_in_stock' | t }}
+                  {%- when 'unavailable' -%}
+                    {{ 'products.availability_unavailable' | t }}
+                  {%- else -%}
+                    {{ 'products.availability_available' | t }}
+                {%- endcase -%}
+              </span>
+            </p>
+
+          {%- when 'benefits' -%}
+            {%- capture benefit_items -%}
+              {%- for i in (1..3) -%}
+                {%- liquid
+                  assign title_key = 'title_' | append: i
+                  assign text_key = 'text_' | append: i
+                  assign icon_key = 'icon_' | append: i
+                  assign benefit_title = block.settings[title_key]
+                  assign benefit_text = block.settings[text_key]
+                  assign benefit_icon = block.settings[icon_key]
+                -%}
+                {%- if benefit_title != blank -%}
+                  <li class="product-benefits__item">
+                    <span class="product-benefits__icon" aria-hidden="true">{% render 'icon', icon: benefit_icon %}</span>
+                    <span class="product-benefits__body">
+                      <span class="product-benefits__title">{{ benefit_title | escape }}</span>
+                      {%- if benefit_text != blank -%}
+                        <span class="product-benefits__text">{{ benefit_text | escape }}</span>
+                      {%- endif -%}
+                    </span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if benefit_items != blank -%}
+              <div class="product-benefits" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="product-benefits__heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                <ul class="product-benefits__list" role="list">{{ benefit_items }}</ul>
+              </div>
+            {%- endif -%}
 
           {%- when 'points' -%}
             {%- assign points = product.metafields.custom.points_forts.value -%}
@@ -281,6 +347,25 @@
                     endif
                   when 'usage'
                     render 'metafield-lines', value: product.metafields.custom.mode_emploi.value, ordered: true
+                  when 'usage_precautions'
+                    assign usage_value = product.metafields.custom.mode_emploi.value
+                    assign precautions_value = product.metafields.custom.precautions.value
+                    if usage_value != blank
+                      echo '<h3 class="product__accordion-subtitle">'
+                      echo 'products.usage_heading' | t
+                      echo '</h3>'
+                      render 'metafield-lines', value: usage_value, ordered: true
+                    endif
+                    if precautions_value != blank
+                      echo '<h3 class="product__accordion-subtitle">'
+                      echo 'products.precautions_heading' | t
+                      echo '</h3>'
+                      render 'metafield-lines', value: precautions_value, ordered: false
+                    endif
+                  when 'care'
+                    render 'metafield-lines', value: product.metafields.custom.entretien.value, ordered: false
+                  when 'size_guide'
+                    render 'metafield-lines', value: product.metafields.custom.guide_tailles.value, ordered: false, plain: true
                   when 'precautions'
                     render 'metafield-lines', value: product.metafields.custom.precautions.value, ordered: false
                   when 'box'
@@ -288,7 +373,7 @@
                   when 'safety_info'
                     render 'metafield-lines', value: product.metafields.custom.informations_securite.value, ordered: false, plain: true
                   when 'shipping'
-                    render 'shipping-summary'
+                    render 'shipping-summary', returns_offer: block.settings.show_returns_offer
                   else
                     if block.settings.content != blank
                       echo '<div class="rte">'
@@ -302,7 +387,9 @@
               <details class="accordion product__accordion" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
                 <summary class="accordion__summary">
                   <span class="accordion__title">
-                    {% render 'icon', icon: block.settings.icon %}
+                    {%- if block.settings.icon != 'none' -%}
+                      {% render 'icon', icon: block.settings.icon %}
+                    {%- endif -%}
                     {{ block.settings.title | escape }}
                   </span>
                   {% render 'icon', icon: 'plus', class: 'icon--toggle' %}
@@ -325,7 +412,18 @@
 
   {%- if section.settings.sticky_bar -%}
     <sticky-buy-bar class="sticky-buy-bar" data-watch="{{ submit_id }}">
-      <div class="sticky-buy-bar__inner">
+      <div class="sticky-buy-bar__inner page-width">
+        {%- if sticky_media -%}
+          <img
+            class="sticky-buy-bar__image"
+            src="{{ sticky_media.preview_image | image_url: width: 120, height: 120, crop: 'center' }}"
+            alt=""
+            width="56"
+            height="56"
+            loading="lazy"
+            data-variant-image
+          >
+        {%- endif -%}
         <div class="sticky-buy-bar__info">
           <p class="sticky-buy-bar__title">{{ product.title | escape }}</p>
           <p class="sticky-buy-bar__meta">
@@ -333,13 +431,14 @@
               <span data-variant-title>{{ current_variant.title | escape }}</span>
               <span aria-hidden="true"> · </span>
             {%- endunless -%}
-            <span data-price-current>{{ current_variant.price | money }}</span>
+            <span class="sticky-buy-bar__price" data-price-current>{{ current_variant.price | money }}</span>
           </p>
+          <p class="sticky-buy-bar__error" role="alert" data-product-error-for="{{ form_id }}" hidden></p>
         </div>
         <button
           type="submit"
           form="{{ form_id }}"
-          class="button button--small"
+          class="button sticky-buy-bar__button"
           data-add-to-cart
           {% unless current_variant.available %}
             disabled
@@ -426,7 +525,7 @@
     & .price__compare {
       order: -1;
       font-weight: var(--font-body-weight);
-      color: var(--rose-strong);
+      color: var(--rose-text);
     }
   }
 
@@ -437,8 +536,9 @@
     font-weight: var(--font-body-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #fff;
-    background-color: var(--rose-strong);
+    color: var(--rose-text);
+    background-color: var(--rose-soft);
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
   }
 
   /* Shopify fills the payment terms itself (empty when not offered): no box of our own. */
@@ -506,49 +606,129 @@
   /* Delivery line under the button */
   .product__delivery {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2xs) var(--space-md);
+    gap: var(--space-2xs);
     font-size: var(--text-sm);
-  }
 
-  .product__delivery-time {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    color: var(--color-success);
-  }
-
-  .product__delivery-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background-color: currentColor;
-    box-shadow: 0 0 0 3px rgb(47 107 74 / 0.15);
-  }
-
-  .product__delivery-shipping {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
+    & > .icon {
+      --icon-size: 1.1rem;
+      color: var(--color-accent);
+    }
 
     & a {
       color: inherit;
       text-decoration: underline;
+      text-decoration-color: var(--warm-hairline);
       text-underline-offset: 0.2em;
     }
   }
 
+  .product__delivery-delay {
+    color: var(--color-text-muted);
+  }
+
   .product__flag {
+    flex: none;
     width: 1.1rem;
     height: auto;
+    margin-inline-start: auto;
     border-radius: 1px;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08);
   }
 
-  .product__delivery-sep {
+  /* Real availability of the selected variant */
+  .product-availability {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-success);
+
+    &[data-state='unavailable'] {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .product-availability__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 0 3px rgb(43 101 69 / 0.14);
+
+    [data-state='unavailable'] & {
+      box-shadow: none;
+      opacity: 0.6;
+    }
+  }
+
+  /* Practical benefits (2 or 3), under the buy area */
+  .product-benefits {
+    display: grid;
+    gap: var(--space-sm);
+    padding-block: var(--space-md);
+    border-block: 1px solid var(--color-border);
+  }
+
+  .product-benefits__heading {
+    font-family: var(--font-body-family);
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .product-benefits__list {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .product-benefits__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .product-benefits__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: var(--warm-text);
+    background-color: var(--palette-rose-light);
+
+    & .icon {
+      --icon-size: 1.1rem;
+    }
+  }
+
+  .product-benefits__body {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .product-benefits__title {
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .product-benefits__text {
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
+  }
+
+  .product__accordion-subtitle {
+    margin-block: var(--space-sm) var(--space-2xs);
+    font-family: var(--font-body-family);
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-bold);
+
+    &:first-child {
+      margin-block-start: 0;
+    }
   }
 
   .product__points {
@@ -574,7 +754,6 @@
   .product-form__submit {
     flex: 1 1 auto;
     min-height: 3.5rem;
-    border-radius: var(--radius-sm);
     font-size: var(--text-sm);
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -639,16 +818,17 @@
     }
   }
 
+  /* Floating add-to-cart bar: appears once the main button is out of view */
   .sticky-buy-bar {
     position: fixed;
     inset-inline: 0;
     inset-block-end: 0;
     z-index: var(--z-sticky-bar);
     display: block;
-    padding: var(--space-xs) var(--gutter) calc(var(--space-xs) + env(safe-area-inset-bottom));
+    padding-block: var(--space-xs) calc(var(--space-xs) + env(safe-area-inset-bottom));
     border-block-start: 1px solid var(--color-border);
-    background-color: rgb(var(--color-background-rgb) / 0.96);
-    box-shadow: 0 -8px 24px -16px rgb(48 39 36 / 0.25);
+    background-color: rgb(var(--color-background-rgb) / 0.97);
+    box-shadow: 0 -10px 30px -18px rgb(73 53 47 / 0.3);
     visibility: hidden;
     transform: translateY(110%);
     transition:
@@ -660,20 +840,29 @@
       transform: none;
       transition-delay: 0s;
     }
-
-    @media screen and (min-width: 990px) {
-      display: none;
-    }
   }
 
   .sticky-buy-bar__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-sm);
   }
 
+  .sticky-buy-bar__image {
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    background-color: var(--gallery-bg);
+
+    @media screen and (max-width: 359px) {
+      display: none;
+    }
+  }
+
   .sticky-buy-bar__info {
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -686,21 +875,41 @@
   }
 
   .sticky-buy-bar__meta {
+    overflow: hidden;
     font-size: var(--text-sm);
+    white-space: nowrap;
+    text-overflow: ellipsis;
     color: var(--color-text-muted);
   }
 
-  /* Shopify Inbox chat bubble sits bottom-right: keep the bar's button clear of it. */
-  body:has(#shopify-chat, inbox-online-store-chat) .sticky-buy-bar {
-    @media screen and (max-width: 989px) {
-      padding-inline-end: calc(var(--gutter) + 4.25rem);
+  .sticky-buy-bar__price {
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+  }
+
+  .sticky-buy-bar__error {
+    font-size: var(--text-xs);
+    color: var(--color-error);
+  }
+
+  .sticky-buy-bar__button {
+    flex: none;
+    min-height: 2.875rem;
+    padding-inline: var(--space-md);
+    font-size: var(--text-sm);
+
+    @media screen and (min-width: 750px) {
+      min-width: 15rem;
     }
   }
 
+  /* Shopify Inbox chat bubble sits bottom-right: keep the bar's button clear of it. */
+  body:has(#shopify-chat, inbox-online-store-chat) .sticky-buy-bar__inner {
+    padding-inline-end: 4.5rem;
+  }
+
   body.has-sticky-bar .site-footer {
-    @media screen and (max-width: 989px) {
-      padding-block-end: 6rem;
-    }
+    padding-block-end: 6rem;
   }
 {% endstylesheet %}
 
@@ -761,7 +970,7 @@
     { "type": "@app" },
     {
       "type": "gallery_card",
-      "name": "Galerie : encart en haut à gauche",
+      "name": "Galerie : encart",
       "limit": 1,
       "settings": [
         {
@@ -875,6 +1084,130 @@
       ]
     },
     {
+      "type": "inventory",
+      "name": "Disponibilité",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Statut réel de la variante choisie : « En stock » si Shopify suit le stock et qu'il en reste, « Disponible » si le stock n'est pas suivi, « Indisponible » sinon. Aucune quantité n'est affichée."
+        }
+      ]
+    },
+    {
+      "type": "benefits",
+      "name": "Bénéfices pratiques",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Deux ou trois avantages concrets, différents des caractéristiques techniques."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Titre",
+          "default": "Au quotidien"
+        },
+        {
+          "type": "header",
+          "content": "Bénéfice 1"
+        },
+        {
+          "type": "select",
+          "id": "icon_1",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "home", "label": "Maison" },
+            { "value": "briefcase", "label": "Bureau" },
+            { "value": "map-pin", "label": "Déplacement" },
+            { "value": "cloud", "label": "Douceur" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "heat"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Titre"
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "Texte"
+        },
+        {
+          "type": "header",
+          "content": "Bénéfice 2"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "home", "label": "Maison" },
+            { "value": "briefcase", "label": "Bureau" },
+            { "value": "map-pin", "label": "Déplacement" },
+            { "value": "cloud", "label": "Douceur" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "feather"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Titre"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Texte"
+        },
+        {
+          "type": "header",
+          "content": "Bénéfice 3"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "feather", "label": "Légèreté" },
+            { "value": "vibration", "label": "Vibration" },
+            { "value": "power", "label": "Arrêt automatique" },
+            { "value": "home", "label": "Maison" },
+            { "value": "briefcase", "label": "Bureau" },
+            { "value": "map-pin", "label": "Déplacement" },
+            { "value": "cloud", "label": "Douceur" },
+            { "value": "check", "label": "Validation" }
+          ],
+          "default": "home"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Titre"
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "Texte"
+        }
+      ]
+    },
+    {
       "type": "guarantee",
       "name": "Encadré garantie",
       "limit": 1,
@@ -908,7 +1241,7 @@
           "type": "text",
           "id": "text",
           "label": "Texte",
-          "default": "Essayez-la chez vous | Garantie légale de 2 ans | Paiement sécurisé"
+          "default": "Essayez-la chez vous | Garantie légale de 2 ans"
         },
         {
           "type": "url",
@@ -925,15 +1258,15 @@
       "settings": [
         {
           "type": "text",
-          "id": "left_text",
-          "label": "Texte à gauche (point vert)",
-          "info": "Par défaut : « Livraison en » + le délai des Paramètres du thème."
+          "id": "right_text",
+          "label": "Texte",
+          "info": "Par défaut, le texte « Livraison » des Paramètres du thème."
         },
         {
           "type": "text",
-          "id": "right_text",
-          "label": "Texte à droite",
-          "info": "Par défaut, le texte « Livraison » des Paramètres du thème."
+          "id": "left_text",
+          "label": "Délai",
+          "info": "Par défaut, le délai des Paramètres du thème (ex. : 7 à 14 jours ouvrés)."
         },
         {
           "type": "checkbox",
@@ -1004,8 +1337,8 @@
           "type": "text",
           "id": "best_label",
           "label": "Onglet de l'offre à plusieurs",
-          "info": "Affiché seulement si l'offre fait vraiment économiser.",
-          "default": "Meilleur prix"
+          "info": "Affiché seulement si l'offre fait vraiment économiser. Restez factuel : c'est une comparaison entre vos offres.",
+          "default": "Le plus avantageux"
         },
         {
           "type": "textarea",
@@ -1018,7 +1351,7 @@
           "id": "perks_multi",
           "label": "Inclus dans les offres à plusieurs",
           "info": "Une ligne par avantage. Texte à droite après « | ».",
-          "default": "Deux ensembles complets : câbles USB et notices\nLivraison offerte en France | Offerte"
+          "default": "Deux ensembles complets : câbles USB et notices"
         }
       ]
     },
@@ -1081,6 +1414,7 @@
           "id": "icon",
           "label": "Icône",
           "options": [
+            { "value": "none", "label": "Aucune" },
             { "value": "info", "label": "Information" },
             { "value": "heat", "label": "Chaleur" },
             { "value": "check", "label": "Validation" },
@@ -1101,6 +1435,9 @@
             { "value": "specs", "label": "Champ méta : Caractéristiques" },
             { "value": "usage", "label": "Champ méta : Mode d'emploi" },
             { "value": "precautions", "label": "Champ méta : Précautions" },
+            { "value": "usage_precautions", "label": "Champs méta : Mode d'emploi + Précautions" },
+            { "value": "care", "label": "Champ méta : Entretien" },
+            { "value": "size_guide", "label": "Champ méta : Guide des tailles" },
             { "value": "box", "label": "Champ méta : Contenu du colis" },
             { "value": "safety_info", "label": "Champ méta : Informations sécurité (fabricant)" },
             { "value": "shipping", "label": "Livraison et retours (paramètres du thème)" },
@@ -1113,6 +1450,14 @@
           "id": "content",
           "label": "Texte personnalisé",
           "visible_if": "{{ block.settings.source == 'custom' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_returns_offer",
+          "label": "Afficher l'offre de retour des Paramètres du thème",
+          "info": "Décochez si elle ne s'applique pas à ce produit (articles d'hygiène, par exemple).",
+          "default": true,
+          "visible_if": "{{ block.settings.source == 'shipping' }}"
         },
         {
           "type": "checkbox",

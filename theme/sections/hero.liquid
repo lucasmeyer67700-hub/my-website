@@ -537,8 +537,15 @@
 
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
     overflow: hidden;
     isolation: isolate;
+
+    /* Phones: photo and text fill the first screen (computers: see below). */
+    @media screen and (max-width: 749px) {
+      min-height: var(--hero-h);
+    }
   }
 
   .hero__photo {
@@ -601,7 +608,7 @@
 
   .hero--photo .hero__trust {
     gap: var(--space-2xs) var(--space-md);
-    border-block-start-color: var(--gold-hairline);
+    border-block-start-color: var(--warm-hairline);
 
     @media screen and (max-width: 749px) {
       display: none;
@@ -721,7 +728,7 @@
 
   .hero--pink .hero__trust {
     gap: var(--space-2xs) var(--space-md);
-    border-block-start-color: var(--gold-hairline);
+    border-block-start-color: var(--warm-hairline);
 
     /* On phones the announcement bar already carries these reassurances. */
     @media screen and (max-width: 749px) {
@@ -752,14 +759,14 @@
       width: min(100%, 31rem);
     }
 
-    /* Fine gold arch, offset behind the visual */
+    /* Fine warm-brown arch, offset behind the visual */
     &::before {
       content: '';
       position: absolute;
       inset: 0;
       z-index: -1;
       translate: -0.9rem 0.9rem;
-      border: 1px solid rgb(var(--gold-rgb) / 0.75);
+      border: 1px solid rgb(var(--warm-rgb) / 0.75);
       border-radius: var(--arch-radius);
       pointer-events: none;
     }
@@ -780,7 +787,7 @@
     object-fit: cover;
   }
 
-  /* Without a photo: one glossy drop above two gold ripples */
+  /* Without a photo: one glossy drop above two warm ripples */
   .hero__arch-art {
     position: absolute;
     inset: 0;
@@ -801,7 +808,7 @@
       linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
     box-shadow:
       inset -2px 2px 0 rgb(255 255 255 / 0.6),
-      inset 0 0 0 1px rgb(var(--gold-rgb) / 0.5),
+      inset 0 0 0 1px rgb(var(--warm-rgb) / 0.5),
       0 26px 40px -22px rgb(160 90 105 / 0.55);
   }
 
@@ -812,13 +819,13 @@
     width: 44%;
     aspect-ratio: 4 / 1;
     translate: -50% -50%;
-    border: 1px solid rgb(var(--gold-rgb) / 0.6);
+    border: 1px solid rgb(var(--warm-rgb) / 0.6);
     border-radius: 50%;
   }
 
   .hero__arch-ripple--outer {
     width: 70%;
-    border-color: rgb(var(--gold-rgb) / 0.3);
+    border-color: rgb(var(--warm-rgb) / 0.3);
   }
 
   /* ------------------------------------------------------------------ */
