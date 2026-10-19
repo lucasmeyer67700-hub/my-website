@@ -1,7 +1,8 @@
 {% doc %}
   Real customer reviews shown one at a time next to the buy button, with the
   average rating and a link to all reviews. Built only from the product's
-  "Avis clientes" (custom.avis) entries; renders nothing when there is none
+  "Avis clientes" (custom.avis) entries, or else from the reviews of another
+  site (custom.avis_externes), named with their source; renders nothing when there is none
   (a hint shows in the theme editor). The reviews are stacked in one grid cell
   so the box keeps the height of the longest one: no jump in the buy area.
 
@@ -16,17 +17,26 @@
   {% render 'review-highlight', product: product, heading: block.settings.heading %}
 {% enddoc %}
 {%- liquid
-  assign review_count = product.metafields.custom.avis.value.size | default: 0
+  assign reviews_key = 'avis'
+  assign own_count = product.metafields.custom.avis.value.size | default: 0
+  if own_count == 0
+    assign reviews_key = 'avis_externes'
+  endif
+  assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
   assign max_items = limit | default: 5
   assign reviews_link = link | append: '#avis'
 -%}
 {%- if review_count > 0 -%}
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
-  {%- paginate product.metafields.custom.avis.value by 250 -%}
+  {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
     {%- liquid
       assign rating_sum = 0
-      for review in product.metafields.custom.avis.value
+      assign source_name = ''
+      for review in product.metafields.custom[reviews_key].value
         assign rating_sum = rating_sum | plus: review.note.value.rating
+        if source_name == blank and review.source.value != blank
+          assign source_name = review.source.value | strip | escape
+        endif
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       assign average_x10 = average | times: 10 | round
@@ -37,17 +47,26 @@
     -%}
     <review-rotator class="review-highlight" data-interval="{{ interval | default: 6 }}" {{ attributes }}>
       <div class="review-highlight__head">
-        {%- if heading != blank -%}
+        {%- if source_name != blank -%}
+          <p class="review-highlight__heading">{{ 'reviews.source_heading' | t: source: source_name }}</p>
+        {%- elsif heading != blank -%}
           <p class="review-highlight__heading">{{ heading | escape }}</p>
         {%- endif -%}
         <a class="review-highlight__summary" href="{{ reviews_link }}">
           {% render 'stars', rating: average %}
-          <span>{{ average_text }}/5 · {{ 'reviews.see_all' | t: count: review_count }}</span>
+          <span>
+            {{- average_text }}/5 ·
+            {% if source_name != blank -%}
+              {{- 'reviews.see_all_source' | t: count: review_count, source: source_name -}}
+            {%- else -%}
+              {{- 'reviews.see_all' | t: count: review_count -}}
+            {%- endif -%}
+          </span>
         </a>
       </div>
 
       <ul class="review-highlight__list" role="list" aria-live="off" data-review-list>
-        {%- for review in product.metafields.custom.avis.value -%}
+        {%- for review in product.metafields.custom[reviews_key].value -%}
           {%- if review.texte.value == blank -%}{%- continue -%}{%- endif -%}
           {%- if shown >= max_items -%}{%- break -%}{%- endif -%}
           {%- assign shown = shown | plus: 1 -%}
@@ -65,7 +84,9 @@
               </blockquote>
               <figcaption class="review-highlight__author">
                 <strong>{{ review.auteur.value | escape }}</strong>
-                {%- if review.achat_verifie.value -%}
+                {%- if review.source.value != blank -%}
+                  <span class="review-source">{{ 'reviews.source_badge' | t: source: review.source.value | escape }}</span>
+                {%- elsif review.achat_verifie.value -%}
                   <span class="review-highlight__verified">
                     {%- render 'icon', icon: 'check' -%}
                     {{- 'reviews.verified' | t -}}

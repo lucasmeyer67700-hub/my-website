@@ -237,6 +237,18 @@
     "marquee_pause": "Mettre en pause le défilement des avis",
     "band_heading": "Elles en parlent",
     "highlight_editor_empty": "Avis près de l'achat : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes).",
-    "band_editor_empty": "Avis défilants : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes)."
+    "band_editor_empty": "Avis défilants : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes).",
+    "source_badge": "Avis {{ source }}",
+    "count_short_source": {
+      "one": "({{ count }} avis {{ source }})",
+      "other": "({{ count }} avis {{ source }})"
+    },
+    "see_all_source": {
+      "one": "Voir l'avis {{ source }}",
+      "other": "Voir les {{ count }} avis {{ source }}"
+    },
+    "source_heading": "Avis publiés sur {{ source }}",
+    "source_note": "Avis publiés sur {{ source }} par des acheteurs de ce modèle, sélectionnés par nos soins. Ils ne proviennent pas de commandes passées sur notre boutique.",
+    "source_about_html": "<p>Ces avis ont été publiés sur {{ source }} par des acheteurs de ce même modèle de ceinture. Nous les avons sélectionnés et les reproduisons sans modification. Ils ne proviennent pas de commandes passées sur notre boutique : ils ne portent donc pas la mention « Évaluation vérifiée ». Les avis de nos clientes les remplaceront dès qu'ils seront publiés.</p>"
   }
 }

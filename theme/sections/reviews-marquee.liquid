@@ -4,23 +4,33 @@
   pauses on hover, on keyboard focus and with its pause button, and stays still
   for visitors who reduce motion (they can swipe it instead). Under four
   reviews, the cards simply sit side by side. Built only from the product's
-  "Avis clientes" (custom.avis) entries: no review, no section.
+  "Avis clientes" (custom.avis) entries, or else from the reviews of another
+  site (custom.avis_externes), named with their source: no review, no section.
 {%- endcomment -%}
 {%- liquid
   assign product = section.settings.product
   assign review_count = 0
+  assign reviews_key = 'avis'
   if product != blank
-    assign review_count = product.metafields.custom.avis.value.size | default: 0
+    assign own_count = product.metafields.custom.avis.value.size | default: 0
+    if own_count == 0
+      assign reviews_key = 'avis_externes'
+    endif
+    assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
   endif
 -%}
 
 {%- if review_count > 0 -%}
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
-  {%- paginate product.metafields.custom.avis.value by 250 -%}
+  {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
     {%- liquid
       assign rating_sum = 0
-      for review in product.metafields.custom.avis.value
+      assign source_name = ''
+      for review in product.metafields.custom[reviews_key].value
         assign rating_sum = rating_sum | plus: review.note.value.rating
+        if source_name == blank and review.source.value != blank
+          assign source_name = review.source.value | strip | escape
+        endif
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       assign average_x10 = average | times: 10 | round
@@ -30,7 +40,7 @@
       assign shown = 0
     -%}
     {%- capture cards -%}
-      {%- for review in product.metafields.custom.avis.value -%}
+      {%- for review in product.metafields.custom[reviews_key].value -%}
         {%- if review.texte.value == blank -%}{%- continue -%}{%- endif -%}
         {%- if shown >= section.settings.limit -%}{%- break -%}{%- endif -%}
         {%- assign shown = shown | plus: 1 -%}
@@ -58,7 +68,9 @@
             </blockquote>
             <figcaption class="review-tile__author">
               <strong>{{ review.auteur.value | escape }}</strong>
-              {%- if review.achat_verifie.value -%}
+              {%- if review.source.value != blank -%}
+                <span class="review-source">{{ 'reviews.source_badge' | t: source: review.source.value | escape }}</span>
+              {%- elsif review.achat_verifie.value -%}
                 <span class="review-tile__verified">
                   {%- render 'icon', icon: 'check' -%}
                   {{- 'reviews.verified' | t -}}
@@ -106,8 +118,18 @@
           </h2>
           <a class="reviews-band__summary" href="{{ product.url }}#avis">
             {% render 'stars', rating: average %}
-            <span>{{ average_text }}/5 · {{ 'reviews.see_all' | t: count: review_count }}</span>
+            <span>
+              {{- average_text }}/5 ·
+              {% if source_name != blank -%}
+                {{- 'reviews.see_all_source' | t: count: review_count, source: source_name -}}
+              {%- else -%}
+                {{- 'reviews.see_all' | t: count: review_count -}}
+              {%- endif -%}
+            </span>
           </a>
+          {%- if source_name != blank -%}
+            <p class="reviews-band__note">{{ 'reviews.source_note' | t: source: source_name }}</p>
+          {%- endif -%}
         </div>
       </div>
 
@@ -159,6 +181,14 @@
 {% stylesheet %}
   .reviews-band {
     overflow: hidden;
+  }
+
+  .reviews-band__note {
+    max-width: 34rem;
+    margin: var(--space-2xs) auto 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
   }
 
   .reviews-band__summary {

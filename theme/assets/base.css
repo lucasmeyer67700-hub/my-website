@@ -1491,3 +1491,16 @@ body:has(dialog[open]) {
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
+
+/* Reviews published on another site: named with their source, never marked as verified. */
+.review-source {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}

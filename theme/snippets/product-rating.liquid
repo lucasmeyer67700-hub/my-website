@@ -2,8 +2,9 @@
   Social proof under the product banner: the first reviewers and the
   average rating with the number of reviews, linking to the reviews
   section. Built only from real data: the product's "Avis clientes"
-  (custom.avis) entries, or the standard rating fields filled by a review
-  app. Renders nothing when there is no review.
+  (custom.avis) entries; without them, the reviews from another site
+  (custom.avis_externes), always named with their source; or the standard
+  rating fields filled by a review app. Renders nothing when there is no review.
 
   @param {object} product - Product object
   @param {string} [anchor] - Id of the reviews section to link to
@@ -13,16 +14,25 @@
   {% render 'product-rating', product: product, anchor: 'avis' %}
 {% enddoc %}
 {%- liquid
-  assign review_count = product.metafields.custom.avis.value.size | default: 0
+  assign reviews_key = 'avis'
+  assign own_count = product.metafields.custom.avis.value.size | default: 0
+  if own_count == 0
+    assign reviews_key = 'avis_externes'
+  endif
+  assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
   assign link = url | append: '#' | append: anchor
 -%}
 {%- if review_count > 0 -%}
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
-  {%- paginate product.metafields.custom.avis.value by 250 -%}
+  {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
     {%- liquid
       assign rating_sum = 0
-      for review in product.metafields.custom.avis.value
+      assign source_name = ''
+      for review in product.metafields.custom[reviews_key].value
         assign rating_sum = rating_sum | plus: review.note.value.rating
+        if source_name == blank and review.source.value != blank
+          assign source_name = review.source.value | strip | escape
+        endif
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       assign average_text_x10 = average | times: 10 | round
@@ -31,18 +41,20 @@
       assign average_text = average_text_int | append: ',' | append: average_text_dec
     -%}
     <div class="product-rating">
+      {%- comment -%} "… ont donné leur avis" speaks of shop customers: not for reviews from another site. {%- endcomment -%}
+      {%- if source_name == blank -%}
       <p class="product-rating__proof">
         <span class="product-rating__avatars" aria-hidden="true">
-          {%- for review in product.metafields.custom.avis.value limit: 3 -%}
+          {%- for review in product.metafields.custom[reviews_key].value limit: 3 -%}
             <span class="product-rating__avatar product-rating__avatar--{{ forloop.index }}">
               {{- review.auteur.value | strip | slice: 0 | upcase -}}
             </span>
           {%- endfor -%}
         </span>
-        {%- for review in product.metafields.custom.avis.value limit: 1 -%}
+        {%- for review in product.metafields.custom[reviews_key].value limit: 1 -%}
           <span>
             <strong>{{ review.auteur.value | escape }}</strong>
-            {%- if review.achat_verifie.value -%}
+            {%- if review.achat_verifie.value and review.source.value == blank -%}
               <span class="product-rating__verified">
                 {%- render 'icon', icon: 'check' -%}
                 <span class="visually-hidden">{{ 'reviews.verified' | t }}</span>
@@ -57,9 +69,17 @@
           </span>
         {%- endfor -%}
       </p>
+      {%- endif -%}
       <a class="product-rating__summary" href="{{ link }}">
         {% render 'stars', rating: average %}
-        <span>{{ average_text }}/5 {{ 'reviews.count_short' | t: count: review_count }}</span>
+        <span>
+          {{- average_text }}/5
+          {% if source_name != blank -%}
+            {{- 'reviews.count_short_source' | t: count: review_count, source: source_name -}}
+          {%- else -%}
+            {{- 'reviews.count_short' | t: count: review_count -}}
+          {%- endif -%}
+        </span>
       </a>
     </div>
   {%- endpaginate -%}

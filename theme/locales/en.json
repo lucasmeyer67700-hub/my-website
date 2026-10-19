@@ -237,6 +237,18 @@
     "marquee_pause": "Pause the scrolling reviews",
     "band_heading": "What customers say",
     "highlight_editor_empty": "Reviews near the buy button: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
-    "band_editor_empty": "Scrolling reviews: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes)."
+    "band_editor_empty": "Scrolling reviews: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
+    "source_badge": "{{ source }} review",
+    "count_short_source": {
+      "one": "({{ count }} {{ source }} review)",
+      "other": "({{ count }} {{ source }} reviews)"
+    },
+    "see_all_source": {
+      "one": "See the {{ source }} review",
+      "other": "See the {{ count }} {{ source }} reviews"
+    },
+    "source_heading": "Reviews published on {{ source }}",
+    "source_note": "Reviews published on {{ source }} by buyers of this model, selected by us. They do not come from orders placed in our shop.",
+    "source_about_html": "<p>These reviews were published on {{ source }} by buyers of this same belt model. We selected them and reproduce them unchanged. They do not come from orders placed in our shop, so they are not marked as verified. Reviews from our own customers will replace them as soon as they are published.</p>"
   }
 }

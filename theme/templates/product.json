@@ -74,10 +74,6 @@
             "show_returns_offer": true
           }
         },
-        "notice": {
-          "type": "notice",
-          "settings": {}
-        },
         "guarantee": {
           "type": "guarantee",
           "settings": {
@@ -135,8 +131,7 @@
         "specs",
         "usage",
         "box",
-        "safety",
-        "notice"
+        "safety"
       ],
       "settings": {
         "banner": "",

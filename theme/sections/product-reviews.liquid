@@ -1,7 +1,9 @@
 {%- comment -%}
   Customer reviews of the product, from its "Avis clientes" entries
   (custom.avis metaobjects): average, star breakdown, filters, customer
-  photos, sorting and the list. Authentic reviews only. Without reviews the
+  photos, sorting and the list. Authentic reviews only. Without them, the
+  reviews published on another site (custom.avis_externes) are shown instead,
+  each one named with its source and never marked as verified. Without reviews the
   section stays invisible for visitors (a notice shows in the theme editor).
   Review apps can be added as app blocks.
 {%- endcomment -%}
@@ -10,8 +12,13 @@
     custom.avis can hold up to 250 reviews (list.max): one paginate page
     covers them all. Without paginate, Liquid would only loop over 50.
   endcomment
+  assign reviews_key = 'avis'
+  assign own_count = product.metafields.custom.avis.value.size | default: 0
+  if own_count == 0
+    assign reviews_key = 'avis_externes'
+  endif
   assign has_reviews = false
-  if product.metafields.custom.avis.value.size > 0
+  if product.metafields.custom[reviews_key].value.size > 0
     assign has_reviews = true
   endif
   assign has_app_reviews = false
@@ -23,7 +30,7 @@
 -%}
 
 {%- if has_reviews -%}
-  {%- paginate product.metafields.custom.avis.value by 250 -%}
+  {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
     {%- liquid
       assign review_count = 0
       assign rating_sum = 0
@@ -36,14 +43,19 @@
       assign c1 = 0
       assign color_handles = '|'
       assign color_labels = ''
-      for review in product.metafields.custom.avis.value
+      assign source_name = ''
+      for review in product.metafields.custom[reviews_key].value
         assign review_count = review_count | plus: 1
         comment
           A 4.5/5 counts as a 4-star review: a rating is never moved up.
         endcomment
         assign note = review.note.value.rating | floor
         assign rating_sum = rating_sum | plus: review.note.value.rating
-        if review.achat_verifie.value
+        if review.source.value != blank
+          if source_name == blank
+            assign source_name = review.source.value | strip | escape
+          endif
+        elsif review.achat_verifie.value
           assign verified_count = verified_count | plus: 1
         endif
         if review.photo.value != blank
@@ -106,6 +118,12 @@
               {{ 'reviews.some_verified' | t: count: verified_count }}
             {%- endif -%}
           </span>
+        {%- endif -%}
+        {%- if source_name != blank -%}
+          <p class="reviews__source">
+            {%- render 'icon', icon: 'info' -%}
+            <span>{{ 'reviews.source_note' | t: source: source_name }}</span>
+          </p>
         {%- endif -%}
       </div>
 
@@ -181,7 +199,7 @@
           {%- liquid
             assign color_label = color_label_list[forloop.index0]
             assign color_total = 0
-            for review in product.metafields.custom.avis.value
+            for review in product.metafields.custom[reviews_key].value
               assign review_color = review.coloris.value | strip | handle
               if review_color == color_handle
                 assign color_total = color_total | plus: 1
@@ -197,7 +215,7 @@
             assign keyword = line | strip | downcase
             assign keyword_total = 0
             if keyword != blank
-              for review in product.metafields.custom.avis.value
+              for review in product.metafields.custom[reviews_key].value
                 assign haystack = review.texte.value | append: ' ' | append: review.titre.value | downcase
                 if haystack contains keyword
                   assign keyword_total = keyword_total | plus: 1
@@ -216,7 +234,7 @@
       {%- if photo_count > 0 -%}
         <ul class="reviews__photos" role="list">
           {%- assign shown_photos = 0 -%}
-          {%- for review in product.metafields.custom.avis.value -%}
+          {%- for review in product.metafields.custom[reviews_key].value -%}
             {%- if review.photo.value != blank and shown_photos < 6 -%}
               {%- assign shown_photos = shown_photos | plus: 1 -%}
               <li>
@@ -266,7 +284,7 @@
       </div>
 
       <ul class="reviews__list" role="list" data-reviews-list>
-        {%- for review in product.metafields.custom.avis.value -%}
+        {%- for review in product.metafields.custom[reviews_key].value -%}
           {%- liquid
             assign review_note = review.note.value.rating
             assign review_color = review.coloris.value | strip
@@ -279,7 +297,7 @@
             data-rating="{{ review_note | floor }}"
             data-date="{{ review.date.value | date: '%Y%m%d' }}"
             data-photo="{% if review.photo.value != blank %}1{% else %}0{% endif %}"
-            data-verified="{% if review.achat_verifie.value %}1{% else %}0{% endif %}"
+            data-verified="{% if review.achat_verifie.value and review.source.value == blank %}1{% else %}0{% endif %}"
             data-color="{{ review_color | handle }}"
             data-text="{{ review_text | escape }}"
             {% if forloop.index > page_size %}
@@ -304,7 +322,9 @@
               {%- endif -%}
               <p class="review__footer">
                 <span class="review__author">{{ review.auteur.value | escape }}</span>
-                {%- if review.achat_verifie.value -%}
+                {%- if review.source.value != blank -%}
+                  <span class="review-source">{{ 'reviews.source_badge' | t: source: review.source.value | escape }}</span>
+                {%- elsif review.achat_verifie.value -%}
                   <span class="review__verified">{% render 'icon', icon: 'check' %}{{ 'reviews.verified' | t }}</span>
                 {%- endif -%}
                 <span class="review__sep" aria-hidden="true">|</span>
@@ -331,7 +351,12 @@
         {{ 'reviews.more' | t }}
       </button>
 
-      {%- if section.settings.about != blank -%}
+      {%- if source_name != blank -%}
+        <details class="reviews__about">
+          <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
+          <div class="rte">{{ 'reviews.source_about_html' | t: source: source_name }}</div>
+        </details>
+      {%- elsif section.settings.about != blank -%}
         <details class="reviews__about">
           <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
           <div class="rte">{{ section.settings.about }}</div>
@@ -354,7 +379,7 @@
 
       {%- comment -%} Large photos for the lightbox, loaded only when opened. {%- endcomment -%}
       <template data-reviews-photos>
-        {%- for review in product.metafields.custom.avis.value -%}
+        {%- for review in product.metafields.custom[reviews_key].value -%}
           {%- if review.photo.value != blank -%}
             <img
               data-for="{{ forloop.index }}"
@@ -404,6 +429,23 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs) var(--space-sm);
+  }
+
+  .reviews__source {
+    display: flex;
+    flex-basis: 100%;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 1rem;
+      flex: none;
+      margin-block-start: 0.15em;
+    }
   }
 
   .reviews__title {

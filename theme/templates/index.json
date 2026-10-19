@@ -177,7 +177,7 @@
         "gallery_ratio": "1",
         "gallery_fit": "cover",
         "anchor": "offre",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-2"
       }
     },
     "videos": {
@@ -187,7 +187,8 @@
           "type": "video",
           "settings": {
             "title": "",
-            "text": ""
+            "text": "",
+            "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
           }
         },
         "video-2": {
