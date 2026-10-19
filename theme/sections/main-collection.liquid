@@ -18,12 +18,16 @@
       {%- liquid
         comment
           Free catalogue slots are filled with "coming soon" cards, on the first
-          page only, until real products take their place.
+          page only, until real products take their place. A card also steps
+          aside as soon as its own product is on sale (picked in the block, or a
+          product whose name contains the card's title).
         endcomment
         assign free_slots = 0
         if paginate.current_page == 1
           assign free_slots = slots | minus: collection.products_count | at_least: 0
         endif
+        assign live_titles = collection.products | map: 'title' | join: ' | ' | downcase
+        assign live_handles = collection.products | map: 'handle'
       -%}
       {%- if collection.products.size > 0 or free_slots > 0 -%}
         <ul class="product-grid product-grid--catalogue" role="list">
@@ -31,7 +35,20 @@
             <li class="reveal">{% render 'product-card', product: product, heading_tag: 'h2' %}</li>
           {%- endfor -%}
           {%- if free_slots > 0 -%}
-            {%- for block in soon_blocks limit: free_slots -%}
+            {%- assign soon_shown = 0 -%}
+            {%- for block in soon_blocks -%}
+              {%- if soon_shown >= free_slots -%}{%- break -%}{%- endif -%}
+              {%- liquid
+                assign soon_live = false
+                assign soon_title = block.settings.title | downcase | strip
+                if block.settings.product != blank and live_handles contains block.settings.product.handle
+                  assign soon_live = true
+                elsif soon_title != blank and live_titles contains soon_title
+                  assign soon_live = true
+                endif
+              -%}
+              {%- if soon_live -%}{%- continue -%}{%- endif -%}
+              {%- assign soon_shown = soon_shown | plus: 1 -%}
               <li class="reveal">
                 {% render 'product-card-placeholder',
                   title: block.settings.title,
@@ -117,6 +134,12 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image teaser (facultative)"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Produit correspondant (facultatif)",
+          "info": "Dès que ce produit est en vente dans le catalogue, la carte « Bientôt » disparaît d'elle-même. Même chose si un produit du catalogue porte le titre de la carte."
         }
       ]
     }

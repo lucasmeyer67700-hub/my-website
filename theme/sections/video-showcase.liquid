@@ -1,0 +1,400 @@
+{%- comment -%}
+  Two (up to three) videos that explain the product, side by side on large
+  screens and swipeable on phones. Videos come from Content > Files. A slot
+  without a video only shows in the theme editor, never to visitors; without
+  any video the section stays hidden.
+{%- endcomment -%}
+{%- liquid
+  assign ratio = section.settings.ratio
+  assign filled = 0
+  for block in section.blocks
+    if block.settings.video != blank
+      assign filled = filled | plus: 1
+    endif
+  endfor
+  assign visible = filled
+  if request.design_mode
+    assign visible = section.blocks.size
+  endif
+  assign columns = visible | at_most: 3 | at_least: 1
+  assign anchor = section.settings.anchor | handleize
+-%}
+
+{%- if visible > 0 -%}
+  <section
+    class="video-showcase section color-{{ section.settings.color_scheme }}"
+    {% if anchor != blank %}
+      id="{{ anchor }}"
+    {% endif %}
+    {% if section.settings.heading != blank %}
+      aria-labelledby="VideoShowcaseTitle-{{ section.id }}"
+    {% endif %}
+  >
+    <div class="page-width">
+      {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+        <div class="section-header section-header--center reveal">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2" id="VideoShowcaseTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <p class="lead">{{ section.settings.text | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <ul
+        class="video-showcase__list video-showcase__list--{% if ratio == '16 / 9' %}landscape{% else %}portrait{% endif %}"
+        role="list"
+        style="--video-ratio: {{ ratio }}; --video-columns: {{ columns }};"
+      >
+        {%- for block in section.blocks -%}
+          {%- assign video = block.settings.video -%}
+          {%- if video == blank and request.design_mode == false -%}{%- continue -%}{%- endif -%}
+          <li class="video-showcase__item reveal" {{ block.shopify_attributes }}>
+            <figure class="video-showcase__card">
+              <div class="video-showcase__frame">
+                {%- if video != blank -%}
+                  {%- if section.settings.autoplay -%}
+                    <video-player class="video-showcase__player">
+                      {{
+                        video
+                        | video_tag:
+                          autoplay: true,
+                          loop: true,
+                          muted: true,
+                          controls: false,
+                          playsinline: true,
+                          preload: 'metadata',
+                          image_size: '900x',
+                          class: 'video-showcase__video'
+                      }}
+                      <div class="video-showcase__controls">
+                        <button
+                          type="button"
+                          class="icon-button video-showcase__control"
+                          data-video-toggle
+                          aria-pressed="false"
+                          aria-label="{{ 'sections.video_pause' | t }}"
+                        >
+                          <span class="video-showcase__icon video-showcase__icon--pause">{% render 'icon', icon: 'pause' %}</span>
+                          <span class="video-showcase__icon video-showcase__icon--play">{% render 'icon', icon: 'play' %}</span>
+                        </button>
+                        <button
+                          type="button"
+                          class="icon-button video-showcase__control"
+                          data-video-sound
+                          aria-pressed="false"
+                          aria-label="{{ 'sections.video_sound' | t }}"
+                        >
+                          <span class="video-showcase__icon video-showcase__icon--muted">{% render 'icon', icon: 'volume-off' %}</span>
+                          <span class="video-showcase__icon video-showcase__icon--sound">{% render 'icon', icon: 'volume' %}</span>
+                        </button>
+                      </div>
+                    </video-player>
+                  {%- else -%}
+                    {{
+                      video
+                      | video_tag:
+                        controls: true,
+                        playsinline: true,
+                        preload: 'none',
+                        image_size: '900x',
+                        class: 'video-showcase__video'
+                    }}
+                  {%- endif -%}
+                {%- else -%}
+                  <div class="video-showcase__empty">
+                    <span class="video-showcase__empty-icon" aria-hidden="true">{% render 'icon', icon: 'play' %}</span>
+                    <p>{{ 'sections.video_slot_hint' | t: number: forloop.index }}</p>
+                  </div>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.title != blank or block.settings.text != blank -%}
+                <figcaption class="video-showcase__caption">
+                  {%- if block.settings.title != blank -%}
+                    <span class="video-showcase__title">{{ block.settings.title | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="video-showcase__text">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </figcaption>
+              {%- endif -%}
+            </figure>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <div class="video-showcase__actions reveal">
+          <a class="button" href="{{ section.settings.button_link }}">
+            {{- section.settings.button_label | escape -}}
+            {% render 'icon', icon: 'arrow-right' %}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  /* Phones: one video at a time, swipe to see the next one */
+  .video-showcase__list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(14rem, 78%);
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0 0 var(--space-2xs);
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+
+    @media screen and (min-width: 750px) {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(var(--video-columns, 2), minmax(0, 1fr));
+      gap: clamp(1.25rem, 3vw, 2.5rem);
+      overflow: visible;
+    }
+  }
+
+  /* Upright videos stay at a comfortable size side by side */
+  .video-showcase__list--portrait {
+    @media screen and (min-width: 750px) {
+      max-width: calc(var(--video-columns, 2) * 22rem + (var(--video-columns, 2) - 1) * 2.5rem);
+      margin-inline: auto;
+    }
+  }
+
+  .video-showcase__list--landscape {
+    @media screen and (max-width: 749px) {
+      grid-auto-columns: 88%;
+    }
+  }
+
+  .video-showcase__item {
+    min-width: 0;
+    scroll-snap-align: center;
+  }
+
+  .video-showcase__card {
+    display: grid;
+    gap: var(--space-sm);
+    margin: 0;
+  }
+
+  .video-showcase__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--video-ratio, 9 / 16);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--warm-hairline), 0 24px 48px -32px rgb(73 53 47 / 0.45);
+  }
+
+  .video-showcase__player {
+    display: block;
+    height: 100%;
+  }
+
+  .video-showcase__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: var(--color-surface);
+  }
+
+  .video-showcase__controls {
+    position: absolute;
+    inset-inline-end: var(--space-xs);
+    inset-block-end: var(--space-xs);
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .video-showcase__control {
+    color: var(--palette-brown-deep);
+    background-color: rgb(255 255 255 / 0.88);
+    box-shadow: 0 4px 14px -6px rgb(73 53 47 / 0.45);
+    backdrop-filter: blur(6px);
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+  }
+
+  .video-showcase__icon {
+    display: inline-flex;
+  }
+
+  .video-showcase__icon--play,
+  .video-showcase__icon--sound,
+  [data-video-toggle][aria-pressed='true'] .video-showcase__icon--pause,
+  [data-video-sound][aria-pressed='true'] .video-showcase__icon--muted {
+    display: none;
+  }
+
+  [data-video-toggle][aria-pressed='true'] .video-showcase__icon--play,
+  [data-video-sound][aria-pressed='true'] .video-showcase__icon--sound {
+    display: inline-flex;
+  }
+
+  /* Empty slot (theme editor only) */
+  .video-showcase__empty {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-sm);
+    height: 100%;
+    padding: var(--space-md);
+    border: 1px dashed var(--warm-hairline);
+    border-radius: inherit;
+    font-size: var(--text-sm);
+    text-align: center;
+    color: var(--color-text-muted);
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 0.85), transparent 70%),
+      var(--palette-rose-light);
+  }
+
+  .video-showcase__empty-icon {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    color: var(--warm-text);
+    background-color: #fff;
+    box-shadow: 0 0 0 1px var(--warm-hairline);
+  }
+
+  .video-showcase__caption {
+    display: grid;
+    gap: 0.2rem;
+    text-align: center;
+  }
+
+  .video-showcase__title {
+    font-family: var(--font-heading-family);
+    font-size: var(--text-xl);
+    line-height: var(--line-height-heading);
+  }
+
+  .video-showcase__text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .video-showcase__actions {
+    display: flex;
+    justify-content: center;
+    margin-block-start: clamp(1.75rem, 1.4rem + 1.5vw, 2.75rem);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Vidéos du produit",
+  "tag": "div",
+  "class": "section-video-showcase",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Ajoutez vos vidéos (Contenu > Fichiers) dans chaque bloc « Vidéo ». Un emplacement sans vidéo n'apparaît que dans l'éditeur ; sans aucune vidéo, la section reste masquée."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "En vidéo"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "La ceinture, <em>en images.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Format des vidéos",
+      "options": [
+        { "value": "9 / 16", "label": "Vertical (9:16)" },
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "1", "label": "Carré" },
+        { "value": "16 / 9", "label": "Horizontal (16:9)" }
+      ],
+      "default": "9 / 16"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Lecture automatique, sans le son",
+      "info": "Avec boutons pause et son. Décochez pour une lecture au clic, avec les commandes du navigateur.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "default": "videos"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Vidéo",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Vidéo"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre (facultatif)"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Légende (facultative)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vidéos du produit",
+      "blocks": [{ "type": "video" }, { "type": "video" }]
+    }
+  ]
+}
+{% endschema %}

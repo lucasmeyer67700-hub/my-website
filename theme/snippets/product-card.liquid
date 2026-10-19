@@ -13,11 +13,11 @@
 {%- liquid
   assign tag = heading_tag | default: 'h3'
   assign image_sizes = sizes | default: '(min-width: 990px) 30vw, (min-width: 600px) 45vw, 90vw'
-  assign second_media = blank
+  assign second_media = ''
   if product.media.size > 1
     assign second_media = product.media[1]
   endif
-  assign color_option = blank
+  assign color_option = ''
   for option in product.options_with_values
     assign option_handle = option.name | handleize
     if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'

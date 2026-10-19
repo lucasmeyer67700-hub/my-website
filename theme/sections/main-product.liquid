@@ -20,43 +20,29 @@
 -%}
 
 <section class="product section section--compact color-{{ section.settings.color_scheme }}" data-product-section>
-  <div class="page-width product__grid">
-    <div class="product__media">
-      {% render 'product-gallery',
-        product: product,
-        fit: section.settings.gallery_fit,
-        ratio: section.settings.gallery_ratio,
-        overlays: section.blocks
-      %}
-    </div>
-
-    <div class="product__info" id="ProductInfo">
-      <div class="product__header">
-        {%- if section.settings.banner != blank -%}
-          <p class="product__banner">{{ section.settings.banner | escape }}</p>
-        {%- endif -%}
-        {% render 'product-rating', product: product, anchor: 'avis' %}
-        <h1 class="product__title">{{ product.title | escape }}</h1>
-        <div class="product__price-row">
-          {% render 'price', product: product, class: 'product__price' %}
-          {%- if section.settings.price_badge != blank -%}
-            <span class="product__badge">{{ section.settings.price_badge | escape }}</span>
-          {%- endif -%}
-        </div>
-        {%- comment -%} Pay in installments: shown only when Shopify offers it for the store. {%- endcomment -%}
-        {%- form 'product', product, id: installments_id, class: 'product__installments' -%}
-          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
-          {{ form | payment_terms }}
-        {%- endform -%}
-        {%- if tagline != blank -%}
-          <p class="product__tagline">{{ tagline | escape }}</p>
-        {%- endif -%}
-      </div>
-
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
+  {%- liquid
+    comment
+      Each block is built once, then placed: buying blocks in the right-hand
+      column, reading blocks (benefits, accordions, notice) under the photos on
+      large screens. Phones keep a single column: photos, buying, details.
+    endcomment
+    assign info_html = ''
+    assign details_html = ''
+  -%}
+  {%- for block in section.blocks -%}
+    {%- capture block_html -%}
+      {%- case block.type -%}
           {%- when '@app' -%}
             {% render block %}
+
+          {%- when 'reviews_highlight' -%}
+            {% render 'review-highlight',
+              product: product,
+              heading: block.settings.heading,
+              limit: block.settings.limit,
+              interval: block.settings.interval,
+              attributes: block.shopify_attributes
+            %}
 
           {%- when 'guarantee' -%}
             {%- liquid
@@ -405,9 +391,57 @@
                 <span>{{ settings.health_notice | escape }}</span>
               </p>
             {%- endif -%}
-        {%- endcase -%}
-      {%- endfor -%}
+      {%- endcase -%}
+    {%- endcapture -%}
+    {%- liquid
+      case block.type
+        when 'benefits', 'accordion', 'notice', 'points'
+          assign details_html = details_html | append: block_html
+        else
+          assign info_html = info_html | append: block_html
+      endcase
+    -%}
+  {%- endfor -%}
+
+  <div class="page-width product__grid{% if details_html != blank %} product__grid--details{% endif %}">
+    <div class="product__media">
+      {% render 'product-gallery',
+        product: product,
+        fit: section.settings.gallery_fit,
+        ratio: section.settings.gallery_ratio,
+        overlays: section.blocks
+      %}
     </div>
+
+    <div class="product__info" id="ProductInfo">
+      <div class="product__header">
+        {%- if section.settings.banner != blank -%}
+          <p class="product__banner">{{ section.settings.banner | escape }}</p>
+        {%- endif -%}
+        {% render 'product-rating', product: product, anchor: 'avis' %}
+        <h1 class="product__title">{{ product.title | escape }}</h1>
+        <div class="product__price-row">
+          {% render 'price', product: product, class: 'product__price' %}
+          {%- if section.settings.price_badge != blank -%}
+            <span class="product__badge">{{ section.settings.price_badge | escape }}</span>
+          {%- endif -%}
+        </div>
+        {%- comment -%} Pay in installments: shown only when Shopify offers it for the store. {%- endcomment -%}
+        {%- form 'product', product, id: installments_id, class: 'product__installments' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+          {{ form | payment_terms }}
+        {%- endform -%}
+        {%- if tagline != blank -%}
+          <p class="product__tagline">{{ tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {{ info_html }}
+    </div>
+
+    {%- if details_html != blank -%}
+      <div class="product__details">{{ details_html }}</div>
+    {%- endif -%}
   </div>
 
   {%- if section.settings.sticky_bar -%}
@@ -469,8 +503,31 @@
 
     @media screen and (min-width: 990px) {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: clamp(3rem, 5vw, 5.5rem);
+      gap: var(--space-xl) clamp(3rem, 5vw, 5.5rem);
       align-items: start;
+    }
+  }
+
+  /* Large screens: details fill the space under the photos, buying stays on the right */
+  .product__grid--details {
+    @media screen and (min-width: 990px) {
+      grid-template-areas:
+        'media info'
+        'details info';
+      grid-template-rows: auto 1fr;
+
+      & .product__media {
+        position: static;
+        grid-area: media;
+      }
+
+      & .product__info {
+        grid-area: info;
+      }
+
+      & .product__details {
+        grid-area: details;
+      }
     }
   }
 
@@ -481,6 +538,12 @@
       position: sticky;
       inset-block-start: calc(var(--header-height) + 1.5rem);
     }
+  }
+
+  .product__details {
+    display: grid;
+    gap: var(--space-sm);
+    min-width: 0;
   }
 
   .product__info {
@@ -513,39 +576,6 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-xs);
-  }
-
-  .product__price {
-    font-size: var(--text-xl);
-
-    & .price__current {
-      font-weight: var(--font-body-weight-bold);
-    }
-
-    & .price__compare {
-      order: -1;
-      font-weight: var(--font-body-weight);
-      color: var(--rose-text);
-    }
-  }
-
-  .product__badge {
-    padding: 0.25rem 0.55rem;
-    border-radius: var(--radius-xs);
-    font-size: 0.6875rem;
-    font-weight: var(--font-body-weight-medium);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--rose-text);
-    background-color: var(--rose-soft);
-    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
-  }
-
-  /* Shopify fills the payment terms itself (empty when not offered): no box of our own. */
-  .product__installments {
-    display: contents;
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
   }
 
   .product__tagline {
@@ -636,33 +666,6 @@
     box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08);
   }
 
-  /* Real availability of the selected variant */
-  .product-availability {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    font-size: var(--text-sm);
-    font-weight: var(--font-body-weight-medium);
-    color: var(--color-success);
-
-    &[data-state='unavailable'] {
-      color: var(--color-text-muted);
-    }
-  }
-
-  .product-availability__dot {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background-color: currentColor;
-    box-shadow: 0 0 0 3px rgb(43 101 69 / 0.14);
-
-    [data-state='unavailable'] & {
-      box-shadow: none;
-      opacity: 0.6;
-    }
-  }
-
   /* Practical benefits (2 or 3), under the buy area */
   .product-benefits {
     display: grid;
@@ -734,39 +737,6 @@
   .product__points {
     padding-block: var(--space-md);
     border-block: 1px solid var(--color-border);
-  }
-
-  .product-form__form {
-    display: grid;
-    gap: var(--space-sm);
-  }
-
-  .product-form__row {
-    display: flex;
-    gap: var(--space-xs);
-  }
-
-  .product-form__quantity .quantity {
-    height: 100%;
-    min-height: 3.25rem;
-  }
-
-  .product-form__submit {
-    flex: 1 1 auto;
-    min-height: 3.5rem;
-    font-size: var(--text-sm);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  .product-form__express:empty {
-    display: none;
-  }
-
-  .product-form__express .shopify-payment-button__button {
-    min-height: 3.25rem;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
   }
 
   .product__trust {
@@ -955,8 +925,8 @@
     {
       "type": "checkbox",
       "id": "sticky_bar",
-      "label": "Barre d'achat fixe sur mobile",
-      "info": "Apparaît une fois le bouton principal dépassé.",
+      "label": "Barre d'achat flottante",
+      "info": "Sur mobile et sur ordinateur, une fois le bouton principal dépassé.",
       "default": true
     },
     {
@@ -1204,6 +1174,42 @@
           "type": "text",
           "id": "text_3",
           "label": "Texte"
+        }
+      ]
+    },
+    {
+      "type": "reviews_highlight",
+      "name": "Avis près de l'achat",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Avis réels du champ méta « Avis clientes », un à la fois, sous le bouton d'achat. Invisible tant qu'aucun avis n'est publié."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Titre",
+          "default": "Ce qu'en disent nos clientes"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "Nombre d'avis",
+          "min": 2,
+          "max": 10,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "range",
+          "id": "interval",
+          "label": "Durée d'affichage de chaque avis",
+          "min": 4,
+          "max": 12,
+          "step": 1,
+          "unit": "s",
+          "default": 6
         }
       ]
     },

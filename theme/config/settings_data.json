@@ -91,15 +91,15 @@
       },
       "scheme-5": {
         "settings": {
-          "background": "#49352F",
-          "text": "#FCF9F7",
-          "text_muted": "#E3D3CC",
-          "accent": "#F3DADD",
-          "surface": "#57423B",
-          "border": "#6A544C",
-          "button": "#F3DADD",
-          "button_label": "#49352F",
-          "background_gradient": ""
+          "background": "#644438",
+          "background_gradient": "",
+          "text": "#fcf9f7",
+          "text_muted": "#e3d3cc",
+          "accent": "#D86396",
+          "surface": "#57423b",
+          "border": "#F4F0EE",
+          "button": "#D86396",
+          "button_label": "#49352f"
         }
       },
       "scheme-6": {

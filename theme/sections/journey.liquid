@@ -33,25 +33,44 @@
       </div>
     {%- endif -%}
 
-    <ol class="journey__steps" role="list">
+    {%- liquid
+      comment
+        Without any photo, the steps become a light timeline (icon, line, text)
+        instead of empty picture frames.
+      endcomment
+      assign has_images = false
+      for block in section.blocks
+        if block.settings.image != blank
+          assign has_images = true
+        endif
+      endfor
+    -%}
+    <ol class="journey__steps{% unless has_images %} journey__steps--timeline{% endunless %}" role="list">
       {%- for block in section.blocks -%}
         {%- assign step_image = block.settings.image -%}
         <li class="journey__step reveal" {{ block.shopify_attributes }}>
-          <div class="journey__media{% if step_image == blank %} journey__media--empty{% endif %}">
-            {%- if step_image != blank -%}
-              {% render 'responsive-image',
-                image: step_image,
-                sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 100vw',
-                widths: '360, 540, 720, 900, 1080',
-                class: 'journey__image'
-              %}
-            {%- else -%}
-              <span class="journey__art" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
-              {%- if request.design_mode -%}
-                <p class="journey__hint">{{ 'sections.journey_image_hint' | t }}</p>
+          {%- if has_images -%}
+            <div class="journey__media{% if step_image == blank %} journey__media--empty{% endif %}">
+              {%- if step_image != blank -%}
+                {% render 'responsive-image',
+                  image: step_image,
+                  sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 100vw',
+                  widths: '360, 540, 720, 900, 1080',
+                  class: 'journey__image'
+                %}
+              {%- else -%}
+                <span class="journey__art" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
+                {%- if request.design_mode -%}
+                  <p class="journey__hint">{{ 'sections.journey_image_hint' | t }}</p>
+                {%- endif -%}
               {%- endif -%}
-            {%- endif -%}
-          </div>
+            </div>
+          {%- else -%}
+            <div class="journey__marker" aria-hidden="true">
+              <span class="journey__art">{% render 'icon', icon: block.settings.icon %}</span>
+              {%- unless forloop.last -%}<span class="journey__line"></span>{%- endunless -%}
+            </div>
+          {%- endif -%}
           <div class="journey__body">
             <p class="journey__label">{{ 'sections.journey_step' | t: number: forloop.index }}</p>
             <h3 class="journey__title">{{ block.settings.title | escape }}</h3>
@@ -157,6 +176,48 @@
   .journey__body {
     display: grid;
     gap: var(--space-2xs);
+  }
+
+  /* Timeline (no photos yet): icon, a dotted line to the next step, then the text */
+  .journey__steps--timeline {
+    & .journey__step {
+      @media screen and (max-width: 749px) {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+        gap: var(--space-md);
+      }
+    }
+
+    & .journey__body {
+      @media screen and (min-width: 750px) {
+        padding-inline-end: var(--space-md);
+      }
+    }
+  }
+
+  .journey__marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+
+    @media screen and (max-width: 749px) {
+      flex-direction: column;
+      align-self: stretch;
+    }
+  }
+
+  .journey__line {
+    flex: 1 1 auto;
+    min-width: 2rem;
+    border-block-start: 1px dashed rgb(var(--warm-rgb) / 0.55);
+
+    @media screen and (max-width: 749px) {
+      min-width: 0;
+      min-height: 1.5rem;
+      border-block-start: 0;
+      border-inline-start: 1px dashed rgb(var(--warm-rgb) / 0.55);
+    }
   }
 
   .journey__label {

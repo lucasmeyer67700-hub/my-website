@@ -47,7 +47,9 @@
         "show_account": true,
         "color_scheme": "scheme-1",
         "full_width": true,
-        "wordmark_size": 38
+        "wordmark_size": 38,
+        "logo_mark": "shopify://shop_images/velea-monogramme.png",
+        "logo_mark_size": 44
       }
     }
   },

@@ -9,7 +9,7 @@
 
 <site-header
   class="site-header color-{{ section.settings.color_scheme }}"
-  style="--wordmark-size: {{ section.settings.wordmark_size | divided_by: 16.0 }}rem;"
+  style="--wordmark-size: {{ section.settings.wordmark_size | divided_by: 16.0 }}rem; --mark-size: {{ section.settings.logo_mark_size | divided_by: 16.0 }}rem;"
 >
   <div class="site-header__inner page-width{% if section.settings.full_width %} page-width--wide{% endif %}">
     <div class="site-header__start">
@@ -40,6 +40,28 @@
               loading: 'eager'
           }}
         {%- else -%}
+          {%- if section.settings.logo_mark != blank -%}
+            {%- liquid
+              comment
+                Decorative symbol next to the shop name (the name stays the link text).
+                Sharp on every screen: 1x, 2x and 3x versions of the set height.
+              endcomment
+              assign mark = section.settings.logo_mark
+              assign mark_height = section.settings.logo_mark_size
+              assign mark_width = mark_height | times: mark.aspect_ratio | round
+              assign mark_2x = mark_height | times: 2
+              assign mark_3x = mark_height | times: 3
+            -%}
+            <img
+              class="site-header__mark"
+              src="{{ mark | image_url: height: mark_2x }}"
+              srcset="{{ mark | image_url: height: mark_height }} 1x, {{ mark | image_url: height: mark_2x }} 2x, {{ mark | image_url: height: mark_3x }} 3x"
+              width="{{ mark_width }}"
+              height="{{ mark_height }}"
+              alt=""
+              fetchpriority="high"
+            >
+          {%- endif -%}
           <span class="site-header__wordmark">{{ shop.name }}</span>
         {%- endif -%}
       </a>
@@ -200,9 +222,20 @@
   .site-header__logo {
     display: inline-flex;
     align-items: center;
+    gap: clamp(0.4rem, 0.3rem + 0.4vw, 0.65rem);
     min-height: var(--tap-target);
     min-width: 0;
     text-decoration: none;
+  }
+
+  .site-header__mark {
+    flex: none;
+    width: auto;
+    height: max(2rem, calc(var(--mark-size, 2.75rem) * 0.82));
+
+    @media screen and (min-width: 990px) {
+      height: var(--mark-size, 2.75rem);
+    }
   }
 
   .site-header__logo-image {
@@ -376,6 +409,26 @@
       "label": "En-tête pleine largeur",
       "info": "Le logo se cale sur le bord gauche de l'écran, l'icône panier sur le bord droit.",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mark",
+      "label": "Symbole à côté du nom",
+      "info": "Image au fond transparent (PNG). Elle s'affiche à gauche du nom de la boutique."
+    },
+    {
+      "type": "range",
+      "id": "logo_mark_size",
+      "label": "Hauteur du symbole",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 44
     },
     {
       "type": "range",

@@ -125,7 +125,12 @@
     "blog_empty": "No articles yet.",
     "read_article": "Read article",
     "back_to_blog": "Back to the journal",
-    "published_on": "Published on {{ date }}"
+    "published_on": "Published on {{ date }}",
+    "not_found_eyebrow": "Error 404",
+    "not_found_search_placeholder": "Search for a product or a question…",
+    "not_found_catalogue": "See the catalogue",
+    "not_found_links": "Need help?",
+    "not_found_product": "Discover"
   },
   "password": {
     "title": "Coming soon",
@@ -155,7 +160,9 @@
     "video_sound": "Turn the video sound on",
     "video_hint": "Add your vertical video (9:16) in this section's settings.",
     "journey_step": "Step {{ number }}",
-    "journey_image_hint": "Add this step's photo (\"Step\" block)."
+    "journey_image_hint": "Add this step's photo (\"Step\" block).",
+    "featured_product_editor_empty": "Choose the product to feature in this section's settings.",
+    "video_slot_hint": "Video {{ number }}: add your video in this block (Content > Files). This empty slot only shows in the editor."
   },
   "collections": {
     "coming_soon": "Coming soon",
@@ -219,6 +226,16 @@
     "more": "See more reviews",
     "about_title": "How are reviews collected?",
     "lightbox_label": "Review photo",
-    "editor_empty": "No reviews for this product: the section stays hidden for visitors. Add authentic reviews in Products > your product > Metafields > Customer reviews."
+    "editor_empty": "No reviews for this product: the section stays hidden for visitors. Add authentic reviews in Products > your product > Metafields > Customer reviews.",
+    "see_all": {
+      "one": "See the review",
+      "other": "See all {{ count }} reviews"
+    },
+    "slide_label": "Review {{ number }} of {{ total }}",
+    "rotation_pause": "Pause the reviews",
+    "marquee_pause": "Pause the scrolling reviews",
+    "band_heading": "What customers say",
+    "highlight_editor_empty": "Reviews near the buy button: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
+    "band_editor_empty": "Scrolling reviews: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes)."
   }
 }

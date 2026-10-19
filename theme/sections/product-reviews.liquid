@@ -74,7 +74,7 @@
 
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       assign average_text_x10 = average | times: 10 | round
-      assign average_text_int = average_text_x10 | divided_by: 10
+      assign average_text_int = average_text_x10 | divided_by: 10 | floor
       assign average_text_dec = average_text_x10 | modulo: 10
       assign average_text = average_text_int | append: ',' | append: average_text_dec
       assign color_handle_list = color_handles | remove_first: '|' | split: '|'
@@ -230,7 +230,7 @@
                     {% render 'icon', icon: 'star' %}
                     {%- liquid
                       assign badge_x10 = review.note.value.rating | times: 10 | round
-                      assign badge_int = badge_x10 | divided_by: 10
+                      assign badge_int = badge_x10 | divided_by: 10 | floor
                       assign badge_dec = badge_x10 | modulo: 10
                       echo badge_int | append: ',' | append: badge_dec
                     -%}
@@ -610,7 +610,7 @@
     padding: 0.15rem 0.4rem;
     border-radius: var(--radius-xs);
     color: #fff;
-    background-color: rgb(30 24 22 / 0.55);
+    background-color: rgb(30 24 22 / 0.72);
 
     & .icon {
       --icon-size: 0.95rem;

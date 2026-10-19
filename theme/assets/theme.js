@@ -445,9 +445,12 @@ class VariantPicker extends HTMLElement {
     }
 
     if (variant) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('variant', variant.id);
-      window.history.replaceState({}, '', url.toString());
+      // Product pages keep the chosen variant in the address; product blocks on other pages don't.
+      if (this.section?.dataset.variantUrl !== 'false') {
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', variant.id);
+        window.history.replaceState({}, '', url.toString());
+      }
 
       if (variant.featured_media_id) {
         scope.querySelector('media-gallery')?.showMedia(variant.featured_media_id);
@@ -740,6 +743,137 @@ class ProductReviews extends HTMLElement {
 }
 
 customElements.define('product-reviews', ProductReviews);
+
+/* -------------------------------------------------------------------------- */
+/* Reviews next to the buy button: one at a time, with dots and a pause       */
+/* -------------------------------------------------------------------------- */
+
+class ReviewRotator extends HTMLElement {
+  #controller = null;
+  #timer = null;
+  #index = 0;
+  #paused = false;
+  #held = false;
+
+  connectedCallback() {
+    this.slides = [...this.querySelectorAll('[data-review-slide]')];
+    if (this.slides.length < 2) return;
+    this.dots = [...this.querySelectorAll('[data-review-dot]')];
+    this.list = this.querySelector('[data-review-list]');
+    this.toggle = this.querySelector('[data-review-toggle]');
+    this.interval = Math.max(3, Number(this.dataset.interval) || 6) * 1000;
+
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+    this.addEventListener('click', this.#onClick.bind(this), { signal });
+    // Never change the review being read: hold while hovered or focused.
+    this.addEventListener('pointerenter', () => this.#hold(true), { signal });
+    this.addEventListener('pointerleave', () => this.#hold(false), { signal });
+    this.addEventListener('focusin', () => this.#hold(true), { signal });
+    this.addEventListener(
+      'focusout',
+      (event) => {
+        if (!this.contains(event.relatedTarget)) this.#hold(false);
+      },
+      { signal }
+    );
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.#setPaused(true);
+    else this.#start();
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    clearInterval(this.#timer);
+  }
+
+  /** @param {number} index */
+  show(index) {
+    const count = this.slides.length;
+    this.#index = (index + count) % count;
+    this.slides.forEach((slide, i) => {
+      const active = i === this.#index;
+      slide.classList.toggle('is-active', active);
+      slide.toggleAttribute('aria-hidden', !active);
+    });
+    this.dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === this.#index)));
+  }
+
+  #start() {
+    clearInterval(this.#timer);
+    const rotating = !this.#paused && !this.#held;
+    // Screen readers hear a review only when it changes on request.
+    this.list?.setAttribute('aria-live', rotating ? 'off' : 'polite');
+    if (rotating) this.#timer = setInterval(() => this.show(this.#index + 1), this.interval);
+  }
+
+  /** @param {boolean} held */
+  #hold(held) {
+    this.#held = held;
+    this.#start();
+  }
+
+  /** @param {boolean} paused */
+  #setPaused(paused) {
+    this.#paused = paused;
+    this.toggle?.setAttribute('aria-pressed', String(paused));
+    this.#start();
+  }
+
+  /** @param {MouseEvent} event */
+  #onClick(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    const dot = target.closest('[data-review-dot]');
+    if (dot) {
+      this.show(Number(dot.getAttribute('data-review-dot')));
+      this.#start();
+      return;
+    }
+    if (target.closest('[data-review-toggle]')) this.#setPaused(!this.#paused);
+  }
+}
+
+customElements.define('review-rotator', ReviewRotator);
+
+/* -------------------------------------------------------------------------- */
+/* Scrolling band of reviews: pause button, and no work while off screen      */
+/* -------------------------------------------------------------------------- */
+
+class ReviewsMarquee extends HTMLElement {
+  #controller = null;
+  #observer = null;
+  #paused = false;
+
+  connectedCallback() {
+    const toggle = this.querySelector('[data-marquee-toggle]');
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+
+    toggle?.addEventListener(
+      'click',
+      () => {
+        this.#paused = !this.#paused;
+        toggle.setAttribute('aria-pressed', String(this.#paused));
+        this.classList.toggle('is-paused', this.#paused);
+      },
+      { signal }
+    );
+
+    if ('IntersectionObserver' in window) {
+      this.#observer = new IntersectionObserver(([entry]) => {
+        this.classList.toggle('is-offscreen', !entry.isIntersecting);
+      });
+      this.#observer.observe(this);
+    }
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    this.#observer?.disconnect();
+  }
+}
+
+customElements.define('reviews-marquee', ReviewsMarquee);
 
 /* -------------------------------------------------------------------------- */
 /* Sticky add-to-cart bar (mobile)                                             */

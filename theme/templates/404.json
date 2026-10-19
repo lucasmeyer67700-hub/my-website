@@ -1,6 +1,14 @@
 {
   "sections": {
-    "main": { "type": "main-404", "settings": { "product": "ceinture-chauffante-regles", "color_scheme": "scheme-2" } }
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "collection": "tous-nos-produits",
+        "menu": "pied-de-page-aide",
+        "color_scheme": "scheme-2"
+      }
+    }
   },
   "order": ["main"]
 }

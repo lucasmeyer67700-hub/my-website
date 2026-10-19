@@ -125,7 +125,12 @@
     "blog_empty": "Aucun article pour le moment.",
     "read_article": "Lire l'article",
     "back_to_blog": "Retour au journal",
-    "published_on": "Publié le {{ date }}"
+    "published_on": "Publié le {{ date }}",
+    "not_found_eyebrow": "Erreur 404",
+    "not_found_search_placeholder": "Rechercher un produit, une question…",
+    "not_found_catalogue": "Voir le catalogue",
+    "not_found_links": "Besoin d'aide ?",
+    "not_found_product": "À découvrir"
   },
   "password": {
     "title": "Bientôt disponible",
@@ -155,7 +160,9 @@
     "video_sound": "Activer le son de la vidéo",
     "video_hint": "Ajoutez votre vidéo verticale (9:16) dans les réglages de cette section.",
     "journey_step": "Étape {{ number }}",
-    "journey_image_hint": "Ajoutez la photo de cette étape (bloc « Étape »)."
+    "journey_image_hint": "Ajoutez la photo de cette étape (bloc « Étape »).",
+    "featured_product_editor_empty": "Choisissez le produit à mettre en avant dans les réglages de cette section.",
+    "video_slot_hint": "Vidéo {{ number }} : ajoutez votre vidéo dans ce bloc (Contenu > Fichiers). Cet emplacement vide n'est visible que dans l'éditeur."
   },
   "collections": {
     "coming_soon": "Bientôt",
@@ -219,6 +226,16 @@
     "more": "Voir plus d'avis",
     "about_title": "Comment les avis sont-ils collectés ?",
     "lightbox_label": "Photo de l'avis",
-    "editor_empty": "Aucun avis pour ce produit : la section reste invisible pour vos visiteuses. Ajoutez des avis authentiques dans Produits > votre produit > Champs méta > Avis clientes."
+    "editor_empty": "Aucun avis pour ce produit : la section reste invisible pour vos visiteuses. Ajoutez des avis authentiques dans Produits > votre produit > Champs méta > Avis clientes.",
+    "see_all": {
+      "one": "Voir l'avis",
+      "other": "Voir les {{ count }} avis"
+    },
+    "slide_label": "Avis {{ number }} sur {{ total }}",
+    "rotation_pause": "Mettre en pause le défilement des avis",
+    "marquee_pause": "Mettre en pause le défilement des avis",
+    "band_heading": "Elles en parlent",
+    "highlight_editor_empty": "Avis près de l'achat : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes).",
+    "band_editor_empty": "Avis défilants : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes)."
   }
 }

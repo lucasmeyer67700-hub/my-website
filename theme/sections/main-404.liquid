@@ -1,26 +1,157 @@
-<section class="section color-{{ section.settings.color_scheme }}" aria-labelledby="NotFoundTitle">
-  <div class="page-width page-width--text not-found">
-    <p class="eyebrow">404</p>
-    <h1 class="h2" id="NotFoundTitle">{{ 'templates.not_found_title' | t }}</h1>
-    <p class="lead">{{ 'templates.not_found_text' | t }}</p>
-    <div class="cluster">
-      <a class="button" href="{{ routes.root_url }}">{{ 'templates.back_home' | t }}</a>
-      {%- if section.settings.product != blank -%}
-        <a class="button button--secondary" href="{{ section.settings.product.url }}">{{ section.settings.product.title | escape }}</a>
+{%- comment -%}
+  Page not found: a short explanation, a search field, the way back to the
+  home page and the catalogue, help links, and the featured product.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign catalogue = section.settings.collection
+  assign help_menu = section.settings.menu
+-%}
+<section class="not-found section color-{{ section.settings.color_scheme }}" aria-labelledby="NotFoundTitle">
+  <div class="page-width not-found__grid{% if product != blank %} not-found__grid--product{% endif %}">
+    <div class="not-found__content">
+      <p class="eyebrow">{{ 'templates.not_found_eyebrow' | t }}</p>
+      <h1 class="h2" id="NotFoundTitle">{{ 'templates.not_found_title' | t }}</h1>
+      <p class="lead">{{ 'templates.not_found_text' | t }}</p>
+
+      <form class="not-found__search" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="NotFoundSearch-{{ section.id }}">{{ 'templates.search_label' | t }}</label>
+        <input
+          class="field__input not-found__search-input"
+          type="search"
+          id="NotFoundSearch-{{ section.id }}"
+          name="q"
+          placeholder="{{ 'templates.not_found_search_placeholder' | t }}"
+          autocomplete="off"
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+        <button class="button not-found__search-button" type="submit">
+          {% render 'icon', icon: 'search' %}
+          <span>{{ 'templates.search_submit' | t }}</span>
+        </button>
+      </form>
+
+      <div class="cluster not-found__actions">
+        <a class="button" href="{{ routes.root_url }}">{{ 'templates.back_home' | t }}</a>
+        {%- if catalogue != blank -%}
+          <a class="button button--secondary" href="{{ catalogue.url }}">{{ 'templates.not_found_catalogue' | t }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- if help_menu != blank and help_menu.links.size > 0 -%}
+        <nav class="not-found__help" aria-labelledby="NotFoundHelp-{{ section.id }}">
+          <p class="not-found__help-title" id="NotFoundHelp-{{ section.id }}">{{ 'templates.not_found_links' | t }}</p>
+          <ul class="not-found__help-list" role="list">
+            {%- for link in help_menu.links -%}
+              <li>
+                <a class="link link--arrow" href="{{ link.url }}">
+                  {{- link.title | escape -}}
+                  {% render 'icon', icon: 'arrow-right' %}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
       {%- endif -%}
     </div>
+
+    {%- if product != blank -%}
+      <aside class="not-found__product" aria-labelledby="NotFoundProduct-{{ section.id }}">
+        <p class="eyebrow" id="NotFoundProduct-{{ section.id }}">{{ 'templates.not_found_product' | t }}</p>
+        {% render 'product-card', product: product, heading_tag: 'h2', sizes: '(min-width: 990px) 24rem, 90vw' %}
+      </aside>
+    {%- endif -%}
   </div>
 </section>
 
 {% stylesheet %}
-  .not-found {
+  .not-found__grid {
     display: grid;
-    justify-items: center;
-    gap: var(--space-md);
-    text-align: center;
+    gap: var(--space-2xl);
+    align-items: center;
 
-    & .cluster {
-      justify-content: center;
+    @media screen and (min-width: 990px) {
+      &.not-found__grid--product {
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: clamp(3rem, 7vw, 7rem);
+      }
+    }
+  }
+
+  .not-found__content {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+    max-width: 38rem;
+
+    & .eyebrow {
+      margin-block-end: 0;
+    }
+  }
+
+  .not-found__search {
+    display: flex;
+    width: 100%;
+    gap: var(--space-2xs);
+  }
+
+  .not-found__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .not-found__search-button {
+    flex: none;
+
+    & .icon {
+      --icon-size: 1.05rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      & span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .not-found__help {
+    display: grid;
+    gap: var(--space-xs);
+    width: 100%;
+    padding-block-start: var(--space-md);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .not-found__help-title {
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .not-found__help-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .not-found__product {
+    display: grid;
+    gap: var(--space-sm);
+    width: 100%;
+    max-width: 24rem;
+
+    @media screen and (min-width: 990px) {
+      justify-self: end;
     }
   }
 {% endstylesheet %}
@@ -34,6 +165,18 @@
       "type": "product",
       "id": "product",
       "label": "Produit proposé"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Catalogue",
+      "info": "Bouton « Voir le catalogue »."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Liens d'aide",
+      "info": "Par exemple : contact, livraison et retours, FAQ."
     },
     {
       "type": "color_scheme",

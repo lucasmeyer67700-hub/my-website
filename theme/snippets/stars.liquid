@@ -14,7 +14,7 @@
     assign stars_percent = 100
   endif
   assign stars_x10 = rating | times: 10 | round
-  assign stars_int = stars_x10 | divided_by: 10
+  assign stars_int = stars_x10 | divided_by: 10 | floor
   assign stars_dec = stars_x10 | modulo: 10
   assign stars_text = stars_int | append: ',' | append: stars_dec
 -%}

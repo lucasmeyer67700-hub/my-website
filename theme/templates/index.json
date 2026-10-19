@@ -36,28 +36,28 @@
         "step-1": {
           "type": "step",
           "settings": {
-            "image": "",
+            "image": "shopify://shop_images/Inconfort_dans_une_chambre_chaleureuse.png",
             "icon": "cloud",
             "title": "Quand les règles compliquent la journée.",
-            "text": "Certains jours, on a surtout envie de ralentir, de s'allonger et de prendre un moment pour soi."
+            "text": "Certains jours, les douleurs menstruelles invitent à ralentir. Offrez-vous un moment de confort et prenez le temps de vous écouter."
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
-            "image": "",
+            "image": "shopify://shop_images/Deballage_d_un_appareil_bien-etre_au_lit.png",
             "icon": "heat",
-            "title": "Une nouvelle façon de prendre du temps pour soi.",
-            "text": "La ceinture VELEA diffuse une chaleur douce sur le bas du ventre. Sans fil, elle vous laisse libre de vos mouvements."
+            "title": "Découvrez votre nouveau  rituel de confort.",
+            "text": "Avec sa chaleur réglable et sa sangle ajustable, la ceinture chauffante VELEA vous accompagne pendant vos règles pour vous offrir un moment de chaleur et de douceur."
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
-            "image": "",
+            "image": "shopify://shop_images/Detente_chaleureuse_avec_ceinture_chauffante_rose.png",
             "icon": "feather",
             "title": "Retrouvez votre moment de douceur.",
-            "text": "Un plaid, une tisane, quelques minutes rien qu'à vous : le temps de souffler, à votre rythme."
+            "text": "Installez-vous confortablement, ajustez votre ceinture et profitez d'une agréable sensation de chaleur. Un instant rien qu'à vous, à la maison comme pendant vos moments de repos."
           }
         }
       },
@@ -73,22 +73,6 @@
         "show_drops": true,
         "anchor": "parcours",
         "color_scheme": "scheme-6"
-      }
-    },
-    "spotlight": {
-      "type": "product-spotlight",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "media_position": 1,
-        "eyebrow": "La ceinture VELEA",
-        "heading": "L'essentiel, <em>rien de superflu.</em>",
-        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
-        "show_specs": true,
-        "specs_limit": 3,
-        "show_box": false,
-        "button_label": "Découvrir la ceinture",
-        "anchor": "",
-        "color_scheme": "scheme-1"
       }
     },
     "faq": {
@@ -168,12 +152,105 @@
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
+    },
+    "offer": {
+      "type": "featured-product",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "La ceinture VELEA",
+        "heading": "",
+        "show_rating": true,
+        "price_badge": "Nouveauté",
+        "show_tagline": true,
+        "offer_heading": "",
+        "unit_label": "la ceinture",
+        "offer_note_single": "L'essentiel, pour vous",
+        "offer_note_multi": "Une pour vous, une à offrir",
+        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
+        "best_label": "Le plus avantageux",
+        "perks_multi": "Deux ensembles complets : câbles USB et notices",
+        "show_dynamic_checkout": true,
+        "show_reassurance": true,
+        "show_specs": true,
+        "specs_limit": 3,
+        "details_label": "Voir tous les détails",
+        "gallery_ratio": "1",
+        "gallery_fit": "cover",
+        "anchor": "offre",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "videos": {
+      "type": "video-showcase",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "title": "",
+            "text": ""
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "title": "",
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2"
+      ],
+      "settings": {
+        "eyebrow": "En vidéo",
+        "heading": "La ceinture, <em>en images.</em>",
+        "text": "",
+        "ratio": "9 / 16",
+        "autoplay": true,
+        "button_label": "Choisir ma ceinture",
+        "button_link": "/#offre",
+        "anchor": "videos",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "reviews": {
+      "type": "reviews-marquee",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "Avis clientes",
+        "heading": "Elles en parlent",
+        "limit": 12,
+        "direction": "ltr",
+        "speed": 7,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "spotlight": {
+      "type": "product-spotlight",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "media_position": 1,
+        "eyebrow": "La ceinture VELEA",
+        "heading": "L'essentiel, <em>rien de superflu.</em>",
+        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
+        "show_specs": true,
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
+        "anchor": "",
+        "color_scheme": "scheme-3"
+      },
+      "disabled": true
     }
   },
   "order": [
     "hero",
+    "offer",
     "journey",
     "spotlight",
+    "videos",
+    "reviews",
     "faq"
   ]
 }

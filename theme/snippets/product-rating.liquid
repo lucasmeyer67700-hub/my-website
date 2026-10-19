@@ -7,13 +7,14 @@
 
   @param {object} product - Product object
   @param {string} [anchor] - Id of the reviews section to link to
+  @param {string} [url] - Page holding that section, when it is another page (e.g. the product page)
 
   @example
   {% render 'product-rating', product: product, anchor: 'avis' %}
 {% enddoc %}
 {%- liquid
   assign review_count = product.metafields.custom.avis.value.size | default: 0
-  assign link = '#' | append: anchor
+  assign link = url | append: '#' | append: anchor
 -%}
 {%- if review_count > 0 -%}
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
@@ -25,7 +26,7 @@
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       assign average_text_x10 = average | times: 10 | round
-      assign average_text_int = average_text_x10 | divided_by: 10
+      assign average_text_int = average_text_x10 | divided_by: 10 | floor
       assign average_text_dec = average_text_x10 | modulo: 10
       assign average_text = average_text_int | append: ',' | append: average_text_dec
     -%}
@@ -67,7 +68,7 @@
     assign average = product.metafields.reviews.rating.value.rating
     assign app_total = product.metafields.reviews.rating_count.value
     assign average_text_x10 = average | times: 10 | round
-    assign average_text_int = average_text_x10 | divided_by: 10
+    assign average_text_int = average_text_x10 | divided_by: 10 | floor
     assign average_text_dec = average_text_x10 | modulo: 10
     assign average_text = average_text_int | append: ',' | append: average_text_dec
   -%}

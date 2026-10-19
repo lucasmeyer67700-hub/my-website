@@ -19,7 +19,7 @@
         "buy": {
           "type": "buy_buttons",
           "settings": {
-            "show_quantity": false,
+            "show_quantity": true,
             "show_dynamic_checkout": true
           }
         },
@@ -37,7 +37,8 @@
             "icon": "none",
             "source": "specs",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
           }
         },
         "usage": {
@@ -47,7 +48,8 @@
             "icon": "none",
             "source": "usage_precautions",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
           }
         },
         "box": {
@@ -57,7 +59,8 @@
             "icon": "none",
             "source": "box",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
           }
         },
         "safety": {
@@ -67,7 +70,8 @@
             "icon": "none",
             "source": "safety_info",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
           }
         },
         "notice": {
@@ -109,12 +113,21 @@
             "title_3": "Discrète sous un vêtement ample",
             "text_3": "Portée sur un vêtement fin, elle se glisse sous un pull ou une chemise."
           }
+        },
+        "highlight": {
+          "type": "reviews_highlight",
+          "settings": {
+            "heading": "Ce qu'en disent nos clientes",
+            "limit": 5,
+            "interval": 6
+          }
         }
       },
       "block_order": [
         "variant",
         "inventory",
         "buy",
+        "highlight",
         "guarantee",
         "delivery",
         "trust",

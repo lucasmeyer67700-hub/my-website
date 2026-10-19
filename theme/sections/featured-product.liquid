@@ -1,0 +1,470 @@
+{%- comment -%}
+  The product's offer on the home page, right under the hero: photo, real
+  rating, price, offer cards (1 ceinture / Duo), colour, real availability and
+  the add-to-cart button wired to the cart drawer. Same building blocks as the
+  product page; the page address does not change when a variant is chosen.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign anchor = section.settings.anchor | handleize
+  if product != blank
+    assign current_variant = product.selected_or_first_available_variant
+    assign form_id = 'FeaturedForm-' | append: section.id
+    assign submit_id = 'FeaturedSubmit-' | append: section.id
+    assign installments_id = 'FeaturedInstallments-' | append: section.id
+    assign tagline = product.metafields.custom.accroche.value
+    assign availability = 'available'
+    if current_variant.available == false
+      assign availability = 'unavailable'
+    elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0
+      assign availability = 'in_stock'
+    endif
+  endif
+-%}
+
+{%- if product != blank -%}
+  <section
+    class="featured-product section color-{{ section.settings.color_scheme }}"
+    data-product-section
+    data-variant-url="false"
+    {% if anchor != blank %}
+      id="{{ anchor }}"
+    {% endif %}
+    aria-labelledby="FeaturedTitle-{{ section.id }}"
+  >
+    <div class="page-width featured-product__grid">
+      <div class="featured-product__media reveal">
+        {% render 'product-gallery',
+          product: product,
+          fit: section.settings.gallery_fit,
+          ratio: section.settings.gallery_ratio
+        %}
+      </div>
+
+      <div class="featured-product__info reveal">
+        <div class="featured-product__header">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.show_rating -%}
+            {% render 'product-rating', product: product, anchor: 'avis', url: product.url %}
+          {%- endif -%}
+          <h2 class="featured-product__title" id="FeaturedTitle-{{ section.id }}">
+            {%- if section.settings.heading != blank -%}
+              {{ section.settings.heading }}
+            {%- else -%}
+              {{ product.title | escape }}
+            {%- endif -%}
+          </h2>
+          <div class="featured-product__price-row">
+            {% render 'price', product: product, class: 'product__price' %}
+            {%- if section.settings.price_badge != blank -%}
+              <span class="product__badge">{{ section.settings.price_badge | escape }}</span>
+            {%- endif -%}
+          </div>
+          {%- form 'product', product, id: installments_id, class: 'product__installments' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+            {{ form | payment_terms }}
+          {%- endform -%}
+          {%- if section.settings.show_tagline and tagline != blank -%}
+            <p class="featured-product__tagline">{{ tagline | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {% render 'variant-picker',
+          product: product,
+          section_id: section.id,
+          offer_heading: section.settings.offer_heading,
+          offer_note_single: section.settings.offer_note_single,
+          offer_note_multi: section.settings.offer_note_multi,
+          multi_hint: section.settings.multi_hint,
+          unit_label: section.settings.unit_label,
+          best_label: section.settings.best_label,
+          perks_multi: section.settings.perks_multi
+        %}
+
+        <p
+          class="product-availability"
+          data-availability
+          data-state="{{ availability }}"
+          data-label-in-stock="{{ 'products.availability_in_stock' | t }}"
+          data-label-available="{{ 'products.availability_available' | t }}"
+          data-label-unavailable="{{ 'products.availability_unavailable' | t }}"
+        >
+          <span class="product-availability__dot" aria-hidden="true"></span>
+          <span data-availability-label aria-live="polite">
+            {%- case availability -%}
+              {%- when 'in_stock' -%}
+                {{ 'products.availability_in_stock' | t }}
+              {%- when 'unavailable' -%}
+                {{ 'products.availability_unavailable' | t }}
+              {%- else -%}
+                {{ 'products.availability_available' | t }}
+            {%- endcase -%}
+          </span>
+        </p>
+
+        <product-form class="product-form">
+          {%- form 'product', product, id: form_id, class: 'product-form__form', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+            <noscript>
+              {%- unless product.has_only_default_variant -%}
+                <label class="field__label" for="NoscriptVariant-{{ section.id }}">{{ 'products.choose_option' | t }}</label>
+                <select class="field__input" id="NoscriptVariant-{{ section.id }}" name="id">
+                  {%- for variant in product.variants -%}
+                    <option
+                      value="{{ variant.id }}"
+                      {% if variant == current_variant %}
+                        selected
+                      {% endif %}
+                      {% unless variant.available %}
+                        disabled
+                      {% endunless %}
+                    >
+                      {{ variant.title | escape }} – {{ variant.price | money | strip_html }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              {%- endunless -%}
+            </noscript>
+
+            <div class="product-form__row">
+              <button
+                id="{{ submit_id }}"
+                type="submit"
+                name="add"
+                class="button product-form__submit"
+                data-add-to-cart
+                {% unless current_variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                <span data-add-to-cart-label>
+                  {%- if current_variant.available -%}
+                    {{ 'products.add_to_cart' | t }}
+                  {%- else -%}
+                    {{ 'products.sold_out' | t }}
+                  {%- endif -%}
+                </span>
+                <span class="button__spinner" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            {%- if section.settings.show_dynamic_checkout -%}
+              <div class="product-form__express">{{ form | payment_button }}</div>
+            {%- endif -%}
+
+            <div class="form-message form-message--error" role="alert" data-product-error hidden>
+              {% render 'icon', icon: 'alert' %}
+              <span data-error-message></span>
+            </div>
+          {%- endform -%}
+        </product-form>
+
+        {%- if section.settings.show_reassurance -%}
+          <ul class="featured-product__reassurance" role="list">
+            {%- if settings.shipping_info != blank -%}
+              <li>
+                {% render 'icon', icon: 'truck' %}
+                <span>
+                  {{- settings.shipping_info | escape -}}
+                  {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
+                </span>
+              </li>
+            {%- endif -%}
+            {%- if settings.returns_info != blank -%}
+              <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
+            {%- endif -%}
+            <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
+          <div class="featured-product__specs">
+            {% render 'product-specs', product: product, limit: section.settings.specs_limit %}
+            <p class="text-muted text-small">{{ 'products.specs_note' | t }}</p>
+          </div>
+        {%- endif -%}
+
+        <a class="link link--arrow featured-product__more" href="{{ product.url }}">
+          {%- if section.settings.details_label != blank -%}
+            {{- section.settings.details_label | escape -}}
+          {%- else -%}
+            {{- 'products.view_product' | t -}}
+          {%- endif -%}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      </div>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <section class="featured-product section color-{{ section.settings.color_scheme }}">
+    <div class="page-width">
+      <p class="text-muted">{{ 'sections.featured_product_editor_empty' | t }}</p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .featured-product__grid {
+    display: grid;
+    gap: var(--space-lg);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: clamp(3rem, 5vw, 5.5rem);
+      align-items: start;
+    }
+  }
+
+  .featured-product__media {
+    min-width: 0;
+
+    @media screen and (min-width: 990px) {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + 1.5rem);
+    }
+  }
+
+  .featured-product__info {
+    display: grid;
+    gap: var(--space-sm);
+    min-width: 0;
+  }
+
+  .featured-product__header {
+    display: grid;
+    gap: var(--space-xs);
+
+    & .eyebrow {
+      margin-block-end: 0;
+    }
+  }
+
+  .featured-product__title {
+    font-size: calc(clamp(2rem, 1.6rem + 1.4vw, 2.75rem) * var(--font-heading-scale, 1));
+    line-height: var(--line-height-tight);
+    text-wrap: balance;
+  }
+
+  .featured-product__price-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .featured-product__tagline {
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .featured-product__reassurance {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    list-style: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    background-color: var(--color-surface);
+
+    & li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    & .icon {
+      --icon-size: 1.05rem;
+      flex: none;
+      color: var(--color-accent);
+    }
+  }
+
+  .featured-product__specs {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .featured-product__more {
+    justify-self: start;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Offre produit",
+  "tag": "div",
+  "class": "section-featured-product",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Le produit et son offre, achetables directement depuis l'accueil. Prix, offres, coloris et disponibilité viennent de la fiche produit."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "La ceinture VELEA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Laissez vide pour afficher le nom du produit."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Afficher la note des avis",
+      "info": "Seulement s'il existe des avis réels.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "price_badge",
+      "label": "Pastille à côté du prix",
+      "info": "Une information vraie (ex. : Nouveauté). Laissez vide pour la masquer."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tagline",
+      "label": "Afficher l'accroche du produit",
+      "info": "Champ méta « Accroche ».",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Offres"
+    },
+    {
+      "type": "text",
+      "id": "offer_heading",
+      "label": "Titre des offres"
+    },
+    {
+      "type": "text",
+      "id": "unit_label",
+      "label": "Unité",
+      "default": "la ceinture"
+    },
+    {
+      "type": "text",
+      "id": "offer_note_single",
+      "label": "Phrase de l'offre à l'unité",
+      "default": "L'essentiel, pour vous"
+    },
+    {
+      "type": "text",
+      "id": "offer_note_multi",
+      "label": "Phrase des offres à plusieurs",
+      "default": "Une pour vous, une à offrir"
+    },
+    {
+      "type": "text",
+      "id": "multi_hint",
+      "label": "Aide sous les coloris (offres à plusieurs)",
+      "default": "Duo : deux roses, deux blanches, ou une de chaque."
+    },
+    {
+      "type": "text",
+      "id": "best_label",
+      "label": "Onglet de l'offre à plusieurs",
+      "info": "Affiché seulement si l'offre fait vraiment économiser.",
+      "default": "Le plus avantageux"
+    },
+    {
+      "type": "textarea",
+      "id": "perks_multi",
+      "label": "Inclus dans les offres à plusieurs",
+      "info": "Une ligne par avantage. Texte à droite après « | ».",
+      "default": "Deux ensembles complets : câbles USB et notices"
+    },
+    {
+      "type": "header",
+      "content": "Sous le bouton"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Afficher le paiement express",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reassurance",
+      "label": "Afficher livraison, retours et paiement sécurisé",
+      "info": "Textes des Paramètres du thème > Réassurance.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_specs",
+      "label": "Afficher les caractéristiques",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "specs_limit",
+      "label": "Nombre de caractéristiques",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "details_label",
+      "label": "Lien vers la fiche produit",
+      "default": "Voir tous les détails"
+    },
+    {
+      "type": "header",
+      "content": "Photos"
+    },
+    {
+      "type": "select",
+      "id": "gallery_ratio",
+      "label": "Format des photos",
+      "options": [
+        { "value": "1", "label": "Carré" },
+        { "value": "4 / 5", "label": "Portrait" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "gallery_fit",
+      "label": "Cadrage des photos",
+      "options": [
+        { "value": "contain", "label": "Photo entière" },
+        { "value": "cover", "label": "Remplir le cadre" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "default": "offre"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Offre produit"
+    }
+  ]
+}
+{% endschema %}

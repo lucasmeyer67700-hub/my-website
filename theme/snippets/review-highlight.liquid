@@ -1,0 +1,291 @@
+{% doc %}
+  Real customer reviews shown one at a time next to the buy button, with the
+  average rating and a link to all reviews. Built only from the product's
+  "Avis clientes" (custom.avis) entries; renders nothing when there is none
+  (a hint shows in the theme editor). The reviews are stacked in one grid cell
+  so the box keeps the height of the longest one: no jump in the buy area.
+
+  @param {object} product - Product object
+  @param {string} [heading] - Small title above the reviews
+  @param {number} [limit] - Number of reviews in the rotation (default 5)
+  @param {number} [interval] - Seconds each review stays on screen (default 6)
+  @param {string} [link] - Page of the reviews section (default: current page)
+  @param {string} [attributes] - Theme editor attributes of the block
+
+  @example
+  {% render 'review-highlight', product: product, heading: block.settings.heading %}
+{% enddoc %}
+{%- liquid
+  assign review_count = product.metafields.custom.avis.value.size | default: 0
+  assign max_items = limit | default: 5
+  assign reviews_link = link | append: '#avis'
+-%}
+{%- if review_count > 0 -%}
+  {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
+  {%- paginate product.metafields.custom.avis.value by 250 -%}
+    {%- liquid
+      assign rating_sum = 0
+      for review in product.metafields.custom.avis.value
+        assign rating_sum = rating_sum | plus: review.note.value.rating
+      endfor
+      assign average = rating_sum | times: 1.0 | divided_by: review_count
+      assign average_x10 = average | times: 10 | round
+      assign average_int = average_x10 | divided_by: 10 | floor
+      assign average_dec = average_x10 | modulo: 10
+      assign average_text = average_int | append: ',' | append: average_dec
+      assign shown = 0
+    -%}
+    <review-rotator class="review-highlight" data-interval="{{ interval | default: 6 }}" {{ attributes }}>
+      <div class="review-highlight__head">
+        {%- if heading != blank -%}
+          <p class="review-highlight__heading">{{ heading | escape }}</p>
+        {%- endif -%}
+        <a class="review-highlight__summary" href="{{ reviews_link }}">
+          {% render 'stars', rating: average %}
+          <span>{{ average_text }}/5 · {{ 'reviews.see_all' | t: count: review_count }}</span>
+        </a>
+      </div>
+
+      <ul class="review-highlight__list" role="list" aria-live="off" data-review-list>
+        {%- for review in product.metafields.custom.avis.value -%}
+          {%- if review.texte.value == blank -%}{%- continue -%}{%- endif -%}
+          {%- if shown >= max_items -%}{%- break -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li
+            class="review-highlight__item{% if shown == 1 %} is-active{% endif %}"
+            data-review-slide
+            {% if shown > 1 %}
+              aria-hidden="true"
+            {% endif %}
+          >
+            <figure class="review-highlight__figure">
+              {% render 'stars', rating: review.note.value.rating, class: 'review-highlight__stars' %}
+              <blockquote class="review-highlight__quote">
+                <p>{{ review.texte.value | strip_newlines | truncate: 170, '…' | escape }}</p>
+              </blockquote>
+              <figcaption class="review-highlight__author">
+                <strong>{{ review.auteur.value | escape }}</strong>
+                {%- if review.achat_verifie.value -%}
+                  <span class="review-highlight__verified">
+                    {%- render 'icon', icon: 'check' -%}
+                    {{- 'reviews.verified' | t -}}
+                  </span>
+                {%- endif -%}
+              </figcaption>
+            </figure>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if shown > 1 -%}
+        <div class="review-highlight__controls">
+          <div class="review-highlight__dots">
+            {%- for i in (1..shown) -%}
+              <button
+                type="button"
+                class="review-highlight__dot"
+                data-review-dot="{{ forloop.index0 }}"
+                aria-label="{{ 'reviews.slide_label' | t: number: i, total: shown }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+              ></button>
+            {%- endfor -%}
+          </div>
+          <button
+            type="button"
+            class="icon-button review-highlight__toggle"
+            data-review-toggle
+            aria-pressed="false"
+            aria-label="{{ 'reviews.rotation_pause' | t }}"
+          >
+            <span class="review-highlight__toggle-icon review-highlight__toggle-icon--pause">{% render 'icon', icon: 'pause' %}</span>
+            <span class="review-highlight__toggle-icon review-highlight__toggle-icon--play">{% render 'icon', icon: 'play' %}</span>
+          </button>
+        </div>
+      {%- endif -%}
+    </review-rotator>
+  {%- endpaginate -%}
+{%- elsif request.design_mode -%}
+  <p class="review-highlight review-highlight--empty" {{ attributes }}>{{ 'reviews.highlight_editor_empty' | t }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .review-highlight {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .review-highlight--empty {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    border-style: dashed;
+  }
+
+  .review-highlight__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-sm);
+  }
+
+  .review-highlight__heading {
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .review-highlight__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    text-decoration: none;
+
+    & .stars {
+      --stars-size: 0.9rem;
+    }
+
+    &:hover span {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  /* All reviews share one cell: the box keeps the height of the longest one */
+  .review-highlight__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .review-highlight__item {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity var(--duration-slow) ease,
+      visibility 0s linear var(--duration-slow);
+
+    &.is-active {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+  }
+
+  .review-highlight__figure {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+  }
+
+  .review-highlight__stars {
+    --stars-size: 0.85rem;
+  }
+
+  .review-highlight__quote {
+    margin: 0;
+    font-size: var(--text-base);
+    line-height: 1.55;
+    color: var(--color-text);
+    text-wrap: pretty;
+  }
+
+  .review-highlight__author {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.15rem var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+
+    & strong {
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text);
+    }
+  }
+
+  .review-highlight__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-success);
+
+    & .icon {
+      --icon-size: 0.85rem;
+      stroke-width: 2.5;
+    }
+  }
+
+  .review-highlight__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .review-highlight__dots {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* 24px hit area around an 8px dot */
+  .review-highlight__dot {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: rgb(var(--rose-strong-rgb) / 0.35);
+      transition: background-color var(--duration-base) ease, transform var(--duration-base) ease;
+    }
+
+    &[aria-current='true']::before {
+      background-color: var(--rose-strong);
+      transform: scale(1.25);
+    }
+  }
+
+  .review-highlight__toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    min-height: 0;
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 0.95rem;
+    }
+  }
+
+  .review-highlight__toggle-icon--play,
+  .review-highlight__toggle[aria-pressed='true'] .review-highlight__toggle-icon--pause {
+    display: none;
+  }
+
+  .review-highlight__toggle[aria-pressed='true'] .review-highlight__toggle-icon--play {
+    display: inline-flex;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .review-highlight__item {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
