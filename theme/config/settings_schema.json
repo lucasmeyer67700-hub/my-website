@@ -276,7 +276,7 @@
         "type": "collection",
         "id": "cart_upsell_collection",
         "label": "Produits proposés en complément",
-        "info": "Seuls les produits disponibles et absents du panier sont proposés. Le panier vide n'affiche que « Votre panier est vide. »."
+        "info": "Seuls les produits disponibles et absents du panier sont proposés."
       },
       {
         "type": "text",
@@ -292,6 +292,63 @@
         "max": 3,
         "step": 1,
         "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Panier vide"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_empty_animation",
+        "label": "Animer la goutte VELEA",
+        "info": "Immobile pour les visiteuses qui réduisent les animations.",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_text",
+        "label": "Phrase sous « Votre panier est vide. »",
+        "default": "Prenez le temps de découvrir nos essentiels, pensés pour des jours de règles plus doux."
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_button",
+        "label": "Texte du bouton",
+        "default": "Découvrir nos essentiels"
+      },
+      {
+        "type": "url",
+        "id": "cart_empty_link",
+        "label": "Lien du bouton",
+        "info": "Sans lien choisi : tous les produits."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_empty_login",
+        "label": "Proposer de se connecter",
+        "info": "Seulement aux visiteuses non connectées, si les comptes clients sont activés.",
+        "default": true
+      },
+      {
+        "type": "collection",
+        "id": "cart_empty_collection",
+        "label": "Produits présentés",
+        "info": "Seuls les produits disponibles s'affichent, avec leur vrai prix."
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_heading",
+        "label": "Titre des produits",
+        "default": "Nos essentiels"
+      },
+      {
+        "type": "range",
+        "id": "cart_empty_limit",
+        "label": "Nombre de produits",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 3
       }
     ]
   },

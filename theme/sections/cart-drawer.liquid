@@ -14,10 +14,9 @@
         </button>
       </div>
 
-      {%- comment -%} Empty cart: the sentence only, nothing else. {%- endcomment -%}
       {%- if cart.item_count == 0 -%}
-        <div class="drawer__body cart-drawer__empty">
-          <p class="cart-drawer__empty-text">{{ 'cart.empty' | t }}</p>
+        <div class="drawer__body">
+          {% render 'cart-empty', context: 'drawer' %}
         </div>
       {%- else -%}
         <div class="drawer__body">
@@ -54,22 +53,10 @@
     color: var(--color-text-muted);
   }
 
-  .cart-drawer__empty {
-    display: grid;
-    align-content: start;
-  }
-
-  .cart-drawer__empty-text {
-    font-size: var(--text-base);
-    color: var(--color-text);
-  }
-
   /* The title gets focus when the drawer opens (for screen readers): no ring on it. */
   .cart-drawer [data-cart-title]:focus {
     outline: none;
   }
-
-
 
   .cart-drawer__note {
     margin-block-start: var(--space-lg);

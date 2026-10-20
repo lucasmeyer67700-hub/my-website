@@ -94,6 +94,7 @@
     "quantity": "Quantity",
     "total": "Total",
     "discount": "Discount",
+    "empty_login_html": "Already a customer? <a href=\"{{ url }}\">Sign in</a> to follow your orders.",
     "upsell_add": "Add",
     "upsell_choose": "Choose…",
     "upsell_choose_label": "Choose an option for {{ product }}",

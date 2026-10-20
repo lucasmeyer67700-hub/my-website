@@ -19,6 +19,14 @@
     "cart_upsell_collection": "tous-nos-produits",
     "cart_upsell_heading": "Pour compléter votre rituel",
     "cart_upsell_limit": 2,
+    "cart_empty_animation": true,
+    "cart_empty_text": "Prenez le temps de découvrir nos essentiels, pensés pour des jours de règles plus doux.",
+    "cart_empty_button": "Découvrir nos essentiels",
+    "cart_empty_link": "shopify://collections/tous-nos-produits",
+    "cart_empty_login": true,
+    "cart_empty_collection": "tous-nos-produits",
+    "cart_empty_heading": "Nos essentiels",
+    "cart_empty_limit": 3,
     "social_instagram": "",
     "social_tiktok": "",
     "social_facebook": "",
@@ -35,7 +43,9 @@
       "shopify-inbox-chat": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
-        "settings": {}
+        "settings": {
+          "button_color": "#B4596A"
+        }
       }
     },
     "color_schemes": {

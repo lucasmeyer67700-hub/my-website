@@ -3,10 +3,7 @@
     <h1 class="h2 main-cart__title" id="CartTitle" tabindex="-1" data-cart-title>{{ 'cart.title' | t }}</h1>
 
     {%- if cart.item_count == 0 -%}
-      {%- comment -%} Empty cart: the sentence only, nothing else. {%- endcomment -%}
-      <div class="main-cart__empty">
-        <p class="lead">{{ 'cart.empty' | t }}</p>
-      </div>
+      {% render 'cart-empty', context: 'page' %}
     {%- else -%}
       <div class="main-cart__grid">
         <cart-items class="main-cart__items">
@@ -44,11 +41,6 @@
     margin-block-end: var(--space-xl);
   }
 
-  .main-cart__empty {
-    display: grid;
-    justify-items: start;
-    gap: var(--space-lg);
-  }
 
   .main-cart__title:focus {
     outline: none;
