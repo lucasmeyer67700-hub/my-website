@@ -9,6 +9,7 @@
   @param {string} [fit] - 'contain' or 'cover'
   @param {string} [ratio] - CSS aspect-ratio for slides
   @param {object} [overlays] - The section's blocks (gallery_card and gallery_badge are used)
+  @param {boolean} [slots] - Keep 5 places (main photo + 4) and show the free ones as photo slots
 
   @example
   {% render 'product-gallery', product: product, overlays: section.blocks %}
@@ -18,6 +19,15 @@
   assign initial_media = product.selected_or_first_available_variant.featured_media
   assign slide_ratio = ratio | default: '1'
   assign slide_fit = fit | default: 'contain'
+  comment
+    Main photo + 4: with fewer than 5 photos, the free places show as slots
+    the merchant fills from the product's media.
+  endcomment
+  assign slot_total = 5
+  assign free_slots = 0
+  if slots and media_count > 0 and media_count < slot_total
+    assign free_slots = slot_total | minus: media_count
+  endif
 -%}
 <media-gallery
   class="gallery gallery--{{ slide_fit }}"
@@ -167,12 +177,12 @@
 
   {%- if media_count == 0 -%}
     <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
-      {%- for i in (1..6) -%}
+      {%- for i in (1..4) -%}
         <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>
       {%- endfor -%}
     </ul>
-  {%- elsif media_count > 1 -%}
-    <ul class="gallery__thumbs" role="list">
+  {%- elsif media_count > 1 or free_slots > 0 -%}
+    <ul class="gallery__thumbs{% if media_count <= slot_total %} gallery__thumbs--grid{% endif %}" role="list">
       {%- for media in product.media -%}
         <li>
           <button
@@ -186,6 +196,14 @@
             {% render 'responsive-image', image: media.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
             <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
           </button>
+        </li>
+      {%- endfor -%}
+      {%- for i in (1..free_slots) -%}
+        <li class="gallery__slot gallery__slot--thumb" aria-hidden="true">
+          {%- render 'icon', icon: 'image' -%}
+          {%- if request.design_mode -%}
+            <span class="gallery__slot-label">{{ 'products.media_slot_short' | t }}</span>
+          {%- endif -%}
         </li>
       {%- endfor -%}
     </ul>
@@ -329,6 +347,31 @@
       flex: none;
       scroll-snap-align: start;
     }
+  }
+
+  /* Main photo + 4: five equal places across the width */
+  .gallery__thumbs--grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    overflow: visible;
+
+    & .gallery__thumb {
+      width: 100%;
+    }
+
+    & .gallery__slot--thumb {
+      width: auto;
+      aspect-ratio: 1;
+    }
+  }
+
+  .gallery__slot-label {
+    position: absolute;
+    inset-block-end: 0.35rem;
+    inset-inline: 0.35rem;
+    font-size: 0.625rem;
+    line-height: 1.2;
+    text-align: center;
   }
 
   .gallery__thumb {
@@ -577,6 +620,7 @@
   .gallery__slot--thumb {
     width: clamp(3.75rem, 2.75rem + 3vw, 5.75rem);
     aspect-ratio: 1;
+    border: 1px dashed rgb(var(--warm-rgb) / 0.55);
     border-radius: var(--radius-sm);
     --icon-size: 1.25rem;
   }

@@ -35,6 +35,19 @@
         endif
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
+      assign display_count = review_count
+      if source_name != blank
+        comment
+          Reviews from another site: that site's overall rating and total, when filled in.
+        endcomment
+        if product.metafields.custom.avis_externes_note.value != blank
+          assign average = product.metafields.custom.avis_externes_note.value.rating
+        endif
+        assign source_total = product.metafields.custom.avis_externes_total.value | default: 0
+        if source_total > review_count
+          assign display_count = source_total
+        endif
+      endif
       assign average_text_x10 = average | times: 10 | round
       assign average_text_int = average_text_x10 | divided_by: 10 | floor
       assign average_text_dec = average_text_x10 | modulo: 10
@@ -75,7 +88,7 @@
         <span>
           {{- average_text }}/5
           {% if source_name != blank -%}
-            {{- 'reviews.count_short_source' | t: count: review_count, source: source_name -}}
+            {{- 'reviews.count_short_source' | t: count: display_count, source: source_name -}}
           {%- else -%}
             {{- 'reviews.count_short' | t: count: review_count -}}
           {%- endif -%}

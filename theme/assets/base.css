@@ -887,8 +887,21 @@ textarea.field__input {
     transform: scale(1.03);
   }
 
+  /* Second photo: revealed with a slow cross-fade while it settles from a slight zoom. */
+  .product-card__media--swap .product-card__image--second {
+    transform: scale(1.06);
+    transition:
+      transform 0.9s var(--ease-out),
+      opacity 0.6s var(--ease-out);
+  }
+
   .product-card:hover .product-card__media--swap .product-card__image--second {
     opacity: 1;
+    transform: scale(1);
+  }
+
+  .product-card:hover .product-card__media--swap .product-card__image:not(.product-card__image--second) {
+    opacity: 0;
   }
 }
 
@@ -1492,15 +1505,25 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
-/* Reviews published on another site: named with their source, never marked as verified. */
-.review-source {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.05rem 0.5rem;
-  border: 1px solid var(--color-border);
+/* "Acheter maintenant" (unbranded dynamic checkout): an outlined pill in the brand colours
+   instead of Shopify's default blue. Branded buttons (Shop Pay…) keep their own look. */
+.product-form__express .shopify-payment-button__button--unbranded {
+  border: 1px solid var(--color-button);
   border-radius: 999px;
-  font-size: var(--text-xs);
-  line-height: 1.5;
-  color: var(--color-text-muted);
-  white-space: nowrap;
+  font-family: var(--font-body-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-body-weight-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-button);
+  background-color: transparent;
+  transition:
+    color var(--duration-base) ease,
+    background-color var(--duration-base) ease;
+
+  &:hover:not([disabled]) {
+    color: var(--color-button-label);
+    background-color: var(--color-button);
+  }
 }
+

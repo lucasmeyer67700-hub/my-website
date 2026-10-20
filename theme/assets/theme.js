@@ -1348,3 +1348,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Re-run reveal when a section is (re)loaded in the theme editor.
 document.addEventListener('shopify:section:load', initReveal);
+
+// A link to a closed <details> (e.g. "Guide des tailles" next to the sizes) opens it before scrolling to it.
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link || link.getAttribute('href').length < 2) return;
+  const target = document.getElementById(decodeURIComponent(link.getAttribute('href').slice(1)));
+  if (target instanceof HTMLDetailsElement) target.open = true;
+});

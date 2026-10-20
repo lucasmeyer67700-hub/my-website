@@ -1,0 +1,367 @@
+{% doc %}
+  A band of review cards that slowly scrolls on its own (left to right by
+  default), shared by the home "Avis défilants" section and the product
+  reviews section. It pauses on hover, on keyboard focus and with its pause
+  button, and stays still for visitors who reduce motion (they can swipe it
+  instead). Under four reviews, the cards simply sit side by side.
+  Built from the product's own reviews (custom.avis), or else from the reviews
+  published on another site (custom.avis_externes); the surrounding section
+  names that source. Renders nothing without reviews.
+
+  @param {object} product - Product object
+  @param {number} [limit] - Maximum number of cards (default 12)
+  @param {number} [speed] - Seconds per card for one loop (default 7)
+  @param {string} [direction] - 'ltr' (default) or 'rtl'
+
+  @example
+  {% render 'reviews-band', product: product, limit: 12, speed: 7 %}
+{% enddoc %}
+{%- liquid
+  assign reviews_key = 'avis'
+  assign own_count = product.metafields.custom.avis.value.size | default: 0
+  if own_count == 0
+    assign reviews_key = 'avis_externes'
+  endif
+  assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
+  assign max_cards = limit | default: 12
+  assign seconds = speed | default: 7
+-%}
+{%- if review_count > 0 -%}
+  {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
+  {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
+    {%- assign shown = 0 -%}
+    {%- capture cards -%}
+      {%- for review in product.metafields.custom[reviews_key].value -%}
+        {%- if review.texte.value == blank -%}{%- continue -%}{%- endif -%}
+        {%- if shown >= max_cards -%}{%- break -%}{%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li class="review-tile">
+          <figure class="review-tile__figure">
+            <span class="review-tile__mark" aria-hidden="true">&ldquo;</span>
+            <div class="review-tile__top">
+              {% render 'stars', rating: review.note.value.rating, class: 'review-tile__stars' %}
+              {%- assign photo = review.photo.value -%}
+              {%- if photo != blank -%}
+                <img
+                  class="review-tile__photo"
+                  src="{{ photo | image_url: width: 144, height: 144, crop: 'center' }}"
+                  alt="{{ 'reviews.photo_label' | t: name: review.auteur.value | escape }}"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </div>
+            {%- if review.titre.value != blank -%}
+              <p class="review-tile__title">{{ review.titre.value | escape }}</p>
+            {%- endif -%}
+            <blockquote class="review-tile__quote">
+              <p>{{ review.texte.value | strip_newlines | truncate: 220, '…' | escape }}</p>
+            </blockquote>
+            <figcaption class="review-tile__author">
+              <span class="review-tile__avatar" aria-hidden="true">{{ review.auteur.value | strip | slice: 0 | upcase }}</span>
+              <span class="review-tile__who">
+                <strong>{{ review.auteur.value | escape }}</strong>
+                {%- if review.achat_verifie.value and review.source.value == blank -%}
+                  <span class="review-tile__verified">
+                    {%- render 'icon', icon: 'check' -%}
+                    {{- 'reviews.verified' | t -}}
+                  </span>
+                {%- endif -%}
+                {%- if review.coloris.value != blank -%}
+                  <span class="review-tile__color">{{ 'reviews.color' | t: color: review.coloris.value | escape }}</span>
+                {%- endif -%}
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- liquid
+      comment
+        A moving band needs enough cards to fill wide screens: the set is
+        repeated (hidden from screen readers) up to at least eight cards.
+      endcomment
+      assign moving = false
+      if shown >= 4
+        assign moving = true
+      endif
+      assign repeats = 8 | plus: shown | minus: 1 | divided_by: shown | at_least: 1
+      assign extra = repeats | minus: 1
+      assign hidden_cards = cards | replace: '<li class="review-tile">', '<li class="review-tile" aria-hidden="true">'
+      assign track_items = shown | times: repeats
+      assign duration = track_items | times: seconds
+    -%}
+    {%- if moving -%}
+      <reviews-marquee
+        class="reviews-band__marquee reveal"
+        data-direction="{{ direction | default: 'ltr' }}"
+        style="--marquee-duration: {{ duration }}s;"
+      >
+        <div class="reviews-band__viewport">
+          <div class="reviews-band__rail">
+            <ul class="reviews-band__track" role="list">
+              {{- cards -}}
+              {%- for i in (1..extra) -%}{{ hidden_cards }}{%- endfor -%}
+            </ul>
+            <ul class="reviews-band__track" role="list" aria-hidden="true" inert>
+              {%- for i in (1..repeats) -%}{{ hidden_cards }}{%- endfor -%}
+            </ul>
+          </div>
+        </div>
+        <div class="page-width reviews-band__controls">
+          <button
+            type="button"
+            class="icon-button reviews-band__toggle"
+            data-marquee-toggle
+            aria-pressed="false"
+            aria-label="{{ 'reviews.marquee_pause' | t }}"
+          >
+            <span class="reviews-band__toggle-icon reviews-band__toggle-icon--pause">{% render 'icon', icon: 'pause' %}</span>
+            <span class="reviews-band__toggle-icon reviews-band__toggle-icon--play">{% render 'icon', icon: 'play' %}</span>
+          </button>
+        </div>
+      </reviews-marquee>
+    {%- else -%}
+      <div class="page-width reveal">
+        <ul class="reviews-band__static" role="list">{{ cards }}</ul>
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+{%- endif -%}
+
+{% stylesheet %}
+  /* Soft fade on both edges of the moving band */
+  .reviews-band__viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .reviews-band__rail {
+    display: flex;
+    width: max-content;
+    animation: reviews-band-move var(--marquee-duration, 60s) linear infinite;
+    will-change: transform;
+  }
+
+  /* Left to right: the band starts shifted by one full set and slides back to 0 */
+  @keyframes reviews-band-move {
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .reviews-band__marquee[data-direction='rtl'] .reviews-band__rail {
+    animation-direction: reverse;
+  }
+
+  .reviews-band__marquee:hover .reviews-band__rail,
+  .reviews-band__marquee:focus-within .reviews-band__rail,
+  .reviews-band__marquee.is-paused .reviews-band__rail,
+  .reviews-band__marquee.is-offscreen .reviews-band__rail {
+    animation-play-state: paused;
+  }
+
+  .reviews-band__track {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-md);
+    margin: 0;
+    padding: var(--space-sm) var(--space-md) var(--space-lg) 0;
+    list-style: none;
+  }
+
+  .reviews-band__static {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 22rem));
+    justify-content: center;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Review card: quiet frame, a large quotation mark, the reviewer at the bottom */
+  .review-tile {
+    display: flex;
+    flex: none;
+    width: min(21rem, 80vw);
+    min-width: 0;
+
+    .reviews-band__static & {
+      width: auto;
+    }
+  }
+
+  .review-tile__figure {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--space-sm);
+    width: 100%;
+    margin: 0;
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: 0 24px 48px -40px rgb(73 53 47 / 0.6);
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+
+  .review-tile__mark {
+    position: absolute;
+    inset-block-start: 0.35rem;
+    inset-inline-end: var(--space-md);
+    font-family: var(--font-heading-family);
+    font-size: 4.5rem;
+    line-height: 1;
+    color: rgb(var(--rose-strong-rgb) / 0.3);
+    pointer-events: none;
+  }
+
+  .review-tile__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .review-tile__stars {
+    --stars-size: 0.95rem;
+  }
+
+  .review-tile__photo {
+    flex: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+  }
+
+  .review-tile__title {
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .review-tile__quote {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text);
+    text-wrap: pretty;
+  }
+
+  .review-tile__author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .review-tile__avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    font-family: var(--font-heading-family);
+    font-size: 1rem;
+    color: var(--color-text);
+    background-color: #f3dfe2;
+  }
+
+  .review-tile__who {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-xs);
+    min-width: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+
+    & strong {
+      flex-basis: 100%;
+      font-size: var(--text-sm);
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text);
+    }
+  }
+
+  .review-tile__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-success);
+
+    & .icon {
+      --icon-size: 0.8rem;
+      stroke-width: 2.5;
+    }
+  }
+
+  .reviews-band__controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .reviews-band__toggle {
+    color: var(--color-text-muted);
+    box-shadow: inset 0 0 0 1px var(--color-border);
+
+    & .icon {
+      --icon-size: 0.95rem;
+    }
+  }
+
+  .reviews-band__toggle-icon--play,
+  .reviews-band__toggle[aria-pressed='true'] .reviews-band__toggle-icon--pause {
+    display: none;
+  }
+
+  .reviews-band__toggle[aria-pressed='true'] .reviews-band__toggle-icon--play {
+    display: inline-flex;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .review-tile:hover .review-tile__figure {
+      transform: translateY(-0.3rem);
+      box-shadow: 0 32px 60px -38px rgb(73 53 47 / 0.7);
+    }
+  }
+
+  /* Reduced motion: no movement, the band can be swiped instead */
+  @media (prefers-reduced-motion: reduce) {
+    .reviews-band__rail {
+      animation: none;
+    }
+
+    .reviews-band__viewport {
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .reviews-band__track[aria-hidden='true'],
+    .reviews-band__track [aria-hidden='true'],
+    .reviews-band__controls {
+      display: none;
+    }
+
+    .reviews-band__track {
+      padding-inline-start: var(--gutter);
+    }
+
+    .review-tile {
+      scroll-snap-align: start;
+    }
+  }
+{% endstylesheet %}

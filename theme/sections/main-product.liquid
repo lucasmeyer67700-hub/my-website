@@ -370,7 +370,16 @@
               endcapture
             -%}
             {%- if accordion_content != blank -%}
-              <details class="accordion product__accordion" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
+              <details
+                class="accordion product__accordion"
+                {% if block.settings.source == 'size_guide' %}
+                  id="guide-tailles"
+                {% endif %}
+                {% if block.settings.open %}
+                  open
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
                 <summary class="accordion__summary">
                   <span class="accordion__title">
                     {%- if block.settings.icon != 'none' -%}
@@ -409,7 +418,8 @@
         product: product,
         fit: section.settings.gallery_fit,
         ratio: section.settings.gallery_ratio,
-        overlays: section.blocks
+        overlays: section.blocks,
+        slots: section.settings.show_media_slots
       %}
     </div>
 
@@ -924,6 +934,13 @@
     },
     {
       "type": "checkbox",
+      "id": "show_media_slots",
+      "label": "Photo principale + 4 emplacements",
+      "info": "Tant que le produit a moins de 5 photos, les places libres s'affichent comme emplacements. Ajoutez vos photos dans Produits > ce produit > Médias.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "sticky_bar",
       "label": "Barre d'achat flottante",
       "info": "Sur mobile et sur ordinateur, une fois le bouton principal dépassé.",
@@ -1097,7 +1114,10 @@
             { "value": "briefcase", "label": "Bureau" },
             { "value": "map-pin", "label": "Déplacement" },
             { "value": "cloud", "label": "Douceur" },
-            { "value": "check", "label": "Validation" }
+            { "value": "check", "label": "Validation" },
+            { "value": "return", "label": "Réutilisable" },
+            { "value": "box", "label": "Lot / colis" },
+            { "value": "shield", "label": "Protection" }
           ],
           "default": "heat"
         },
@@ -1129,7 +1149,10 @@
             { "value": "briefcase", "label": "Bureau" },
             { "value": "map-pin", "label": "Déplacement" },
             { "value": "cloud", "label": "Douceur" },
-            { "value": "check", "label": "Validation" }
+            { "value": "check", "label": "Validation" },
+            { "value": "return", "label": "Réutilisable" },
+            { "value": "box", "label": "Lot / colis" },
+            { "value": "shield", "label": "Protection" }
           ],
           "default": "feather"
         },
@@ -1161,7 +1184,10 @@
             { "value": "briefcase", "label": "Bureau" },
             { "value": "map-pin", "label": "Déplacement" },
             { "value": "cloud", "label": "Douceur" },
-            { "value": "check", "label": "Validation" }
+            { "value": "check", "label": "Validation" },
+            { "value": "return", "label": "Réutilisable" },
+            { "value": "box", "label": "Lot / colis" },
+            { "value": "shield", "label": "Protection" }
           ],
           "default": "home"
         },

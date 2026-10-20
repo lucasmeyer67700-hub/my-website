@@ -27,6 +27,14 @@
             "show_dynamic_checkout": true
           }
         },
+        "highlight": {
+          "type": "reviews_highlight",
+          "settings": {
+            "heading": "Ce qu'en disent nos clientes",
+            "limit": 5,
+            "interval": 6
+          }
+        },
         "delivery": {
           "type": "delivery",
           "settings": {
@@ -38,23 +46,23 @@
         "trust": {
           "type": "trust",
           "settings": {
-            "show_lines": false,
-            "show_payment_icons": true
+            "show_payment_icons": true,
+            "show_lines": false
           }
         },
         "benefits": {
           "type": "benefits",
           "settings": {
             "heading": "Au quotidien",
-            "icon_1": "check",
-            "title_1": "",
-            "text_1": "",
+            "icon_1": "return",
+            "title_1": "Lavables et réutilisables",
+            "text_1": "Elles se lavent et se réutilisent, à votre rythme.",
             "icon_2": "check",
-            "title_2": "",
-            "text_2": "",
-            "icon_3": "check",
-            "title_3": "",
-            "text_3": ""
+            "title_2": "Tenues par des boutons-pression",
+            "text_2": "Les ailettes se referment autour de la culotte.",
+            "icon_3": "box",
+            "title_3": "Un lot de 5 serviettes",
+            "text_3": "De quoi alterner entre les lavages."
           }
         },
         "specs": {
@@ -64,7 +72,19 @@
             "icon": "none",
             "source": "specs",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
+          }
+        },
+        "usage": {
+          "type": "accordion",
+          "settings": {
+            "title": "Comment la poser",
+            "icon": "none",
+            "source": "usage",
+            "content": "",
+            "open": false,
+            "show_returns_offer": true
           }
         },
         "care": {
@@ -74,18 +94,19 @@
             "icon": "none",
             "source": "care",
             "content": "",
+            "show_returns_offer": false,
             "open": false
           }
         },
-        "shipping": {
+        "box": {
           "type": "accordion",
           "settings": {
-            "title": "Livraison et retours",
+            "title": "Contenu du colis",
             "icon": "none",
-            "source": "shipping",
+            "source": "box",
             "content": "",
             "open": false,
-            "show_returns_offer": false
+            "show_returns_offer": true
           }
         },
         "safety": {
@@ -95,17 +116,19 @@
             "icon": "none",
             "source": "safety_info",
             "content": "",
-            "open": false
+            "open": false,
+            "show_returns_offer": true
           }
         },
-        "usage": {
+        "description": {
           "type": "accordion",
           "settings": {
-            "title": "Mode d'utilisation",
+            "title": "Description",
             "icon": "none",
-            "source": "usage",
+            "source": "description",
             "content": "",
-            "open": false
+            "show_returns_offer": false,
+            "open": true
           }
         }
       },
@@ -113,22 +136,25 @@
         "variant",
         "inventory",
         "buy",
+        "highlight",
         "delivery",
         "trust",
+        "description",
         "benefits",
         "specs",
         "usage",
         "care",
-        "shipping",
+        "box",
         "safety"
       ],
       "settings": {
         "banner": "",
-        "price_badge": "",
+        "price_badge": "Nouveauté",
         "gallery_ratio": "1",
-        "gallery_fit": "cover",
+        "gallery_fit": "contain",
         "sticky_bar": true,
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-4",
+        "show_media_slots": true
       }
     },
     "reviews": {
@@ -138,14 +164,99 @@
       "settings": {
         "heading": "Avis",
         "show_breakdown": true,
-        "keywords": "confort\nlivraison",
+        "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
+        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
+        "color_scheme": "scheme-1",
+        "layout": "carousel",
+        "band_limit": 12,
+        "band_speed": 8
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "install": {
+          "type": "question",
+          "settings": {
+            "question": "Comment installer la serviette ?",
+            "answer": "<p>Placez-la au fond de votre culotte, face grise vers vous. Rabattez les ailettes noires sous la culotte, puis fermez les boutons-pression.</p>"
+          }
+        },
+        "wash": {
+          "type": "question",
+          "settings": {
+            "question": "Comment la laver ?",
+            "answer": "<p>Rincez-la à l'eau froide après utilisation, jusqu'à ce que l'eau soit claire, puis lavez-la en suivant l'étiquette de l'article. Évitez l'adoucissant et laissez-la sécher à l'air libre.</p>"
+          }
+        },
+        "count": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de serviettes contient le lot ?",
+            "answer": "<p>Cinq serviettes lavables.</p>"
+          }
+        },
+        "length": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle est leur longueur ?",
+            "answer": "<p>Environ 25 cm, selon les indications du fabricant.</p>"
+          }
+        },
+        "format": {
+          "type": "question",
+          "settings": {
+            "question": "Quel format choisir ?",
+            "answer": "<p>Les serviettes sont proposées en un seul format : un lot de 5.</p>"
+          }
+        },
+        "flow": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle protection selon mon flux ?",
+            "answer": "<p>Cela dépend de votre flux, de la durée de port et de votre confort. Essayez-la d'abord sur une courte durée, à la maison, puis ajustez selon votre ressenti.</p>"
+          }
+        },
+        "material": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle est leur composition ?",
+            "answer": "<p>Selon le fabricant : une surface imperméable, des couches en microfibre et une couche en bambou charbon. Le détail figure dans les caractéristiques du produit.</p>"
+          }
+        },
+        "shipping": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les délais de livraison ?",
+            "answer": "<p>La livraison est offerte en France, en 7 à 14 jours ouvrés, avec un numéro de suivi.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "install",
+        "wash",
+        "count",
+        "length",
+        "format",
+        "flow",
+        "material",
+        "shipping"
+      ],
+      "settings": {
+        "eyebrow": "Questions fréquentes",
+        "heading": "Avant de <em>commander.</em>",
+        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
+        "link_label": "Nous contacter",
+        "link": "/pages/contact",
+        "anchor": "faq",
         "color_scheme": "scheme-1"
       }
     }
   },
   "order": [
     "main",
-    "reviews"
+    "reviews",
+    "faq"
   ]
 }

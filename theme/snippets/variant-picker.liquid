@@ -60,6 +60,12 @@
         if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
           assign is_color = true
         endif
+        assign show_size_guide = false
+        if option_handle == 'taille' or option_handle == 'size'
+          if product.metafields.custom.guide_tailles.value != blank
+            assign show_size_guide = true
+          endif
+        endif
         assign is_offer = false
         assign offer_position = offer_index | plus: 1
         if option_position == offer_position
@@ -114,6 +120,8 @@
                       assign swatch_color = '#BDB6B3'
                     when 'beige'
                       assign swatch_color = '#E8DCCB'
+                    when 'rouge'
+                      assign swatch_color = '#9E2B33'
                   endcase
                 endif
               endif
@@ -261,6 +269,9 @@
         {%- if is_color and offer_index >= 0 and multi_hint != blank -%}
           <p class="variant-picker__hint" data-multi-hint hidden>{{ multi_hint | escape }}</p>
         {%- endif -%}
+        {%- if show_size_guide -%}
+          <a class="variant-picker__guide" href="#guide-tailles">{{ 'products.size_guide' | t }}</a>
+        {%- endif -%}
       </fieldset>
     {%- endfor -%}
 
@@ -310,6 +321,17 @@
     padding: 0;
     font-size: var(--text-sm);
     font-weight: var(--font-body-weight-medium);
+  }
+
+  .variant-picker__guide {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target, 2.75rem);
+    margin-block-start: var(--space-3xs);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .variant-picker__selected {

@@ -39,6 +39,16 @@
         endif
       endfor
       assign average = rating_sum | times: 1.0 | divided_by: review_count
+      assign display_count = review_count
+      if source_name != blank
+        if product.metafields.custom.avis_externes_note.value != blank
+          assign average = product.metafields.custom.avis_externes_note.value.rating
+        endif
+        assign source_total = product.metafields.custom.avis_externes_total.value | default: 0
+        if source_total > review_count
+          assign display_count = source_total
+        endif
+      endif
       assign average_x10 = average | times: 10 | round
       assign average_int = average_x10 | divided_by: 10 | floor
       assign average_dec = average_x10 | modulo: 10
@@ -47,17 +57,16 @@
     -%}
     <review-rotator class="review-highlight" data-interval="{{ interval | default: 6 }}" {{ attributes }}>
       <div class="review-highlight__head">
-        {%- if source_name != blank -%}
-          <p class="review-highlight__heading">{{ 'reviews.source_heading' | t: source: source_name }}</p>
-        {%- elsif heading != blank -%}
+        {%- comment -%} With reviews from another site, the summary line names it. {%- endcomment -%}
+        {%- if source_name == blank and heading != blank -%}
           <p class="review-highlight__heading">{{ heading | escape }}</p>
         {%- endif -%}
         <a class="review-highlight__summary" href="{{ reviews_link }}">
           {% render 'stars', rating: average %}
           <span>
-            {{- average_text }}/5 ·
+            <strong>{{ average_text }}/5</strong> ·
             {% if source_name != blank -%}
-              {{- 'reviews.see_all_source' | t: count: review_count, source: source_name -}}
+              {{- 'reviews.source_total' | t: count: display_count, source: source_name -}}
             {%- else -%}
               {{- 'reviews.see_all' | t: count: review_count -}}
             {%- endif -%}
@@ -78,20 +87,25 @@
             {% endif %}
           >
             <figure class="review-highlight__figure">
+              <span class="review-highlight__mark" aria-hidden="true">&ldquo;</span>
               {% render 'stars', rating: review.note.value.rating, class: 'review-highlight__stars' %}
               <blockquote class="review-highlight__quote">
                 <p>{{ review.texte.value | strip_newlines | truncate: 170, '…' | escape }}</p>
               </blockquote>
               <figcaption class="review-highlight__author">
-                <strong>{{ review.auteur.value | escape }}</strong>
-                {%- if review.source.value != blank -%}
-                  <span class="review-source">{{ 'reviews.source_badge' | t: source: review.source.value | escape }}</span>
-                {%- elsif review.achat_verifie.value -%}
-                  <span class="review-highlight__verified">
-                    {%- render 'icon', icon: 'check' -%}
-                    {{- 'reviews.verified' | t -}}
-                  </span>
-                {%- endif -%}
+                <span class="review-highlight__avatar" aria-hidden="true">{{ review.auteur.value | strip | slice: 0 | upcase }}</span>
+                <span class="review-highlight__who">
+                  <strong>{{ review.auteur.value | escape }}</strong>
+                  {%- if review.achat_verifie.value and review.source.value == blank -%}
+                    <span class="review-highlight__verified">
+                      {%- render 'icon', icon: 'check' -%}
+                      {{- 'reviews.verified' | t -}}
+                    </span>
+                  {%- endif -%}
+                  {%- if review.coloris.value != blank -%}
+                    <span>{{ 'reviews.color' | t: color: review.coloris.value | escape }}</span>
+                  {%- endif -%}
+                </span>
               </figcaption>
             </figure>
           </li>
@@ -132,11 +146,12 @@
 {% stylesheet %}
   .review-highlight {
     display: grid;
-    gap: var(--space-xs);
-    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-md) var(--space-sm);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background-color: var(--color-surface);
+    box-shadow: 0 22px 44px -38px rgb(73 53 47 / 0.55);
   }
 
   .review-highlight--empty {
@@ -173,6 +188,10 @@
       --stars-size: 0.9rem;
     }
 
+    & strong {
+      font-weight: var(--font-body-weight-medium);
+    }
+
     &:hover span {
       text-decoration: underline;
       text-underline-offset: 0.2em;
@@ -203,9 +222,23 @@
   }
 
   .review-highlight__figure {
+    position: relative;
     display: grid;
-    gap: var(--space-2xs);
+    gap: var(--space-xs);
     margin: 0;
+    padding-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .review-highlight__mark {
+    position: absolute;
+    inset-block-start: 0.1rem;
+    inset-inline-end: 0;
+    font-family: var(--font-heading-family);
+    font-size: 3.75rem;
+    line-height: 1;
+    color: rgb(var(--rose-strong-rgb) / 0.3);
+    pointer-events: none;
   }
 
   .review-highlight__stars {
@@ -214,21 +247,45 @@
 
   .review-highlight__quote {
     margin: 0;
-    font-size: var(--text-base);
-    line-height: 1.55;
+    padding-inline-end: 2.5rem;
+    font-family: var(--font-heading-family);
+    font-size: 1.125rem;
+    font-style: italic;
+    line-height: 1.5;
     color: var(--color-text);
     text-wrap: pretty;
   }
 
   .review-highlight__author {
     display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .review-highlight__avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-family: var(--font-heading-family);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    background-color: #f3dfe2;
+  }
+
+  .review-highlight__who {
+    display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.15rem var(--space-xs);
-    font-size: var(--text-sm);
+    gap: 0 var(--space-xs);
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
 
     & strong {
+      flex-basis: 100%;
+      font-size: var(--text-sm);
       font-weight: var(--font-body-weight-medium);
       color: var(--color-text);
     }

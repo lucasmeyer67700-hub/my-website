@@ -8,14 +8,16 @@
           "settings": {
             "title": "Culotte menstruelle",
             "text": "Bientôt dans la boutique VELEA.",
-            "image": "shopify://shop_images/Gemini_Generated_Image_4qr4e24qr4e24qr4.jpg"
+            "image": "shopify://shop_images/Gemini_Generated_Image_4qr4e24qr4e24qr4.jpg",
+            "product": "culotte-menstruelle"
           }
         },
         "soon-2": {
           "type": "coming_soon",
           "settings": {
             "title": "Serviette menstruelle",
-            "text": "Bientôt dans la boutique VELEA."
+            "text": "Bientôt dans la boutique VELEA.",
+            "product": "serviettes-menstruelles-lavables"
           }
         }
       },
