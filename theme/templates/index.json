@@ -177,7 +177,8 @@
         "gallery_ratio": "1",
         "gallery_fit": "cover",
         "anchor": "offre",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-2",
+        "media_layout": "composition"
       }
     },
     "videos": {

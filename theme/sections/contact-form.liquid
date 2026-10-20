@@ -1,88 +1,263 @@
+{%- comment -%}
+  Contact page form, sent by Shopify's own contact form (the message reaches
+  the store's contact e-mail). Fields are checked in the browser before
+  sending; the success message only shows once Shopify confirms the message
+  (form.posted_successfully?). Spam: Shopify's contact form protection plus a
+  hidden field that people never fill. No contact detail is written here: the
+  side panel only shows the merchant's own text and help links.
+{%- endcomment -%}
+{%- liquid
+  assign subjects = section.settings.subjects | newline_to_br | split: '<br />'
+  assign help_menu = section.settings.menu
+-%}
 <section class="contact section section--flush-top color-{{ section.settings.color_scheme }}" aria-labelledby="ContactTitle-{{ section.id }}">
-  <div class="page-width page-width--text">
-    <h2 class="h3 contact__title" id="ContactTitle-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
-
-    {%- form 'contact', id: 'ContactForm', class: 'contact__form' -%}
-      {%- if form.posted_successfully? -%}
-        <p class="form-message form-message--success" role="status">
-          {% render 'icon', icon: 'check' %}
-          {{ 'contact.success' | t }}
-        </p>
-      {%- elsif form.errors -%}
-        <div class="form-message form-message--error" role="alert" id="ContactFormErrors">
-          {% render 'icon', icon: 'alert' %}
-          <ul class="form-message__list">
-            {%- for field in form.errors -%}
+  <div class="page-width contact__grid">
+    <aside class="contact__aside">
+      {%- if section.settings.aside_heading != blank -%}
+        <p class="contact__aside-title">{{ section.settings.aside_heading | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.aside_text != blank -%}
+        <div class="rte contact__aside-text">{{ section.settings.aside_text }}</div>
+      {%- endif -%}
+      {%- if help_menu != blank and help_menu.links.size > 0 -%}
+        <nav class="contact__help" aria-label="{{ 'contact.help_label' | t }}">
+          <ul class="contact__help-list" role="list">
+            {%- for link in help_menu.links -%}
+              {%- if link.current -%}{%- continue -%}{%- endif -%}
               <li>
-                {%- if field == 'form' -%}
-                  {{ form.errors.messages[field] }}
-                {%- else -%}
-                  {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
-                {%- endif -%}
+                <a class="contact__help-link" href="{{ link.url }}">
+                  <span>{{ link.title | escape }}</span>
+                  {% render 'icon', icon: 'arrow-right' %}
+                </a>
               </li>
             {%- endfor -%}
           </ul>
-        </div>
+        </nav>
       {%- endif -%}
+    </aside>
 
-      <div class="contact__row">
-        <div class="field">
-          <label class="field__label" for="ContactName">{{ 'contact.name' | t }}</label>
-          <input class="field__input" type="text" id="ContactName" name="contact[{{ 'contact.name' | t }}]" autocomplete="name" value="{{ form.name }}">
+    <contact-form
+      class="contact__card"
+      data-error-name="{{ 'contact.error_name' | t | escape }}"
+      data-error-email-empty="{{ 'contact.error_email_empty' | t | escape }}"
+      data-error-email="{{ 'contact.error_email' | t | escape }}"
+      data-error-subject="{{ 'contact.error_subject' | t | escape }}"
+      data-error-message="{{ 'contact.error_message' | t | escape }}"
+    >
+      <h2 class="h3 contact__title" id="ContactTitle-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+
+      {%- form 'contact', id: 'ContactForm', class: 'contact__form', novalidate: 'novalidate' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form-message form-message--success" role="status" tabindex="-1" data-contact-success>
+            {% render 'icon', icon: 'check' %}
+            {{ 'contact.success' | t }}
+          </p>
+        {%- elsif form.errors -%}
+          <div class="form-message form-message--error" role="alert" id="ContactFormErrors" tabindex="-1" data-contact-errors>
+            {% render 'icon', icon: 'alert' %}
+            <ul class="form-message__list">
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Left empty by people; a filled value stops the sending. {%- endcomment -%}
+        <div class="contact__trap" aria-hidden="true">
+          <label for="ContactWebsite">{{ 'contact.trap_label' | t }}</label>
+          <input type="text" id="ContactWebsite" name="contact[website]" tabindex="-1" autocomplete="off" data-contact-trap>
         </div>
+
+        <div class="contact__row">
+          <div class="field">
+            <label class="field__label" for="ContactName">
+              {{- 'contact.full_name' | t }} <span aria-hidden="true">*</span>
+              <span class="visually-hidden">({{ 'general.required' | t }})</span>
+            </label>
+            <input
+              class="field__input"
+              type="text"
+              id="ContactName"
+              name="contact[name]"
+              autocomplete="name"
+              value="{{ form.name }}"
+              required
+              aria-required="true"
+              aria-describedby="ContactNameError"
+              data-validate="name"
+            >
+            <p class="field__error" id="ContactNameError" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="ContactEmail">
+              {{- 'contact.email' | t }} <span aria-hidden="true">*</span>
+              <span class="visually-hidden">({{ 'general.required' | t }})</span>
+            </label>
+            <input
+              class="field__input"
+              type="email"
+              id="ContactEmail"
+              name="contact[email]"
+              autocomplete="email"
+              spellcheck="false"
+              autocapitalize="off"
+              value="{{ form.email }}"
+              required
+              aria-required="true"
+              aria-describedby="ContactEmailError"
+              data-validate="email"
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+              {% endif %}
+            >
+            <p class="field__error" id="ContactEmailError" hidden></p>
+          </div>
+        </div>
+
+        <div class="contact__row">
+          <div class="field">
+            <label class="field__label" for="ContactSubject">
+              {{- 'contact.subject' | t }} <span aria-hidden="true">*</span>
+              <span class="visually-hidden">({{ 'general.required' | t }})</span>
+            </label>
+            <span class="contact__select">
+              <select
+                class="field__input"
+                id="ContactSubject"
+                name="contact[{{ 'contact.subject' | t }}]"
+                required
+                aria-required="true"
+                aria-describedby="ContactSubjectError"
+                data-validate="subject"
+              >
+                <option value="">{{ 'contact.subject_placeholder' | t }}</option>
+                {%- for raw_subject in subjects -%}
+                  {%- assign subject = raw_subject | strip -%}
+                  {%- if subject != blank -%}
+                    <option value="{{ subject | escape }}">{{ subject | escape }}</option>
+                  {%- endif -%}
+                {%- endfor -%}
+              </select>
+              {% render 'icon', icon: 'chevron-down' %}
+            </span>
+            <p class="field__error" id="ContactSubjectError" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="ContactOrder">{{ 'contact.order_number' | t }}</label>
+            <input class="field__input" type="text" id="ContactOrder" name="contact[{{ 'contact.order_number' | t }}]" autocomplete="off">
+          </div>
+        </div>
+
         <div class="field">
-          <label class="field__label" for="ContactEmail">
-            {{- 'contact.email' | t }} <span aria-hidden="true">*</span>
+          <label class="field__label" for="ContactBody">
+            {{- 'contact.message' | t }} <span aria-hidden="true">*</span>
             <span class="visually-hidden">({{ 'general.required' | t }})</span>
           </label>
-          <input
+          <textarea
             class="field__input"
-            type="email"
-            id="ContactEmail"
-            name="contact[email]"
-            autocomplete="email"
-            spellcheck="false"
-            autocapitalize="off"
-            value="{{ form.email }}"
+            id="ContactBody"
+            name="contact[body]"
             required
             aria-required="true"
-            {% if form.errors contains 'email' %}
-              aria-invalid="true" aria-describedby="ContactFormErrors"
+            aria-describedby="ContactBodyError"
+            data-validate="message"
+            {% if form.errors contains 'body' %}
+              aria-invalid="true"
             {% endif %}
           >
+            {{- form.body -}}
+          </textarea>
+          <p class="field__error" id="ContactBodyError" hidden></p>
         </div>
-      </div>
 
-      <div class="field">
-        <label class="field__label" for="ContactOrder">{{ 'contact.order_number' | t }}</label>
-        <input class="field__input" type="text" id="ContactOrder" name="contact[{{ 'contact.order_number' | t }}]">
-      </div>
+        <p class="contact__privacy text-small text-muted">
+          {{ 'contact.privacy' | t }}
+          {%- if section.settings.privacy_page != blank %}
+            <a href="{{ section.settings.privacy_page.url }}">{{ 'contact.privacy_link' | t }}</a>
+          {%- endif -%}
+        </p>
 
-      <div class="field">
-        <label class="field__label" for="ContactBody">
-          {{- 'contact.message' | t }} <span aria-hidden="true">*</span>
-          <span class="visually-hidden">({{ 'general.required' | t }})</span>
-        </label>
-        <textarea
-          class="field__input"
-          id="ContactBody"
-          name="contact[body]"
-          required
-          aria-required="true"
-          {% if form.errors contains 'body' %}
-            aria-invalid="true" aria-describedby="ContactFormErrors"
-          {% endif %}
-        >
-          {{- form.body -}}
-        </textarea>
-      </div>
-
-      <button type="submit" class="button">{{ 'contact.submit' | t }}</button>
-    {%- endform -%}
+        <button type="submit" class="button contact__submit" data-contact-submit>
+          <span data-contact-label>{{ 'contact.submit' | t }}</span>
+          <span data-contact-sending hidden>{{ 'contact.sending' | t }}</span>
+        </button>
+      {%- endform -%}
+    </contact-form>
   </div>
 </section>
 
 {% stylesheet %}
+  .contact__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+      gap: clamp(2.5rem, 5vw, 5rem);
+    }
+  }
+
+  .contact__aside {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .contact__aside-title {
+    font-family: var(--font-heading-family);
+    font-size: var(--heading-4);
+    line-height: 1.25;
+  }
+
+  .contact__aside-text {
+    color: var(--color-text-muted);
+  }
+
+  .contact__help-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .contact__help-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    min-height: 3.25rem;
+    border-block-end: 1px solid var(--color-border);
+    color: var(--color-text);
+    text-decoration: none;
+
+    & .icon {
+      --icon-size: 1rem;
+      color: var(--color-text-muted);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+
+    &:hover .icon {
+      transform: translateX(0.2rem);
+    }
+  }
+
+  .contact__card {
+    display: block;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: 0 24px 48px -42px rgb(73 53 47 / 0.55);
+  }
+
   .contact__title {
     margin-block-end: var(--space-lg);
   }
@@ -99,12 +274,57 @@
 
   .contact__row {
     display: grid;
+    align-items: start;
     gap: var(--space-md);
     width: 100%;
 
     @media screen and (min-width: 750px) {
       grid-template-columns: 1fr 1fr;
     }
+  }
+
+  .contact__select {
+    position: relative;
+    display: block;
+
+    & select {
+      padding-inline-end: 2.5rem;
+      appearance: none;
+    }
+
+    & .icon {
+      --icon-size: 1rem;
+
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-end: 1rem;
+      translate: 0 -50%;
+      pointer-events: none;
+    }
+  }
+
+  .field__error {
+    margin-block-start: 0.35rem;
+    font-size: var(--text-sm);
+    color: var(--color-error);
+  }
+
+  .contact__trap {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .contact__privacy a {
+    color: inherit;
+  }
+
+  .contact__submit[aria-busy='true'] {
+    cursor: progress;
+    opacity: 0.75;
   }
 {% endstylesheet %}
 
@@ -117,8 +337,42 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Titre",
+      "label": "Titre du formulaire",
       "default": "Écrivez-nous"
+    },
+    {
+      "type": "textarea",
+      "id": "subjects",
+      "label": "Sujets proposés",
+      "info": "Un sujet par ligne.",
+      "default": "Une question sur un produit\nLe suivi de ma commande\nLa livraison\nUn retour ou un remboursement\nAutre demande"
+    },
+    {
+      "type": "page",
+      "id": "privacy_page",
+      "label": "Page de confidentialité"
+    },
+    {
+      "type": "header",
+      "content": "Colonne d'accompagnement"
+    },
+    {
+      "type": "text",
+      "id": "aside_heading",
+      "label": "Titre",
+      "default": "Nous sommes là pour vous"
+    },
+    {
+      "type": "richtext",
+      "id": "aside_text",
+      "label": "Texte",
+      "default": "<p>Une question sur un produit, une commande ou un retour ? Écrivez-nous : nous vous répondons par e-mail.</p>"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Liens d'aide",
+      "info": "Par exemple : FAQ, suivi de commande, livraison et retours."
     },
     {
       "type": "color_scheme",

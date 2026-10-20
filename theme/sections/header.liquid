@@ -5,7 +5,24 @@
   endif
   assign secondary_menu = section.settings.secondary_menu
   assign cta_product = section.settings.cta_product
+  assign wordmark_font = section.settings.wordmark_font
+  assign wordmark_tracking = section.settings.wordmark_spacing | divided_by: 100.0
 -%}
+
+{%- unless settings.logo or wordmark_font.system? -%}
+  {%- comment -%} The shop name is the logo: its font is fetched first so it never flashes. {%- endcomment -%}
+  {{ wordmark_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- endunless -%}
+{%- style -%}
+  {%- unless settings.logo or wordmark_font.system? -%}
+    {{ wordmark_font | font_face: font_display: 'swap' }}
+  {%- endunless %}
+  .site-header {
+    --wordmark-font: {{ wordmark_font.family }}, {{ wordmark_font.fallback_families }};
+    --wordmark-weight: {{ wordmark_font.weight }};
+    --wordmark-tracking: {{ wordmark_tracking }}em;
+  }
+{%- endstyle -%}
 
 <site-header
   class="site-header color-{{ section.settings.color_scheme }}"
@@ -62,7 +79,7 @@
               fetchpriority="high"
             >
           {%- endif -%}
-          <span class="site-header__wordmark">{{ shop.name }}</span>
+          <span class="site-header__wordmark{% if section.settings.wordmark_uppercase %} site-header__wordmark--caps{% endif %}">{{ shop.name | escape }}</span>
         {%- endif -%}
       </a>
     </div>
@@ -366,16 +383,30 @@
     height: auto;
   }
 
+  /* Shop name as the logo: its own font, even letter spacing, crisp edges */
   .site-header__wordmark {
-    font-family: var(--font-heading-family);
-    font-size: max(1.625rem, calc(var(--wordmark-size, 2.25rem) * 0.82));
+    margin-inline-end: calc(var(--wordmark-tracking, 0em) * -1); /* trailing letter spacing */
+    font-family: var(--wordmark-font, var(--font-heading-family));
+    font-size: max(1.375rem, min(calc(var(--wordmark-size, 2.25rem) * 0.8), 7.5vw));
+    font-weight: var(--wordmark-weight, 400);
+    font-kerning: normal;
+    font-synthesis: none;
     line-height: 1;
-    letter-spacing: 0.015em;
+    letter-spacing: var(--wordmark-tracking, 0.015em);
     white-space: nowrap;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     @media screen and (min-width: 990px) {
       font-size: var(--wordmark-size, 2.25rem);
     }
+  }
+
+  /* Capitals sit a touch low in the line box: lift them to the optical centre */
+  .site-header__wordmark--caps {
+    padding-block-start: 0.06em;
+    text-transform: uppercase;
   }
 
   .site-header__nav {
@@ -902,14 +933,41 @@
       "default": 44
     },
     {
+      "type": "paragraph",
+      "content": "Sans logo image (Paramètres du thème > Logo), le nom de la boutique sert de logo."
+    },
+    {
+      "type": "font_picker",
+      "id": "wordmark_font",
+      "label": "Police du nom de la boutique",
+      "default": "playfair_display_n4"
+    },
+    {
       "type": "range",
       "id": "wordmark_size",
-      "label": "Taille du nom de la boutique (sans logo image)",
-      "min": 24,
+      "label": "Taille du nom de la boutique",
+      "min": 20,
       "max": 56,
       "step": 2,
       "unit": "px",
-      "default": 38
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "wordmark_spacing",
+      "label": "Espacement des lettres",
+      "info": "En % de la taille des lettres.",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "wordmark_uppercase",
+      "label": "Nom en capitales",
+      "default": true
     },
     {
       "type": "color_scheme",

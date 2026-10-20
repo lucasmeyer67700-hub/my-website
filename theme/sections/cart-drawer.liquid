@@ -14,19 +14,14 @@
         </button>
       </div>
 
+      {%- comment -%} Empty cart: the sentence only, nothing else. {%- endcomment -%}
       {%- if cart.item_count == 0 -%}
         <div class="drawer__body cart-drawer__empty">
-          <p class="h4">{{ 'cart.empty' | t }}</p>
-          {%- assign suggested = settings.cart_empty_product -%}
-          {%- if suggested != blank -%}
-            {% render 'product-card', product: suggested, heading_tag: 'p', sizes: '(min-width: 480px) 380px, 90vw' %}
-          {%- endif -%}
-          <button type="button" class="button button--secondary button--full" data-drawer-close>
-            {{- 'cart.continue_shopping' | t -}}
-          </button>
+          <p class="cart-drawer__empty-text">{{ 'cart.empty' | t }}</p>
         </div>
       {%- else -%}
-        <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm" class="drawer__body" novalidate>
+        <div class="drawer__body">
+        <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm" novalidate>
           <ul class="cart-lines" role="list">
             {%- for item in cart.items -%}
               {% render 'cart-line', item: item, index: forloop.index, context: 'drawer' %}
@@ -40,6 +35,9 @@
             </div>
           {%- endif -%}
         </form>
+        {%- comment -%} Outside the cart form: each add-on has its own add form. {%- endcomment -%}
+        {% render 'cart-upsell', context: 'drawer' %}
+        </div>
 
         <div class="drawer__footer">
           {% render 'cart-summary', form_id: 'CartDrawerForm' %}
@@ -59,8 +57,19 @@
   .cart-drawer__empty {
     display: grid;
     align-content: start;
-    gap: var(--space-lg);
   }
+
+  .cart-drawer__empty-text {
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+
+  /* The title gets focus when the drawer opens (for screen readers): no ring on it. */
+  .cart-drawer [data-cart-title]:focus {
+    outline: none;
+  }
+
+
 
   .cart-drawer__note {
     margin-block-start: var(--space-lg);

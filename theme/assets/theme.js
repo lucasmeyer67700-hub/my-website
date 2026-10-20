@@ -198,6 +198,158 @@ class CartDrawer extends ModalDrawer {
 customElements.define('cart-drawer', CartDrawer);
 
 /**
+ * Optional add-ons under a filled cart (snippet "cart-upsell"). Each add-on
+ * is added only on click; products with several variants need a choice first.
+ * The cart is re-rendered from the server's answer, so totals stay exact.
+ */
+class CartUpsell extends HTMLElement {
+  connectedCallback() {
+    this.addEventListener('submit', this.#onSubmit.bind(this));
+    this.addEventListener('change', (event) => {
+      const form = event.target.closest('[data-upsell-form]');
+      if (form) this.#showError(form, '');
+    });
+  }
+
+  /**
+   * @param {HTMLFormElement} form
+   * @param {string} message
+   */
+  #showError(form, message) {
+    const error = form.querySelector('[data-upsell-error]');
+    if (!error) return;
+    error.textContent = message;
+    error.hidden = !message;
+  }
+
+  async #onSubmit(event) {
+    const form = event.target.closest('[data-upsell-form]');
+    if (!form) return;
+    event.preventDefault();
+
+    const id = form.querySelector('[name="id"]')?.value;
+    if (!id) {
+      this.#showError(form, theme.strings.upsellChoose);
+      form.querySelector('select')?.focus();
+      return;
+    }
+
+    const button = form.querySelector('[type="submit"]');
+    button?.setAttribute('aria-busy', 'true');
+    button?.toggleAttribute('disabled', true);
+    try {
+      const result = await cartRequest(`${theme.routes.cartAdd}.js`, {
+        items: [{ id: Number(id), quantity: 1 }],
+        sections: getCartSectionIds().join(','),
+        sections_url: window.location.pathname,
+      });
+      renderCartSections(result.sections);
+      announce(theme.strings.upsellAdded);
+    } catch (error) {
+      this.#showError(form, error.data?.description || theme.strings.cartError);
+    } finally {
+      // The add-on usually leaves the list once added; reset it if it is still shown.
+      button?.removeAttribute('aria-busy');
+      button?.toggleAttribute('disabled', false);
+    }
+  }
+}
+
+customElements.define('cart-upsell', CartUpsell);
+
+/* -------------------------------------------------------------------------- */
+/* Contact form                                                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Checks the contact form before Shopify sends it, with one message per field.
+ * Sending stays Shopify's native form post: the success message only appears
+ * on the page Shopify returns once the message is accepted.
+ */
+class ContactForm extends HTMLElement {
+  connectedCallback() {
+    this.form = this.querySelector('form');
+    if (!this.form) return;
+    this.form.addEventListener('submit', this.#onSubmit.bind(this));
+    this.form.addEventListener('input', (event) => {
+      const field = event.target.closest('[data-validate]');
+      if (field?.getAttribute('aria-invalid') === 'true') this.#check(field);
+    });
+    this.form.addEventListener('focusout', (event) => {
+      const field = event.target.closest('[data-validate]');
+      if (field?.dataset.touched) this.#check(field);
+    });
+    // Shopify's answer (sent or refused) is brought to the visitor's attention.
+    this.querySelector('[data-contact-success], [data-contact-errors]')?.focus();
+  }
+
+  /**
+   * @param {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} field
+   * @returns {string} The error message, empty when the value is fine.
+   */
+  #message(field) {
+    const value = field.value.trim();
+    switch (field.dataset.validate) {
+      case 'name':
+        return value.length >= 2 ? '' : this.dataset.errorName;
+      case 'email':
+        if (!value) return this.dataset.errorEmailEmpty;
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) ? '' : this.dataset.errorEmail;
+      case 'subject':
+        return value ? '' : this.dataset.errorSubject;
+      case 'message':
+        return value.length >= 10 ? '' : this.dataset.errorMessage;
+      default:
+        return '';
+    }
+  }
+
+  /** @param {HTMLElement} field */
+  #check(field) {
+    const message = this.#message(field);
+    const error = document.getElementById(field.getAttribute('aria-describedby') || '');
+    field.setAttribute('aria-invalid', String(Boolean(message)));
+    if (error) {
+      error.textContent = message;
+      error.hidden = !message;
+    }
+    return !message;
+  }
+
+  /** @param {SubmitEvent} event */
+  #onSubmit(event) {
+    // A filled hidden field means a robot: nothing is sent.
+    if (this.form.querySelector('[data-contact-trap]')?.value) {
+      event.preventDefault();
+      return;
+    }
+
+    let firstInvalid = null;
+    for (const field of this.form.querySelectorAll('[data-validate]')) {
+      field.dataset.touched = 'true';
+      if (!this.#check(field) && !firstInvalid) firstInvalid = field;
+    }
+    if (firstInvalid) {
+      event.preventDefault();
+      firstInvalid.focus();
+      return;
+    }
+
+    if (this.sending) {
+      event.preventDefault();
+      return;
+    }
+    this.sending = true;
+    const button = this.form.querySelector('[data-contact-submit]');
+    button?.setAttribute('aria-busy', 'true');
+    this.form.querySelector('[data-contact-label]')?.toggleAttribute('hidden', true);
+    this.form.querySelector('[data-contact-sending]')?.toggleAttribute('hidden', false);
+  }
+}
+
+customElements.define('contact-form', ContactForm);
+
+/**
  * Changes a cart line quantity and re-renders every cart view.
  * @param {number} line
  * @param {number} quantity

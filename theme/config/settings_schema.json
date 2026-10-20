@@ -269,9 +269,29 @@
         "default": false
       },
       {
-        "type": "product",
-        "id": "cart_empty_product",
-        "label": "Produit suggéré quand le panier est vide"
+        "type": "header",
+        "content": "Compléments dans le panier"
+      },
+      {
+        "type": "collection",
+        "id": "cart_upsell_collection",
+        "label": "Produits proposés en complément",
+        "info": "Seuls les produits disponibles et absents du panier sont proposés. Le panier vide n'affiche que « Votre panier est vide. »."
+      },
+      {
+        "type": "text",
+        "id": "cart_upsell_heading",
+        "label": "Titre des compléments",
+        "default": "Pour compléter votre rituel"
+      },
+      {
+        "type": "range",
+        "id": "cart_upsell_limit",
+        "label": "Nombre de compléments",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
       }
     ]
   },

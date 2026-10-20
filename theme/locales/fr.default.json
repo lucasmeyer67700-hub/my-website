@@ -75,7 +75,6 @@
   "cart": {
     "title": "Votre panier",
     "empty": "Votre panier est vide.",
-    "continue_shopping": "Continuer mes achats",
     "subtotal": "Sous-total",
     "taxes_included": "Taxes incluses.",
     "shipping_at_checkout": "Les frais de livraison sont confirmés à l'étape du paiement.",
@@ -94,7 +93,13 @@
     "product": "Produit",
     "quantity": "Quantité",
     "total": "Total",
-    "discount": "Réduction"
+    "discount": "Réduction",
+    "upsell_add": "Ajouter",
+    "upsell_choose": "Choisir…",
+    "upsell_choose_label": "Choisir une option pour {{ product }}",
+    "upsell_choose_error": "Choisissez une option avant d'ajouter.",
+    "upsell_added": "Ajouté au panier",
+    "unit_price": "{{ price }} l'unité"
   },
   "newsletter": {
     "label": "Adresse e-mail",
@@ -104,12 +109,24 @@
     "consent": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Vous pouvez vous désinscrire à tout moment grâce au lien présent dans chaque e-mail."
   },
   "contact": {
-    "name": "Nom",
     "email": "Adresse e-mail",
     "order_number": "Numéro de commande (facultatif)",
     "message": "Votre message",
     "submit": "Envoyer le message",
-    "success": "Merci, votre message a bien été envoyé. Nous vous répondons dès que possible."
+    "success": "Merci, votre message a bien été envoyé. Nous vous répondons dès que possible.",
+    "full_name": "Nom et prénom",
+    "subject": "Sujet de votre demande",
+    "subject_placeholder": "Choisissez un sujet",
+    "privacy": "Vos informations servent uniquement à répondre à votre demande.",
+    "privacy_link": "Politique de confidentialité",
+    "sending": "Envoi en cours…",
+    "trap_label": "Ne remplissez pas ce champ",
+    "help_label": "Aide",
+    "error_name": "Indiquez votre nom et votre prénom.",
+    "error_email_empty": "Indiquez votre adresse e-mail.",
+    "error_email": "Cette adresse e-mail semble incorrecte (exemple : prenom@domaine.fr).",
+    "error_subject": "Choisissez le sujet de votre demande.",
+    "error_message": "Écrivez votre message (10 caractères au moins)."
   },
   "templates": {
     "not_found_title": "Page introuvable",
@@ -165,6 +182,8 @@
     "journey_step": "Étape {{ number }}",
     "journey_image_hint": "Ajoutez la photo de cette étape (bloc « Étape »).",
     "featured_product_editor_empty": "Choisissez le produit à mettre en avant dans les réglages de cette section.",
+    "offer_mosaic_alt": "{{ product }} – image {{ index }}",
+    "offer_mosaic_slot": "Image {{ index }}",
     "video_slot_hint": "Vidéo {{ number }} : ajoutez votre vidéo dans ce bloc (Contenu > Fichiers). Cet emplacement vide n'est visible que dans l'éditeur."
   },
   "collections": {

@@ -34,11 +34,56 @@
   >
     <div class="page-width featured-product__grid">
       <div class="featured-product__media reveal">
-        {% render 'product-gallery',
-          product: product,
-          fit: section.settings.gallery_fit,
-          ratio: section.settings.gallery_ratio
-        %}
+        {%- if section.settings.media_layout == 'composition' -%}
+          {%- comment -%}
+            Four image places, chosen in the editor: Offre produit > Composition.
+            Image 1 = mosaic_image_1 (large), then mosaic_image_2..4 (small row).
+            Image 1 shows the product photo until one is chosen; an empty place
+            stays a soft frame, never a stand-in photo.
+          {%- endcomment -%}
+          <div class="offer-mosaic" style="--offer-mosaic-fit: {{ section.settings.gallery_fit }};">
+            {%- for i in (1..4) -%}
+              {%- liquid
+                assign slot_key = 'mosaic_image_' | append: i
+                assign slot_image = section.settings[slot_key]
+                if i == 1 and slot_image == blank and product.featured_media != blank
+                  assign slot_image = product.featured_media.preview_image
+                endif
+                assign slot_alt = slot_image.alt
+                if slot_alt == blank
+                  assign slot_alt = 'sections.offer_mosaic_alt' | t: product: product.title, index: i
+                endif
+                if i == 1
+                  assign slot_sizes = '(min-width: 990px) 52vw, calc(100vw - 2.5rem)'
+                else
+                  assign slot_sizes = '(min-width: 990px) 17vw, 32vw'
+                endif
+              -%}
+              <figure class="offer-mosaic__slot offer-mosaic__slot--{{ i }}{% if slot_image == blank %} offer-mosaic__slot--empty{% endif %}" data-image-slot="{{ i }}">
+                {%- if slot_image != blank -%}
+                  {%- if i == 1 -%}
+                    {% render 'responsive-image', image: slot_image, sizes: slot_sizes, alt: slot_alt, class: 'offer-mosaic__img' %}
+                  {%- else -%}
+                    {% render 'responsive-image', image: slot_image, sizes: slot_sizes, alt: slot_alt, class: 'offer-mosaic__img', widths: '240, 360, 540, 720' %}
+                  {%- endif -%}
+                {%- else -%}
+                  <span class="offer-mosaic__empty" aria-hidden="true">
+                    {%- render 'icon', icon: 'image' -%}
+                    {%- if request.design_mode -%}
+                      <span class="offer-mosaic__label">{{ 'sections.offer_mosaic_slot' | t: index: i }}</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </figure>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          {% render 'product-gallery',
+            product: product,
+            fit: section.settings.gallery_fit,
+            ratio: section.settings.gallery_ratio
+          %}
+        {%- endif -%}
       </div>
 
       <div class="featured-product__info reveal">
@@ -290,6 +335,67 @@
   .featured-product__more {
     justify-self: start;
   }
+
+  /* Composition: one large image over a row of three */
+  .offer-mosaic {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.5rem, 0.3rem + 0.8vw, 1rem);
+  }
+
+  .offer-mosaic__slot {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    border-radius: var(--radius-md);
+    background: linear-gradient(160deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
+    aspect-ratio: 1;
+    isolation: isolate;
+  }
+
+  .offer-mosaic__slot--1 {
+    grid-column: 1 / -1;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4 / 3;
+  }
+
+  .offer-mosaic__img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--offer-mosaic-fit, cover);
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .offer-mosaic__slot--empty {
+    border: 1px dashed rgb(var(--warm-rgb) / 0.45);
+  }
+
+  .offer-mosaic__empty {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2xs);
+    width: 100%;
+    height: 100%;
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--warm-rgb) / 0.85);
+
+    & .icon {
+      --icon-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+    }
+  }
+
+  .offer-mosaic__slot--1 .offer-mosaic__empty .icon {
+    --icon-size: 2.25rem;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .offer-mosaic__slot:hover .offer-mosaic__img {
+      transform: scale(1.035);
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -430,8 +536,45 @@
     },
     {
       "type": "select",
+      "id": "media_layout",
+      "label": "Présentation",
+      "options": [
+        { "value": "composition", "label": "Composition : 4 images" },
+        { "value": "gallery", "label": "Galerie des photos du produit" }
+      ],
+      "default": "composition"
+    },
+    {
+      "type": "image_picker",
+      "id": "mosaic_image_1",
+      "label": "Image 1 (grande)",
+      "info": "Sans image choisie, la photo principale du produit s'affiche ici.",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "mosaic_image_2",
+      "label": "Image 2",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "mosaic_image_3",
+      "label": "Image 3",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "mosaic_image_4",
+      "label": "Image 4",
+      "info": "Texte alternatif : renseignez-le dans Contenu > Fichiers pour chaque image.",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "select",
       "id": "gallery_ratio",
-      "label": "Format des photos",
+      "label": "Format des photos (galerie)",
+      "visible_if": "{{ section.settings.media_layout == 'gallery' }}",
       "options": [
         { "value": "1", "label": "Carré" },
         { "value": "4 / 5", "label": "Portrait" }

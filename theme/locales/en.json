@@ -75,7 +75,6 @@
   "cart": {
     "title": "Your cart",
     "empty": "Your cart is empty.",
-    "continue_shopping": "Continue shopping",
     "subtotal": "Subtotal",
     "taxes_included": "Tax included.",
     "shipping_at_checkout": "Shipping costs are confirmed at checkout.",
@@ -94,7 +93,13 @@
     "product": "Product",
     "quantity": "Quantity",
     "total": "Total",
-    "discount": "Discount"
+    "discount": "Discount",
+    "upsell_add": "Add",
+    "upsell_choose": "Choose…",
+    "upsell_choose_label": "Choose an option for {{ product }}",
+    "upsell_choose_error": "Choose an option before adding.",
+    "upsell_added": "Added to cart",
+    "unit_price": "{{ price }} each"
   },
   "newsletter": {
     "label": "Email address",
@@ -104,12 +109,24 @@
     "consent": "By subscribing, you agree to receive our emails. You can unsubscribe at any time using the link in every email."
   },
   "contact": {
-    "name": "Name",
     "email": "Email address",
     "order_number": "Order number (optional)",
     "message": "Your message",
     "submit": "Send message",
-    "success": "Thank you, your message has been sent. We'll get back to you as soon as possible."
+    "success": "Thank you, your message has been sent. We'll get back to you as soon as possible.",
+    "full_name": "First and last name",
+    "subject": "Subject",
+    "subject_placeholder": "Choose a subject",
+    "privacy": "Your details are only used to answer your request.",
+    "privacy_link": "Privacy policy",
+    "sending": "Sending…",
+    "trap_label": "Leave this field empty",
+    "help_label": "Help",
+    "error_name": "Enter your first and last name.",
+    "error_email_empty": "Enter your email address.",
+    "error_email": "This email address looks incorrect (example: name@domain.com).",
+    "error_subject": "Choose the subject of your request.",
+    "error_message": "Write your message (at least 10 characters)."
   },
   "templates": {
     "not_found_title": "Page not found",
@@ -165,6 +182,8 @@
     "journey_step": "Step {{ number }}",
     "journey_image_hint": "Add this step's photo (\"Step\" block).",
     "featured_product_editor_empty": "Choose the product to feature in this section's settings.",
+    "offer_mosaic_alt": "{{ product }} – image {{ index }}",
+    "offer_mosaic_slot": "Image {{ index }}",
     "video_slot_hint": "Video {{ number }}: add your video in this block (Content > Files). This empty slot only shows in the editor."
   },
   "collections": {

@@ -3,14 +3,9 @@
     <h1 class="h2 main-cart__title" id="CartTitle" tabindex="-1" data-cart-title>{{ 'cart.title' | t }}</h1>
 
     {%- if cart.item_count == 0 -%}
+      {%- comment -%} Empty cart: the sentence only, nothing else. {%- endcomment -%}
       <div class="main-cart__empty">
         <p class="lead">{{ 'cart.empty' | t }}</p>
-        {%- if settings.cart_empty_product != blank -%}
-          <div class="main-cart__suggestion">
-            {% render 'product-card', product: settings.cart_empty_product, heading_tag: 'h2', sizes: '(min-width: 750px) 360px, 90vw' %}
-          </div>
-        {%- endif -%}
-        <a class="button button--secondary" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a>
       </div>
     {%- else -%}
       <div class="main-cart__grid">
@@ -33,6 +28,7 @@
               <button type="submit" class="button button--secondary" name="update">{{ 'cart.update' | t }}</button>
             </noscript>
           </form>
+          {% render 'cart-upsell', context: 'page' %}
         </cart-items>
 
         <aside class="main-cart__summary" aria-label="{{ 'cart.subtotal' | t }}">
@@ -54,8 +50,8 @@
     gap: var(--space-lg);
   }
 
-  .main-cart__suggestion {
-    width: min(100%, 22rem);
+  .main-cart__title:focus {
+    outline: none;
   }
 
   .main-cart__grid {
