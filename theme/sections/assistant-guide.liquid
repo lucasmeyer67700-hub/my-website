@@ -213,6 +213,7 @@
     cursor: pointer;
     animation: assistant-arrive 0.7s var(--ease-out) 0.8s both;
     transition:
+      opacity var(--duration-base) var(--ease-out),
       transform var(--duration-base) var(--ease-out),
       box-shadow var(--duration-base) var(--ease-out);
 
@@ -251,6 +252,12 @@
         white-space: nowrap;
       }
     }
+  }
+
+  .assistant.is-tucked .assistant__launcher {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.9);
+    pointer-events: none;
   }
 
   .assistant__launcher-icon {

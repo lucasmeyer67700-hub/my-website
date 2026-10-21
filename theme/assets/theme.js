@@ -392,12 +392,24 @@ class VeleaAssistant extends HTMLElement {
       if (event.detail?.sectionId === this.dataset.sectionId) this.close();
     });
 
+    // Phones: the button waits for the first scroll, so it never covers the banner's buttons.
+    if (window.matchMedia('(max-width: 749px)').matches && window.scrollY < 160) {
+      this.classList.add('is-tucked');
+      this.onScroll = () => {
+        if (window.scrollY < 160) return;
+        this.classList.remove('is-tucked');
+        window.removeEventListener('scroll', this.onScroll);
+      };
+      window.addEventListener('scroll', this.onScroll, { passive: true });
+    }
+
     this.#scheduleNudge();
   }
 
   disconnectedCallback() {
     clearTimeout(this.nudgeTimer);
     clearTimeout(this.nudgeHideTimer);
+    if (this.onScroll) window.removeEventListener('scroll', this.onScroll);
   }
 
   open() {
@@ -555,7 +567,7 @@ class VeleaAssistant extends HTMLElement {
       return;
     }
     this.nudgeTimer = setTimeout(() => {
-      if (!this.panel.hidden || document.documentElement.classList.contains('is-inbox-open')) return;
+      if (!this.panel.hidden || this.classList.contains('is-tucked') || document.documentElement.classList.contains('is-inbox-open')) return;
       this.nudge.hidden = false;
       try {
         sessionStorage.setItem(VeleaAssistant.nudgeKey, '1');
