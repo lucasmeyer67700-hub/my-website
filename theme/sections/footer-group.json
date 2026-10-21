@@ -132,10 +132,12 @@
         "title": "Assistante VELEA",
         "status": "Je vous guide pas à pas",
         "greeting": "<p>Bonjour, je suis l'assistante VELEA. Choisissez un sujet ci-dessous : je vous réponds tout de suite.</p>",
-        "next_text": "Une autre question ? Choisissez un sujet, ou écrivez-nous directement.",
+        "next_text": "Une autre question ? Choisissez un sujet, ou écrivez à notre équipe : nous vous répondons par e-mail.",
         "ai_label": "Poser ma question à l'assistante",
         "contact_label": "ou nous écrire par e-mail",
-        "contact_link": "shopify://pages/contact"
+        "contact_link": "shopify://pages/contact",
+        "use_chat": false,
+        "contact_button_label": "Écrire à notre équipe"
       }
     }
   },

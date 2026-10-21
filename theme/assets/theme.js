@@ -370,7 +370,7 @@ class VeleaAssistant extends HTMLElement {
     this.choices = this.querySelector('[data-assistant-choices]');
     this.steps = [...this.querySelectorAll('[data-assistant-step]')];
     this.nudge = this.querySelector('[data-assistant-nudge]');
-    this.ai = this.querySelector('[data-assistant-ai]');
+    this.ai = this.querySelector('[data-assistant-ai], [data-assistant-contact]');
     if (!this.panel || !this.launcher) return;
 
     this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

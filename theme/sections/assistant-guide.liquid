@@ -13,7 +13,7 @@
   <velea-assistant
     class="assistant"
     data-section-id="{{ section.id }}"
-    data-replace-inbox="{{ section.settings.replace_inbox }}"
+    data-replace-inbox="{% if section.settings.use_chat %}{{ section.settings.replace_inbox }}{% else %}true{% endif %}"
     data-nudge="{{ section.settings.show_nudge }}"
   >
     <p class="assistant__nudge" data-assistant-nudge hidden>
@@ -71,11 +71,19 @@
       </div>
 
       <div class="assistant__footer">
-        <button type="button" class="assistant__ai" data-assistant-ai>
-          {%- render 'icon', icon: 'sparkle' -%}
-          <span>{{ section.settings.ai_label | escape }}</span>
-        </button>
-        <a class="assistant__contact" href="{{ contact_link }}">{{ section.settings.contact_label | escape }}</a>
+        {%- if section.settings.use_chat -%}
+          <button type="button" class="assistant__ai" data-assistant-ai>
+            {%- render 'icon', icon: 'sparkle' -%}
+            <span>{{ section.settings.ai_label | escape }}</span>
+          </button>
+          <a class="assistant__contact" href="{{ contact_link }}">{{ section.settings.contact_label | escape }}</a>
+        {%- else -%}
+          {%- comment -%} No live chat: the main way out is the contact page. {%- endcomment -%}
+          <a class="assistant__ai" href="{{ contact_link }}" data-assistant-contact>
+            {%- render 'icon', icon: 'mail' -%}
+            <span>{{ section.settings.contact_button_label | escape }}</span>
+          </a>
+        {%- endif -%}
       </div>
     </div>
 
@@ -150,7 +158,8 @@
 
 {% stylesheet %}
   /* While the assistant is on, Shopify Inbox's own bubble stays hidden until
-     the visitor asks for the chat (then Inbox takes over the corner). */
+     the visitor asks for the chat (then Inbox takes over the corner). Without
+     the chat option, the bubble stays hidden. */
   html.has-assistant:not(.is-inbox-open) #shopify-chat,
   html.has-assistant:not(.is-inbox-open) #ShopifyChat,
   html.has-assistant:not(.is-inbox-open) inbox-online-store-chat {
@@ -800,7 +809,9 @@
   }
 
   .assistant__ai {
+    box-sizing: border-box;
     display: inline-flex;
+    text-decoration: none;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
@@ -880,7 +891,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Un guide en bas à droite : la visiteuse choisit un sujet, l'assistante répond avec vos textes. Pour le reste, un bouton ouvre le chat Shopify Inbox."
+      "content": "Un guide en bas à droite : la visiteuse choisit un sujet, l'assistante répond avec vos textes. Pour le reste, un bouton ouvre le chat Shopify Inbox ou la page de contact."
     },
     {
       "type": "checkbox",
@@ -890,10 +901,18 @@
     },
     {
       "type": "checkbox",
+      "id": "use_chat",
+      "label": "Proposer le chat Shopify Inbox",
+      "info": "Sans le chat, le bouton du bas mène à la page de contact et la bulle Shopify Inbox reste cachée. Pour retirer Inbox complètement : Intégrations d'applications > Shopify Inbox.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "replace_inbox",
       "label": "Remplacer la bulle Shopify Inbox",
       "info": "La bulle Inbox reste cachée jusqu'à ce que la visiteuse demande le chat.",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.use_chat }}"
     },
     {
       "type": "text",
@@ -946,13 +965,22 @@
       "type": "text",
       "id": "ai_label",
       "label": "Bouton vers le chat",
-      "default": "Poser ma question à l'assistante"
+      "default": "Poser ma question à l'assistante",
+      "visible_if": "{{ section.settings.use_chat }}"
     },
     {
       "type": "text",
       "id": "contact_label",
-      "label": "Lien de contact",
-      "default": "ou nous écrire par e-mail"
+      "label": "Lien de contact sous le bouton",
+      "default": "ou nous écrire par e-mail",
+      "visible_if": "{{ section.settings.use_chat }}"
+    },
+    {
+      "type": "text",
+      "id": "contact_button_label",
+      "label": "Bouton de contact (sans chat)",
+      "default": "Écrire à notre équipe",
+      "visible_if": "{{ section.settings.use_chat == false }}"
     },
     {
       "type": "url",
