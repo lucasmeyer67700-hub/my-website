@@ -1,0 +1,996 @@
+{%- comment -%}
+  The VELEA assistant: a pink button bottom right that opens a guided,
+  chat-like panel. The visitor picks a topic, sees her choice as a message,
+  then the answer "typed" by the assistant (the merchant's own text, real
+  prices from the store). Three steps show where she is. For anything else,
+  one button hands over to the Shopify Inbox chat (or to the contact page
+  when the chat is not available). Nothing is sent or stored by this panel.
+{%- endcomment -%}
+{%- liquid
+  assign contact_link = section.settings.contact_link | default: routes.root_url
+-%}
+{%- if section.settings.enabled -%}
+  <velea-assistant
+    class="assistant"
+    data-section-id="{{ section.id }}"
+    data-replace-inbox="{{ section.settings.replace_inbox }}"
+    data-nudge="{{ section.settings.show_nudge }}"
+  >
+    <p class="assistant__nudge" data-assistant-nudge hidden>
+      <button type="button" class="assistant__nudge-open" data-assistant-open>
+        {{- section.settings.nudge | escape -}}
+      </button>
+      <button type="button" class="assistant__nudge-close" data-assistant-nudge-close aria-label="{{ 'assistant.nudge_close' | t }}">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+    </p>
+
+    <div
+      class="assistant__panel"
+      id="Assistant-{{ section.id }}"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="AssistantTitle-{{ section.id }}"
+      data-assistant-panel
+      hidden
+    >
+      <div class="assistant__header">
+        <span class="assistant__avatar" aria-hidden="true"><span class="assistant__avatar-drop"></span></span>
+        <div class="assistant__identity">
+          <p class="assistant__title" id="AssistantTitle-{{ section.id }}" tabindex="-1" data-assistant-title>
+            {{- section.settings.title | escape -}}
+          </p>
+          <p class="assistant__status">
+            <span class="assistant__status-dot" aria-hidden="true"></span>
+            {{- section.settings.status | escape -}}
+          </p>
+        </div>
+        <button type="button" class="assistant__icon-button" data-assistant-restart aria-label="{{ 'assistant.restart' | t }}">
+          {%- render 'icon', icon: 'refresh' -%}
+        </button>
+        <button type="button" class="assistant__icon-button" data-assistant-close aria-label="{{ 'general.close' | t }}">
+          {%- render 'icon', icon: 'close' -%}
+        </button>
+      </div>
+
+      <ol class="assistant__steps" aria-label="{{ 'assistant.steps_label' | t }}">
+        <li class="assistant__step is-current" data-assistant-step aria-current="step"><span>1</span>{{ 'assistant.step_topic' | t }}</li>
+        <li class="assistant__step" data-assistant-step><span>2</span>{{ 'assistant.step_answer' | t }}</li>
+        <li class="assistant__step" data-assistant-step><span>3</span>{{ 'assistant.step_help' | t }}</li>
+      </ol>
+
+      <div class="assistant__log" role="log" aria-live="polite" data-assistant-log></div>
+
+      <div class="assistant__choices" role="group" aria-label="{{ 'assistant.topics_label' | t }}" data-assistant-choices hidden>
+        {%- for block in section.blocks -%}
+          <button type="button" class="assistant__chip" data-assistant-topic="{{ block.id }}" {{ block.shopify_attributes }}>
+            <span>{{ block.settings.question | escape }}</span>
+            {%- render 'icon', icon: 'arrow-right' -%}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="assistant__footer">
+        <button type="button" class="assistant__ai" data-assistant-ai>
+          {%- render 'icon', icon: 'sparkle' -%}
+          <span>{{ section.settings.ai_label | escape }}</span>
+        </button>
+        <a class="assistant__contact" href="{{ contact_link }}">{{ section.settings.contact_label | escape }}</a>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="assistant__launcher"
+      aria-expanded="false"
+      aria-controls="Assistant-{{ section.id }}"
+      data-assistant-toggle
+    >
+      <span class="assistant__launcher-icon" aria-hidden="true">
+        {%- render 'icon', icon: 'chat', class: 'assistant__launcher-chat' -%}
+        {%- render 'icon', icon: 'close', class: 'assistant__launcher-close' -%}
+      </span>
+      <span class="assistant__launcher-label">{{ section.settings.launcher_label | escape }}</span>
+    </button>
+
+    {%- comment -%} Messages, cloned into the conversation by theme.js {%- endcomment -%}
+    <template data-assistant-template="greeting">{{ section.settings.greeting }}</template>
+    <template data-assistant-template="next"><p>{{ section.settings.next_text | escape }}</p></template>
+    <template data-assistant-template="ai-missing">
+      <p>{{ 'assistant.ai_missing' | t }}</p>
+      <a class="assistant__link" href="{{ contact_link }}">
+        {{- section.settings.contact_label | escape -}}
+        {%- render 'icon', icon: 'arrow-right' -%}
+      </a>
+    </template>
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign topic_product = block.settings.product
+        assign topic_link = block.settings.link
+        if topic_link == blank and topic_product != blank
+          assign topic_link = topic_product.url
+        endif
+      -%}
+      <template data-assistant-template="{{ block.id }}">
+        {{ block.settings.answer }}
+        {%- if topic_product != blank -%}
+          <a class="assistant__product" href="{{ topic_product.url }}">
+            <span class="assistant__product-media media">
+              {%- if topic_product.featured_media -%}
+                {% render 'responsive-image', image: topic_product.featured_media.preview_image, sizes: '64px', widths: '64, 128, 192', decorative: true %}
+              {%- else -%}
+                <span class="product-card__soon-art" aria-hidden="true">
+                  <span class="product-card__soon-drop"></span>
+                </span>
+              {%- endif -%}
+            </span>
+            <span class="assistant__product-info">
+              <span class="assistant__product-title">{{ topic_product.title | escape }}</span>
+              <span class="assistant__product-price">
+                {%- if topic_product.price_varies -%}
+                  {%- assign price_min_text = topic_product.price_min | money -%}
+                  {{ 'products.price_from' | t: price: price_min_text }}
+                {%- else -%}
+                  {{ topic_product.price | money }}
+                {%- endif -%}
+              </span>
+            </span>
+          </a>
+        {%- endif -%}
+        {%- if topic_link != blank and block.settings.link_label != blank -%}
+          <a class="assistant__link" href="{{ topic_link }}">
+            {{- block.settings.link_label | escape -}}
+            {%- render 'icon', icon: 'arrow-right' -%}
+          </a>
+        {%- endif -%}
+      </template>
+    {%- endfor -%}
+  </velea-assistant>
+{%- endif -%}
+
+{% stylesheet %}
+  /* While the assistant is on, Shopify Inbox's own bubble stays hidden until
+     the visitor asks for the chat (then Inbox takes over the corner). */
+  html.has-assistant:not(.is-inbox-open) #shopify-chat,
+  html.has-assistant:not(.is-inbox-open) #ShopifyChat,
+  html.has-assistant:not(.is-inbox-open) inbox-online-store-chat {
+    /* !important: Inbox sets its own inline display */
+    display: none !important;
+  }
+
+  html.is-inbox-open .assistant__launcher,
+  html.is-inbox-open .assistant__nudge {
+    display: none;
+  }
+
+  .assistant {
+    /* White text stays readable (4.5:1 or more) across the whole gradient */
+    --assistant-rose: #a24c5d;
+    --assistant-rose-light: #b4596a;
+    --assistant-edge: max(1rem, env(safe-area-inset-right));
+    --assistant-bottom: max(1rem, env(safe-area-inset-bottom));
+
+    position: fixed;
+    inset-inline-end: var(--assistant-edge);
+    inset-block-end: var(--assistant-bottom);
+    z-index: calc(var(--z-sticky-bar) + 2);
+    display: grid;
+    justify-items: end;
+    gap: var(--space-xs);
+    font-family: var(--font-body-family);
+    pointer-events: none;
+    transition: inset-block-end var(--duration-base) var(--ease-out);
+
+    & > * {
+      pointer-events: auto;
+    }
+  }
+
+  /* Product page: when the floating buy bar shows, the assistant sits above it */
+  body.has-sticky-bar .assistant {
+    inset-block-end: calc(var(--assistant-bottom) + 5rem);
+  }
+
+  /* Launcher: a rose pill that slides in, then breathes twice */
+  .assistant__launcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 3.5rem;
+    padding: 0.4rem 1.25rem 0.4rem 0.4rem;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+    box-shadow:
+      0 14px 30px -12px rgb(162 76 93 / 0.65),
+      inset 0 1px 0 rgb(255 255 255 / 0.25);
+    cursor: pointer;
+    animation: assistant-arrive 0.7s var(--ease-out) 0.8s both;
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 0 0 0 rgb(201 114 126 / 0.55);
+      animation: assistant-breathe 2.4s ease-out 1.8s 2;
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 18px 36px -12px rgb(180 89 106 / 0.75),
+        inset 0 1px 0 rgb(255 255 255 / 0.25);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--assistant-rose);
+      outline-offset: 3px;
+    }
+
+    @media screen and (max-width: 749px) {
+      min-height: 3.5rem;
+      padding: 0.4rem;
+
+      & .assistant__launcher-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .assistant__launcher-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 50%;
+    color: var(--assistant-rose);
+    background-color: #fff;
+
+    & .icon {
+      --icon-size: 1.25rem;
+
+      grid-area: 1 / 1;
+      transition:
+        opacity var(--duration-base) var(--ease-out),
+        transform var(--duration-base) var(--ease-out);
+    }
+  }
+
+  .assistant__launcher-close {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+
+  .assistant__launcher[aria-expanded='true'] {
+    & .assistant__launcher-chat {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.6);
+    }
+
+    & .assistant__launcher-close {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes assistant-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem) scale(0.92);
+    }
+  }
+
+  @keyframes assistant-breathe {
+    to {
+      box-shadow: 0 0 0 1rem rgb(201 114 126 / 0);
+    }
+  }
+
+  /* A small note above the button, once per visit */
+  .assistant__nudge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    max-width: min(18rem, calc(100vw - 2rem));
+    margin: 0;
+    padding: 0.35rem 0.35rem 0.35rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg) var(--radius-lg) 0.4rem var(--radius-lg);
+    background-color: var(--color-surface, #fff);
+    box-shadow: var(--shadow-md);
+    animation: assistant-pop 0.5s var(--ease-out) both;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .assistant__nudge-open {
+    padding: 0.4rem 0;
+    border: 0;
+    font: inherit;
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    text-align: start;
+    color: var(--color-text);
+    background: none;
+    cursor: pointer;
+  }
+
+  .assistant__nudge-close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--color-text-muted);
+    background: none;
+    cursor: pointer;
+
+    & .icon {
+      --icon-size: 0.9rem;
+    }
+  }
+
+  @keyframes assistant-pop {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.96);
+    }
+  }
+
+  /* Panel: opens from the button, like a card lifting off the page */
+  .assistant__panel {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    width: min(24.5rem, calc(100vw - 2rem));
+    height: min(38rem, calc(100dvh - 7.5rem));
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    box-shadow: 0 30px 70px -24px rgb(48 39 36 / 0.45);
+    opacity: 0;
+    transform: translateY(1rem) scale(0.95);
+    transform-origin: bottom right;
+    transition:
+      opacity 0.28s var(--ease-out),
+      transform 0.38s var(--ease-out);
+
+    &[hidden] {
+      display: none;
+    }
+
+    .assistant.is-open & {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media screen and (max-width: 749px) {
+      position: fixed;
+      inset-inline: 0;
+      inset-block-end: 0;
+      width: 100%;
+      height: min(85dvh, 40rem);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      transform: translateY(100%);
+      transform-origin: bottom center;
+    }
+  }
+
+  .assistant__header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+    background: linear-gradient(135deg, #f8e9ea 0%, #f3dadd 100%);
+  }
+
+  .assistant__avatar {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 6px 14px -8px rgb(180 89 106 / 0.6);
+  }
+
+  .assistant__avatar-drop {
+    width: 1.15rem;
+    aspect-ratio: 1;
+    border-radius: 50% 0 50% 50%;
+    background:
+      radial-gradient(circle at 44% 30%, rgb(255 255 255 / 0.95) 0 7%, transparent 20%),
+      linear-gradient(225deg, #f9e3e7 0%, #ecbcc5 55%, #dc97a4 100%);
+    rotate: -45deg;
+    animation: assistant-float 4.8s ease-in-out infinite;
+  }
+
+  @keyframes assistant-float {
+    50% {
+      translate: 0 -0.15rem;
+    }
+  }
+
+  .assistant__title {
+    font-family: var(--font-heading-family);
+    font-size: 1.1875rem;
+    line-height: 1.2;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .assistant__status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .assistant__status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #3f8f5b;
+    box-shadow: 0 0 0 3px rgb(63 143 91 / 0.18);
+  }
+
+  .assistant__icon-button {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--color-text);
+    background: rgb(255 255 255 / 0.55);
+    cursor: pointer;
+    transition: background-color var(--duration-base) var(--ease-out);
+
+    &:hover {
+      background-color: #fff;
+    }
+
+    & .icon {
+      --icon-size: 1.05rem;
+    }
+  }
+
+  /* Three steps: topic, answer, help */
+  .assistant__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    margin: 0;
+    padding: var(--space-xs) var(--space-md);
+    list-style: none;
+    border-block-end: 1px solid var(--color-border);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .assistant__step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block-end: 0.45rem;
+    transition: color var(--duration-base) var(--ease-out);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--color-border);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-end: 0;
+      z-index: 1;
+      width: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--assistant-rose);
+      transition: width 0.6s var(--ease-out);
+    }
+
+    & span {
+      display: grid;
+      flex: none;
+      place-items: center;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+      font-size: 0.6875rem;
+      color: var(--color-text-muted);
+      background-color: var(--color-border);
+      transition:
+        background-color var(--duration-base) var(--ease-out),
+        color var(--duration-base) var(--ease-out);
+    }
+
+    &.is-current,
+    &.is-done {
+      color: var(--color-text);
+
+      & span {
+        color: #fff;
+        background-color: var(--assistant-rose);
+      }
+    }
+
+    &.is-current::before {
+      width: 55%;
+    }
+
+    &.is-done::before {
+      width: 100%;
+    }
+  }
+
+  /* Conversation */
+  .assistant__log {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    overflow-y: auto;
+    padding: var(--space-md);
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+  }
+
+  .assistant__msg {
+    max-width: 88%;
+    padding: 0.75rem 1rem;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    animation: assistant-message 0.45s var(--ease-out) both;
+
+    & p + p {
+      margin-block-start: 0.5rem;
+    }
+  }
+
+  .assistant__msg--bot {
+    align-self: flex-start;
+    display: grid;
+    gap: 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.4rem var(--radius-lg) var(--radius-lg) var(--radius-lg);
+    background-color: var(--color-surface, #fff);
+    box-shadow: 0 10px 24px -20px rgb(48 39 36 / 0.5);
+  }
+
+  .assistant__msg--user {
+    align-self: flex-end;
+    border-radius: var(--radius-lg) 0.4rem var(--radius-lg) var(--radius-lg);
+    color: #fff;
+    background: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+  }
+
+  @keyframes assistant-message {
+    from {
+      opacity: 0;
+      transform: translateY(0.6rem);
+    }
+  }
+
+  .assistant__typing {
+    align-self: flex-start;
+    display: inline-flex;
+    gap: 0.3rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.4rem var(--radius-lg) var(--radius-lg) var(--radius-lg);
+    background-color: var(--color-surface, #fff);
+
+    & span {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background-color: var(--assistant-rose-light);
+      animation: assistant-dot 1s ease-in-out infinite;
+    }
+
+    & span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    & span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+
+  @keyframes assistant-dot {
+    0%,
+    60%,
+    100% {
+      opacity: 0.35;
+      transform: translateY(0);
+    }
+
+    30% {
+      opacity: 1;
+      transform: translateY(-0.25rem);
+    }
+  }
+
+  .assistant__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    justify-self: start;
+    font-weight: var(--font-body-weight-medium);
+    color: var(--assistant-rose);
+    text-decoration: none;
+
+    & .icon {
+      --icon-size: 0.9rem;
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+
+    &:hover .icon {
+      transform: translateX(0.2rem);
+    }
+  }
+
+  .assistant__product {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    background-color: var(--color-background);
+    transition: border-color var(--duration-base) var(--ease-out);
+
+    &:hover {
+      border-color: var(--assistant-rose-light);
+    }
+  }
+
+  .assistant__product-media {
+    --media-ratio: 1;
+
+    border-radius: var(--radius-sm);
+  }
+
+  .assistant__product-info {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .assistant__product-title {
+    font-family: var(--font-heading-family);
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  .assistant__product-price {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Topics */
+  .assistant__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    max-height: 11.5rem;
+    overflow-y: auto;
+    padding: 0 var(--space-md) var(--space-sm);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .assistant__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.85rem 0.45rem 1rem;
+    border: 1px solid rgb(180 89 106 / 0.45);
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--assistant-rose);
+    background-color: var(--color-surface, #fff);
+    cursor: pointer;
+    animation: assistant-message 0.4s var(--ease-out) both;
+    transition:
+      color var(--duration-base) var(--ease-out),
+      background-color var(--duration-base) var(--ease-out),
+      border-color var(--duration-base) var(--ease-out);
+
+    &:nth-child(2) {
+      animation-delay: 0.06s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.12s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.18s;
+    }
+
+    &:nth-child(n + 5) {
+      animation-delay: 0.24s;
+    }
+
+    & .icon {
+      --icon-size: 0.85rem;
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+
+    &[data-seen] {
+      border-color: var(--color-border);
+      color: var(--color-text-muted);
+    }
+
+    /* Hover only with a mouse: a tapped chip must not stay filled on phones */
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--assistant-rose);
+        color: #fff;
+        background-color: var(--assistant-rose);
+
+        & .icon {
+          transform: translateX(0.15rem);
+        }
+      }
+    }
+  }
+
+  /* Hand-over: the live chat, then e-mail */
+  .assistant__footer {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+    padding: var(--space-sm) var(--space-md) max(var(--space-sm), env(safe-area-inset-bottom));
+    border-block-start: 1px solid var(--color-border);
+    background-color: var(--color-surface, #fff);
+  }
+
+  .assistant__ai {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.6rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: #fff;
+    background-color: var(--color-button, #49352f);
+    cursor: pointer;
+    transition: transform var(--duration-base) var(--ease-out);
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &.is-highlighted {
+      animation: assistant-glow 1.6s ease-out 2;
+    }
+  }
+
+  @keyframes assistant-glow {
+    0% {
+      box-shadow: 0 0 0 0 rgb(180 89 106 / 0.5);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0.75rem rgb(180 89 106 / 0);
+    }
+  }
+
+  .assistant__contact {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-underline-offset: 0.2em;
+  }
+
+  /* Phones: the panel is a sheet; the button hides while it is open */
+  @media screen and (max-width: 749px) {
+    .assistant.is-open .assistant__launcher {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .assistant__launcher,
+    .assistant__launcher::after,
+    .assistant__nudge,
+    .assistant__avatar-drop,
+    .assistant__msg,
+    .assistant__chip,
+    .assistant__ai.is-highlighted,
+    .assistant__typing span {
+      animation: none;
+    }
+
+    .assistant__panel {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Assistante VELEA",
+  "tag": "div",
+  "class": "section-assistant",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Un guide en bas à droite : la visiteuse choisit un sujet, l'assistante répond avec vos textes. Pour le reste, un bouton ouvre le chat Shopify Inbox."
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Afficher l'assistante",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "replace_inbox",
+      "label": "Remplacer la bulle Shopify Inbox",
+      "info": "La bulle Inbox reste cachée jusqu'à ce que la visiteuse demande le chat.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "launcher_label",
+      "label": "Texte du bouton",
+      "default": "Besoin d'aide ?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nudge",
+      "label": "Petit message au-dessus du bouton",
+      "info": "Une fois par visite, après quelques secondes.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "nudge",
+      "label": "Petit message",
+      "default": "Une question ? Je vous guide en quelques secondes."
+    },
+    {
+      "type": "header",
+      "content": "Panneau"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Nom de l'assistante",
+      "default": "Assistante VELEA"
+    },
+    {
+      "type": "text",
+      "id": "status",
+      "label": "Sous-titre",
+      "default": "Je vous guide pas à pas"
+    },
+    {
+      "type": "richtext",
+      "id": "greeting",
+      "label": "Message d'accueil",
+      "default": "<p>Bonjour, je suis l'assistante VELEA. Choisissez un sujet ci-dessous : je vous réponds tout de suite.</p>"
+    },
+    {
+      "type": "text",
+      "id": "next_text",
+      "label": "Message après une réponse",
+      "default": "Une autre question ? Choisissez un sujet, ou écrivez-nous directement."
+    },
+    {
+      "type": "text",
+      "id": "ai_label",
+      "label": "Bouton vers le chat",
+      "default": "Poser ma question à l'assistante"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Lien de contact",
+      "default": "ou nous écrire par e-mail"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Page de contact"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "topic",
+      "name": "Sujet",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Sujet (bouton)",
+          "default": "Choisir mon produit"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Réponse",
+          "info": "N'écrivez que des informations vérifiées. Les prix s'affichent avec le produit choisi ci-dessous.",
+          "default": "<p>Votre réponse.</p>"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Produit à montrer (facultatif)",
+          "info": "Photo, nom et prix réel du produit."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Texte du lien (facultatif)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien",
+          "info": "Sans lien : la page du produit choisi."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8
+}
+{% endschema %}

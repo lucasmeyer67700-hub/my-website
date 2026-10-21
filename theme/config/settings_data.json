@@ -2,6 +2,8 @@
   "current": {
     "logo_width": 120,
     "brand_tagline": "Le confort menstruel, avec douceur.",
+    "seo_home_title": "Ceinture chauffante pour les règles",
+    "seo_description": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France.",
     "type_heading_font": "serif",
     "type_body_font": "dm_sans_n4",
     "heading_scale": 100,
@@ -44,61 +46,88 @@
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
         "settings": {
-          "button_color": "#B4596A"
+          "greeting_message": "Bienvenue chez VELEA 🌸\n\nRavie de vous accueillir ! Je suis votre assistante virtuelle VELEA, là pour vous accompagner et rendre votre expérience shopping aussi agréable que possible. ✨\n\nComment puis-je vous aider aujourd’hui ?",
+          "show_featured_products": true,
+          "featured_products": [],
+          "background_color": "#F5F2EF",
+          "font_color": "#EB59D1",
+          "agent_invert_activator_colors": true,
+          "button_color": "#b4596a",
+          "button_icon": "chat_bubble",
+          "button_text": "help",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "agent_inherit_fonts": true,
+          "agent_font": "system_ui_n4",
+          "agent_font_size": 14,
+          "agent_activator_font_size": 14,
+          "agent_border_radius": 24
         }
+      },
+      "13098026196886883183": {
+        "type": "shopify://apps/zendrop-dropshipping-pod/blocks/shipping_protection_embed/01a0c88d-3089-7c0b-8926-d2c6b8132290",
+        "disabled": false,
+        "settings": {
+          "placement": "summary"
+        }
+      },
+      "11532412952436166569": {
+        "type": "shopify://apps/loox-reviews/blocks/loox-inject/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+        "disabled": false,
+        "settings": {}
       }
     },
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#FCF9F7",
-          "text": "#49352F",
-          "text_muted": "#6E574C",
-          "accent": "#725A4E",
-          "surface": "#FFFFFF",
-          "border": "#EDE2DE",
-          "button": "#49352F",
-          "button_label": "#FFFFFF",
-          "background_gradient": ""
+          "background": "#fcf9f7",
+          "background_gradient": "",
+          "text": "#49352f",
+          "text_muted": "#6e574c",
+          "accent": "#725a4e",
+          "surface": "#ffffff",
+          "border": "#ede2de",
+          "button": "#49352f",
+          "button_label": "#ffffff"
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#F8E9EA",
-          "text": "#49352F",
-          "text_muted": "#6B5449",
-          "accent": "#725A4E",
-          "surface": "#FFFFFF",
-          "border": "#EDD5D8",
-          "button": "#49352F",
-          "button_label": "#FFFFFF",
-          "background_gradient": ""
+          "background": "#f8e9ea",
+          "background_gradient": "",
+          "text": "#49352f",
+          "text_muted": "#6b5449",
+          "accent": "#725a4e",
+          "surface": "#ffffff",
+          "border": "#edd5d8",
+          "button": "#49352f",
+          "button_label": "#ffffff"
         }
       },
       "scheme-3": {
         "settings": {
-          "background": "#F3DADD",
-          "text": "#49352F",
-          "text_muted": "#5E4A41",
-          "accent": "#725A4E",
-          "surface": "#FCF9F7",
-          "border": "#E5C6CB",
-          "button": "#49352F",
-          "button_label": "#FFFFFF",
-          "background_gradient": ""
+          "background": "#f3dadd",
+          "background_gradient": "",
+          "text": "#49352f",
+          "text_muted": "#5e4a41",
+          "accent": "#725a4e",
+          "surface": "#fcf9f7",
+          "border": "#e5c6cb",
+          "button": "#49352f",
+          "button_label": "#ffffff"
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#EECFD3",
-          "text": "#49352F",
+          "background": "#eecfd3",
+          "background_gradient": "",
+          "text": "#49352f",
           "text_muted": "#574339",
-          "accent": "#6A5248",
-          "surface": "#F8E9EA",
-          "border": "#DDB9BF",
-          "button": "#49352F",
-          "button_label": "#FFFFFF",
-          "background_gradient": ""
+          "accent": "#6a5248",
+          "surface": "#f8e9ea",
+          "border": "#ddb9bf",
+          "button": "#49352f",
+          "button_label": "#ffffff"
         }
       },
       "scheme-5": {
@@ -107,29 +136,27 @@
           "background_gradient": "",
           "text": "#fcf9f7",
           "text_muted": "#e3d3cc",
-          "accent": "#D86396",
+          "accent": "#d86396",
           "surface": "#57423b",
-          "border": "#F4F0EE",
-          "button": "#D86396",
+          "border": "#f4f0ee",
+          "button": "#d86396",
           "button_label": "#49352f"
         }
       },
       "scheme-6": {
         "settings": {
-          "background": "#F8E9EA",
-          "text": "#49352F",
-          "text_muted": "#5E4A41",
-          "accent": "#725A4E",
-          "surface": "#FFFFFF",
-          "border": "#EAD3D6",
-          "button": "#49352F",
-          "button_label": "#FFFFFF",
-          "background_gradient": "linear-gradient(180deg, rgba(243, 218, 221, 1) 0%, rgba(248, 233, 234, 1) 40%, rgba(252, 249, 247, 1) 100%)"
+          "background": "#f8e9ea",
+          "background_gradient": "linear-gradient(180deg, rgba(243, 218, 221, 1) 0%, rgba(248, 233, 234, 1) 40%, rgba(252, 249, 247, 1) 100%)",
+          "text": "#49352f",
+          "text_muted": "#5e4a41",
+          "accent": "#725a4e",
+          "surface": "#ffffff",
+          "border": "#ead3d6",
+          "button": "#49352f",
+          "button_label": "#ffffff"
         }
       }
-    },
-    "seo_home_title": "Ceinture chauffante pour les règles",
-    "seo_description": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France."
+    }
   },
   "presets": {
     "Douceur": {

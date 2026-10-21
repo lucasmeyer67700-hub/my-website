@@ -349,6 +349,231 @@ class ContactForm extends HTMLElement {
 
 customElements.define('contact-form', ContactForm);
 
+/* -------------------------------------------------------------------------- */
+/* VELEA assistant: guided, chat-like panel                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Pink button bottom right that opens a guided panel. The visitor picks a
+ * topic, sees it as her message, then the answer appears after a short
+ * "typing" pause. Answers are the merchant's own texts (templates rendered by
+ * Liquid). "Ask the assistant" hands over to the Shopify Inbox chat; if the
+ * chat is not on the page, the visitor is pointed to the contact page.
+ */
+class VeleaAssistant extends HTMLElement {
+  static nudgeKey = 'velea:assistant-nudge';
+
+  connectedCallback() {
+    this.panel = this.querySelector('[data-assistant-panel]');
+    this.launcher = this.querySelector('[data-assistant-toggle]');
+    this.log = this.querySelector('[data-assistant-log]');
+    this.choices = this.querySelector('[data-assistant-choices]');
+    this.steps = [...this.querySelectorAll('[data-assistant-step]')];
+    this.nudge = this.querySelector('[data-assistant-nudge]');
+    this.ai = this.querySelector('[data-assistant-ai]');
+    if (!this.panel || !this.launcher) return;
+
+    this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.started = false;
+    this.busy = false;
+    if (this.dataset.replaceInbox === 'true') document.documentElement.classList.add('has-assistant');
+
+    this.launcher.addEventListener('click', () => (this.panel.hidden ? this.open() : this.close()));
+    this.addEventListener('click', this.#onClick.bind(this));
+    this.panel.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') this.close();
+    });
+
+    // Theme editor: show the panel while its section or a topic is selected.
+    document.addEventListener('shopify:section:select', (event) => {
+      if (event.detail?.sectionId === this.dataset.sectionId) this.open();
+    });
+    document.addEventListener('shopify:section:deselect', (event) => {
+      if (event.detail?.sectionId === this.dataset.sectionId) this.close();
+    });
+
+    this.#scheduleNudge();
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.nudgeTimer);
+    clearTimeout(this.nudgeHideTimer);
+  }
+
+  open() {
+    this.#hideNudge();
+    this.panel.hidden = false;
+    this.launcher.setAttribute('aria-expanded', 'true');
+    requestAnimationFrame(() => this.classList.add('is-open'));
+    this.querySelector('[data-assistant-title]')?.focus();
+    if (!this.started) this.#start();
+  }
+
+  close() {
+    if (this.panel.hidden) return;
+    this.classList.remove('is-open');
+    this.launcher.setAttribute('aria-expanded', 'false');
+    const hide = () => {
+      if (!this.classList.contains('is-open')) this.panel.hidden = true;
+    };
+    if (this.reduceMotion) hide();
+    else setTimeout(hide, 320);
+    this.launcher.focus();
+  }
+
+  /** @param {MouseEvent} event */
+  #onClick(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    if (target.closest('[data-assistant-close]')) return this.close();
+    if (target.closest('[data-assistant-open]')) return this.open();
+    if (target.closest('[data-assistant-nudge-close]')) return this.#hideNudge();
+    if (target.closest('[data-assistant-restart]')) return this.#start();
+    if (target.closest('[data-assistant-ai]')) return this.#openChat();
+    const topic = target.closest('[data-assistant-topic]');
+    if (topic) this.#choose(/** @type {HTMLButtonElement} */ (topic));
+  }
+
+  async #start() {
+    this.started = true;
+    this.busy = false;
+    this.run = (this.run || 0) + 1;
+    const run = this.run;
+    this.log.replaceChildren();
+    this.choices.hidden = true;
+    this.ai?.classList.remove('is-highlighted');
+    for (const chip of this.choices.querySelectorAll('[data-seen]')) chip.removeAttribute('data-seen');
+    this.#setStep(1);
+    await this.#botSay('greeting', 650);
+    if (run === this.run) this.#showChoices();
+  }
+
+  /** @param {HTMLButtonElement} chip */
+  async #choose(chip) {
+    if (this.busy) return;
+    this.busy = true;
+    const run = this.run;
+    this.choices.hidden = true;
+    this.#userSay(chip.textContent.trim());
+    this.#setStep(2);
+    await this.#botSay(chip.dataset.assistantTopic, 900);
+    if (run !== this.run) return;
+    chip.setAttribute('data-seen', '');
+    await this.#botSay('next', 450);
+    if (run !== this.run) return;
+    this.#setStep(3);
+    this.#showChoices();
+    this.ai?.classList.remove('is-highlighted');
+    void this.ai?.offsetWidth;
+    this.ai?.classList.add('is-highlighted');
+    this.busy = false;
+  }
+
+  /**
+   * Hands over to the Shopify Inbox chat: its bubble is revealed, then its
+   * own button is pressed. Inbox is a separate app: if its button cannot be
+   * reached, the revealed bubble stays in the same corner for the visitor.
+   */
+  async #openChat() {
+    if (this.busy) return;
+    const host = await this.#findInbox();
+    if (!host) {
+      await this.#botSay('ai-missing', 400);
+      return;
+    }
+    document.documentElement.classList.add('is-inbox-open');
+    this.close();
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const toggle = host.shadowRoot?.querySelector('button.chat-toggle, [class*="chat-toggle"]');
+    if (toggle) toggle.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+  }
+
+  async #findInbox() {
+    for (let attempt = 0; attempt < 15; attempt += 1) {
+      const host = document.querySelector('inbox-online-store-chat, #ShopifyChat, #shopify-chat');
+      if (host) return host;
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    return null;
+  }
+
+  /**
+   * @param {string} templateId
+   * @param {number} delay
+   */
+  async #botSay(templateId, delay) {
+    const template = this.querySelector(`template[data-assistant-template="${templateId}"]`);
+    if (!template) return;
+    const typing = document.createElement('div');
+    typing.className = 'assistant__typing';
+    typing.setAttribute('aria-hidden', 'true');
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    this.log.append(typing);
+    this.#scroll();
+    await new Promise((resolve) => setTimeout(resolve, this.reduceMotion ? 0 : delay));
+    typing.remove();
+    const message = document.createElement('div');
+    message.className = 'assistant__msg assistant__msg--bot';
+    message.append(template.content.cloneNode(true));
+    this.log.append(message);
+    this.#scroll();
+  }
+
+  /** @param {string} text */
+  #userSay(text) {
+    const message = document.createElement('p');
+    message.className = 'assistant__msg assistant__msg--user';
+    message.textContent = text;
+    this.log.append(message);
+    this.#scroll();
+  }
+
+  #showChoices() {
+    this.choices.hidden = false;
+    this.choices.scrollTop = 0;
+    this.#scroll();
+  }
+
+  /** @param {number} step */
+  #setStep(step) {
+    this.steps.forEach((item, index) => {
+      item.classList.toggle('is-done', index < step - 1);
+      item.classList.toggle('is-current', index === step - 1);
+      if (index === step - 1) item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
+    });
+  }
+
+  #scroll() {
+    this.log.scrollTo({ top: this.log.scrollHeight, behavior: this.reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  #scheduleNudge() {
+    if (this.dataset.nudge !== 'true' || !this.nudge) return;
+    try {
+      if (sessionStorage.getItem(VeleaAssistant.nudgeKey)) return;
+    } catch (error) {
+      return;
+    }
+    this.nudgeTimer = setTimeout(() => {
+      if (!this.panel.hidden || document.documentElement.classList.contains('is-inbox-open')) return;
+      this.nudge.hidden = false;
+      try {
+        sessionStorage.setItem(VeleaAssistant.nudgeKey, '1');
+      } catch (error) {
+        /* Private browsing: the note may show again on the next page. */
+      }
+      this.nudgeHideTimer = setTimeout(() => this.#hideNudge(), 10000);
+    }, 6000);
+  }
+
+  #hideNudge() {
+    clearTimeout(this.nudgeTimer);
+    if (this.nudge) this.nudge.hidden = true;
+  }
+}
+
+customElements.define('velea-assistant', VeleaAssistant);
+
 /**
  * Changes a cart line quantity and re-renders every cart view.
  * @param {number} line

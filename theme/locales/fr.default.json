@@ -271,5 +271,15 @@
       "other": "{{ count }} avis sur {{ source }}"
     },
     "source_published": "Publié sur {{ source }}"
+  },
+  "assistant": {
+    "nudge_close": "Fermer le message",
+    "restart": "Recommencer",
+    "steps_label": "Étapes",
+    "step_topic": "Sujet",
+    "step_answer": "Réponse",
+    "step_help": "Échange",
+    "topics_label": "Sujets",
+    "ai_missing": "Le chat n'est pas disponible pour le moment. Écrivez-nous : nous vous répondons par e-mail."
   }
 }

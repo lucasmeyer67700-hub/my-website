@@ -64,10 +64,84 @@
         "conditions": "Code valable une fois par cliente sur la ceinture à l'unité, hors Duo, non cumulable avec d'autres codes.",
         "color_scheme": "scheme-4"
       }
+    },
+    "assistant": {
+      "type": "assistant-guide",
+      "blocks": {
+        "topic-belt": {
+          "type": "topic",
+          "settings": {
+            "question": "Choisir ma ceinture",
+            "answer": "<p>Une ceinture pour vous, ou le Duo pour en avoir une d'avance ou l'offrir. Trois niveaux de chaleur (50, 55 ou 60 °C), un massage par vibration à 4 modes, et aucun fil : environ 2 h d'autonomie selon le fabricant.</p>",
+            "product": "ceinture-chauffante-regles",
+            "link_label": "Voir la ceinture",
+            "link": ""
+          }
+        },
+        "topic-shipping": {
+          "type": "topic",
+          "settings": {
+            "question": "Livraison et suivi",
+            "answer": "<p>La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés. Dès l'expédition, vous recevez par e-mail votre numéro de suivi.</p>",
+            "link_label": "Suivre ma commande",
+            "link": "shopify://pages/suivi-de-commande"
+          }
+        },
+        "topic-returns": {
+          "type": "topic",
+          "settings": {
+            "question": "Retours et garantie",
+            "answer": "<p>Vous avez 14 jours après réception pour changer d'avis. Pour la ceinture, notre garantie « Satisfaite ou remboursée » dure 30 jours. Colis abîmé ou produit défectueux : nous renvoyons ou remboursons, à nos frais.</p>",
+            "link_label": "Lire la politique de retour",
+            "link": "shopify://pages/politique-de-retour"
+          }
+        },
+        "topic-size": {
+          "type": "topic",
+          "settings": {
+            "question": "Trouver ma taille",
+            "answer": "<p>La culotte menstruelle existe du S au 4XL. Mesurez votre tour de taille (à l'endroit le plus fin) et de hanches (à l'endroit le plus large). Entre deux tailles, choisissez la plus grande.</p>",
+            "product": "culotte-menstruelle",
+            "link_label": "Voir la culotte",
+            "link": ""
+          }
+        },
+        "topic-use": {
+          "type": "topic",
+          "settings": {
+            "question": "Bien utiliser ma ceinture",
+            "answer": "<p>Chargez-la complètement avant la première utilisation. Placez-la sur le bas du ventre, par-dessus un vêtement fin, et commencez par la chaleur la plus douce. Elle s'arrête seule au bout de 30 minutes et ne s'utilise pas pendant le sommeil.</p>",
+            "link_label": "Toutes les questions",
+            "link": "shopify://pages/faq"
+          }
+        }
+      },
+      "block_order": [
+        "topic-belt",
+        "topic-shipping",
+        "topic-returns",
+        "topic-size",
+        "topic-use"
+      ],
+      "settings": {
+        "enabled": true,
+        "replace_inbox": true,
+        "launcher_label": "Besoin d'aide ?",
+        "show_nudge": true,
+        "nudge": "Une question ? Je vous guide en quelques secondes.",
+        "title": "Assistante VELEA",
+        "status": "Je vous guide pas à pas",
+        "greeting": "<p>Bonjour, je suis l'assistante VELEA. Choisissez un sujet ci-dessous : je vous réponds tout de suite.</p>",
+        "next_text": "Une autre question ? Choisissez un sujet, ou écrivez-nous directement.",
+        "ai_label": "Poser ma question à l'assistante",
+        "contact_label": "ou nous écrire par e-mail",
+        "contact_link": "shopify://pages/contact"
+      }
     }
   },
   "order": [
     "footer",
-    "welcome"
+    "welcome",
+    "assistant"
   ]
 }
