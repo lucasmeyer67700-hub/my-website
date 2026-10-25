@@ -44,7 +44,7 @@
     "blocks": {
       "shopify-inbox-chat": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "greeting_message": "Bienvenue chez VELEA 🌸\n\nRavie de vous accueillir ! Je suis votre assistante virtuelle VELEA, là pour vous accompagner et rendre votre expérience shopping aussi agréable que possible. ✨\n\nComment puis-je vous aider aujourd’hui ?",
           "show_featured_products": true,
