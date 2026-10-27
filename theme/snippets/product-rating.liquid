@@ -61,19 +61,31 @@
       assign average_text = average_text_int | append: ',' | append: average_text_dec
     -%}
     <div class="product-rating">
-      {%- comment -%} "… ont donné leur avis" speaks of shop customers: not for reviews from another site. {%- endcomment -%}
-      {%- if source_name == blank -%}
+      {%- comment -%}
+        "… ont donné leur avis" speaks of shop customers: not for reviews from another site,
+        and only when the first review has a name to show (never "Anonyme").
+      {%- endcomment -%}
+      {%- assign first_name = '' -%}
+      {%- for review in product.metafields.custom[reviews_key].value limit: 1 -%}
+        {%- capture first_name -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
+      {%- endfor -%}
+      {%- if source_name == blank and first_name != blank -%}
       <p class="product-rating__proof">
         <span class="product-rating__avatars" aria-hidden="true">
           {%- for review in product.metafields.custom[reviews_key].value limit: 3 -%}
+            {%- capture shown_name -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
             <span class="product-rating__avatar product-rating__avatar--{{ forloop.index }}">
-              {{- review.auteur.value | strip | slice: 0 | upcase -}}
+              {%- if shown_name != blank -%}
+                {{- shown_name | slice: 0 | upcase | escape -}}
+              {%- else -%}
+                {%- render 'icon', icon: 'user' -%}
+              {%- endif -%}
             </span>
           {%- endfor -%}
         </span>
         {%- for review in product.metafields.custom[reviews_key].value limit: 1 -%}
           <span>
-            <strong>{{ review.auteur.value | escape }}</strong>
+            <strong>{{ first_name | escape }}</strong>
             {%- if review.achat_verifie.value and review.source.value == blank -%}
               <span class="product-rating__verified">
                 {%- render 'icon', icon: 'check' -%}
@@ -154,6 +166,11 @@
 
     & + & {
       margin-inline-start: -0.55rem;
+    }
+
+    & svg {
+      width: 0.875rem;
+      height: 0.875rem;
     }
   }
 
