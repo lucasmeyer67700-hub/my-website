@@ -72,6 +72,7 @@
           "type": "topic",
           "settings": {
             "question": "Choisir ma ceinture",
+            "keywords": "choisir, prix, combien coute, combien ca coute, coute, tarif, duo, deux ceintures, offrir, cadeau, coloris, couleur, rose, blanc, blanche, chaleur, chauffe, chauffant, temperature, degres, niveaux, vibration, massage, modes, batterie, autonomie, recharger, recharge, charge, usb, sans fil, poids, boitier",
             "answer": "<p>Une ceinture pour vous, ou le Duo pour en avoir une d'avance ou l'offrir. Trois niveaux de chaleur (50, 55 ou 60 °C), un massage par vibration à 4 modes, et aucun fil : environ 2 h d'autonomie selon le fabricant.</p>",
             "product": "ceinture-chauffante-regles",
             "link_label": "Voir la ceinture",
@@ -82,6 +83,7 @@
           "type": "topic",
           "settings": {
             "question": "Livraison et suivi",
+            "keywords": "livraison, livrer, livre, livree, delai, expedition, expedie, envoi, envoye, colis, suivi, suivre, numero de suivi, recevoir, reception, quand vais je, arrive, arriver, transporteur, frais de port, frais d envoi, ou est ma commande",
             "answer": "<p>La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés. Dès l'expédition, vous recevez par e-mail votre numéro de suivi.</p>",
             "link_label": "Suivre ma commande",
             "link": "shopify://pages/suivi-de-commande"
@@ -91,6 +93,7 @@
           "type": "topic",
           "settings": {
             "question": "Retours et garantie",
+            "keywords": "retour, retourner, renvoyer, rembourser, remboursement, remboursee, rembourse, satisfaite, echange, echanger, garantie, defectueux, defaut, casse, abime, panne, ne marche pas, ne fonctionne pas, ne chauffe pas, retractation, changer d avis, annuler",
             "answer": "<p>Vous avez 14 jours après réception pour changer d'avis. Pour la ceinture, notre garantie « Satisfaite ou remboursée » dure 30 jours. Colis abîmé ou produit défectueux : nous renvoyons ou remboursons, à nos frais.</p>",
             "link_label": "Lire la politique de retour",
             "link": "shopify://pages/politique-de-retour"
@@ -100,6 +103,7 @@
           "type": "topic",
           "settings": {
             "question": "Trouver ma taille",
+            "keywords": "culotte, taille, tailles, guide des tailles, mesurer, mesure, tour de taille, hanches, xl, xxl, 3xl, 4xl, petite, grande taille",
             "answer": "<p>La culotte menstruelle existe du S au 4XL. Mesurez votre tour de taille (à l'endroit le plus fin) et de hanches (à l'endroit le plus large). Entre deux tailles, choisissez la plus grande.</p>",
             "product": "culotte-menstruelle",
             "link_label": "Voir la culotte",
@@ -110,6 +114,7 @@
           "type": "topic",
           "settings": {
             "question": "Bien utiliser ma ceinture",
+            "keywords": "utiliser, utilisation, porter, mettre, allumer, eteindre, regler, reglage, premiere fois, premiere utilisation, mode d emploi, notice, minutes, arret automatique, nuit, dormir, sommeil, peau, vetement, pull, bureau, travail, dehors, sortir, discrete",
             "answer": "<p>Chargez-la complètement avant la première utilisation. Placez-la sur le bas du ventre, par-dessus un vêtement fin, et commencez par la chaleur la plus douce. Elle s'arrête seule au bout de 30 minutes et ne s'utilise pas pendant le sommeil.</p>",
             "link_label": "Toutes les questions",
             "link": "shopify://pages/faq"
@@ -130,11 +135,14 @@
         "show_nudge": true,
         "nudge": "Une question ? Je vous guide en quelques secondes.",
         "title": "Assistante VELEA",
-        "status": "Je vous guide pas à pas",
-        "greeting": "<p>Bonjour, je suis l'assistante VELEA. Choisissez un sujet ci-dessous : je vous réponds tout de suite.</p>",
-        "next_text": "Une autre question ? Choisissez un sujet, ou écrivez à notre équipe : nous vous répondons par e-mail.",
-        "ai_label": "Poser ma question à l'assistante",
-        "contact_label": "ou nous écrire par e-mail",
+        "status": "En ligne",
+        "greeting": "<p>Bonjour, je suis l'assistante VELEA. Posez-moi votre question, ou choisissez un sujet ci-dessous.</p>",
+        "next_text": "Une autre question ? Écrivez-la ci-dessous.",
+        "input_placeholder": "Posez votre question…",
+        "unknown_text": "Je n'ai pas encore la réponse à cette question. Notre équipe vous répond par e-mail : votre question est déjà écrite dans le formulaire.",
+        "fineprint": "Réponses tirées des informations VELEA, sans avis médical.",
+        "health_link": "shopify://products/ceinture-chauffante-regles",
+        "ai_label": "Discuter avec l'assistante IA",
         "contact_link": "shopify://pages/contact",
         "use_chat": false,
         "contact_button_label": "Écrire à notre équipe"

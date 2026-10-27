@@ -16,6 +16,8 @@
     "shipping_page": "livraison-et-retours",
     "returns_page": "politique-de-retour",
     "health_notice": "Accessoire de confort, la ceinture ne remplace pas un avis médical. En cas de douleurs intenses, inhabituelles ou persistantes, consultez un professionnel de santé.",
+    "buy_now_style": "accent",
+    "buy_now_large": true,
     "cart_type": "drawer",
     "cart_note": false,
     "cart_upsell_collection": "tous-nos-produits",

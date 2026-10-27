@@ -1,0 +1,132 @@
+{% doc %}
+  The three promises under a buy button (delivery, returns, secure payment),
+  from the theme settings "Réassurance". No box: three columns separated by
+  fine lines, each with its icon in a soft rose ring. Items whose setting is
+  empty are not shown. The icons rise in one after the other when the row
+  comes into view.
+
+  @param {string} [class] - Extra CSS classes
+
+  @example
+  {% render 'reassurance-row' %}
+{% enddoc %}
+<ul class="reassurance-row reveal{% if class %} {{ class }}{% endif %}" role="list">
+  {%- if settings.shipping_info != blank -%}
+    <li class="reassurance-row__item">
+      <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'truck' %}</span>
+      <span class="reassurance-row__text">
+        <span class="reassurance-row__title">{{ settings.shipping_info | escape }}</span>
+        {%- if settings.shipping_delay != blank %}
+          <span class="reassurance-row__detail">{{ settings.shipping_delay | escape }}</span>
+        {%- endif -%}
+      </span>
+    </li>
+  {%- endif -%}
+  {%- if settings.returns_info != blank -%}
+    <li class="reassurance-row__item">
+      <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'return' %}</span>
+      <span class="reassurance-row__text">
+        <span class="reassurance-row__title">{{ settings.returns_info | escape }}</span>
+      </span>
+    </li>
+  {%- endif -%}
+  <li class="reassurance-row__item">
+    <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
+    <span class="reassurance-row__text">
+      <span class="reassurance-row__title">{{ 'products.secure_payment' | t }}</span>
+    </span>
+  </li>
+</ul>
+
+{% stylesheet %}
+  .reassurance-row {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    margin: 0;
+    padding: var(--space-sm) 0;
+    list-style: none;
+    border-block: 1px solid rgb(var(--warm-rgb) / 0.22);
+  }
+
+  .reassurance-row__item {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 0.55rem;
+    padding-inline: 0.5rem;
+    text-align: center;
+
+    & + & {
+      border-inline-start: 1px solid rgb(var(--warm-rgb) / 0.18);
+    }
+  }
+
+  .reassurance-row__icon {
+    display: grid;
+    place-items: center;
+    width: 2.625rem;
+    height: 2.625rem;
+    border-radius: 50%;
+    color: var(--rose-text);
+    background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.55), rgb(var(--rose-strong-rgb) / 0.1) 70%);
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
+
+    & .icon {
+      --icon-size: 1.15rem;
+    }
+  }
+
+  .reassurance-row__text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .reassurance-row__title {
+    font-size: 0.8125rem;
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1.35;
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  .reassurance-row__detail {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--color-text-muted);
+  }
+
+  @media screen and (min-width: 750px) {
+    .reassurance-row__title,
+    .reassurance-row__detail {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* The icons rise in one after the other with the row */
+  .js [data-reveal-enabled] .reassurance-row.reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-reveal-enabled] .reassurance-row.reveal .reassurance-row__icon {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.9);
+    transition:
+      opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .js [data-reveal-enabled] .reassurance-row.reveal .reassurance-row__item:nth-child(2) .reassurance-row__icon {
+    transition-delay: 0.08s;
+  }
+
+  .js [data-reveal-enabled] .reassurance-row.reveal .reassurance-row__item:nth-child(3) .reassurance-row__icon {
+    transition-delay: 0.16s;
+  }
+
+  .js [data-reveal-enabled] .reassurance-row.reveal.is-visible .reassurance-row__icon {
+    opacity: 1;
+    transform: none;
+  }
+{% endstylesheet %}

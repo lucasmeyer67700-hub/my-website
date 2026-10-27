@@ -279,11 +279,17 @@
   "assistant": {
     "nudge_close": "Fermer le message",
     "restart": "Recommencer",
-    "steps_label": "Étapes",
-    "step_topic": "Sujet",
-    "step_answer": "Réponse",
-    "step_help": "Échange",
-    "topics_label": "Sujets",
-    "ai_missing": "Le chat n'est pas disponible pour le moment. Écrivez-nous : nous vous répondons par e-mail."
+    "topics_label": "Sujets suggérés",
+    "ai_missing": "Le chat n'est pas disponible pour le moment. Écrivez à notre équipe : votre question est déjà écrite dans le formulaire.",
+    "question_label": "Votre question",
+    "send": "Envoyer",
+    "handover": "Je transmets votre question à notre assistante IA : elle vous répond dans la fenêtre de discussion.",
+    "health_more": "Les précautions et contre-indications du fabricant sont détaillées sur la fiche de la ceinture.",
+    "health_link": "Voir les précautions d'utilisation",
+    "hello_text": "Bonjour ! Posez-moi votre question, ou choisissez un sujet ci-dessous.",
+    "thanks_text": "Avec plaisir ! Une autre question ? Je suis là.",
+    "health_keywords": "enceinte, grossesse, allaitement, allaite, bebe, endometriose, sopk, kyste, fibrome, maladie, malade, pathologie, medecin, gynecologue, medicament, traitement, soigner, soigne, guerir, guerit, therapeutique, cardiaque, coeur, pacemaker, stimulateur, diabete, epilepsie, cancer, tumeur, brulure, brule, douleur intense, tres mal, hemorragie, saigne beaucoup, enfant, mineure",
+    "hello_keywords": "bonjour, bonsoir, salut, coucou, hello, hey",
+    "thanks_keywords": "merci, super, parfait, top, genial, ok merci, d accord"
   }
 }

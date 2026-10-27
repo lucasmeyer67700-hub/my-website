@@ -31,6 +31,11 @@
   --rose-text: #9c5261;
   --rose-soft: #f8e9ea;
 
+  /* Deep rose for filled buttons: white text passes 4.5:1 across the gradient */
+  --rose-cta: #a24c5d;
+  --rose-cta-light: #b4596a;
+  --rose-cta-rgb: 162 76 93;
+
   /* Light warm frame behind product photos */
   --gallery-bg: #f7f1ef;
 
@@ -1524,6 +1529,82 @@ body:has(dialog[open]) {
   &:hover:not([disabled]) {
     color: var(--color-button-label);
     background-color: var(--color-button);
+  }
+}
+
+/* "Acheter maintenant" leads straight to payment: it can be the strongest
+   button of the page (theme settings > Boutons d'achat). */
+.product-form__express .shopify-payment-button__button {
+  width: 100%;
+}
+
+[data-buy-now-large] .product-form__express .shopify-payment-button__button {
+  min-height: 4.25rem;
+}
+
+[data-buy-now-large] .product-form__express .shopify-payment-button__button--unbranded {
+  font-size: 0.9375rem;
+  letter-spacing: 0.14em;
+}
+
+[data-buy-now='solid'] .product-form__express .shopify-payment-button__button--unbranded {
+  border-color: var(--color-button);
+  color: var(--color-button-label);
+  background-color: var(--color-button);
+
+  &:hover:not([disabled]) {
+    color: var(--color-button-label);
+    background-color: var(--color-button);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+[data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded {
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  color: #fff;
+  background-color: var(--rose-cta);
+  background-image: linear-gradient(135deg, var(--rose-cta-light) 0%, var(--rose-cta) 100%);
+  box-shadow:
+    0 16px 30px -16px rgb(var(--rose-cta-rgb) / 0.75),
+    inset 0 1px 0 rgb(255 255 255 / 0.22);
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* A soft light that sweeps across on hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.28) 50%, transparent 65%);
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+
+  &:hover:not([disabled]) {
+    color: #fff;
+    background-color: var(--rose-cta);
+    box-shadow:
+      0 20px 36px -16px rgb(var(--rose-cta-rgb) / 0.85),
+      inset 0 1px 0 rgb(255 255 255 / 0.22);
+  }
+
+  &:active:not([disabled]) {
+    transform: scale(0.985);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--rose-cta);
+    outline-offset: 3px;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded:hover:not([disabled])::after {
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 

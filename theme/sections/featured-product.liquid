@@ -207,21 +207,7 @@
         </product-form>
 
         {%- if section.settings.show_reassurance -%}
-          <ul class="featured-product__reassurance" role="list">
-            {%- if settings.shipping_info != blank -%}
-              <li>
-                {% render 'icon', icon: 'truck' %}
-                <span>
-                  {{- settings.shipping_info | escape -}}
-                  {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
-                </span>
-              </li>
-            {%- endif -%}
-            {%- if settings.returns_info != blank -%}
-              <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
-            {%- endif -%}
-            <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
-          </ul>
+          {% render 'reassurance-row' %}
         {%- endif -%}
 
         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
@@ -302,29 +288,6 @@
   .featured-product__tagline {
     line-height: 1.65;
     text-wrap: pretty;
-  }
-
-  .featured-product__reassurance {
-    display: grid;
-    gap: var(--space-2xs);
-    margin: 0;
-    padding: var(--space-sm) var(--space-md);
-    list-style: none;
-    border-radius: var(--radius-md);
-    font-size: var(--text-sm);
-    background-color: var(--color-surface);
-
-    & li {
-      display: flex;
-      align-items: center;
-      gap: var(--space-xs);
-    }
-
-    & .icon {
-      --icon-size: 1.05rem;
-      flex: none;
-      color: var(--color-accent);
-    }
   }
 
   .featured-product__specs {

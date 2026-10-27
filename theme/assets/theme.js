@@ -281,6 +281,11 @@ class ContactForm extends HTMLElement {
     });
     // Shopify's answer (sent or refused) is brought to the visitor's attention.
     this.querySelector('[data-contact-success], [data-contact-errors]')?.focus();
+
+    // A question typed in the VELEA assistant arrives already written in the message.
+    const question = new URL(window.location.href).searchParams.get('question');
+    const body = /** @type {HTMLTextAreaElement | null} */ (this.form.querySelector('[data-validate="message"]'));
+    if (question && body && !body.value.trim()) body.value = question.slice(0, 1000);
   }
 
   /**
@@ -354,34 +359,95 @@ customElements.define('contact-form', ContactForm);
 /* -------------------------------------------------------------------------- */
 
 /**
- * Pink button bottom right that opens a guided panel. The visitor picks a
- * topic, sees it as her message, then the answer appears after a short
+ * Pink button bottom right that opens a chat-like panel. The visitor types a
+ * question (or picks a suggested topic) and the answer appears after a short
  * "typing" pause. Answers are the merchant's own texts (templates rendered by
- * Liquid). "Ask the assistant" hands over to the Shopify Inbox chat; if the
- * chat is not on the page, the visitor is pointed to the contact page.
+ * Liquid), chosen from each topic's keywords; health questions get the theme's
+ * caution notice. Any other question goes to the Shopify Inbox chat (and its
+ * AI agent) when that option is on, otherwise to the contact form with the
+ * question already written in. Nothing typed here is stored.
  */
 class VeleaAssistant extends HTMLElement {
   static nudgeKey = 'velea:assistant-nudge';
+
+  /**
+   * Lower case, no accents, words separated by single spaces, a trailing
+   * plural "s" or "x" dropped: "Délais de livraisons ?" → " delai de livraison ".
+   * @param {string} text
+   */
+  static normalize(text) {
+    const words = text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .split(' ')
+      .map((word) => (word.length > 3 ? word.replace(/[sx]$/, '') : word));
+    return ` ${words.join(' ')} `;
+  }
+
+  /** @param {string} [list] Comma-separated keywords */
+  static keywords(list = '') {
+    return list
+      .split(',')
+      .map((keyword) => VeleaAssistant.normalize(keyword))
+      .filter((keyword) => keyword.trim());
+  }
+
+  /**
+   * Each keyword found counts as many points as it has words, so
+   * "numero de suivi" outweighs "suivi".
+   * @param {string} text Normalized text
+   * @param {string[]} keywords Normalized keywords
+   */
+  static score(text, keywords) {
+    let score = 0;
+    for (const keyword of keywords) {
+      if (text.includes(keyword)) score += keyword.trim().split(' ').length;
+    }
+    return score;
+  }
 
   connectedCallback() {
     this.panel = this.querySelector('[data-assistant-panel]');
     this.launcher = this.querySelector('[data-assistant-toggle]');
     this.log = this.querySelector('[data-assistant-log]');
     this.choices = this.querySelector('[data-assistant-choices]');
-    this.steps = [...this.querySelectorAll('[data-assistant-step]')];
     this.nudge = this.querySelector('[data-assistant-nudge]');
-    this.ai = this.querySelector('[data-assistant-ai], [data-assistant-contact]');
+    this.form = this.querySelector('[data-assistant-form]');
+    this.input = this.querySelector('[data-assistant-input]');
+    this.send = this.querySelector('[data-assistant-send]');
     if (!this.panel || !this.launcher) return;
 
     this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.started = false;
     this.busy = false;
+    this.topics = [...this.querySelectorAll('[data-assistant-topic]')].map((chip) => ({
+      id: chip.dataset.assistantTopic,
+      keywords: VeleaAssistant.keywords(chip.dataset.keywords),
+    }));
+    this.health = VeleaAssistant.keywords(this.dataset.healthKeywords);
+    this.hello = VeleaAssistant.keywords(this.dataset.helloKeywords);
+    this.thanks = VeleaAssistant.keywords(this.dataset.thanksKeywords);
     if (this.dataset.replaceInbox === 'true') document.documentElement.classList.add('has-assistant');
 
     this.launcher.addEventListener('click', () => (this.panel.hidden ? this.open() : this.close()));
     this.addEventListener('click', this.#onClick.bind(this));
     this.panel.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') this.close();
+    });
+
+    this.form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.#ask(this.input.value);
+    });
+    this.input?.addEventListener('input', () => this.#updateInput());
+    this.input?.addEventListener('keydown', (event) => {
+      // Enter sends, Shift + Enter goes to a new line.
+      if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+      event.preventDefault();
+      this.form.requestSubmit();
     });
 
     // Theme editor: show the panel while its section or a topic is selected.
@@ -447,49 +513,148 @@ class VeleaAssistant extends HTMLElement {
 
   async #start() {
     this.started = true;
-    this.busy = false;
     this.run = (this.run || 0) + 1;
     const run = this.run;
+    this.busy = true;
+    this.#updateInput();
     this.log.replaceChildren();
     this.choices.hidden = true;
-    this.ai?.classList.remove('is-highlighted');
     for (const chip of this.choices.querySelectorAll('[data-seen]')) chip.removeAttribute('data-seen');
-    this.#setStep(1);
     await this.#botSay('greeting', 650);
-    if (run === this.run) this.#showChoices();
+    if (run !== this.run) return;
+    this.#showChoices();
+    this.busy = false;
+    this.#updateInput();
   }
 
   /** @param {HTMLButtonElement} chip */
   async #choose(chip) {
     if (this.busy) return;
     this.busy = true;
+    this.#updateInput();
     const run = this.run;
     this.choices.hidden = true;
     this.#userSay(chip.textContent.trim());
-    this.#setStep(2);
     await this.#botSay(chip.dataset.assistantTopic, 900);
     if (run !== this.run) return;
     chip.setAttribute('data-seen', '');
+    track('velea_assistant_question', { answer: chip.dataset.assistantTopic, source: 'topic' });
+    await this.#finish(run);
+  }
+
+  /**
+   * A typed question: the best matching answer, or the hand-over.
+   * @param {string} raw
+   */
+  async #ask(raw) {
+    const question = raw.trim();
+    if (!question || this.busy) return;
+    this.busy = true;
+    const run = this.run;
+    this.choices.hidden = true;
+    this.input.value = '';
+    this.#updateInput();
+    this.#userSay(question);
+
+    const answer = this.#match(question);
+    track('velea_assistant_question', { answer: answer || 'none', source: 'typed' });
+
+    if (answer) {
+      await this.#botSay(answer, 900);
+      if (run !== this.run) return;
+      const chip = this.choices.querySelector(`[data-assistant-topic="${answer}"]`);
+      chip?.setAttribute('data-seen', '');
+      await this.#finish(run);
+      return;
+    }
+
+    if (this.dataset.chat === 'true' && (await this.#findInbox(5))) {
+      await this.#botSay('handover', 700);
+      if (run !== this.run) return;
+      this.busy = false;
+      this.#updateInput();
+      setTimeout(() => this.#openChat(question), this.reduceMotion ? 0 : 900);
+      return;
+    }
+
+    const message = await this.#botSay('unknown', 900);
+    if (run !== this.run) return;
+    this.#prepareMail(message, question);
+    this.#showChoices();
+    this.busy = false;
+    this.#updateInput();
+  }
+
+  /** @param {number} run */
+  async #finish(run) {
     await this.#botSay('next', 450);
     if (run !== this.run) return;
-    this.#setStep(3);
     this.#showChoices();
-    this.ai?.classList.remove('is-highlighted');
-    void this.ai?.offsetWidth;
-    this.ai?.classList.add('is-highlighted');
     this.busy = false;
+    this.#updateInput();
+  }
+
+  /**
+   * The id of the answer for a typed question: health first, then the topic
+   * with the most keywords found, then hello / thanks for short messages.
+   * @param {string} question
+   * @returns {string | null}
+   */
+  #match(question) {
+    const text = VeleaAssistant.normalize(question);
+    if (VeleaAssistant.score(text, this.health) > 0) return 'health';
+
+    let best = null;
+    let bestScore = 0;
+    for (const topic of this.topics) {
+      const score = VeleaAssistant.score(text, topic.keywords);
+      if (score > bestScore) {
+        best = topic.id;
+        bestScore = score;
+      }
+    }
+    if (best) return best;
+
+    const short = text.trim().split(' ').length <= 5;
+    if (short && VeleaAssistant.score(text, this.thanks) > 0) return 'thanks';
+    if (short && VeleaAssistant.score(text, this.hello) > 0) return 'hello';
+    return null;
+  }
+
+  /**
+   * The contact link of an answer opens the form with the question written in.
+   * @param {HTMLElement | null} message
+   * @param {string} question
+   */
+  #prepareMail(message, question) {
+    const link = /** @type {HTMLAnchorElement | null} */ (message?.querySelector('[data-assistant-mail]'));
+    if (!link || !question) return;
+    const url = new URL(link.getAttribute('href') || '/', window.location.origin);
+    url.searchParams.set('question', question.slice(0, 400));
+    link.href = url.toString();
+  }
+
+  #updateInput() {
+    if (!this.input) return;
+    this.input.style.height = 'auto';
+    this.input.style.height = `${this.input.scrollHeight}px`;
+    if (this.send) this.send.disabled = this.busy || !this.input.value.trim();
   }
 
   /**
    * Hands over to the Shopify Inbox chat: its bubble is revealed, then its
-   * own button is pressed. Inbox is a separate app: if its button cannot be
-   * reached, the revealed bubble stays in the same corner for the visitor.
+   * own button is pressed, and the question is written in its field when
+   * Inbox lets the page reach it. Inbox is a separate app: if its button
+   * cannot be reached, the revealed bubble stays in the same corner, and
+   * without Inbox the visitor is pointed to the contact form.
+   * @param {string} [question]
    */
-  async #openChat() {
+  async #openChat(question = '') {
     if (this.busy) return;
     const host = await this.#findInbox();
     if (!host) {
-      await this.#botSay('ai-missing', 400);
+      const message = await this.#botSay('ai-missing', 400);
+      this.#prepareMail(message, question);
       return;
     }
     document.documentElement.classList.add('is-inbox-open');
@@ -497,10 +662,29 @@ class VeleaAssistant extends HTMLElement {
     await new Promise((resolve) => requestAnimationFrame(resolve));
     const toggle = host.shadowRoot?.querySelector('button.chat-toggle, [class*="chat-toggle"]');
     if (toggle) toggle.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+    if (question) this.#fillInbox(host, question);
   }
 
-  async #findInbox() {
-    for (let attempt = 0; attempt < 15; attempt += 1) {
+  /**
+   * @param {Element} host
+   * @param {string} question
+   */
+  async #fillInbox(host, question) {
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      const field = host.shadowRoot?.querySelector('textarea');
+      if (!field) continue;
+      const setValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set;
+      setValue?.call(field, question);
+      field.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      field.focus();
+      return;
+    }
+  }
+
+  /** @param {number} [attempts] */
+  async #findInbox(attempts = 15) {
+    for (let attempt = 0; attempt < attempts; attempt += 1) {
       const host = document.querySelector('inbox-online-store-chat, #ShopifyChat, #shopify-chat');
       if (host) return host;
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -511,10 +695,11 @@ class VeleaAssistant extends HTMLElement {
   /**
    * @param {string} templateId
    * @param {number} delay
+   * @returns {Promise<HTMLElement | null>} The message added to the conversation
    */
   async #botSay(templateId, delay) {
     const template = this.querySelector(`template[data-assistant-template="${templateId}"]`);
-    if (!template) return;
+    if (!template) return null;
     const typing = document.createElement('div');
     typing.className = 'assistant__typing';
     typing.setAttribute('aria-hidden', 'true');
@@ -528,6 +713,7 @@ class VeleaAssistant extends HTMLElement {
     message.append(template.content.cloneNode(true));
     this.log.append(message);
     this.#scroll();
+    return message;
   }
 
   /** @param {string} text */
@@ -540,19 +726,10 @@ class VeleaAssistant extends HTMLElement {
   }
 
   #showChoices() {
+    if (!this.choices.children.length) return;
     this.choices.hidden = false;
-    this.choices.scrollTop = 0;
+    this.choices.scrollLeft = 0;
     this.#scroll();
-  }
-
-  /** @param {number} step */
-  #setStep(step) {
-    this.steps.forEach((item, index) => {
-      item.classList.toggle('is-done', index < step - 1);
-      item.classList.toggle('is-current', index === step - 1);
-      if (index === step - 1) item.setAttribute('aria-current', 'step');
-      else item.removeAttribute('aria-current');
-    });
   }
 
   #scroll() {

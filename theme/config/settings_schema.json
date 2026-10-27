@@ -244,6 +244,32 @@
     ]
   },
   {
+    "name": "Boutons d'achat",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Le bouton « Acheter maintenant » mène directement au paiement. Il s'affiche quand « Bouton de paiement rapide » est activé dans le bloc d'achat."
+      },
+      {
+        "type": "select",
+        "id": "buy_now_style",
+        "label": "Style du bouton « Acheter maintenant »",
+        "options": [
+          { "value": "accent", "label": "Rose, mis en avant" },
+          { "value": "solid", "label": "Brun, comme « Ajouter au panier »" },
+          { "value": "outline", "label": "Contour, discret" }
+        ],
+        "default": "accent"
+      },
+      {
+        "type": "checkbox",
+        "id": "buy_now_large",
+        "label": "« Acheter maintenant » plus grand que « Ajouter au panier »",
+        "default": true
+      }
+    ]
+  },
+  {
     "name": "Panier",
     "settings": [
       {

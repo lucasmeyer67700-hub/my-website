@@ -595,26 +595,26 @@
     text-wrap: pretty;
   }
 
-  /* Guarantee box, dashed (under the offers) */
+  /* Guarantee: no box, fine lines above and below, the icon in a soft rose ring
+     (same look as the promises under the home offer) */
   .product__guarantee {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border: 2px dashed rgb(var(--rose-strong-rgb) / 0.55);
-    border-radius: var(--radius-sm);
-    background-color: #fff;
+    padding-block: var(--space-sm);
+    border-block: 1px solid rgb(var(--warm-rgb) / 0.22);
   }
 
   .product__guarantee-icon {
     display: grid;
     flex: none;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-xs);
-    color: var(--rose-strong);
-    background-color: var(--rose-soft);
+    width: 2.625rem;
+    height: 2.625rem;
+    border-radius: 50%;
+    color: var(--rose-text);
+    background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.55), rgb(var(--rose-strong-rgb) / 0.1) 70%);
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
 
     & .icon {
       --icon-size: 1.15rem;

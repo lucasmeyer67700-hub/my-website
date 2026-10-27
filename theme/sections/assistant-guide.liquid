@@ -1,10 +1,11 @@
 {%- comment -%}
-  The VELEA assistant: a pink button bottom right that opens a guided,
-  chat-like panel. The visitor picks a topic, sees her choice as a message,
-  then the answer "typed" by the assistant (the merchant's own text, real
-  prices from the store). Three steps show where she is. For anything else,
-  one button hands over to the Shopify Inbox chat (or to the contact page
-  when the chat is not available). Nothing is sent or stored by this panel.
+  The VELEA assistant: a pink button bottom right that opens a chat-like
+  panel. The visitor types any question (or picks a suggested topic): the
+  assistant answers at once with the merchant's own texts when the question
+  matches a topic's keywords (real prices from the store). Health questions
+  get the theme's caution notice. Anything else goes to the Shopify Inbox
+  chat and its AI agent when the chat option is on, otherwise to the contact
+  form with the question already written in. Nothing is stored by this panel.
 {%- endcomment -%}
 {%- liquid
   assign contact_link = section.settings.contact_link | default: routes.root_url
@@ -15,6 +16,11 @@
     data-section-id="{{ section.id }}"
     data-replace-inbox="{% if section.settings.use_chat %}{{ section.settings.replace_inbox }}{% else %}true{% endif %}"
     data-nudge="{{ section.settings.show_nudge }}"
+    data-chat="{{ section.settings.use_chat }}"
+    data-contact-url="{{ contact_link }}"
+    data-health-keywords="{{ 'assistant.health_keywords' | t | escape }}"
+    data-hello-keywords="{{ 'assistant.hello_keywords' | t | escape }}"
+    data-thanks-keywords="{{ 'assistant.thanks_keywords' | t | escape }}"
   >
     <p class="assistant__nudge" data-assistant-nudge hidden>
       <button type="button" class="assistant__nudge-open" data-assistant-open>
@@ -53,38 +59,49 @@
         </button>
       </div>
 
-      <ol class="assistant__steps" aria-label="{{ 'assistant.steps_label' | t }}">
-        <li class="assistant__step is-current" data-assistant-step aria-current="step"><span>1</span>{{ 'assistant.step_topic' | t }}</li>
-        <li class="assistant__step" data-assistant-step><span>2</span>{{ 'assistant.step_answer' | t }}</li>
-        <li class="assistant__step" data-assistant-step><span>3</span>{{ 'assistant.step_help' | t }}</li>
-      </ol>
-
       <div class="assistant__log" role="log" aria-live="polite" data-assistant-log></div>
 
       <div class="assistant__choices" role="group" aria-label="{{ 'assistant.topics_label' | t }}" data-assistant-choices hidden>
         {%- for block in section.blocks -%}
-          <button type="button" class="assistant__chip" data-assistant-topic="{{ block.id }}" {{ block.shopify_attributes }}>
-            <span>{{ block.settings.question | escape }}</span>
-            {%- render 'icon', icon: 'arrow-right' -%}
+          <button
+            type="button"
+            class="assistant__chip"
+            data-assistant-topic="{{ block.id }}"
+            data-keywords="{{ block.settings.keywords | escape }}"
+            {{ block.shopify_attributes }}
+          >
+            {{- block.settings.question | escape -}}
           </button>
         {%- endfor -%}
       </div>
 
-      <div class="assistant__footer">
-        {%- if section.settings.use_chat -%}
-          <button type="button" class="assistant__ai" data-assistant-ai>
-            {%- render 'icon', icon: 'sparkle' -%}
-            <span>{{ section.settings.ai_label | escape }}</span>
-          </button>
-          <a class="assistant__contact" href="{{ contact_link }}">{{ section.settings.contact_label | escape }}</a>
-        {%- else -%}
-          {%- comment -%} No live chat: the main way out is the contact page. {%- endcomment -%}
-          <a class="assistant__ai" href="{{ contact_link }}" data-assistant-contact>
-            {%- render 'icon', icon: 'mail' -%}
-            <span>{{ section.settings.contact_button_label | escape }}</span>
-          </a>
+      <form class="assistant__composer" novalidate data-assistant-form>
+        <label class="visually-hidden" for="AssistantQuestion-{{ section.id }}">{{ 'assistant.question_label' | t }}</label>
+        <textarea
+          class="assistant__input"
+          id="AssistantQuestion-{{ section.id }}"
+          rows="1"
+          maxlength="400"
+          placeholder="{{ section.settings.input_placeholder | escape }}"
+          enterkeyhint="send"
+          autocomplete="off"
+          data-assistant-input
+        ></textarea>
+        <button type="submit" class="assistant__send" aria-label="{{ 'assistant.send' | t }}" disabled data-assistant-send>
+          {%- render 'icon', icon: 'arrow-up' -%}
+        </button>
+      </form>
+
+      <p class="assistant__fineprint">
+        {%- if section.settings.fineprint != blank -%}
+          <span>{{ section.settings.fineprint | escape }}</span>
         {%- endif -%}
-      </div>
+        {%- if section.settings.use_chat -%}
+          <button type="button" class="assistant__fineprint-link" data-assistant-ai>{{ section.settings.ai_label | escape }}</button>
+        {%- else -%}
+          <a class="assistant__fineprint-link" href="{{ contact_link }}" data-assistant-contact>{{ section.settings.contact_button_label | escape }}</a>
+        {%- endif -%}
+      </p>
     </div>
 
     <button
@@ -106,11 +123,33 @@
     <template data-assistant-template="next"><p>{{ section.settings.next_text | escape }}</p></template>
     <template data-assistant-template="ai-missing">
       <p>{{ 'assistant.ai_missing' | t }}</p>
-      <a class="assistant__link" href="{{ contact_link }}">
-        {{- section.settings.contact_label | escape -}}
+      <a class="assistant__link" href="{{ contact_link }}" data-assistant-mail>
+        {{- section.settings.contact_button_label | escape -}}
         {%- render 'icon', icon: 'arrow-right' -%}
       </a>
     </template>
+    <template data-assistant-template="unknown">
+      <p>{{ section.settings.unknown_text | escape }}</p>
+      <a class="assistant__link" href="{{ contact_link }}" data-assistant-mail>
+        {{- section.settings.contact_button_label | escape -}}
+        {%- render 'icon', icon: 'arrow-right' -%}
+      </a>
+    </template>
+    <template data-assistant-template="handover"><p>{{ 'assistant.handover' | t }}</p></template>
+    <template data-assistant-template="health">
+      {%- if settings.health_notice != blank -%}
+        <p>{{ settings.health_notice | escape }}</p>
+      {%- endif -%}
+      <p>{{ 'assistant.health_more' | t }}</p>
+      {%- if section.settings.health_link != blank -%}
+        <a class="assistant__link" href="{{ section.settings.health_link }}">
+          {{- 'assistant.health_link' | t -}}
+          {%- render 'icon', icon: 'arrow-right' -%}
+        </a>
+      {%- endif -%}
+    </template>
+    <template data-assistant-template="hello"><p>{{ 'assistant.hello_text' | t }}</p></template>
+    <template data-assistant-template="thanks"><p>{{ 'assistant.thanks_text' | t }}</p></template>
     {%- for block in section.blocks -%}
       {%- liquid
         assign topic_product = block.settings.product
@@ -215,7 +254,8 @@
     font-weight: var(--font-body-weight-medium);
     letter-spacing: 0.02em;
     color: #fff;
-    background: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+    background-color: var(--assistant-rose);
+    background-image: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
     box-shadow:
       0 14px 30px -12px rgb(162 76 93 / 0.65),
       inset 0 1px 0 rgb(255 255 255 / 0.25);
@@ -378,15 +418,17 @@
   /* Panel: opens from the button, like a card lifting off the page */
   .assistant__panel {
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-    width: min(24.5rem, calc(100vw - 2rem));
-    height: min(38rem, calc(100dvh - 7.5rem));
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    width: min(25rem, calc(100vw - 2rem));
+    height: min(40rem, calc(100dvh - 7.5rem));
     overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border: 1px solid rgb(var(--warm-rgb) / 0.18);
+    border-radius: 1.5rem;
     color: var(--color-text);
-    background-color: var(--color-background);
-    box-shadow: 0 30px 70px -24px rgb(48 39 36 / 0.45);
+    background: linear-gradient(180deg, #fffdfc 0%, var(--color-background) 100%);
+    box-shadow:
+      0 40px 80px -30px rgb(48 39 36 / 0.45),
+      0 0 0 1px rgb(255 255 255 / 0.6) inset;
     opacity: 0;
     transform: translateY(1rem) scale(0.95);
     transform-origin: bottom right;
@@ -421,7 +463,8 @@
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
-    background: linear-gradient(135deg, #f8e9ea 0%, #f3dadd 100%);
+    border-block-end: 1px solid rgb(var(--warm-rgb) / 0.14);
+    background: linear-gradient(135deg, #fbf1f2 0%, #f6e3e6 100%);
   }
 
   .assistant__avatar {
@@ -501,84 +544,6 @@
     }
   }
 
-  /* Three steps: topic, answer, help */
-  .assistant__steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.4rem;
-    margin: 0;
-    padding: var(--space-xs) var(--space-md);
-    list-style: none;
-    border-block-end: 1px solid var(--color-border);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-  }
-
-  .assistant__step {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding-block-end: 0.45rem;
-    transition: color var(--duration-base) var(--ease-out);
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset-inline: 0;
-      inset-block-end: 0;
-      height: 2px;
-      border-radius: 2px;
-      background: var(--color-border);
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset-inline-start: 0;
-      inset-block-end: 0;
-      z-index: 1;
-      width: 0;
-      height: 2px;
-      border-radius: 2px;
-      background: var(--assistant-rose);
-      transition: width 0.6s var(--ease-out);
-    }
-
-    & span {
-      display: grid;
-      flex: none;
-      place-items: center;
-      width: 1.2rem;
-      height: 1.2rem;
-      border-radius: 50%;
-      font-size: 0.6875rem;
-      color: var(--color-text-muted);
-      background-color: var(--color-border);
-      transition:
-        background-color var(--duration-base) var(--ease-out),
-        color var(--duration-base) var(--ease-out);
-    }
-
-    &.is-current,
-    &.is-done {
-      color: var(--color-text);
-
-      & span {
-        color: #fff;
-        background-color: var(--assistant-rose);
-      }
-    }
-
-    &.is-current::before {
-      width: 55%;
-    }
-
-    &.is-done::before {
-      width: 100%;
-    }
-  }
-
   /* Conversation */
   .assistant__log {
     display: flex;
@@ -593,9 +558,10 @@
   .assistant__msg {
     max-width: 88%;
     padding: 0.75rem 1rem;
-    font-size: var(--text-sm);
+    font-size: 0.9375rem;
     line-height: 1.55;
-    animation: assistant-message 0.45s var(--ease-out) both;
+    overflow-wrap: anywhere;
+    animation: assistant-message 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 
     & p + p {
       margin-block-start: 0.5rem;
@@ -606,17 +572,18 @@
     align-self: flex-start;
     display: grid;
     gap: 0.65rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.4rem var(--radius-lg) var(--radius-lg) var(--radius-lg);
-    background-color: var(--color-surface, #fff);
-    box-shadow: 0 10px 24px -20px rgb(48 39 36 / 0.5);
+    border: 1px solid rgb(var(--warm-rgb) / 0.16);
+    border-radius: 0.4rem 1.25rem 1.25rem 1.25rem;
+    background-color: #fff;
+    box-shadow: 0 12px 28px -22px rgb(48 39 36 / 0.55);
   }
 
   .assistant__msg--user {
     align-self: flex-end;
-    border-radius: var(--radius-lg) 0.4rem var(--radius-lg) var(--radius-lg);
+    border-radius: 1.25rem 0.4rem 1.25rem 1.25rem;
     color: #fff;
-    background: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+    background-color: var(--color-button, #49352f);
+    white-space: pre-line;
   }
 
   @keyframes assistant-message {
@@ -725,14 +692,19 @@
     color: var(--color-text-muted);
   }
 
-  /* Topics */
+  /* Suggested topics: one row of pills that scrolls sideways */
   .assistant__choices {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.45rem;
-    max-height: 11.5rem;
-    overflow-y: auto;
-    padding: 0 var(--space-md) var(--space-sm);
+    overflow-x: auto;
+    padding: 0.15rem var(--space-md) var(--space-xs);
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, #000 88%, transparent);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     &[hidden] {
       display: none;
@@ -740,19 +712,18 @@
   }
 
   .assistant__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    min-height: 2.5rem;
-    padding: 0.45rem 0.85rem 0.45rem 1rem;
-    border: 1px solid rgb(180 89 106 / 0.45);
+    flex: none;
+    min-height: 2.75rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid rgb(var(--rose-cta-rgb, 162 76 93) / 0.35);
     border-radius: 999px;
     font: inherit;
     font-size: var(--text-sm);
+    white-space: nowrap;
     color: var(--assistant-rose);
-    background-color: var(--color-surface, #fff);
+    background-color: #fff;
     cursor: pointer;
-    animation: assistant-message 0.4s var(--ease-out) both;
+    animation: assistant-message 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
     transition:
       color var(--duration-base) var(--ease-out),
       background-color var(--duration-base) var(--ease-out),
@@ -774,11 +745,6 @@
       animation-delay: 0.24s;
     }
 
-    & .icon {
-      --icon-size: 0.85rem;
-      transition: transform var(--duration-base) var(--ease-out);
-    }
-
     &[data-seen] {
       border-color: var(--color-border);
       color: var(--color-text-muted);
@@ -790,71 +756,119 @@
         border-color: var(--assistant-rose);
         color: #fff;
         background-color: var(--assistant-rose);
-
-        & .icon {
-          transform: translateX(0.15rem);
-        }
       }
     }
   }
 
-  /* Hand-over: the live chat, then e-mail */
-  .assistant__footer {
-    display: grid;
-    gap: 0.35rem;
-    justify-items: center;
-    padding: var(--space-sm) var(--space-md) max(var(--space-sm), env(safe-area-inset-bottom));
-    border-block-start: 1px solid var(--color-border);
-    background-color: var(--color-surface, #fff);
+  /* Question field: a soft pill with a round send button */
+  .assistant__composer {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin: 0 var(--space-sm);
+    padding: 0.35rem 0.35rem 0.35rem 1.1rem;
+    border: 1px solid rgb(var(--warm-rgb) / 0.3);
+    border-radius: 1.6rem;
+    background-color: #fff;
+    box-shadow: 0 12px 26px -22px rgb(48 39 36 / 0.6);
+    transition:
+      border-color var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+
+    &:focus-within {
+      border-color: var(--assistant-rose);
+      box-shadow:
+        0 0 0 3px rgb(162 76 93 / 0.14),
+        0 12px 26px -22px rgb(48 39 36 / 0.6);
+    }
   }
 
-  .assistant__ai {
-    box-sizing: border-box;
-    display: inline-flex;
-    text-decoration: none;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    min-height: 3rem;
-    padding: 0.6rem 1rem;
+  .assistant__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-height: 7.5rem;
+    margin: 0;
+    padding: 0.65rem 0;
     border: 0;
-    border-radius: 999px;
+    outline: none;
+    /* 16px: no zoom on iPhone when the field gets focus */
     font: inherit;
-    font-size: var(--text-sm);
-    font-weight: var(--font-body-weight-medium);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--color-text);
+    background: none;
+    resize: none;
+
+    &::placeholder {
+      color: var(--color-text-muted);
+      opacity: 1;
+    }
+  }
+
+  .assistant__send {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
     color: #fff;
-    background-color: var(--color-button, #49352f);
+    background-color: var(--assistant-rose);
+    background-image: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
     cursor: pointer;
-    transition: transform var(--duration-base) var(--ease-out);
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 
     & .icon {
-      --icon-size: 1rem;
+      --icon-size: 1.15rem;
+      stroke-width: 2;
     }
 
-    &:hover {
-      transform: translateY(-1px);
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
     }
 
-    &.is-highlighted {
-      animation: assistant-glow 1.6s ease-out 2;
-    }
-  }
-
-  @keyframes assistant-glow {
-    0% {
-      box-shadow: 0 0 0 0 rgb(180 89 106 / 0.5);
+    &:not(:disabled):active {
+      transform: scale(0.92);
     }
 
-    100% {
-      box-shadow: 0 0 0 0.75rem rgb(180 89 106 / 0);
+    &:focus-visible {
+      outline: 2px solid var(--assistant-rose);
+      outline-offset: 2px;
     }
   }
 
-  .assistant__contact {
+  .assistant__fineprint {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0 0.35rem;
+    margin: 0;
+    padding: 0.35rem var(--space-md) max(0.6rem, env(safe-area-inset-bottom));
     font-size: var(--text-xs);
+    line-height: 1.4;
+    text-align: center;
     color: var(--color-text-muted);
+  }
+
+  .assistant__fineprint-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--warm-rgb) / 0.5);
     text-underline-offset: 0.2em;
+    background: none;
+    cursor: pointer;
   }
 
   /* Phones: the panel is a sheet; the button hides while it is open */
@@ -872,7 +886,6 @@
     .assistant__avatar-drop,
     .assistant__msg,
     .assistant__chip,
-    .assistant__ai.is-highlighted,
     .assistant__typing span {
       animation: none;
     }
@@ -891,7 +904,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Un guide en bas à droite : la visiteuse choisit un sujet, l'assistante répond avec vos textes. Pour le reste, un bouton ouvre le chat Shopify Inbox ou la page de contact."
+      "content": "La visiteuse écrit sa question : si elle contient un mot-clé d'un sujet, l'assistante répond avec votre texte. Santé : votre mention de prudence. Sinon : le chat Inbox et son agent IA, ou le formulaire de contact avec la question déjà écrite."
     },
     {
       "type": "checkbox",
@@ -902,8 +915,8 @@
     {
       "type": "checkbox",
       "id": "use_chat",
-      "label": "Proposer le chat Shopify Inbox",
-      "info": "Sans le chat, le bouton du bas mène à la page de contact et la bulle Shopify Inbox reste cachée. Pour retirer Inbox complètement : Intégrations d'applications > Shopify Inbox.",
+      "label": "Confier les autres questions au chat Shopify Inbox (agent IA)",
+      "info": "Activez aussi Shopify Inbox dans Intégrations d'applications, et l'agent IA dans l'application Inbox. Sans le chat, les questions sans réponse mènent au formulaire de contact, et la bulle Inbox reste cachée.",
       "default": true
     },
     {
@@ -947,40 +960,57 @@
       "type": "text",
       "id": "status",
       "label": "Sous-titre",
-      "default": "Je vous guide pas à pas"
+      "default": "En ligne"
     },
     {
       "type": "richtext",
       "id": "greeting",
       "label": "Message d'accueil",
-      "default": "<p>Bonjour, je suis l'assistante VELEA. Choisissez un sujet ci-dessous : je vous réponds tout de suite.</p>"
+      "default": "<p>Bonjour, je suis l'assistante VELEA. Posez-moi votre question, ou choisissez un sujet ci-dessous.</p>"
     },
     {
       "type": "text",
       "id": "next_text",
       "label": "Message après une réponse",
-      "default": "Une autre question ? Choisissez un sujet, ou écrivez-nous directement."
+      "default": "Une autre question ? Écrivez-la ci-dessous."
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Texte du champ de question",
+      "default": "Posez votre question…"
+    },
+    {
+      "type": "text",
+      "id": "unknown_text",
+      "label": "Réponse quand l'assistante ne sait pas",
+      "info": "Affichée quand aucun sujet ne correspond et que le chat Inbox est désactivé.",
+      "default": "Je n'ai pas encore la réponse à cette question. Notre équipe vous répond par e-mail : votre question est déjà écrite dans le formulaire."
+    },
+    {
+      "type": "text",
+      "id": "fineprint",
+      "label": "Petite ligne sous le champ",
+      "default": "Réponses tirées des informations VELEA, sans avis médical."
+    },
+    {
+      "type": "url",
+      "id": "health_link",
+      "label": "Lien des précautions d'utilisation",
+      "info": "Montré avec la mention de prudence, quand une question parle de santé (grossesse, maladie, traitement…)."
     },
     {
       "type": "text",
       "id": "ai_label",
-      "label": "Bouton vers le chat",
-      "default": "Poser ma question à l'assistante",
-      "visible_if": "{{ section.settings.use_chat }}"
-    },
-    {
-      "type": "text",
-      "id": "contact_label",
-      "label": "Lien de contact sous le bouton",
-      "default": "ou nous écrire par e-mail",
+      "label": "Lien vers le chat Inbox",
+      "default": "Discuter avec l'assistante IA",
       "visible_if": "{{ section.settings.use_chat }}"
     },
     {
       "type": "text",
       "id": "contact_button_label",
-      "label": "Bouton de contact (sans chat)",
-      "default": "Écrire à notre équipe",
-      "visible_if": "{{ section.settings.use_chat == false }}"
+      "label": "Lien vers le formulaire de contact",
+      "default": "Écrire à notre équipe"
     },
     {
       "type": "url",
@@ -998,6 +1028,12 @@
           "id": "question",
           "label": "Sujet (bouton)",
           "default": "Choisir mon produit"
+        },
+        {
+          "type": "textarea",
+          "id": "keywords",
+          "label": "Mots-clés",
+          "info": "Séparés par des virgules. Quand une question contient l'un d'eux, l'assistante donne cette réponse. Exemple : livraison, délai, colis, suivi."
         },
         {
           "type": "richtext",

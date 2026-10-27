@@ -279,11 +279,17 @@
   "assistant": {
     "nudge_close": "Close the message",
     "restart": "Start again",
-    "steps_label": "Steps",
-    "step_topic": "Topic",
-    "step_answer": "Answer",
-    "step_help": "Chat",
-    "topics_label": "Topics",
-    "ai_missing": "The chat is not available right now. Write to us: we reply by e-mail."
+    "topics_label": "Suggested topics",
+    "ai_missing": "The chat is not available right now. Write to our team: your question is already in the form.",
+    "question_label": "Your question",
+    "send": "Send",
+    "handover": "I am passing your question to our AI assistant: she will answer in the chat window.",
+    "health_more": "The manufacturer's precautions and contraindications are listed on the belt's page.",
+    "health_link": "See the precautions for use",
+    "hello_text": "Hello! Ask me your question, or pick a topic below.",
+    "thanks_text": "My pleasure! Another question? I am here.",
+    "health_keywords": "pregnant, pregnancy, breastfeeding, baby, endometriosis, pcos, cyst, fibroid, disease, illness, condition, doctor, gynaecologist, medicine, medication, treatment, treat, cure, heals, therapeutic, heart, pacemaker, diabetes, epilepsy, cancer, tumour, burn, burns, severe pain, bleeding a lot, child, minor",
+    "hello_keywords": "hello, hi, hey, good morning, good evening",
+    "thanks_keywords": "thanks, thank you, great, perfect, ok thanks"
   }
 }

@@ -72,6 +72,10 @@
 
   <body
     class="color-scheme-1 template-{{ request.page_type | handle }}"
+    data-buy-now="{{ settings.buy_now_style | default: 'accent' }}"
+    {% if settings.buy_now_large %}
+      data-buy-now-large
+    {% endif %}
     {% if settings.animations_reveal %}
       data-reveal-enabled
     {% endif %}
