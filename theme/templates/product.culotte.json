@@ -27,14 +27,6 @@
             "show_dynamic_checkout": true
           }
         },
-        "highlight": {
-          "type": "reviews_highlight",
-          "settings": {
-            "heading": "Ce qu'en disent nos clientes",
-            "limit": 5,
-            "interval": 6
-          }
-        },
         "delivery": {
           "type": "delivery",
           "settings": {
@@ -147,7 +139,6 @@
         "variant",
         "inventory",
         "buy",
-        "highlight",
         "delivery",
         "trust",
         "description",

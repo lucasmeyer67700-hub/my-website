@@ -109,21 +109,12 @@
             "title_3": "Discrète sous un vêtement ample",
             "text_3": "Portée sur un vêtement fin, elle se glisse sous un pull ou une chemise."
           }
-        },
-        "highlight": {
-          "type": "reviews_highlight",
-          "settings": {
-            "heading": "Ce qu'en disent nos clientes",
-            "limit": 5,
-            "interval": 6
-          }
         }
       },
       "block_order": [
         "variant",
         "inventory",
         "buy",
-        "highlight",
         "guarantee",
         "delivery",
         "trust",
