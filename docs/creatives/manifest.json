@@ -1,0 +1,92 @@
+[
+ {
+  "id": "ceinture-01-essentiel",
+  "product": "belt",
+  "alt": "Ceinture chauffante VELEA rose : trois niveaux de chaleur (50, 55, 60 °C), massage par vibration 4 modes, sans fil avec environ 2 h d'autonomie, arrêt automatique au bout de 30 minutes",
+  "file": "velea-ceinture-01-essentiel.jpg"
+ },
+ {
+  "id": "ceinture-02-chaleur",
+  "product": "belt",
+  "alt": "Ceinture chauffante VELEA : chaleur réglable sur 3 niveaux, 50, 55 et 60 °C, et massage par vibration en 4 modes, M1 à M4, avec ou sans chaleur",
+  "file": "velea-ceinture-02-chaleur.jpg"
+ },
+ {
+  "id": "ceinture-03-utilisation",
+  "product": "belt",
+  "alt": "Mode d'emploi de la ceinture chauffante VELEA en 4 étapes : charger, placer sur le bas du ventre par-dessus un vêtement fin, allumer d'un appui long et choisir la chaleur, arrêt automatique après 30 minutes",
+  "file": "velea-ceinture-03-utilisation.jpg"
+ },
+ {
+  "id": "ceinture-04-coffret",
+  "product": "belt",
+  "alt": "Contenu du colis de la ceinture chauffante VELEA : 1 ceinture chauffante, 1 câble de charge USB et 1 notice d'utilisation ; le Duo contient deux ensembles complets",
+  "file": "velea-ceinture-04-coffret.jpg"
+ },
+ {
+  "id": "ceinture-05-fiche-technique",
+  "product": "belt",
+  "alt": "Fiche technique de la ceinture chauffante VELEA : boîtier de 18,5 × 8 × 2,5 cm, 142 g, 3 niveaux de chaleur, massage 4 modes, batterie 1 800 mAh, 5 V / 1 A, environ 2 h d'autonomie, arrêt automatique 30 minutes, ABS et tissu effet velours",
+  "file": "velea-ceinture-05-fiche-technique.jpg"
+ },
+ {
+  "id": "ceinture-06-coloris",
+  "product": "belt",
+  "alt": "Les deux coloris de la ceinture chauffante VELEA, rose et blanc ; le Duo se compose de deux roses, deux blanches ou une de chaque",
+  "file": "velea-ceinture-06-coloris.jpg"
+ },
+ {
+  "id": "ceinture-07-bon-a-savoir",
+  "product": "belt",
+  "alt": "Précautions d'utilisation de la ceinture chauffante VELEA : pas pendant le sommeil, ne fonctionne pas pendant la charge, surveiller sa peau, contre-indications (grossesse, maladie cardiaque, tumeur du col de l'utérus, crise de goutte, plaie ou anomalie de la peau), tenir éloignée des flammes ; accessoire de confort qui ne remplace pas un avis médical",
+  "file": "velea-ceinture-07-bon-a-savoir.jpg"
+ },
+ {
+  "id": "culotte-01-tailles",
+  "product": "culotte",
+  "alt": "Guide des tailles de la culotte menstruelle VELEA, du S au 4XL : mesurer le tour de taille au plus fin, au-dessus du nombril, et le tour de hanches au plus large ; entre deux tailles, choisir la plus grande",
+  "file": "velea-culotte-01-tailles.jpg"
+ },
+ {
+  "id": "culotte-02-matiere",
+  "product": "culotte",
+  "alt": "Composition de la culotte menstruelle VELEA : 95 % viscose et 5 % élasthanne, entrejambe 100 % coton ; elle se porte comme une culotte classique et se réutilise après lavage",
+  "file": "velea-culotte-02-matiere.jpg"
+ },
+ {
+  "id": "culotte-03-coloris",
+  "product": "culotte",
+  "alt": "Les trois coloris de la culotte menstruelle VELEA : noir, beige et rouge, du S au 4XL",
+  "file": "velea-culotte-03-coloris.jpg"
+ },
+ {
+  "id": "culotte-04-entretien",
+  "product": "culotte",
+  "alt": "Entretien de la culotte menstruelle VELEA : rincer à l'eau froide jusqu'à ce que l'eau soit claire, laver selon l'étiquette, éviter l'adoucissant, sécher à l'air libre loin d'une source de chaleur directe",
+  "file": "velea-culotte-04-entretien.jpg"
+ },
+ {
+  "id": "serviettes-01-lot",
+  "product": "serviette",
+  "alt": "Illustration du lot de 5 serviettes menstruelles lavables VELEA d'environ 25 cm : partie centrale grise, ailettes noires à boutons-pression",
+  "file": "velea-serviettes-01-lot.jpg"
+ },
+ {
+  "id": "serviettes-02-pose",
+  "product": "serviette",
+  "alt": "Comment poser la serviette lavable VELEA : la placer au fond de la culotte face grise vers soi, rabattre les ailettes sous la culotte et fermer les boutons-pression, puis la rincer à l'eau froide après utilisation",
+  "file": "velea-serviettes-02-pose.jpg"
+ },
+ {
+  "id": "serviettes-03-composition",
+  "product": "serviette",
+  "alt": "Composition de la serviette lavable VELEA : surface imperméable, couches en microfibre et couche en bambou charbon ; longueur environ 25 cm, partie centrale grise, ailettes noires à boutons-pression",
+  "file": "velea-serviettes-03-composition.jpg"
+ },
+ {
+  "id": "serviettes-04-entretien",
+  "product": "serviette",
+  "alt": "Entretien des serviettes lavables VELEA : rincer à l'eau froide jusqu'à ce que l'eau soit claire, laver selon l'étiquette, éviter l'adoucissant, sécher à l'air libre loin d'une source de chaleur directe",
+  "file": "velea-serviettes-04-entretien.jpg"
+ }
+]
