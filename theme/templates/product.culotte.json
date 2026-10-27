@@ -181,8 +181,8 @@
         "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
         "color_scheme": "scheme-1",
         "layout": "carousel",
-        "band_limit": 12,
-        "band_speed": 8
+        "band_limit": 10,
+        "band_speed": 7
       }
     },
     "faq": {

@@ -2,8 +2,9 @@
   Social proof under the product banner: the first reviewers and the
   average rating with the number of reviews, linking to the reviews
   section. Built only from real data: the product's "Avis clientes"
-  (custom.avis) entries; without them, the reviews from another site
-  (custom.avis_externes), always named with their source; or the standard
+  (custom.avis) entries; without them, the selection of reviews of this model
+  published elsewhere (custom.avis_selection, then custom.avis_externes), with
+  that site's overall rating and total; or the standard
   rating fields filled by a review app. Renders nothing when there is no review.
 
   @param {object} product - Product object
@@ -18,6 +19,9 @@
   assign own_count = product.metafields.custom.avis.value.size | default: 0
   if own_count == 0
     assign reviews_key = 'avis_externes'
+    if product.metafields.custom.avis_selection.value.size > 0
+      assign reviews_key = 'avis_selection'
+    endif
   endif
   assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
   assign link = url | append: '#' | append: anchor
@@ -44,6 +48,9 @@
           assign average = product.metafields.custom.avis_externes_note.value.rating
         endif
         assign source_total = product.metafields.custom.avis_externes_total.value | default: 0
+        if reviews_key == 'avis_selection'
+          assign source_total = product.metafields.custom.avis_selection_total.value | default: source_total
+        endif
         if source_total > review_count
           assign display_count = source_total
         endif
@@ -87,11 +94,7 @@
         {% render 'stars', rating: average %}
         <span>
           {{- average_text }}/5
-          {% if source_name != blank -%}
-            {{- 'reviews.count_short_source' | t: count: display_count, source: source_name -}}
-          {%- else -%}
-            {{- 'reviews.count_short' | t: count: review_count -}}
-          {%- endif -%}
+          {{ 'reviews.count_short' | t: count: display_count -}}
         </span>
       </a>
     </div>

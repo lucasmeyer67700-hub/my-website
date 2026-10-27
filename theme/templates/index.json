@@ -226,8 +226,7 @@
         "product": "ceinture-chauffante-regles",
         "eyebrow": "Avis clientes",
         "heading": "Elles en parlent",
-        "limit": 12,
-        "direction": "ltr",
+        "limit": 10,
         "speed": 7,
         "color_scheme": "scheme-1"
       }

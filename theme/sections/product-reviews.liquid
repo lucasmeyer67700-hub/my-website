@@ -2,8 +2,9 @@
   Customer reviews of the product, from its "Avis clientes" entries
   (custom.avis metaobjects): average, star breakdown, filters, customer
   photos, sorting and the list. Authentic reviews only. Without them, the
-  reviews published on another site (custom.avis_externes) are shown instead,
-  each one named with its source and never marked as verified. Without reviews the
+  selection of reviews of this model published elsewhere (custom.avis_selection,
+  then custom.avis_externes) is shown instead: never marked as verified, with
+  "Comment les avis sont-ils sélectionnés ?" under the rating. Without reviews the
   section stays invisible for visitors (a notice shows in the theme editor).
   Review apps can be added as app blocks.
 {%- endcomment -%}
@@ -16,6 +17,9 @@
   assign own_count = product.metafields.custom.avis.value.size | default: 0
   if own_count == 0
     assign reviews_key = 'avis_externes'
+    if product.metafields.custom.avis_selection.value.size > 0
+      assign reviews_key = 'avis_selection'
+    endif
   endif
   assign has_reviews = false
   if product.metafields.custom[reviews_key].value.size > 0
@@ -87,19 +91,20 @@
       assign average = rating_sum | times: 1.0 | divided_by: review_count
       comment
         Reviews from another site: that site's overall rating and total, when
-        filled in on the product (custom.avis_externes_note / _total / _mention).
+        filled in on the product (custom.avis_externes_note / _total).
       endcomment
       assign display_count = review_count
-      assign source_mention = ''
       if source_name != blank
         if product.metafields.custom.avis_externes_note.value != blank
           assign average = product.metafields.custom.avis_externes_note.value.rating
         endif
         assign source_total = product.metafields.custom.avis_externes_total.value | default: 0
+        if reviews_key == 'avis_selection'
+          assign source_total = product.metafields.custom.avis_selection_total.value | default: source_total
+        endif
         if source_total > review_count
           assign display_count = source_total
         endif
-        assign source_mention = product.metafields.custom.avis_externes_mention.value
       endif
       assign average_text_x10 = average | times: 10 | round
       assign average_text_int = average_text_x10 | divided_by: 10 | floor
@@ -127,7 +132,7 @@
         {% render 'stars', rating: average, class: 'reviews__stars' %}
         <span class="reviews__total">
           {%- if source_name != blank -%}
-            {{ 'reviews.source_total' | t: count: display_count, source: source_name }}
+            {{ 'reviews.total' | t: count: display_count }}
           {%- else -%}
             {{ 'reviews.count' | t: count: review_count }}
           {%- endif -%}
@@ -143,10 +148,7 @@
           </span>
         {%- endif -%}
         {%- if source_name != blank -%}
-          <p class="reviews__source">
-            {%- render 'icon', icon: 'info' -%}
-            <span>{{ 'reviews.source_note' | t: source: source_name }}</span>
-          </p>
+          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
         {%- endif -%}
       </div>
 
@@ -346,9 +348,7 @@
               {%- endif -%}
               <p class="review__footer">
                 <span class="review__author">{{ review.auteur.value | escape }}</span>
-                {%- if review.source.value != blank -%}
-                  <span class="review__published">{{ 'reviews.source_published' | t: source: review.source.value | escape }}</span>
-                {%- elsif review.achat_verifie.value -%}
+                {%- if review.achat_verifie.value and review.source.value == blank -%}
                   <span class="review__verified">{% render 'icon', icon: 'check' %}{{ 'reviews.verified' | t }}</span>
                 {%- endif -%}
                 <span class="review__sep" aria-hidden="true">|</span>
@@ -375,12 +375,7 @@
         {{ 'reviews.more' | t }}
       </button>
 
-      {%- if source_name != blank -%}
-        <details class="reviews__about">
-          <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
-          <div class="rte">{{ 'reviews.source_about_html' | t: source: source_name }}</div>
-        </details>
-      {%- elsif section.settings.about != blank -%}
+      {%- if source_name == blank and section.settings.about != blank -%}
         <details class="reviews__about">
           <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
           <div class="rte">{{ section.settings.about }}</div>
@@ -440,7 +435,7 @@
             {% render 'stars', rating: average, class: 'reviews__score-stars' %}
             <span class="reviews__score-count">
               {%- if source_name != blank -%}
-                {{ 'reviews.source_total' | t: count: display_count, source: source_name }}
+                {{ 'reviews.total' | t: count: display_count }}
               {%- else -%}
                 {{ 'reviews.count' | t: count: review_count }}
               {%- endif -%}
@@ -448,13 +443,7 @@
           </span>
         </div>
         {%- if source_name != blank -%}
-          {%- if source_mention != blank -%}
-            <p class="reviews__verified">{% render 'icon', icon: 'check' %}{{ source_mention | escape }}</p>
-          {%- endif -%}
-          <p class="reviews__source">
-            {%- render 'icon', icon: 'info' -%}
-            <span>{{ 'reviews.source_note' | t: source: source_name }}</span>
-          </p>
+          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
         {%- elsif verified_count > 0 -%}
           <p class="reviews__verified">
             {% render 'icon', icon: 'check' %}
@@ -470,12 +459,7 @@
       {% render 'reviews-band', product: product, limit: section.settings.band_limit, speed: section.settings.band_speed %}
 
       <div class="page-width reviews__foot">
-        {%- if source_name != blank -%}
-          <details class="reviews__about">
-            <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
-            <div class="rte">{{ 'reviews.source_about_html' | t: source: source_name }}</div>
-          </details>
-        {%- elsif section.settings.about != blank -%}
+        {%- if source_name == blank and section.settings.about != blank -%}
           <details class="reviews__about">
             <summary>{% render 'icon', icon: 'info' %}<span>{{ 'reviews.about_title' | t }}</span></summary>
             <div class="rte">{{ section.settings.about }}</div>
@@ -572,11 +556,23 @@
     color: var(--color-text-muted);
   }
 
-  .reviews--carousel .reviews__source {
-    justify-content: center;
-    max-width: 38rem;
-    font-size: var(--text-xs);
-    text-align: start;
+  .reviews__about-selection {
+    margin-block-start: var(--space-2xs);
+
+    .reviews__head & {
+      flex-basis: 100%;
+    }
+  }
+
+  /* The overall stars fill from left to right as the score comes into view */
+  .js [data-reveal-enabled] .reviews__showcase .reviews__score-stars::before {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+  }
+
+  .js [data-reveal-enabled] .reviews__showcase.is-visible .reviews__score-stars::before {
+    transform: none;
   }
 
   .reviews__foot {
@@ -584,28 +580,6 @@
     justify-items: center;
     gap: var(--space-sm);
     margin-block-start: var(--space-md);
-  }
-
-  .review__published {
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
-  .reviews__source {
-    display: flex;
-    flex-basis: 100%;
-    align-items: flex-start;
-    gap: 0.4rem;
-    margin: 0;
-    font-size: var(--text-sm);
-    line-height: 1.5;
-    color: var(--color-text-muted);
-
-    & .icon {
-      --icon-size: 1rem;
-      flex: none;
-      margin-block-start: 0.15em;
-    }
   }
 
   .reviews__title {
@@ -1033,7 +1007,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Les avis viennent du champ méta « Avis clientes » du produit (Produits > votre produit > Champs méta). Sans avis de vos clientes, ceux du champ « Avis d'un autre site » s'affichent à la place, avec leur source. Sans avis, la section reste invisible."
+      "content": "Les avis viennent du champ méta « Avis clientes » du produit (Produits > votre produit > Champs méta). Sans avis de vos clientes, la sélection d'avis de ce modèle (champ « Avis — sélection affichée ») s'affiche à la place, avec « Comment les avis sont-ils sélectionnés ? » sous la note. Sans avis, la section reste invisible."
     },
     {
       "type": "text",
@@ -1046,7 +1020,7 @@
       "id": "layout",
       "label": "Présentation",
       "options": [
-        { "value": "carousel", "label": "Note + avis qui défilent" },
+        { "value": "carousel", "label": "Note + carrousel d'avis" },
         { "value": "list", "label": "Liste avec filtres et tri" }
       ],
       "default": "carousel"
@@ -1054,16 +1028,16 @@
     {
       "type": "range",
       "id": "band_limit",
-      "label": "Nombre d'avis qui défilent",
+      "label": "Nombre d'avis du carrousel",
       "min": 4,
       "max": 20,
       "step": 1,
-      "default": 12
+      "default": 10
     },
     {
       "type": "range",
       "id": "band_speed",
-      "label": "Vitesse du défilement (secondes par avis)",
+      "label": "Rythme du défilement (secondes par avis)",
       "min": 3,
       "max": 12,
       "step": 1,

@@ -1251,44 +1251,167 @@ class ReviewRotator extends HTMLElement {
 customElements.define('review-rotator', ReviewRotator);
 
 /* -------------------------------------------------------------------------- */
-/* Scrolling band of reviews: pause button, and no work while off screen      */
+/* Review carousel: swipe or arrows, moves on by itself one card at a time    */
 /* -------------------------------------------------------------------------- */
 
-class ReviewsMarquee extends HTMLElement {
+class ReviewsCarousel extends HTMLElement {
   #controller = null;
   #observer = null;
+  #resizeObserver = null;
+  #timer = 0;
+  #frame = 0;
   #paused = false;
+  #hovered = false;
+  #visible = false;
 
   connectedCallback() {
-    const toggle = this.querySelector('[data-marquee-toggle]');
+    this.viewport = this.querySelector('[data-carousel-viewport]');
+    if (!this.viewport) return;
+    this.slides = [...this.querySelectorAll('[data-carousel-slide]')];
+    this.progress = this.querySelector('[data-carousel-progress]');
+    this.toggle = this.querySelector('[data-carousel-toggle]');
+    this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.delay = this.reduceMotion ? 0 : Number(this.dataset.autoplay || 0) * 1000;
+    // A fresh start each time the carousel is (re)attached, e.g. by the theme editor.
+    this.#paused = false;
+    this.#hovered = false;
+    this.#visible = false;
+    this.toggle?.setAttribute('aria-pressed', 'false');
+
     this.#controller = new AbortController();
     const { signal } = this.#controller;
 
-    toggle?.addEventListener(
-      'click',
-      () => {
-        this.#paused = !this.#paused;
-        toggle.setAttribute('aria-pressed', String(this.#paused));
-        this.classList.toggle('is-paused', this.#paused);
-      },
-      { signal }
-    );
+    this.querySelector('[data-carousel-prev]')?.addEventListener('click', () => this.#takeOver(-1), { signal });
+    this.querySelector('[data-carousel-next]')?.addEventListener('click', () => this.#takeOver(1), { signal });
+    this.toggle?.addEventListener('click', () => this.#setPaused(!this.#paused), { signal });
+
+    // The visitor takes over: no more automatic movement until "play".
+    for (const type of ['pointerdown', 'keydown']) {
+      this.viewport.addEventListener(type, () => this.#setPaused(true), { signal, passive: true });
+    }
+    this.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') this.#hover(true); }, { signal });
+    this.addEventListener('pointerleave', () => this.#hover(false), { signal });
+    this.addEventListener('focusin', () => this.#hover(true), { signal });
+    this.addEventListener('focusout', (event) => { if (!this.contains(event.relatedTarget)) this.#hover(false); }, { signal });
+    document.addEventListener('visibilitychange', () => this.#schedule(), { signal });
+
+    this.viewport.addEventListener('scroll', () => {
+      cancelAnimationFrame(this.#frame);
+      this.#frame = requestAnimationFrame(() => this.#updateProgress());
+    }, { signal, passive: true });
+
+    this.addEventListener('click', (event) => {
+      const more = event.target.closest('[data-review-more]');
+      if (more) this.#toggleText(more);
+    }, { signal });
+
+    if ('ResizeObserver' in window) {
+      this.#resizeObserver = new ResizeObserver(() => {
+        this.#measureTexts();
+        this.#updateProgress();
+      });
+      this.#resizeObserver.observe(this.viewport);
+    }
+    this.#measureTexts();
+    this.#updateProgress();
 
     if ('IntersectionObserver' in window) {
       this.#observer = new IntersectionObserver(([entry]) => {
-        this.classList.toggle('is-offscreen', !entry.isIntersecting);
-      });
+        this.#visible = entry.isIntersecting;
+        if (entry.isIntersecting) this.classList.add('is-in');
+        this.#schedule();
+      }, { threshold: 0.2 });
       this.#observer.observe(this);
+    } else {
+      this.classList.add('is-in');
+      this.#visible = true;
+      this.#schedule();
     }
   }
 
   disconnectedCallback() {
     this.#controller?.abort();
     this.#observer?.disconnect();
+    this.#resizeObserver?.disconnect();
+    clearTimeout(this.#timer);
+    cancelAnimationFrame(this.#frame);
+  }
+
+  /** Width of one move: from one card to the next. */
+  get #step() {
+    if (this.slides.length < 2) return this.viewport.clientWidth;
+    return this.slides[1].offsetLeft - this.slides[0].offsetLeft;
+  }
+
+  /** @param {number} direction 1 = next, -1 = previous; loops at both ends. */
+  #go(direction) {
+    const { scrollLeft, scrollWidth, clientWidth } = this.viewport;
+    const max = scrollWidth - clientWidth;
+    let target = scrollLeft + direction * this.#step;
+    if (direction > 0 && scrollLeft >= max - 2) target = 0;
+    if (direction < 0 && scrollLeft <= 2) target = max;
+    this.viewport.scrollTo({ left: target, behavior: this.reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  /** @param {number} direction */
+  #takeOver(direction) {
+    this.#setPaused(true);
+    this.#go(direction);
+  }
+
+  /** @param {boolean} paused */
+  #setPaused(paused) {
+    if (!this.delay) return;
+    this.#paused = paused;
+    this.toggle?.setAttribute('aria-pressed', String(paused));
+    this.#schedule();
+  }
+
+  /** @param {boolean} hovered */
+  #hover(hovered) {
+    this.#hovered = hovered;
+    this.#schedule();
+  }
+
+  #schedule() {
+    clearTimeout(this.#timer);
+    if (!this.delay || this.#paused || this.#hovered || !this.#visible || document.hidden) return;
+    this.#timer = setTimeout(() => {
+      this.#go(1);
+      this.#schedule();
+    }, this.delay);
+  }
+
+  /** Progress line: how far along the visible part of the track is. */
+  #updateProgress() {
+    if (!this.progress) return;
+    const { scrollLeft, scrollWidth, clientWidth } = this.viewport;
+    const value = scrollWidth > 0 ? Math.min(1, (scrollLeft + clientWidth) / scrollWidth) : 1;
+    this.progress.style.setProperty('--carousel-progress', value.toFixed(3));
+  }
+
+  /** "Lire la suite" only on the cards whose text is cut. */
+  #measureTexts() {
+    for (const slide of this.slides) {
+      if (slide.classList.contains('is-expanded')) continue;
+      const text = slide.querySelector('[data-review-text]');
+      const more = slide.querySelector('[data-review-more]');
+      if (text && more) more.hidden = text.scrollHeight <= text.clientHeight + 1;
+    }
+  }
+
+  /** @param {HTMLButtonElement} button */
+  #toggleText(button) {
+    const slide = button.closest('[data-carousel-slide]');
+    const expanded = !slide.classList.contains('is-expanded');
+    slide.classList.toggle('is-expanded', expanded);
+    button.setAttribute('aria-expanded', String(expanded));
+    button.textContent = expanded ? button.dataset.labelLess : button.dataset.labelMore;
+    this.#setPaused(true);
   }
 }
 
-customElements.define('reviews-marquee', ReviewsMarquee);
+customElements.define('reviews-carousel', ReviewsCarousel);
 
 /* -------------------------------------------------------------------------- */
 /* Sticky add-to-cart bar (mobile)                                             */

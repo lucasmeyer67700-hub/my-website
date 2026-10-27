@@ -260,17 +260,21 @@
     "band_heading": "What customers say",
     "highlight_editor_empty": "Reviews near the buy button: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
     "band_editor_empty": "Scrolling reviews: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
-    "count_short_source": {
-      "one": "({{ count }} {{ source }} review)",
-      "other": "({{ count }} {{ source }} reviews)"
+    "total": {
+      "one": "{{ count }} review",
+      "other": "{{ count }} reviews"
     },
-    "source_note": "Reviews published on {{ source }} by buyers of this model, selected by us. They do not come from orders placed in our shop.",
-    "source_about_html": "<p>These reviews were published on {{ source }} by buyers of this same model. We selected a few of them and reproduce them unchanged. The average rating and total number of reviews shown are those of {{ source }}. They do not come from orders placed in our shop: reviews from our own customers will replace them as soon as they are published.</p>",
-    "source_total": {
-      "one": "{{ count }} review on {{ source }}",
-      "other": "{{ count }} reviews on {{ source }}"
-    },
-    "source_published": "Published on {{ source }}"
+    "selection_about_title": "How are the reviews selected?",
+    "selection_about_html": "<p>These reviews were left by buyers of this same model on another sales platform, which states that they come from verified purchases. We selected a few of them, shown without any change to their content. The {{ rating }}/5 rating covers all {{ count }} ratings of this model. Reviews from our own customers will be added as orders come in.</p>",
+    "carousel_label": "Reviews of this product",
+    "carousel_role": "carousel",
+    "slide_role": "review",
+    "previous": "Previous review",
+    "next": "Next review",
+    "read_more": "Read more",
+    "read_less": "Show less",
+    "months": "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec",
+    "date": "{{ month }} {{ day }}, {{ year }}"
   },
   "assistant": {
     "nudge_close": "Close the message",

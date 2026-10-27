@@ -1,0 +1,87 @@
+{% doc %}
+  "How are the reviews selected?": a discreet disclosure under the overall
+  rating, for the selection of reviews of this model published elsewhere.
+  It says where the reviews come from without naming the platform, that
+  they are a selection whose text is unchanged, and what the overall rating
+  covers. Opens and closes with a smooth fade.
+
+  @param {string} rating - Overall rating, already formatted (e.g. "4,7")
+  @param {number} count - Number of ratings the overall rating covers
+  @param {string} [class] - Extra CSS classes
+
+  @example
+  {% render 'reviews-about', rating: '4,7', count: 409 %}
+{% enddoc %}
+<details class="reviews-about{% if class %} {{ class }}{% endif %}">
+  <summary class="reviews-about__summary">
+    {%- render 'icon', icon: 'info' -%}
+    <span>{{ 'reviews.selection_about_title' | t }}</span>
+  </summary>
+  <div class="reviews-about__body">
+    {{ 'reviews.selection_about_html' | t: rating: rating, count: count }}
+  </div>
+</details>
+
+{% stylesheet %}
+  .reviews-about {
+    display: inline-block;
+    max-width: 36rem;
+    font-size: var(--text-sm);
+    text-align: start;
+    color: var(--color-text-muted);
+  }
+
+  .reviews-about__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    color: inherit;
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    & span {
+      text-decoration: underline;
+      text-decoration-color: rgb(var(--warm-rgb) / 0.45);
+      text-underline-offset: 0.25em;
+    }
+
+    & .icon {
+      --icon-size: 0.95rem;
+      flex: none;
+    }
+
+    &:hover span {
+      color: var(--color-text);
+    }
+  }
+
+  .reviews-about__body {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    line-height: 1.6;
+    background-color: var(--color-surface);
+
+    & p {
+      margin: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reviews-about[open] .reviews-about__body {
+      animation: reviews-about-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  @keyframes reviews-about-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.375rem);
+    }
+  }
+{% endstylesheet %}

@@ -1,10 +1,11 @@
 {%- comment -%}
   Home band of reviews: title, average rating with the number of reviews, and
-  the moving cards (snippet "reviews-band"). Built from the product's own
-  reviews (custom.avis), or else from the reviews published on another site
-  (custom.avis_externes): then the rating and total come from that site
-  (custom.avis_externes_note, custom.avis_externes_total) and the source is
-  named under the title. No review, no section.
+  the review carousel (snippet "reviews-band"). Built from the product's own
+  reviews (custom.avis), or else from the selection of reviews of this model
+  published elsewhere (custom.avis_selection, then custom.avis_externes): then
+  the rating and total are that site's (custom.avis_externes_note,
+  custom.avis_externes_total), with "Comment les avis sont-ils sélectionnés ?"
+  under them. No review, no section.
 {%- endcomment -%}
 {%- liquid
   assign product = section.settings.product
@@ -14,6 +15,9 @@
     assign own_count = product.metafields.custom.avis.value.size | default: 0
     if own_count == 0
       assign reviews_key = 'avis_externes'
+      if product.metafields.custom.avis_selection.value.size > 0
+        assign reviews_key = 'avis_selection'
+      endif
     endif
     assign review_count = product.metafields.custom[reviews_key].value.size | default: 0
   endif
@@ -42,6 +46,9 @@
         assign display_average = product.metafields.custom.avis_externes_note.value.rating
       endif
       assign source_total = product.metafields.custom.avis_externes_total.value | default: 0
+      if reviews_key == 'avis_selection'
+        assign source_total = product.metafields.custom.avis_selection_total.value | default: source_total
+      endif
       if source_total > review_count
         assign display_count = source_total
       endif
@@ -73,24 +80,21 @@
           <span>
             {{- average_text }}/5 ·
             {% if source_name != blank -%}
-              {{- 'reviews.source_total' | t: count: display_count, source: source_name -}}
+              {{- 'reviews.total' | t: count: display_count -}}
             {%- else -%}
               {{- 'reviews.see_all' | t: count: review_count -}}
             {%- endif -%}
           </span>
         </a>
         {%- if source_name != blank -%}
-          <p class="reviews-band__note">{{ 'reviews.source_note' | t: source: source_name }}</p>
+          <div class="reviews-band__about">
+            {% render 'reviews-about', rating: average_text, count: display_count %}
+          </div>
         {%- endif -%}
       </div>
     </div>
 
-    {% render 'reviews-band',
-      product: product,
-      limit: section.settings.limit,
-      speed: section.settings.speed,
-      direction: section.settings.direction
-    %}
+    {% render 'reviews-band', product: product, limit: section.settings.limit, speed: section.settings.speed %}
   </section>
 {%- elsif request.design_mode -%}
   <section class="reviews-band section color-{{ section.settings.color_scheme }}">
@@ -120,12 +124,19 @@
     }
   }
 
-  .reviews-band__note {
-    max-width: 34rem;
-    margin: var(--space-2xs) auto 0;
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--color-text-muted);
+  .reviews-band__about {
+    margin-block-start: var(--space-2xs);
+  }
+
+  /* The stars fill from left to right as the title comes into view */
+  .js [data-reveal-enabled] .reviews-band .reveal .reviews-band__summary .stars::before {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+  }
+
+  .js [data-reveal-enabled] .reviews-band .reveal.is-visible .reviews-band__summary .stars::before {
+    transform: none;
   }
 
   .reviews-band__editor-note {
@@ -146,7 +157,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Avis réels du champ méta « Avis clientes » du produit choisi. Sans avis publié, la section reste invisible pour vos visiteuses."
+      "content": "Avis du produit choisi : ceux de vos clientes (champ méta « Avis clientes »), sinon la sélection d'avis de ce modèle (champ méta « Avis — sélection affichée »). Sans avis, la section reste invisible pour vos visiteuses."
     },
     {
       "type": "product",
@@ -172,23 +183,13 @@
       "min": 4,
       "max": 20,
       "step": 1,
-      "default": 12
-    },
-    {
-      "type": "select",
-      "id": "direction",
-      "label": "Sens du défilement",
-      "options": [
-        { "value": "ltr", "label": "De gauche à droite" },
-        { "value": "rtl", "label": "De droite à gauche" }
-      ],
-      "default": "ltr"
+      "default": 10
     },
     {
       "type": "range",
       "id": "speed",
-      "label": "Vitesse (secondes par avis)",
-      "info": "Plus le nombre est grand, plus le défilement est lent.",
+      "label": "Rythme du défilement (secondes par avis)",
+      "info": "Les avis avancent d'une carte à la fois. Le défilement s'arrête au survol et dès que la visiteuse fait défiler elle-même.",
       "min": 3,
       "max": 12,
       "step": 1,
