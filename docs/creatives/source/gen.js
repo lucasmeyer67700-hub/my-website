@@ -389,6 +389,22 @@ ${careGrid('Pour une première fois, portez-la sur une courte durée, à la mais
 <p class="eyebrow">Entretien</p>
 <h1>Lavables, <em>et réutilisables.</em></h1>
 ${careGrid('Pour une première fois, portez-en une sur une courte durée, à la maison, pour trouver votre rythme.')}`, { product: SERV }) },
+
+  { id: 'serviettes-05-en-bref', product: 'serviette', alt: "Les serviettes lavables VELEA en bref : lot de 5 serviettes d'environ 25 cm, ailettes à boutons-pression, lavables et réutilisables, pour remplacer à votre rythme une partie de vos protections jetables",
+    html: page(`
+<p class="eyebrow">En bref</p>
+<h1>Cinq serviettes, <em>à votre rythme.</em></h1>
+<div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:36px;margin-top:52px" class="fill">
+  <div class="card" style="display:grid;place-items:center;padding:30px">
+    <svg viewBox="0 0 300 340" style="width:100%;max-height:100%">${padG()}</svg>
+  </div>
+  <div style="display:grid;grid-template-rows:repeat(4,1fr);gap:20px">
+    ${[['box', '5 serviettes lavables', 'Dans le colis.'], ['ruler', 'Environ 25 cm', 'Longueur indiquée par le fabricant.'], ['snap', 'Boutons-pression', 'Les ailettes se referment autour de la culotte.'], ['water', 'Réutilisables', 'Rincez, lavez, et elles repartent pour un cycle.']]
+      .map(([i, t, d]) => `<div class="card" style="padding:26px 32px;display:flex;align-items:center;gap:26px"><div class="ring">${icon(i)}</div><div><p style="font-family:PF;font-size:38px;color:var(--ink)">${t}</p><p style="margin-top:6px;font-size:24px;line-height:1.4;color:var(--muted)">${d}</p></div></div>`).join('')}
+  </div>
+</div>
+<div class="band" style="margin-top:28px"><div class="ring">${icon('heart')}</div><p>Pour remplacer, à votre rythme, une partie de vos protections jetables.</p></div>
+<p class="foot" style="padding-top:18px">Illustration.</p>`, { product: SERV }) },
 ];
 
 function careGrid(tip) {

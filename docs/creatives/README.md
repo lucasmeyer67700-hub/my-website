@@ -1,6 +1,6 @@
 # Visuels produits VELEA
 
-15 visuels carrés en 3000 × 3000 px pour les fiches produits : 7 pour la ceinture, 4 pour la culotte et 4 pour les serviettes. `planche-creatives.jpg` les montre tous ensemble.
+16 visuels carrés en 3000 × 3000 px pour les fiches produits : 7 pour la ceinture, 4 pour la culotte et 5 pour les serviettes. `planche-creatives.jpg` les montre tous ensemble.
 
 - Tous les textes viennent des fiches produits Shopify (description et champs méta) : aucune donnée inventée.
 - Les visuels de la ceinture utilisent la photo de la bannière de la boutique. Les schémas (boîtier coté, culotte, serviettes) sont des illustrations et sont présentés comme telles.
@@ -25,4 +25,8 @@ Les visuels ont été ajoutés aux médias des produits, après la photo princip
 | --- | --- |
 | Ceinture (`Product/16695274930521`) | `MediaImage/76905341911385` à `76905342107993` (7 visuels, dans l'ordre 01 à 07) |
 | Culotte (`Product/16711602635097`) | `MediaImage/76905348792665` à `76905348890969` (4 visuels) |
-| Serviettes (`Product/16711603454297`) | `MediaImage/76905351774553` à `76905351872857` (4 visuels ; le premier est devenu la photo principale, le produit n'en avait aucune) |
+| Serviettes (`Product/16711603454297`) | `MediaImage/76905351774553` à `76905351872857`, puis `76905421308249` (5 visuels ; le premier est devenu la photo principale, le produit n'en avait aucune) |
+
+## Accueil : les 4 cases de l'offre ceinture
+
+Ces cases sont des réglages du thème (Personnaliser > Offre produit > Composition), pas des médias du produit. La copie non publiée « VELEA v13 – visuels dans l'offre » (`OnlineStoreTheme/209743511897`) les remplit : case 1 = photo principale du produit, cases 2 à 4 = visuels 01, 02 et 06 de la ceinture.

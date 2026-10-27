@@ -181,7 +181,10 @@
         "gallery_fit": "cover",
         "anchor": "offre",
         "color_scheme": "scheme-2",
-        "media_layout": "composition"
+        "media_layout": "composition",
+        "mosaic_image_2": "shopify://shop_images/velea-ceinture-01-essentiel.jpg",
+        "mosaic_image_3": "shopify://shop_images/velea-ceinture-02-chaleur.jpg",
+        "mosaic_image_4": "shopify://shop_images/velea-ceinture-06-coloris.jpg"
       }
     },
     "videos": {
