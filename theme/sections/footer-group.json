@@ -145,7 +145,8 @@
         "ai_label": "Discuter avec l'assistante IA",
         "contact_link": "shopify://pages/contact",
         "use_chat": false,
-        "contact_button_label": "Écrire à notre équipe"
+        "contact_button_label": "Écrire à notre équipe",
+        "avatar": "shopify://shop_images/velea-monogramme.png"
       }
     }
   },

@@ -41,7 +41,22 @@
       hidden
     >
       <div class="assistant__header">
-        <span class="assistant__avatar" aria-hidden="true"><span class="assistant__avatar-drop"></span></span>
+        <span class="assistant__avatar{% if section.settings.avatar != blank %} assistant__avatar--logo{% endif %}" aria-hidden="true">
+          {%- if section.settings.avatar != blank -%}
+            {%- assign avatar = section.settings.avatar -%}
+            <img
+              class="assistant__avatar-logo"
+              src="{{ avatar | image_url: height: 64 }}"
+              srcset="{{ avatar | image_url: height: 32 }} 1x, {{ avatar | image_url: height: 64 }} 2x, {{ avatar | image_url: height: 96 }} 3x"
+              width="{{ 32 | times: avatar.aspect_ratio | round }}"
+              height="32"
+              alt=""
+              loading="lazy"
+            >
+          {%- else -%}
+            <span class="assistant__avatar-drop"></span>
+          {%- endif -%}
+        </span>
         <div class="assistant__identity">
           <p class="assistant__title" id="AssistantTitle-{{ section.id }}" tabindex="-1" data-assistant-title>
             {{- section.settings.title | escape -}}
@@ -475,6 +490,21 @@
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 6px 14px -8px rgb(180 89 106 / 0.6);
+  }
+
+  /* The shop's logo in the avatar: the same monogram as in the header */
+  .assistant__avatar--logo {
+    box-shadow:
+      0 0 0 1px rgb(var(--rose-strong-rgb) / 0.25),
+      0 6px 14px -8px rgb(180 89 106 / 0.6);
+  }
+
+  .assistant__avatar-logo {
+    display: block;
+    width: auto;
+    max-width: 1.875rem;
+    height: 1.75rem;
+    object-fit: contain;
   }
 
   .assistant__avatar-drop {
@@ -955,6 +985,12 @@
       "id": "title",
       "label": "Nom de l'assistante",
       "default": "Assistante VELEA"
+    },
+    {
+      "type": "image_picker",
+      "id": "avatar",
+      "label": "Logo de l'assistante",
+      "info": "Le même symbole que dans l'en-tête, de préférence. Sans image, une goutte rose s'affiche."
     },
     {
       "type": "text",
