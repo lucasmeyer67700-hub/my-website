@@ -17,7 +17,9 @@
     "payment_methods": "Moyens de paiement acceptés",
     "copyright": "© {{ year }} {{ shop }}",
     "loading": "Chargement…",
-    "required": "obligatoire"
+    "required": "obligatoire",
+    "menu": "Menu",
+    "help_title": "Besoin d'aide ?"
   },
   "header": {
     "cart": "Panier",

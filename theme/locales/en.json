@@ -17,7 +17,9 @@
     "payment_methods": "Accepted payment methods",
     "copyright": "© {{ year }} {{ shop }}",
     "loading": "Loading…",
-    "required": "required"
+    "required": "required",
+    "menu": "Menu",
+    "help_title": "Need help?"
   },
   "header": {
     "cart": "Cart",
