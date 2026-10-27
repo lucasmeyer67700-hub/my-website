@@ -1,12 +1,13 @@
 {% doc %}
-  Review cards gliding past in a continuous loop, shared by the home "Avis
-  défilants" section and the product reviews section. No buttons: the band
-  moves on its own, slows down and stops while the mouse is over it, while a
-  card has the keyboard focus or is opened with "Lire la suite", and while a
-  photo is enlarged. Visitors who reduce motion (and browsers without
-  JavaScript) get a still row they can scroll themselves.
-  A review without a first name shows no name at all (never "Anonyme"). The
-  review's photos show as thumbnails that open larger.
+  Review cards gliding past in an endless loop, shared by the home "Avis
+  défilants" section and the product reviews section. No buttons and no stop:
+  the band keeps moving, even under the mouse. "Lire la suite" and the photos
+  open the whole review in a window, while the band goes on behind it. It only
+  waits while a card has the keyboard focus. Visitors who reduce motion (and
+  browsers without JavaScript) get a still row they can scroll themselves.
+  Each card has a photo place: the review's photo when there is one (with the
+  number of photos), an empty place shown only in the theme editor otherwise.
+  A review without a first name shows no name at all (never "Anonyme").
   Built from the product's own reviews (custom.avis), or else from the
   selection of reviews of this model (custom.avis_selection, then
   custom.avis_externes). Renders nothing without reviews.
@@ -36,7 +37,7 @@
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
   {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
     {%- assign position = 0 -%}
-    <reviews-loop class="reviews-loop" data-speed="{{ seconds }}">
+    <reviews-loop class="reviews-loop" data-speed="{{ seconds }}" data-photo-label="{{ 'reviews.photo_number' | t }}">
       <div
         class="reviews-loop__viewport"
         role="region"
@@ -54,6 +55,11 @@
               assign month_index = review.date.value | date: '%m' | plus: 0 | minus: 1
               assign review_month = months[month_index]
               assign avatar = review.avatar.value
+              assign first_photo = review.photo.value | default: review.photos.value.first
+              assign photo_total = review.photos.value.size | default: 0
+              if review.photo.value != blank
+                assign photo_total = photo_total | plus: 1
+              endif
             -%}
             {%- capture author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
             {%- liquid
@@ -62,15 +68,52 @@
               else
                 assign photo_alt = 'reviews.photo_label_anonymous' | t
               endif
-              assign photo_total = 0
-              if review.photo.value != blank
-                assign photo_total = 1
-              endif
-              assign photo_total = review.photos.value.size | default: 0 | plus: photo_total
             -%}
-            <li class="review-card" style="--card-index: {{ position | minus: 1 }};" data-loop-card>
+            <li
+              class="review-card{% if first_photo != blank %} review-card--photo{% elsif request.design_mode %} review-card--slot{% endif %}"
+              style="--card-index: {{ position | minus: 1 }};"
+              data-loop-card
+            >
               <article class="review-card__inner">
-                <span class="review-card__mark" aria-hidden="true">&ldquo;</span>
+                {%- if first_photo != blank -%}
+                  <button
+                    type="button"
+                    class="review-card__media"
+                    data-review-photo="0"
+                    aria-haspopup="dialog"
+                    aria-label="{{ 'reviews.photos_open' | t: count: photo_total }}"
+                  >
+                    {{ first_photo | image_url: width: 760, height: 480, crop: 'center' | image_tag: width: 380, height: 240, alt: '', loading: 'lazy', class: 'review-card__media-image' }}
+                    {%- if photo_total > 1 -%}
+                      <span class="review-card__media-count" aria-hidden="true">
+                        {%- render 'icon', icon: 'image' -%}
+                        {{- photo_total -}}
+                      </span>
+                    {%- endif -%}
+                  </button>
+                  <span hidden>
+                    {%- if review.photo.value != blank -%}
+                      <span
+                        data-photo-src="{{ review.photo.value | image_url: width: 1400 }}"
+                        data-photo-thumb="{{ review.photo.value | image_url: width: 120, height: 120, crop: 'center' }}"
+                        data-photo-alt="{{ photo_alt }}"
+                      ></span>
+                    {%- endif -%}
+                    {%- for extra in review.photos.value -%}
+                      <span
+                        data-photo-src="{{ extra | image_url: width: 1400 }}"
+                        data-photo-thumb="{{ extra | image_url: width: 120, height: 120, crop: 'center' }}"
+                        data-photo-alt="{{ photo_alt }}"
+                      ></span>
+                    {%- endfor -%}
+                  </span>
+                {%- elsif request.design_mode -%}
+                  <div class="review-card__media review-card__media--slot">
+                    {%- render 'icon', icon: 'image' -%}
+                    <span>{{ 'reviews.photo_slot' | t }}</span>
+                  </div>
+                {%- endif -%}
+
                 <div class="review-card__head">
                   {% render 'stars', rating: review.note.value.rating, class: 'review-card__stars' %}
                   {%- if review.date.value != blank -%}
@@ -78,6 +121,7 @@
                       {{- 'reviews.date' | t: day: review_day, month: review_month, year: review_year -}}
                     </time>
                   {%- endif -%}
+                  <span class="review-card__mark" aria-hidden="true">&ldquo;</span>
                 </div>
                 {%- if review.titre.value != blank -%}
                   <p class="review-card__title">{{ review.titre.value | escape }}</p>
@@ -85,54 +129,9 @@
                 <blockquote class="review-card__quote">
                   <p data-review-text>{{ review.texte.value | escape | newline_to_br }}</p>
                 </blockquote>
-                <button
-                  type="button"
-                  class="review-card__more"
-                  aria-expanded="false"
-                  data-review-more
-                  data-label-more="{{ 'reviews.read_more' | t }}"
-                  data-label-less="{{ 'reviews.read_less' | t }}"
-                  hidden
-                >
+                <button type="button" class="review-card__more" aria-haspopup="dialog" data-review-more hidden>
                   {{- 'reviews.read_more' | t -}}
                 </button>
-
-                {%- if photo_total > 0 -%}
-                  {%- assign shown_photos = 0 -%}
-                  <ul class="review-card__photos" role="list">
-                    {%- if review.photo.value != blank -%}
-                      {%- assign shown_photos = 1 -%}
-                      <li>
-                        <button
-                          type="button"
-                          class="review-card__photo"
-                          data-review-photo
-                          data-src="{{ review.photo.value | image_url: width: 1600 }}"
-                          data-alt="{{ photo_alt }}"
-                          aria-label="{{ 'reviews.photo_open' | t }}"
-                        >
-                          {{ review.photo.value | image_url: width: 180, height: 180, crop: 'center' | image_tag: width: 60, height: 60, alt: '', loading: 'lazy' }}
-                        </button>
-                      </li>
-                    {%- endif -%}
-                    {%- for extra in review.photos.value -%}
-                      {%- if shown_photos >= 3 -%}{%- break -%}{%- endif -%}
-                      {%- assign shown_photos = shown_photos | plus: 1 -%}
-                      <li>
-                        <button
-                          type="button"
-                          class="review-card__photo"
-                          data-review-photo
-                          data-src="{{ extra | image_url: width: 1600 }}"
-                          data-alt="{{ photo_alt }}"
-                          aria-label="{{ 'reviews.photo_open' | t }}"
-                        >
-                          {{ extra | image_url: width: 180, height: 180, crop: 'center' | image_tag: width: 60, height: 60, alt: '', loading: 'lazy' }}
-                        </button>
-                      </li>
-                    {%- endfor -%}
-                  </ul>
-                {%- endif -%}
 
                 {%- if author != blank or review.coloris.value != blank or avatar != blank -%}
                   <div class="review-card__author">
@@ -167,16 +166,24 @@
         </ul>
       </div>
 
-      <dialog class="reviews-loop__dialog" aria-label="{{ 'reviews.photo_dialog' | t }}" data-loop-dialog>
+      <dialog class="reviews-reader" aria-label="{{ 'reviews.reader_label' | t }}" data-loop-dialog>
         <button
           type="button"
-          class="icon-button reviews-loop__close"
-          aria-label="{{ 'reviews.photo_close' | t }}"
+          class="icon-button reviews-reader__close"
+          aria-label="{{ 'general.close' | t }}"
           data-loop-dialog-close
         >
           {%- render 'icon', icon: 'close' -%}
         </button>
-        <img class="reviews-loop__dialog-image" src="data:," alt="" width="1600" height="1600" data-loop-dialog-image>
+        <div class="reviews-reader__layout">
+          <div class="reviews-reader__media" data-reader-media hidden>
+            <div class="reviews-reader__frame">
+              <img class="reviews-reader__image" src="data:," alt="" width="1200" height="1200" data-reader-image>
+            </div>
+            <div class="reviews-reader__thumbs" data-reader-thumbs></div>
+          </div>
+          <div class="reviews-reader__body" data-reader-body></div>
+        </div>
       </dialog>
     </reviews-loop>
   {%- endpaginate -%}
@@ -185,8 +192,8 @@
 {% stylesheet %}
   /*
     A row of cards wider than the screen, faded at both ends. With motion it
-    glides left in a loop (the cards are repeated by the script); without, it
-    is a row the visitor scrolls.
+    glides left in an endless loop (the cards are repeated by the script);
+    without, it is a row the visitor scrolls.
   */
   .reviews-loop {
     --loop-gap: var(--space-sm);
@@ -228,17 +235,13 @@
     gap: var(--loop-gap);
     width: max-content;
     margin: 0;
-    padding: var(--space-xs) var(--loop-fade) var(--space-xl);
+    padding: var(--space-sm) var(--loop-fade) var(--space-xl);
     list-style: none;
   }
 
   .reviews-loop.is-moving .reviews-loop__track {
     padding-inline: 0;
     will-change: transform;
-  }
-
-  .reviews-loop.has-expanded .reviews-loop__track {
-    align-items: flex-start;
   }
 
   .review-card {
@@ -260,7 +263,7 @@
     gap: var(--space-sm);
     width: 100%;
     margin: 0;
-    padding: var(--space-lg) var(--space-md) var(--space-md);
+    padding: var(--space-md);
     border: 1px solid rgb(var(--rose-strong-rgb) / 0.18);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
@@ -269,23 +272,76 @@
       inset 0 1px 0 rgb(255 255 255 / 0.8),
       0 28px 52px -40px rgb(73 53 47 / 0.6);
     transition:
-      transform 0.5s var(--loop-ease),
-      box-shadow 0.5s var(--loop-ease);
+      transform 0.6s var(--loop-ease),
+      box-shadow 0.6s var(--loop-ease),
+      border-color 0.6s var(--loop-ease);
 
     @media screen and (min-width: 750px) {
-      padding: var(--space-lg) var(--space-lg) var(--space-md);
+      padding: var(--space-md) var(--space-lg) var(--space-md);
     }
   }
 
-  .review-card__mark {
+  /* The photo place: the review's photo, or (theme editor only) an empty frame */
+  .review-card__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    aspect-ratio: 19 / 12;
+    border: 0;
+    border-radius: calc(var(--radius-lg) - 0.5rem);
+    background-color: #f6ecec;
+    cursor: zoom-in;
+  }
+
+  .review-card__media-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--loop-ease);
+  }
+
+  .review-card__media-count {
     position: absolute;
-    inset-block-start: 0.35rem;
-    inset-inline-end: var(--space-md);
-    font-family: var(--font-heading-family);
-    font-size: 5rem;
-    line-height: 1;
-    color: rgb(var(--rose-strong-rgb) / 0.3);
-    pointer-events: none;
+    inset-block-end: var(--space-2xs);
+    inset-inline-end: var(--space-2xs);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+    background-color: rgb(255 255 255 / 0.92);
+    box-shadow: 0 6px 16px -10px rgb(43 37 35 / 0.6);
+
+    & .icon {
+      --icon-size: 0.85rem;
+    }
+  }
+
+  .review-card__media--slot {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-sm);
+    border: 1.5px dashed rgb(var(--rose-strong-rgb) / 0.45);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--color-text-muted);
+    background-color: rgb(var(--rose-strong-rgb) / 0.05);
+    cursor: default;
+
+    & .icon {
+      --icon-size: 1.5rem;
+      color: var(--rose-text);
+    }
   }
 
   .review-card__head {
@@ -293,7 +349,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs) var(--space-xs);
-    padding-inline-end: 3rem;
+    padding-block-start: var(--space-2xs);
   }
 
   .review-card__stars {
@@ -304,6 +360,16 @@
     font-size: 0.8125rem;
     letter-spacing: 0.02em;
     color: var(--color-text-muted);
+  }
+
+  .review-card__mark {
+    margin-inline-start: auto;
+    height: 1.75rem;
+    font-family: var(--font-heading-family);
+    font-size: 4rem;
+    line-height: 0.95;
+    color: rgb(var(--rose-strong-rgb) / 0.32);
+    pointer-events: none;
   }
 
   .review-card__title {
@@ -324,15 +390,16 @@
       color: var(--color-text);
       text-wrap: pretty;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 6;
-      line-clamp: 6;
+      -webkit-line-clamp: 7;
+      line-clamp: 7;
     }
   }
 
-  .review-card.is-expanded .review-card__quote p {
-    display: block;
-    -webkit-line-clamp: unset;
-    line-clamp: none;
+  /* With a photo (or its empty place), fewer lines keep the cards the same height */
+  .review-card--photo .review-card__quote p,
+  .review-card--slot .review-card__quote p {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   /* "Lire la suite": a text link with a 44px tall hit area */
@@ -354,36 +421,6 @@
 
     &[hidden] {
       display: none;
-    }
-  }
-
-  /* Photos sent with the review: thumbnails that open larger */
-  .review-card .review-card__photos {
-    display: flex;
-    gap: var(--space-2xs);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .review-card__photo {
-    display: block;
-    width: 3.75rem;
-    height: 3.75rem;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    border-radius: var(--radius-sm);
-    background-color: var(--color-background);
-    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.2);
-    cursor: zoom-in;
-
-    & img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s var(--loop-ease);
     }
   }
 
@@ -451,54 +488,157 @@
     }
   }
 
-  /* The enlarged photo */
-  .reviews-loop__dialog {
-    width: fit-content;
-    max-width: min(92vw, 56rem);
+  /* The whole review in a window: its photos on one side, its words on the other */
+  .reviews-reader {
+    width: min(92vw, 34rem);
     max-height: 90dvh;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
+    overscroll-behavior: contain;
     border: 0;
     border-radius: var(--radius-lg);
+    color: var(--color-text);
     background-color: var(--color-surface);
-    box-shadow: 0 40px 80px -30px rgb(43 37 35 / 0.6);
+    box-shadow: 0 40px 90px -30px rgb(43 37 35 / 0.6);
+
+    &.has-media {
+      width: min(92vw, 60rem);
+    }
 
     &::backdrop {
-      background-color: rgb(43 37 35 / 0.62);
-      backdrop-filter: blur(4px);
+      background-color: rgb(43 37 35 / 0.55);
+      backdrop-filter: blur(5px);
+    }
+
+    &[open] {
+      animation: reviews-reader-in 0.45s var(--loop-ease);
     }
   }
 
-  .reviews-loop__dialog-image {
+  @keyframes reviews-reader-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem) scale(0.98);
+    }
+  }
+
+  .reviews-reader__layout {
+    display: grid;
+
+    .reviews-reader.has-media & {
+      @media screen and (min-width: 750px) {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      }
+    }
+  }
+
+  .reviews-reader__media {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-sm);
+    background-color: #f6ecec;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .reviews-reader__frame {
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: calc(var(--radius-lg) - 0.5rem);
+    background-color: #efe2e2;
+  }
+
+  .reviews-reader__image {
     display: block;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 90dvh;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
   }
 
-  .reviews-loop__close {
+  .reviews-reader__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .reviews-reader__thumb {
+    width: 3.25rem;
+    height: 3.25rem;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.25);
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+
+    & img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &[aria-current='true'] {
+      opacity: 1;
+      box-shadow: 0 0 0 2px var(--color-text);
+    }
+  }
+
+  .reviews-reader__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+
+    & .review-card__quote p {
+      display: block;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      -webkit-line-clamp: unset;
+      line-clamp: none;
+    }
+
+    & .review-card__mark {
+      display: none;
+    }
+
+    & .review-card__author {
+      margin-block-start: auto;
+    }
+  }
+
+  .reviews-reader__close {
     position: absolute;
     inset-block-start: var(--space-xs);
     inset-inline-end: var(--space-xs);
+    z-index: 1;
     width: 2.75rem;
     height: 2.75rem;
     color: var(--color-text);
-    background-color: rgb(255 255 255 / 0.9);
+    background-color: rgb(255 255 255 / 0.92);
     box-shadow: 0 6px 18px -8px rgb(43 37 35 / 0.5);
   }
 
   @media (hover: hover) {
     .review-card:hover .review-card__inner {
-      transform: translateY(-0.3rem);
+      border-color: rgb(var(--rose-strong-rgb) / 0.32);
+      transform: translateY(-0.35rem);
       box-shadow:
         inset 0 1px 0 rgb(255 255 255 / 0.8),
-        0 36px 64px -38px rgb(73 53 47 / 0.7);
+        0 38px 66px -38px rgb(73 53 47 / 0.72);
     }
 
-    .review-card__photo:hover img {
-      transform: scale(1.08);
+    .review-card__media:hover .review-card__media-image {
+      transform: scale(1.05);
     }
   }
 
@@ -519,8 +659,12 @@
 
   @media (prefers-reduced-motion: reduce) {
     .review-card:hover .review-card__inner,
-    .review-card__photo:hover img {
+    .review-card__media:hover .review-card__media-image {
       transform: none;
+    }
+
+    .reviews-reader[open] {
+      animation: none;
     }
   }
 {% endstylesheet %}

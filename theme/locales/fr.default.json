@@ -267,13 +267,13 @@
     "selection_about_html": "<p>Ces avis ont été laissés par des acheteurs de ce même modèle sur une autre plateforme de vente, qui indique qu'ils proviennent d'achats vérifiés. Nous en avons sélectionné quelques-uns, présentés sans modification de leur contenu. La note de {{ rating }}/5 porte sur l'ensemble des {{ count }} évaluations de ce modèle. Les avis de nos clientes viendront s'y ajouter au fil des commandes.</p>",
     "carousel_label": "Avis sur ce produit",
     "read_more": "Lire la suite",
-    "read_less": "Réduire",
     "months": "janv.|févr.|mars|avr.|mai|juin|juil.|août|sept.|oct.|nov.|déc.",
     "date": "{{ day }} {{ month }} {{ year }}",
     "photo_label_anonymous": "Photo jointe à l'avis",
-    "photo_open": "Agrandir la photo",
-    "photo_close": "Fermer la photo",
-    "photo_dialog": "Photo jointe à l'avis"
+    "photos_open": "Voir l'avis et ses photos ({{ count }})",
+    "photo_number": "Photo",
+    "reader_label": "Avis complet",
+    "photo_slot": "Case photo : ajoutez la photo de cet avis dans Contenu > Métaobjets > Avis client"
   },
   "assistant": {
     "nudge_close": "Fermer le message",

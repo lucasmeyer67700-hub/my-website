@@ -267,13 +267,13 @@
     "selection_about_html": "<p>These reviews were left by buyers of this same model on another sales platform, which states that they come from verified purchases. We selected a few of them, shown without any change to their content. The {{ rating }}/5 rating covers all {{ count }} ratings of this model. Reviews from our own customers will be added as orders come in.</p>",
     "carousel_label": "Reviews of this product",
     "read_more": "Read more",
-    "read_less": "Show less",
     "months": "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec",
     "date": "{{ month }} {{ day }}, {{ year }}",
     "photo_label_anonymous": "Photo attached to the review",
-    "photo_open": "Enlarge the photo",
-    "photo_close": "Close the photo",
-    "photo_dialog": "Photo attached to the review"
+    "photos_open": "See the review and its photos ({{ count }})",
+    "photo_number": "Photo",
+    "reader_label": "Full review",
+    "photo_slot": "Photo slot: add this review's photo in Content > Metaobjects > Avis client"
   },
   "assistant": {
     "nudge_close": "Close the message",

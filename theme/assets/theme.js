@@ -1428,7 +1428,7 @@ class ReviewRotator extends HTMLElement {
 customElements.define('review-rotator', ReviewRotator);
 
 /* -------------------------------------------------------------------------- */
-/* Reviews loop: the cards glide past on their own, in a continuous loop      */
+/* Reviews loop: the cards glide past on their own, endlessly                 */
 /* -------------------------------------------------------------------------- */
 
 class ReviewsLoop extends HTMLElement {
@@ -1442,8 +1442,8 @@ class ReviewsLoop extends HTMLElement {
   #setWidth = 0;
   #width = 0;
   #visible = false;
-  #hovered = false;
   #focused = false;
+  #photos = [];
 
   connectedCallback() {
     this.viewport = this.querySelector('[data-loop-viewport]');
@@ -1458,35 +1458,27 @@ class ReviewsLoop extends HTMLElement {
     this.#pace = 0;
     this.#width = 0;
     this.#visible = false;
-    this.#hovered = false;
     this.#focused = false;
 
     this.#controller = new AbortController();
     const { signal } = this.#controller;
 
     this.addEventListener('click', (event) => this.#onClick(event), { signal });
-    this.addEventListener('keydown', (event) => { if (event.key === 'Escape') this.#collapseAll(); }, { signal });
-    document.addEventListener('click', (event) => { if (!this.contains(event.target)) this.#collapseAll(); }, { signal });
     this.dialog?.addEventListener('click', (event) => {
-      if (event.target === this.dialog || event.target.closest('[data-loop-dialog-close]')) this.dialog.close();
+      const thumb = event.target.closest('[data-reader-photo]');
+      if (thumb) this.#showPhoto(Number(thumb.dataset.readerPhoto));
+      else if (event.target === this.dialog || event.target.closest('[data-loop-dialog-close]')) this.dialog.close();
     }, { signal });
-    this.dialog?.addEventListener('close', () => this.#run(), { signal });
 
     if (this.seconds > 0) {
       this.classList.add('is-moving');
-      this.viewport.addEventListener('pointerenter', (event) => {
-        if (event.pointerType !== 'mouse') return;
-        this.#hovered = true;
-        this.#run();
-      }, { signal });
-      this.viewport.addEventListener('pointerleave', () => { this.#hovered = false; this.#run(); }, { signal });
-      // Keyboard focus only: a card clicked with the mouse or a finger keeps the band moving.
+      // It never stops under the mouse; it only waits for someone reading it with the keyboard.
       this.addEventListener('focusin', (event) => {
-        this.#focused = event.target.matches(':focus-visible');
+        this.#focused = event.target.matches(':focus-visible') && this.viewport.contains(event.target);
         this.#run();
       }, { signal });
       this.addEventListener('focusout', (event) => {
-        if (this.contains(event.relatedTarget)) return;
+        if (this.viewport.contains(event.relatedTarget)) return;
         this.#focused = false;
         this.#run();
       }, { signal });
@@ -1511,7 +1503,7 @@ class ReviewsLoop extends HTMLElement {
         this.#visible = entry.isIntersecting;
         if (entry.isIntersecting) this.classList.add('is-in');
         this.#run();
-      }, { threshold: 0.1 });
+      }, { threshold: 0 });
       this.#observer.observe(this);
     } else {
       this.classList.add('is-in');
@@ -1561,18 +1553,10 @@ class ReviewsLoop extends HTMLElement {
   }
 
   get #shouldMove() {
-    return (
-      this.seconds > 0 &&
-      this.#visible &&
-      !document.hidden &&
-      !this.#hovered &&
-      !this.#focused &&
-      !this.classList.contains('has-expanded') &&
-      !this.dialog?.open
-    );
+    return this.seconds > 0 && this.#visible && !document.hidden && !this.#focused;
   }
 
-  /** Starts the glide, or lets it slow down to a stop. */
+  /** Starts the glide, or lets it ease to a stop when it is out of sight. */
   #run() {
     if (this.seconds <= 0 || this.#frame) return;
     if (!this.#shouldMove && this.#pace === 0) return;
@@ -1586,7 +1570,7 @@ class ReviewsLoop extends HTMLElement {
     this.#last = time;
     const target = this.#shouldMove ? 1 : 0;
     // Eases in and out of the movement instead of starting or stopping dead.
-    this.#pace += (target - this.#pace) * (1 - Math.exp(-elapsed / 0.4));
+    this.#pace += (target - this.#pace) * (1 - Math.exp(-elapsed / 0.5));
     if (target === 0 && this.#pace < 0.01) this.#pace = 0;
     // One card goes by in `seconds`.
     const speed = this.#setWidth / (this.cards.length * this.seconds);
@@ -1600,79 +1584,73 @@ class ReviewsLoop extends HTMLElement {
 
   /** @param {MouseEvent} event */
   #onClick(event) {
-    const more = event.target.closest('[data-review-more]');
-    if (more) {
-      this.#toggleText(more);
-      return;
-    }
+    if (this.dialog?.contains(event.target)) return;
+    const card = event.target.closest('[data-loop-card]');
+    if (!card) return;
     const photo = event.target.closest('[data-review-photo]');
-    if (photo) {
-      this.#openPhoto(photo);
-      return;
-    }
-    if (!event.target.closest('.is-expanded') && !this.dialog?.contains(event.target)) this.#collapseAll();
+    if (photo) this.#openReader(card, Number(photo.dataset.reviewPhoto) || 0);
+    else if (event.target.closest('[data-review-more]')) this.#openReader(card, 0);
   }
 
   /** "Lire la suite" only on the cards whose text is cut. */
   #measureTexts() {
     for (const card of this.track.querySelectorAll('[data-loop-card]')) {
-      if (card.classList.contains('is-expanded')) continue;
       const text = card.querySelector('[data-review-text]');
       const more = card.querySelector('[data-review-more]');
       if (text && more) more.hidden = text.scrollHeight <= text.clientHeight + 1;
     }
   }
 
-  /** @param {HTMLButtonElement} button */
-  #toggleText(button) {
-    const card = button.closest('[data-loop-card]');
-    const expanded = !card.classList.contains('is-expanded');
-    if (expanded) this.#collapseAll();
-    this.#setExpanded(card, expanded);
-  }
-
   /**
+   * The whole review in a window, with its photos; the band goes on behind it.
    * @param {Element} card
-   * @param {boolean} expanded
+   * @param {number} photoIndex
    */
-  #setExpanded(card, expanded) {
-    const button = card.querySelector('[data-review-more]');
-    card.classList.toggle('is-expanded', expanded);
-    if (button) {
-      button.setAttribute('aria-expanded', String(expanded));
-      button.textContent = expanded ? button.dataset.labelLess : button.dataset.labelMore;
-    }
-    // Only the opened card grows; the band waits while it is open.
-    this.classList.toggle('has-expanded', Boolean(this.track.querySelector('.is-expanded')));
-    this.#run();
-  }
+  #openReader(card, photoIndex) {
+    if (!this.dialog || typeof this.dialog.showModal !== 'function') return;
+    const body = this.dialog.querySelector('[data-reader-body]');
+    const media = this.dialog.querySelector('[data-reader-media]');
+    const thumbs = this.dialog.querySelector('[data-reader-thumbs]');
+    const parts = card.querySelectorAll('.review-card__head, .review-card__title, .review-card__quote, .review-card__author');
+    body.replaceChildren(...[...parts].map((part) => part.cloneNode(true)));
 
-  #collapseAll() {
-    for (const card of this.track.querySelectorAll('.is-expanded')) this.#setExpanded(card, false);
-  }
-
-  /** @param {HTMLElement} button */
-  #openPhoto(button) {
-    const image = this.dialog?.querySelector('[data-loop-dialog-image]');
-    if (!image || typeof this.dialog.showModal !== 'function') return;
-    image.removeAttribute('style');
-    image.addEventListener('load', () => this.#fitPhoto(image), { once: true });
-    image.src = button.dataset.src;
-    image.alt = button.dataset.alt || '';
+    this.#photos = [...card.querySelectorAll('[data-photo-src]')].map((item) => ({
+      src: item.dataset.photoSrc,
+      thumb: item.dataset.photoThumb,
+      alt: item.dataset.photoAlt || '',
+    }));
+    const hasPhotos = this.#photos.length > 0;
+    media.hidden = !hasPhotos;
+    this.dialog.classList.toggle('has-media', hasPhotos);
+    thumbs.hidden = this.#photos.length < 2;
+    thumbs.replaceChildren(...this.#photos.map((photo, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'reviews-reader__thumb';
+      button.dataset.readerPhoto = String(index);
+      button.setAttribute('aria-label', `${this.dataset.photoLabel || ''} ${index + 1}`.trim());
+      const image = document.createElement('img');
+      image.src = photo.thumb;
+      image.alt = '';
+      image.width = 52;
+      image.height = 52;
+      button.append(image);
+      return button;
+    }));
+    if (hasPhotos) this.#showPhoto(Math.min(photoIndex, this.#photos.length - 1));
     this.dialog.showModal();
-    this.#run();
   }
 
-  /**
-   * The frame hugs the photo: as large as the screen allows, never a blank margin.
-   * @param {HTMLImageElement} image
-   */
-  #fitPhoto(image) {
-    const { naturalWidth: width, naturalHeight: height } = image;
-    if (!width || !height) return;
-    const scale = Math.min(1, Math.min(window.innerWidth * 0.92, 896) / width, (window.innerHeight * 0.9) / height);
-    image.style.width = `${Math.round(width * scale)}px`;
-    image.style.height = `${Math.round(height * scale)}px`;
+  /** @param {number} index */
+  #showPhoto(index) {
+    const photo = this.#photos[index];
+    const image = this.dialog?.querySelector('[data-reader-image]');
+    if (!photo || !image) return;
+    image.src = photo.src;
+    image.alt = photo.alt;
+    for (const thumb of this.dialog.querySelectorAll('[data-reader-photo]')) {
+      thumb.setAttribute('aria-current', String(Number(thumb.dataset.readerPhoto) === index));
+    }
   }
 }
 
