@@ -282,7 +282,14 @@
                   {%- if shown_photos == 6 and photo_count > 6 -%}
                     <span class="reviews__photo-more">{{ 'reviews.see_more_photos' | t }}</span>
                   {%- endif -%}
-                  <span class="visually-hidden">{{ 'reviews.photo_label' | t: name: review.auteur.value }}</span>
+                  {%- capture photo_author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
+                  <span class="visually-hidden">
+                    {%- if photo_author != blank -%}
+                      {{- 'reviews.photo_label' | t: name: photo_author -}}
+                    {%- else -%}
+                      {{- 'reviews.photo_label_anonymous' | t -}}
+                    {%- endif -%}
+                  </span>
                 </button>
               </li>
             {%- endif -%}
@@ -316,6 +323,7 @@
             assign review_color = review.coloris.value | strip
             assign review_text = review.texte.value | append: ' ' | append: review.titre.value | downcase | strip_newlines
           -%}
+          {%- capture author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
           <li
             class="review"
             data-review
@@ -330,7 +338,15 @@
               hidden
             {% endif %}
           >
-            <span class="review__avatar" aria-hidden="true">{{ review.auteur.value | strip | slice: 0 | upcase }}</span>
+            <span class="review__avatar" aria-hidden="true">
+              {%- if review.avatar.value != blank -%}
+                {{ review.avatar.value | image_url: width: 120, height: 120, crop: 'center' | image_tag: width: 44, height: 44, alt: '', loading: 'lazy' }}
+              {%- elsif author != blank -%}
+                {{- author | slice: 0 | upcase | escape -}}
+              {%- else -%}
+                {% render 'icon', icon: 'user' %}
+              {%- endif -%}
+            </span>
             <div class="review__body">
               {% render 'stars', rating: review_note, class: 'review__stars' %}
               {%- if review_color != blank -%}
@@ -343,15 +359,25 @@
               {%- if review.photo.value != blank -%}
                 <button type="button" class="review__photo" data-reviews-photo="{{ forloop.index }}">
                   {{ review.photo.value | image_url: width: 240 | image_tag: width: 96, height: 96, alt: '', loading: 'lazy' }}
-                  <span class="visually-hidden">{{ 'reviews.photo_label' | t: name: review.auteur.value }}</span>
+                  <span class="visually-hidden">
+                    {%- if author != blank -%}
+                      {{- 'reviews.photo_label' | t: name: author -}}
+                    {%- else -%}
+                      {{- 'reviews.photo_label_anonymous' | t -}}
+                    {%- endif -%}
+                  </span>
                 </button>
               {%- endif -%}
               <p class="review__footer">
-                <span class="review__author">{{ review.auteur.value | escape }}</span>
+                {%- if author != blank -%}
+                  <span class="review__author">{{ author | escape }}</span>
+                {%- endif -%}
                 {%- if review.achat_verifie.value and review.source.value == blank -%}
                   <span class="review__verified">{% render 'icon', icon: 'check' %}{{ 'reviews.verified' | t }}</span>
                 {%- endif -%}
-                <span class="review__sep" aria-hidden="true">|</span>
+                {%- if author != blank -%}
+                  <span class="review__sep" aria-hidden="true">|</span>
+                {%- endif -%}
                 <time datetime="{{ review.date.value | date: '%Y-%m-%d' }}">{{ review.date.value | date: '%d/%m/%Y' }}</time>
               </p>
             </div>
@@ -400,10 +426,16 @@
       <template data-reviews-photos>
         {%- for review in product.metafields.custom[reviews_key].value -%}
           {%- if review.photo.value != blank -%}
+            {%- capture photo_author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
+            {%- if photo_author != blank -%}
+              {%- assign photo_alt = 'reviews.photo_label' | t: name: photo_author -%}
+            {%- else -%}
+              {%- assign photo_alt = 'reviews.photo_label_anonymous' | t -%}
+            {%- endif -%}
             <img
               data-for="{{ forloop.index }}"
               src="{{ review.photo.value | image_url: width: 1400 }}"
-              alt="{{ 'reviews.photo_label' | t: name: review.auteur.value }}"
+              alt="{{ photo_alt }}"
               width="1400"
               height="1400"
             >
@@ -843,10 +875,21 @@
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
+    overflow: hidden;
     border-radius: 50%;
     font-weight: var(--font-body-weight-medium);
     color: var(--rose-text);
     background-color: var(--rose-soft);
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    & .icon {
+      --icon-size: 1.1rem;
+    }
   }
 
   .review__body {
@@ -1037,7 +1080,8 @@
     {
       "type": "range",
       "id": "band_speed",
-      "label": "Rythme du défilement (secondes par avis)",
+      "label": "Vitesse du défilement (secondes par avis)",
+      "info": "Les avis défilent en continu, en boucle. Plus le nombre est petit, plus ça va vite.",
       "min": 3,
       "max": 12,
       "step": 1,

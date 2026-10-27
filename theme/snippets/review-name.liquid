@@ -1,0 +1,22 @@
+{% doc %}
+  The name shown for a review's author, not escaped (escape it where it is
+  printed). Nothing for an anonymous review ("Anonyme", "Anonymous" or empty):
+  no name is shown rather than the word "Anonyme". A masked pseudonym such as
+  "E***o" becomes its initial, "E.".
+
+  @param {string} name - The review's "auteur" field
+
+  @example
+  {%- capture author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
+{% enddoc %}
+{%- liquid
+  assign clean = name | strip
+  assign key = clean | downcase
+  if key != blank and key != 'anonyme' and key != 'anonymous'
+    if clean contains '*'
+      echo clean | slice: 0 | upcase | append: '.'
+    else
+      echo clean
+    endif
+  endif
+-%}

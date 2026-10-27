@@ -256,7 +256,6 @@
     },
     "slide_label": "Avis {{ number }} sur {{ total }}",
     "rotation_pause": "Mettre en pause le défilement des avis",
-    "marquee_pause": "Mettre en pause le défilement des avis",
     "band_heading": "Elles en parlent",
     "highlight_editor_empty": "Avis près de l'achat : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes).",
     "band_editor_empty": "Avis défilants : invisible pour vos visiteuses tant qu'aucun avis réel n'est publié. Ajoutez vos avis dans Contenu > Métaobjets > Avis client, puis reliez-les au produit (Produits > votre produit > Champs méta > Avis clientes).",
@@ -267,14 +266,14 @@
     "selection_about_title": "Comment les avis sont-ils sélectionnés ?",
     "selection_about_html": "<p>Ces avis ont été laissés par des acheteurs de ce même modèle sur une autre plateforme de vente, qui indique qu'ils proviennent d'achats vérifiés. Nous en avons sélectionné quelques-uns, présentés sans modification de leur contenu. La note de {{ rating }}/5 porte sur l'ensemble des {{ count }} évaluations de ce modèle. Les avis de nos clientes viendront s'y ajouter au fil des commandes.</p>",
     "carousel_label": "Avis sur ce produit",
-    "carousel_role": "carrousel",
-    "slide_role": "avis",
-    "previous": "Avis précédent",
-    "next": "Avis suivant",
     "read_more": "Lire la suite",
     "read_less": "Réduire",
     "months": "janv.|févr.|mars|avr.|mai|juin|juil.|août|sept.|oct.|nov.|déc.",
-    "date": "{{ day }} {{ month }} {{ year }}"
+    "date": "{{ day }} {{ month }} {{ year }}",
+    "photo_label_anonymous": "Photo jointe à l'avis",
+    "photo_open": "Agrandir la photo",
+    "photo_close": "Fermer la photo",
+    "photo_dialog": "Photo jointe à l'avis"
   },
   "assistant": {
     "nudge_close": "Fermer le message",

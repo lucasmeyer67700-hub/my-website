@@ -1428,81 +1428,95 @@ class ReviewRotator extends HTMLElement {
 customElements.define('review-rotator', ReviewRotator);
 
 /* -------------------------------------------------------------------------- */
-/* Review carousel: swipe or arrows, moves on by itself one card at a time    */
+/* Reviews loop: the cards glide past on their own, in a continuous loop      */
 /* -------------------------------------------------------------------------- */
 
-class ReviewsCarousel extends HTMLElement {
+class ReviewsLoop extends HTMLElement {
   #controller = null;
   #observer = null;
   #resizeObserver = null;
-  #timer = 0;
   #frame = 0;
-  #paused = false;
-  #hovered = false;
+  #last = 0;
+  #offset = 0;
+  #pace = 0;
+  #setWidth = 0;
+  #width = 0;
   #visible = false;
+  #hovered = false;
+  #focused = false;
 
   connectedCallback() {
-    this.viewport = this.querySelector('[data-carousel-viewport]');
-    if (!this.viewport) return;
-    this.slides = [...this.querySelectorAll('[data-carousel-slide]')];
-    this.progress = this.querySelector('[data-carousel-progress]');
-    this.toggle = this.querySelector('[data-carousel-toggle]');
-    this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.delay = this.reduceMotion ? 0 : Number(this.dataset.autoplay || 0) * 1000;
-    // A fresh start each time the carousel is (re)attached, e.g. by the theme editor.
-    this.#paused = false;
-    this.#hovered = false;
+    this.viewport = this.querySelector('[data-loop-viewport]');
+    this.track = this.querySelector('[data-loop-track]');
+    if (!this.viewport || !this.track) return;
+    this.dialog = this.querySelector('[data-loop-dialog]');
+    this.cards = [...this.track.querySelectorAll('[data-loop-card]:not([data-loop-clone])')];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.seconds = reduceMotion || this.cards.length < 2 ? 0 : Number(this.dataset.speed || 0);
+    // A fresh start each time the band is (re)attached, e.g. by the theme editor.
+    this.#offset = 0;
+    this.#pace = 0;
+    this.#width = 0;
     this.#visible = false;
-    this.toggle?.setAttribute('aria-pressed', 'false');
+    this.#hovered = false;
+    this.#focused = false;
 
     this.#controller = new AbortController();
     const { signal } = this.#controller;
 
-    this.querySelector('[data-carousel-prev]')?.addEventListener('click', () => this.#takeOver(-1), { signal });
-    this.querySelector('[data-carousel-next]')?.addEventListener('click', () => this.#takeOver(1), { signal });
-    this.toggle?.addEventListener('click', () => this.#setPaused(!this.#paused), { signal });
-
-    // The visitor takes over: no more automatic movement until "play".
-    for (const type of ['pointerdown', 'keydown']) {
-      this.viewport.addEventListener(type, () => this.#setPaused(true), { signal, passive: true });
-    }
-    this.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') this.#hover(true); }, { signal });
-    this.addEventListener('pointerleave', () => this.#hover(false), { signal });
-    this.addEventListener('focusin', () => this.#hover(true), { signal });
-    this.addEventListener('focusout', (event) => { if (!this.contains(event.relatedTarget)) this.#hover(false); }, { signal });
-    document.addEventListener('visibilitychange', () => this.#schedule(), { signal });
-
-    this.viewport.addEventListener('scroll', () => {
-      cancelAnimationFrame(this.#frame);
-      this.#frame = requestAnimationFrame(() => this.#updateProgress());
-    }, { signal, passive: true });
-
-    this.addEventListener('click', (event) => {
-      const more = event.target.closest('[data-review-more]');
-      if (more) this.#toggleText(more);
+    this.addEventListener('click', (event) => this.#onClick(event), { signal });
+    this.addEventListener('keydown', (event) => { if (event.key === 'Escape') this.#collapseAll(); }, { signal });
+    document.addEventListener('click', (event) => { if (!this.contains(event.target)) this.#collapseAll(); }, { signal });
+    this.dialog?.addEventListener('click', (event) => {
+      if (event.target === this.dialog || event.target.closest('[data-loop-dialog-close]')) this.dialog.close();
     }, { signal });
+    this.dialog?.addEventListener('close', () => this.#run(), { signal });
+
+    if (this.seconds > 0) {
+      this.classList.add('is-moving');
+      this.viewport.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        this.#hovered = true;
+        this.#run();
+      }, { signal });
+      this.viewport.addEventListener('pointerleave', () => { this.#hovered = false; this.#run(); }, { signal });
+      // Keyboard focus only: a card clicked with the mouse or a finger keeps the band moving.
+      this.addEventListener('focusin', (event) => {
+        this.#focused = event.target.matches(':focus-visible');
+        this.#run();
+      }, { signal });
+      this.addEventListener('focusout', (event) => {
+        if (this.contains(event.relatedTarget)) return;
+        this.#focused = false;
+        this.#run();
+      }, { signal });
+      // Keyboard focus may scroll the viewport to show a card: fold that into the glide instead.
+      this.viewport.addEventListener('scroll', () => {
+        const shift = this.viewport.scrollLeft;
+        if (!shift) return;
+        this.viewport.scrollLeft = 0;
+        this.#moveBy(shift);
+      }, { signal, passive: true });
+      document.addEventListener('visibilitychange', () => this.#run(), { signal });
+    }
 
     if ('ResizeObserver' in window) {
-      this.#resizeObserver = new ResizeObserver(() => {
-        this.#measureTexts();
-        this.#updateProgress();
-      });
+      this.#resizeObserver = new ResizeObserver(() => this.#layout());
       this.#resizeObserver.observe(this.viewport);
     }
-    this.#measureTexts();
-    this.#updateProgress();
+    this.#layout();
 
     if ('IntersectionObserver' in window) {
       this.#observer = new IntersectionObserver(([entry]) => {
         this.#visible = entry.isIntersecting;
         if (entry.isIntersecting) this.classList.add('is-in');
-        this.#schedule();
-      }, { threshold: 0.2 });
+        this.#run();
+      }, { threshold: 0.1 });
       this.#observer.observe(this);
     } else {
       this.classList.add('is-in');
       this.#visible = true;
-      this.#schedule();
+      this.#run();
     }
   }
 
@@ -1510,87 +1524,159 @@ class ReviewsCarousel extends HTMLElement {
     this.#controller?.abort();
     this.#observer?.disconnect();
     this.#resizeObserver?.disconnect();
-    clearTimeout(this.#timer);
     cancelAnimationFrame(this.#frame);
+    this.#frame = 0;
   }
 
-  /** Width of one move: from one card to the next. */
-  get #step() {
-    if (this.slides.length < 2) return this.viewport.clientWidth;
-    return this.slides[1].offsetLeft - this.slides[0].offsetLeft;
+  /** Repeats the cards so the loop never shows a gap, when the width changes. */
+  #layout() {
+    const width = this.viewport.clientWidth;
+    if (this.seconds > 0 && width && width !== this.#width) {
+      this.#width = width;
+      for (const clone of this.track.querySelectorAll('[data-loop-clone]')) clone.remove();
+      const first = this.cards[0];
+      const last = this.cards[this.cards.length - 1];
+      const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
+      this.#setWidth = last.offsetLeft + last.offsetWidth + gap - first.offsetLeft;
+      const copies = Math.max(1, Math.ceil(width / this.#setWidth));
+      for (let copy = 0; copy < copies; copy += 1) {
+        for (const card of this.cards) {
+          const clone = card.cloneNode(true);
+          clone.setAttribute('data-loop-clone', '');
+          clone.setAttribute('aria-hidden', 'true');
+          for (const control of clone.querySelectorAll('a, button')) control.setAttribute('tabindex', '-1');
+          this.track.append(clone);
+        }
+      }
+      this.#moveBy(0);
+    }
+    this.#measureTexts();
   }
 
-  /** @param {number} direction 1 = next, -1 = previous; loops at both ends. */
-  #go(direction) {
-    const { scrollLeft, scrollWidth, clientWidth } = this.viewport;
-    const max = scrollWidth - clientWidth;
-    let target = scrollLeft + direction * this.#step;
-    if (direction > 0 && scrollLeft >= max - 2) target = 0;
-    if (direction < 0 && scrollLeft <= 2) target = max;
-    this.viewport.scrollTo({ left: target, behavior: this.reduceMotion ? 'auto' : 'smooth' });
+  /** @param {number} distance Pixels to move the cards to the left. */
+  #moveBy(distance) {
+    if (!this.#setWidth) return;
+    this.#offset = (((this.#offset + distance) % this.#setWidth) + this.#setWidth) % this.#setWidth;
+    this.track.style.transform = `translate3d(${(-this.#offset).toFixed(2)}px, 0, 0)`;
   }
 
-  /** @param {number} direction */
-  #takeOver(direction) {
-    this.#setPaused(true);
-    this.#go(direction);
+  get #shouldMove() {
+    return (
+      this.seconds > 0 &&
+      this.#visible &&
+      !document.hidden &&
+      !this.#hovered &&
+      !this.#focused &&
+      !this.classList.contains('has-expanded') &&
+      !this.dialog?.open
+    );
   }
 
-  /** @param {boolean} paused */
-  #setPaused(paused) {
-    if (!this.delay) return;
-    this.#paused = paused;
-    this.toggle?.setAttribute('aria-pressed', String(paused));
-    this.#schedule();
+  /** Starts the glide, or lets it slow down to a stop. */
+  #run() {
+    if (this.seconds <= 0 || this.#frame) return;
+    if (!this.#shouldMove && this.#pace === 0) return;
+    this.#last = performance.now();
+    this.#frame = requestAnimationFrame((time) => this.#tick(time));
   }
 
-  /** @param {boolean} hovered */
-  #hover(hovered) {
-    this.#hovered = hovered;
-    this.#schedule();
+  /** @param {number} time */
+  #tick(time) {
+    const elapsed = Math.min(0.1, (time - this.#last) / 1000);
+    this.#last = time;
+    const target = this.#shouldMove ? 1 : 0;
+    // Eases in and out of the movement instead of starting or stopping dead.
+    this.#pace += (target - this.#pace) * (1 - Math.exp(-elapsed / 0.4));
+    if (target === 0 && this.#pace < 0.01) this.#pace = 0;
+    // One card goes by in `seconds`.
+    const speed = this.#setWidth / (this.cards.length * this.seconds);
+    this.#moveBy(speed * this.#pace * elapsed);
+    if (target === 0 && this.#pace === 0) {
+      this.#frame = 0;
+      return;
+    }
+    this.#frame = requestAnimationFrame((next) => this.#tick(next));
   }
 
-  #schedule() {
-    clearTimeout(this.#timer);
-    if (!this.delay || this.#paused || this.#hovered || !this.#visible || document.hidden) return;
-    this.#timer = setTimeout(() => {
-      this.#go(1);
-      this.#schedule();
-    }, this.delay);
-  }
-
-  /** Progress line: how far along the visible part of the track is. */
-  #updateProgress() {
-    if (!this.progress) return;
-    const { scrollLeft, scrollWidth, clientWidth } = this.viewport;
-    const value = scrollWidth > 0 ? Math.min(1, (scrollLeft + clientWidth) / scrollWidth) : 1;
-    this.progress.style.setProperty('--carousel-progress', value.toFixed(3));
+  /** @param {MouseEvent} event */
+  #onClick(event) {
+    const more = event.target.closest('[data-review-more]');
+    if (more) {
+      this.#toggleText(more);
+      return;
+    }
+    const photo = event.target.closest('[data-review-photo]');
+    if (photo) {
+      this.#openPhoto(photo);
+      return;
+    }
+    if (!event.target.closest('.is-expanded') && !this.dialog?.contains(event.target)) this.#collapseAll();
   }
 
   /** "Lire la suite" only on the cards whose text is cut. */
   #measureTexts() {
-    for (const slide of this.slides) {
-      if (slide.classList.contains('is-expanded')) continue;
-      const text = slide.querySelector('[data-review-text]');
-      const more = slide.querySelector('[data-review-more]');
+    for (const card of this.track.querySelectorAll('[data-loop-card]')) {
+      if (card.classList.contains('is-expanded')) continue;
+      const text = card.querySelector('[data-review-text]');
+      const more = card.querySelector('[data-review-more]');
       if (text && more) more.hidden = text.scrollHeight <= text.clientHeight + 1;
     }
   }
 
   /** @param {HTMLButtonElement} button */
   #toggleText(button) {
-    const slide = button.closest('[data-carousel-slide]');
-    const expanded = !slide.classList.contains('is-expanded');
-    slide.classList.toggle('is-expanded', expanded);
-    // Only the opened card grows: the others keep their own height meanwhile.
-    this.classList.toggle('has-expanded', this.slides.some((item) => item.classList.contains('is-expanded')));
-    button.setAttribute('aria-expanded', String(expanded));
-    button.textContent = expanded ? button.dataset.labelLess : button.dataset.labelMore;
-    this.#setPaused(true);
+    const card = button.closest('[data-loop-card]');
+    const expanded = !card.classList.contains('is-expanded');
+    if (expanded) this.#collapseAll();
+    this.#setExpanded(card, expanded);
+  }
+
+  /**
+   * @param {Element} card
+   * @param {boolean} expanded
+   */
+  #setExpanded(card, expanded) {
+    const button = card.querySelector('[data-review-more]');
+    card.classList.toggle('is-expanded', expanded);
+    if (button) {
+      button.setAttribute('aria-expanded', String(expanded));
+      button.textContent = expanded ? button.dataset.labelLess : button.dataset.labelMore;
+    }
+    // Only the opened card grows; the band waits while it is open.
+    this.classList.toggle('has-expanded', Boolean(this.track.querySelector('.is-expanded')));
+    this.#run();
+  }
+
+  #collapseAll() {
+    for (const card of this.track.querySelectorAll('.is-expanded')) this.#setExpanded(card, false);
+  }
+
+  /** @param {HTMLElement} button */
+  #openPhoto(button) {
+    const image = this.dialog?.querySelector('[data-loop-dialog-image]');
+    if (!image || typeof this.dialog.showModal !== 'function') return;
+    image.removeAttribute('style');
+    image.addEventListener('load', () => this.#fitPhoto(image), { once: true });
+    image.src = button.dataset.src;
+    image.alt = button.dataset.alt || '';
+    this.dialog.showModal();
+    this.#run();
+  }
+
+  /**
+   * The frame hugs the photo: as large as the screen allows, never a blank margin.
+   * @param {HTMLImageElement} image
+   */
+  #fitPhoto(image) {
+    const { naturalWidth: width, naturalHeight: height } = image;
+    if (!width || !height) return;
+    const scale = Math.min(1, Math.min(window.innerWidth * 0.92, 896) / width, (window.innerHeight * 0.9) / height);
+    image.style.width = `${Math.round(width * scale)}px`;
+    image.style.height = `${Math.round(height * scale)}px`;
   }
 }
 
-customElements.define('reviews-carousel', ReviewsCarousel);
+customElements.define('reviews-loop', ReviewsLoop);
 
 /* -------------------------------------------------------------------------- */
 /* Sticky add-to-cart bar (mobile)                                             */

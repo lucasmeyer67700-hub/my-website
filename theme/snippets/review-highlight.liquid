@@ -100,16 +100,20 @@
                 <p>{{ review.texte.value | strip_newlines | truncate: 170, '…' | escape }}</p>
               </blockquote>
               <figcaption class="review-highlight__author">
-                {%- assign author_key = review.auteur.value | strip | downcase -%}
+                {%- capture author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
                 <span class="review-highlight__avatar" aria-hidden="true">
-                  {%- if author_key == blank or author_key == 'anonyme' or author_key == 'anonymous' -%}
-                    {% render 'icon', icon: 'user' %}
+                  {%- if review.avatar.value != blank -%}
+                    {{ review.avatar.value | image_url: width: 96, height: 96, crop: 'center' | image_tag: width: 40, height: 40, alt: '', loading: 'lazy' }}
+                  {%- elsif author != blank -%}
+                    {{- author | slice: 0 | upcase | escape -}}
                   {%- else -%}
-                    {{- review.auteur.value | strip | slice: 0 | upcase -}}
+                    {% render 'icon', icon: 'user' %}
                   {%- endif -%}
                 </span>
                 <span class="review-highlight__who">
-                  <strong>{{ review.auteur.value | escape }}</strong>
+                  {%- if author != blank -%}
+                    <strong>{{ author | escape }}</strong>
+                  {%- endif -%}
                   {%- if review.achat_verifie.value and review.source.value == blank -%}
                     <span class="review-highlight__verified">
                       {%- render 'icon', icon: 'check' -%}
@@ -284,9 +288,16 @@
     height: 2rem;
     border-radius: 50%;
     font-family: var(--font-heading-family);
+    overflow: hidden;
     font-size: 0.95rem;
     color: var(--color-text);
     background-color: #f3dfe2;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     & .icon {
       --icon-size: 0.95rem;

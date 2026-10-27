@@ -1,7 +1,7 @@
 {%- comment -%}
   Home band of reviews: title, average rating with the number of reviews, and
-  the review carousel (snippet "reviews-band"). Built from the product's own
-  reviews (custom.avis), or else from the selection of reviews of this model
+  the reviews gliding past in a loop (snippet "reviews-band"). Built from the
+  product's own reviews (custom.avis), or else from the selection of reviews of this model
   published elsewhere (custom.avis_selection, then custom.avis_externes): then
   the rating and total are that site's (custom.avis_externes_note,
   custom.avis_externes_total), with "Comment les avis sont-ils sélectionnés ?"
@@ -188,8 +188,8 @@
     {
       "type": "range",
       "id": "speed",
-      "label": "Rythme du défilement (secondes par avis)",
-      "info": "Les avis avancent d'une carte à la fois. Le défilement s'arrête au survol et dès que la visiteuse fait défiler elle-même.",
+      "label": "Vitesse du défilement (secondes par avis)",
+      "info": "Les avis défilent en continu, en boucle. Plus le nombre est petit, plus ça va vite. Le défilement ralentit puis s'arrête au survol de la souris.",
       "min": 3,
       "max": 12,
       "step": 1,

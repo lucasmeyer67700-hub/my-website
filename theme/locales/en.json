@@ -256,7 +256,6 @@
     },
     "slide_label": "Review {{ number }} of {{ total }}",
     "rotation_pause": "Pause the reviews",
-    "marquee_pause": "Pause the scrolling reviews",
     "band_heading": "What customers say",
     "highlight_editor_empty": "Reviews near the buy button: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
     "band_editor_empty": "Scrolling reviews: hidden from visitors until a real review is published. Add reviews in Content > Metaobjects > Avis client, then link them to the product (Products > your product > Metafields > Avis clientes).",
@@ -267,14 +266,14 @@
     "selection_about_title": "How are the reviews selected?",
     "selection_about_html": "<p>These reviews were left by buyers of this same model on another sales platform, which states that they come from verified purchases. We selected a few of them, shown without any change to their content. The {{ rating }}/5 rating covers all {{ count }} ratings of this model. Reviews from our own customers will be added as orders come in.</p>",
     "carousel_label": "Reviews of this product",
-    "carousel_role": "carousel",
-    "slide_role": "review",
-    "previous": "Previous review",
-    "next": "Next review",
     "read_more": "Read more",
     "read_less": "Show less",
     "months": "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec",
-    "date": "{{ month }} {{ day }}, {{ year }}"
+    "date": "{{ month }} {{ day }}, {{ year }}",
+    "photo_label_anonymous": "Photo attached to the review",
+    "photo_open": "Enlarge the photo",
+    "photo_close": "Close the photo",
+    "photo_dialog": "Photo attached to the review"
   },
   "assistant": {
     "nudge_close": "Close the message",

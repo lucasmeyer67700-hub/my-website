@@ -1,17 +1,19 @@
 {% doc %}
-  Review cards in a carousel, shared by the home "Avis défilants" section and
-  the product reviews section. The cards can be swiped (or moved with the
-  arrows); the carousel moves on by itself one card at a time, pausing on
-  hover, on keyboard focus, with its pause button and as soon as the visitor
-  takes over. No automatic movement for visitors who reduce motion. Long
-  reviews are cut after a few lines, with "Lire la suite".
+  Review cards gliding past in a continuous loop, shared by the home "Avis
+  défilants" section and the product reviews section. No buttons: the band
+  moves on its own, slows down and stops while the mouse is over it, while a
+  card has the keyboard focus or is opened with "Lire la suite", and while a
+  photo is enlarged. Visitors who reduce motion (and browsers without
+  JavaScript) get a still row they can scroll themselves.
+  A review without a first name shows no name at all (never "Anonyme"). The
+  review's photos show as thumbnails that open larger.
   Built from the product's own reviews (custom.avis), or else from the
   selection of reviews of this model (custom.avis_selection, then
   custom.avis_externes). Renders nothing without reviews.
 
   @param {object} product - Product object
   @param {number} [limit] - Maximum number of cards (default 12)
-  @param {number} [speed] - Seconds each position stays still when moving on its own (default 7, 0 = never)
+  @param {number} [speed] - Seconds for one card to go by (default 7, 0 = still)
 
   @example
   {% render 'reviews-band', product: product, limit: 10, speed: 7 %}
@@ -33,51 +35,40 @@
 {%- if review_count > 0 -%}
   {%- comment -%} Up to 250 reviews (list.max): one paginate page covers them all. {%- endcomment -%}
   {%- paginate product.metafields.custom[reviews_key].value by 250 -%}
-    {%- liquid
-      assign shown = 0
-      for review in product.metafields.custom[reviews_key].value
-        if review.texte.value != blank
-          assign shown = shown | plus: 1
-        endif
-      endfor
-      if shown > max_cards
-        assign shown = max_cards
-      endif
-      assign position = 0
-    -%}
-    <reviews-carousel
-      class="reviews-carousel"
-      data-autoplay="{% if shown > 1 %}{{ seconds }}{% else %}0{% endif %}"
-    >
+    {%- assign position = 0 -%}
+    <reviews-loop class="reviews-loop" data-speed="{{ seconds }}">
       <div
-        class="reviews-carousel__viewport"
+        class="reviews-loop__viewport"
         role="region"
-        aria-roledescription="{{ 'reviews.carousel_role' | t }}"
         aria-label="{{ 'reviews.carousel_label' | t }}"
-        tabindex="0"
-        data-carousel-viewport
+        data-loop-viewport
       >
-        <ul class="reviews-carousel__track" role="list">
+        <ul class="reviews-loop__track" role="list" data-loop-track>
           {%- for review in product.metafields.custom[reviews_key].value -%}
             {%- if review.texte.value == blank -%}{%- continue -%}{%- endif -%}
-            {%- if position >= shown -%}{%- break -%}{%- endif -%}
+            {%- if position >= max_cards -%}{%- break -%}{%- endif -%}
             {%- liquid
               assign position = position | plus: 1
-              assign author = review.auteur.value | strip
-              assign author_key = author | downcase
               assign review_day = review.date.value | date: '%d' | plus: 0
               assign review_year = review.date.value | date: '%Y'
               assign month_index = review.date.value | date: '%m' | plus: 0 | minus: 1
               assign review_month = months[month_index]
+              assign avatar = review.avatar.value
             -%}
-            <li
-              class="review-card"
-              role="group"
-              aria-roledescription="{{ 'reviews.slide_role' | t }}"
-              aria-label="{{ 'reviews.slide_label' | t: number: position, total: shown }}"
-              style="--card-index: {{ position | minus: 1 }};"
-              data-carousel-slide
-            >
+            {%- capture author -%}{% render 'review-name', name: review.auteur.value %}{%- endcapture -%}
+            {%- liquid
+              if author != blank
+                assign photo_alt = 'reviews.photo_label' | t: name: author
+              else
+                assign photo_alt = 'reviews.photo_label_anonymous' | t
+              endif
+              assign photo_total = 0
+              if review.photo.value != blank
+                assign photo_total = 1
+              endif
+              assign photo_total = review.photos.value.size | default: 0 | plus: photo_total
+            -%}
+            <li class="review-card" style="--card-index: {{ position | minus: 1 }};" data-loop-card>
               <article class="review-card__inner">
                 <span class="review-card__mark" aria-hidden="true">&ldquo;</span>
                 <div class="review-card__head">
@@ -105,146 +96,163 @@
                 >
                   {{- 'reviews.read_more' | t -}}
                 </button>
-                <div class="review-card__author">
-                  <span class="review-card__avatar" aria-hidden="true">
-                    {%- if author == blank or author_key == 'anonyme' or author_key == 'anonymous' -%}
-                      {% render 'icon', icon: 'user' %}
-                    {%- else -%}
-                      {{- author | slice: 0 | upcase -}}
+
+                {%- if photo_total > 0 -%}
+                  {%- assign shown_photos = 0 -%}
+                  <ul class="review-card__photos" role="list">
+                    {%- if review.photo.value != blank -%}
+                      {%- assign shown_photos = 1 -%}
+                      <li>
+                        <button
+                          type="button"
+                          class="review-card__photo"
+                          data-review-photo
+                          data-src="{{ review.photo.value | image_url: width: 1600 }}"
+                          data-alt="{{ photo_alt }}"
+                          aria-label="{{ 'reviews.photo_open' | t }}"
+                        >
+                          {{ review.photo.value | image_url: width: 180, height: 180, crop: 'center' | image_tag: width: 60, height: 60, alt: '', loading: 'lazy' }}
+                        </button>
+                      </li>
                     {%- endif -%}
-                  </span>
-                  <span class="review-card__who">
-                    <strong>{{ author | escape }}</strong>
-                    {%- if review.achat_verifie.value and review.source.value == blank -%}
-                      <span class="review-card__verified">
-                        {%- render 'icon', icon: 'check' -%}
-                        {{- 'reviews.verified' | t -}}
-                      </span>
-                    {%- endif -%}
-                    {%- if review.coloris.value != blank -%}
-                      <span>{{ 'reviews.color' | t: color: review.coloris.value | escape }}</span>
-                    {%- endif -%}
-                  </span>
-                  {%- assign photo = review.photo.value -%}
-                  {%- if photo != blank -%}
-                    <img
-                      class="review-card__photo"
-                      src="{{ photo | image_url: width: 144, height: 144, crop: 'center' }}"
-                      alt="{{ 'reviews.photo_label' | t: name: author | escape }}"
-                      width="56"
-                      height="56"
-                      loading="lazy"
-                    >
-                  {%- endif -%}
-                </div>
+                    {%- for extra in review.photos.value -%}
+                      {%- if shown_photos >= 3 -%}{%- break -%}{%- endif -%}
+                      {%- assign shown_photos = shown_photos | plus: 1 -%}
+                      <li>
+                        <button
+                          type="button"
+                          class="review-card__photo"
+                          data-review-photo
+                          data-src="{{ extra | image_url: width: 1600 }}"
+                          data-alt="{{ photo_alt }}"
+                          aria-label="{{ 'reviews.photo_open' | t }}"
+                        >
+                          {{ extra | image_url: width: 180, height: 180, crop: 'center' | image_tag: width: 60, height: 60, alt: '', loading: 'lazy' }}
+                        </button>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                {%- if author != blank or review.coloris.value != blank or avatar != blank -%}
+                  <div class="review-card__author">
+                    <span class="review-card__avatar" aria-hidden="true">
+                      {%- if avatar != blank -%}
+                        {{ avatar | image_url: width: 120, height: 120, crop: 'center' | image_tag: width: 44, height: 44, alt: '', loading: 'lazy' }}
+                      {%- elsif author != blank -%}
+                        {{- author | slice: 0 | upcase | escape -}}
+                      {%- else -%}
+                        {% render 'icon', icon: 'user' %}
+                      {%- endif -%}
+                    </span>
+                    <span class="review-card__who">
+                      {%- if author != blank -%}
+                        <strong>{{ author | escape }}</strong>
+                      {%- endif -%}
+                      {%- if review.achat_verifie.value and review.source.value == blank -%}
+                        <span class="review-card__verified">
+                          {%- render 'icon', icon: 'check' -%}
+                          {{- 'reviews.verified' | t -}}
+                        </span>
+                      {%- endif -%}
+                      {%- if review.coloris.value != blank -%}
+                        <span>{{ 'reviews.color' | t: color: review.coloris.value | escape }}</span>
+                      {%- endif -%}
+                    </span>
+                  </div>
+                {%- endif -%}
               </article>
             </li>
           {%- endfor -%}
         </ul>
       </div>
 
-      {%- if shown > 1 -%}
-        <div class="page-width reviews-carousel__controls">
-          <span class="reviews-carousel__buttons">
-            <button
-              type="button"
-              class="icon-button reviews-carousel__button"
-              data-carousel-prev
-              aria-label="{{ 'reviews.previous' | t }}"
-            >
-              {%- render 'icon', icon: 'chevron-left' -%}
-            </button>
-            <button
-              type="button"
-              class="icon-button reviews-carousel__button"
-              data-carousel-next
-              aria-label="{{ 'reviews.next' | t }}"
-            >
-              {%- render 'icon', icon: 'chevron-right' -%}
-            </button>
-            {%- if seconds > 0 -%}
-              <button
-                type="button"
-                class="icon-button reviews-carousel__button reviews-carousel__toggle"
-                data-carousel-toggle
-                aria-pressed="false"
-                aria-label="{{ 'reviews.marquee_pause' | t }}"
-              >
-                <span class="reviews-carousel__toggle-icon reviews-carousel__toggle-icon--pause">{% render 'icon', icon: 'pause' %}</span>
-                <span class="reviews-carousel__toggle-icon reviews-carousel__toggle-icon--play">{% render 'icon', icon: 'play' %}</span>
-              </button>
-            {%- endif -%}
-          </span>
-          <span class="reviews-carousel__progress" aria-hidden="true">
-            <span class="reviews-carousel__progress-bar" data-carousel-progress></span>
-          </span>
-        </div>
-      {%- endif -%}
-    </reviews-carousel>
+      <dialog class="reviews-loop__dialog" aria-label="{{ 'reviews.photo_dialog' | t }}" data-loop-dialog>
+        <button
+          type="button"
+          class="icon-button reviews-loop__close"
+          aria-label="{{ 'reviews.photo_close' | t }}"
+          data-loop-dialog-close
+        >
+          {%- render 'icon', icon: 'close' -%}
+        </button>
+        <img class="reviews-loop__dialog-image" src="data:," alt="" width="1600" height="1600" data-loop-dialog-image>
+      </dialog>
+    </reviews-loop>
   {%- endpaginate -%}
 {%- endif -%}
 
 {% stylesheet %}
   /*
-    The track runs edge to edge, its first card aligned with the page content.
-    Cards per view: a little more than one on phones (the next card shows),
-    two on tablets, three from 1100px.
+    A row of cards wider than the screen, faded at both ends. With motion it
+    glides left in a loop (the cards are repeated by the script); without, it
+    is a row the visitor scrolls.
   */
-  .reviews-carousel {
-    --carousel-gap: var(--space-sm);
-    --carousel-ease: cubic-bezier(0.22, 1, 0.36, 1);
-    --carousel-edge: max(var(--gutter), (100cqi - var(--page-width)) / 2);
+  .reviews-loop {
+    --loop-gap: var(--space-sm);
+    --loop-fade: clamp(1.25rem, 7vw, 7rem);
+    --loop-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
     display: block;
-    container-type: inline-size;
 
     @media screen and (min-width: 750px) {
-      --carousel-gap: var(--space-md);
+      --loop-gap: var(--space-md);
     }
   }
 
-  .reviews-carousel__viewport {
+  .reviews-loop__viewport {
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--carousel-edge);
+    scroll-padding-inline: var(--loop-fade);
     scrollbar-width: none;
     outline-offset: -3px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--loop-fade), #000 calc(100% - var(--loop-fade)), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 var(--loop-fade), #000 calc(100% - var(--loop-fade)), transparent);
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
+  .reviews-loop.is-moving .reviews-loop__viewport {
+    overflow: hidden;
+    scroll-snap-type: none;
+    touch-action: pan-y;
+  }
+
   /* Two classes: wins over the reset of lists with role="list" */
-  .reviews-carousel .reviews-carousel__track {
+  .reviews-loop .reviews-loop__track {
     display: flex;
     align-items: stretch;
-    gap: var(--carousel-gap);
+    gap: var(--loop-gap);
     width: max-content;
     margin: 0;
-    padding: var(--space-xs) var(--carousel-edge) var(--space-lg);
+    padding: var(--space-xs) var(--loop-fade) var(--space-xl);
     list-style: none;
+  }
+
+  .reviews-loop.is-moving .reviews-loop__track {
+    padding-inline: 0;
+    will-change: transform;
+  }
+
+  .reviews-loop.has-expanded .reviews-loop__track {
+    align-items: flex-start;
   }
 
   .review-card {
     display: flex;
     flex: none;
-    width: calc(100cqi - var(--carousel-edge) * 2 - 2.25rem);
-    max-width: 26rem;
+    width: min(80vw, 23.5rem);
     scroll-snap-align: start;
 
-    @container (min-width: 750px) {
-      width: calc((100cqi - var(--carousel-edge) * 2 - var(--carousel-gap)) / 2.15);
-      max-width: none;
-    }
-
-    @container (min-width: 1100px) {
-      width: calc((100cqi - var(--carousel-edge) * 2 - var(--carousel-gap) * 2) / 3);
+    @media screen and (min-width: 990px) {
+      width: 25.5rem;
     }
   }
 
-  /* Card: quiet frame, stars and date, the words, then who wrote them */
+  /* Card: a soft white page with a rose glow, the words, then who wrote them */
   .review-card__inner {
     position: relative;
     display: flex;
@@ -253,23 +261,30 @@
     width: 100%;
     margin: 0;
     padding: var(--space-lg) var(--space-md) var(--space-md);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgb(var(--rose-strong-rgb) / 0.18);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
-    box-shadow: 0 24px 48px -40px rgb(73 53 47 / 0.6);
+    background-image: radial-gradient(120% 70% at 100% 0%, rgb(var(--rose-strong-rgb) / 0.08), transparent 62%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.8),
+      0 28px 52px -40px rgb(73 53 47 / 0.6);
     transition:
-      transform 0.45s var(--carousel-ease),
-      box-shadow 0.45s var(--carousel-ease);
+      transform 0.5s var(--loop-ease),
+      box-shadow 0.5s var(--loop-ease);
+
+    @media screen and (min-width: 750px) {
+      padding: var(--space-lg) var(--space-lg) var(--space-md);
+    }
   }
 
   .review-card__mark {
     position: absolute;
-    inset-block-start: 0.2rem;
+    inset-block-start: 0.35rem;
     inset-inline-end: var(--space-md);
     font-family: var(--font-heading-family);
-    font-size: 4.5rem;
+    font-size: 5rem;
     line-height: 1;
-    color: rgb(var(--rose-strong-rgb) / 0.28);
+    color: rgb(var(--rose-strong-rgb) / 0.3);
     pointer-events: none;
   }
 
@@ -278,7 +293,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs) var(--space-xs);
-    padding-inline-end: 2.5rem;
+    padding-inline-end: 3rem;
   }
 
   .review-card__stars {
@@ -287,6 +302,7 @@
 
   .review-card__date {
     font-size: 0.8125rem;
+    letter-spacing: 0.02em;
     color: var(--color-text-muted);
   }
 
@@ -304,17 +320,13 @@
       overflow: hidden;
       margin: 0;
       font-size: 1rem;
-      line-height: 1.6;
+      line-height: 1.65;
       color: var(--color-text);
       text-wrap: pretty;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-      line-clamp: 5;
+      -webkit-line-clamp: 6;
+      line-clamp: 6;
     }
-  }
-
-  .reviews-carousel.has-expanded .reviews-carousel__track {
-    align-items: flex-start;
   }
 
   .review-card.is-expanded .review-card__quote p {
@@ -345,25 +357,65 @@
     }
   }
 
+  /* Photos sent with the review: thumbnails that open larger */
+  .review-card .review-card__photos {
+    display: flex;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .review-card__photo {
+    display: block;
+    width: 3.75rem;
+    height: 3.75rem;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-background);
+    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.2);
+    cursor: zoom-in;
+
+    & img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--loop-ease);
+    }
+  }
+
   .review-card__author {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
     padding-block-start: var(--space-sm);
-    border-block-start: 1px solid var(--color-border);
+    border-block-start: 1px solid rgb(var(--rose-strong-rgb) / 0.16);
   }
 
   .review-card__avatar {
     display: grid;
     flex: none;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    overflow: hidden;
     border-radius: 50%;
     font-family: var(--font-heading-family);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     color: var(--color-text);
-    background: linear-gradient(145deg, #f8e9ea, #f0d4d9);
+    background: linear-gradient(145deg, #fbeef0, #efd2d8);
+    box-shadow:
+      0 0 0 2px var(--color-surface),
+      0 0 0 3px rgb(var(--rose-strong-rgb) / 0.35);
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     & .icon {
       --icon-size: 1.1rem;
@@ -375,6 +427,7 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    gap: 0.1rem;
     min-width: 0;
     font-size: 0.8125rem;
     color: var(--color-text-muted);
@@ -398,104 +451,75 @@
     }
   }
 
-  .review-card__photo {
-    flex: none;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: var(--radius-sm);
-    object-fit: cover;
-  }
-
-  /* Controls: arrows and pause on the left, progress line on the right */
-  .reviews-carousel__controls {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-  }
-
-  .reviews-carousel__progress {
-    position: relative;
-    flex: 0 1 16rem;
-    margin-inline-start: auto;
-    height: 2px;
+  /* The enlarged photo */
+  .reviews-loop__dialog {
+    width: fit-content;
+    max-width: min(92vw, 56rem);
+    max-height: 90dvh;
+    padding: 0;
     overflow: hidden;
-    border-radius: 2px;
-    background-color: rgb(var(--rose-strong-rgb) / 0.2);
+    border: 0;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: 0 40px 80px -30px rgb(43 37 35 / 0.6);
+
+    &::backdrop {
+      background-color: rgb(43 37 35 / 0.62);
+      backdrop-filter: blur(4px);
+    }
   }
 
-  .reviews-carousel__progress-bar {
+  .reviews-loop__dialog-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 90dvh;
+    object-fit: contain;
+  }
+
+  .reviews-loop__close {
     position: absolute;
-    inset: 0;
-    background-color: var(--color-text);
-    transform: scaleX(var(--carousel-progress, 0.3));
-    transform-origin: left center;
-    transition: transform 0.5s var(--carousel-ease);
-  }
-
-  .reviews-carousel__buttons {
-    display: flex;
-    gap: var(--space-2xs);
-  }
-
-  .reviews-carousel__button {
+    inset-block-start: var(--space-xs);
+    inset-inline-end: var(--space-xs);
     width: 2.75rem;
     height: 2.75rem;
     color: var(--color-text);
-    box-shadow: inset 0 0 0 1px var(--color-border);
-    transition:
-      transform 0.2s var(--carousel-ease),
-      box-shadow 0.3s var(--carousel-ease);
-
-    & .icon {
-      --icon-size: 1rem;
-    }
-
-    &:active {
-      transform: scale(0.94);
-    }
-  }
-
-  .reviews-carousel__toggle-icon--play,
-  .reviews-carousel__toggle[aria-pressed='true'] .reviews-carousel__toggle-icon--pause {
-    display: none;
-  }
-
-  .reviews-carousel__toggle[aria-pressed='true'] .reviews-carousel__toggle-icon--play {
-    display: inline-flex;
+    background-color: rgb(255 255 255 / 0.9);
+    box-shadow: 0 6px 18px -8px rgb(43 37 35 / 0.5);
   }
 
   @media (hover: hover) {
-    .reviews-carousel__button:hover {
-      box-shadow: inset 0 0 0 1px var(--color-text);
+    .review-card:hover .review-card__inner {
+      transform: translateY(-0.3rem);
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.8),
+        0 36px 64px -38px rgb(73 53 47 / 0.7);
     }
 
-    .review-card:hover .review-card__inner {
-      transform: translateY(-0.25rem);
-      box-shadow: 0 32px 60px -38px rgb(73 53 47 / 0.7);
+    .review-card__photo:hover img {
+      transform: scale(1.08);
     }
   }
 
-  /* Entrance: the cards rise one after the other when the carousel comes into view */
-  .js [data-reveal-enabled] .reviews-carousel .review-card {
+  /* Entrance: the cards rise one after the other when the band comes into view */
+  .js [data-reveal-enabled] .reviews-loop .review-card {
     opacity: 0;
     transform: translateY(1.25rem);
     transition:
-      opacity 0.6s var(--carousel-ease),
-      transform 0.6s var(--carousel-ease);
+      opacity 0.7s var(--loop-ease),
+      transform 0.7s var(--loop-ease);
     transition-delay: calc(min(var(--card-index, 0), 4) * 90ms);
   }
 
-  .js [data-reveal-enabled] .reviews-carousel.is-in .review-card {
+  .js [data-reveal-enabled] .reviews-loop.is-in .review-card {
     opacity: 1;
     transform: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reviews-carousel__toggle {
-      display: none;
-    }
-
-    .review-card:hover .review-card__inner {
+    .review-card:hover .review-card__inner,
+    .review-card__photo:hover img {
       transform: none;
     }
   }
