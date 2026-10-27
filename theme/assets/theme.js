@@ -1405,6 +1405,8 @@ class ReviewsCarousel extends HTMLElement {
     const slide = button.closest('[data-carousel-slide]');
     const expanded = !slide.classList.contains('is-expanded');
     slide.classList.toggle('is-expanded', expanded);
+    // Only the opened card grows: the others keep their own height meanwhile.
+    this.classList.toggle('has-expanded', this.slides.some((item) => item.classList.contains('is-expanded')));
     button.setAttribute('aria-expanded', String(expanded));
     button.textContent = expanded ? button.dataset.labelLess : button.dataset.labelMore;
     this.#setPaused(true);
