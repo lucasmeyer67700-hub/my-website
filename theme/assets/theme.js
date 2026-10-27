@@ -1923,7 +1923,8 @@ customElements.define('video-player', VideoPlayer);
 /* Welcome pop-up: shown once, 10 s after the visitor arrives on the site     */
 /* -------------------------------------------------------------------------- */
 
-const WELCOME_KEY = 'velea:welcome';
+// v2: everyone's memory of the pop-up starts afresh with the new design.
+const WELCOME_KEY = 'velea:welcome-v2';
 const VISIT_GAP = 30 * 60 * 1000;
 const welcomeStore = {
   get() {
@@ -1990,6 +1991,12 @@ class WelcomePopup extends HTMLElement {
       document.addEventListener('shopify:section:deselect', (event) => {
         if (event.detail?.sectionId === this.dataset.sectionId) this.dialog.close();
       }, { signal });
+      return;
+    }
+
+    // « ?offre » in the address shows the pop-up at once, to preview it at any time.
+    if (new URL(window.location.href).searchParams.has('offre')) {
+      this.#timer = setTimeout(() => this.open(true), 800);
       return;
     }
 
