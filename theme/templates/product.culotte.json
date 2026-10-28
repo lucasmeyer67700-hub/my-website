@@ -30,16 +30,27 @@
         "delivery": {
           "type": "delivery",
           "settings": {
-            "left_text": "",
             "right_text": "",
+            "left_text": "",
             "show_flag": true
           }
         },
         "trust": {
           "type": "trust",
           "settings": {
-            "show_payment_icons": true,
-            "show_lines": false
+            "show_lines": false,
+            "show_payment_icons": true
+          }
+        },
+        "description": {
+          "type": "accordion",
+          "settings": {
+            "title": "Description",
+            "icon": "none",
+            "source": "description",
+            "content": "",
+            "show_returns_offer": false,
+            "open": true
           }
         },
         "benefits": {
@@ -64,8 +75,8 @@
             "icon": "none",
             "source": "specs",
             "content": "",
-            "open": false,
-            "show_returns_offer": true
+            "show_returns_offer": true,
+            "open": false
           }
         },
         "size_guide": {
@@ -86,8 +97,8 @@
             "icon": "none",
             "source": "usage",
             "content": "",
-            "open": false,
-            "show_returns_offer": true
+            "show_returns_offer": true,
+            "open": false
           }
         },
         "care": {
@@ -108,8 +119,8 @@
             "icon": "none",
             "source": "box",
             "content": "",
-            "open": false,
-            "show_returns_offer": true
+            "show_returns_offer": true,
+            "open": false
           }
         },
         "safety": {
@@ -119,19 +130,8 @@
             "icon": "none",
             "source": "safety_info",
             "content": "",
-            "open": false,
-            "show_returns_offer": true
-          }
-        },
-        "description": {
-          "type": "accordion",
-          "settings": {
-            "title": "Description",
-            "icon": "none",
-            "source": "description",
-            "content": "",
-            "show_returns_offer": false,
-            "open": true
+            "show_returns_offer": true,
+            "open": false
           }
         }
       },
@@ -154,26 +154,24 @@
         "banner": "",
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
-        "gallery_fit": "contain",
+        "gallery_fit": "cover",
+        "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-4",
-        "show_media_slots": true
+        "color_scheme": "scheme-2"
       }
     },
     "reviews": {
       "type": "product-reviews",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "heading": "Avis",
+        "layout": "carousel",
+        "band_limit": 10,
+        "band_speed": 7,
         "show_breakdown": true,
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
         "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
-        "color_scheme": "scheme-1",
-        "layout": "carousel",
-        "band_limit": 10,
-        "band_speed": 7
+        "color_scheme": "scheme-1"
       }
     },
     "faq": {

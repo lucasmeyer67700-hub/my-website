@@ -1,11 +1,15 @@
 {%- comment -%}
   The VELEA assistant: a pink button bottom right that opens a chat-like
-  panel. The visitor types any question (or picks a suggested topic): the
-  assistant answers at once with the merchant's own texts when the question
-  matches a topic's keywords (real prices from the store). Health questions
-  get the theme's caution notice. Anything else goes to the Shopify Inbox
-  chat and its AI agent when the chat option is on, otherwise to the contact
-  form with the question already written in. Nothing is stored by this panel.
+  panel. The visitor writes anything, in her own words: assets/assistant-brain.js
+  (loaded the first time the panel opens) understands the message and answers
+  from the shop's data, rendered by snippets/assistant-knowledge.liquid:
+  products, prices, options, stock, instructions, care, sizes, precautions,
+  and the shipping, returns and warranty answers set below. It can add a
+  product to the cart, open the welcome offer or the cookie settings, and
+  hands over to the team (contact form, question already written) when the
+  shop's data does not hold the answer. The suggested topics below stay as
+  first buttons and as answers when the visitor taps them. The conversation
+  is kept for the visit (session storage of this browser only).
 {%- endcomment -%}
 {%- liquid
   assign contact_link = section.settings.contact_link | default: routes.root_url
@@ -21,6 +25,7 @@
     data-health-keywords="{{ 'assistant.health_keywords' | t | escape }}"
     data-hello-keywords="{{ 'assistant.hello_keywords' | t | escape }}"
     data-thanks-keywords="{{ 'assistant.thanks_keywords' | t | escape }}"
+    data-brain-src="{{ 'assistant-brain.js' | asset_url }}"
   >
     <p class="assistant__nudge" data-assistant-nudge hidden>
       <button type="button" class="assistant__nudge-open" data-assistant-open>
@@ -132,6 +137,26 @@
       </span>
       <span class="assistant__launcher-label">{{ section.settings.launcher_label | escape }}</span>
     </button>
+
+    {%- comment -%} What the assistant knows, read by assets/assistant-brain.js {%- endcomment -%}
+    <script type="application/json" data-assistant-kb>
+      {%- render 'assistant-knowledge', settings_source: section.settings, contact_url: contact_link -%}
+    </script>
+    <script type="application/json" data-assistant-strings>
+      {
+        "addToCart": {{ 'assistant.add_to_cart' | t | json }},
+        "adding": {{ 'assistant.adding' | t | json }},
+        "added": {{ 'assistant.added' | t | json }},
+        "addedText": {{ 'assistant.added_text' | t | json }},
+        "addError": {{ 'assistant.add_error' | t | json }},
+        "openCart": {{ 'assistant.open_cart' | t | json }},
+        "from": {{ 'assistant.from' | t | json }},
+        "view": {{ 'assistant.view' | t | json }}
+      }
+    </script>
+    <template data-assistant-icon="arrow-right">{%- render 'icon', icon: 'arrow-right' -%}</template>
+    <template data-assistant-icon="bag">{%- render 'icon', icon: 'bag' -%}</template>
+    <template data-assistant-icon="check">{%- render 'icon', icon: 'check' -%}</template>
 
     {%- comment -%} Messages, cloned into the conversation by theme.js {%- endcomment -%}
     <template data-assistant-template="greeting">{{ section.settings.greeting }}</template>
@@ -576,6 +601,7 @@
 
   /* Conversation */
   .assistant__log {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
@@ -621,6 +647,198 @@
       opacity: 0;
       transform: translateY(0.6rem);
     }
+  }
+
+  /* An earlier page's conversation, shown again as it was */
+  .assistant__msg--restored {
+    animation: none;
+  }
+
+  .assistant__msg--bot:has(.assistant__products--row, .assistant__buy) {
+    max-width: 94%;
+  }
+
+  .assistant__list {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    & li {
+      position: relative;
+      padding-inline-start: 1.1rem;
+    }
+
+    & li::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0.62em;
+      inset-inline-start: 0.2rem;
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+      background-color: var(--assistant-rose-light);
+    }
+  }
+
+  .assistant__note {
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid rgb(var(--warm-rgb) / 0.25);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  /* Product cards in an answer: one wide card, or a row that scrolls */
+  .assistant__products {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .assistant__products--row {
+    display: flex;
+    gap: 0.5rem;
+    margin-inline: -0.25rem;
+    padding: 0.15rem 0.25rem 0.35rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    & .assistant__product {
+      flex: 0 0 9.5rem;
+      grid-template-columns: 1fr;
+      align-content: start;
+      scroll-snap-align: start;
+    }
+
+    & .assistant__product-media {
+      --media-ratio: 1;
+    }
+  }
+
+  .assistant__product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .assistant__product-detail {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+  }
+
+  /* "Add to cart" card: the chosen product and one clear button */
+  .assistant__buy {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid rgb(var(--rose-cta-rgb, 162 76 93) / 0.25);
+    border-radius: calc(var(--radius-md) + 0.25rem);
+    background: linear-gradient(180deg, #fdf6f7 0%, #fff 100%);
+
+    & .assistant__product {
+      border-color: transparent;
+      background-color: transparent;
+      padding: 0;
+    }
+  }
+
+  .assistant__add {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.875rem;
+    padding: 0.6rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.02em;
+    color: #fff;
+    background-color: var(--assistant-rose);
+    background-image: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+    box-shadow: 0 10px 22px -14px rgb(162 76 93 / 0.8);
+    cursor: pointer;
+    transition:
+      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow var(--duration-base) var(--ease-out),
+      opacity var(--duration-base) var(--ease-out);
+
+    & .icon {
+      --icon-size: 1.05rem;
+    }
+
+    &:not(:disabled):active {
+      transform: scale(0.97);
+    }
+
+    &[aria-busy='true'] {
+      opacity: 0.75;
+      cursor: progress;
+    }
+
+    &.is-added {
+      color: var(--assistant-rose);
+      background: #fff;
+      box-shadow: inset 0 0 0 1px rgb(162 76 93 / 0.4);
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--assistant-rose);
+      outline-offset: 3px;
+    }
+
+    @media (hover: hover) {
+      &:not(:disabled):hover {
+        box-shadow: 0 14px 26px -14px rgb(162 76 93 / 0.9);
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  /* An action in an answer: the offer, the cart, the cookie settings */
+  .assistant__action {
+    justify-self: start;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid rgb(162 76 93 / 0.45);
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: var(--assistant-rose);
+    background-color: #fff;
+    cursor: pointer;
+    transition:
+      color var(--duration-base) var(--ease-out),
+      background-color var(--duration-base) var(--ease-out);
+
+    &:focus-visible {
+      outline: 2px solid var(--assistant-rose);
+      outline-offset: 2px;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        color: #fff;
+        background-color: var(--assistant-rose);
+      }
+    }
+  }
+
+  .assistant__action--offer {
+    color: #fff;
+    background-color: var(--assistant-rose);
+    background-image: linear-gradient(135deg, var(--assistant-rose-light) 0%, var(--assistant-rose) 100%);
+    border-color: transparent;
   }
 
   .assistant__typing {
@@ -920,6 +1138,11 @@
       animation: none;
     }
 
+    .assistant__add,
+    .assistant__action {
+      transition: none;
+    }
+
     .assistant__panel {
       transition: none;
     }
@@ -934,7 +1157,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "La visiteuse écrit sa question : si elle contient un mot-clé d'un sujet, l'assistante répond avec votre texte. Santé : votre mention de prudence. Sinon : le chat Inbox et son agent IA, ou le formulaire de contact avec la question déjà écrite."
+      "content": "La visiteuse écrit ce qu'elle veut, avec ses mots : l'assistante comprend et répond à partir de vos produits et des réponses ci-dessous. Elle peut ajouter un produit au panier, ouvrir l'offre de bienvenue, et passe le relais à votre équipe (question déjà écrite) quand l'information n'est pas dans la boutique. Les sujets restent comme premiers boutons."
     },
     {
       "type": "checkbox",
@@ -1019,9 +1242,9 @@
     {
       "type": "text",
       "id": "unknown_text",
-      "label": "Réponse quand l'assistante ne sait pas",
-      "info": "Affichée quand aucun sujet ne correspond et que le chat Inbox est désactivé.",
-      "default": "Je n'ai pas encore la réponse à cette question. Notre équipe vous répond par e-mail : votre question est déjà écrite dans le formulaire."
+      "label": "Message quand l'équipe prend le relais",
+      "info": "Rarement affiché : seulement si le fichier de l'assistante ne se charge pas et qu'aucun sujet ne correspond.",
+      "default": "Pour être sûre de bien vous répondre, notre équipe prend le relais par e-mail : votre question est déjà écrite dans le formulaire."
     },
     {
       "type": "text",
@@ -1052,6 +1275,82 @@
       "type": "url",
       "id": "contact_link",
       "label": "Page de contact"
+    },
+    {
+      "type": "header",
+      "content": "Ce que sait l'assistante"
+    },
+    {
+      "type": "paragraph",
+      "content": "Les produits (prix, options, stock, points forts, caractéristiques, contenu du colis, mode d'emploi, entretien, guide des tailles, précautions) sont lus directement dans votre boutique. Les réponses ci-dessous servent pour la livraison, le suivi, les retours et la garantie : n'écrivez que des informations vérifiées."
+    },
+    {
+      "type": "collection",
+      "id": "catalogue",
+      "label": "Produits que connaît l'assistante",
+      "info": "Sans collection : tous les produits de la boutique (12 au maximum)."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_shipping",
+      "label": "Réponse : livraison",
+      "default": "La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés entre votre commande et la réception."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_tracking",
+      "label": "Réponse : suivi de commande",
+      "default": "Dès l'expédition, vous recevez par e-mail votre numéro de suivi et un lien pour suivre votre colis étape par étape. Pensez à regarder vos courriers indésirables. Vous retrouvez aussi l'état de votre commande dans votre compte."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_returns",
+      "label": "Réponse : retours",
+      "default": "Vous avez 14 jours après réception pour changer d'avis, sans vous justifier : écrivez-nous avec votre numéro de commande. Une fois le produit retourné, nous vous remboursons sous 14 jours ; les frais de retour sont à votre charge."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_guarantee",
+      "label": "Réponse : garantie commerciale",
+      "default": "Pour la ceinture chauffante, seule ou en duo, notre garantie « Satisfaite ou remboursée » dure 30 jours après réception. Contactez-nous avant tout envoi, et renvoyez-la complète et propre. Une demande par foyer et par produit ; les frais de retour restent à votre charge."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_damaged",
+      "label": "Réponse : produit abîmé ou défectueux",
+      "default": "Colis abîmé, perdu ou produit qui ne fonctionne pas correctement ? Écrivez-nous rapidement, avec une photo si possible : nous renvoyons le produit ou vous remboursons, frais à notre charge."
+    },
+    {
+      "type": "textarea",
+      "id": "answer_origin",
+      "label": "Réponse : origine des produits",
+      "default": "Nos produits sont fabriqués par des fournisseurs partenaires, puis expédiés jusqu'à chez vous."
+    },
+    {
+      "type": "page",
+      "id": "tracking_page",
+      "label": "Page suivi de commande"
+    },
+    {
+      "type": "page",
+      "id": "faq_page",
+      "label": "Page questions fréquentes"
+    },
+    {
+      "type": "page",
+      "id": "story_page",
+      "label": "Page histoire de la marque"
+    },
+    {
+      "type": "page",
+      "id": "guide_page",
+      "label": "Page de conseils (jours de règles)",
+      "info": "Proposée quand une visiteuse dit avoir mal."
+    },
+    {
+      "type": "page",
+      "id": "privacy_page",
+      "label": "Page confidentialité et cookies"
     }
   ],
   "blocks": [

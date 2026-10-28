@@ -359,16 +359,22 @@ customElements.define('contact-form', ContactForm);
 /* -------------------------------------------------------------------------- */
 
 /**
- * Pink button bottom right that opens a chat-like panel. The visitor types a
- * question (or picks a suggested topic) and the answer appears after a short
- * "typing" pause. Answers are the merchant's own texts (templates rendered by
- * Liquid), chosen from each topic's keywords; health questions get the theme's
- * caution notice. Any other question goes to the Shopify Inbox chat (and its
- * AI agent) when that option is on, otherwise to the contact form with the
- * question already written in. Nothing typed here is stored.
+ * Pink button bottom right that opens a chat-like panel. The visitor writes
+ * anything, in her own words: assets/assistant-brain.js (loaded the first time
+ * the button is reached for) reads the message and builds the answer from the
+ * shop's data, which this panel renders after a short "typing" pause: text,
+ * product cards, an "add to cart" button, links and actions (welcome offer,
+ * cookie settings, cart, contact form with the question written in), then
+ * suggested replies. The merchant's topics stay as the first buttons, with
+ * their own answers. The conversation is kept for the visit, in this
+ * browser's session storage only.
+ *
+ * Without the brain file (network error), typed questions fall back to the
+ * topics' keywords, then to Shopify Inbox (when on) or the contact form.
  */
 class VeleaAssistant extends HTMLElement {
   static nudgeKey = 'velea:assistant-nudge';
+  static chatKey = 'velea:assistant-chat';
 
   /**
    * Lower case, no accents, words separated by single spaces, a trailing
@@ -409,6 +415,11 @@ class VeleaAssistant extends HTMLElement {
     return score;
   }
 
+  /** @param {number} ms */
+  static wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   connectedCallback() {
     this.panel = this.querySelector('[data-assistant-panel]');
     this.launcher = this.querySelector('[data-assistant-toggle]');
@@ -423,6 +434,12 @@ class VeleaAssistant extends HTMLElement {
     this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.started = false;
     this.busy = false;
+    /** @type {any[]} What was said, kept for the next pages of the visit */
+    this.history = [];
+    /** @type {any} The brain's memory of the conversation */
+    this.state = undefined;
+    this.chips = null;
+    this.topicChips = [...this.choices.children].map((chip) => chip.cloneNode(true));
     this.topics = [...this.querySelectorAll('[data-assistant-topic]')].map((chip) => ({
       id: chip.dataset.assistantTopic,
       keywords: VeleaAssistant.keywords(chip.dataset.keywords),
@@ -430,9 +447,16 @@ class VeleaAssistant extends HTMLElement {
     this.health = VeleaAssistant.keywords(this.dataset.healthKeywords);
     this.hello = VeleaAssistant.keywords(this.dataset.helloKeywords);
     this.thanks = VeleaAssistant.keywords(this.dataset.thanksKeywords);
+    this.knowledge = this.#readJSON('[data-assistant-kb]') || {};
+    this.strings = this.#readJSON('[data-assistant-strings]') || {};
+    this.saved = this.#readSaved();
     if (this.dataset.replaceInbox === 'true') document.documentElement.classList.add('has-assistant');
 
     this.launcher.addEventListener('click', () => (this.panel.hidden ? this.open() : this.close()));
+    // The brain loads as soon as the visitor reaches for the button.
+    for (const type of ['pointerenter', 'focus', 'touchstart']) {
+      this.launcher.addEventListener(type, () => this.#loadBrain(), { once: true, passive: true });
+    }
     this.addEventListener('click', this.#onClick.bind(this));
     this.panel.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') this.close();
@@ -484,7 +508,10 @@ class VeleaAssistant extends HTMLElement {
     this.launcher.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => this.classList.add('is-open'));
     this.querySelector('[data-assistant-title]')?.focus();
-    if (!this.started) this.#start();
+    this.#loadBrain();
+    if (this.started) return;
+    if (this.saved) this.#restore();
+    else this.#start();
   }
 
   close() {
@@ -507,9 +534,61 @@ class VeleaAssistant extends HTMLElement {
     if (target.closest('[data-assistant-nudge-close]')) return this.#hideNudge();
     if (target.closest('[data-assistant-restart]')) return this.#start();
     if (target.closest('[data-assistant-ai]')) return this.#openChat();
+    const say = target.closest('[data-assistant-say]');
+    if (say) return this.#ask(say.dataset.assistantSay || '');
+    const buy = target.closest('[data-assistant-buy]');
+    if (buy) return this.#addToCart(/** @type {HTMLButtonElement} */ (buy));
+    const action = target.closest('[data-assistant-action]');
+    if (action) return this.#act(action.dataset.assistantAction);
     const topic = target.closest('[data-assistant-topic]');
     if (topic) this.#choose(/** @type {HTMLButtonElement} */ (topic));
   }
+
+  /* ---------------------------------------------------------------- brain */
+
+  /**
+   * Loads assets/assistant-brain.js once and builds it with the shop's data.
+   * @returns {Promise<any>} The brain, or null when it cannot load
+   */
+  #loadBrain() {
+    if (this.brainPromise) return this.brainPromise;
+    this.brainPromise = new Promise((resolve) => {
+      const build = () => {
+        try {
+          resolve(window.VeleaBrain.create(this.knowledge));
+        } catch (error) {
+          resolve(null);
+        }
+      };
+      if (window.VeleaBrain) return build();
+      if (!this.dataset.brainSrc) return resolve(null);
+      const script = document.createElement('script');
+      script.src = this.dataset.brainSrc;
+      script.async = true;
+      script.addEventListener('load', build);
+      script.addEventListener('error', () => resolve(null));
+      document.head.append(script);
+    }).then((brain) => {
+      this.brain = brain;
+      return brain;
+    });
+    return this.brainPromise;
+  }
+
+  /** @param {number} ms Longest wait */
+  #waitBrain(ms) {
+    return Promise.race([this.#loadBrain(), VeleaAssistant.wait(ms).then(() => null)]);
+  }
+
+  /** The welcome offer of the pop-up on this page, if any. */
+  #offer() {
+    const popup = /** @type {HTMLElement | null} */ (document.querySelector('welcome-popup[data-offer-percent]'));
+    if (!popup) return null;
+    const { offerPercent, offerLabel, offerPrice, offerNewPrice, offerConditions, offerProduct } = popup.dataset;
+    return { percent: offerPercent, label: offerLabel, price: offerPrice, newPrice: offerNewPrice, conditions: offerConditions, product: offerProduct };
+  }
+
+  /* --------------------------------------------------------- conversation */
 
   async #start() {
     this.started = true;
@@ -518,13 +597,46 @@ class VeleaAssistant extends HTMLElement {
     this.busy = true;
     this.#updateInput();
     this.log.replaceChildren();
+    this.history = [];
+    this.state = undefined;
+    this.saved = null;
+    this.#forget();
     this.choices.hidden = true;
-    for (const chip of this.choices.querySelectorAll('[data-seen]')) chip.removeAttribute('data-seen');
-    await this.#botSay('greeting', 650);
+    const typing = this.#showTyping();
+    const [brain] = await Promise.all([this.#waitBrain(1500), VeleaAssistant.wait(this.reduceMotion ? 0 : 650)]);
+    typing.remove();
     if (run !== this.run) return;
-    this.#showChoices();
+    // Product page: a greeting about the product. Elsewhere: the merchant's own.
+    const greeting = brain?.greet();
+    if (greeting) {
+      this.state = greeting.state;
+      this.#appendBot(greeting.parts);
+      this.#setChips(greeting.chips);
+    } else {
+      this.#appendTemplate('greeting');
+      this.#setChips(null);
+    }
     this.busy = false;
     this.#updateInput();
+    this.#save();
+  }
+
+  /** The conversation of an earlier page of this visit, shown as it was. */
+  #restore() {
+    const saved = this.saved;
+    this.saved = null;
+    this.started = true;
+    this.run = (this.run || 0) + 1;
+    this.log.replaceChildren();
+    this.history = [];
+    this.state = saved.state;
+    for (const entry of saved.history) {
+      if (entry.who === 'user') this.#userSay(entry.text, true);
+      else if (entry.parts) this.#appendBot(entry.parts, true);
+      else if (entry.template) this.#appendTemplate(entry.template, entry.question, true);
+    }
+    this.#setChips(saved.chips);
+    this.#scroll(false);
   }
 
   /** @param {HTMLButtonElement} chip */
@@ -537,13 +649,12 @@ class VeleaAssistant extends HTMLElement {
     this.#userSay(chip.textContent.trim());
     await this.#botSay(chip.dataset.assistantTopic, 900);
     if (run !== this.run) return;
-    chip.setAttribute('data-seen', '');
     track('velea_assistant_question', { answer: chip.dataset.assistantTopic, source: 'topic' });
     await this.#finish(run);
   }
 
   /**
-   * A typed question: the best matching answer, or the hand-over.
+   * A typed question (or a suggested reply): the brain's answer.
    * @param {string} raw
    */
   async #ask(raw) {
@@ -556,18 +667,63 @@ class VeleaAssistant extends HTMLElement {
     this.#updateInput();
     this.#userSay(question);
 
+    const typing = this.#showTyping();
+    const brain = await this.#waitBrain(4000);
+    if (run !== this.run) return typing.remove();
+    if (!brain) {
+      typing.remove();
+      return this.#askTopics(question, run);
+    }
+
+    const reply = brain.reply(question, this.state, { offer: this.#offer(), chat: this.dataset.chat === 'true' });
+    this.state = reply.state;
+    track('velea_assistant_question', { answer: reply.subjects.join(',') || (reply.confident ? 'conversation' : 'none'), source: 'typed' });
+
+    // Not sure: one of the merchant's topics, or Shopify Inbox's AI agent when it is on.
+    if (!reply.confident) {
+      const topic = this.#matchTopic(question);
+      if (topic) {
+        typing.remove();
+        await this.#botSay(topic, 500);
+        if (run !== this.run) return;
+        return this.#finish(run);
+      }
+      if (this.dataset.chat === 'true' && (await this.#findInbox(5))) {
+        typing.remove();
+        await this.#botSay('handover', 300);
+        if (run !== this.run) return;
+        this.busy = false;
+        this.#updateInput();
+        this.#save();
+        setTimeout(() => this.#openChat(question), this.reduceMotion ? 0 : 900);
+        return;
+      }
+    }
+
+    await VeleaAssistant.wait(this.#delayFor(reply.parts));
+    typing.remove();
+    if (run !== this.run) return;
+    const message = this.#appendBot(reply.parts);
+    this.#setChips(reply.chips, message);
+    this.busy = false;
+    this.#updateInput();
+    this.#save();
+  }
+
+  /**
+   * Without the brain: the best matching topic, or the hand-over.
+   * @param {string} question
+   * @param {number} run
+   */
+  async #askTopics(question, run) {
     const answer = this.#match(question);
     track('velea_assistant_question', { answer: answer || 'none', source: 'typed' });
-
     if (answer) {
       await this.#botSay(answer, 900);
       if (run !== this.run) return;
-      const chip = this.choices.querySelector(`[data-assistant-topic="${answer}"]`);
-      chip?.setAttribute('data-seen', '');
       await this.#finish(run);
       return;
     }
-
     if (this.dataset.chat === 'true' && (await this.#findInbox(5))) {
       await this.#botSay('handover', 700);
       if (run !== this.run) return;
@@ -576,34 +732,47 @@ class VeleaAssistant extends HTMLElement {
       setTimeout(() => this.#openChat(question), this.reduceMotion ? 0 : 900);
       return;
     }
-
-    const message = await this.#botSay('unknown', 900);
+    await this.#botSay('unknown', 900, question);
     if (run !== this.run) return;
-    this.#prepareMail(message, question);
-    this.#showChoices();
+    this.#setChips(null);
     this.busy = false;
     this.#updateInput();
+    this.#save();
   }
 
   /** @param {number} run */
   async #finish(run) {
     await this.#botSay('next', 450);
     if (run !== this.run) return;
-    this.#showChoices();
+    this.#setChips(null);
     this.busy = false;
     this.#updateInput();
+    this.#save();
   }
 
   /**
-   * The id of the answer for a typed question: health first, then the topic
-   * with the most keywords found, then hello / thanks for short messages.
+   * The id of the answer for a typed question without the brain: health
+   * first, then the topic with the most keywords found, then hello / thanks.
    * @param {string} question
    * @returns {string | null}
    */
   #match(question) {
     const text = VeleaAssistant.normalize(question);
     if (VeleaAssistant.score(text, this.health) > 0) return 'health';
+    const topic = this.#matchTopic(question);
+    if (topic) return topic;
+    const short = text.trim().split(' ').length <= 5;
+    if (short && VeleaAssistant.score(text, this.thanks) > 0) return 'thanks';
+    if (short && VeleaAssistant.score(text, this.hello) > 0) return 'hello';
+    return null;
+  }
 
+  /**
+   * The merchant's topic whose keywords best match a question.
+   * @param {string} question
+   */
+  #matchTopic(question) {
+    const text = VeleaAssistant.normalize(question);
     let best = null;
     let bestScore = 0;
     for (const topic of this.topics) {
@@ -613,12 +782,293 @@ class VeleaAssistant extends HTMLElement {
         bestScore = score;
       }
     }
-    if (best) return best;
+    return best;
+  }
 
-    const short = text.trim().split(' ').length <= 5;
-    if (short && VeleaAssistant.score(text, this.thanks) > 0) return 'thanks';
-    if (short && VeleaAssistant.score(text, this.hello) > 0) return 'hello';
-    return null;
+  /** A typing pause that follows the length of the answer. */
+  #delayFor(parts) {
+    if (this.reduceMotion) return 0;
+    const length = parts.reduce((total, part) => total + (part.text?.length || 0) + (part.items?.join(' ').length || 0), 0);
+    return Math.min(1300, 450 + length * 2.5);
+  }
+
+  /* -------------------------------------------------------------- actions */
+
+  /** @param {string | undefined} action */
+  #act(action) {
+    if (action === 'offer') {
+      const popup = /** @type {any} */ (document.querySelector('welcome-popup'));
+      if (!popup?.open) return;
+      this.close();
+      popup.open(true);
+      track('velea_assistant_action', { action });
+      return;
+    }
+    if (action === 'cookies') {
+      this.close();
+      /** @type {HTMLElement | null} */ (document.querySelector('[data-cookie-preferences]'))?.click();
+      return;
+    }
+    if (action === 'cart') {
+      const drawer = /** @type {any} */ (document.querySelector('cart-drawer'));
+      if (theme.cartType === 'drawer' && drawer?.open) {
+        this.close();
+        drawer.open();
+      } else {
+        window.location.href = theme.routes.cart || '/cart';
+      }
+      return;
+    }
+    if (action === 'chat') this.#openChat(this.state?.lastQuestion || '');
+  }
+
+  /** @param {HTMLButtonElement} button */
+  async #addToCart(button) {
+    if (button.disabled || button.dataset.added) return;
+    const label = button.querySelector('[data-assistant-buy-label]');
+    const idle = label?.textContent || '';
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    if (label) label.textContent = this.strings.adding || idle;
+    try {
+      const result = await cartRequest(`${theme.routes.cartAdd}.js`, {
+        items: [{ id: Number(button.dataset.assistantBuy), quantity: 1 }],
+        sections: getCartSectionIds().join(','),
+        sections_url: window.location.pathname,
+      });
+      renderCartSections(result.sections);
+      button.dataset.added = 'true';
+      button.classList.add('is-added');
+      if (label) label.textContent = this.strings.added || idle;
+      button.querySelector('.icon')?.replaceWith(this.#icon('check'));
+      track('velea_assistant_add_to_cart', { variant: button.dataset.assistantBuy });
+      announce(this.strings.addedText);
+      await this.#botParts([
+        { type: 'text', text: this.strings.addedText },
+        { type: 'action', action: 'cart', label: this.strings.openCart },
+      ], 450);
+    } catch (error) {
+      button.disabled = false;
+      if (label) label.textContent = idle;
+      await this.#botParts([{ type: 'text', text: error?.data?.description || this.strings.addError }], 300);
+    } finally {
+      button.removeAttribute('aria-busy');
+    }
+  }
+
+  /* ------------------------------------------------------------ rendering */
+
+  /** Typing dots, removed when the answer is ready. */
+  #showTyping() {
+    const typing = document.createElement('div');
+    typing.className = 'assistant__typing';
+    typing.setAttribute('aria-hidden', 'true');
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    this.log.append(typing);
+    this.#scroll();
+    return typing;
+  }
+
+  /**
+   * @param {any[]} parts
+   * @param {number} delay
+   */
+  async #botParts(parts, delay) {
+    const typing = this.#showTyping();
+    await VeleaAssistant.wait(this.reduceMotion ? 0 : delay);
+    typing.remove();
+    this.#appendBot(parts);
+    this.#save();
+  }
+
+  /**
+   * A merchant template (greeting, topic answers…) after a typing pause.
+   * @param {string} templateId
+   * @param {number} delay
+   * @param {string} [question] Written into the contact link
+   * @returns {Promise<HTMLElement | null>}
+   */
+  async #botSay(templateId, delay, question = '') {
+    if (!this.querySelector(`template[data-assistant-template="${templateId}"]`)) return null;
+    const typing = this.#showTyping();
+    await VeleaAssistant.wait(this.reduceMotion ? 0 : delay);
+    typing.remove();
+    return this.#appendTemplate(templateId, question);
+  }
+
+  /**
+   * @param {string} templateId
+   * @param {string} [question]
+   * @param {boolean} [restored] Shown again on a new page: no animation, not recorded twice
+   */
+  #appendTemplate(templateId, question = '', restored = false) {
+    const template = /** @type {HTMLTemplateElement | null} */ (this.querySelector(`template[data-assistant-template="${templateId}"]`));
+    if (!template) return null;
+    const message = document.createElement('div');
+    message.className = `assistant__msg assistant__msg--bot${restored ? ' assistant__msg--restored' : ''}`;
+    message.append(template.content.cloneNode(true));
+    this.#prepareMail(message, question);
+    this.log.append(message);
+    this.history.push({ who: 'bot', template: templateId, question });
+    if (!restored) this.#scroll(true, message);
+    return message;
+  }
+
+  /**
+   * @param {any[]} parts The brain's answer
+   * @param {boolean} [restored]
+   */
+  #appendBot(parts, restored = false) {
+    const message = document.createElement('div');
+    message.className = `assistant__msg assistant__msg--bot${restored ? ' assistant__msg--restored' : ''}`;
+    for (const part of parts) {
+      const node = this.#renderPart(part);
+      if (node) message.append(node);
+    }
+    this.log.append(message);
+    this.history.push({ who: 'bot', parts });
+    if (!restored) this.#scroll(true, message);
+    return message;
+  }
+
+  /** @param {any} part */
+  #renderPart(part) {
+    const element = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+    switch (part.type) {
+      case 'text':
+        return element('p', '', part.text);
+      case 'note':
+        return element('p', 'assistant__note', part.text);
+      case 'list': {
+        const list = element('ul', 'assistant__list');
+        list.setAttribute('role', 'list');
+        for (const item of part.items) list.append(element('li', '', item));
+        return list;
+      }
+      case 'products': {
+        const products = part.handles.map((handle) => this.#product(handle)).filter(Boolean);
+        if (!products.length) return null;
+        const wrap = element('div', `assistant__products${products.length > 1 ? ' assistant__products--row' : ''}`);
+        for (const product of products) wrap.append(this.#productCard(product));
+        return wrap;
+      }
+      case 'link': {
+        const link = element('a', 'assistant__link', part.label);
+        link.href = part.url;
+        link.append(this.#icon('arrow-right'));
+        return link;
+      }
+      case 'action': {
+        if (part.action === 'contact') {
+          const link = element('a', 'assistant__link', part.label);
+          const url = new URL(this.dataset.contactUrl || '/', window.location.origin);
+          if (part.question) url.searchParams.set('question', String(part.question).slice(0, 400));
+          link.href = url.toString();
+          link.append(this.#icon('arrow-right'));
+          return link;
+        }
+        if (part.action === 'offer' && !document.querySelector('welcome-popup')) return null;
+        const button = element('button', `assistant__action${part.action === 'offer' ? ' assistant__action--offer' : ''}`, part.label);
+        button.type = 'button';
+        button.dataset.assistantAction = part.action;
+        return button;
+      }
+      case 'buy': {
+        const product = this.#product(part.handle);
+        const card = element('div', 'assistant__buy');
+        if (product) card.append(this.#productCard(product, part.label, part.price));
+        const button = element('button', 'assistant__add');
+        button.type = 'button';
+        button.dataset.assistantBuy = String(part.variant);
+        button.append(this.#icon('bag'), element('span', '', this.strings.addToCart || 'Ajouter au panier'));
+        button.lastElementChild?.setAttribute('data-assistant-buy-label', '');
+        card.append(button);
+        return card;
+      }
+      default:
+        return null;
+    }
+  }
+
+  /** @param {string} handle */
+  #product(handle) {
+    return (this.knowledge.products || []).find((product) => product.handle === handle) || null;
+  }
+
+  /**
+   * @param {any} product
+   * @param {string} [detail] The chosen options
+   * @param {string} [price] The chosen variant's price
+   */
+  #productCard(product, detail = '', price = '') {
+    const card = document.createElement('a');
+    card.className = 'assistant__product';
+    card.href = product.url;
+    const media = document.createElement('span');
+    media.className = 'assistant__product-media media';
+    if (product.image) {
+      const image = document.createElement('img');
+      image.src = product.image;
+      image.alt = '';
+      image.width = 120;
+      image.height = 120;
+      image.loading = 'lazy';
+      media.append(image);
+    } else {
+      media.innerHTML = '<span class="product-card__soon-art" aria-hidden="true"><span class="product-card__soon-drop"></span></span>';
+    }
+    const info = document.createElement('span');
+    info.className = 'assistant__product-info';
+    const title = document.createElement('span');
+    title.className = 'assistant__product-title';
+    title.textContent = product.title;
+    info.append(title);
+    if (detail) {
+      const options = document.createElement('span');
+      options.className = 'assistant__product-detail';
+      options.textContent = detail;
+      info.append(options);
+    }
+    const cost = document.createElement('span');
+    cost.className = 'assistant__product-price';
+    cost.textContent = price || (product.varies ? `${this.strings.from || ''} ${product.price}`.trim() : product.price);
+    info.append(cost);
+    card.append(media, info);
+    return card;
+  }
+
+  /** @param {string} name */
+  #icon(name) {
+    const template = /** @type {HTMLTemplateElement | null} */ (this.querySelector(`template[data-assistant-icon="${name}"]`));
+    return template ? template.content.firstElementChild.cloneNode(true) : document.createTextNode('');
+  }
+
+  /**
+   * Suggested replies under the conversation: the brain's, or the merchant's topics.
+   * @param {string[] | null} chips
+   * @param {HTMLElement} [message] The answer they follow, kept in view
+   */
+  #setChips(chips, message) {
+    this.chips = chips;
+    this.choices.replaceChildren();
+    if (chips?.length) {
+      for (const label of chips) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'assistant__chip';
+        chip.dataset.assistantSay = label;
+        chip.textContent = label;
+        this.choices.append(chip);
+      }
+    } else {
+      for (const chip of this.topicChips) this.choices.append(chip.cloneNode(true));
+    }
+    this.#showChoices(message);
   }
 
   /**
@@ -653,8 +1103,8 @@ class VeleaAssistant extends HTMLElement {
     if (this.busy) return;
     const host = await this.#findInbox();
     if (!host) {
-      const message = await this.#botSay('ai-missing', 400);
-      this.#prepareMail(message, question);
+      await this.#botSay('ai-missing', 400, question);
+      this.#save();
       return;
     }
     document.documentElement.classList.add('is-inbox-open');
@@ -671,7 +1121,7 @@ class VeleaAssistant extends HTMLElement {
    */
   async #fillInbox(host, question) {
     for (let attempt = 0; attempt < 20; attempt += 1) {
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await VeleaAssistant.wait(150);
       const field = host.shadowRoot?.querySelector('textarea');
       if (!field) continue;
       const setValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set;
@@ -687,53 +1137,83 @@ class VeleaAssistant extends HTMLElement {
     for (let attempt = 0; attempt < attempts; attempt += 1) {
       const host = document.querySelector('inbox-online-store-chat, #ShopifyChat, #shopify-chat');
       if (host) return host;
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await VeleaAssistant.wait(200);
     }
     return null;
   }
 
   /**
-   * @param {string} templateId
-   * @param {number} delay
-   * @returns {Promise<HTMLElement | null>} The message added to the conversation
+   * @param {string} text
+   * @param {boolean} [restored]
    */
-  async #botSay(templateId, delay) {
-    const template = this.querySelector(`template[data-assistant-template="${templateId}"]`);
-    if (!template) return null;
-    const typing = document.createElement('div');
-    typing.className = 'assistant__typing';
-    typing.setAttribute('aria-hidden', 'true');
-    typing.innerHTML = '<span></span><span></span><span></span>';
-    this.log.append(typing);
-    this.#scroll();
-    await new Promise((resolve) => setTimeout(resolve, this.reduceMotion ? 0 : delay));
-    typing.remove();
-    const message = document.createElement('div');
-    message.className = 'assistant__msg assistant__msg--bot';
-    message.append(template.content.cloneNode(true));
-    this.log.append(message);
-    this.#scroll();
-    return message;
-  }
-
-  /** @param {string} text */
-  #userSay(text) {
+  #userSay(text, restored = false) {
     const message = document.createElement('p');
-    message.className = 'assistant__msg assistant__msg--user';
+    message.className = `assistant__msg assistant__msg--user${restored ? ' assistant__msg--restored' : ''}`;
     message.textContent = text;
     this.log.append(message);
-    this.#scroll();
+    this.history.push({ who: 'user', text });
+    if (!restored) this.#scroll();
   }
 
-  #showChoices() {
+  /** @param {HTMLElement} [message] The answer to keep in view */
+  #showChoices(message) {
     if (!this.choices.children.length) return;
     this.choices.hidden = false;
     this.choices.scrollLeft = 0;
-    this.#scroll();
+    // The buttons take room from the conversation: follow it once the layout has moved.
+    requestAnimationFrame(() => this.#scroll(true, message));
   }
 
-  #scroll() {
-    this.log.scrollTo({ top: this.log.scrollHeight, behavior: this.reduceMotion ? 'auto' : 'smooth' });
+  /**
+   * Follows the conversation. A long answer is shown from its start, so the
+   * visitor reads it from the top instead of from its last line.
+   * @param {boolean} [smooth]
+   * @param {HTMLElement} [message]
+   */
+  #scroll(smooth = true, message) {
+    const behavior = smooth && !this.reduceMotion ? 'smooth' : 'auto';
+    if (message && message.offsetHeight > this.log.clientHeight * 0.7) {
+      this.log.scrollTo({ top: message.offsetTop - 12, behavior });
+      return;
+    }
+    this.log.scrollTo({ top: this.log.scrollHeight, behavior });
+  }
+
+  /* ---------------------------------------------------------- the visit */
+
+  /** Keeps the conversation for the next pages of the visit (this tab only). */
+  #save() {
+    try {
+      sessionStorage.setItem(VeleaAssistant.chatKey, JSON.stringify({ v: 1, history: this.history.slice(-40), state: this.state, chips: this.chips }));
+    } catch (error) {
+      /* Private browsing: the conversation starts afresh on the next page. */
+    }
+  }
+
+  #readSaved() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(VeleaAssistant.chatKey) || 'null');
+      return saved?.v === 1 && Array.isArray(saved.history) && saved.history.length ? saved : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  #forget() {
+    try {
+      sessionStorage.removeItem(VeleaAssistant.chatKey);
+    } catch (error) {
+      /* Nothing stored. */
+    }
+  }
+
+  /** @param {string} selector */
+  #readJSON(selector) {
+    try {
+      return JSON.parse(this.querySelector(selector)?.textContent || 'null');
+    } catch (error) {
+      return null;
+    }
   }
 
   #scheduleNudge() {

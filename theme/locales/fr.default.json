@@ -295,7 +295,15 @@
     "thanks_text": "Avec plaisir ! Une autre question ? Je suis là.",
     "health_keywords": "enceinte, grossesse, allaitement, allaite, bebe, endometriose, sopk, kyste, fibrome, maladie, malade, pathologie, medecin, gynecologue, medicament, traitement, soigner, soigne, guerir, guerit, therapeutique, cardiaque, coeur, pacemaker, stimulateur, diabete, epilepsie, cancer, tumeur, brulure, brule, douleur intense, tres mal, hemorragie, saigne beaucoup, enfant, mineure",
     "hello_keywords": "bonjour, bonsoir, salut, coucou, hello, hey",
-    "thanks_keywords": "merci, super, parfait, top, genial, ok merci, d accord"
+    "thanks_keywords": "merci, super, parfait, top, genial, ok merci, d accord",
+    "add_to_cart": "Ajouter au panier",
+    "adding": "Ajout…",
+    "added": "Ajouté",
+    "added_text": "C'est dans votre panier ! Vous pouvez continuer vos achats ou finaliser votre commande.",
+    "add_error": "L'ajout n'a pas fonctionné. Réessayez depuis la fiche du produit, ou écrivez-nous.",
+    "open_cart": "Voir mon panier",
+    "from": "À partir de",
+    "view": "Voir le produit"
   },
   "cookies": {
     "reject_all": "Tout refuser",

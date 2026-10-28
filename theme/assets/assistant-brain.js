@@ -2263,7 +2263,7 @@
         return this.#buy(ctx, product, {});
       }
       const label = variant.options.filter(Boolean).filter((value) => options.length > 1 || product.variants.length > 1).join(' · ');
-      ctx.reply.text(`${label ? `${the(product, true)}, ${label} : ` : `${the(product, true)} : `}${variant.price}. Un clic et c’est dans votre panier :`);
+      ctx.reply.text(`Excellent choix ! ${the(product, true)}${label ? `, ${label}` : ''}, à ${variant.price} : un clic et c’est dans votre panier.`);
       ctx.reply.parts.push({ type: 'buy', handle: product.handle, variant: variant.id, label, price: variant.price });
       if (this.facts.shipping) ctx.reply.note(`${this.facts.shipping}.`);
       ctx.reply.chip(CHIP.delay, CHIP.returns);

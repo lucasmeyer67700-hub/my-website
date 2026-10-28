@@ -71,6 +71,17 @@
     data-snooze-days="{{ section.settings.snooze_days }}"
     data-section-id="{{ section.id }}"
     data-warm-fonts="{{ warm_fonts | strip | escape }}"
+    {%- comment -%} Read by the assistant when a visitor asks for a discount {%- endcomment -%}
+    {% if show_popup %}
+      data-offer-percent="{{ percent }}"
+      data-offer-conditions="{{ section.settings.conditions | escape }}"
+      {%- if offer_product %}
+        data-offer-label="{{ section.settings.offer_label | escape }}"
+        data-offer-price="{{ offer_price | money | strip_html | escape }}"
+        data-offer-new-price="{{ offer_new_price_text | strip_html | escape }}"
+        data-offer-product="{{ offer_product.handle }}"
+      {%- endif %}
+    {% endif %}
     {% if request.design_mode %}
       data-design-mode
     {% endif %}

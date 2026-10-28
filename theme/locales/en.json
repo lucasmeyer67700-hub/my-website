@@ -295,7 +295,15 @@
     "thanks_text": "My pleasure! Another question? I am here.",
     "health_keywords": "pregnant, pregnancy, breastfeeding, baby, endometriosis, pcos, cyst, fibroid, disease, illness, condition, doctor, gynaecologist, medicine, medication, treatment, treat, cure, heals, therapeutic, heart, pacemaker, diabetes, epilepsy, cancer, tumour, burn, burns, severe pain, bleeding a lot, child, minor",
     "hello_keywords": "hello, hi, hey, good morning, good evening",
-    "thanks_keywords": "thanks, thank you, great, perfect, ok thanks"
+    "thanks_keywords": "thanks, thank you, great, perfect, ok thanks",
+    "add_to_cart": "Add to cart",
+    "adding": "Adding…",
+    "added": "Added",
+    "added_text": "It's in your cart! Keep shopping or check out whenever you're ready.",
+    "add_error": "It couldn't be added. Please try again from the product page, or write to us.",
+    "open_cart": "View my cart",
+    "from": "From",
+    "view": "View product"
   },
   "cookies": {
     "reject_all": "Reject all",
