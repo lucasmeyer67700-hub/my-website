@@ -205,7 +205,11 @@
     "price_with_code": "Price with the code",
     "with_code": "with the code",
     "privacy": "Privacy policy",
-    "consent": "By signing up, you agree to receive our emails. You can unsubscribe at any time using the link in every email."
+    "consent": "By signing up, you agree to receive our emails. You can unsubscribe at any time using the link in every email.",
+    "photo_slot_title": "Photo placeholder",
+    "photo_slot_text": "Add your photo in the pop-up settings, under “Pop-up photo”.",
+    "your_code": "Your code",
+    "email_placeholder": "Your email address"
   },
   "reviews": {
     "stars_label": "Rated {{ rating }} out of 5",
@@ -292,5 +296,26 @@
     "health_keywords": "pregnant, pregnancy, breastfeeding, baby, endometriosis, pcos, cyst, fibroid, disease, illness, condition, doctor, gynaecologist, medicine, medication, treatment, treat, cure, heals, therapeutic, heart, pacemaker, diabetes, epilepsy, cancer, tumour, burn, burns, severe pain, bleeding a lot, child, minor",
     "hello_keywords": "hello, hi, hey, good morning, good evening",
     "thanks_keywords": "thanks, thank you, great, perfect, ok thanks"
+  },
+  "cookies": {
+    "eyebrow": "Privacy",
+    "policy": "Privacy policy",
+    "reject_all": "Reject all",
+    "accept_all": "Accept all",
+    "customize": "Customize my choices",
+    "save": "Save my choices",
+    "prefs_title": "Cookie preferences",
+    "prefs_intro": "Choose the cookies you accept. Your choice is saved for this browser and can be changed at any time.",
+    "necessary": "Necessary",
+    "necessary_text": "Required for the site to work: cart, payment, security. They cannot be turned off.",
+    "always_on": "Always on",
+    "preferences": "Preferences",
+    "preferences_text": "Remember your choices, such as language or country, for your next visits.",
+    "analytics": "Analytics",
+    "analytics_text": "Help us understand how the site is used, to improve it.",
+    "marketing": "Marketing",
+    "marketing_text": "Let us show you offers and ads that match your interests.",
+    "manage": "Manage cookies",
+    "saved": "Your cookie choices are saved."
   }
 }

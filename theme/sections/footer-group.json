@@ -52,9 +52,8 @@
         "product": "ceinture-chauffante-regles",
         "percent": 10,
         "offer_label": "La ceinture, à l'unité",
-        "seal_label": "sur votre ceinture",
+        "seal_label": "offerts sur votre ceinture",
         "eyebrow": "Offre de bienvenue",
-        "heading": "<em>−10&nbsp;%</em> sur votre ceinture",
         "text": "Laissez votre e-mail : votre code s'affiche tout de suite.",
         "button_label": "Recevoir mon code",
         "code": "VELEA",
@@ -148,10 +147,21 @@
         "contact_button_label": "Écrire à notre équipe",
         "avatar": "shopify://shop_images/velea-monogramme.png"
       }
+    },
+    "cookies": {
+      "type": "cookie-banner",
+      "settings": {
+        "enabled": true,
+        "title": "Vos cookies, votre choix",
+        "text": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page.",
+        "heading_font": "playfair_display_n4",
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "footer",
+    "cookies",
     "welcome",
     "assistant"
   ]

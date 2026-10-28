@@ -205,7 +205,11 @@
     "price_with_code": "Prix avec le code",
     "with_code": "avec le code",
     "privacy": "Politique de confidentialité",
-    "consent": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque e-mail."
+    "consent": "En vous inscrivant, vous acceptez de recevoir nos e-mails. Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque e-mail.",
+    "photo_slot_title": "Emplacement photo",
+    "photo_slot_text": "Ajoutez votre photo dans les réglages de la pop-up, champ « Photo de la pop-up ».",
+    "your_code": "Votre code",
+    "email_placeholder": "Votre adresse e-mail"
   },
   "reviews": {
     "stars_label": "Note : {{ rating }} sur 5",
@@ -292,5 +296,26 @@
     "health_keywords": "enceinte, grossesse, allaitement, allaite, bebe, endometriose, sopk, kyste, fibrome, maladie, malade, pathologie, medecin, gynecologue, medicament, traitement, soigner, soigne, guerir, guerit, therapeutique, cardiaque, coeur, pacemaker, stimulateur, diabete, epilepsie, cancer, tumeur, brulure, brule, douleur intense, tres mal, hemorragie, saigne beaucoup, enfant, mineure",
     "hello_keywords": "bonjour, bonsoir, salut, coucou, hello, hey",
     "thanks_keywords": "merci, super, parfait, top, genial, ok merci, d accord"
+  },
+  "cookies": {
+    "eyebrow": "Confidentialité",
+    "policy": "Politique de confidentialité",
+    "reject_all": "Tout refuser",
+    "accept_all": "Tout accepter",
+    "customize": "Personnaliser mes choix",
+    "save": "Enregistrer mes choix",
+    "prefs_title": "Préférences de cookies",
+    "prefs_intro": "Choisissez les cookies que vous acceptez. Votre choix est enregistré pour ce navigateur et reste modifiable à tout moment.",
+    "necessary": "Nécessaires",
+    "necessary_text": "Indispensables au fonctionnement du site : panier, paiement, sécurité. Ils ne peuvent pas être désactivés.",
+    "always_on": "Toujours actifs",
+    "preferences": "Préférences",
+    "preferences_text": "Mémorisent vos choix, comme la langue ou le pays, pour vos prochaines visites.",
+    "analytics": "Mesure d'audience",
+    "analytics_text": "Nous aident à comprendre comment le site est utilisé, pour l'améliorer.",
+    "marketing": "Marketing",
+    "marketing_text": "Permettent de vous proposer des offres et des publicités adaptées à vos centres d'intérêt.",
+    "manage": "Gérer les cookies",
+    "saved": "Vos choix de cookies sont enregistrés."
   }
 }

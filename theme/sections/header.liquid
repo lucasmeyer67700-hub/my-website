@@ -129,10 +129,10 @@
 
 {%- liquid
   comment
-    Mobile menu: the brand, numbered links from its own menu or else the main
-    menu, a button, an optional editorial card, the help links not already
-    listed plus the account link, and the shop's reassurance lines. Fonts and
-    colours are set in the section so the menu keeps its own look.
+    Mobile menu: the brand, the links from its own menu or else the main
+    menu, a button, an optional editorial card, and the help links not
+    already listed plus the account link. Fonts and colours are set in the
+    section so the menu keeps its own look.
   endcomment
   assign drawer_menu = section.settings.drawer_menu
   if drawer_menu == blank or drawer_menu.links.size == 0
@@ -237,7 +237,6 @@
                     aria-current="page"
                   {% endif %}
                 >
-                  <span class="velea-menu__number" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
                   <span class="velea-menu__link-label">{{ link.title | escape }}</span>
                   {% render 'icon', icon: 'arrow-right', class: 'velea-menu__chevron' %}
                 </a>
@@ -325,23 +324,6 @@
               {{- help_links -}}
             </ul>
           </nav>
-        {%- endif -%}
-
-        {%- if settings.shipping_info != blank or settings.returns_info != blank -%}
-          <ul class="velea-menu__trust velea-menu__reveal" role="list" style="--velea-menu-index: 8;">
-            {%- if settings.shipping_info != blank -%}
-              <li class="velea-menu__trust-item">
-                <span class="velea-menu__trust-icon">{% render 'icon', icon: 'truck' %}</span>
-                <span>{{ settings.shipping_info | escape }}</span>
-              </li>
-            {%- endif -%}
-            {%- if settings.returns_info != blank -%}
-              <li class="velea-menu__trust-item">
-                <span class="velea-menu__trust-icon">{% render 'icon', icon: 'return' %}</span>
-                <span>{{ settings.returns_info | escape }}</span>
-              </li>
-            {%- endif -%}
-          </ul>
         {%- endif -%}
       </div>
     </div>
@@ -635,10 +617,10 @@
     border-block-start: 1px solid var(--velea-menu-border);
   }
 
-  /* Numbered links: a small number, the name in the serif font, an arrow */
+  /* Links: the name in the serif font, an arrow */
   .velea-menu__link {
     display: grid;
-    grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.5rem;
     min-height: 3.75rem;
@@ -658,15 +640,6 @@
     &:hover .velea-menu__link-label {
       transform: translateX(0.15rem);
     }
-  }
-
-  .velea-menu__number {
-    align-self: start;
-    padding-block-start: 0.55rem;
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    font-variant-numeric: tabular-nums;
-    color: var(--velea-menu-text-muted);
   }
 
   .velea-menu__link-label {
@@ -815,40 +788,6 @@
     &:hover,
     &[aria-current='page'] {
       color: var(--velea-menu-text);
-    }
-  }
-
-  .velea-menu__trust {
-    display: grid;
-    gap: 0.75rem;
-    margin: auto 0 0;
-    padding: 1.25rem 0 0;
-    border-block-start: 1px solid var(--velea-menu-border);
-    list-style: none;
-    font-size: 0.8125rem;
-    line-height: 1.4;
-    color: var(--velea-menu-text-muted);
-  }
-
-  .velea-menu__trust-item {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-  }
-
-  .velea-menu__trust-icon {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    color: var(--rose-text);
-    background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.8), rgb(var(--rose-strong-rgb) / 0.1) 70%);
-    box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.35);
-
-    & .icon {
-      --icon-size: 1rem;
     }
   }
 

@@ -1920,6 +1920,246 @@ class VideoPlayer extends HTMLElement {
 customElements.define('video-player', VideoPlayer);
 
 /* -------------------------------------------------------------------------- */
+/* Cookie consent: the theme's banner, recorded through Shopify's privacy API */
+/* -------------------------------------------------------------------------- */
+
+const COOKIE_PURPOSES = ['preferences', 'analytics', 'marketing'];
+// A choice kept here is asked again after about six months.
+const COOKIE_MEMORY = 182 * 24 * 60 * 60 * 1000;
+const cookieStore = {
+  get() {
+    try {
+      return JSON.parse(window.localStorage.getItem('velea:cookies')) || {};
+    } catch (error) {
+      return {};
+    }
+  },
+  set(value) {
+    try {
+      window.localStorage.setItem('velea:cookies', JSON.stringify(value));
+    } catch (error) {
+      // Storage can be blocked (private mode): Shopify still keeps the choice.
+    }
+  },
+};
+
+let customerPrivacyLoading = null;
+
+/** Shopify's built-in cookie banner, when it is switched on in the shop's privacy settings. */
+function shopifyBannerShown() {
+  return Boolean(document.querySelector('#shopify-pc__banner, [id^="shopify-pc__banner"]'));
+}
+
+/**
+ * Shopify's Customer Privacy API, loaded once. Resolves to null where it is not
+ * available, so the banner still works and simply keeps the choice locally.
+ * @returns {Promise<object|null>}
+ */
+function loadCustomerPrivacy() {
+  if (customerPrivacyLoading) return customerPrivacyLoading;
+  customerPrivacyLoading = new Promise((resolve) => {
+    const shopify = window.Shopify;
+    if (shopify?.customerPrivacy) {
+      resolve(shopify.customerPrivacy);
+      return;
+    }
+    if (typeof shopify?.loadFeatures !== 'function') {
+      resolve(null);
+      return;
+    }
+    const timer = setTimeout(() => resolve(shopify.customerPrivacy || null), 5000);
+    const load = (versions) => {
+      shopify.loadFeatures([{ name: 'consent-tracking-api', version: versions[0] }], (error) => {
+        if (error && versions.length > 1) {
+          load(versions.slice(1));
+          return;
+        }
+        clearTimeout(timer);
+        resolve(shopify.customerPrivacy || null);
+      });
+    };
+    load(['0.2', '0.1']);
+  });
+  return customerPrivacyLoading;
+}
+
+class CookieConsent extends HTMLElement {
+  #controller = null;
+  #lastFocus = null;
+  #useShopifyBanner = false;
+
+  connectedCallback() {
+    this.banner = this.querySelector('[data-cookie-banner]');
+    this.prefs = this.querySelector('[data-cookie-prefs]');
+    if (!this.banner || !this.prefs) return;
+    this.#controller?.abort();
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+
+    this.addEventListener('click', (event) => {
+      const choice = event.target.closest('[data-cookie-choice]');
+      if (choice) {
+        this.#choose(choice.dataset.cookieChoice);
+        return;
+      }
+      if (event.target.closest('[data-cookie-open-prefs]')) this.openPreferences();
+      if (event.target.closest('[data-cookie-close]')) this.prefs.close();
+    }, { signal });
+    // A click on the dimmed backdrop closes the preferences.
+    this.prefs.addEventListener('click', (event) => {
+      if (event.target === this.prefs) this.prefs.close();
+    }, { signal });
+    this.prefs.addEventListener('close', () => {
+      if (this.#lastFocus instanceof HTMLElement && this.#lastFocus.isConnected) {
+        this.#lastFocus.focus({ preventScroll: true });
+      }
+    }, { signal });
+
+    // « Gérer les cookies » links reopen the choices at any time.
+    for (const link of document.querySelectorAll('[data-cookie-preferences]')) {
+      link.hidden = false;
+      link.addEventListener('click', () => this.#manage(), { signal });
+    }
+
+    if (this.hasAttribute('data-design-mode')) {
+      document.addEventListener('shopify:section:select', (event) => {
+        if (event.detail?.sectionId === this.dataset.sectionId) this.#showBanner(false);
+      }, { signal });
+      document.addEventListener('shopify:section:deselect', (event) => {
+        if (event.detail?.sectionId === this.dataset.sectionId) this.#hideBanner();
+      }, { signal });
+      return;
+    }
+
+    // Decide once the page has settled, so Shopify's own banner, if it is
+    // switched on, has had time to appear: there is never a second banner.
+    const decide = () => setTimeout(() => this.#decide(), 500);
+    if (document.readyState === 'complete') {
+      decide();
+    } else {
+      window.addEventListener('load', decide, { once: true, signal });
+    }
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    document.documentElement.removeAttribute('data-cookie-banner-open');
+  }
+
+  async #decide() {
+    if (shopifyBannerShown()) {
+      this.#useShopifyBanner = true;
+      return;
+    }
+    const consent = await this.#currentConsent();
+    // « ?cookies » in the address shows the banner again, to preview it at any time.
+    const preview = new URL(window.location.href).searchParams.has('cookies');
+    if (consent.decided && !preview) return;
+    this.#showBanner(true);
+    this.#yieldToShopifyBanner();
+  }
+
+  /** Shopify's own banner can arrive a little later: this one then steps aside. */
+  #yieldToShopifyBanner() {
+    const observer = new MutationObserver(() => {
+      if (!shopifyBannerShown()) return;
+      observer.disconnect();
+      this.#useShopifyBanner = true;
+      this.#hideBanner();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 10000);
+    this.#controller?.signal.addEventListener('abort', () => observer.disconnect());
+  }
+
+  /** @returns {Promise<{decided: boolean, preferences: boolean, analytics: boolean, marketing: boolean}>} */
+  async #currentConsent() {
+    const privacy = await loadCustomerPrivacy();
+    let shopifyConsent = null;
+    try {
+      shopifyConsent = privacy?.currentVisitorConsent?.() || null;
+    } catch (error) {
+      shopifyConsent = null;
+    }
+    const kept = cookieStore.get();
+    const keptIsRecent = Boolean(kept.decidedAt) && Date.now() - kept.decidedAt < COOKIE_MEMORY;
+    const result = { decided: keptIsRecent };
+    for (const purpose of COOKIE_PURPOSES) {
+      // Shopify answers 'yes', 'no', or '' when the visitor has not chosen yet.
+      const answer = shopifyConsent?.[purpose];
+      if (answer) result.decided = true;
+      result[purpose] = answer ? answer === 'yes' : kept[purpose] === true;
+    }
+    return result;
+  }
+
+  /** @param {boolean} focus - move focus to the banner (not in the theme editor) */
+  #showBanner(focus) {
+    this.banner.hidden = false;
+    document.documentElement.setAttribute('data-cookie-banner-open', '');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.banner.classList.add('is-visible'));
+    });
+    // Keyboard and screen reader users meet the choice first, without the page scrolling.
+    if (focus && (document.activeElement === document.body || !document.activeElement)) {
+      this.banner.focus({ preventScroll: true });
+    }
+  }
+
+  #hideBanner() {
+    this.banner.classList.remove('is-visible');
+    document.documentElement.removeAttribute('data-cookie-banner-open');
+    setTimeout(() => {
+      if (!this.banner.classList.contains('is-visible')) this.banner.hidden = true;
+    }, 450);
+  }
+
+  async openPreferences() {
+    const consent = await this.#currentConsent();
+    for (const input of this.querySelectorAll('[data-cookie-purpose]')) {
+      input.checked = consent[input.dataset.cookiePurpose] === true;
+    }
+    if (this.prefs.open) return;
+    this.#lastFocus = document.activeElement;
+    this.prefs.showModal();
+  }
+
+  #manage() {
+    // Where Shopify's own banner is in use, its preferences open instead.
+    if (this.#useShopifyBanner && typeof window.privacyBanner?.showPreferences === 'function') {
+      window.privacyBanner.showPreferences();
+      return;
+    }
+    this.openPreferences();
+  }
+
+  /** @param {string} choice - 'accept', 'reject' or 'save' */
+  async #choose(choice) {
+    const values = {};
+    for (const purpose of COOKIE_PURPOSES) {
+      if (choice === 'accept') values[purpose] = true;
+      else if (choice === 'reject') values[purpose] = false;
+      else values[purpose] = Boolean(this.querySelector(`[data-cookie-purpose="${purpose}"]`)?.checked);
+    }
+    cookieStore.set({ decidedAt: Date.now(), ...values });
+    if (this.prefs.open) this.prefs.close();
+    this.#hideBanner();
+    announce(theme.strings.cookiesSaved);
+    document.dispatchEvent(new CustomEvent('theme:cookie-consent', { detail: values }));
+
+    const privacy = await loadCustomerPrivacy();
+    if (typeof privacy?.setTrackingConsent !== 'function') return;
+    try {
+      privacy.setTrackingConsent(values, () => {});
+    } catch (error) {
+      // The choice stays kept in this browser; Shopify asks again if it missed it.
+    }
+  }
+}
+
+customElements.define('cookie-consent', CookieConsent);
+
+/* -------------------------------------------------------------------------- */
 /* Welcome pop-up: shown once, 10 s after the visitor arrives on the site     */
 /* -------------------------------------------------------------------------- */
 
@@ -1947,6 +2187,7 @@ class WelcomePopup extends HTMLElement {
   #controller = null;
   #timer = null;
   #lastFocus = null;
+  #prepared = false;
 
   connectedCallback() {
     this.dialog = this.querySelector('[data-welcome-dialog]');
@@ -1996,6 +2237,7 @@ class WelcomePopup extends HTMLElement {
 
     // « ?offre » in the address shows the pop-up at once, to preview it at any time.
     if (new URL(window.location.href).searchParams.has('offre')) {
+      this.#prepare();
       this.#timer = setTimeout(() => this.open(true), 800);
       return;
     }
@@ -2021,6 +2263,7 @@ class WelcomePopup extends HTMLElement {
     // Count the delay from the visitor's arrival on the site, across pages.
     const delay = Number(this.dataset.delay) || 7000;
     this.#timer = setTimeout(() => this.open(), Math.max(1000, delay - (now - visitStart)));
+    this.#prepare();
   }
 
   disconnectedCallback() {
@@ -2036,9 +2279,38 @@ class WelcomePopup extends HTMLElement {
       this.#timer = setTimeout(() => this.open(), 5000);
       return;
     }
+    // The cookie banner comes first: the offer follows a moment after the visitor's choice.
+    if (!force && document.documentElement.hasAttribute('data-cookie-banner-open')) {
+      document.addEventListener('theme:cookie-consent', () => {
+        this.#timer = setTimeout(() => this.open(), 1500);
+      }, { once: true, signal: this.#controller?.signal });
+      return;
+    }
+    this.#prepare();
     this.#lastFocus = document.activeElement;
     this.dialog.showModal();
     track('theme:welcome_view');
+  }
+
+  /**
+   * The photo and the serif used only in the pop-up are fetched while the page
+   * is idle, once it is due to open, so it appears complete.
+   */
+  #prepare() {
+    if (this.#prepared) return;
+    this.#prepared = true;
+    const warm = () => {
+      for (const image of this.querySelectorAll('img[loading="lazy"]')) image.loading = 'eager';
+      if (!document.fonts) return;
+      for (const font of (this.dataset.warmFonts || '').split('|').filter(Boolean)) {
+        document.fonts.load(font).catch(() => {});
+      }
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(warm, { timeout: 3000 });
+    } else {
+      setTimeout(warm, 1500);
+    }
   }
 
   #remember() {

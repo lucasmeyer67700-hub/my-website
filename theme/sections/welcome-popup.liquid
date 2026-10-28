@@ -23,10 +23,30 @@
     assign offer_new_price_text = offer_new_price | money
   endif
 
+  comment
+    The photo is only the one chosen in the section. Without it the pop-up is a
+    single column; in the theme editor an empty photo place shows where it goes.
+  endcomment
   assign visual_image = section.settings.image
-  if visual_image == blank and offer_product.featured_media
-    assign visual_image = offer_product.featured_media.preview_image
+  assign show_slot = false
+  if visual_image == blank and request.design_mode
+    assign show_slot = true
   endif
+  assign has_media = false
+  if visual_image != blank or show_slot
+    assign has_media = true
+  endif
+
+  assign heading_font = section.settings.heading_font
+  assign heading_italic = heading_font | font_modify: 'style', 'italic'
+  capture warm_fonts
+    unless heading_font.system?
+      echo heading_font.weight | append: ' 1em ' | append: heading_font.family
+      if heading_italic
+        echo '|italic ' | append: heading_italic.weight | append: ' 1em ' | append: heading_font.family
+      endif
+    endunless
+  endcapture
 
   assign show_popup = section.settings.enabled
   if customer and customer.accepts_marketing
@@ -37,16 +57,26 @@
   endif
 -%}
 {%- if show_popup or request.design_mode -%}
+  {%- style -%}
+    {{ heading_font | font_face: font_display: 'swap' }}
+    {%- if heading_italic %}{{ heading_italic | font_face: font_display: 'swap' }}{% endif %}
+    .section-welcome-popup .welcome-popup {
+      --welcome-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+      --welcome-font-weight: {{ heading_font.weight }};
+    }
+  {%- endstyle -%}
+
   <welcome-popup
     data-delay="{{ section.settings.delay | times: 1000 }}"
     data-snooze-days="{{ section.settings.snooze_days }}"
     data-section-id="{{ section.id }}"
+    data-warm-fonts="{{ warm_fonts | strip | escape }}"
     {% if request.design_mode %}
       data-design-mode
     {% endif %}
   >
     <dialog
-      class="welcome-popup color-{{ section.settings.color_scheme }}"
+      class="welcome-popup color-{{ section.settings.color_scheme }}{% if has_media %} welcome-popup--media{% endif %}"
       aria-labelledby="WelcomeTitle-{{ section.id }}"
       aria-describedby="WelcomeText-{{ section.id }}"
       data-welcome-dialog
@@ -54,57 +84,65 @@
       <div class="welcome-popup__panel">
         <button
           type="button"
-          class="icon-button welcome-popup__close"
+          class="welcome-popup__close"
           data-welcome-close
           aria-label="{{ 'general.close' | t }}"
         >
           {% render 'icon', icon: 'close' %}
         </button>
 
-        <div
-          class="welcome-popup__visual{% if visual_image != blank %} welcome-popup__visual--image{% else %} has-drops{% endif %}"
-          aria-hidden="true"
-        >
-          {%- if visual_image != blank -%}
-            {% render 'responsive-image',
-              image: visual_image,
-              sizes: '(min-width: 750px) 24rem, 100vw',
-              widths: '400, 600, 800, 1000',
-              decorative: true,
-              class: 'welcome-popup__image'
-            %}
-          {%- else -%}
-            {% render 'drops', density: 'light' %}
-          {%- endif -%}
-          <span class="welcome-popup__seal">
-            <span class="welcome-popup__seal-value">−{{ percent }}&nbsp;%</span>
-            <span class="welcome-popup__seal-label">{{ section.settings.seal_label | escape }}</span>
-          </span>
-          {%- if settings.brand_tagline != blank and visual_image == blank -%}
-            <span class="welcome-popup__tagline">{{ settings.brand_tagline | escape }}</span>
-          {%- endif -%}
-        </div>
+        {%- if has_media -%}
+          <div
+            class="welcome-popup__media{% if show_slot %} welcome-popup__media--slot{% endif %}"
+            {% unless show_slot %}
+              aria-hidden="true"
+            {% endunless %}
+          >
+            {%- if visual_image != blank -%}
+              {%- capture image_style -%}object-position: {{ visual_image.presentation.focal_point | default: 'center' }};{%- endcapture -%}
+              {{
+                visual_image
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'welcome-popup__image',
+                  widths: '480, 720, 960, 1200, 1400',
+                  sizes: '(min-width: 750px) 27rem, 100vw',
+                  loading: 'lazy',
+                  alt: '',
+                  style: image_style
+              }}
+            {%- else -%}
+              <span class="welcome-popup__slot">
+                {% render 'icon', icon: 'image' %}
+                <span class="welcome-popup__slot-title">{{ 'welcome.photo_slot_title' | t }}</span>
+                <span class="welcome-popup__slot-text">{{ 'welcome.photo_slot_text' | t }}</span>
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
 
         <div class="welcome-popup__body">
           {%- form 'customer', id: form_id, class: 'welcome-popup__form', novalidate: 'novalidate' -%}
             {%- if form.posted_successfully? -%}
               <div class="welcome-popup__content" data-welcome-success>
-                <span class="welcome-popup__check">{% render 'icon', icon: 'check' %}</span>
-                <p class="eyebrow eyebrow--center">{{ 'welcome.success_eyebrow' | t }}</p>
-                <h2 class="welcome-popup__title h3" id="WelcomeTitle-{{ section.id }}" tabindex="-1" autofocus>
+                <p class="welcome-popup__brand" aria-hidden="true">{{ shop.name | escape }}</p>
+                <p class="welcome-popup__eyebrow">{{ 'welcome.success_eyebrow' | t }}</p>
+                <h2 class="welcome-popup__title welcome-popup__title--success" id="WelcomeTitle-{{ section.id }}" tabindex="-1" autofocus>
                   {{- section.settings.success_heading | escape -}}
                 </h2>
+                <span class="welcome-popup__rule" aria-hidden="true"></span>
                 <p class="welcome-popup__text" id="WelcomeText-{{ section.id }}">
                   {{- section.settings.success_text | escape -}}
                 </p>
                 {%- if section.settings.code != blank -%}
                   <copy-button class="welcome-popup__code" data-copy="{{ section.settings.code | escape }}">
+                    <span class="welcome-popup__code-label">{{ 'welcome.your_code' | t }}</span>
                     <span class="welcome-popup__code-value">{{ section.settings.code | escape }}</span>
-                    <button type="button" class="button button--secondary button--small">{{ 'gift_card.copy' | t }}</button>
+                    <button type="button" class="welcome-popup__copy">{{ 'gift_card.copy' | t }}</button>
                     <span class="visually-hidden" data-copy-status hidden>{{ 'gift_card.copied' | t }}</span>
                   </copy-button>
                   <a
-                    class="button button--full"
+                    class="button button--full welcome-popup__submit"
                     href="{{ discount_base }}{{ section.settings.code | url_encode }}?redirect={{ redirect_url | url_encode }}"
                   >
                     {%- if offer_product -%}
@@ -112,63 +150,60 @@
                     {%- else -%}
                       {{- 'welcome.use_code' | t -}}
                     {%- endif -%}
-                    {% render 'icon', icon: 'arrow-right' %}
                   </a>
                   <p class="welcome-popup__note">{{ 'welcome.auto_applied' | t }}</p>
                 {%- endif -%}
-                <button type="button" class="text-button welcome-popup__later" data-welcome-close>
-                  {{- 'welcome.keep_browsing' | t -}}
-                </button>
                 {%- if section.settings.conditions != blank -%}
                   <p class="welcome-popup__legal">{{ section.settings.conditions | escape }}</p>
                 {%- endif -%}
+                <button type="button" class="welcome-popup__later" data-welcome-close>
+                  {{- 'welcome.keep_browsing' | t -}}
+                </button>
               </div>
             {%- else -%}
               <div class="welcome-popup__content">
                 <input type="hidden" name="contact[tags]" value="newsletter,popup-bienvenue">
+                <p class="welcome-popup__brand" aria-hidden="true">{{ shop.name | escape }}</p>
                 {%- if section.settings.eyebrow != blank -%}
-                  <p class="eyebrow eyebrow--center">{{ section.settings.eyebrow | escape }}</p>
+                  <p class="welcome-popup__eyebrow">{{ section.settings.eyebrow | escape }}</p>
                 {%- endif -%}
-                <h2 class="welcome-popup__title h2" id="WelcomeTitle-{{ section.id }}" tabindex="-1" autofocus>
-                  {{- section.settings.heading -}}
+                <h2 class="welcome-popup__title" id="WelcomeTitle-{{ section.id }}" tabindex="-1" autofocus>
+                  <span class="welcome-popup__figure">
+                    <span class="welcome-popup__number">{{ percent }}</span>
+                    <span class="welcome-popup__percent">%</span>
+                  </span>
+                  {% if section.settings.seal_label != blank -%}
+                    <span class="welcome-popup__subtitle">{{ section.settings.seal_label | escape }}</span>
+                  {%- endif %}
                 </h2>
+                <span class="welcome-popup__rule" aria-hidden="true"></span>
+
+                {%- if offer_product -%}
+                  <p class="welcome-popup__price">
+                    {%- if section.settings.offer_label != blank -%}
+                      <span class="welcome-popup__price-label">{{ section.settings.offer_label | escape }}</span>
+                    {%- endif -%}
+                    <span class="welcome-popup__price-values">
+                      <s class="welcome-popup__price-old">
+                        <span class="visually-hidden">{{ 'welcome.regular_price' | t }}</span>
+                        {{- offer_price | money -}}
+                      </s>
+                      <strong class="welcome-popup__price-new">
+                        <span class="visually-hidden">{{ 'welcome.price_with_code' | t }}</span>
+                        {{- offer_new_price_text -}}
+                      </strong>
+                      <span class="welcome-popup__price-hint" aria-hidden="true">{{ 'welcome.with_code' | t }}</span>
+                    </span>
+                  </p>
+                {%- endif -%}
+
                 <p class="welcome-popup__text" id="WelcomeText-{{ section.id }}">
                   {{- section.settings.text | escape -}}
                 </p>
 
-                {%- if offer_product -%}
-                  <div class="welcome-popup__offer">
-                    <span class="welcome-popup__offer-thumb">
-                      {%- if offer_product.featured_media -%}
-                        {{
-                          offer_product.featured_media.preview_image
-                          | image_url: width: 160
-                          | image_tag: width: 56, height: 56, alt: '', loading: 'lazy', class: 'welcome-popup__offer-image'
-                        }}
-                      {%- else -%}
-                        <span class="welcome-popup__offer-drop"></span>
-                      {%- endif -%}
-                    </span>
-                    <span class="welcome-popup__offer-details">
-                      <span class="welcome-popup__offer-name">{{ section.settings.offer_label | escape }}</span>
-                      <span class="welcome-popup__offer-prices">
-                        <s class="welcome-popup__offer-old">
-                          <span class="visually-hidden">{{ 'welcome.regular_price' | t }}</span>
-                          {{- offer_price | money -}}
-                        </s>
-                        <strong class="welcome-popup__offer-new">
-                          <span class="visually-hidden">{{ 'welcome.price_with_code' | t }}</span>
-                          {{- offer_new_price_text -}}
-                        </strong>
-                        <span class="welcome-popup__offer-hint" aria-hidden="true">{{ 'welcome.with_code' | t }}</span>
-                      </span>
-                    </span>
-                  </div>
-                {%- endif -%}
-
                 {%- if form.errors -%}
                   <p
-                    class="form-message form-message--error"
+                    class="form-message form-message--error welcome-popup__error"
                     role="alert"
                     id="WelcomeError-{{ section.id }}"
                     data-welcome-error
@@ -179,41 +214,28 @@
                 {%- endif -%}
 
                 <div class="welcome-popup__fields">
-                  <div class="field">
-                    <label class="visually-hidden" for="WelcomeEmail-{{ section.id }}">
-                      {{- 'newsletter.label' | t -}}
-                    </label>
-                    <input
-                      class="field__input"
-                      type="email"
-                      id="WelcomeEmail-{{ section.id }}"
-                      name="contact[email]"
-                      autocomplete="email"
-                      autocapitalize="off"
-                      spellcheck="false"
-                      required
-                      placeholder="{{ 'newsletter.placeholder' | t }}"
-                      {% if form.errors %}
-                        aria-invalid="true"
-                        aria-describedby="WelcomeError-{{ section.id }}"
-                      {% endif %}
-                    >
-                  </div>
-                  <button type="submit" class="button button--full">
+                  <label class="visually-hidden" for="WelcomeEmail-{{ section.id }}">
+                    {{- 'newsletter.label' | t -}}
+                  </label>
+                  <input
+                    class="welcome-popup__input"
+                    type="email"
+                    id="WelcomeEmail-{{ section.id }}"
+                    name="contact[email]"
+                    autocomplete="email"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    required
+                    placeholder="{{ 'welcome.email_placeholder' | t }}"
+                    {% if form.errors %}
+                      aria-invalid="true"
+                      aria-describedby="WelcomeError-{{ section.id }}"
+                    {% endif %}
+                  >
+                  <button type="submit" class="button button--full welcome-popup__submit">
                     {{- section.settings.button_label | escape -}}
                   </button>
                 </div>
-
-                {%- if settings.shipping_info != blank or settings.returns_info != blank -%}
-                  <ul class="welcome-popup__perks" role="list">
-                    {%- if settings.shipping_info != blank -%}
-                      <li>{% render 'icon', icon: 'truck' %}<span>{{ settings.shipping_info | escape }}</span></li>
-                    {%- endif -%}
-                    {%- if settings.returns_info != blank -%}
-                      <li>{% render 'icon', icon: 'return' %}<span>{{ settings.returns_info | escape }}</span></li>
-                    {%- endif -%}
-                  </ul>
-                {%- endif -%}
 
                 <p class="welcome-popup__legal">
                   {{ 'welcome.consent' | t }}
@@ -222,7 +244,7 @@
                     <a href="{{ shop.privacy_policy.url }}">{{ 'welcome.privacy' | t }}</a>
                   {%- endif -%}
                 </p>
-                <button type="button" class="text-button welcome-popup__later" data-welcome-close>
+                <button type="button" class="welcome-popup__later" data-welcome-close>
                   {{- 'welcome.no_thanks' | t -}}
                 </button>
               </div>
@@ -235,46 +257,62 @@
 {%- endif -%}
 
 {% stylesheet %}
+  /*
+    Welcome offer. One calm column: the brand, the offer set large in the
+    serif, the price with the code, then the e-mail. With a photo, the photo
+    takes the left half on computers and a band at the top on phones.
+  */
   .welcome-popup {
-    width: min(100% - 2rem, 56rem);
-    max-height: min(100dvh - 2rem, 46rem);
+    --welcome-gutter: clamp(1.5rem, 1rem + 2.5vw, 3.25rem);
+    --welcome-line: rgb(var(--color-text-rgb) / 0.16);
+
+    width: min(100% - 2rem, 32rem);
+    max-height: min(100dvh - 2rem, 48rem);
     padding: 0;
-    border: 1px solid var(--warm-hairline);
-    border-radius: var(--radius-lg);
+    border: 0;
+    border-radius: 1.5rem;
     color: var(--color-text);
-    box-shadow: 0 40px 100px -40px rgb(48 39 36 / 0.55);
+    background-color: var(--color-background);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.45),
+      0 40px 110px -40px rgb(48 39 36 / 0.6);
     overflow: auto;
     overscroll-behavior: contain;
+    scrollbar-width: thin;
 
     &::backdrop {
-      background-color: rgb(var(--palette-scrim-rgb) / 0.5);
-      backdrop-filter: blur(4px);
+      background-color: rgb(var(--palette-scrim-rgb) / 0.48);
+      backdrop-filter: blur(6px);
     }
 
     &[open] {
-      animation: welcome-in var(--duration-slow) var(--ease-out);
+      animation: welcome-in 700ms var(--ease-out);
     }
 
     &[open]::backdrop {
-      animation: welcome-fade var(--duration-slow) var(--ease-out);
+      animation: welcome-fade 500ms ease-out;
     }
 
-    /* Phones: a bottom sheet, easy to reach with the thumb */
+    /* Phones: a sheet rising from the bottom, within reach of the thumb */
     @media screen and (max-width: 749px) {
       width: 100%;
       max-width: 100%;
-      max-height: 94dvh;
+      max-height: 92dvh;
       margin: auto 0 0;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      border-inline: 0;
-      border-block-end: 0;
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+  }
+
+  .welcome-popup--media {
+    @media screen and (min-width: 750px) {
+      width: min(100% - 3rem, 58rem);
     }
   }
 
   @keyframes welcome-in {
     from {
       opacity: 0;
-      transform: translateY(1.5rem) scale(0.985);
+      transform: translateY(1.25rem);
     }
   }
 
@@ -288,321 +326,339 @@
     position: relative;
     display: grid;
 
-    @media screen and (min-width: 750px) {
-      grid-template-columns: minmax(0, 9fr) minmax(0, 11fr);
-      min-height: 32rem;
+    .welcome-popup--media & {
+      @media screen and (min-width: 750px) {
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+        min-height: 35rem;
+      }
     }
   }
 
   .welcome-popup__close {
     position: absolute;
-    inset-block-start: var(--space-2xs);
-    inset-inline-end: var(--space-2xs);
-    z-index: 2;
-    border-radius: 50%;
-    background-color: rgb(var(--palette-warm-white-rgb) / 0.85);
-  }
-
-  /* Visual: pink with drops, or the product photo, and a warm seal */
-  .welcome-popup__visual {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
+    inset-block-start: 0.875rem;
+    inset-inline-end: 0.875rem;
+    z-index: 3;
     display: grid;
     place-items: center;
-    min-height: 8.5rem;
-    background:
-      radial-gradient(120% 90% at 50% 0%, rgb(255 255 255 / 0.55), transparent 60%),
-      linear-gradient(180deg, #f3dfe2 0%, #e8c7cd 100%);
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--welcome-line);
+    border-radius: 50%;
+    color: var(--color-text);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.82);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      background-color var(--duration-base) ease;
+
+    & .icon {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover {
+      background-color: rgb(var(--palette-warm-white-rgb));
+      transform: rotate(90deg);
+    }
+  }
+
+  /* The photo the shop chose, or the empty place for it in the theme editor */
+  .welcome-popup__media {
+    position: relative;
+    overflow: hidden;
+    height: clamp(8.5rem, 24dvh, 12.5rem);
+    background: linear-gradient(160deg, #f8ebed 0%, #efd3d8 100%);
 
     @media screen and (min-width: 750px) {
+      height: auto;
       min-height: 100%;
     }
-
-    /* The drop behind the seal would peek out from under it. */
-    & .drops__drop:nth-child(3) {
-      display: none;
-    }
-
-    /* Phones: a short band, so the drops move to the sides of the seal. */
-    @media screen and (max-width: 749px) {
-      & .drops__drop:nth-child(4) {
-        left: 76%;
-      }
-
-      & .drops__drop:nth-child(5) {
-        left: 89%;
-      }
-    }
-
-    & .welcome-popup__image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
   }
 
-  .welcome-popup__visual--image {
-    place-items: end start;
-    padding: var(--space-sm);
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(0deg, rgb(48 39 36 / 0.28), transparent 45%);
-    }
+  .welcome-popup__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .welcome-popup__seal {
-    position: relative;
-    z-index: 1;
+  .welcome-popup__media--slot {
+    display: grid;
+    padding: 0.875rem;
+    background: rgb(var(--palette-warm-white-rgb) / 0.55);
+  }
+
+  .welcome-popup__slot {
     display: grid;
     place-content: center;
-    gap: 0.35rem;
-    width: clamp(6.75rem, 5rem + 8vw, 11.5rem);
-    aspect-ratio: 1;
-    border-radius: 50%;
+    justify-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: 1.5px dashed rgb(var(--rose-strong-rgb) / 0.55);
+    border-radius: 1rem;
     text-align: center;
-    background:
-      radial-gradient(circle at 35% 25%, rgb(255 255 255 / 0.95), rgb(var(--palette-warm-white-rgb) / 0.88) 70%);
-    box-shadow:
-      0 0 0 1px rgb(var(--warm-rgb) / 0.6),
-      0 0 0 6px rgb(var(--palette-warm-white-rgb) / 0.45),
-      0 0 0 7px rgb(var(--warm-rgb) / 0.35),
-      0 24px 50px -24px rgb(120 60 72 / 0.55);
+    color: var(--color-text-muted);
 
-    .welcome-popup__visual--image & {
-      width: clamp(5.5rem, 4.5rem + 4vw, 7.5rem);
-    }
-
-    @media screen and (max-width: 749px) {
-      width: 6.25rem;
-
-      .welcome-popup__visual--image & {
-        width: 5.5rem;
-      }
+    & .icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      color: var(--rose-text);
     }
   }
 
-  .welcome-popup__seal-value {
-    font-family: var(--font-heading-family);
-    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
-    line-height: 1;
-    color: var(--warm-text);
-
-    .welcome-popup__visual--image & {
-      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
-    }
-
-    @media screen and (max-width: 749px) {
-      font-size: 1.75rem;
-
-      .welcome-popup__visual--image & {
-        font-size: 1.5rem;
-      }
-    }
-  }
-
-  .welcome-popup__seal-label {
-    max-width: 8ch;
-    margin-inline: auto;
-    font-size: 0.625rem;
-    font-weight: var(--font-body-weight-medium);
-    line-height: 1.3;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+  .welcome-popup__slot-title {
+    font-family: var(--welcome-font);
+    font-size: 1.125rem;
     color: var(--color-text);
-
-    @media screen and (max-width: 749px) {
-      display: none;
-    }
   }
 
-  /* Computers: the seal in the middle, the brand line at the bottom */
-  .welcome-popup__visual.has-drops {
-    @media screen and (min-width: 750px) {
-      grid-template-rows: 1fr auto 1fr;
-
-      & .welcome-popup__seal {
-        grid-row: 2;
-      }
-    }
-  }
-
-  .welcome-popup__tagline {
-    grid-row: 3;
-    align-self: end;
-    padding: 0 var(--space-md) var(--space-lg);
-    font-family: var(--font-heading-family);
-    font-size: var(--text-lg);
-    font-style: italic;
-    text-align: center;
-    color: var(--color-text);
-    opacity: 0.8;
-
-    @media screen and (max-width: 749px) {
-      display: none;
-    }
+  .welcome-popup__slot-text {
+    max-width: 30ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   .welcome-popup__body {
     display: grid;
     align-content: center;
-    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem) clamp(1.25rem, 0.75rem + 2vw, 2.75rem);
+    padding: 2.75rem var(--welcome-gutter) calc(1.25rem + env(safe-area-inset-bottom));
+    background-image:
+      radial-gradient(90% 60% at 50% 0%, rgb(255 255 255 / 0.55), transparent 70%),
+      radial-gradient(70% 50% at 100% 100%, rgb(var(--rose-strong-rgb) / 0.08), transparent 70%);
+
+    @media screen and (min-width: 750px) {
+      padding-block: 3.25rem 1.75rem;
+    }
   }
 
   .welcome-popup__content {
     display: grid;
-    gap: var(--space-xs);
     justify-items: center;
     text-align: center;
+
+    & > * {
+      animation: welcome-rise 700ms var(--ease-out) backwards;
+    }
+
+    & > :nth-child(3) {
+      animation-delay: 60ms;
+    }
+
+    & > :nth-child(4) {
+      animation-delay: 120ms;
+    }
+
+    & > :nth-child(n + 5) {
+      animation-delay: 180ms;
+    }
+  }
+
+  @keyframes welcome-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  .welcome-popup__brand {
+    margin: 0 0 1.5rem;
+    padding-inline-start: 0.42em;
+    font-family: var(--welcome-font);
+    font-size: 0.9375rem;
+    font-weight: var(--welcome-font-weight);
+    line-height: 1;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+
+  .welcome-popup__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin: 0 0 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1.4;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+
+    &::before,
+    &::after {
+      content: '';
+      width: 1.75rem;
+      height: 1px;
+      background-color: currentColor;
+      opacity: 0.45;
+    }
   }
 
   .welcome-popup__title {
-    margin-block-end: var(--space-3xs);
-    text-wrap: balance;
-
-    &.h2 {
-      font-size: calc(clamp(2rem, 1.6rem + 1.4vw, 2.75rem) * var(--font-heading-scale, 1));
-    }
+    display: grid;
+    justify-items: center;
+    margin: 0;
+    font-family: var(--welcome-font);
+    font-weight: var(--welcome-font-weight);
+    line-height: 1;
 
     /* Focused on opening so screen readers start here; it is not a control. */
     &:focus {
       outline: none;
     }
+  }
 
-    & em {
-      font-style: normal;
-      color: var(--warm-text);
-    }
+  .welcome-popup__figure {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.06em;
+    font-size: clamp(5rem, 4rem + 4vw, 6.75rem);
+    font-variant-numeric: lining-nums;
+    letter-spacing: -0.03em;
+    line-height: 0.88;
+  }
+
+  .welcome-popup__percent {
+    margin-block-start: 0.12em;
+    font-size: 0.4em;
+    letter-spacing: 0;
+  }
+
+  .welcome-popup__subtitle {
+    margin-block-start: 0.875rem;
+    font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem);
+    font-style: italic;
+    line-height: 1.2;
+    color: var(--rose-text);
+    text-wrap: balance;
+  }
+
+  .welcome-popup__title--success {
+    font-size: clamp(1.875rem, 1.6rem + 1vw, 2.375rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .welcome-popup__rule {
+    width: 2.5rem;
+    height: 1px;
+    margin-block: 1.25rem;
+    background-color: var(--rose-text);
+    opacity: 0.5;
+  }
+
+  .welcome-popup__price {
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    margin: 0 0 1rem;
+  }
+
+  .welcome-popup__price-label {
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .welcome-popup__price-values {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 0.625rem;
+  }
+
+  .welcome-popup__price-old {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+  }
+
+  .welcome-popup__price-new {
+    font-family: var(--welcome-font);
+    font-size: 1.5rem;
+    font-weight: var(--welcome-font-weight);
+    line-height: 1.1;
+  }
+
+  .welcome-popup__price-hint {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
   }
 
   .welcome-popup__text {
-    max-width: 34ch;
+    max-width: 30ch;
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
     color: var(--color-text-muted);
     text-wrap: pretty;
   }
 
-  /* The product and its price with the code */
-  .welcome-popup__offer {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: var(--space-xs) var(--space-sm);
-    border: 1px solid var(--warm-hairline);
-    border-radius: var(--radius-md);
-    background-color: rgb(var(--palette-warm-white-rgb) / 0.75);
-    text-align: start;
-  }
-
-  .welcome-popup__offer-thumb {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    overflow: hidden;
-    border-radius: var(--radius-sm);
-    background: linear-gradient(180deg, #f8ebed, #f3dfe2);
-
-    & .welcome-popup__offer-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .welcome-popup__offer-drop {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50% 0 50% 50%;
-    rotate: -45deg;
-    background:
-      radial-gradient(circle at 46% 30%, rgb(255 255 255 / 0.9) 0 6%, transparent 18%),
-      linear-gradient(225deg, #f7dde2 0%, #eab6c0 55%, var(--palette-rose-deep) 100%);
-    box-shadow: 0 0 0 1px rgb(var(--warm-rgb) / 0.6);
-  }
-
-  .welcome-popup__offer-details {
-    display: grid;
-    gap: 0.15rem;
-    min-width: 0;
-  }
-
-  .welcome-popup__offer-name {
-    font-size: var(--text-sm);
-    font-weight: var(--font-body-weight-medium);
-  }
-
-  .welcome-popup__offer-prices {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    column-gap: 0.5rem;
-  }
-
-  .welcome-popup__offer-old {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-  }
-
-  .welcome-popup__offer-new {
-    font-family: var(--font-heading-family);
-    font-size: var(--text-xl);
-    font-weight: 400;
-    line-height: 1.1;
-    color: var(--warm-text);
-  }
-
-  .welcome-popup__offer-hint {
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
+  .welcome-popup__error {
+    margin-block-end: 0.75rem;
   }
 
   .welcome-popup__fields {
     display: grid;
-    gap: var(--space-xs);
+    gap: 0.875rem;
     width: 100%;
-    margin-block-start: var(--space-3xs);
+    max-width: 22rem;
+  }
 
-    & .field {
-      width: 100%;
+  /* A single underlined line, like a signature field */
+  .welcome-popup__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 0.25rem;
+    border: 0;
+    border-block-end: 1px solid rgb(var(--color-text-rgb) / 0.4);
+    border-radius: 0;
+    font: inherit;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--color-text);
+    background: transparent;
+    transition:
+      border-color var(--duration-base) ease,
+      box-shadow var(--duration-base) ease;
+
+    &::placeholder {
+      color: var(--color-text-muted);
+      opacity: 1;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      border-block-end-color: var(--color-text);
+      box-shadow: 0 1px 0 0 var(--color-text);
+    }
+
+    &[aria-invalid='true'] {
+      border-block-end-color: var(--color-error, #a33a3a);
     }
   }
 
-  .welcome-popup__perks {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3xs) var(--space-sm);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: var(--text-xs);
-    color: var(--color-text);
-
-    & li {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    & .icon {
-      width: 1rem;
-      height: 1rem;
-      color: var(--warm-text);
-    }
+  .welcome-popup__submit {
+    min-height: 3.25rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .welcome-popup__legal,
   .welcome-popup__note {
-    max-width: 52ch;
-    font-size: var(--text-xs);
-    line-height: 1.5;
+    max-width: 46ch;
+    margin: 1.25rem 0 0;
+    font-size: 0.6875rem;
+    line-height: 1.55;
     color: var(--color-text-muted);
     text-wrap: pretty;
 
@@ -613,208 +669,159 @@
     }
   }
 
-  .welcome-popup__later {
-    min-height: var(--tap-target);
+  .welcome-popup__note {
+    margin-block-start: 0.75rem;
   }
 
-  .welcome-popup__check {
-    display: grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    color: var(--warm-text);
-    background-color: rgb(var(--palette-warm-white-rgb) / 0.8);
-    box-shadow: 0 0 0 1px rgb(var(--warm-rgb) / 0.6);
+  .welcome-popup__later {
+    min-height: var(--tap-target);
+    margin-block-start: 0.25rem;
+    padding: 0 0.5rem;
+    border: 0;
+    font: inherit;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    background: none;
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--color-text-rgb) / 0.35);
+    text-underline-offset: 0.3em;
+    cursor: pointer;
 
-    & .icon {
-      width: 1.25rem;
-      height: 1.25rem;
+    &:hover {
+      color: var(--color-text);
+      text-decoration-color: currentColor;
     }
   }
 
+  /* After the sign-up: the code, ready to copy */
   .welcome-popup__code {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
+    display: grid;
+    justify-items: center;
+    gap: 0.375rem;
     width: 100%;
-    padding: var(--space-sm);
-    border: 1px dashed rgb(var(--warm-rgb) / 0.8);
-    border-radius: var(--radius-md);
-    background-color: rgb(var(--palette-warm-white-rgb) / 0.75);
+    max-width: 22rem;
+    margin-block-end: 1rem;
+    padding: 1.125rem 1rem 0.75rem;
+    border: 1px dashed rgb(var(--rose-strong-rgb) / 0.6);
+    border-radius: 1rem;
+    background-color: rgb(255 255 255 / 0.55);
+  }
+
+  .welcome-popup__code-label {
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
   }
 
   .welcome-popup__code-value {
-    font-family: var(--font-heading-family);
-    font-size: var(--heading-4);
-    letter-spacing: 0.12em;
+    padding-inline-start: 0.2em;
+    font-family: var(--welcome-font);
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: 0.2em;
   }
 
-  /*
-    Computers: an editorial layout. The photo on the left, the offer on a warm
-    ivory page on the right, read from the left like a magazine page: the
-    −10 % large in italic, the e-mail and its button on one line.
-  */
-  @media screen and (min-width: 750px) {
-    .welcome-popup {
-      width: min(100% - 3rem, 62rem);
-      max-height: min(100dvh - 3rem, 44rem);
-      border: 0;
-      border-radius: 1.75rem;
-      box-shadow:
-        0 0 0 1px rgb(255 255 255 / 0.5),
-        0 50px 120px -40px rgb(48 39 36 / 0.65);
-    }
+  .welcome-popup__copy {
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    border: 0;
+    font: inherit;
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    background: none;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
 
-    .welcome-popup__panel {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      min-height: 36rem;
-    }
-
-    .welcome-popup__visual--image {
-      padding: var(--space-md);
-
-      &::after {
-        background:
-          linear-gradient(0deg, rgb(48 39 36 / 0.38), transparent 40%),
-          linear-gradient(90deg, transparent 70%, rgb(252 249 247 / 0.18));
-      }
-
-      & .welcome-popup__seal {
-        width: 7.25rem;
-        background: rgb(255 255 255 / 0.82);
-        backdrop-filter: blur(6px);
-      }
-    }
-
+  /* Short computer screens (laptops): the same page, set a little tighter */
+  @media screen and (min-width: 750px) and (max-height: 50rem) {
     .welcome-popup__body {
-      align-content: center;
-      padding: 3.25rem 3.25rem 2.5rem;
-      background-color: #fcf9f7;
-      background-image:
-        radial-gradient(80% 55% at 100% 0%, rgb(var(--rose-strong-rgb) / 0.1), transparent 65%),
-        radial-gradient(60% 45% at 0% 100%, rgb(var(--rose-strong-rgb) / 0.06), transparent 70%);
+      padding-block: 2.25rem 1.25rem;
     }
 
-    .welcome-popup__content {
-      gap: var(--space-sm);
-      justify-items: start;
-      text-align: start;
-
-      & .eyebrow--center {
-        justify-content: flex-start;
-      }
-
-      & .eyebrow--center::after {
-        display: none;
-      }
+    .welcome-popup__brand {
+      margin-block-end: 1rem;
     }
 
-    .welcome-popup__title {
-      margin-block: 0;
+    .welcome-popup__figure {
+      font-size: 4.75rem;
+    }
 
-      &.h2 {
-        font-size: calc(2.125rem * var(--font-heading-scale, 1));
-        line-height: 1.12;
-      }
+    .welcome-popup__subtitle {
+      margin-block-start: 0.625rem;
+    }
 
-      & em {
-        display: block;
-        margin-block-end: 0.2rem;
-        font-size: calc(4.5rem * var(--font-heading-scale, 1));
-        font-style: italic;
-        line-height: 0.95;
-        letter-spacing: -0.02em;
-        color: var(--rose-text);
-      }
+    .welcome-popup__rule {
+      margin-block: 0.875rem;
+    }
+
+    .welcome-popup__price {
+      margin-block-end: 0.75rem;
     }
 
     .welcome-popup__text {
-      max-width: 36ch;
+      margin-block-end: 1rem;
     }
 
-    .welcome-popup__offer {
-      padding: 0.875rem 1rem;
-      border-color: rgb(var(--rose-strong-rgb) / 0.2);
-      border-radius: 1rem;
-      background-color: #fff;
-      box-shadow: 0 18px 36px -30px rgb(73 53 47 / 0.6);
+    .welcome-popup__legal {
+      margin-block-start: 1rem;
     }
 
-    /* The e-mail and its button share one rounded line */
-    .welcome-popup__fields {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 0.375rem;
-      margin-block-start: var(--space-2xs);
-      padding: 0.375rem;
-      border: 1px solid rgb(var(--color-text-rgb) / 0.2);
-      border-radius: 999px;
-      background-color: #fff;
-      transition:
-        border-color var(--duration-fast) ease,
-        box-shadow var(--duration-fast) ease;
-
-      &:focus-within {
-        border-color: var(--color-text);
-        box-shadow: 0 0 0 4px rgb(var(--rose-strong-rgb) / 0.15);
-      }
-
-      & .field__input {
-        min-height: 3rem;
-        padding-inline: 1.25rem 0.5rem;
-        border: 0;
-        border-radius: 999px;
-        background-color: transparent;
-        outline: none;
-      }
-
-      & .button {
-        width: auto;
-        min-height: 3rem;
-        padding-inline: 1.75rem;
-        border-radius: 999px;
-        white-space: nowrap;
-      }
-    }
-
-    .welcome-popup__perks {
-      justify-content: flex-start;
-      width: 100%;
-      padding-block-start: var(--space-sm);
-      border-block-start: 1px solid rgb(var(--rose-strong-rgb) / 0.16);
-    }
-
-    .welcome-popup__legal,
-    .welcome-popup__note {
-      max-width: none;
-      font-size: 0.6875rem;
-    }
-
-    .welcome-popup__later {
-      min-height: 2.25rem;
-      margin-block-start: calc(var(--space-2xs) * -1);
-    }
-
-    .welcome-popup__code {
-      justify-content: flex-start;
+    .welcome-popup--media .welcome-popup__panel {
+      min-height: 0;
     }
   }
 
-  /* Tablets: narrower columns, so a little less padding and a taller frame */
-  @media screen and (min-width: 750px) and (max-width: 989px) {
-    .welcome-popup {
-      max-height: min(100dvh - 3rem, 54rem);
-    }
+  /* Phones with a photo: a slimmer band and tighter spacing, so the form stays in view */
+  @media screen and (max-width: 749px) {
+    .welcome-popup--media {
+      & .welcome-popup__media {
+        height: clamp(7rem, 18dvh, 9.5rem);
+      }
 
-    .welcome-popup__body {
-      padding: 2.5rem 2rem 2rem;
-    }
+      & .welcome-popup__body {
+        padding-block-start: 1.75rem;
+      }
 
-    .welcome-popup__title em {
-      font-size: calc(3.75rem * var(--font-heading-scale, 1));
+      & .welcome-popup__brand {
+        margin-block-end: 1rem;
+      }
+
+      & .welcome-popup__figure {
+        font-size: 4.25rem;
+      }
+
+      & .welcome-popup__subtitle {
+        margin-block-start: 0.625rem;
+      }
+
+      & .welcome-popup__rule {
+        margin-block: 0.875rem;
+      }
+
+      & .welcome-popup__price {
+        margin-block-end: 0.75rem;
+      }
+
+      & .welcome-popup__text {
+        margin-block-end: 1rem;
+      }
+
+      & .welcome-popup__legal {
+        margin-block-start: 1rem;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-popup[open],
+    .welcome-popup[open]::backdrop,
+    .welcome-popup__content > * {
+      animation: none;
     }
   }
 {% endstylesheet %}
@@ -859,13 +866,23 @@
     },
     {
       "type": "header",
+      "content": "Photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo de la pop-up",
+      "info": "Emplacement réservé à votre photo : à gauche sur ordinateur, en bandeau en haut sur téléphone. Format portrait conseillé (au moins 1200 px de large). Sans photo, la pop-up s'affiche sur une colonne."
+    },
+    {
+      "type": "header",
       "content": "Offre"
     },
     {
       "type": "product",
       "id": "product",
       "label": "Produit concerné par le code",
-      "info": "Affiche son prix avec la réduction et sa photo."
+      "info": "Affiche son prix avec la réduction."
     },
     {
       "type": "range",
@@ -880,21 +897,15 @@
     },
     {
       "type": "text",
-      "id": "offer_label",
-      "label": "Nom de l'offre",
-      "default": "La ceinture, à l'unité"
+      "id": "seal_label",
+      "label": "Texte sous le pourcentage",
+      "default": "offerts sur votre ceinture"
     },
     {
       "type": "text",
-      "id": "seal_label",
-      "label": "Texte sous la réduction",
-      "default": "sur votre ceinture"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image",
-      "info": "Par défaut, la première photo du produit."
+      "id": "offer_label",
+      "label": "Nom de l'offre, au-dessus du prix",
+      "default": "La ceinture, à l'unité"
     },
     {
       "type": "header",
@@ -907,22 +918,22 @@
       "default": "Offre de bienvenue"
     },
     {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "Titre",
-      "default": "<em>−10 %</em> sur votre ceinture"
-    },
-    {
       "type": "text",
       "id": "text",
       "label": "Texte",
-      "default": "Laissez votre e-mail : votre code s'affiche tout de suite."
+      "default": "Laissez votre e-mail : votre code s'affiche tout de suite."
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Bouton",
       "default": "Recevoir mon code"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Police du pourcentage et des titres",
+      "default": "playfair_display_n4"
     },
     {
       "type": "header",
@@ -962,7 +973,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Palette de couleurs",
-      "default": "scheme-3"
+      "default": "scheme-1"
     }
   ],
   "presets": [{ "name": "Pop-up de bienvenue" }]

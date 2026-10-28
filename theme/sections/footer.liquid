@@ -96,6 +96,9 @@
       <div class="site-footer__legal">
         {%- assign current_year = 'now' | date: '%Y' -%}
         <p>{{ 'general.copyright' | t: year: current_year, shop: shop.name }}</p>
+        <button type="button" class="site-footer__cookies" data-cookie-preferences aria-haspopup="dialog" hidden>
+          {{- 'cookies.manage' | t -}}
+        </button>
         {% render 'payment-icons' %}
       </div>
     </div>
@@ -223,6 +226,23 @@
     justify-content: space-between;
     gap: var(--space-sm);
     font-size: var(--text-xs);
+  }
+
+  .site-footer__cookies {
+    min-height: var(--tap-target);
+    margin-inline-end: auto;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-text);
+    }
   }
 {% endstylesheet %}
 

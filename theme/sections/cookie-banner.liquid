@@ -1,0 +1,550 @@
+{%- liquid
+  assign privacy_url = shop.privacy_policy.url
+  if section.settings.policy_page != blank
+    assign privacy_url = section.settings.policy_page.url
+  endif
+  assign heading_font = section.settings.heading_font
+-%}
+{%- if section.settings.enabled or request.design_mode -%}
+  {%- style -%}
+    {{ heading_font | font_face: font_display: 'swap' }}
+    .section-cookie-banner {
+      --cookie-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+      --cookie-font-weight: {{ heading_font.weight }};
+    }
+  {%- endstyle -%}
+  <cookie-consent
+    class="cookie-consent"
+    data-section-id="{{ section.id }}"
+    {% if request.design_mode %}
+      data-design-mode
+    {% endif %}
+  >
+    <div
+      class="cookie-banner color-{{ section.settings.color_scheme }}"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="CookieTitle-{{ section.id }}"
+      aria-describedby="CookieText-{{ section.id }}"
+      tabindex="-1"
+      data-cookie-banner
+      hidden
+    >
+      <p class="cookie-banner__eyebrow" aria-hidden="true">{{ 'cookies.eyebrow' | t }}</p>
+      <h2 class="cookie-banner__title" id="CookieTitle-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+      <p class="cookie-banner__text" id="CookieText-{{ section.id }}">
+        {{- section.settings.text | escape -}}
+        {%- if privacy_url != blank %}
+          <a href="{{ privacy_url }}">{{ 'cookies.policy' | t }}</a>
+        {%- endif -%}
+      </p>
+      <div class="cookie-banner__actions">
+        <button type="button" class="cookie-banner__button" data-cookie-choice="reject">
+          {{- 'cookies.reject_all' | t -}}
+        </button>
+        <button type="button" class="cookie-banner__button" data-cookie-choice="accept">
+          {{- 'cookies.accept_all' | t -}}
+        </button>
+      </div>
+      <button type="button" class="cookie-banner__customize" data-cookie-open-prefs aria-haspopup="dialog">
+        {{- 'cookies.customize' | t -}}
+      </button>
+    </div>
+
+    <dialog
+      class="cookie-prefs color-{{ section.settings.color_scheme }}"
+      aria-labelledby="CookiePrefsTitle-{{ section.id }}"
+      data-cookie-prefs
+    >
+      <div class="cookie-prefs__inner">
+        <div class="cookie-prefs__header">
+          <p class="cookie-banner__eyebrow" aria-hidden="true">{{ 'cookies.eyebrow' | t }}</p>
+          <h2 class="cookie-prefs__title" id="CookiePrefsTitle-{{ section.id }}">{{ 'cookies.prefs_title' | t }}</h2>
+          <button type="button" class="cookie-prefs__close" data-cookie-close aria-label="{{ 'general.close' | t }}">
+            {% render 'icon', icon: 'close' %}
+          </button>
+        </div>
+        <p class="cookie-prefs__intro">{{ 'cookies.prefs_intro' | t }}</p>
+
+        <ul class="cookie-prefs__list" role="list">
+          <li class="cookie-prefs__item">
+            <div class="cookie-prefs__label cookie-prefs__label--static">
+              <span class="cookie-prefs__name">{{ 'cookies.necessary' | t }}</span>
+              <span class="cookie-prefs__desc">{{ 'cookies.necessary_text' | t }}</span>
+            </div>
+            <span class="cookie-prefs__always">{{ 'cookies.always_on' | t }}</span>
+          </li>
+          <li class="cookie-prefs__item">
+            <label class="cookie-prefs__label" for="CookiePreferences-{{ section.id }}">
+              <span class="cookie-prefs__name">{{ 'cookies.preferences' | t }}</span>
+              <span class="cookie-prefs__desc">{{ 'cookies.preferences_text' | t }}</span>
+            </label>
+            <input
+              class="cookie-prefs__switch"
+              type="checkbox"
+              role="switch"
+              id="CookiePreferences-{{ section.id }}"
+              data-cookie-purpose="preferences"
+            >
+          </li>
+          <li class="cookie-prefs__item">
+            <label class="cookie-prefs__label" for="CookieAnalytics-{{ section.id }}">
+              <span class="cookie-prefs__name">{{ 'cookies.analytics' | t }}</span>
+              <span class="cookie-prefs__desc">{{ 'cookies.analytics_text' | t }}</span>
+            </label>
+            <input
+              class="cookie-prefs__switch"
+              type="checkbox"
+              role="switch"
+              id="CookieAnalytics-{{ section.id }}"
+              data-cookie-purpose="analytics"
+            >
+          </li>
+          <li class="cookie-prefs__item">
+            <label class="cookie-prefs__label" for="CookieMarketing-{{ section.id }}">
+              <span class="cookie-prefs__name">{{ 'cookies.marketing' | t }}</span>
+              <span class="cookie-prefs__desc">{{ 'cookies.marketing_text' | t }}</span>
+            </label>
+            <input
+              class="cookie-prefs__switch"
+              type="checkbox"
+              role="switch"
+              id="CookieMarketing-{{ section.id }}"
+              data-cookie-purpose="marketing"
+            >
+          </li>
+        </ul>
+
+        <div class="cookie-prefs__actions">
+          <button type="button" class="cookie-banner__button cookie-banner__button--quiet" data-cookie-choice="reject">
+            {{- 'cookies.reject_all' | t -}}
+          </button>
+          <button type="button" class="cookie-banner__button cookie-banner__button--quiet" data-cookie-choice="accept">
+            {{- 'cookies.accept_all' | t -}}
+          </button>
+          <button type="button" class="cookie-banner__button cookie-prefs__save" data-cookie-choice="save">
+            {{- 'cookies.save' | t -}}
+          </button>
+        </div>
+      </div>
+    </dialog>
+  </cookie-consent>
+{%- endif -%}
+
+{% stylesheet %}
+  /*
+    Cookie banner: a small card in the bottom corner on computers, a sheet at
+    the bottom on phones. It never blocks the page. Refusing takes exactly the
+    same effort as accepting: two identical buttons side by side.
+  */
+  .cookie-banner {
+    --cookie-line: rgb(var(--color-text-rgb) / 0.14);
+
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: calc(var(--z-drawer) - 1);
+    display: grid;
+    justify-items: center;
+    padding: 1.5rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+    border-radius: 1.5rem 1.5rem 0 0;
+    text-align: center;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    background-image: radial-gradient(90% 70% at 50% 0%, rgb(255 255 255 / 0.6), transparent 70%);
+    box-shadow:
+      0 0 0 1px var(--cookie-line),
+      0 -24px 60px -30px rgb(48 39 36 / 0.45);
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity 450ms var(--ease-out),
+      transform 600ms var(--ease-out);
+
+    &.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    @media screen and (min-width: 750px) {
+      inset-inline: 1.5rem auto;
+      inset-block-end: 1.5rem;
+      width: 25.5rem;
+      padding: 1.75rem 1.75rem 1.25rem;
+      border-radius: 1.5rem;
+      text-align: start;
+      justify-items: stretch;
+      box-shadow:
+        0 0 0 1px var(--cookie-line),
+        0 30px 80px -30px rgb(48 39 36 / 0.5);
+    }
+  }
+
+  .cookie-banner__eyebrow {
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .cookie-banner__title,
+  .cookie-prefs__title {
+    margin: 0;
+    font-family: var(--cookie-font);
+    font-size: 1.375rem;
+    font-weight: var(--cookie-font-weight);
+    line-height: 1.2;
+  }
+
+  .cookie-banner__text {
+    max-width: 40ch;
+    margin: 0.625rem 0 1.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+
+    & a {
+      color: var(--color-text);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      white-space: nowrap;
+    }
+  }
+
+  .cookie-banner__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    width: 100%;
+  }
+
+  .cookie-banner__button {
+    min-height: 2.875rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-button);
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-button-label);
+    background-color: var(--color-button);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) ease,
+      color var(--duration-base) ease;
+
+    /* Hover only with a mouse: on phones a tap would leave it stuck */
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-button);
+        background-color: transparent;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 3px;
+    }
+  }
+
+  .cookie-banner__button--quiet {
+    color: var(--color-button);
+    background-color: transparent;
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-button-label);
+        background-color: var(--color-button);
+      }
+    }
+  }
+
+  .cookie-banner__customize {
+    justify-self: center;
+    min-height: 2.75rem;
+    margin-block-start: 0.25rem;
+    padding: 0 0.5rem;
+    border: 0;
+    font: inherit;
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    background: none;
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--color-text-rgb) / 0.35);
+    text-underline-offset: 0.3em;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  /* While the banner is up, the help button and its bubble step aside on phones. */
+  html[data-cookie-banner-open] .assistant__nudge {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    html[data-cookie-banner-open] .assistant {
+      visibility: hidden;
+    }
+  }
+
+  /* Preferences: one line per kind of cookie, with a switch */
+  .cookie-prefs {
+    width: min(100% - 2rem, 34rem);
+    max-height: min(100dvh - 2rem, 44rem);
+    padding: 0;
+    border: 0;
+    border-radius: 1.5rem;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.45),
+      0 40px 110px -40px rgb(48 39 36 / 0.6);
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    &::backdrop {
+      background-color: rgb(var(--palette-scrim-rgb) / 0.48);
+      backdrop-filter: blur(6px);
+    }
+
+    &[open] {
+      animation: welcome-in 600ms var(--ease-out);
+    }
+
+    @media screen and (max-width: 749px) {
+      width: 100%;
+      max-width: 100%;
+      max-height: 92dvh;
+      margin: auto 0 0;
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+  }
+
+  .cookie-prefs__inner {
+    padding: 1.75rem clamp(1.25rem, 0.75rem + 2vw, 2.25rem) calc(1.25rem + env(safe-area-inset-bottom));
+  }
+
+  .cookie-prefs__header {
+    position: relative;
+    padding-inline-end: 3rem;
+  }
+
+  .cookie-prefs__close {
+    position: absolute;
+    inset-block-start: -0.25rem;
+    inset-inline-end: -0.25rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.16);
+    border-radius: 50%;
+    color: var(--color-text);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.8);
+    cursor: pointer;
+
+    & .icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .cookie-prefs__intro {
+    margin: 0.75rem 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .cookie-prefs__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cookie-prefs__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-block-start: 1px solid rgb(var(--color-text-rgb) / 0.12);
+  }
+
+  .cookie-prefs__label {
+    display: grid;
+    flex: 1;
+    gap: 0.25rem;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .cookie-prefs__label--static {
+    cursor: default;
+  }
+
+  .cookie-prefs__name {
+    font-family: var(--cookie-font);
+    font-size: 1.0625rem;
+    line-height: 1.3;
+  }
+
+  .cookie-prefs__desc {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  .cookie-prefs__always {
+    flex: none;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* A switch drawn from a checkbox: a pale knob on the left when off, on the right over brown when on */
+  .cookie-prefs__switch {
+    position: relative;
+    flex: none;
+    width: 2.75rem;
+    height: 1.625rem;
+    margin: 0;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.55);
+    border-radius: 999px;
+    background-color: rgb(var(--color-text-rgb) / 0.12);
+    appearance: none;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) ease,
+      border-color var(--duration-base) ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block-start: 0.1875rem;
+      inset-inline-start: 0.1875rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow:
+        0 0 0 1px rgb(var(--color-text-rgb) / 0.35),
+        0 1px 3px rgb(48 39 36 / 0.25);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+
+    &:checked {
+      border-color: var(--color-button);
+      background-color: var(--color-button);
+
+      &::after {
+        box-shadow: none;
+        transform: translateX(1.125rem);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 3px;
+    }
+  }
+
+  /* Refuse and accept side by side, alike; saving the switches below, full width */
+  .cookie-prefs__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.625rem;
+    margin-block-start: 0.5rem;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid rgb(var(--color-text-rgb) / 0.12);
+  }
+
+  .cookie-prefs__save {
+    grid-column: 1 / -1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cookie-banner,
+    .cookie-prefs__switch,
+    .cookie-prefs__switch::after {
+      transition: none;
+    }
+
+    .cookie-prefs[open] {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .cookie-prefs__switch::after {
+      background-color: ButtonText;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bannière cookies",
+  "tag": "div",
+  "class": "section-cookie-banner",
+  "limit": 1,
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Afficher la bannière cookies",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Elle s'affiche à chaque nouvelle visiteuse tant qu'aucun choix n'est fait, et enregistre ce choix auprès de Shopify (outil de confidentialité intégré). Si la bannière cookies de Shopify est activée dans Paramètres > Confidentialité des clients, c'est elle qui s'affiche et celle-ci s'efface, pour ne jamais en montrer deux. Le lien « Gérer les cookies » du pied de page rouvre les préférences."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Vos cookies, votre choix"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte",
+      "default": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page."
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Police des titres",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "page",
+      "id": "policy_page",
+      "label": "Page de politique de confidentialité",
+      "info": "Par défaut, la politique de confidentialité de la boutique."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [{ "name": "Bannière cookies" }]
+}
+{% endschema %}
