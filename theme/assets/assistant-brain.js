@@ -2066,7 +2066,7 @@
           ctx.reply.text(product.tagline || '');
           ctx.reply.list(lines(product.highlights).slice(0, 3));
         }
-        if (product.reviews) ctx.reply.link('Lire les avis de nos clientes', `${product.url}#avis`);
+        if (product.reviews) ctx.reply.link('Lire les avis', `${product.url}#avis`);
         this.#card(ctx, [product]);
       }
       if (this.facts.returns && (!product || this.has(product, 'heat'))) ctx.reply.text(`Et vous êtes tranquille : ${inline(this.facts.returns)}.`);
@@ -2079,16 +2079,16 @@
       const withReviews = this.products.filter((product) => product.reviews);
       const product = products[0];
       if (product && product.reviews) {
-        ctx.reply.text(`Les avis de nos clientes sur ${the(product)} sont en bas de sa fiche.`);
+        ctx.reply.text(`Les avis sur ${the(product)} sont en bas de ${grammar(product).plural ? 'leur' : 'sa'} fiche, avec ${grammar(product).plural ? 'leur' : 'sa'} note globale.`);
         ctx.reply.link('Lire les avis', `${product.url}#avis`);
       } else if (product && withReviews.length) {
         ctx.reply.text(`${the(product, true)} n'a pas encore d'avis publiés sur le site. Ceux de ${the(withReviews[0])} sont en bas de sa fiche.`);
         ctx.reply.link('Lire les avis', `${withReviews[0].url}#avis`);
       } else if (withReviews.length) {
-        ctx.reply.text(`Les avis de nos clientes sont en bas de la fiche ${this.#of(withReviews[0])}.`);
+        ctx.reply.text(`Les avis sont en bas de chaque fiche produit, par exemple celle ${this.#of(withReviews[0])}.`);
         ctx.reply.link('Lire les avis', `${withReviews[0].url}#avis`);
       } else {
-        ctx.reply.text('Les avis de nos clientes s’affichent sur les fiches produits.').link('Voir le catalogue', this.urls.catalogue);
+        ctx.reply.text('Les avis s’affichent sur les fiches produits.').link('Voir le catalogue', this.urls.catalogue);
       }
       ctx.reply.chip(CHIP.price, CHIP.guarantee);
     }

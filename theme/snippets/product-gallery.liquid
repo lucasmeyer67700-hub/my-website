@@ -5,6 +5,12 @@
   "gallery_badge" blocks. Works as a simple scrollable list without
   JavaScript. Without photos, empty photo slots are shown.
 
+  A photo belongs to a colour when its alt text or its file name holds that
+  colour (for example "Culotte menstruelle beige" or culotte-beige.jpg):
+  choosing the colour in the variant picker then shows it, and it opens the
+  page when that colour is the one selected. A photo attached to a variant
+  in Shopify takes precedence.
+
   @param {object} product - Product object
   @param {string} [fit] - 'contain' or 'cover'
   @param {string} [ratio] - CSS aspect-ratio for slides
@@ -17,6 +23,48 @@
 {%- liquid
   assign media_count = product.media.size
   assign initial_media = product.selected_or_first_available_variant.featured_media
+
+  comment
+    The product's colours as handles, longest first so that rose-blanc wins
+    over rose. A variant chosen in the page address, without its own photo,
+    opens on the photo of its colour.
+  endcomment
+  assign color_handles = ''
+  assign current_color = ''
+  for option in product.options_with_values
+    assign option_handle = option.name | handleize
+    if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+      for value in option.values
+        assign value_handle = value.name | handleize
+        assign color_handles = color_handles | append: value_handle | append: ','
+      endfor
+      if product.selected_variant
+        assign current_color = product.selected_variant.options[forloop.index0] | handleize
+      endif
+    endif
+  endfor
+  assign color_list = color_handles | split: ','
+  assign color_list_sorted = ''
+  for size in (1..40) reversed
+    for color in color_list
+      if color.size == size
+        assign color_list_sorted = color_list_sorted | append: color | append: ','
+      endif
+    endfor
+  endfor
+  assign color_list = color_list_sorted | split: ','
+  if initial_media == blank and current_color != blank
+    for media in product.media
+      capture media_color
+        render 'media-color', media: media, colors: color_list
+      endcapture
+      if media_color == current_color
+        assign initial_media = media
+        break
+      endif
+    endfor
+  endif
+
   assign slide_ratio = ratio | default: '1'
   assign slide_fit = fit | default: 'contain'
   comment
@@ -57,11 +105,22 @@
         aria-label="{{ 'products.gallery_label' | t }}"
       >
         {%- for media in product.media -%}
-          {%- assign media_alt = media.alt | default: product.title -%}
+          {%- liquid
+            assign media_alt = media.alt | default: product.title
+            assign media_color = ''
+            if color_list.size > 0
+              capture media_color
+                render 'media-color', media: media, colors: color_list
+              endcapture
+            endif
+          -%}
           <li
             class="gallery__slide"
             data-gallery-slide
             data-media-id="{{ media.id }}"
+            {% if media_color != blank %}
+              data-media-color="{{ media_color }}"
+            {% endif %}
             aria-label="{{ 'products.media_x_of_y' | t: index: forloop.index, count: media_count }}"
           >
             {%- case media.media_type -%}

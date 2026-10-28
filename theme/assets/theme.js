@@ -1536,8 +1536,34 @@ class VariantPicker extends HTMLElement {
 
       if (variant.featured_media_id) {
         scope.querySelector('media-gallery')?.showMedia(variant.featured_media_id);
+      } else {
+        this.#showColour(scope, variant);
       }
     }
+  }
+
+  /**
+   * Without a photo attached to the variant: the first photo of its colour
+   * (named in the photo's alt text or file name, see product-gallery).
+   * @param {ParentNode} scope
+   * @param {any} variant
+   */
+  #showColour(scope, variant) {
+    const index = Number(this.dataset.colorIndex);
+    if (!(index >= 0) || !variant.options?.[index]) return;
+    const handle = String(variant.options[index])
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const gallery = /** @type {any} */ (scope.querySelector('media-gallery'));
+    const slide = gallery?.querySelector(`[data-media-color="${handle}"]`);
+    if (!slide) return;
+    gallery.showMedia(slide.dataset.mediaId);
+    const image = slide.querySelector('img');
+    if (!image) return;
+    for (const thumb of scope.querySelectorAll('[data-variant-image]')) thumb.src = image.currentSrc || image.src;
   }
 }
 

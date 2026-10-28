@@ -1,0 +1,49 @@
+{% doc %}
+  The colour a product photo shows, read from its alt text or its file name:
+  the first of the given colours whose words all appear there, with the
+  French feminine and plural forms ("noire", "blanches"). Prints that
+  colour's handle, or nothing.
+
+  @param {object} media - Product media
+  @param {object} colors - List of colour handles, longest first ("rose-blanc" before "rose")
+
+  @example
+  {%- capture media_color -%}{% render 'media-color', media: media, colors: color_list %}{%- endcapture -%}
+{% enddoc %}
+{%- liquid
+  assign file_name = media.preview_image.src | split: '?' | first | split: '/' | last
+  assign media_words = media.alt | append: ' ' | append: file_name | handleize | prepend: '-' | append: '-'
+  for color in colors
+    if color == blank
+      continue
+    endif
+    assign parts = color | split: '-'
+    assign found_all = true
+    for part in parts
+      assign forms = part | append: ',' | append: part | append: 'e,' | append: part | append: 's,' | append: part | append: 'es'
+      assign last_letter = part | slice: -1
+      if last_letter == 'c'
+        assign stem_size = part.size | minus: 1
+        assign stem = part | slice: 0, stem_size
+        assign forms = forms | append: ',' | append: stem | append: 'che,' | append: stem | append: 'ches'
+      endif
+      assign found = false
+      assign form_list = forms | split: ','
+      for form in form_list
+        assign wanted = '-' | append: form | append: '-'
+        if media_words contains wanted
+          assign found = true
+          break
+        endif
+      endfor
+      unless found
+        assign found_all = false
+        break
+      endunless
+    endfor
+    if found_all
+      echo color
+      break
+    endif
+  endfor
+-%}

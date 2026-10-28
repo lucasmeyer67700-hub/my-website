@@ -26,10 +26,14 @@
       one item. Used to show the saving of multi-item offers.
     endcomment
     assign offer_index = -1
+    assign color_index = -1
     for option in product.options_with_values
       assign option_handle = option.name | handleize
       if option_handle == 'offre' or option_handle == 'offer' or option_handle == 'pack' or option_handle == 'lot'
         assign offer_index = forloop.index0
+      endif
+      if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+        assign color_index = forloop.index0
       endif
     endfor
     assign unit_text = unit_label
@@ -48,7 +52,8 @@
       endfor
     endif
   -%}
-  <variant-picker class="variant-picker">
+  {%- comment -%} The colour option's place: choosing a colour shows that colour's photo (see product-gallery). {%- endcomment -%}
+  <variant-picker class="variant-picker" data-color-index="{{ color_index }}">
     {%- for option in product.options_with_values -%}
       {%- liquid
         comment
