@@ -1987,6 +1987,8 @@ class CookieConsent extends HTMLElement {
   #controller = null;
   #lastFocus = null;
   #useShopifyBanner = false;
+  #answered = false;
+  #showTimer = 0;
 
   connectedCallback() {
     this.banner = this.querySelector('[data-cookie-banner]');
@@ -2031,32 +2033,41 @@ class CookieConsent extends HTMLElement {
       return;
     }
 
-    // Decide once the page has settled, so Shopify's own banner, if it is
-    // switched on, has had time to appear: there is never a second banner.
-    const decide = () => setTimeout(() => this.#decide(), 500);
-    if (document.readyState === 'complete') {
-      decide();
-    } else {
-      window.addEventListener('load', decide, { once: true, signal });
-    }
+    this.#decide();
   }
 
   disconnectedCallback() {
     this.#controller?.abort();
+    clearTimeout(this.#showTimer);
     document.documentElement.removeAttribute('data-cookie-banner-open');
   }
 
-  async #decide() {
+  /**
+   * Shown as the site opens, without waiting for the rest of the page. A choice
+   * kept in this browser skips it; a choice only Shopify still holds hides it
+   * again quietly; Shopify's own banner, if switched on, takes its place.
+   */
+  #decide() {
     if (shopifyBannerShown()) {
       this.#useShopifyBanner = true;
       return;
     }
-    const consent = await this.#currentConsent();
     // « ?cookies » in the address shows the banner again, to preview it at any time.
     const preview = new URL(window.location.href).searchParams.has('cookies');
-    if (consent.decided && !preview) return;
-    this.#showBanner(true);
+    const kept = cookieStore.get();
+    const keptIsRecent = Boolean(kept.decidedAt) && Date.now() - kept.decidedAt < COOKIE_MEMORY;
+    if (keptIsRecent && !preview) return;
+    this.#showTimer = setTimeout(() => this.#showBanner(true), 250);
     this.#yieldToShopifyBanner();
+    if (preview) return;
+    this.#currentConsent().then((consent) => {
+      if (!consent.decided || this.#answered) return;
+      clearTimeout(this.#showTimer);
+      const values = {};
+      for (const purpose of COOKIE_PURPOSES) values[purpose] = consent[purpose];
+      cookieStore.set({ decidedAt: Date.now(), ...values });
+      if (!this.banner.hidden) this.#hideBanner();
+    });
   }
 
   /** Shopify's own banner can arrive a little later: this one then steps aside. */
@@ -2065,7 +2076,8 @@ class CookieConsent extends HTMLElement {
       if (!shopifyBannerShown()) return;
       observer.disconnect();
       this.#useShopifyBanner = true;
-      this.#hideBanner();
+      clearTimeout(this.#showTimer);
+      if (!this.banner.hidden) this.#hideBanner();
     });
     observer.observe(document.body, { childList: true, subtree: true });
     setTimeout(() => observer.disconnect(), 10000);
@@ -2095,6 +2107,7 @@ class CookieConsent extends HTMLElement {
 
   /** @param {boolean} focus - move focus to the banner (not in the theme editor) */
   #showBanner(focus) {
+    if (this.#useShopifyBanner) return;
     this.banner.hidden = false;
     document.documentElement.setAttribute('data-cookie-banner-open', '');
     requestAnimationFrame(() => {
@@ -2111,7 +2124,7 @@ class CookieConsent extends HTMLElement {
     document.documentElement.removeAttribute('data-cookie-banner-open');
     setTimeout(() => {
       if (!this.banner.classList.contains('is-visible')) this.banner.hidden = true;
-    }, 450);
+    }, 600);
   }
 
   async openPreferences() {
@@ -2141,6 +2154,7 @@ class CookieConsent extends HTMLElement {
       else if (choice === 'reject') values[purpose] = false;
       else values[purpose] = Boolean(this.querySelector(`[data-cookie-purpose="${purpose}"]`)?.checked);
     }
+    this.#answered = true;
     cookieStore.set({ decidedAt: Date.now(), ...values });
     if (this.prefs.open) this.prefs.close();
     this.#hideBanner();

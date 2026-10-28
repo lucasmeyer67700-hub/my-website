@@ -205,9 +205,14 @@
     }
   }
 
+  /* Phones and tablets: the form first, the help links after it */
   .contact__aside {
     display: grid;
     gap: var(--space-md);
+
+    @media screen and (max-width: 989px) {
+      order: 1;
+    }
   }
 
   .contact__aside-title {

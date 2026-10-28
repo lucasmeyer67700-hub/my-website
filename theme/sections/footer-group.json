@@ -47,11 +47,10 @@
       "type": "cookie-banner",
       "settings": {
         "enabled": true,
-        "title": "Vos cookies, votre choix",
-        "text": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page.",
+        "title": "Cookies",
+        "text": "Nous les utilisons pour mesurer l'audience et personnaliser nos offres.",
         "heading_font": "playfair_display_n4",
-        "policy_page": "",
-        "color_scheme": "scheme-4"
+        "policy_page": ""
       }
     },
     "welcome": {

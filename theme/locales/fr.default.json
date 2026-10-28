@@ -298,24 +298,25 @@
     "thanks_keywords": "merci, super, parfait, top, genial, ok merci, d accord"
   },
   "cookies": {
-    "eyebrow": "Confidentialité",
-    "policy": "Politique de confidentialité",
     "reject_all": "Tout refuser",
     "accept_all": "Tout accepter",
-    "customize": "Personnaliser mes choix",
+    "customize": "Personnaliser",
     "save": "Enregistrer mes choix",
     "prefs_title": "Préférences de cookies",
-    "prefs_intro": "Choisissez les cookies que vous acceptez. Votre choix est enregistré pour ce navigateur et reste modifiable à tout moment.",
+    "prefs_intro": "Choisissez les cookies que vous acceptez.",
     "necessary": "Nécessaires",
-    "necessary_text": "Indispensables au fonctionnement du site : panier, paiement, sécurité. Ils ne peuvent pas être désactivés.",
+    "necessary_text": "Panier, paiement et sécurité du site.",
     "always_on": "Toujours actifs",
     "preferences": "Préférences",
-    "preferences_text": "Mémorisent vos choix, comme la langue ou le pays, pour vos prochaines visites.",
+    "preferences_text": "Votre langue et votre pays, mémorisés.",
     "analytics": "Mesure d'audience",
-    "analytics_text": "Nous aident à comprendre comment le site est utilisé, pour l'améliorer.",
+    "analytics_text": "Pour comprendre et améliorer le site.",
     "marketing": "Marketing",
-    "marketing_text": "Permettent de vous proposer des offres et des publicités adaptées à vos centres d'intérêt.",
+    "marketing_text": "Des offres adaptées à vos envies.",
     "manage": "Gérer les cookies",
-    "saved": "Vos choix de cookies sont enregistrés."
+    "saved": "Vos choix de cookies sont enregistrés.",
+    "learn_more": "En savoir plus",
+    "reject": "Refuser",
+    "accept": "Accepter"
   }
 }

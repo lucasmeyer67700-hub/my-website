@@ -3,9 +3,9 @@
     "main": {
       "type": "main-page",
       "settings": {
-        "eyebrow": "Contact",
-        "intro": "",
-        "show_content": true,
+        "eyebrow": "Service client",
+        "intro": "Une question ? Nous vous répondons par e-mail.",
+        "show_content": false,
         "center": false,
         "compact": true,
         "color_scheme": "scheme-1"
@@ -17,7 +17,9 @@
         "heading": "Écrivez-nous",
         "color_scheme": "scheme-1",
         "menu": "pied-de-page-aide",
-        "privacy_page": "confidentialite-et-cookies"
+        "privacy_page": "confidentialite-et-cookies",
+        "aside_heading": "Besoin d'aide ?",
+        "aside_text": ""
       }
     }
   },

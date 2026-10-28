@@ -298,24 +298,25 @@
     "thanks_keywords": "thanks, thank you, great, perfect, ok thanks"
   },
   "cookies": {
-    "eyebrow": "Privacy",
-    "policy": "Privacy policy",
     "reject_all": "Reject all",
     "accept_all": "Accept all",
-    "customize": "Customize my choices",
+    "customize": "Customize",
     "save": "Save my choices",
     "prefs_title": "Cookie preferences",
-    "prefs_intro": "Choose the cookies you accept. Your choice is saved for this browser and can be changed at any time.",
+    "prefs_intro": "Choose the cookies you accept.",
     "necessary": "Necessary",
-    "necessary_text": "Required for the site to work: cart, payment, security. They cannot be turned off.",
+    "necessary_text": "Cart, payment and site security.",
     "always_on": "Always on",
     "preferences": "Preferences",
-    "preferences_text": "Remember your choices, such as language or country, for your next visits.",
+    "preferences_text": "Your language and country, remembered.",
     "analytics": "Analytics",
-    "analytics_text": "Help us understand how the site is used, to improve it.",
+    "analytics_text": "To understand and improve the site.",
     "marketing": "Marketing",
-    "marketing_text": "Let us show you offers and ads that match your interests.",
+    "marketing_text": "Offers that match your interests.",
     "manage": "Manage cookies",
-    "saved": "Your cookie choices are saved."
+    "saved": "Your cookie choices are saved.",
+    "learn_more": "Learn more",
+    "reject": "Reject",
+    "accept": "Accept"
   }
 }

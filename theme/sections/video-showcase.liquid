@@ -161,10 +161,13 @@
     }
   }
 
-  /* Upright videos stay at a comfortable size side by side */
-  .video-showcase__list--portrait {
+  /*
+    Upright videos stay at a comfortable size side by side, centred on the page.
+    Two classes: the base list reset (ul[role='list'] { margin: 0 }) must not undo the centring.
+  */
+  .video-showcase__list.video-showcase__list--portrait {
     @media screen and (min-width: 750px) {
-      max-width: calc(var(--video-columns, 2) * 22rem + (var(--video-columns, 2) - 1) * 2.5rem);
+      max-width: calc(var(--video-columns, 2) * 19.5rem + (var(--video-columns, 2) - 1) * 2.5rem);
       margin-inline: auto;
     }
   }

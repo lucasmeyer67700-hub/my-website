@@ -11,6 +11,14 @@
     .section-cookie-banner {
       --cookie-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
       --cookie-font-weight: {{ heading_font.weight }};
+      --cookie-bg: {{ section.settings.background }};
+      --cookie-bg-rgb: {{ section.settings.background.rgb }};
+      --cookie-text: {{ section.settings.text_color }};
+      --cookie-text-rgb: {{ section.settings.text_color.rgb }};
+      --cookie-accent: {{ section.settings.accent }};
+      --cookie-accent-rgb: {{ section.settings.accent.rgb }};
+      --cookie-button: {{ section.settings.button }};
+      --cookie-button-label: {{ section.settings.button_label }};
     }
   {%- endstyle -%}
   <cookie-consent
@@ -21,7 +29,7 @@
     {% endif %}
   >
     <div
-      class="cookie-banner color-{{ section.settings.color_scheme }}"
+      class="cookie-banner"
       role="dialog"
       aria-modal="false"
       aria-labelledby="CookieTitle-{{ section.id }}"
@@ -30,35 +38,35 @@
       data-cookie-banner
       hidden
     >
-      <p class="cookie-banner__eyebrow" aria-hidden="true">{{ 'cookies.eyebrow' | t }}</p>
-      <h2 class="cookie-banner__title" id="CookieTitle-{{ section.id }}">{{ section.settings.title | escape }}</h2>
-      <p class="cookie-banner__text" id="CookieText-{{ section.id }}">
-        {{- section.settings.text | escape -}}
-        {%- if privacy_url != blank %}
-          <a href="{{ privacy_url }}">{{ 'cookies.policy' | t }}</a>
-        {%- endif -%}
-      </p>
+      <div class="cookie-banner__copy">
+        <h2 class="cookie-banner__title" id="CookieTitle-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+        <p class="cookie-banner__text" id="CookieText-{{ section.id }}">
+          {{- section.settings.text | escape -}}
+          {%- if privacy_url != blank %}
+            <a href="{{ privacy_url }}">{{ 'cookies.learn_more' | t }}</a>
+          {%- endif -%}
+        </p>
+      </div>
       <div class="cookie-banner__actions">
         <button type="button" class="cookie-banner__button" data-cookie-choice="reject">
-          {{- 'cookies.reject_all' | t -}}
+          {{- 'cookies.reject' | t -}}
         </button>
         <button type="button" class="cookie-banner__button" data-cookie-choice="accept">
-          {{- 'cookies.accept_all' | t -}}
+          {{- 'cookies.accept' | t -}}
+        </button>
+        <button type="button" class="cookie-banner__customize" data-cookie-open-prefs aria-haspopup="dialog">
+          {{- 'cookies.customize' | t -}}
         </button>
       </div>
-      <button type="button" class="cookie-banner__customize" data-cookie-open-prefs aria-haspopup="dialog">
-        {{- 'cookies.customize' | t -}}
-      </button>
     </div>
 
     <dialog
-      class="cookie-prefs color-{{ section.settings.color_scheme }}"
+      class="cookie-prefs"
       aria-labelledby="CookiePrefsTitle-{{ section.id }}"
       data-cookie-prefs
     >
       <div class="cookie-prefs__inner">
         <div class="cookie-prefs__header">
-          <p class="cookie-banner__eyebrow" aria-hidden="true">{{ 'cookies.eyebrow' | t }}</p>
           <h2 class="cookie-prefs__title" id="CookiePrefsTitle-{{ section.id }}">{{ 'cookies.prefs_title' | t }}</h2>
           <button type="button" class="cookie-prefs__close" data-cookie-close aria-label="{{ 'general.close' | t }}">
             {% render 'icon', icon: 'close' %}
@@ -116,13 +124,13 @@
         </ul>
 
         <div class="cookie-prefs__actions">
-          <button type="button" class="cookie-banner__button cookie-banner__button--quiet" data-cookie-choice="reject">
+          <button type="button" class="cookie-prefs__button cookie-prefs__button--quiet" data-cookie-choice="reject">
             {{- 'cookies.reject_all' | t -}}
           </button>
-          <button type="button" class="cookie-banner__button cookie-banner__button--quiet" data-cookie-choice="accept">
+          <button type="button" class="cookie-prefs__button cookie-prefs__button--quiet" data-cookie-choice="accept">
             {{- 'cookies.accept_all' | t -}}
           </button>
-          <button type="button" class="cookie-banner__button cookie-prefs__save" data-cookie-choice="save">
+          <button type="button" class="cookie-prefs__button cookie-prefs__save" data-cookie-choice="save">
             {{- 'cookies.save' | t -}}
           </button>
         </div>
@@ -133,33 +141,34 @@
 
 {% stylesheet %}
   /*
-    Cookie banner: a small card in the bottom corner on computers, a sheet at
-    the bottom on phones. It never blocks the page. Refusing takes exactly the
-    same effort as accepting: two identical buttons side by side.
+    Cookie banner, shown as the site opens: a dark espresso bar centred at the
+    bottom on computers, a card at the bottom on phones. It never blocks the
+    page. Refusing takes exactly the same effort as accepting: two identical
+    buttons side by side.
   */
   .cookie-banner {
-    --cookie-line: rgb(var(--color-text-rgb) / 0.14);
-
     position: fixed;
-    inset-inline: 0;
-    inset-block-end: 0;
+    inset-inline: 0.75rem;
+    inset-block-end: calc(0.75rem + env(safe-area-inset-bottom));
     z-index: calc(var(--z-drawer) - 1);
     display: grid;
-    justify-items: center;
-    padding: 1.5rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
-    border-radius: 1.5rem 1.5rem 0 0;
-    text-align: center;
-    color: var(--color-text);
-    background-color: var(--color-background);
-    background-image: radial-gradient(90% 70% at 50% 0%, rgb(255 255 255 / 0.6), transparent 70%);
+    gap: 0.875rem;
+    padding: 1.125rem 1.125rem 0.625rem;
+    border-radius: 1.375rem;
+    color: var(--cookie-text);
+    background-color: var(--cookie-bg);
+    background-image:
+      radial-gradient(90% 140% at 0% 0%, rgb(var(--cookie-accent-rgb) / 0.2), transparent 60%),
+      radial-gradient(70% 120% at 100% 100%, rgb(var(--cookie-accent-rgb) / 0.1), transparent 65%);
     box-shadow:
-      0 0 0 1px var(--cookie-line),
-      0 -24px 60px -30px rgb(48 39 36 / 0.45);
+      inset 0 1px 0 rgb(var(--cookie-accent-rgb) / 0.28),
+      0 0 0 1px rgb(var(--cookie-text-rgb) / 0.06),
+      0 30px 70px -24px rgb(20 12 10 / 0.6);
     opacity: 0;
-    transform: translateY(1.5rem);
+    transform: translateY(calc(100% + 1.5rem));
     transition:
-      opacity 450ms var(--ease-out),
-      transform 600ms var(--ease-out);
+      opacity 500ms ease,
+      transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 
     &.is-visible {
       opacity: 1;
@@ -170,144 +179,159 @@
       outline: none;
     }
 
+    /* Computers: one slim bar, the words on the left, the choices on the right */
     @media screen and (min-width: 750px) {
-      inset-inline: 1.5rem auto;
+      inset-inline: 0;
       inset-block-end: 1.5rem;
-      width: 25.5rem;
-      padding: 1.75rem 1.75rem 1.25rem;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2.5rem;
+      width: min(100% - 3rem, 64rem);
+      margin-inline: auto;
+      padding: 1.125rem 1.25rem 1.125rem 2rem;
       border-radius: 1.5rem;
-      text-align: start;
-      justify-items: stretch;
-      box-shadow:
-        0 0 0 1px var(--cookie-line),
-        0 30px 80px -30px rgb(48 39 36 / 0.5);
     }
-  }
-
-  .cookie-banner__eyebrow {
-    margin: 0 0 0.5rem;
-    font-size: 0.6875rem;
-    font-weight: var(--font-body-weight-medium);
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
   }
 
   .cookie-banner__title,
   .cookie-prefs__title {
     margin: 0;
     font-family: var(--cookie-font);
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: var(--cookie-font-weight);
     line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  .cookie-banner__copy {
+    display: grid;
+    gap: 0.375rem;
   }
 
   .cookie-banner__text {
-    max-width: 40ch;
-    margin: 0.625rem 0 1.125rem;
+    margin: 0;
     font-size: 0.8125rem;
-    line-height: 1.6;
-    color: var(--color-text-muted);
+    line-height: 1.55;
+    color: rgb(var(--cookie-text-rgb) / 0.78);
     text-wrap: pretty;
 
     & a {
-      color: var(--color-text);
+      margin-inline-start: 0.25rem;
+      color: var(--cookie-text);
       text-decoration: underline;
-      text-underline-offset: 0.2em;
+      text-decoration-color: rgb(var(--cookie-accent-rgb) / 0.8);
+      text-underline-offset: 0.25em;
       white-space: nowrap;
     }
   }
 
+  /* Phones: refuse and accept side by side, « Personnaliser » underneath */
   .cookie-banner__actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'reject accept'
+      'custom custom';
+    align-items: center;
     gap: 0.625rem;
-    width: 100%;
+
+    & [data-cookie-choice='reject'] {
+      grid-area: reject;
+    }
+
+    & [data-cookie-choice='accept'] {
+      grid-area: accept;
+    }
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: auto 8.5rem 8.5rem;
+      grid-template-areas: 'custom reject accept';
+      gap: 0.75rem;
+    }
   }
 
   .cookie-banner__button {
     min-height: 2.875rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--color-button);
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--cookie-button);
     border-radius: 999px;
     font: inherit;
     font-size: 0.75rem;
     font-weight: var(--font-body-weight-medium);
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-button-label);
-    background-color: var(--color-button);
+    color: var(--cookie-button-label);
+    background-color: var(--cookie-button);
     cursor: pointer;
     transition:
       background-color var(--duration-base) ease,
-      color var(--duration-base) ease;
+      color var(--duration-base) ease,
+      transform var(--duration-base) var(--ease-out);
 
     /* Hover only with a mouse: on phones a tap would leave it stuck */
     @media (hover: hover) {
       &:hover {
-        color: var(--color-button);
+        color: var(--cookie-text);
         background-color: transparent;
       }
     }
 
+    &:active {
+      transform: scale(0.98);
+    }
+
     &:focus-visible {
-      outline: 2px solid var(--color-text);
+      outline: 2px solid var(--cookie-text);
       outline-offset: 3px;
     }
   }
 
-  .cookie-banner__button--quiet {
-    color: var(--color-button);
-    background-color: transparent;
-
-    @media (hover: hover) {
-      &:hover {
-        color: var(--color-button-label);
-        background-color: var(--color-button);
-      }
-    }
-  }
-
   .cookie-banner__customize {
+    grid-area: custom;
     justify-self: center;
     min-height: 2.75rem;
-    margin-block-start: 0.25rem;
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
     border: 0;
     font: inherit;
     font-size: 0.8125rem;
-    color: var(--color-text);
+    letter-spacing: 0.02em;
+    color: var(--cookie-text);
     background: none;
     text-decoration: underline;
-    text-decoration-color: rgb(var(--color-text-rgb) / 0.35);
+    text-decoration-color: rgb(var(--cookie-accent-rgb) / 0.7);
     text-underline-offset: 0.3em;
     cursor: pointer;
 
     &:hover {
       text-decoration-color: currentColor;
     }
-  }
 
-  /* While the banner is up, the help button and its bubble step aside on phones. */
-  html[data-cookie-banner-open] .assistant__nudge {
-    display: none;
-  }
-
-  @media screen and (max-width: 749px) {
-    html[data-cookie-banner-open] .assistant {
-      visibility: hidden;
+    &:focus-visible {
+      outline: 2px solid var(--cookie-text);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
     }
   }
 
-  /* Preferences: one line per kind of cookie, with a switch */
+  /* While the banner is up, the help button and its bubble step aside. */
+  html[data-cookie-banner-open] .assistant {
+    visibility: hidden;
+  }
+
+  /* Preferences: a calm ivory window, one line per kind of cookie, with a switch */
   .cookie-prefs {
-    width: min(100% - 2rem, 34rem);
+    --prefs-text: #49352f;
+    --prefs-text-rgb: 73 53 47;
+    --prefs-muted: #6e574c;
+
+    width: min(100% - 2rem, 32rem);
     max-height: min(100dvh - 2rem, 44rem);
     padding: 0;
     border: 0;
     border-radius: 1.5rem;
-    color: var(--color-text);
-    background-color: var(--color-background);
+    color: var(--prefs-text);
+    background-color: #fcf9f7;
+    background-image: radial-gradient(90% 50% at 100% 0%, rgb(var(--cookie-accent-rgb) / 0.14), transparent 70%);
     box-shadow:
       0 0 0 1px rgb(255 255 255 / 0.45),
       0 40px 110px -40px rgb(48 39 36 / 0.6);
@@ -315,12 +339,12 @@
     overscroll-behavior: contain;
 
     &::backdrop {
-      background-color: rgb(var(--palette-scrim-rgb) / 0.48);
+      background-color: rgb(var(--palette-scrim-rgb) / 0.5);
       backdrop-filter: blur(6px);
     }
 
     &[open] {
-      animation: welcome-in 600ms var(--ease-out);
+      animation: cookie-prefs-in 600ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @media screen and (max-width: 749px) {
@@ -329,6 +353,13 @@
       max-height: 92dvh;
       margin: auto 0 0;
       border-radius: 1.5rem 1.5rem 0 0;
+    }
+  }
+
+  @keyframes cookie-prefs-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
     }
   }
 
@@ -341,19 +372,23 @@
     padding-inline-end: 3rem;
   }
 
+  .cookie-prefs__title {
+    font-size: 1.5rem;
+  }
+
   .cookie-prefs__close {
     position: absolute;
-    inset-block-start: -0.25rem;
+    inset-block-start: -0.5rem;
     inset-inline-end: -0.25rem;
     display: grid;
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
     padding: 0;
-    border: 1px solid rgb(var(--color-text-rgb) / 0.16);
+    border: 1px solid rgb(var(--prefs-text-rgb) / 0.16);
     border-radius: 50%;
-    color: var(--color-text);
-    background-color: rgb(var(--palette-warm-white-rgb) / 0.8);
+    color: var(--prefs-text);
+    background-color: rgb(255 255 255 / 0.7);
     cursor: pointer;
 
     & .icon {
@@ -363,10 +398,10 @@
   }
 
   .cookie-prefs__intro {
-    margin: 0.75rem 0 1rem;
+    margin: 0.5rem 0 1rem;
     font-size: 0.875rem;
     line-height: 1.6;
-    color: var(--color-text-muted);
+    color: var(--prefs-muted);
   }
 
   .cookie-prefs__list {
@@ -379,14 +414,14 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding-block: 1rem;
-    border-block-start: 1px solid rgb(var(--color-text-rgb) / 0.12);
+    padding-block: 0.9375rem;
+    border-block-start: 1px solid rgb(var(--prefs-text-rgb) / 0.12);
   }
 
   .cookie-prefs__label {
     display: grid;
     flex: 1;
-    gap: 0.25rem;
+    gap: 0.2rem;
     min-width: 0;
     cursor: pointer;
   }
@@ -403,8 +438,8 @@
 
   .cookie-prefs__desc {
     font-size: 0.8125rem;
-    line-height: 1.55;
-    color: var(--color-text-muted);
+    line-height: 1.5;
+    color: var(--prefs-muted);
   }
 
   .cookie-prefs__always {
@@ -413,19 +448,19 @@
     font-weight: var(--font-body-weight-medium);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--prefs-muted);
   }
 
-  /* A switch drawn from a checkbox: a pale knob on the left when off, on the right over brown when on */
+  /* A switch drawn from a checkbox: a pale knob on the left when off, on the right over espresso when on */
   .cookie-prefs__switch {
     position: relative;
     flex: none;
     width: 2.75rem;
     height: 1.625rem;
     margin: 0;
-    border: 1px solid rgb(var(--color-text-rgb) / 0.55);
+    border: 1px solid rgb(var(--prefs-text-rgb) / 0.55);
     border-radius: 999px;
-    background-color: rgb(var(--color-text-rgb) / 0.12);
+    background-color: rgb(var(--prefs-text-rgb) / 0.12);
     appearance: none;
     cursor: pointer;
     transition:
@@ -442,14 +477,14 @@
       border-radius: 50%;
       background-color: #fff;
       box-shadow:
-        0 0 0 1px rgb(var(--color-text-rgb) / 0.35),
+        0 0 0 1px rgb(var(--prefs-text-rgb) / 0.35),
         0 1px 3px rgb(48 39 36 / 0.25);
-      transition: transform var(--duration-base) var(--ease-out);
+      transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     &:checked {
-      border-color: var(--color-button);
-      background-color: var(--color-button);
+      border-color: var(--cookie-bg);
+      background-color: var(--cookie-bg);
 
       &::after {
         box-shadow: none;
@@ -458,7 +493,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-text);
+      outline: 2px solid var(--prefs-text);
       outline-offset: 3px;
     }
   }
@@ -470,7 +505,42 @@
     gap: 0.625rem;
     margin-block-start: 0.5rem;
     padding-block-start: 1.25rem;
-    border-block-start: 1px solid rgb(var(--color-text-rgb) / 0.12);
+    border-block-start: 1px solid rgb(var(--prefs-text-rgb) / 0.12);
+  }
+
+  .cookie-prefs__button {
+    min-height: 2.875rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--cookie-bg);
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: var(--cookie-bg);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) ease,
+      color var(--duration-base) ease;
+
+    &:focus-visible {
+      outline: 2px solid var(--prefs-text);
+      outline-offset: 3px;
+    }
+  }
+
+  .cookie-prefs__button--quiet {
+    color: var(--cookie-bg);
+    background-color: transparent;
+
+    @media (hover: hover) {
+      &:hover {
+        color: #fff;
+        background-color: var(--cookie-bg);
+      }
+    }
   }
 
   .cookie-prefs__save {
@@ -479,6 +549,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .cookie-banner,
+    .cookie-banner__button,
     .cookie-prefs__switch,
     .cookie-prefs__switch::after {
       transition: none;
@@ -512,37 +583,65 @@
     },
     {
       "type": "paragraph",
-      "content": "Elle s'affiche à chaque nouvelle visiteuse tant qu'aucun choix n'est fait, et enregistre ce choix auprès de Shopify (outil de confidentialité intégré). Si la bannière cookies de Shopify est activée dans Paramètres > Confidentialité des clients, c'est elle qui s'affiche et celle-ci s'efface, pour ne jamais en montrer deux. Le lien « Gérer les cookies » du pied de page rouvre les préférences."
+      "content": "Elle s'affiche dès l'ouverture du site tant qu'aucun choix n'est fait, et enregistre ce choix auprès de Shopify (outil de confidentialité intégré). Si la bannière cookies de Shopify est activée dans Paramètres > Confidentialité des clients, c'est elle qui s'affiche et celle-ci s'efface, pour ne jamais en montrer deux. Le lien « Gérer les cookies » du pied de page rouvre les préférences."
     },
     {
       "type": "text",
       "id": "title",
       "label": "Titre",
-      "default": "Vos cookies, votre choix"
+      "default": "Cookies"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "text",
       "label": "Texte",
-      "default": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page."
-    },
-    {
-      "type": "font_picker",
-      "id": "heading_font",
-      "label": "Police des titres",
-      "default": "playfair_display_n4"
+      "default": "Nous les utilisons pour mesurer l'audience et personnaliser nos offres."
     },
     {
       "type": "page",
       "id": "policy_page",
-      "label": "Page de politique de confidentialité",
+      "label": "Page « En savoir plus »",
       "info": "Par défaut, la politique de confidentialité de la boutique."
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Palette de couleurs",
-      "default": "scheme-1"
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Police du titre",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Fond",
+      "default": "#2b201d"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Texte",
+      "default": "#f7efe9"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Reflet",
+      "default": "#d9a58f"
+    },
+    {
+      "type": "color",
+      "id": "button",
+      "label": "Boutons",
+      "default": "#f7efe9"
+    },
+    {
+      "type": "color",
+      "id": "button_label",
+      "label": "Texte des boutons",
+      "default": "#2b201d"
     }
   ],
   "presets": [{ "name": "Bannière cookies" }]
