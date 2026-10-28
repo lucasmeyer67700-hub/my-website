@@ -522,8 +522,11 @@
 
   /* Entrance: the photo settles slowly, the text rises line after line */
   @media (prefers-reduced-motion: no-preference) {
+    /* …then keeps breathing, very slowly, as long as the page is open */
     .hero--full .hero__image {
-      animation: hero-settle 2.8s var(--ease-out) both;
+      animation:
+        hero-settle 2.8s var(--ease-out) both,
+        hero-breathe 26s ease-in-out 2.8s infinite alternate;
     }
 
     .hero--full .hero__content > * {
@@ -546,6 +549,12 @@
   @keyframes hero-settle {
     from {
       transform: scale(1.06);
+    }
+  }
+
+  @keyframes hero-breathe {
+    to {
+      scale: 1.05;
     }
   }
 

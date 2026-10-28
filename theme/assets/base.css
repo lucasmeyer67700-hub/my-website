@@ -1676,3 +1676,80 @@ body:has(dialog[open]) {
   }
 }
 
+
+/* --------------------------------------------------------------------------
+   Premium motion: titles that unveil, buttons that catch the light, photos
+   that answer the pointer. Only when the visitor has not asked for less motion.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Section titles rise from behind an invisible line, just after their block */
+  .js [data-reveal-enabled] .reveal.is-visible > .h2 {
+    animation: title-unveil 1.2s var(--ease-reveal) calc(var(--reveal-delay, 0ms) + 0.15s) backwards;
+  }
+
+  /* The main buttons catch a soft light every few seconds */
+  :is(.hero__button:not(.button--secondary), .product-form__submit:not([disabled])) {
+    overflow: hidden;
+    isolation: isolate;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.2) 50%, transparent 70%);
+      transform: translateX(-120%);
+      animation: button-shine 7s var(--ease-out) 2.4s infinite;
+      pointer-events: none;
+    }
+  }
+
+  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded::after {
+    animation: button-shine 7s var(--ease-out) 3.6s infinite;
+  }
+
+  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded:hover::after {
+    animation: none;
+  }
+}
+
+@keyframes title-unveil {
+  from {
+    clip-path: inset(0 0 100% 0);
+    translate: 0 0.45em;
+  }
+
+  to {
+    clip-path: inset(0);
+    translate: none;
+  }
+}
+
+@keyframes button-shine {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  20%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* Product photos: a soft light follows the pointer (position set by the script) */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .product-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(18rem circle at var(--glow-x, 50%) var(--glow-y, 35%), rgb(255 255 255 / 0.3), transparent 65%);
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .product-card:hover .product-card__media::after {
+    opacity: 1;
+  }
+}

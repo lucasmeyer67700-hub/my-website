@@ -2931,9 +2931,46 @@ function initNewsletterTracking() {
   if (document.querySelector('[data-newsletter-success]')) track('theme:newsletter_signup');
 }
 
+const fullMotion = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+// Product photos: a soft light follows the pointer (see .product-card__media::after).
+function initCardGlow() {
+  if (!window.matchMedia('(hover: hover)').matches) return;
+  let frame = 0;
+  document.addEventListener(
+    'pointermove',
+    (event) => {
+      if (frame || !fullMotion.matches || !(event.target instanceof Element)) return;
+      // The card link covers the whole card, so the photo is found through the card.
+      const media = event.target.closest('.product-card')?.querySelector('.product-card__media');
+      if (!media) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const box = media.getBoundingClientRect();
+        media.style.setProperty('--glow-x', `${Math.round(event.clientX - box.left)}px`);
+        media.style.setProperty('--glow-y', `${Math.round(event.clientY - box.top)}px`);
+      });
+    },
+    { passive: true }
+  );
+}
+
+// Option pills: the one just chosen answers with a small press, its colour dot with a little bloom.
+document.addEventListener('change', (event) => {
+  const input = event.target;
+  if (!(input instanceof HTMLInputElement) || !input.classList.contains('variant-pill__input')) return;
+  if (!fullMotion.matches || !input.checked) return;
+  const pill = input.nextElementSibling;
+  if (!(pill instanceof HTMLElement)) return;
+  const easing = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  pill.animate([{ scale: 1 }, { scale: 0.94 }, { scale: 1 }], { duration: 420, easing });
+  pill.querySelector('.variant-pill__swatch')?.animate([{ scale: 0.55 }, { scale: 1 }], { duration: 520, easing });
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initNewsletterTracking();
+  initCardGlow();
 });
 
 // Re-run reveal when a section is (re)loaded in the theme editor.

@@ -104,9 +104,18 @@
 
     <div class="site-header__actions">
       {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
-        <a class="icon-button site-header__account" href="{{ routes.account_url }}">
+        {%- comment -%} A signed-in customer is greeted by her first name (computers). {%- endcomment -%}
+        {%- assign first_name = customer.first_name | strip | escape -%}
+        <a
+          class="icon-button site-header__account{% if first_name != blank %} site-header__account--named{% endif %}"
+          href="{{ routes.account_url }}"
+        >
           {% render 'icon', icon: 'user' %}
+          {%- if first_name != blank -%}
+            <span class="site-header__greeting">{{ 'header.greeting' | t: name: first_name }}</span>
+          {%- endif -%}
           <span class="visually-hidden">
+            {%- if first_name != blank -%}, {% endif -%}
             {%- if customer -%}{{ 'header.account' | t }}{%- else -%}{{ 'header.login' | t }}{%- endif -%}
           </span>
         </a>
@@ -312,6 +321,11 @@
           {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
             <li>
               <a class="velea-menu__secondary-link" href="{{ routes.account_url }}">
+                {%- assign first_name = customer.first_name | strip | escape -%}
+                {%- if first_name != blank -%}
+                  <span class="velea-menu__greeting">{{ 'header.greeting' | t: name: first_name }}</span>
+                  <span class="visually-hidden">, </span>
+                {%- endif -%}
                 {%- if customer -%}{{ 'header.account' | t }}{%- else -%}{{ 'header.login' | t }}{%- endif -%}
               </a>
             </li>
@@ -342,11 +356,21 @@
     border-block-end: 1px solid transparent;
     transition:
       border-color var(--duration-base) ease,
-      box-shadow var(--duration-base) ease;
+      box-shadow var(--duration-base) ease,
+      background-color var(--duration-slow) ease;
 
     &.is-scrolled {
       border-block-end-color: var(--warm-hairline);
       box-shadow: var(--shadow-sm);
+    }
+  }
+
+  /* Once the page scrolls, the header turns to frosted glass over the content. */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .site-header.is-scrolled {
+      background-color: rgb(var(--color-background-rgb) / 0.84);
+      -webkit-backdrop-filter: saturate(1.4) blur(16px);
+      backdrop-filter: saturate(1.4) blur(16px);
     }
   }
 
@@ -804,6 +828,40 @@
     &:hover,
     &[aria-current='page'] {
       color: var(--velea-menu-text);
+    }
+  }
+
+  /* Signed in: her first name before « Mon compte » */
+  .velea-menu__greeting {
+    margin-inline-end: 0.6rem;
+    font-family: var(--velea-menu-font-heading);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--velea-menu-text);
+  }
+
+  /* Computers: « Bonjour, Prénom » next to the account icon */
+  .site-header__greeting {
+    display: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    .site-header__account--named {
+      gap: 0.5rem;
+      text-decoration: none;
+      padding-inline: 0.7rem 0.95rem;
+      border-radius: var(--radius-round);
+    }
+
+    .site-header__greeting {
+      display: inline;
+      max-width: 12rem;
+      overflow: hidden;
+      font-family: var(--font-heading-family);
+      font-size: 0.9375rem;
+      font-style: italic;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

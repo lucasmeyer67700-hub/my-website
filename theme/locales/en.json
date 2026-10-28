@@ -28,7 +28,8 @@
       "other": "Cart, {{ count }} items"
     },
     "account": "My account",
-    "login": "Log in"
+    "login": "Log in",
+    "greeting": "Hello, {{ name }}"
   },
   "products": {
     "price_label": "Price: {{ price }}",
