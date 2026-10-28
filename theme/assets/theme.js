@@ -440,6 +440,8 @@ class VeleaAssistant extends HTMLElement {
     this.state = undefined;
     this.chips = null;
     this.topicChips = [...this.choices.children].map((chip) => chip.cloneNode(true));
+    /** Topics already answered, shown as read */
+    this.seenTopics = new Set();
     this.topics = [...this.querySelectorAll('[data-assistant-topic]')].map((chip) => ({
       id: chip.dataset.assistantTopic,
       keywords: VeleaAssistant.keywords(chip.dataset.keywords),
@@ -600,6 +602,7 @@ class VeleaAssistant extends HTMLElement {
     this.history = [];
     this.state = undefined;
     this.saved = null;
+    this.seenTopics.clear();
     this.#forget();
     this.choices.hidden = true;
     const typing = this.#showTyping();
@@ -649,6 +652,7 @@ class VeleaAssistant extends HTMLElement {
     this.#userSay(chip.textContent.trim());
     await this.#botSay(chip.dataset.assistantTopic, 900);
     if (run !== this.run) return;
+    this.seenTopics.add(chip.dataset.assistantTopic);
     track('velea_assistant_question', { answer: chip.dataset.assistantTopic, source: 'topic' });
     await this.#finish(run);
   }
@@ -686,6 +690,7 @@ class VeleaAssistant extends HTMLElement {
         typing.remove();
         await this.#botSay(topic, 500);
         if (run !== this.run) return;
+        this.seenTopics.add(topic);
         return this.#finish(run);
       }
       if (this.dataset.chat === 'true' && (await this.#findInbox(5))) {
@@ -721,6 +726,7 @@ class VeleaAssistant extends HTMLElement {
     if (answer) {
       await this.#botSay(answer, 900);
       if (run !== this.run) return;
+      this.seenTopics.add(answer);
       await this.#finish(run);
       return;
     }
@@ -1066,7 +1072,11 @@ class VeleaAssistant extends HTMLElement {
         this.choices.append(chip);
       }
     } else {
-      for (const chip of this.topicChips) this.choices.append(chip.cloneNode(true));
+      for (const chip of this.topicChips) {
+        const copy = /** @type {HTMLElement} */ (chip.cloneNode(true));
+        if (this.seenTopics.has(copy.dataset.assistantTopic)) copy.setAttribute('data-seen', '');
+        this.choices.append(copy);
+      }
     }
     this.#showChoices(message);
   }

@@ -208,7 +208,7 @@
       terms: {
         robot: 3, bot: 3, chatbot: 3, ia: 3, 'intelligence artificielle': 4, 'vraie personne': 3, 'une vraie': 1, chatgpt: 3, machine: 2,
         'qui es tu': 4, 'tu es qui': 4, 't es qui': 4, 'qui etes vous': 3, 'vous etes qui': 3, 'ton nom': 3, 'votre nom': 2,
-        'tu t appelle': 4, 'comment tu t appelle': 4, 'vous vous appelez': 4, 'es tu humaine': 4, 'tu es humaine': 4, 'tu es une humaine': 4,
+        'tu t appelle': 4, 'comment tu t appelle': 4, 'vous vous appelez': 4, 'es tu humaine': 4, 'tu es humaine': 4, 'vrais gens': 4, 'de vraies personnes': 4, 'des humains': 4, 'etes vous humain': 4, 'tu es une humaine': 4,
         'etes vous humaine': 4, 'tu es reelle': 4, 'tu es un robot': 4, 'programme': 1, automatique: 1,
       },
     },
@@ -303,7 +303,7 @@
       family: 'product',
       terms: {
         prix: 3, combien: 2, coute: 3, 'coute combien': 4, cout: 2, tarif: 3, cher: 2, chere: 2, euro: 2, budget: 2, 'a combien': 3, montant: 2,
-        'quel prix': 4, 'combien ca coute': 4, 'c est combien': 4, 'moins cher': 2, abordable: 2, 'le duo': 1, economie: 2, 'combien pour': 3,
+        'quel prix': 4, 'combien ca coute': 4, 'si cher': 3, 'trop cher': 3, 'pourquoi c est cher': 4, 'c est combien': 4, 'moins cher': 2, abordable: 2, 'le duo': 1, economie: 2, 'combien pour': 3,
       },
     },
     promo: {
@@ -389,7 +389,7 @@
       family: 'product',
       terms: {
         contenu: 3, 'dans le colis': 4, 'dans la boite': 4, 'livre avec': 4, 'livree avec': 4, fourni: 3, fournie: 3, inclu: 3, inclus: 3, comprend: 2,
-        emballage: 2, packaging: 2, 'qu y a t il': 3, 'il y a quoi dans': 4, accessoire: 2, 'chargeur inclu': 4, 'chargeur fourni': 4, 'avec le cable': 3,
+        emballage: 2, packaging: 2, 'combien de serviette': 4, 'combien dans le lot': 4, 'dans le lot': 4, 'dans le pack': 4, 'combien y en a': 4, 'combien il y en a': 4, 'qu y a t il': 3, 'il y a quoi dans': 4, accessoire: 2, 'chargeur inclu': 4, 'chargeur fourni': 4, 'avec le cable': 3,
       },
     },
     safety: {
@@ -423,7 +423,7 @@
       terms: {
         efficace: 3, efficacite: 3, 'ca marche vraiment': 4, 'ca marche bien': 4, 'est ce que ca marche': 4, 'ca soulage': 4, soulager: 3, soulage: 3,
         'ca aide': 3, 'ca aide vraiment': 4, resultat: 2, 'vaut le coup': 4, 'ca vaut le coup': 4, 'rapport qualite prix': 4, qualite: 2, solide: 3,
-        durable: 2, resistant: 3, 'bonne qualite': 4, 'ca fonctionne vraiment': 4, 'ca fonctionne bien': 4, utile: 2, 'ca change quoi': 3,
+        durable: 2, resistant: 3, 'bonne qualite': 4, 'elle est bien': 3, 'est elle bien': 3, 'elle vaut quoi': 4, 'ca fonctionne vraiment': 4, 'ca fonctionne bien': 4, utile: 2, 'ca change quoi': 3,
       },
     },
     reviews: {
@@ -435,7 +435,7 @@
       terms: {
         discret: 3, discrete: 3, discretion: 3, 'se voit': 3, visible: 2, 'sous les vetement': 4, 'sous un pull': 4, 'sous mes vetement': 4,
         'au travail': 3, 'au bureau': 3, 'en cours': 2, 'a l ecole': 3, dehors: 3, exterieur: 3, sortir: 2, transport: 2, voyage: 2, bouger: 2,
-        marcher: 2, sport: 2, bruit: 3, bruyant: 3, silencieux: 3, 'fait du bruit': 4, 'en bougeant': 3, 'a l exterieur': 4,
+        marcher: 2, sport: 2, 'pendant le sport': 4, 'faire du sport': 4, 'en faisant du sport': 4, bruit: 3, bruyant: 3, silencieux: 3, 'fait du bruit': 4, 'en bougeant': 3, 'a l exterieur': 4,
       },
     },
     gift: {
@@ -491,7 +491,7 @@
         belgique: 4, suisse: 4, luxembourg: 4, canada: 4, quebec: 4, allemagne: 4, espagne: 4, italie: 4, europe: 3, etranger: 4, international: 4,
         'dom tom': 4, dom: 3, 'outre mer': 4, martinique: 4, guadeloupe: 4, reunion: 3, guyane: 4, mayotte: 4, corse: 4, monaco: 4, maroc: 4,
         algerie: 4, tunisie: 4, senegal: 4, afrique: 4, usa: 4, 'etats uni': 4, 'royaume uni': 4, angleterre: 4, 'quel pays': 4, 'autre pays': 4,
-        'hors de france': 4, 'hors france': 4, 'pays bas': 4, portugal: 4,
+        'hors de france': 4, 'hors france': 4, 'pays bas': 4, portugal: 4, douane: 4, 'frais de douane': 5,
       },
     },
     tracking: {
@@ -545,7 +545,7 @@
       terms: {
         paiement: 3, payer: 3, 'carte bancaire': 4, carte: 2, cb: 3, visa: 3, mastercard: 3, paypal: 4, 'apple pay': 4, 'google pay': 4,
         'plusieurs fois': 4, '3 fois': 4, '4 fois': 4, klarna: 4, alma: 4, 'en plusieurs': 3, virement: 3, cheque: 3, espece: 3, 'moyen de paiement': 4,
-        'paiement securise': 4, securise: 2, facture: 3, 'shop pay': 4, 'payer en': 3, 'je paie': 3, 'je paye': 3,
+        'paiement securise': 4, securise: 2, facture: 3, 'payer a la livraison': 5, 'paiement a la livraison': 5, 'contre remboursement': 5, 'shop pay': 4, 'payer en': 3, 'je paie': 3, 'je paye': 3,
       },
     },
     account: { family: 'shop', terms: { compte: 3, 'mon compte': 4, 'creer un compte': 4, connexion: 3, connecter: 3, 'mot de passe': 4, identifiant: 3, historique: 2 } },
@@ -586,7 +586,7 @@
     },
     store: {
       family: 'brand',
-      terms: { 'boutique physique': 5, magasin: 4, showroom: 4, retrait: 3, 'click and collect': 5, 'venir chercher': 4, 'ou etes vous situe': 4, 'votre adresse': 3, 'sur place': 3 },
+      terms: { 'vous etes base': 4, 'vous etes basee': 4, 'vous etes situe': 4, 'ou etes vous': 3, 'vous etes ou': 4, 'basee ou': 4, 'base ou': 4, 'boutique physique': 5, magasin: 4, showroom: 4, retrait: 3, 'click and collect': 5, 'venir chercher': 4, 'ou etes vous situe': 4, 'votre adresse': 3, 'sur place': 3 },
     },
     social: { family: 'brand', terms: { instagram: 4, tiktok: 4, facebook: 4, 'reseaux sociaux': 4, reseau: 2, pinterest: 4, youtube: 4, snapchat: 4 } },
     faq: { family: 'brand', terms: { faq: 4, 'questions frequente': 4, 'foire aux questions': 4 } },
@@ -890,6 +890,15 @@
       this.products = (this.kb.products || []).filter((product) => product && product.handle);
       this.currency = this.kb.currency || 'EUR';
       this.names = productTerms(this.products);
+      // Option words only one product has ("duo"), not sizes or colours: they are too common.
+      const optionWords = this.products.map((product) => new Set((product.options || [])
+        .filter((option) => !/couleur|coloris|color|taille|size/.test(fold(option.name)))
+        .flatMap((option) => option.values.flatMap((value) => words(value)))
+        .filter((word) => word.length >= 3 && !/\d/.test(word) && !GENERIC.has(word) && !STOP.has(word))));
+      this.optionNames = this.products.map((product, index) => ({
+        product,
+        options: new Set([...optionWords[index]].filter((word) => optionWords.filter((set) => set.has(word)).length === 1 && !this.names.some(({ terms }) => terms.some((parts) => parts.length === 1 && parts[0].text === word)))),
+      }));
       this.facts = this.kb.facts || {};
       this.answers = this.kb.answers || {};
       this.urls = this.kb.urls || {};
@@ -909,13 +918,23 @@
       }
     }
 
-    /** Products named in the message, in the order they appear. */
+    /**
+     * Products named in the message, in the order they appear. Without a
+     * name, an option only one product has points to it ("le Duo").
+     */
     named(tokens) {
       const found = [];
       for (const { product, terms } of this.names) {
         let at = Infinity;
         for (const parts of terms) for (const start of find(tokens, parts)) at = Math.min(at, start);
         if (at < Infinity) found.push({ product, at });
+      }
+      if (!found.length) {
+        for (const { product, options } of this.optionNames) {
+          const at = tokens.findIndex((token) => options.has(token));
+          if (at >= 0) found.push({ product, at });
+        }
+        if (found.length > 1) return [];
       }
       return found.sort((a, b) => a.at - b.at).map((entry) => entry.product);
     }
@@ -1108,6 +1127,10 @@
       if (strong.some((entry) => entry.id === 'price') && !/\b(prix|cout\w*|tarif|cher\w*|euro|budget|montant|economi\w*|paye\w*)\b/.test(tokens.join(' ')) && strong.some((entry) => ['heat', 'battery', 'timer', 'vibration', 'sizes', 'absorb', 'eco', 'delay', 'specs'].includes(entry.id))) {
         strong = strong.filter((entry) => entry.id !== 'price');
       }
+      // "Délai de rétractation": a return question, not a shipping one.
+      if (strong.some((entry) => entry.id === 'returns') && !/\b(livr\w*|recev\w*|recoi\w*|coli|colis|expedi\w*|arriv\w*)\b/.test(tokens.join(' '))) strong = strong.filter((entry) => entry.id !== 'delay');
+      // "Payer à la livraison ?": a payment question.
+      if (strong.some((entry) => entry.id === 'payment') && /\b(pay\w*|paie\w*|paiement)\b/.test(tokens.join(' '))) strong = strong.filter((entry) => !['shipping', 'delay'].includes(entry.id));
       // "Ça soulage ?": one honest answer, not two.
       if (strong.some((entry) => entry.id === 'effect')) strong = strong.filter((entry) => entry.id !== 'pain');
       // "Combien coûte la livraison ?": the shipping, not the products' prices.
@@ -1139,6 +1162,11 @@
         if (greeting && !state.greeted && hello) ctx.prefix.unshift(hello);
         state.greeted = true;
         return this.#howAreYou(ctx);
+      }
+      if (scores.greet && greeting && ctx.named.length) {
+        state.greeted = true;
+        if (hello) ctx.prefix.unshift(hello);
+        return this.#about(ctx, ctx.named);
       }
       if (scores.greet && greeting) {
         state.greeted = true;
@@ -1596,6 +1624,7 @@
 
     #price(ctx, named) {
       const products = this.#resolve(ctx, 'price', named);
+      if (/si cher|trop cher|pourquoi/.test(fold(ctx.raw))) ctx.prefix.push('Je comprends la question.');
       if (!products.length) {
         ctx.reply.text('Voici nos prix :');
         ctx.reply.list(this.products.flatMap((product) => (this.quantityOption(product) >= 0 ? this.priceLines(product).map((line) => `${plainTitle(product)}, ${line}`) : this.priceLines(product))));
@@ -1959,12 +1988,15 @@
       if (water && this.has(product, 'battery')) {
         ctx.reply.text(`${the(product, true)} est un appareil électrique : gardez-${object} au sec, et retirez-${object} avant la douche ou le bain.`);
         ctx.reply.list(grep(product, TOPIC.water, ['precautions']));
-      } else if (found.length) {
+      } else if (found.length && /dorm|nuit|sommeil/.test(text)) {
         // "Peut-on dormir avec ?" → "Non : ne pas utiliser pendant le sommeil."
         const [first, ...rest] = found;
         ctx.reply.text(/^ne pas/i.test(first) ? `Non : ${first.charAt(0).toLowerCase()}${first.slice(1)}` : first);
         ctx.reply.list(rest);
         ctx.reply.text('Les autres précautions sont sur la fiche du produit.');
+      } else if (found.length) {
+        ctx.reply.text('Pour l’utiliser en toute sérénité, voici les précautions du fabricant :');
+        ctx.reply.list(found);
       } else {
         ctx.reply.text(`Les précautions d'emploi ${this.#of(product)} :`);
         ctx.reply.list(precautions);
@@ -2386,6 +2418,7 @@
           ctx.reply.text('Les solutions de paiement disponibles s’affichent à l’étape du paiement, selon votre commande.');
         }
       }
+      if (/livraison|contre rembours|espece|cheque|virement/.test(text)) ctx.reply.text('Le paiement se fait en ligne, au moment de la commande.');
       if (types.length) ctx.reply.text(`Vous pouvez payer avec ${join(types)}.`);
       ctx.reply.text('Le paiement est sécurisé : il est traité par nos prestataires de paiement, et VELEA n’a jamais accès à vos données bancaires.');
       ctx.reply.chip(CHIP.cart, CHIP.shipping, CHIP.promo);
@@ -2473,7 +2506,7 @@
     }
 
     #store(ctx) {
-      ctx.reply.text('VELEA est une boutique en ligne : tout se commande ici, sur le site.', this.facts.shipping ? `${this.facts.shipping}.` : '');
+      ctx.reply.text('VELEA est une boutique en ligne : tout se commande ici, sur le site, et nos coordonnées figurent dans les mentions légales.', this.facts.shipping ? `${this.facts.shipping}.` : '');
       ctx.reply.chip(CHIP.delay, CHIP.catalogue);
     }
 
