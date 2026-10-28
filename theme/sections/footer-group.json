@@ -62,7 +62,7 @@
         "success_text": "Merci pour votre inscription. Voici votre code de bienvenue.",
         "redirect": "/products/ceinture-chauffante-regles",
         "conditions": "Code valable une fois par cliente sur la ceinture à l'unité, hors Duo, non cumulable avec d'autres codes.",
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-3"
       }
     },
     "assistant": {
