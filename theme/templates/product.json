@@ -16,62 +16,15 @@
             "perks_multi": "Deux ensembles complets : câbles USB et notices"
           }
         },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
         "buy": {
           "type": "buy_buttons",
           "settings": {
             "show_quantity": true,
             "show_dynamic_checkout": true
-          }
-        },
-        "trust": {
-          "type": "trust",
-          "settings": {
-            "show_payment_icons": true,
-            "show_lines": false
-          }
-        },
-        "specs": {
-          "type": "accordion",
-          "settings": {
-            "title": "Caractéristiques",
-            "icon": "none",
-            "source": "specs",
-            "content": "",
-            "open": false,
-            "show_returns_offer": true
-          }
-        },
-        "usage": {
-          "type": "accordion",
-          "settings": {
-            "title": "Utilisation et précautions",
-            "icon": "none",
-            "source": "usage_precautions",
-            "content": "",
-            "open": false,
-            "show_returns_offer": true
-          }
-        },
-        "box": {
-          "type": "accordion",
-          "settings": {
-            "title": "Contenu du colis",
-            "icon": "none",
-            "source": "box",
-            "content": "",
-            "open": false,
-            "show_returns_offer": true
-          }
-        },
-        "safety": {
-          "type": "accordion",
-          "settings": {
-            "title": "Informations fabricant et sécurité",
-            "icon": "none",
-            "source": "safety_info",
-            "content": "",
-            "open": false,
-            "show_returns_offer": true
           }
         },
         "guarantee": {
@@ -86,14 +39,17 @@
         "delivery": {
           "type": "delivery",
           "settings": {
-            "left_text": "",
             "right_text": "",
+            "left_text": "",
             "show_flag": true
           }
         },
-        "inventory": {
-          "type": "inventory",
-          "settings": {}
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_lines": false,
+            "show_payment_icons": true
+          }
         },
         "benefits": {
           "type": "benefits",
@@ -108,6 +64,50 @@
             "icon_3": "home",
             "title_3": "Discrète sous un vêtement ample",
             "text_3": "Portée sur un vêtement fin, elle se glisse sous un pull ou une chemise."
+          }
+        },
+        "specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "Caractéristiques",
+            "icon": "none",
+            "source": "specs",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "usage": {
+          "type": "accordion",
+          "settings": {
+            "title": "Utilisation et précautions",
+            "icon": "none",
+            "source": "usage_precautions",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "box": {
+          "type": "accordion",
+          "settings": {
+            "title": "Contenu du colis",
+            "icon": "none",
+            "source": "box",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "safety": {
+          "type": "accordion",
+          "settings": {
+            "title": "Informations fabricant et sécurité",
+            "icon": "none",
+            "source": "safety_info",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
           }
         }
       },
@@ -129,14 +129,13 @@
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
         "gallery_fit": "contain",
+        "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-3"
       }
     },
     "video": {
       "type": "product-video",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
         "media_position": "left",
@@ -145,23 +144,21 @@
         "text": "<p>Regardez-la en situation, portée comme au quotidien.</p>",
         "button_label": "Choisir mon coloris",
         "button_link": "",
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-3"
       }
     },
     "reviews": {
       "type": "product-reviews",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "heading": "Avis",
+        "layout": "carousel",
+        "band_limit": 10,
+        "band_speed": 7,
         "show_breakdown": true,
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
         "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
-        "color_scheme": "scheme-1",
-        "layout": "carousel",
-        "band_limit": 10,
-        "band_speed": 7
+        "color_scheme": "scheme-2"
       }
     },
     "faq": {
@@ -193,7 +190,7 @@
         "link_label": "Nous contacter",
         "link": "/pages/contact",
         "anchor": "faq",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-3"
       }
     }
   },

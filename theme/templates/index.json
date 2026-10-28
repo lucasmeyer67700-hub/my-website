@@ -2,23 +2,24 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "layout": "full",
-        "show_drops": false,
+        "display_font": "playfair_display_n4",
+        "show_drops": true,
         "eyebrow": "Ceinture chauffante sans fil",
         "heading": "Vos règles, <em>tout en douceur.</em>",
-        "heading_tag": "h1",
+        "heading_tag": "h2",
         "text": "Trois niveaux de chaleur, un massage par vibration et aucun fil : la ceinture VELEA vous suit partout, même sous un pull.",
         "image": "shopify://shop_images/velea-hero-chambre.jpg",
         "photo_width": 70,
         "photo_crop_x": 75,
         "image_alt": "Deux ceintures chauffantes VELEA, rose et blanche, posées sur un lit dans une chambre douce et lumineuse",
         "height": "full",
+        "image_focus_y": 100,
+        "mobile_stack": true,
         "content_position": "bottom-left",
-        "text_tone": "light",
-        "overlay_opacity": 40,
+        "text_tone": "dark",
+        "overlay_opacity": 60,
         "image_position": "right",
         "product": "ceinture-chauffante-regles",
         "show_price": false,
@@ -27,10 +28,38 @@
         "button_link": "",
         "secondary_label": "Voir nos essentiels",
         "secondary_link": "shopify://collections/tous-nos-produits",
-        "color_scheme": "scheme-3",
-        "display_font": "playfair_display_n4",
-        "image_focus_y": 100,
-        "mobile_stack": true
+        "color_scheme": "scheme-3"
+      }
+    },
+    "offer": {
+      "type": "featured-product",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "La ceinture VELEA",
+        "heading": "",
+        "show_rating": true,
+        "price_badge": "Nouveauté",
+        "show_tagline": true,
+        "offer_heading": "",
+        "unit_label": "la ceinture",
+        "offer_note_single": "L'essentiel, pour vous",
+        "offer_note_multi": "Une pour vous, une à offrir",
+        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
+        "best_label": "Le plus avantageux",
+        "perks_multi": "Deux ensembles complets : câbles USB et notices",
+        "show_dynamic_checkout": true,
+        "show_reassurance": true,
+        "show_specs": true,
+        "specs_limit": 3,
+        "details_label": "Voir tous les détails",
+        "media_layout": "composition",
+        "mosaic_image_2": "shopify://shop_images/velea-ceinture-01-essentiel.jpg",
+        "mosaic_image_3": "shopify://shop_images/velea-ceinture-02-chaleur.jpg",
+        "mosaic_image_4": "shopify://shop_images/velea-ceinture-06-coloris.jpg",
+        "gallery_ratio": "1",
+        "gallery_fit": "cover",
+        "anchor": "offre",
+        "color_scheme": "scheme-3"
       }
     },
     "journey": {
@@ -76,6 +105,70 @@
         "show_drops": true,
         "anchor": "parcours",
         "color_scheme": "scheme-6"
+      }
+    },
+    "spotlight": {
+      "type": "product-spotlight",
+      "disabled": true,
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "media_position": 1,
+        "eyebrow": "La ceinture VELEA",
+        "heading": "L'essentiel, <em>rien de superflu.</em>",
+        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
+        "show_specs": true,
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
+        "anchor": "",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "videos": {
+      "type": "video-showcase",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+            "title": "",
+            "text": ""
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4",
+            "title": "",
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2"
+      ],
+      "settings": {
+        "eyebrow": "En vidéo",
+        "heading": "La ceinture, <em>en images.</em>",
+        "text": "",
+        "ratio": "9 / 16",
+        "autoplay": true,
+        "button_label": "Choisir ma ceinture",
+        "button_link": "/#offre",
+        "anchor": "videos",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "reviews": {
+      "type": "reviews-marquee",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "Avis clientes",
+        "heading": "Elles en parlent",
+        "limit": 10,
+        "speed": 7,
+        "color_scheme": "scheme-2"
       }
     },
     "faq": {
@@ -155,101 +248,6 @@
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
-    },
-    "offer": {
-      "type": "featured-product",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "eyebrow": "La ceinture VELEA",
-        "heading": "",
-        "show_rating": true,
-        "price_badge": "Nouveauté",
-        "show_tagline": true,
-        "offer_heading": "",
-        "unit_label": "la ceinture",
-        "offer_note_single": "L'essentiel, pour vous",
-        "offer_note_multi": "Une pour vous, une à offrir",
-        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
-        "best_label": "Le plus avantageux",
-        "perks_multi": "Deux ensembles complets : câbles USB et notices",
-        "show_dynamic_checkout": true,
-        "show_reassurance": true,
-        "show_specs": true,
-        "specs_limit": 3,
-        "details_label": "Voir tous les détails",
-        "gallery_ratio": "1",
-        "gallery_fit": "cover",
-        "anchor": "offre",
-        "color_scheme": "scheme-2",
-        "media_layout": "composition",
-        "mosaic_image_2": "shopify://shop_images/velea-ceinture-01-essentiel.jpg",
-        "mosaic_image_3": "shopify://shop_images/velea-ceinture-02-chaleur.jpg",
-        "mosaic_image_4": "shopify://shop_images/velea-ceinture-06-coloris.jpg"
-      }
-    },
-    "videos": {
-      "type": "video-showcase",
-      "blocks": {
-        "video-1": {
-          "type": "video",
-          "settings": {
-            "title": "",
-            "text": "",
-            "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
-          }
-        },
-        "video-2": {
-          "type": "video",
-          "settings": {
-            "title": "",
-            "text": "",
-            "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4"
-          }
-        }
-      },
-      "block_order": [
-        "video-1",
-        "video-2"
-      ],
-      "settings": {
-        "eyebrow": "En vidéo",
-        "heading": "La ceinture, <em>en images.</em>",
-        "text": "",
-        "ratio": "9 / 16",
-        "autoplay": true,
-        "button_label": "Choisir ma ceinture",
-        "button_link": "/#offre",
-        "anchor": "videos",
-        "color_scheme": "scheme-2"
-      }
-    },
-    "reviews": {
-      "type": "reviews-marquee",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "eyebrow": "Avis clientes",
-        "heading": "Elles en parlent",
-        "limit": 10,
-        "speed": 7,
-        "color_scheme": "scheme-2"
-      }
-    },
-    "spotlight": {
-      "type": "product-spotlight",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "media_position": 1,
-        "eyebrow": "La ceinture VELEA",
-        "heading": "L'essentiel, <em>rien de superflu.</em>",
-        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
-        "show_specs": true,
-        "specs_limit": 3,
-        "show_box": false,
-        "button_label": "Découvrir la ceinture",
-        "anchor": "",
-        "color_scheme": "scheme-3"
-      },
-      "disabled": true
     }
   },
   "order": [

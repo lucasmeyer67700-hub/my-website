@@ -126,14 +126,14 @@
       },
       "scheme-4": {
         "settings": {
-          "background": "#eecfd3",
+          "background": "#F5C8E0",
           "background_gradient": "",
           "text": "#49352f",
-          "text_muted": "#574339",
-          "accent": "#6a5248",
-          "surface": "#f8e9ea",
-          "border": "#ddb9bf",
-          "button": "#49352f",
+          "text_muted": "#060706",
+          "accent": "#8D5353",
+          "surface": "#F5C8E0",
+          "border": "#F5C8E0",
+          "button": "#8D5353",
           "button_label": "#ffffff"
         }
       },

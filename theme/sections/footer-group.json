@@ -40,7 +40,18 @@
         "newsletter"
       ],
       "settings": {
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-6"
+      }
+    },
+    "cookies": {
+      "type": "cookie-banner",
+      "settings": {
+        "enabled": true,
+        "title": "Vos cookies, votre choix",
+        "text": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page.",
+        "heading_font": "playfair_display_n4",
+        "policy_page": "",
+        "color_scheme": "scheme-4"
       }
     },
     "welcome": {
@@ -51,11 +62,12 @@
         "snooze_days": 0,
         "product": "ceinture-chauffante-regles",
         "percent": 10,
-        "offer_label": "La ceinture, à l'unité",
         "seal_label": "offerts sur votre ceinture",
+        "offer_label": "La ceinture, à l'unité",
         "eyebrow": "Offre de bienvenue",
         "text": "Laissez votre e-mail : votre code s'affiche tout de suite.",
         "button_label": "Recevoir mon code",
+        "heading_font": "playfair_display_n4",
         "code": "VELEA",
         "success_heading": "Votre code est prêt",
         "success_text": "Merci pour votre inscription. Voici votre code de bienvenue.",
@@ -84,6 +96,7 @@
             "question": "Livraison et suivi",
             "keywords": "livraison, livrer, livre, livree, delai, expedition, expedie, envoi, envoye, colis, suivi, suivre, numero de suivi, recevoir, reception, quand vais je, arrive, arriver, transporteur, frais de port, frais d envoi, ou est ma commande",
             "answer": "<p>La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés. Dès l'expédition, vous recevez par e-mail votre numéro de suivi.</p>",
+            "product": "",
             "link_label": "Suivre ma commande",
             "link": "shopify://pages/suivi-de-commande"
           }
@@ -94,6 +107,7 @@
             "question": "Retours et garantie",
             "keywords": "retour, retourner, renvoyer, rembourser, remboursement, remboursee, rembourse, satisfaite, echange, echanger, garantie, defectueux, defaut, casse, abime, panne, ne marche pas, ne fonctionne pas, ne chauffe pas, retractation, changer d avis, annuler",
             "answer": "<p>Vous avez 14 jours après réception pour changer d'avis. Pour la ceinture, notre garantie « Satisfaite ou remboursée » dure 30 jours. Colis abîmé ou produit défectueux : nous renvoyons ou remboursons, à nos frais.</p>",
+            "product": "",
             "link_label": "Lire la politique de retour",
             "link": "shopify://pages/politique-de-retour"
           }
@@ -115,6 +129,7 @@
             "question": "Bien utiliser ma ceinture",
             "keywords": "utiliser, utilisation, porter, mettre, allumer, eteindre, regler, reglage, premiere fois, premiere utilisation, mode d emploi, notice, minutes, arret automatique, nuit, dormir, sommeil, peau, vetement, pull, bureau, travail, dehors, sortir, discrete",
             "answer": "<p>Chargez-la complètement avant la première utilisation. Placez-la sur le bas du ventre, par-dessus un vêtement fin, et commencez par la chaleur la plus douce. Elle s'arrête seule au bout de 30 minutes et ne s'utilise pas pendant le sommeil.</p>",
+            "product": "",
             "link_label": "Toutes les questions",
             "link": "shopify://pages/faq"
           }
@@ -129,11 +144,13 @@
       ],
       "settings": {
         "enabled": true,
+        "use_chat": false,
         "replace_inbox": true,
         "launcher_label": "Besoin d'aide ?",
         "show_nudge": true,
         "nudge": "Une question ? Je vous guide en quelques secondes.",
         "title": "Assistante VELEA",
+        "avatar": "shopify://shop_images/velea-monogramme.png",
         "status": "En ligne",
         "greeting": "<p>Bonjour, je suis l'assistante VELEA. Posez-moi votre question, ou choisissez un sujet ci-dessous.</p>",
         "next_text": "Une autre question ? Écrivez-la ci-dessous.",
@@ -142,20 +159,8 @@
         "fineprint": "Réponses tirées des informations VELEA, sans avis médical.",
         "health_link": "shopify://products/ceinture-chauffante-regles",
         "ai_label": "Discuter avec l'assistante IA",
-        "contact_link": "shopify://pages/contact",
-        "use_chat": false,
         "contact_button_label": "Écrire à notre équipe",
-        "avatar": "shopify://shop_images/velea-monogramme.png"
-      }
-    },
-    "cookies": {
-      "type": "cookie-banner",
-      "settings": {
-        "enabled": true,
-        "title": "Vos cookies, votre choix",
-        "text": "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies pour mesurer l'audience et personnaliser nos offres. Vous pouvez changer d'avis à tout moment avec le lien « Gérer les cookies », en bas de page.",
-        "heading_font": "playfair_display_n4",
-        "color_scheme": "scheme-1"
+        "contact_link": "shopify://pages/contact"
       }
     }
   },
