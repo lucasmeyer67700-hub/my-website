@@ -25,7 +25,7 @@
         "button_label": "Découvrir la ceinture",
         "button_link": "/products/ceinture-chauffante-regles",
         "anchor": "",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-2"
       }
     },
     "commitments": {
@@ -78,6 +78,7 @@
         "columns": 4,
         "center": true,
         "compact": false,
+        "show_drops": false,
         "anchor": "engagements",
         "color_scheme": "scheme-2"
       }
@@ -92,7 +93,8 @@
         "button_label": "Découvrir la ceinture",
         "button_link": "",
         "show_trust": true,
-        "color_scheme": "scheme-5"
+        "show_drops": false,
+        "color_scheme": "scheme-3"
       }
     }
   },

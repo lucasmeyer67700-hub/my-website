@@ -128,7 +128,7 @@
         "banner": "",
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
-        "gallery_fit": "contain",
+        "gallery_fit": "cover",
         "show_media_slots": true,
         "sticky_bar": true,
         "color_scheme": "scheme-3"
