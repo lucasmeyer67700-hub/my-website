@@ -642,6 +642,16 @@
     }
   }
 
+  /*
+    While the band glides, the review in the middle is the one you read: full
+    size and colour; the ones on the sides step back a little (--focus, 0 to 1,
+    set by the script).
+  */
+  .reviews-loop.is-moving .review-card__inner {
+    scale: calc(0.95 + 0.05 * var(--focus, 1));
+    opacity: calc(0.6 + 0.4 * var(--focus, 1));
+  }
+
   /* Entrance: the cards rise one after the other when the band comes into view */
   .js [data-reveal-enabled] .reviews-loop .review-card {
     opacity: 0;

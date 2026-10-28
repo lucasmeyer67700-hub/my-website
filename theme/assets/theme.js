@@ -1444,6 +1444,9 @@ class ReviewsLoop extends HTMLElement {
   #visible = false;
   #focused = false;
   #photos = [];
+  #allCards = [];
+  #centers = [];
+  #focusValues = [];
 
   connectedCallback() {
     this.viewport = this.querySelector('[data-loop-viewport]');
@@ -1540,6 +1543,9 @@ class ReviewsLoop extends HTMLElement {
           this.track.append(clone);
         }
       }
+      this.#allCards = [...this.track.querySelectorAll('[data-loop-card]')];
+      this.#centers = this.#allCards.map((card) => card.offsetLeft + card.offsetWidth / 2);
+      this.#focusValues = [];
       this.#moveBy(0);
     }
     this.#measureTexts();
@@ -1550,6 +1556,21 @@ class ReviewsLoop extends HTMLElement {
     if (!this.#setWidth) return;
     this.#offset = (((this.#offset + distance) % this.#setWidth) + this.#setWidth) % this.#setWidth;
     this.track.style.transform = `translate3d(${(-this.#offset).toFixed(2)}px, 0, 0)`;
+    this.#focus();
+  }
+
+  /** The review passing the middle comes forward; those on the sides step back a little. */
+  #focus() {
+    const half = this.#width / 2;
+    if (!half || !this.#allCards.length) return;
+    const reach = half + (this.#allCards[0].offsetWidth || half) * 0.6;
+    for (let index = 0; index < this.#allCards.length; index += 1) {
+      const distance = Math.min(1, Math.abs(this.#centers[index] - this.#offset - half) / reach);
+      const value = (1 - distance * distance).toFixed(2);
+      if (this.#focusValues[index] === value) continue;
+      this.#focusValues[index] = value;
+      this.#allCards[index].style.setProperty('--focus', value);
+    }
   }
 
   get #shouldMove() {
@@ -2374,11 +2395,16 @@ function initReveal() {
   }
   const observer = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
+      // Blocks coming into view together appear one after the other.
+      const arriving = entries.filter((entry) => entry.isIntersecting).map((entry) => entry.target);
+      arriving.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+      arriving.forEach((item, index) => {
+        if (index > 0) item.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 110}ms`);
+        item.classList.add('is-visible');
+        observer.unobserve(item);
+        // The delay is only for the entrance, not for later hover effects.
+        if (index > 0) setTimeout(() => item.style.removeProperty('--reveal-delay'), 2200);
+      });
     },
     { rootMargin: '0px 0px -8% 0px' }
   );
