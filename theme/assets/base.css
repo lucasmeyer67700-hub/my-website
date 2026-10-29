@@ -36,8 +36,7 @@
   --rose-cta-light: #b4596a;
   --rose-cta-rgb: 162 76 93;
 
-  /* Light warm frame behind product photos */
-  --gallery-bg: #f7f1ef;
+  /* --gallery-bg, behind product photos, comes from the theme settings (css-variables). */
 
   /* Warm brown accents (eyebrows, ornaments, hairlines). Text brown passes
      4.5:1 on blanc cassé and on rose poudré; the light tints are for
@@ -895,7 +894,7 @@ textarea.field__input {
   --media-ratio: 4 / 5;
 
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--palette-warm-white) 0%, #f6e4e7 100%);
+  background-color: var(--gallery-bg);
   box-shadow: 0 0 0 1px rgb(var(--warm-rgb) / 0.18);
 
   & img {
@@ -909,6 +908,26 @@ textarea.field__input {
   position: absolute;
   inset: 0;
   opacity: 0;
+}
+
+/* A photo wider than its card (e.g. pads laid flat) is shown whole, a little
+   smaller and centred on the photo background, its edges fading softly into it. */
+.product-card__media--contain > .product-card__image:first-child {
+  --card-fade: linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%),
+    linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 5%;
+  width: 90%;
+  height: auto;
+  aspect-ratio: var(--image-ratio);
+  object-fit: contain;
+  translate: 0 -50%;
+  -webkit-mask-image: var(--card-fade);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--card-fade);
+  mask-composite: intersect;
 }
 
 @media (hover: hover) {

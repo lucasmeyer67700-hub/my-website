@@ -191,6 +191,17 @@
         "label": "Apparition douce des sections au défilement",
         "info": "Désactivée automatiquement pour les visiteurs qui ont demandé à réduire les animations.",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Photos produits"
+      },
+      {
+        "type": "color",
+        "id": "product_photo_background",
+        "label": "Fond des photos produits",
+        "info": "Mettez la couleur du fond de vos photos produits : les cases du catalogue, la galerie des fiches et l'offre de l'accueil prennent ce fond, et une photo plus large que sa case s'affiche en entier, fondue dans ce rose.",
+        "default": "#fbccd6"
       }
     ]
   },
