@@ -2716,6 +2716,7 @@ customElements.define('cookie-consent', CookieConsent);
 
 // v2: everyone's memory of the pop-up starts afresh with the new design.
 const WELCOME_KEY = 'velea:welcome-v2';
+const WELCOME_VISIT_KEY = 'velea:welcome-visit';
 const VISIT_GAP = 30 * 60 * 1000;
 const welcomeStore = {
   get() {
@@ -2796,9 +2797,17 @@ class WelcomePopup extends HTMLElement {
     const state = welcomeStore.get();
     if (state.subscribed) return;
 
-    // A visit ends after 30 minutes without a page view; the next one starts afresh.
+    // A new visit starts each time the shop is opened (new tab or window), or after
+    // 30 minutes without a page view; pages seen in the same tab are the same visit.
     const now = Date.now();
-    const sameVisit = state.visitStart && state.lastSeenAt && now - state.lastSeenAt < VISIT_GAP;
+    let opened = false;
+    try {
+      opened = !window.sessionStorage.getItem(WELCOME_VISIT_KEY);
+      window.sessionStorage.setItem(WELCOME_VISIT_KEY, '1');
+    } catch (error) {
+      // Session storage blocked: only the 30 minutes count.
+    }
+    const sameVisit = !opened && state.visitStart && state.lastSeenAt && now - state.lastSeenAt < VISIT_GAP;
     const visitStart = sameVisit ? state.visitStart : now;
     welcomeStore.set({ visitStart, lastSeenAt: now });
     window.addEventListener('pagehide', () => welcomeStore.set({ lastSeenAt: Date.now() }), { signal });
