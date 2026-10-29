@@ -1,24 +1,64 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
-      "settings": {
-        "eyebrow": "Aide",
-        "intro": "",
-        "show_content": true,
-        "center": false,
-        "compact": true,
-        "color_scheme": "scheme-1"
-      }
-    },
-    "faq-product": {
-      "type": "faq",
+    "faq": {
+      "type": "faq-hub",
       "blocks": {
+        "topic-ceinture": {
+          "type": "category",
+          "settings": {
+            "title": "La ceinture",
+            "icon": "heat",
+            "anchor": "ceinture"
+          }
+        },
         "how": {
           "type": "question",
           "settings": {
             "question": "Comment fonctionne la ceinture ?",
             "answer": "<p>Un élément chauffant intégré diffuse une chaleur réglable sur 3 niveaux (50, 55 ou 60 °C, selon le fabricant). La ceinture fonctionne sur batterie : une fois chargée, elle s'utilise sans fil. Le massage par vibration (4 modes) s'utilise avec ou sans la chaleur.</p>"
+          }
+        },
+        "colours": {
+          "type": "question",
+          "settings": {
+            "question": "Quels coloris sont disponibles ?",
+            "answer": "<p>La ceinture existe en rose et en blanc. Le Duo se compose comme vous le souhaitez : deux roses, deux blanches, ou une de chaque.</p>"
+          }
+        },
+        "massage-only": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on utiliser le massage sans la chaleur ?",
+            "answer": "<p>Oui. Les quatre modes de vibration s'utilisent avec ou sans la chaleur.</p>"
+          }
+        },
+        "clothes": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la porter sous ses vêtements ?",
+            "answer": "<p>Oui, sous un vêtement ample (pull, sweat, chemise). Portez-la par-dessus un vêtement fin et surveillez votre peau pendant l'utilisation.</p>"
+          }
+        },
+        "size": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle taille fait-elle et combien pèse-t-elle ?",
+            "answer": "<p>Selon le fabricant, le boîtier mesure 18,5 × 8 × 2,5 cm et pèse 142 g. Il associe de l'ABS et un tissu doux effet velours.</p>"
+          }
+        },
+        "box": {
+          "type": "question",
+          "settings": {
+            "question": "Que contient le colis ?",
+            "answer": "<p>Une ceinture, un câble USB et une notice. Le Duo contient deux ensembles complets.</p>"
+          }
+        },
+        "topic-utilisation": {
+          "type": "category",
+          "settings": {
+            "title": "Utilisation et recharge",
+            "icon": "battery",
+            "anchor": "utilisation"
           }
         },
         "start": {
@@ -28,11 +68,11 @@
             "answer": "<p>Chargez-la complètement avant la première utilisation : le voyant est rouge pendant la charge, puis vert lorsqu'elle est prête. Placez-la sur le bas du ventre, par-dessus un vêtement fin, ajustez la sangle, puis allumez-la d'un appui long sur le bouton marche/arrêt. Commencez toujours par le niveau de chaleur le plus doux.</p>"
           }
         },
-        "massage-only": {
+        "recharge": {
           "type": "question",
           "settings": {
-            "question": "Peut-on utiliser le massage sans la chaleur ?",
-            "answer": "<p>Oui. Les quatre modes de vibration s'utilisent avec ou sans la chaleur.</p>"
+            "question": "Comment la recharger ?",
+            "answer": "<p>Avec le câble USB fourni (5 V / 1 A). Le voyant est rouge pendant la charge, puis vert lorsque la ceinture est prête.</p>"
           }
         },
         "battery": {
@@ -49,18 +89,12 @@
             "answer": "<p>Non : par sécurité, la ceinture ne fonctionne pas lorsqu'elle est branchée.</p>"
           }
         },
-        "clothes": {
-          "type": "question",
+        "topic-precautions": {
+          "type": "category",
           "settings": {
-            "question": "Peut-on la porter sous ses vêtements ?",
-            "answer": "<p>Oui, sous un vêtement ample (pull, sweat, chemise). Portez-la par-dessus un vêtement fin et surveillez votre peau pendant l'utilisation.</p>"
-          }
-        },
-        "sleep": {
-          "type": "question",
-          "settings": {
-            "question": "Peut-on la garder pour dormir ?",
-            "answer": "<p>Non, la ceinture ne doit pas être utilisée pendant le sommeil.</p>"
+            "title": "Santé et précautions",
+            "icon": "shield",
+            "anchor": "precautions"
           }
         },
         "pain": {
@@ -70,40 +104,54 @@
             "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
           }
         },
+        "safe-use": {
+          "type": "question",
+          "settings": {
+            "question": "Comment l'utiliser en toute sécurité ?",
+            "answer": "<p>Commencez toujours par le niveau de chaleur le plus doux, portez-la par-dessus un vêtement fin et surveillez votre peau pendant l'utilisation. Toutes les précautions du fabricant sont sur la <a href=\"/products/ceinture-chauffante-regles\" title=\"Ceinture chauffante menstruelle\">fiche de la ceinture</a>.</p>"
+          }
+        },
+        "sleep": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la garder pour dormir ?",
+            "answer": "<p>Non, la ceinture ne doit pas être utilisée pendant le sommeil.</p>"
+          }
+        },
         "contraindications": {
           "type": "question",
           "settings": {
             "question": "Y a-t-il des contre-indications ?",
             "answer": "<p>Oui. Selon la notice du fabricant, la ceinture est contre-indiquée en cas de grossesse, de maladie cardiaque, de tumeur du col de l'utérus, de crise de goutte, ou de plaie ou anomalie de la peau. En cas de doute, demandez l'avis d'un professionnel de santé.</p>"
           }
-        }
-      },
-      "block_order": ["how", "start", "massage-only", "battery", "charging", "clothes", "sleep", "pain", "contraindications"],
-      "settings": {
-        "eyebrow": "",
-        "heading": "La ceinture",
-        "text": "",
-        "link_label": "Voir la ceinture",
-        "link": "/products/ceinture-chauffante-regles",
-        "anchor": "ceinture",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "faq-order": {
-      "type": "faq",
-      "blocks": {
+        },
+        "topic-livraison": {
+          "type": "category",
+          "settings": {
+            "title": "Commande et livraison",
+            "icon": "truck",
+            "anchor": "livraison"
+          }
+        },
         "shipping-cost": {
           "type": "question",
           "settings": {
             "question": "Combien coûte la livraison ?",
-            "answer": "<p>La livraison est offerte en France. Les frais éventuels sont toujours affichés avant le paiement.</p>"
+            "answer": "<p>La livraison est offerte en France métropolitaine. Les frais éventuels sont toujours affichés avant le paiement.</p>"
+          }
+        },
+        "delay": {
+          "type": "question",
+          "settings": {
+            "question": "Quel est le délai de livraison ?",
+            "answer": "<p>Comptez 7 à 14 jours ouvrés entre la commande et la réception. Un numéro de suivi vous est envoyé par e-mail dès l'expédition.</p>"
           }
         },
         "tracking": {
           "type": "question",
           "settings": {
             "question": "Comment suivre ma commande ?",
-            "answer": "<p>Toutes les informations sont sur notre page <a href=\"/pages/suivi-de-commande\" title=\"Suivi de commande\">Suivi de commande</a>.</p>"
+            "answer": "<p>Le lien de suivi se trouve dans l'e-mail d'expédition (pensez à regarder vos courriers indésirables). Tout est expliqué sur notre page <a href=\"/pages/suivi-de-commande\" title=\"Suivi de commande\">Suivi de commande</a>.</p>"
           }
         },
         "payment": {
@@ -113,11 +161,33 @@
             "answer": "<p>Les moyens de paiement disponibles sont affichés en bas de page et à l'étape du paiement. Le paiement s'effectue sur la page sécurisée de Shopify.</p>"
           }
         },
+        "topic-retours": {
+          "type": "category",
+          "settings": {
+            "title": "Retours et garanties",
+            "icon": "return",
+            "anchor": "retours"
+          }
+        },
+        "guarantee": {
+          "type": "question",
+          "settings": {
+            "question": "Qu'est-ce que la garantie « Satisfaite ou remboursée 30 jours » ?",
+            "answer": "<p>C'est une garantie commerciale réservée à la ceinture chauffante, achetée seule ou en Duo. Elle dure 30 jours à partir de la réception. La ceinture doit nous revenir complète (boîtier, sangle, câble), propre et bien emballée. Une demande par foyer et par produit, à faire avant tout envoi ; les frais de retour sont à votre charge. Elle s'ajoute à vos droits légaux : tous les détails sont sur la page <a href=\"/pages/livraison-et-retours\" title=\"Livraison, retours et garantie 30 jours\">Livraison, retours et garantie</a>.</p>"
+          }
+        },
         "returns": {
           "type": "question",
           "settings": {
             "question": "Comment retourner un article ?",
             "answer": "<p>Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation. La démarche est décrite dans notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour\">politique de retour</a> ; vous pouvez aussi utiliser le <a href=\"/pages/formulaire-de-retractation\" title=\"Formulaire de rétractation\">formulaire de rétractation</a>.</p>"
+          }
+        },
+        "damaged": {
+          "type": "question",
+          "settings": {
+            "question": "Mon colis est arrivé abîmé, que faire ?",
+            "answer": "<p>Écrivez-nous rapidement via le <a href=\"/pages/contact\" title=\"Contact\">formulaire de contact</a>, avec une photo ou une courte vidéo. Nous procédons à un nouvel envoi ou au remboursement, frais à notre charge.</p>"
           }
         },
         "warranty": {
@@ -128,17 +198,52 @@
           }
         }
       },
-      "block_order": ["shipping-cost", "tracking", "payment", "returns", "warranty"],
+      "block_order": [
+        "topic-ceinture",
+        "how",
+        "colours",
+        "massage-only",
+        "clothes",
+        "size",
+        "box",
+        "topic-utilisation",
+        "start",
+        "recharge",
+        "battery",
+        "charging",
+        "topic-precautions",
+        "pain",
+        "safe-use",
+        "sleep",
+        "contraindications",
+        "topic-livraison",
+        "shipping-cost",
+        "delay",
+        "tracking",
+        "payment",
+        "topic-retours",
+        "guarantee",
+        "returns",
+        "damaged",
+        "warranty"
+      ],
       "settings": {
-        "eyebrow": "",
-        "heading": "Commande, livraison et retours",
-        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
-        "link_label": "Nous contacter",
-        "link": "/pages/contact",
-        "anchor": "commande",
+        "eyebrow": "Questions fréquentes",
+        "heading": "Vos questions, <em>nos réponses.</em>",
+        "intro": "Tout ce qu'il faut savoir sur la ceinture, votre commande et nos garanties. Tapez un mot ou choisissez un thème.",
+        "show_search": true,
+        "contact_heading": "Vous n'avez pas trouvé <em>votre réponse ?</em>",
+        "contact_text": "Écrivez-nous : nous vous répondons par e-mail.",
+        "contact_label": "Nous écrire",
+        "contact_link": "/pages/contact",
+        "aside_contact_label": "Une autre question ?",
+        "gradient_start": "#f3dadd",
+        "gradient_end": "#f8e9ea",
         "color_scheme": "scheme-2"
       }
     }
   },
-  "order": ["main", "faq-product", "faq-order"]
+  "order": [
+    "faq"
+  ]
 }

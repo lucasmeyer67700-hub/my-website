@@ -188,7 +188,16 @@
     "featured_product_editor_empty": "Choisissez le produit à mettre en avant dans les réglages de cette section.",
     "offer_mosaic_alt": "{{ product }} – image {{ index }}",
     "offer_mosaic_slot": "Image {{ index }}",
-    "video_slot_hint": "Vidéo {{ number }} : ajoutez votre vidéo dans ce bloc (Contenu > Fichiers). Cet emplacement vide n'est visible que dans l'éditeur."
+    "video_slot_hint": "Vidéo {{ number }} : ajoutez votre vidéo dans ce bloc (Contenu > Fichiers). Cet emplacement vide n'est visible que dans l'éditeur.",
+    "story_chapter": "Chapitre {{ number }}",
+    "faq_search_label": "Rechercher une question",
+    "faq_search_placeholder": "Batterie, livraison, retour…",
+    "faq_search_clear": "Effacer la recherche",
+    "faq_topics": "Thèmes",
+    "faq_results_one": "1 réponse trouvée",
+    "faq_results_other": "{{ count }} réponses trouvées",
+    "faq_no_result": "Aucune question ne correspond à votre recherche.",
+    "faq_no_result_hint": "Essayez un autre mot, ou posez-nous directement votre question ci-dessous."
   },
   "collections": {
     "coming_soon": "Bientôt",

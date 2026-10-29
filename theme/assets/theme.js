@@ -2911,6 +2911,133 @@ class CopyButton extends HTMLElement {
 
 customElements.define('copy-button', CopyButton);
 
+/**
+ * FAQ page: filters the questions as the visitor types (accents and case
+ * ignored), keeps the number of questions on each topic chip, and marks the
+ * topic being read in the topic column and the chips.
+ */
+class FaqHub extends HTMLElement {
+  #controller = null;
+  #observer = null;
+
+  connectedCallback() {
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+    this.input = this.querySelector('[data-faq-search]');
+    this.clearButton = this.querySelector('[data-faq-clear]');
+    this.status = this.querySelector('[data-faq-status]');
+    this.empty = this.querySelector('[data-faq-empty]');
+    this.groups = [...this.querySelectorAll('[data-faq-group]')];
+    this.items = [...this.querySelectorAll('[data-faq-item]')].map((item) => ({
+      item,
+      text: FaqHub.normalize(item.textContent),
+    }));
+
+    this.input?.addEventListener('input', () => this.#filter(), { signal });
+    this.input?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !this.input.value) return;
+      event.preventDefault();
+      this.#clear();
+    }, { signal });
+    this.clearButton?.addEventListener('click', () => {
+      this.#clear();
+      this.input?.focus();
+    }, { signal });
+
+    // A topic hidden by the search comes back when its link is used. The browser
+    // would aim at the shortened page, so the scroll is done once it is whole again.
+    this.addEventListener('click', (event) => {
+      const link = event.target instanceof Element ? event.target.closest('[data-faq-link]') : null;
+      const group = link ? this.querySelector(`[data-faq-group="${CSS.escape(link.dataset.faqLink)}"]`) : null;
+      if (!group?.hidden) return;
+      event.preventDefault();
+      this.#clear();
+      history.pushState(null, '', `#${group.id}`);
+      group.scrollIntoView({ behavior: fullMotion.matches ? 'smooth' : 'auto', block: 'start' });
+    }, { signal });
+
+    this.#count();
+    this.#followReading();
+
+    // A link to a question (/pages/faq#q-…) opens it, on arrival or from the same page.
+    this.#openFromHash();
+    window.addEventListener('hashchange', () => this.#openFromHash(), { signal });
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    this.#observer?.disconnect();
+  }
+
+  /** @param {string} value */
+  static normalize(value) {
+    return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+
+  #filter() {
+    const query = FaqHub.normalize(this.input.value);
+    const words = query.split(' ').filter(Boolean);
+    let shown = 0;
+    for (const { item, text } of this.items) {
+      const match = words.every((word) => text.includes(word));
+      item.hidden = !match;
+      if (match) shown += 1;
+    }
+    for (const group of this.groups) {
+      group.hidden = !group.querySelector('[data-faq-item]:not([hidden])');
+    }
+    if (this.clearButton) this.clearButton.hidden = !query;
+    if (this.empty) this.empty.hidden = shown > 0;
+    if (this.status) {
+      this.status.textContent = !query ? '' : shown === 1 ? this.dataset.resultOne : (this.dataset.resultOther || '').replace('§', String(shown));
+    }
+    this.#count();
+  }
+
+  #clear() {
+    if (!this.input) return;
+    this.input.value = '';
+    this.#filter();
+  }
+
+  #openFromHash() {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (!(target instanceof HTMLDetailsElement) || !this.contains(target)) return;
+    if (target.hidden) this.#clear();
+    target.open = true;
+  }
+
+  /** Number of (matching) questions on each topic chip. */
+  #count() {
+    for (const badge of this.querySelectorAll('[data-faq-count]')) {
+      const group = this.querySelector(`[data-faq-group="${CSS.escape(badge.dataset.faqCount)}"]`);
+      badge.textContent = group ? String(group.querySelectorAll('[data-faq-item]:not([hidden])').length) : '';
+    }
+  }
+
+  /** The topic in the upper part of the screen is marked as current. */
+  #followReading() {
+    const named = this.groups.filter((group) => group.id);
+    if (!named.length || !('IntersectionObserver' in window)) return;
+    const links = [...this.querySelectorAll('[data-faq-link]')];
+    this.#observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries.filter((entry) => entry.isIntersecting).map((entry) => entry.target)[0];
+        if (!current) return;
+        for (const link of links) {
+          if (link.dataset.faqLink === current.id) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        }
+      },
+      { rootMargin: '-20% 0px -65% 0px' }
+    );
+    for (const group of named) this.#observer.observe(group);
+  }
+}
+
+customElements.define('faq-hub', FaqHub);
+
 function initReveal() {
   if (!document.body.hasAttribute('data-reveal-enabled')) return;
   const items = document.querySelectorAll('.reveal');

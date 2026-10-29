@@ -1,0 +1,17 @@
+{% doc %}
+  One question of the FAQ page: a card that opens on its answer. The card has
+  an id built from the block id, so a link such as /pages/faq#q-battery opens
+  it directly.
+
+  @param {object} block - A "question" block of the faq-hub section
+
+  @example
+  {% render 'faq-item', block: block %}
+{% enddoc %}
+<details class="faq-item" id="q-{{ block.id }}" data-faq-item {{ block.shopify_attributes }}>
+  <summary class="faq-item__summary">
+    <h3 class="faq-item__question">{{ block.settings.question | escape }}</h3>
+    <span class="faq-item__toggle" aria-hidden="true"></span>
+  </summary>
+  <div class="faq-item__answer rte">{{ block.settings.answer }}</div>
+</details>

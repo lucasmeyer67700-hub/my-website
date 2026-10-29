@@ -1,0 +1,667 @@
+{%- comment -%}
+  The brand's story: an opening (title, a few lines, a photo in an arch) on a
+  soft rose gradient, then the story told in short chapters along a thread
+  that fills as the reader scrolls, broken once by a quote. The gradient
+  colours are section settings, so the page can follow the brand's colours.
+{%- endcomment -%}
+{%- liquid
+  assign hero_image = section.settings.image
+  assign chapter_count = 0
+-%}
+
+<section
+  class="brand-story color-{{ section.settings.color_scheme }}"
+  style="--story-from: {{ section.settings.gradient_start }}; --story-mid: {{ section.settings.gradient_middle }}; --story-to: {{ section.settings.gradient_end }};"
+  aria-labelledby="StoryTitle-{{ section.id }}"
+>
+  <div class="brand-story__aura" aria-hidden="true"></div>
+
+  <div class="page-width brand-story__hero{% if hero_image == blank %} brand-story__hero--text{% endif %}">
+    <div class="brand-story__intro reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 class="h1 brand-story__title" id="StoryTitle-{{ section.id }}">
+        {{- section.settings.heading | default: page.title -}}
+      </h1>
+      {%- if section.settings.lead != blank -%}
+        <p class="lead brand-story__lead">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.signature != blank -%}
+        <p class="brand-story__signature">{{ section.settings.signature | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if hero_image != blank -%}
+      <figure class="brand-story__portrait reveal">
+        <div class="brand-story__arch">
+          {% render 'responsive-image',
+            image: hero_image,
+            sizes: '(min-width: 990px) 40vw, 100vw',
+            widths: '540, 720, 900, 1080, 1296',
+            alt: section.settings.image_alt,
+            class: 'brand-story__image',
+            eager: true
+          %}
+        </div>
+        {%- if section.settings.image_badge != blank -%}
+          <figcaption class="brand-story__badge">
+            <span class="brand-story__badge-dot" aria-hidden="true"></span>
+            {{- section.settings.image_badge | escape -}}
+          </figcaption>
+        {%- endif -%}
+      </figure>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="page-width brand-story__story">
+      <ol class="brand-story__chapters" role="list">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'chapter' -%}
+              {%- assign chapter_count = chapter_count | plus: 1 -%}
+              {%- assign chapter_image = block.settings.image -%}
+              <li
+                class="story-chapter reveal{% if chapter_image == blank %} story-chapter--text{% endif %}{% if chapter_count == 2 or chapter_count == 4 or chapter_count == 6 %} story-chapter--flip{% endif %}"
+                {{ block.shopify_attributes }}
+              >
+                <span class="story-chapter__dot" aria-hidden="true"></span>
+                {%- if chapter_image != blank -%}
+                  <div class="story-chapter__media">
+                    {% render 'responsive-image',
+                      image: chapter_image,
+                      sizes: '(min-width: 990px) 38vw, 100vw',
+                      widths: '360, 540, 720, 900, 1080',
+                      alt: block.settings.image_alt,
+                      class: 'story-chapter__image'
+                    %}
+                  </div>
+                {%- endif -%}
+                <div class="story-chapter__body">
+                  <p class="story-chapter__label">
+                    <span class="story-chapter__number" aria-hidden="true">{% if chapter_count < 10 %}0{% endif %}{{ chapter_count }}</span>
+                    <span>
+                      {{- 'sections.story_chapter' | t: number: chapter_count -}}
+                      {%- if block.settings.label != blank %} · {{ block.settings.label | escape }}{% endif -%}
+                    </span>
+                  </p>
+                  <h2 class="story-chapter__title">{{ block.settings.title }}</h2>
+                  {%- if block.settings.text != blank -%}
+                    <div class="story-chapter__text rte">{{ block.settings.text }}</div>
+                  {%- endif -%}
+                </div>
+              </li>
+            {%- when 'quote' -%}
+              <li class="story-quote reveal" {{ block.shopify_attributes }}>
+                <figure class="story-quote__card">
+                  <span class="story-quote__mark" aria-hidden="true">“</span>
+                  <blockquote class="story-quote__text">
+                    <p>{{ block.settings.text | escape }}</p>
+                  </blockquote>
+                  {%- if block.settings.attribution != blank -%}
+                    <figcaption class="story-quote__attribution">{{ block.settings.attribution | escape }}</figcaption>
+                  {%- endif -%}
+                </figure>
+              </li>
+          {%- endcase -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .brand-story {
+    --story-thread: 1.25rem;
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    background: linear-gradient(180deg, var(--story-from) 0%, var(--story-mid) 38%, var(--story-to) 100%);
+  }
+
+  /* Two soft lights drifting behind the opening */
+  .brand-story__aura {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: min(52rem, 110vh);
+    pointer-events: none;
+    background:
+      radial-gradient(38% 46% at 82% 18%, rgb(255 255 255 / 0.75), transparent 70%),
+      radial-gradient(34% 40% at 12% 62%, rgb(var(--rose-strong-rgb) / 0.16), transparent 70%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-story__aura {
+      animation: story-aura 18s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes story-aura {
+    to {
+      transform: translate3d(-3%, 4%, 0) scale(1.08);
+    }
+  }
+
+  /* Opening: text and photo side by side from 990px */
+  .brand-story__hero {
+    display: grid;
+    gap: clamp(1.75rem, 1rem + 3vw, 3rem);
+    align-items: center;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+  }
+
+  .brand-story__hero--text {
+    max-width: 46rem;
+    margin-inline: auto;
+    text-align: center;
+
+    & .brand-story__intro {
+      justify-items: center;
+    }
+  }
+
+  .brand-story__intro {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+  }
+
+  .brand-story__title {
+    max-width: 14ch;
+    font-size: calc(clamp(2.4rem, 1.6rem + 3.4vw, 4.25rem) * var(--font-heading-scale, 1));
+  }
+
+  .brand-story__lead {
+    max-width: 34rem;
+    color: var(--color-text);
+  }
+
+  .brand-story__signature {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-heading-family);
+    font-size: var(--text-lg);
+    font-style: italic;
+    color: var(--warm-text);
+
+    &::before {
+      content: '';
+      width: 2.5rem;
+      height: 1px;
+      background: var(--warm-gradient);
+    }
+  }
+
+  /* The photo sits in an arch with a fine outline offset around it */
+  .brand-story__portrait {
+    position: relative;
+    margin: 0;
+    width: min(100%, 26rem);
+    justify-self: center;
+
+    @media screen and (max-width: 989px) {
+      width: min(100%, 19rem);
+    }
+  }
+
+  .brand-story__arch {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+    background-color: var(--palette-rose-light);
+    box-shadow: var(--shadow-lg);
+
+    @media screen and (max-width: 989px) {
+      aspect-ratio: 1;
+    }
+  }
+
+  .brand-story__portrait::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -0.75rem;
+    border: 1px solid var(--warm-hairline);
+    border-radius: 999px 999px calc(var(--radius-lg) + 0.75rem) calc(var(--radius-lg) + 0.75rem);
+  }
+
+  .brand-story__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .brand-story__badge {
+    position: absolute;
+    inset-block-end: 1.25rem;
+    inset-inline-start: 50%;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    white-space: nowrap;
+    color: var(--palette-brown-deep);
+    background-color: rgb(var(--palette-warm-white-rgb) / 0.88);
+    box-shadow: var(--shadow-md);
+    translate: -50% 0;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand-story__badge-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--rose-strong);
+    box-shadow: 0 0 0 0 rgb(var(--rose-strong-rgb) / 0.5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-story__badge-dot {
+      animation: story-pulse 2.6s ease-out infinite;
+    }
+
+    .js [data-reveal-enabled] .brand-story__portrait.reveal .brand-story__image {
+      scale: 1.08;
+      transition: scale 2.2s var(--ease-reveal);
+    }
+
+    .js [data-reveal-enabled] .brand-story__portrait.reveal.is-visible .brand-story__image {
+      scale: 1;
+    }
+  }
+
+  @keyframes story-pulse {
+    70% {
+      box-shadow: 0 0 0 0.6rem rgb(var(--rose-strong-rgb) / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgb(var(--rose-strong-rgb) / 0);
+    }
+  }
+
+  /* Chapters along a thread on the left; the thread fills while scrolling */
+  .brand-story__story {
+    margin-block-start: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  }
+
+  .brand-story__chapters {
+    position: relative;
+    display: grid;
+    gap: clamp(2.25rem, 1.5rem + 3vw, 4rem);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block: 0.5rem 0;
+      inset-inline-start: calc(var(--story-thread) / 2);
+      width: 1px;
+      background: var(--warm-hairline);
+    }
+
+    &::after {
+      width: 2px;
+      margin-inline-start: -0.5px;
+      background: linear-gradient(180deg, var(--rose-strong), var(--warm));
+      transform-origin: top;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .brand-story__chapters::after {
+        animation: story-thread linear both;
+        animation-timeline: view();
+        animation-range: entry 10% exit 70%;
+      }
+    }
+  }
+
+  @keyframes story-thread {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  .story-chapter {
+    position: relative;
+    display: grid;
+    gap: var(--space-md);
+    padding-inline-start: calc(var(--story-thread) + clamp(1rem, 0.5rem + 2vw, 2.5rem));
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(2.5rem, 5vw, 5rem);
+      align-items: center;
+    }
+  }
+
+  .story-chapter--text {
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 52rem);
+    }
+
+    & .story-chapter__body {
+      max-width: 52rem;
+    }
+  }
+
+  .story-chapter--flip .story-chapter__media {
+    @media screen and (min-width: 990px) {
+      order: 2;
+    }
+  }
+
+  .story-chapter__dot {
+    position: absolute;
+    inset-block-start: 0.35rem;
+    inset-inline-start: 0;
+    width: var(--story-thread);
+    height: var(--story-thread);
+    border: 1px solid var(--warm-hairline);
+    border-radius: 50%;
+    background-color: var(--rose-strong);
+    box-shadow: inset 0 0 0 0.3rem var(--palette-warm-white);
+
+    @media screen and (min-width: 990px) {
+      inset-block-start: 50%;
+      translate: 0 -50%;
+    }
+  }
+
+  .story-chapter--text .story-chapter__dot {
+    @media screen and (min-width: 990px) {
+      inset-block-start: 0.35rem;
+      translate: none;
+    }
+  }
+
+  /* The dot lights up once its chapter has appeared */
+  .js [data-reveal-enabled] .story-chapter .story-chapter__dot {
+    transition: background-color 0.8s var(--ease-reveal) 0.3s;
+  }
+
+  .js [data-reveal-enabled] .story-chapter:not(.is-visible) .story-chapter__dot {
+    background-color: var(--palette-warm-white);
+  }
+
+  .story-chapter__media {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    background-color: var(--palette-rose-light);
+    box-shadow: var(--shadow-md);
+
+    @media screen and (min-width: 990px) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  .story-chapter__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .js [data-reveal-enabled] .story-chapter.reveal .story-chapter__image {
+      scale: 1.06;
+      transition: scale 1.8s var(--ease-reveal);
+    }
+
+    .js [data-reveal-enabled] .story-chapter.reveal.is-visible .story-chapter__image {
+      scale: 1;
+    }
+  }
+
+  .story-chapter__body {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 34rem;
+  }
+
+  .story-chapter__label {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* The chapter number: a large italic figure in a rose-to-brown gradient */
+  .story-chapter__number {
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
+    font-style: italic;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--rose-text);
+    background: linear-gradient(135deg, var(--rose-strong) 10%, var(--warm) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .story-chapter__title {
+    font-size: var(--heading-3);
+  }
+
+  .story-chapter__text {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+  }
+
+  /* The quote: a full-width card on its own gradient */
+  .story-quote {
+    padding-inline-start: calc(var(--story-thread) + clamp(1rem, 0.5rem + 2vw, 2.5rem));
+  }
+
+  .story-quote__card {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: clamp(1.75rem, 1rem + 3vw, 3.25rem) clamp(1.5rem, 1rem + 3vw, 4rem);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    text-align: center;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgb(255 255 255 / 0.7), transparent 70%),
+      linear-gradient(120deg, var(--story-from) 0%, var(--palette-rose-light) 55%, var(--story-to) 100%);
+    box-shadow: var(--shadow-md);
+  }
+
+  .story-quote__mark {
+    position: absolute;
+    inset-block-start: -0.5rem;
+    inset-inline-end: 1.5rem;
+    font-family: var(--font-heading-family);
+    font-size: clamp(6rem, 4rem + 6vw, 10rem);
+    line-height: 1;
+    color: rgb(var(--rose-strong-rgb) / 0.22);
+  }
+
+  .story-quote__text {
+    margin: 0;
+
+    & p {
+      max-width: 40ch;
+      margin-inline: auto;
+      font-family: var(--font-heading-family);
+      font-size: clamp(1.45rem, 1.1rem + 1.4vw, 2.25rem);
+      font-style: italic;
+      line-height: 1.3;
+      text-wrap: balance;
+      color: var(--palette-brown-deep);
+    }
+  }
+
+  .story-quote__attribution {
+    margin-block-start: var(--space-md);
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--warm-text);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Histoire de la marque",
+  "tag": "div",
+  "class": "section-brand-story",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Ouverture"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Notre histoire"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Mettez un mot en italique pour lui donner la couleur d'accent.",
+      "default": "Une marque née <em>d'un geste simple.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Introduction"
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Signature",
+      "info": "Une courte ligne en italique sous l'introduction."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Description de la photo (accessibilité)"
+    },
+    {
+      "type": "text",
+      "id": "image_badge",
+      "label": "Pastille sur la photo"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Dégradé : haut",
+      "default": "#f3dadd"
+    },
+    {
+      "type": "color",
+      "id": "gradient_middle",
+      "label": "Dégradé : milieu",
+      "default": "#f8e9ea"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Dégradé : bas",
+      "default": "#fcf9f7"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette du texte",
+      "default": "scheme-6"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapitre",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nom du chapitre",
+          "info": "Affiché après « Chapitre 1 », par exemple « Le constat »."
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Titre",
+          "default": "Un titre court"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texte"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Facultative : sans photo, le chapitre s'affiche en texte seul."
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Description de la photo (accessibilité)"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Citation",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Citation",
+          "default": "Une phrase qui résume ce qui vous anime."
+        },
+        {
+          "type": "text",
+          "id": "attribution",
+          "label": "Signature",
+          "default": "VELEA"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Histoire de la marque",
+      "blocks": [{ "type": "chapter" }, { "type": "chapter" }, { "type": "quote" }, { "type": "chapter" }]
+    }
+  ]
+}
+{% endschema %}

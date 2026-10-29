@@ -1,31 +1,73 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "story": {
+      "type": "brand-story",
+      "blocks": {
+        "chapter-constat": {
+          "type": "chapter",
+          "settings": {
+            "label": "Le constat",
+            "title": "Des jours que l'on connaît <em>par cœur.</em>",
+            "text": "<p>Le ventre qui tire, le bas du dos qui proteste, l'envie de se rouler en boule. Pour beaucoup de femmes, les règles reviennent chaque mois avec leur lot d'inconfort.</p><p>Et souvent, on ressort la bouillotte. Elle réconforte, c'est vrai. Mais elle refroidit vite, il faut rester allongée, et elle ne suit pas une journée qui, elle, continue.</p>",
+            "image": "shopify://shop_images/Inconfort_dans_une_chambre_chaleureuse.png",
+            "image_alt": "Un moment d'inconfort pendant les règles, dans une chambre douce et chaleureuse"
+          }
+        },
+        "chapter-idee": {
+          "type": "chapter",
+          "settings": {
+            "label": "L'idée",
+            "title": "Garder la chaleur, <em>sans s'arrêter.</em>",
+            "text": "<p>Nous voulions une chaleur qui se règle, qui tienne sur soi et qui ne retienne pas au bout d'un fil. C'est ce que nous avons cherché, et ce que nous proposons aujourd'hui avec la ceinture VELEA : rechargeable, sans fil, avec trois niveaux de chaleur et un massage par vibration.</p><p>Légère, elle se glisse sous un pull ample et s'allume d'un simple appui. Du canapé au bureau, elle vous suit.</p>",
+            "image": "shopify://shop_images/Deballage_d_un_appareil_bien-etre_au_lit.png",
+            "image_alt": "Le déballage de la ceinture chauffante VELEA, sur un lit"
+          }
+        },
+        "quote": {
+          "type": "quote",
+          "settings": {
+            "text": "Nous ne promettons pas de faire disparaître la douleur. Nous voulons rendre ces jours-là un peu plus doux.",
+            "attribution": "VELEA"
+          }
+        },
+        "chapter-parti-pris": {
+          "type": "chapter",
+          "settings": {
+            "label": "Notre parti pris",
+            "title": "Dire les choses <em>telles qu'elles sont.</em>",
+            "text": "<p>La ceinture n'est pas un traitement, et nous ne la présenterons jamais comme tel : c'est un accessoire de confort, qui apporte une chaleur douce, comme une bouillotte.</p><p>Ses caractéristiques sont celles annoncées par le fabricant, sans retouche. Ses précautions d'emploi se lisent avant l'achat, pas seulement dans la boîte. Et si une question vous retient, écrivez-nous : nous vous répondons par e-mail.</p>"
+          }
+        },
+        "chapter-aujourdhui": {
+          "type": "chapter",
+          "settings": {
+            "label": "Aujourd'hui",
+            "title": "Un essentiel aujourd'hui, <em>d'autres bientôt.</em>",
+            "text": "<p>VELEA est une jeune marque, installée en Alsace. Pour l'instant, elle tient en un objet : la ceinture chauffante, en rose ou en blanc.</p><p>La culotte menstruelle et les serviettes lavables arrivent bientôt, avec la même idée : du confort, des informations claires, et rien de superflu.</p>",
+            "image": "shopify://shop_images/velea-ceinture-06-coloris.jpg",
+            "image_alt": "La ceinture chauffante VELEA dans ses deux coloris, rose et blanc"
+          }
+        }
+      },
+      "block_order": [
+        "chapter-constat",
+        "chapter-idee",
+        "quote",
+        "chapter-parti-pris",
+        "chapter-aujourdhui"
+      ],
       "settings": {
-        "eyebrow": "Notre approche",
-        "intro": "Une marque de confort menstruel qui préfère la clarté aux grandes promesses.",
-        "show_content": true,
-        "center": true,
-        "compact": false,
-        "color_scheme": "scheme-2"
-      }
-    },
-    "what": {
-      "type": "image-with-text",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "fallback_media_position": 2,
-        "image_alt": "",
-        "ratio": "4 / 5",
-        "image_position": "left",
-        "eyebrow": "Ce que nous proposons",
-        "heading": "Un accessoire de confort, <em>simplement.</em>",
-        "text": "<p>Une ceinture chauffante sans fil, pensée pour accompagner vos jours de règles avec une chaleur douce et réglable, chez vous comme à l'extérieur.</p><p>Ce n'est ni un traitement ni un dispositif médical : c'est une source de chaleur pratique, que vous utilisez à votre rythme, en suivant ses précautions d'emploi.</p>",
-        "button_label": "Découvrir la ceinture",
-        "button_link": "/products/ceinture-chauffante-regles",
-        "anchor": "",
-        "color_scheme": "scheme-2"
+        "eyebrow": "Notre histoire",
+        "heading": "Une marque née <em>d'un geste simple.</em>",
+        "lead": "Poser quelque chose de chaud sur son ventre quand les règles font mal. Beaucoup de femmes connaissent ce geste depuis l'adolescence. VELEA est née de l'envie de le rendre plus pratique, plus doux et plus libre.",
+        "signature": "Le confort menstruel, avec douceur.",
+        "image": "shopify://shop_images/Detente_chaleureuse_avec_ceinture_chauffante_rose.png",
+        "image_alt": "Un moment de détente avec la ceinture chauffante VELEA rose",
+        "image_badge": "Chaleur douce, sans fil",
+        "gradient_start": "#f3dadd",
+        "gradient_middle": "#f8e9ea",
+        "gradient_end": "#fcf9f7",
+        "color_scheme": "scheme-6"
       }
     },
     "commitments": {
@@ -77,10 +119,10 @@
         "style": "cards",
         "columns": 4,
         "center": true,
-        "compact": false,
+        "compact": true,
         "show_drops": false,
         "anchor": "engagements",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-1"
       }
     },
     "cta": {
@@ -99,8 +141,7 @@
     }
   },
   "order": [
-    "main",
-    "what",
+    "story",
     "commitments",
     "cta"
   ]

@@ -1,0 +1,861 @@
+{%- comment -%}
+  The FAQ page: a powder-pink opening with a search field, then the questions
+  grouped by topic (a "Thème" block starts each group). On large screens the
+  topics stay in a column on the left and follow the reading; on phones they
+  become a row of chips. Answers open with a soft unfolding. The questions
+  are also given to search engines as FAQPage structured data.
+{%- endcomment -%}
+{%- liquid
+  assign category_blocks = section.blocks | where: 'type', 'category'
+  assign question_blocks = section.blocks | where: 'type', 'question'
+  assign intro = section.settings.intro
+-%}
+
+<faq-hub
+  class="faq-hub color-{{ section.settings.color_scheme }}"
+  style="--faq-from: {{ section.settings.gradient_start }}; --faq-to: {{ section.settings.gradient_end }};"
+  data-result-one="{{ 'sections.faq_results_one' | t }}"
+  data-result-other="{{ 'sections.faq_results_other' | t: count: '§' }}"
+>
+  <section class="faq-hub__section" aria-labelledby="FaqHubTitle-{{ section.id }}">
+    <div class="faq-hub__hero">
+      <div class="faq-hub__aura" aria-hidden="true"></div>
+      <div class="page-width faq-hub__hero-inner reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow eyebrow--center">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="h1 faq-hub__title" id="FaqHubTitle-{{ section.id }}">
+          {{- section.settings.heading | default: page.title -}}
+        </h1>
+        {%- if intro != blank -%}
+          <p class="lead faq-hub__intro">{{ intro | escape }}</p>
+        {%- elsif page.content != blank -%}
+          <div class="lead faq-hub__intro rte">{{ page.content }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.show_search -%}
+          <div class="faq-hub__search" role="search">
+            <label class="visually-hidden" for="FaqSearch-{{ section.id }}">{{ 'sections.faq_search_label' | t }}</label>
+            <span class="faq-hub__search-icon" aria-hidden="true">{% render 'icon', icon: 'search' %}</span>
+            <input
+              class="faq-hub__search-input"
+              type="search"
+              id="FaqSearch-{{ section.id }}"
+              placeholder="{{ 'sections.faq_search_placeholder' | t }}"
+              autocomplete="off"
+              enterkeyhint="search"
+              data-faq-search
+            >
+            <button
+              type="button"
+              class="faq-hub__search-clear"
+              aria-label="{{ 'sections.faq_search_clear' | t }}"
+              data-faq-clear
+              hidden
+            >
+              {% render 'icon', icon: 'close' %}
+            </button>
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-faq-status></p>
+        {%- endif -%}
+
+        {%- if category_blocks.size > 1 -%}
+          <nav class="faq-hub__chips" aria-label="{{ 'sections.faq_topics' | t }}">
+            {%- for block in category_blocks -%}
+              {%- assign topic_id = block.settings.anchor | default: block.settings.title | handleize -%}
+              <a class="faq-hub__chip" href="#{{ topic_id }}" data-faq-link="{{ topic_id }}">
+                {% render 'icon', icon: block.settings.icon %}
+                <span>{{ block.settings.title | escape }}</span>
+                <span class="faq-hub__chip-count" data-faq-count="{{ topic_id }}" aria-hidden="true"></span>
+              </a>
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="page-width faq-hub__layout{% if category_blocks.size < 2 %} faq-hub__layout--single{% endif %}">
+      {%- if category_blocks.size > 1 -%}
+        <aside class="faq-hub__aside">
+          <nav class="faq-hub__toc" aria-label="{{ 'sections.faq_topics' | t }}">
+            <p class="faq-hub__toc-title">{{ 'sections.faq_topics' | t }}</p>
+            <ul class="faq-hub__toc-list" role="list">
+              {%- for block in category_blocks -%}
+                {%- assign topic_id = block.settings.anchor | default: block.settings.title | handleize -%}
+                <li>
+                  <a class="faq-hub__toc-link" href="#{{ topic_id }}" data-faq-link="{{ topic_id }}">
+                    {% render 'icon', icon: block.settings.icon %}
+                    <span>{{ block.settings.title | escape }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+          {%- if section.settings.contact_link != blank -%}
+            <a class="faq-hub__aside-contact link--arrow" href="{{ section.settings.contact_link }}">
+              {{- section.settings.aside_contact_label | escape -}}
+              {% render 'icon', icon: 'arrow-right' %}
+            </a>
+          {%- endif -%}
+        </aside>
+      {%- endif -%}
+
+      <div class="faq-hub__groups">
+        {%- comment -%} Each topic takes the questions that follow it, up to the next topic. {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category' -%}
+            {%- assign topic_id = block.settings.anchor | default: block.settings.title | handleize -%}
+            <div class="faq-hub__group reveal" id="{{ topic_id }}" data-faq-group="{{ topic_id }}" {{ block.shopify_attributes }}>
+              <h2 class="faq-hub__group-title">
+                <span class="icon-badge" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
+                {{- block.settings.title | escape -}}
+              </h2>
+              <div class="faq-hub__items">
+                {%- for item in section.blocks offset: forloop.index -%}
+                  {%- if item.type == 'category' -%}{%- break -%}{%- endif -%}
+                  {% render 'faq-item', block: item %}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- elsif forloop.first -%}
+            <div class="faq-hub__group reveal" data-faq-group>
+              <div class="faq-hub__items">
+                {%- for item in section.blocks -%}
+                  {%- if item.type == 'category' -%}{%- break -%}{%- endif -%}
+                  {% render 'faq-item', block: item %}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="faq-hub__empty" data-faq-empty hidden>
+          <p class="faq-hub__empty-title">{{ 'sections.faq_no_result' | t }}</p>
+          <p class="text-muted">{{ 'sections.faq_no_result_hint' | t }}</p>
+        </div>
+
+        {%- if section.settings.contact_heading != blank -%}
+          <div class="faq-hub__contact reveal">
+            <span class="faq-hub__contact-icon" aria-hidden="true">{% render 'icon', icon: 'mail' %}</span>
+            <div class="faq-hub__contact-body">
+              <h2 class="faq-hub__contact-title">{{ section.settings.contact_heading }}</h2>
+              {%- if section.settings.contact_text != blank -%}
+                <p class="text-muted">{{ section.settings.contact_text | escape }}</p>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.contact_label != blank and section.settings.contact_link != blank -%}
+              <a class="button faq-hub__contact-button" href="{{ section.settings.contact_link }}">
+                {{- section.settings.contact_label | escape -}}
+                {% render 'icon', icon: 'arrow-right' %}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+</faq-hub>
+
+{%- if question_blocks.size > 0 -%}
+  {%- capture faq_entities -%}
+    {%- for block in question_blocks -%}
+      {"@type": "Question", "name": {{ block.settings.question | json }}, "acceptedAnswer": {"@type": "Answer", "text": {{ block.settings.answer | strip_html | json }}}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  {%- endcapture -%}
+  <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{{ faq_entities }}]}
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .faq-hub {
+    display: block;
+    background: linear-gradient(180deg, var(--faq-from) 0%, var(--color-background) 22rem, var(--faq-to) 100%);
+  }
+
+  /* Opening: centred title, search field and topic chips */
+  .faq-hub__hero {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    text-align: center;
+  }
+
+  .faq-hub__aura {
+    position: absolute;
+    z-index: -1;
+    inset: -20% -10% 0;
+    pointer-events: none;
+    background:
+      radial-gradient(30% 50% at 20% 30%, rgb(255 255 255 / 0.7), transparent 70%),
+      radial-gradient(26% 46% at 82% 60%, rgb(var(--rose-strong-rgb) / 0.14), transparent 70%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .faq-hub__aura {
+      animation: faq-aura 16s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes faq-aura {
+    to {
+      transform: translate3d(4%, -3%, 0) scale(1.06);
+    }
+  }
+
+  .faq-hub__hero-inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-md);
+    max-width: calc(46rem + var(--gutter) * 2);
+  }
+
+  .faq-hub__title {
+    font-size: calc(clamp(2.4rem, 1.6rem + 3.2vw, 4rem) * var(--font-heading-scale, 1));
+  }
+
+  .faq-hub__intro {
+    max-width: 36rem;
+
+    & a {
+      text-decoration: underline;
+      text-decoration-color: rgb(var(--color-text-rgb) / 0.35);
+    }
+  }
+
+  .faq-hub__search {
+    position: relative;
+    width: min(100%, 34rem);
+    margin-block-start: var(--space-2xs);
+  }
+
+  .faq-hub__search-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 1.25rem;
+    display: grid;
+    color: var(--warm-text);
+    translate: 0 -50%;
+    pointer-events: none;
+    --icon-size: 1.15rem;
+  }
+
+  .faq-hub__search-input {
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0 3.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-round);
+    font: inherit;
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background-color: rgb(255 255 255 / 0.85);
+    box-shadow: 0 10px 30px -18px rgb(var(--rose-cta-rgb) / 0.45);
+    transition: border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &::placeholder {
+      color: var(--color-text-muted);
+      opacity: 0.85;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--rose-strong);
+      box-shadow: 0 0 0 4px rgb(var(--rose-strong-rgb) / 0.18), 0 10px 30px -18px rgb(var(--rose-cta-rgb) / 0.45);
+    }
+  }
+
+  .faq-hub__search-clear {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 0.4rem;
+    display: grid;
+    place-items: center;
+    width: var(--tap-target);
+    height: var(--tap-target);
+    border: 0;
+    border-radius: 50%;
+    color: var(--color-text-muted);
+    background: none;
+    translate: 0 -50%;
+    cursor: pointer;
+    --icon-size: 1rem;
+
+    &:hover {
+      color: var(--color-text);
+      background-color: var(--palette-rose-light);
+    }
+  }
+
+  /* Topic chips: one row that scrolls sideways on phones, wraps on tablets, hidden next to the column on PC */
+  .faq-hub__chips {
+    display: flex;
+    gap: var(--space-2xs);
+    max-width: 100%;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 0.25rem var(--gutter) 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media screen and (min-width: 750px) {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+    }
+
+    @media screen and (min-width: 990px) {
+      display: none;
+    }
+  }
+
+  .faq-hub__chip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: var(--tap-target);
+    padding: 0 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-round);
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--color-text);
+    background-color: rgb(255 255 255 / 0.7);
+    scroll-snap-align: start;
+    transition: background-color var(--duration-base) ease, border-color var(--duration-base) ease, color var(--duration-base) ease;
+    --icon-size: 1rem;
+
+    & .icon {
+      color: var(--warm-text);
+    }
+
+    &:hover,
+    &[aria-current='true'] {
+      border-color: var(--palette-brown-deep);
+      color: var(--palette-warm-white);
+      background-color: var(--palette-brown-deep);
+
+      & .icon {
+        color: inherit;
+      }
+    }
+  }
+
+  .faq-hub__chip-count:not(:empty) {
+    min-width: 1.4rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-xs);
+    text-align: center;
+    background-color: rgb(var(--rose-strong-rgb) / 0.16);
+  }
+
+  /* Questions next to a column of topics that follows the reading (PC) */
+  .faq-hub__layout {
+    display: grid;
+    gap: var(--space-lg);
+    padding-block: clamp(1rem, 0.5rem + 2vw, 2rem) clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: clamp(2.5rem, 5vw, 5rem);
+      align-items: start;
+    }
+  }
+
+  .faq-hub__layout--single {
+    max-width: calc(52rem + var(--gutter) * 2);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .faq-hub__aside {
+    display: none;
+
+    @media screen and (min-width: 990px) {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + 1.5rem);
+      display: grid;
+      gap: var(--space-md);
+    }
+  }
+
+  .faq-hub__toc-title {
+    margin-block-end: var(--space-xs);
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .faq-hub__toc-list {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .faq-hub__toc-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: var(--tap-target);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    transition: color var(--duration-base) ease, background-color var(--duration-base) ease;
+    --icon-size: 1.05rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 0.55rem;
+      inset-inline-start: 0;
+      width: 2px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--rose-strong), var(--warm));
+      transform: scaleY(0);
+      transition: transform var(--duration-slow) var(--ease-reveal);
+    }
+
+    &:hover {
+      color: var(--color-text);
+      background-color: rgb(255 255 255 / 0.55);
+    }
+
+    &[aria-current='true'] {
+      font-weight: var(--font-body-weight-medium);
+      color: var(--color-text);
+      background-color: rgb(255 255 255 / 0.8);
+
+      &::before {
+        transform: scaleY(1);
+      }
+    }
+  }
+
+  .faq-hub__aside-contact {
+    font-size: var(--text-sm);
+    color: var(--rose-text);
+  }
+
+  .faq-hub__groups {
+    display: grid;
+    gap: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+    min-width: 0;
+  }
+
+  .faq-hub__group {
+    display: grid;
+    gap: var(--space-sm);
+    scroll-margin-block-start: calc(var(--header-height) + 1.25rem);
+  }
+
+  .faq-hub__group-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--heading-4);
+
+    & .icon-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: rgb(255 255 255 / 0.75);
+      --icon-size: 1.1rem;
+    }
+  }
+
+  .faq-hub__items {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  /* Each question is a soft card; the open one lifts and gets a rose edge */
+  .faq-item {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 0.9);
+    border-radius: var(--radius-md);
+    background-color: rgb(255 255 255 / 0.62);
+    box-shadow: 0 1px 2px rgb(48 39 36 / 0.04);
+    transition: background-color var(--duration-base) ease, box-shadow var(--duration-slow) var(--ease-reveal), border-color var(--duration-base) ease;
+    scroll-margin-block-start: calc(var(--header-height) + 1.25rem);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--rose-strong), var(--warm-light));
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform var(--duration-slow) var(--ease-reveal);
+    }
+
+    &:hover {
+      border-color: var(--color-border);
+      background-color: rgb(255 255 255 / 0.85);
+    }
+
+    &[open] {
+      border-color: var(--color-border);
+      background-color: #fff;
+      box-shadow: var(--shadow-md);
+
+      &::before {
+        transform: scaleY(1);
+      }
+    }
+  }
+
+  .faq-item__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    min-height: 3.5rem;
+    padding: 0.85rem 1rem 0.85rem 1.25rem;
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline-offset: -3px;
+      border-radius: var(--radius-md);
+    }
+  }
+
+  .faq-item__question {
+    font-family: var(--font-body-family);
+    font-size: var(--text-md);
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  /* Plus that turns into a minus, in a small rose circle */
+  .faq-item__toggle {
+    position: relative;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: var(--palette-rose-light);
+    transition: background-color var(--duration-base) ease, rotate var(--duration-slow) var(--ease-reveal);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
+      width: 0.75rem;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: var(--palette-brown-deep);
+      translate: -50% -50%;
+      transition: rotate var(--duration-slow) var(--ease-reveal), background-color var(--duration-base) ease;
+    }
+
+    &::after {
+      rotate: 90deg;
+    }
+  }
+
+  .faq-item[open] .faq-item__toggle {
+    background-color: var(--palette-brown-deep);
+    rotate: 180deg;
+
+    &::before,
+    &::after {
+      background-color: var(--palette-warm-white);
+    }
+
+    &::after {
+      rotate: 0deg;
+    }
+  }
+
+  .faq-item__answer {
+    padding: 0 1.25rem 1.15rem;
+    color: var(--color-text-muted);
+  }
+
+  /* The answer unfolds (browsers that can animate details) and fades in */
+  @media (prefers-reduced-motion: no-preference) {
+    .faq-item {
+      interpolate-size: allow-keywords;
+
+      &::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition: block-size 0.5s var(--ease-reveal), content-visibility 0.5s allow-discrete;
+      }
+
+      &[open]::details-content {
+        block-size: auto;
+      }
+    }
+
+    .faq-item[open] .faq-item__answer {
+      animation: faq-answer 0.6s var(--ease-reveal) both;
+    }
+  }
+
+  @keyframes faq-answer {
+    from {
+      opacity: 0;
+      transform: translateY(-0.35rem);
+    }
+  }
+
+  .faq-hub__empty {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-lg);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    background-color: rgb(255 255 255 / 0.5);
+  }
+
+  .faq-hub__empty-title {
+    font-family: var(--font-heading-family);
+    font-size: var(--heading-4);
+  }
+
+  /* Contact card on a rose-to-ivory gradient */
+  .faq-hub__contact {
+    display: grid;
+    gap: var(--space-sm);
+    align-items: center;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(60% 120% at 100% 0%, rgb(255 255 255 / 0.75), transparent 70%),
+      linear-gradient(120deg, var(--faq-from) 0%, var(--palette-rose-light) 60%, var(--palette-warm-white) 100%);
+    box-shadow: var(--shadow-md);
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: var(--space-md);
+    }
+  }
+
+  .faq-hub__contact-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    color: var(--palette-warm-white);
+    background: linear-gradient(135deg, var(--rose-cta-light), var(--rose-cta));
+    --icon-size: 1.25rem;
+  }
+
+  .faq-hub__contact-body {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .faq-hub__contact-title {
+    font-size: var(--heading-4);
+  }
+
+  .faq-hub__contact-button {
+    justify-self: start;
+
+    @media screen and (min-width: 750px) {
+      justify-self: end;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ complète",
+  "tag": "div",
+  "class": "section-faq-hub",
+  "max_blocks": 50,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Ouverture"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Aide"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Vos questions, <em>nos réponses.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Introduction",
+      "info": "Vide : le texte de la page (Boutique en ligne > Pages) s'affiche."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Afficher la recherche",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Carte contact"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "contact_heading",
+      "label": "Titre",
+      "default": "Vous n'avez pas trouvé <em>votre réponse ?</em>"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "Texte",
+      "default": "Écrivez-nous : nous vous répondons par e-mail."
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Bouton : texte",
+      "default": "Nous écrire"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Bouton : destination"
+    },
+    {
+      "type": "text",
+      "id": "aside_contact_label",
+      "label": "Lien sous les thèmes (PC)",
+      "default": "Une autre question ?"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Dégradé : haut",
+      "default": "#f3dadd"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Dégradé : bas",
+      "default": "#fcf9f7"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Thème",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Un thème regroupe les questions placées en dessous de lui, jusqu'au thème suivant."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "La ceinture"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "heat", "label": "Chaleur" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "shield", "label": "Sécurité" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "return", "label": "Retour" },
+            { "value": "box", "label": "Colis" },
+            { "value": "lock", "label": "Paiement" },
+            { "value": "chat", "label": "Question" },
+            { "value": "info", "label": "Information" },
+            { "value": "sparkle", "label": "Étincelle" }
+          ],
+          "default": "heat"
+        },
+        {
+          "type": "text",
+          "id": "anchor",
+          "label": "Ancre (lien interne)",
+          "info": "Par exemple « livraison » pour un lien vers /pages/faq#livraison."
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Votre question ?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Réponse",
+          "default": "<p>Une réponse claire et vérifiée.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ complète",
+      "blocks": [{ "type": "category" }, { "type": "question" }, { "type": "question" }]
+    }
+  ]
+}
+{% endschema %}

@@ -188,7 +188,16 @@
     "featured_product_editor_empty": "Choose the product to feature in this section's settings.",
     "offer_mosaic_alt": "{{ product }} – image {{ index }}",
     "offer_mosaic_slot": "Image {{ index }}",
-    "video_slot_hint": "Video {{ number }}: add your video in this block (Content > Files). This empty slot only shows in the editor."
+    "video_slot_hint": "Video {{ number }}: add your video in this block (Content > Files). This empty slot only shows in the editor.",
+    "story_chapter": "Chapter {{ number }}",
+    "faq_search_label": "Search a question",
+    "faq_search_placeholder": "Battery, delivery, returns…",
+    "faq_search_clear": "Clear search",
+    "faq_topics": "Topics",
+    "faq_results_one": "1 answer found",
+    "faq_results_other": "{{ count }} answers found",
+    "faq_no_result": "No question matches your search.",
+    "faq_no_result_hint": "Try another word, or ask us your question directly below."
   },
   "collections": {
     "coming_soon": "Coming soon",

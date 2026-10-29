@@ -77,6 +77,26 @@
     background-color: rgb(var(--palette-warm-white-rgb) / 0.82);
     box-shadow: 0 18px 40px -30px rgb(73 53 47 / 0.35);
     backdrop-filter: blur(4px);
+
+    /* Phones: icon beside the text, so four cards don't fill several screens */
+    @media screen and (max-width: 749px) {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-sm);
+
+      & .icon-badge {
+        width: 2.5rem;
+        height: 2.5rem;
+        --icon-size: 1.15rem;
+      }
+    }
+  }
+
+  .benefits__grid--cards {
+    @media screen and (max-width: 749px) {
+      gap: var(--space-sm);
+    }
   }
 
   .benefits__grid--inline {
