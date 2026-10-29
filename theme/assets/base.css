@@ -202,6 +202,14 @@ h6 {
   overflow-wrap: break-word;
 }
 
+/* Inside grids and flex rows, titles and paragraphs may shrink below their
+   longest word, so a pasted text with non-breaking spaces wraps instead of
+   running off the screen. */
+:where(h1, h2, h3, h4, h5, h6, p, li) {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
 ul[role='list'],
 ol[role='list'] {
   margin: 0;
