@@ -1689,7 +1689,7 @@ body:has(dialog[open]) {
   }
 
   /* The main buttons catch a soft light every few seconds */
-  :is(.hero__button:not(.button--secondary), .product-form__submit:not([disabled])) {
+  :is(.hero__button:not(.button--secondary), .product-form__submit:not([disabled]), .welcome-popup__submit) {
     overflow: hidden;
     isolation: isolate;
 
