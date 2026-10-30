@@ -1,0 +1,44 @@
+{% doc %}
+  Google Ads tag (gtag.js), set up with Consent Mode v2: nothing is stored for
+  advertising until the visitor accepts the "marketing" cookies in the theme's
+  banner (or Shopify's). The ID comes from theme settings > Suivi publicitaire.
+
+  @example
+  {% render 'google-ads-tag' %}
+{% enddoc %}
+{%- assign ads_id = settings.google_ads_id | strip -%}
+{%- if ads_id != blank -%}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ads_id | url_encode }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    // Until the visitor chooses, Google gets no cookie and no personal data.
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+
+    (function () {
+      function grant(choice) {
+        var ads = choice && choice.marketing ? 'granted' : 'denied';
+        gtag('consent', 'update', {
+          ad_storage: ads,
+          ad_user_data: ads,
+          ad_personalization: ads,
+          analytics_storage: choice && choice.analytics ? 'granted' : 'denied'
+        });
+      }
+      // A choice made on an earlier visit (theme banner)
+      try { grant(JSON.parse(localStorage.getItem('velea:cookies')) || {}); } catch (e) {}
+      // A choice made now
+      document.addEventListener('theme:cookie-consent', function (event) { grant(event.detail); });
+    })();
+
+    gtag('js', new Date());
+    gtag('config', {{ ads_id | json }});
+  </script>
+{%- endif -%}

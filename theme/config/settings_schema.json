@@ -445,5 +445,17 @@
         "placeholder": "https://youtube.com/"
       }
     ]
+  },
+  {
+    "name": "Suivi publicitaire",
+    "settings": [
+      {
+        "type": "text",
+        "id": "google_ads_id",
+        "label": "Identifiant Google Ads",
+        "info": "Format AW-…. Vide : la balise n'est pas chargée.",
+        "default": "AW-18546545893"
+      }
+    ]
   }
 ]
