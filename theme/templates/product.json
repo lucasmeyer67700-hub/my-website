@@ -111,6 +111,20 @@
             "show_returns_offer": true,
             "open": false
           }
+        },
+        "color_photo_blanc": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-produit-chambre-blanc.webp"
+          }
+        },
+        "color_photo_rose": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rose",
+            "image": "shopify://shop_images/velea-produit-chambre.webp"
+          }
         }
       },
       "block_order": [
@@ -124,7 +138,9 @@
         "specs",
         "usage",
         "box",
-        "safety"
+        "safety",
+        "color_photo_rose",
+        "color_photo_blanc"
       ],
       "settings": {
         "banner": "",
@@ -133,7 +149,8 @@
         "gallery_fit": "cover",
         "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "media_color": "Rose"
       }
     },
     "video": {

@@ -528,6 +528,19 @@
     background-color: var(--color-button);
   }
 
+  /* After « Ajouter au panier »: the count pops softly */
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header__cart-icon.is-bumped .cart-count {
+      animation: cart-count-pop 700ms var(--ease-out, ease-out);
+    }
+  }
+
+  @keyframes cart-count-pop {
+    0% { transform: scale(0.6); }
+    45% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+
   /* Mobile menu ------------------------------------------------------------ */
 
   .drawer.velea-menu {

@@ -1400,11 +1400,10 @@ class ProductForm extends HTMLElement {
         await this.#buyNow(formData, event.submitter.value);
         return;
       }
-      result = await cartRequest(`${theme.routes.cartAdd}.js`, formData);
+      result = await this.#add(formData);
     } catch (error) {
       // A refusal from Shopify (stock, limit…) is shown as it is. Anything else
-      // (network, unexpected answer) falls back to the plain form post, which
-      // Shopify always handles: the product still reaches the cart.
+      // falls back to the plain form post, which Shopify always handles.
       if (!error.data?.description) {
         console.error('Ajout au panier : passage au formulaire classique', error);
         this.#submitNatively(buyNow ? event.submitter.value : null);
@@ -1416,16 +1415,56 @@ class ProductForm extends HTMLElement {
       return;
     }
 
-    // The product is in the cart: a display problem must never say otherwise.
+    // The visitor stays on the page: the cart icon shows the new count and the
+    // button confirms. The cart (drawer or page) is up to date when opened.
     try {
       renderCartSections(result.sections);
-      document.querySelector('cart-drawer')?.open(event.submitter || this.submitButtons[0]);
     } catch (error) {
-      console.error('Panier : affichage du tiroir impossible', error);
-      window.location.assign(theme.routes.cart);
-      return;
+      console.error('Panier : mise à jour de l’affichage impossible', error);
     }
     this.#setBusy(false);
+    this.#confirmAdded(event.submitter || this.submitButtons[0]);
+  }
+
+  /**
+   * Adds to the cart with the cart sections in the answer. If that answer is
+   * not usable, tries once more the simplest way, then fetches the sections.
+   * @param {FormData} formData
+   */
+  async #add(formData) {
+    try {
+      return await cartRequest(`${theme.routes.cartAdd}.js`, formData);
+    } catch (error) {
+      if (error.data?.description) throw error;
+      const id = Number(formData.get('id'));
+      const quantity = Number(formData.get('quantity')) || 1;
+      await cartRequest(`${theme.routes.cartAdd}.js`, { items: [{ id, quantity }] });
+      const url = new URL(window.location.href);
+      url.search = '';
+      url.searchParams.set('sections', getCartSectionIds().join(','));
+      const response = await fetch(url.toString());
+      return { sections: response.ok ? await response.json().catch(() => ({})) : {} };
+    }
+  }
+
+  /**
+   * « Ajouté » on the button for a moment, and the cart icon pulses.
+   * @param {HTMLElement} button
+   */
+  #confirmAdded(button) {
+    const label = button?.querySelector('[data-add-to-cart-label]');
+    announce(theme.strings.added);
+    document.querySelector('[data-cart-icon]')?.classList.add('is-bumped');
+    setTimeout(() => document.querySelector('[data-cart-icon]')?.classList.remove('is-bumped'), 700);
+    if (!label) return;
+    const text = label.textContent;
+    button.classList.add('is-added');
+    label.textContent = theme.strings.added;
+    clearTimeout(this.addedTimer);
+    this.addedTimer = setTimeout(() => {
+      button.classList.remove('is-added');
+      if (label.textContent === theme.strings.added) label.textContent = text;
+    }, 1800);
   }
 
   /**
@@ -1593,10 +1632,9 @@ class VariantPicker extends HTMLElement {
         window.history.replaceState({}, '', url.toString());
       }
 
+      this.#showColour(scope, variant);
       if (variant.featured_media_id) {
         scope.querySelector('media-gallery')?.showMedia(variant.featured_media_id);
-      } else {
-        this.#showColour(scope, variant);
       }
     }
   }
@@ -1617,9 +1655,9 @@ class VariantPicker extends HTMLElement {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
     const gallery = /** @type {any} */ (scope.querySelector('media-gallery'));
-    const slide = gallery?.querySelector(`[data-media-color="${handle}"]`);
-    if (!slide) return;
-    gallery.showMedia(slide.dataset.mediaId);
+    if (!gallery?.showColour) return;
+    const slide = gallery.showColour(handle);
+    if (!slide?.dataset.mediaColor) return;
     const image = slide.querySelector('img');
     if (!image) return;
     for (const thumb of scope.querySelectorAll('[data-variant-image]')) thumb.src = image.currentSrc || image.src;
@@ -1655,9 +1693,10 @@ class MediaGallery extends HTMLElement {
 
     this.prev?.addEventListener('click', () => this.goTo(this.index - 1));
     this.next?.addEventListener('click', () => this.goTo(this.index + 1));
-    for (const [index, thumb] of this.thumbs.entries()) {
-      thumb.addEventListener('click', () => this.goTo(index));
+    for (const thumb of this.thumbs) {
+      thumb.addEventListener('click', () => this.goTo(this.thumbs.indexOf(thumb)));
     }
+    this.#syncVisible();
 
     this.track.addEventListener('keydown', (event) => {
       if (event.key === 'ArrowRight') this.goTo(this.index + 1);
@@ -1743,6 +1782,42 @@ class MediaGallery extends HTMLElement {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.track.scrollTo({ left: target.offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
     this.#setActive(this.slides.indexOf(target));
+  }
+
+  /** Only the photos on show (the chosen colour's) take part in the navigation. */
+  #syncVisible() {
+    const slides = [...this.querySelectorAll('[data-gallery-slide]')];
+    const thumbs = [...this.querySelectorAll('[data-gallery-thumb]')];
+    this.slides = slides.filter((slide) => !slide.hidden);
+    this.thumbs = thumbs.filter((thumb) => !thumb.closest('li')?.hidden);
+    const multiple = this.slides.length > 1;
+    if (this.prev) this.prev.hidden = !multiple;
+    if (this.next) this.next.hidden = !multiple;
+    const strip = this.querySelector('.gallery__thumbs');
+    if (strip) strip.hidden = !multiple;
+  }
+
+  /**
+   * Shows only the photos of a colour, when that colour has photos (otherwise
+   * all of them), and opens on its first photo.
+   * @param {string} colour - Colour handle, e.g. "blanc"
+   * @returns {HTMLElement | undefined} The first photo shown
+   */
+  showColour(colour) {
+    const slides = [...this.querySelectorAll('[data-gallery-slide]')];
+    const thumbs = [...this.querySelectorAll('[data-gallery-thumb]')];
+    const hasPhotos = slides.some((slide) => slide.dataset.mediaColor === colour);
+    for (const [i, slide] of slides.entries()) {
+      const show = !hasPhotos || !slide.dataset.mediaColor || slide.dataset.mediaColor === colour;
+      slide.hidden = !show;
+      const item = thumbs[i]?.closest('li');
+      if (item) item.hidden = !show;
+    }
+    this.#syncVisible();
+    if (!this.track || !this.slides.length) return undefined;
+    this.track.scrollLeft = this.slides[0].offsetLeft;
+    this.#setActive(0);
+    return this.slides[0];
   }
 
   /** @param {string | number} mediaId */

@@ -16,12 +16,22 @@
   @param {string} [ratio] - CSS aspect-ratio for slides
   @param {object} [overlays] - The section's blocks (gallery_card and gallery_badge are used)
   @param {boolean} [slots] - Keep 5 places (main photo + 4) and show the free ones as photo slots
+  @param {string} [media_color] - Colour shown by the product's own photos (e.g. "Rose")
+
+  Photos of a colour can also come from "color_photo" blocks (colour + photo)
+  in overlays. When the chosen colour has photos, only its photos show; a
+  colour without photos (e.g. "Rose + Blanc") shows them all.
 
   @example
   {% render 'product-gallery', product: product, overlays: section.blocks %}
 {% enddoc %}
 {%- liquid
   assign media_count = product.media.size
+  for block in overlays
+    if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank
+      assign media_count = media_count | plus: 1
+    endif
+  endfor
   assign initial_media = product.selected_or_first_available_variant.featured_media
 
   comment
@@ -53,6 +63,39 @@
     endfor
   endfor
   assign color_list = color_list_sorted | split: ','
+
+  comment
+    Colour photos chosen in the section, and the colour of the product's own
+    photos. The gallery opens on the colour of the selected variant.
+  endcomment
+  assign default_media_color = media_color | handleize
+  assign color_photo_count = 0
+  for block in overlays
+    if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank
+      assign color_photo_count = color_photo_count | plus: 1
+    endif
+  endfor
+  assign selected_color = ''
+  for option in product.options_with_values
+    assign option_handle = option.name | handleize
+    if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+      assign selected_color = product.selected_or_first_available_variant.options[forloop.index0] | handleize
+    endif
+  endfor
+  assign selected_has_photos = false
+  if selected_color != blank
+    if default_media_color == selected_color
+      assign selected_has_photos = true
+    endif
+    for block in overlays
+      if block.type == 'color_photo' and block.settings.image != blank
+        assign block_color = block.settings.color | handleize
+        if block_color == selected_color
+          assign selected_has_photos = true
+        endif
+      endif
+    endfor
+  endif
   if initial_media == blank and current_color != blank
     for media in product.media
       capture media_color
@@ -113,6 +156,9 @@
                 render 'media-color', media: media, colors: color_list
               endcapture
             endif
+            if media_color == blank
+              assign media_color = default_media_color
+            endif
           -%}
           <li
             class="gallery__slide"
@@ -120,6 +166,9 @@
             data-media-id="{{ media.id }}"
             {% if media_color != blank %}
               data-media-color="{{ media_color }}"
+            {% endif %}
+            {% if selected_has_photos and media_color != blank and media_color != selected_color %}
+              hidden
             {% endif %}
             aria-label="{{ 'products.media_x_of_y' | t: index: forloop.index, count: media_count }}"
           >
@@ -147,6 +196,35 @@
                 {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media_alt %}
             {%- endcase -%}
           </li>
+        {%- endfor -%}
+        {%- for block in overlays -%}
+          {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
+            {%- liquid
+              assign block_color = block.settings.color | handleize
+              assign block_alt = block.settings.image.alt | default: product.title | append: ' – ' | append: block.settings.color
+            -%}
+            <li
+              class="gallery__slide"
+              data-gallery-slide
+              data-media-id="color-{{ block.id }}"
+              data-media-color="{{ block_color }}"
+              {% if selected_has_photos and block_color != selected_color %}
+                hidden
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              <button
+                type="button"
+                class="gallery__zoom"
+                data-gallery-zoom
+                data-zoom-src="{{ block.settings.image | image_url: width: 2000 }}"
+                data-zoom-alt="{{ block_alt | escape }}"
+              >
+                {% render 'responsive-image', image: block.settings.image, sizes: '(min-width: 990px) 55vw, 100vw', alt: block_alt %}
+                <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
+              </button>
+            </li>
+          {%- endif -%}
         {%- endfor -%}
       </ul>
     {%- endif -%}
@@ -246,7 +324,22 @@
   {%- elsif media_count > 1 or free_slots > 0 -%}
     <ul class="gallery__thumbs{% if media_count <= slot_total %} gallery__thumbs--grid{% endif %}" role="list">
       {%- for media in product.media -%}
-        <li>
+        {%- liquid
+          assign thumb_color = ''
+          if color_list.size > 0
+            capture thumb_color
+              render 'media-color', media: media, colors: color_list
+            endcapture
+          endif
+          if thumb_color == blank
+            assign thumb_color = default_media_color
+          endif
+        -%}
+        <li
+          {% if selected_has_photos and thumb_color != blank and thumb_color != selected_color %}
+            hidden
+          {% endif %}
+        >
           <button
             type="button"
             class="gallery__thumb"
@@ -259,6 +352,21 @@
             <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
           </button>
         </li>
+      {%- endfor -%}
+      {%- for block in overlays -%}
+        {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
+          {%- assign block_color = block.settings.color | handleize -%}
+          <li
+            {% if selected_has_photos and block_color != selected_color %}
+              hidden
+            {% endif %}
+          >
+            <button type="button" class="gallery__thumb" data-gallery-thumb>
+              {% render 'responsive-image', image: block.settings.image, sizes: '96px', widths: '96, 192, 288', alt: block.settings.color %}
+              <span class="visually-hidden">{{ block.settings.color | escape }}</span>
+            </button>
+          </li>
+        {%- endif -%}
       {%- endfor -%}
       {%- for i in (1..free_slots) -%}
         <li class="gallery__slot gallery__slot--thumb" aria-hidden="true">
@@ -309,6 +417,12 @@
     &::-webkit-scrollbar {
       display: none;
     }
+  }
+
+  /* Photos of another colour than the one chosen */
+  .gallery__slide[hidden],
+  .gallery__thumbs > li[hidden] {
+    display: none;
   }
 
   .gallery__slide {

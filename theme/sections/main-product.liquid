@@ -428,7 +428,8 @@
         fit: section.settings.gallery_fit,
         ratio: section.settings.gallery_ratio,
         overlays: section.blocks,
-        slots: section.settings.show_media_slots
+        slots: section.settings.show_media_slots,
+        media_color: section.settings.media_color
       %}
     </div>
 
@@ -963,6 +964,12 @@
       "default": "contain"
     },
     {
+      "type": "text",
+      "id": "media_color",
+      "label": "Les photos du produit montrent le coloris",
+      "info": "Ex. : Rose. Avec les blocs « Photo d'un coloris », chaque couleur montre ses photos."
+    },
+    {
       "type": "checkbox",
       "id": "show_media_slots",
       "label": "Photo principale + 4 emplacements",
@@ -1042,6 +1049,23 @@
           "id": "dismissible",
           "label": "Bouton pour fermer l'encart",
           "default": true
+        }
+      ]
+    },
+    {
+      "type": "color_photo",
+      "name": "Galerie : photo d'un coloris",
+      "settings": [
+        {
+          "type": "text",
+          "id": "color",
+          "label": "Coloris",
+          "info": "Écrit comme dans les variantes, ex. : Blanc."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
         }
       ]
     },

@@ -1802,3 +1802,10 @@ body:has(dialog[open]) {
     opacity: 1;
   }
 }
+
+/* « Ajouté au panier ✓ » on the button for a moment after adding */
+.product-form__submit.is-added,
+[data-add-to-cart].is-added {
+  transition: background-color 0.3s ease;
+}
+
