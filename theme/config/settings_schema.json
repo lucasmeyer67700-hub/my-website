@@ -201,7 +201,7 @@
         "id": "product_photo_background",
         "label": "Fond des photos produits",
         "info": "Mettez la couleur du fond de vos photos produits : les cases du catalogue, la galerie des fiches et l'offre de l'accueil prennent ce fond, et une photo plus large que sa case s'affiche en entier, fondue dans ce rose.",
-        "default": "#fbccd6"
+        "default": "#ecbac7"
       }
     ]
   },

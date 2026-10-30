@@ -28,13 +28,11 @@
 <article class="product-card" aria-labelledby="CardTitle-{{ product.id }}">
   {%- liquid
     comment
-      A photo wider than the 4:5 card is shown whole rather than cropped.
+      Every card shows its first photo the same size: it fills the square
+      frame (centred), whatever the photo's own format.
     endcomment
     assign card_image = product.featured_media.preview_image
     assign card_contain = false
-    if card_image and card_image.aspect_ratio > 0.95
-      assign card_contain = true
-    endif
   -%}
   <div
     class="product-card__media media{% if second_media != blank %} product-card__media--swap{% endif %}{% if card_contain %} product-card__media--contain{% endif %}"
@@ -58,7 +56,17 @@
     <{{ tag }} class="product-card__title" id="CardTitle-{{ product.id }}">
       <a class="product-card__link" href="{{ product.url }}">{{ product.title | escape }}</a>
     </{{ tag }}>
-    {%- if product.price_varies -%}
+    {%- liquid
+      comment
+        « À partir de » on every product, unless it is on sale (then the
+        price snippet shows the old and new prices).
+      endcomment
+      assign on_sale = false
+      if product.compare_at_price_min > product.price_min
+        assign on_sale = true
+      endif
+    -%}
+    {%- if product.price_varies or on_sale == false -%}
       {%- assign price_min_text = product.price_min | money -%}
       <p class="price product-card__price">
         <span class="price__current">{{ 'products.price_from' | t: price: price_min_text }}</span>

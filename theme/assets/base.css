@@ -899,7 +899,7 @@ textarea.field__input {
 }
 
 .product-card__media {
-  --media-ratio: 4 / 5;
+  --media-ratio: 1 / 1;
 
   border-radius: var(--radius-lg);
   background-color: var(--gallery-bg);

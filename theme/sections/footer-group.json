@@ -57,7 +57,7 @@
       "type": "welcome-popup",
       "settings": {
         "enabled": true,
-        "delay": 40,
+        "delay": 30,
         "show_image": false,
         "snooze_days": 0,
         "product": "ceinture-chauffante-regles",
@@ -68,7 +68,7 @@
         "text": "",
         "button_label": "Recevoir mon code",
         "heading_font": "playfair_display_n4",
-        "code": "VELEA",
+        "code": "VELEA10",
         "success_heading": "Votre code est prêt",
         "success_text": "Merci pour votre inscription. Voici votre code de bienvenue.",
         "redirect": "/products/ceinture-chauffante-regles",
