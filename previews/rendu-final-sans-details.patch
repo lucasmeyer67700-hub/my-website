@@ -1,0 +1,209 @@
+diff --git a/theme/sections/featured-product.liquid b/theme/sections/featured-product.liquid
+index 0b90821..ffddf2a 100644
+--- a/theme/sections/featured-product.liquid
++++ b/theme/sections/featured-product.liquid
+@@ -224,7 +224,6 @@
+         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
+           <div class="featured-product__specs">
+             {% render 'product-specs', product: product, limit: section.settings.specs_limit %}
+-            <p class="text-muted text-small">{{ 'products.specs_note' | t }}</p>
+           </div>
+         {%- endif -%}
+ 
+diff --git a/theme/sections/hero.liquid b/theme/sections/hero.liquid
+index da035c1..4e4ecf4 100644
+--- a/theme/sections/hero.liquid
++++ b/theme/sections/hero.liquid
+@@ -511,6 +511,14 @@
+     }
+   }
+ 
++  /* Wide but not very tall screens (1440×900, 1536×864): a narrower, smaller title stays clear of the belts */
++  @media screen and (min-width: 1300px) and (max-height: 960px) {
++    .hero--full .hero__title {
++      max-width: 11em;
++      font-size: calc(clamp(2.4rem, 1.2rem + 2.6vw, 4rem) * var(--font-heading-scale, 1));
++    }
++  }
++
+   .hero--full .hero__eyebrow {
+     letter-spacing: 0.22em;
+   }
+diff --git a/theme/sections/main-product.liquid b/theme/sections/main-product.liquid
+index ee91252..946bfc3 100644
+--- a/theme/sections/main-product.liquid
++++ b/theme/sections/main-product.liquid
+@@ -318,6 +318,7 @@
+               {%- if block.settings.show_payment_icons -%}
+                 {% render 'secure-payment', style: 'compact' %}
+               {%- endif -%}
++              {% render 'reassurance-row', hide_payment: true, class: 'product__reassurance' %}
+             </div>
+ 
+           {%- when 'accordion' -%}
+@@ -338,9 +339,6 @@
+                   when 'specs'
+                     if product.metafields.custom.caracteristiques.value != blank
+                       render 'product-specs', product: product
+-                      echo '<p class="text-small product__specs-note">'
+-                      echo 'products.specs_note' | t
+-                      echo '</p>'
+                     endif
+                   when 'usage'
+                     render 'metafield-lines', value: product.metafields.custom.mode_emploi.value, ordered: true
+diff --git a/theme/sections/product-reviews.liquid b/theme/sections/product-reviews.liquid
+index 3656f66..e78afc9 100644
+--- a/theme/sections/product-reviews.liquid
++++ b/theme/sections/product-reviews.liquid
+@@ -148,7 +148,6 @@
+           </span>
+         {%- endif -%}
+         {%- if source_name != blank -%}
+-          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
+         {%- endif -%}
+       </div>
+ 
+@@ -475,7 +474,6 @@
+           </span>
+         </div>
+         {%- if source_name != blank -%}
+-          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
+         {%- elsif verified_count > 0 -%}
+           <p class="reviews__verified">
+             {% render 'icon', icon: 'check' %}
+diff --git a/theme/sections/product-spotlight.liquid b/theme/sections/product-spotlight.liquid
+index 31b645e..0b80281 100644
+--- a/theme/sections/product-spotlight.liquid
++++ b/theme/sections/product-spotlight.liquid
+@@ -42,7 +42,6 @@
+         {%- if section.settings.show_specs -%}
+           <div class="spotlight__specs">
+             {% render 'product-specs', product: product, limit: section.settings.specs_limit %}
+-            <p class="text-muted text-small">{{ 'products.specs_note' | t }}</p>
+           </div>
+         {%- endif -%}
+ 
+diff --git a/theme/sections/reviews-marquee.liquid b/theme/sections/reviews-marquee.liquid
+index 7270d67..6739669 100644
+--- a/theme/sections/reviews-marquee.liquid
++++ b/theme/sections/reviews-marquee.liquid
+@@ -88,7 +88,6 @@
+         </a>
+         {%- if source_name != blank -%}
+           <div class="reviews-band__about">
+-            {% render 'reviews-about', rating: average_text, count: display_count %}
+           </div>
+         {%- endif -%}
+       </div>
+diff --git a/theme/snippets/product-gallery.liquid b/theme/snippets/product-gallery.liquid
+index 2939a9f..b74551f 100644
+--- a/theme/snippets/product-gallery.liquid
++++ b/theme/snippets/product-gallery.liquid
+@@ -234,7 +234,10 @@
+     {%- endif -%}
+   </div>
+ 
+-  {%- if media_count == 0 -%}
++  {%- unless request.design_mode -%}
++    {%- assign free_slots = 0 -%}
++  {%- endunless -%}
++  {%- if media_count == 0 and request.design_mode -%}
+     <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
+       {%- for i in (1..4) -%}
+         <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>
+diff --git a/theme/snippets/reassurance-row.liquid b/theme/snippets/reassurance-row.liquid
+index 150d14b..035ebaf 100644
+--- a/theme/snippets/reassurance-row.liquid
++++ b/theme/snippets/reassurance-row.liquid
+@@ -31,14 +31,23 @@
+       </span>
+     </li>
+   {%- endif -%}
+-  {%- unless hide_payment -%}
++  {%- if hide_payment -%}
++    {%- if settings.warranty_info != blank -%}
++      <li class="reassurance-row__item">
++        <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'shield' %}</span>
++        <span class="reassurance-row__text">
++          <span class="reassurance-row__title">{{ settings.warranty_info | escape }}</span>
++        </span>
++      </li>
++    {%- endif -%}
++  {%- else -%}
+     <li class="reassurance-row__item">
+       <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
+       <span class="reassurance-row__text">
+         <span class="reassurance-row__title">{{ 'products.secure_payment' | t }}</span>
+       </span>
+     </li>
+-  {%- endunless -%}
++  {%- endif -%}
+ </ul>
+ 
+ {% stylesheet %}
+diff --git a/theme/snippets/reviews-band.liquid b/theme/snippets/reviews-band.liquid
+index 3ce6eee..6819c3b 100644
+--- a/theme/snippets/reviews-band.liquid
++++ b/theme/snippets/reviews-band.liquid
+@@ -135,15 +135,15 @@
+ 
+                 {%- if author != blank or review.coloris.value != blank or avatar != blank -%}
+                   <div class="review-card__author">
++                    {%- if avatar != blank or author != blank -%}
+                     <span class="review-card__avatar" aria-hidden="true">
+                       {%- if avatar != blank -%}
+                         {{ avatar | image_url: width: 120, height: 120, crop: 'center' | image_tag: width: 44, height: 44, alt: '', loading: 'lazy' }}
+                       {%- elsif author != blank -%}
+                         {{- author | slice: 0 | upcase | escape -}}
+-                      {%- else -%}
+-                        {% render 'icon', icon: 'user' %}
+                       {%- endif -%}
+                     </span>
++                    {%- endif -%}
+                     <span class="review-card__who">
+                       {%- if author != blank -%}
+                         <strong>{{ author | escape }}</strong>
+diff --git a/theme/templates/product.culotte.json b/theme/templates/product.culotte.json
+index 8c75edf..4e35df5 100644
+--- a/theme/templates/product.culotte.json
++++ b/theme/templates/product.culotte.json
+@@ -29,6 +29,7 @@
+         },
+         "delivery": {
+           "type": "delivery",
++          "disabled": true,
+           "settings": {
+             "right_text": "",
+             "left_text": "",
+diff --git a/theme/templates/product.json b/theme/templates/product.json
+index c4e269f..bba5d9f 100644
+--- a/theme/templates/product.json
++++ b/theme/templates/product.json
+@@ -29,6 +29,7 @@
+         },
+         "guarantee": {
+           "type": "guarantee",
++          "disabled": true,
+           "settings": {
+             "icon": "return",
+             "title": "",
+@@ -38,6 +39,7 @@
+         },
+         "delivery": {
+           "type": "delivery",
++          "disabled": true,
+           "settings": {
+             "right_text": "",
+             "left_text": "",
+diff --git a/theme/templates/product.serviette.json b/theme/templates/product.serviette.json
+index a9a2e02..56b9fb7 100644
+--- a/theme/templates/product.serviette.json
++++ b/theme/templates/product.serviette.json
+@@ -29,6 +29,7 @@
+         },
+         "delivery": {
+           "type": "delivery",
++          "disabled": true,
+           "settings": {
+             "right_text": "",
+             "left_text": "",
