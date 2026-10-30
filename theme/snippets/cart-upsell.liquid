@@ -32,7 +32,7 @@
       <li class="cart-upsell__item">
         <a class="cart-upsell__media media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
           {%- if product.featured_media -%}
-            {% render 'responsive-image', image: product.featured_media.preview_image, sizes: '80px', widths: '80, 160, 240', decorative: true %}
+            {% render 'responsive-image', image: product.featured_media.preview_image, sizes: '80px', widths: '80, 160, 240', alt: product.title %}
           {%- else -%}
             <span class="cart-upsell__placeholder">{% render 'icon', icon: 'image' %}</span>
           {%- endif -%}

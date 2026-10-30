@@ -12,7 +12,7 @@
 <li class="cart-line">
   <a class="cart-line__media media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
     {%- if item.image -%}
-      {% render 'responsive-image', image: item.image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
+      {% render 'responsive-image', image: item.image, sizes: '96px', widths: '96, 192, 288', alt: item.product.title %}
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     {%- endif -%}

@@ -48,6 +48,7 @@
     <ol class="journey__steps{% unless has_images %} journey__steps--timeline{% endunless %}" role="list">
       {%- for block in section.blocks -%}
         {%- assign step_image = block.settings.image -%}
+        {%- assign step_alt = step_image.alt | default: block.settings.title -%}
         <li class="journey__step reveal" {{ block.shopify_attributes }}>
           {%- if has_images -%}
             <div class="journey__media{% if step_image == blank %} journey__media--empty{% endif %}">
@@ -56,6 +57,7 @@
                   image: step_image,
                   sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 100vw',
                   widths: '360, 540, 720, 900, 1080',
+                  alt: step_alt,
                   class: 'journey__image'
                 %}
               {%- else -%}

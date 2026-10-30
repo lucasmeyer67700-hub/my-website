@@ -55,7 +55,7 @@
               srcset="{{ avatar | image_url: height: 32 }} 1x, {{ avatar | image_url: height: 64 }} 2x, {{ avatar | image_url: height: 96 }} 3x"
               width="{{ 32 | times: avatar.aspect_ratio | round }}"
               height="32"
-              alt=""
+              alt="{{ shop.name | escape }}"
               loading="lazy"
             >
           {%- else -%}
@@ -204,7 +204,7 @@
           <a class="assistant__product" href="{{ topic_product.url }}">
             <span class="assistant__product-media media">
               {%- if topic_product.featured_media -%}
-                {% render 'responsive-image', image: topic_product.featured_media.preview_image, sizes: '64px', widths: '64, 128, 192', decorative: true %}
+                {% render 'responsive-image', image: topic_product.featured_media.preview_image, sizes: '64px', widths: '64, 128, 192', alt: topic_product.title %}
               {%- else -%}
                 <span class="product-card__soon-art" aria-hidden="true">
                   <span class="product-card__soon-drop"></span>

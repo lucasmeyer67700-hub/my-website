@@ -513,6 +513,27 @@
   <script type="application/ld+json">
     {{ product | structured_data }}
   </script>
+  {%- comment -%} Breadcrumb for Google: Accueil › Catalogue › product (the catalogue only when it exists). {%- endcomment -%}
+  {%- liquid
+    assign crumb_collection = collections['tous-nos-produits']
+    assign crumb_position = 2
+    if crumb_collection.url != blank
+      assign crumb_position = 3
+    endif
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": {{ 'general.home' | t | json }}, "item": {{ request.origin | append: routes.root_url | json }} },
+        {%- if crumb_collection.url != blank -%}
+          { "@type": "ListItem", "position": 2, "name": {{ crumb_collection.title | json }}, "item": {{ request.origin | append: crumb_collection.url | json }} },
+        {%- endif -%}
+        { "@type": "ListItem", "position": {{ crumb_position }}, "name": {{ product.title | json }}, "item": {{ request.origin | append: product.url | json }} }
+      ]
+    }
+  </script>
 </section>
 
 {% stylesheet %}

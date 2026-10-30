@@ -31,6 +31,10 @@
     {%- if meta_description != blank -%}
       <meta name="description" content="{{ meta_description | escape }}">
     {%- endif -%}
+    {%- comment -%} Cart, search and account pages have nothing to rank: keep them out of Google. {%- endcomment -%}
+    {%- if request.page_type == 'cart' or request.page_type == 'search' or template.name == 'customers' or template.directory == 'customers' -%}
+      <meta name="robots" content="noindex, follow">
+    {%- endif -%}
 
     {% render 'meta-tags' %}
     {% render 'css-variables' %}
