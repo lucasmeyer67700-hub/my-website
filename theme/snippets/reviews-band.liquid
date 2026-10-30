@@ -135,15 +135,15 @@
 
                 {%- if author != blank or review.coloris.value != blank or avatar != blank -%}
                   <div class="review-card__author">
+                    {%- if avatar != blank or author != blank -%}
                     <span class="review-card__avatar" aria-hidden="true">
                       {%- if avatar != blank -%}
                         {{ avatar | image_url: width: 120, height: 120, crop: 'center' | image_tag: width: 44, height: 44, alt: '', loading: 'lazy' }}
                       {%- elsif author != blank -%}
                         {{- author | slice: 0 | upcase | escape -}}
-                      {%- else -%}
-                        {% render 'icon', icon: 'user' %}
                       {%- endif -%}
                     </span>
+                    {%- endif -%}
                     <span class="review-card__who">
                       {%- if author != blank -%}
                         <strong>{{ author | escape }}</strong>

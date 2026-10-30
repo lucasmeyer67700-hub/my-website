@@ -224,7 +224,6 @@
         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
           <div class="featured-product__specs">
             {% render 'product-specs', product: product, limit: section.settings.specs_limit %}
-            <p class="text-muted text-small">{{ 'products.specs_note' | t }}</p>
           </div>
         {%- endif -%}
 

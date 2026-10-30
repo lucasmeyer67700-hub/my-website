@@ -148,7 +148,6 @@
           </span>
         {%- endif -%}
         {%- if source_name != blank -%}
-          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
         {%- endif -%}
       </div>
 
@@ -475,7 +474,6 @@
           </span>
         </div>
         {%- if source_name != blank -%}
-          {% render 'reviews-about', rating: average_text, count: display_count, class: 'reviews__about-selection' %}
         {%- elsif verified_count > 0 -%}
           <p class="reviews__verified">
             {% render 'icon', icon: 'check' %}

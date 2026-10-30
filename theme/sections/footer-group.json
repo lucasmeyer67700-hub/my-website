@@ -57,7 +57,8 @@
       "type": "welcome-popup",
       "settings": {
         "enabled": true,
-        "delay": 7,
+        "delay": 40,
+        "show_image": false,
         "snooze_days": 0,
         "product": "ceinture-chauffante-regles",
         "percent": 10,

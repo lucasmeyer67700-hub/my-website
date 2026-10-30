@@ -29,6 +29,7 @@
         },
         "guarantee": {
           "type": "guarantee",
+          "disabled": true,
           "settings": {
             "icon": "return",
             "title": "",
@@ -38,6 +39,7 @@
         },
         "delivery": {
           "type": "delivery",
+          "disabled": true,
           "settings": {
             "right_text": "",
             "left_text": "",

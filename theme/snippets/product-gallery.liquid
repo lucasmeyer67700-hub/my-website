@@ -234,7 +234,10 @@
     {%- endif -%}
   </div>
 
-  {%- if media_count == 0 -%}
+  {%- unless request.design_mode -%}
+    {%- assign free_slots = 0 -%}
+  {%- endunless -%}
+  {%- if media_count == 0 and request.design_mode -%}
     <ul class="gallery__thumbs gallery__thumbs--slots" role="list" aria-hidden="true">
       {%- for i in (1..4) -%}
         <li class="gallery__slot gallery__slot--thumb">{% render 'icon', icon: 'image' %}</li>

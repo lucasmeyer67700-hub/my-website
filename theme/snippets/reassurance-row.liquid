@@ -31,14 +31,23 @@
       </span>
     </li>
   {%- endif -%}
-  {%- unless hide_payment -%}
+  {%- if hide_payment -%}
+    {%- if settings.warranty_info != blank -%}
+      <li class="reassurance-row__item">
+        <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'shield' %}</span>
+        <span class="reassurance-row__text">
+          <span class="reassurance-row__title">{{ settings.warranty_info | escape }}</span>
+        </span>
+      </li>
+    {%- endif -%}
+  {%- else -%}
     <li class="reassurance-row__item">
       <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
       <span class="reassurance-row__text">
         <span class="reassurance-row__title">{{ 'products.secure_payment' | t }}</span>
       </span>
     </li>
-  {%- endunless -%}
+  {%- endif -%}
 </ul>
 
 {% stylesheet %}

@@ -29,6 +29,7 @@
         },
         "delivery": {
           "type": "delivery",
+          "disabled": true,
           "settings": {
             "right_text": "",
             "left_text": "",

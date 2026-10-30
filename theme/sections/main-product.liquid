@@ -318,6 +318,7 @@
               {%- if block.settings.show_payment_icons -%}
                 {% render 'secure-payment', style: 'compact' %}
               {%- endif -%}
+              {% render 'reassurance-row', hide_payment: true, class: 'product__reassurance' %}
             </div>
 
           {%- when 'accordion' -%}
@@ -338,9 +339,6 @@
                   when 'specs'
                     if product.metafields.custom.caracteristiques.value != blank
                       render 'product-specs', product: product
-                      echo '<p class="text-small product__specs-note">'
-                      echo 'products.specs_note' | t
-                      echo '</p>'
                     endif
                   when 'usage'
                     render 'metafield-lines', value: product.metafields.custom.mode_emploi.value, ordered: true

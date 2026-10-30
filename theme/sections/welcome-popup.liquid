@@ -40,6 +40,9 @@
   if visual_image != blank or show_slot
     assign has_media = true
   endif
+  unless section.settings.show_image
+    assign has_media = false
+  endunless
 
   assign description_id = 'WelcomeLegal-' | append: section.id
   if section.settings.text != blank
@@ -1103,9 +1106,17 @@
       "content": "Photo"
     },
     {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Afficher une photo",
+      "info": "Décochée : seul le bon de réduction s'affiche.",
+      "default": true
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Photo de la pop-up",
+      "visible_if": "{{ section.settings.show_image }}",
       "info": "À gauche sur ordinateur, en bandeau en haut sur téléphone, dans un fin cadre blanc. Format portrait conseillé (au moins 1200 px de large). Sans photo choisie, celle du produit concerné s'affiche."
     },
     {
