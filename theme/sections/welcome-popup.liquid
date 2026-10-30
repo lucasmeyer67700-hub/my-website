@@ -612,7 +612,7 @@
 
   .welcome-popup__figure {
     display: flex;
-    align-items: flex-start;
+    align-items: baseline;
     gap: 0.06em;
     font-size: clamp(5rem, 4rem + 4vw, 6.5rem);
     font-variant-numeric: lining-nums tabular-nums;
@@ -631,9 +631,9 @@
     }
   }
 
+  /* Same size and baseline as the figure: "10 %" reads as one number */
   .welcome-popup__percent {
-    margin-block-start: 0.12em;
-    font-size: 0.4em;
+    font-size: 1em;
     letter-spacing: 0;
   }
 
@@ -696,11 +696,10 @@
     }
   }
 
+  /* Same writing as the old price; only the colour and weight set it apart */
   .welcome-popup__price-new {
-    font-family: var(--welcome-font);
-    font-size: 1.5rem;
-    font-weight: var(--welcome-font-weight);
-    line-height: 1.1;
+    font-size: 0.9375rem;
+    font-weight: var(--font-body-weight-medium, 500);
   }
 
   .welcome-popup__text {
