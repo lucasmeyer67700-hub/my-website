@@ -36,6 +36,7 @@
     "sale_price_label": "Prix réduit : {{ sale_price }}, au lieu de {{ original_price }}",
     "unit_price_label": "Prix unitaire",
     "taxes_included": "TTC",
+    "buy_now": "Acheter maintenant",
     "add_to_cart": "Ajouter au panier",
     "adding": "Ajout en cours…",
     "sold_out": "Épuisé",

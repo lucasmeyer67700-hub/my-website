@@ -1,0 +1,25 @@
+{% doc %}
+  The theme's own "Acheter maintenant" button, in the brand colours (Shopify's
+  express button keeps the colours of Shop Pay and can't be restyled). It
+  adds the chosen variant, then goes straight to Shopify's checkout, where
+  Shop Pay, Apple Pay… are offered at the top. Without JavaScript the form
+  post itself leads to the checkout (return_to).
+
+  @param {object} product - The product of the surrounding product form
+
+  @example
+  {% render 'buy-now-button', product: product %}
+{% enddoc %}
+{%- assign buy_variant = product.selected_or_first_available_variant -%}
+<button
+  type="submit"
+  name="return_to"
+  value="/checkout"
+  class="buy-now-button"
+  data-buy-now-button
+  {% unless buy_variant.available %}
+    disabled
+  {% endunless %}
+>
+  {{- 'products.buy_now' | t -}}
+</button>

@@ -277,6 +277,17 @@
         "id": "buy_now_large",
         "label": "« Acheter maintenant » plus grand que « Ajouter au panier »",
         "default": true
+      },
+      {
+        "type": "select",
+        "id": "buy_now_button",
+        "label": "Bouton « Acheter maintenant »",
+        "info": "Celui du site mène au paiement, où Shop Pay et Apple Pay sont proposés.",
+        "options": [
+          { "value": "theme", "label": "Aux couleurs du site" },
+          { "value": "shopify", "label": "Bouton express Shopify" }
+        ],
+        "default": "theme"
       }
     ]
   },

@@ -1599,15 +1599,37 @@ body:has(dialog[open]) {
   display: none;
 }
 
-.product-form__express .shopify-payment-button__button {
+.product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
   min-height: 3.25rem;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
+/* The theme's own button (snippets/buy-now-button) */
+.buy-now-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  cursor: pointer;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &[aria-busy='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+}
+
 /* "Acheter maintenant" (unbranded dynamic checkout): an outlined pill in the brand colours
    instead of Shopify's default blue. Branded buttons (Shop Pay…) keep their own look. */
-.product-form__express .shopify-payment-button__button--unbranded {
+.product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button) {
   border: 1px solid var(--color-button);
   border-radius: 999px;
   font-family: var(--font-body-family);
@@ -1629,20 +1651,20 @@ body:has(dialog[open]) {
 
 /* "Acheter maintenant" leads straight to payment: it can be the strongest
    button of the page (theme settings > Boutons d'achat). */
-.product-form__express .shopify-payment-button__button {
+.product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
   width: 100%;
 }
 
-[data-buy-now-large] .product-form__express .shopify-payment-button__button {
+[data-buy-now-large] .product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
   min-height: 4.25rem;
 }
 
-[data-buy-now-large] .product-form__express .shopify-payment-button__button--unbranded {
+[data-buy-now-large] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button) {
   font-size: 0.9375rem;
   letter-spacing: 0.14em;
 }
 
-[data-buy-now='solid'] .product-form__express .shopify-payment-button__button--unbranded {
+[data-buy-now='solid'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button) {
   border-color: var(--color-button);
   color: var(--color-button-label);
   background-color: var(--color-button);
@@ -1654,7 +1676,7 @@ body:has(dialog[open]) {
   }
 }
 
-[data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded {
+[data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button) {
   position: relative;
   overflow: hidden;
   border: 0;
@@ -1697,7 +1719,7 @@ body:has(dialog[open]) {
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded:hover:not([disabled])::after {
+  [data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button):hover:not([disabled])::after {
     transform: translateX(100%);
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -1732,11 +1754,11 @@ body:has(dialog[open]) {
     }
   }
 
-  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded::after {
+  [data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button)::after {
     animation: button-shine 7s var(--ease-out) 3.6s infinite;
   }
 
-  [data-buy-now='accent'] .product-form__express .shopify-payment-button__button--unbranded:hover::after {
+  [data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button):hover::after {
     animation: none;
   }
 }

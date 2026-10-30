@@ -257,7 +257,13 @@
                 </div>
 
                 {%- if block.settings.show_dynamic_checkout -%}
-                  <div class="product-form__express">{{ form | payment_button }}</div>
+                  <div class="product-form__express">
+                    {%- if settings.buy_now_button == 'shopify' -%}
+                      {{ form | payment_button }}
+                    {%- else -%}
+                      {% render 'buy-now-button', product: product %}
+                    {%- endif -%}
+                  </div>
                 {%- endif -%}
 
                 <div class="form-message form-message--error" role="alert" data-product-error hidden>

@@ -36,6 +36,7 @@
     "sale_price_label": "Sale price: {{ sale_price }}, regular price {{ original_price }}",
     "unit_price_label": "Unit price",
     "taxes_included": "Tax included",
+    "buy_now": "Buy it now",
     "add_to_cart": "Add to cart",
     "adding": "Adding…",
     "sold_out": "Sold out",

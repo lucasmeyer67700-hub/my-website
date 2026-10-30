@@ -1391,7 +1391,14 @@ class ProductForm extends HTMLElement {
     formData.append('sections', getCartSectionIds().join(','));
     formData.append('sections_url', window.location.pathname);
 
+    // "Acheter maintenant" (theme button): straight to Shopify's checkout.
+    const buyNow = event.submitter?.hasAttribute('data-buy-now-button');
+
     try {
+      if (buyNow) {
+        await this.#buyNow(formData, event.submitter.value);
+        return;
+      }
       const result = await cartRequest(`${theme.routes.cartAdd}.js`, formData);
       renderCartSections(result.sections);
       document.querySelector('cart-drawer')?.open(event.submitter || this.submitButtons[0]);
@@ -1399,9 +1406,25 @@ class ProductForm extends HTMLElement {
       const message = error.data?.description || theme.strings.productError;
       this.#showError(message);
       announce(message);
-    } finally {
-      this.#setBusy(false);
     }
+    this.#setBusy(false);
+  }
+
+  /**
+   * Adds the variant (unless it is already in the cart, so a second click
+   * never doubles the quantity) and goes to the checkout. The buttons stay
+   * busy while the checkout loads.
+   * @param {FormData} formData
+   * @param {string} checkoutUrl
+   */
+  async #buyNow(formData, checkoutUrl) {
+    const response = await fetch(`${theme.routes.cart}.js`, { headers: { Accept: 'application/json' } });
+    const cart = response.ok ? await response.json() : { items: [] };
+    const variantId = Number(formData.get('id'));
+    if (!cart.items.some((item) => item.variant_id === variantId)) {
+      await cartRequest(`${theme.routes.cartAdd}.js`, formData);
+    }
+    window.location.assign(checkoutUrl);
   }
 }
 
@@ -1506,6 +1529,9 @@ class VariantPicker extends HTMLElement {
       const unavailable = !variant || !variant.available;
       button.toggleAttribute('disabled', unavailable);
       button.querySelector('[data-add-to-cart-label]').textContent = label;
+    }
+    for (const button of scope.querySelectorAll('[data-buy-now-button]')) {
+      button.toggleAttribute('disabled', !variant || !variant.available);
     }
 
     for (const title of scope.querySelectorAll('[data-variant-title]')) {
