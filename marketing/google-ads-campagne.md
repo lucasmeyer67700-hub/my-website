@@ -50,7 +50,7 @@ Données : clientes et inscrites newsletter (liste Shopify) quand il y en aura.
 ## 4. Extensions (composants de la campagne)
 Liens annexes : Catalogue → /collections/tous-nos-produits · Questions fréquentes → /pages/faq ·
 Livraison et retours → /pages/livraison-et-retours · Notre approche → /pages/notre-approche
-Accroches (≤ 25) : Livraison offerte en France · Remboursée sous 30 jours · Paiement sécurisé ·
+Accroches (≤ 25) : Livraison offerte · Remboursée sous 30 jours · Paiement sécurisé ·
 Sans fil · Rechargeable par USB
 Extraits structurés « Modèles » : Ceinture rose, Ceinture blanche, Duo
 Prix : Ceinture 44,90 € · Duo 75 €
