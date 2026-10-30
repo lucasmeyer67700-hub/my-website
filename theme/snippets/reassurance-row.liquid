@@ -6,6 +6,7 @@
   comes into view.
 
   @param {string} [class] - Extra CSS classes
+  @param {boolean} [hide_payment] - Leave out "Paiement sécurisé" (already shown under the buy buttons)
 
   @example
   {% render 'reassurance-row' %}
@@ -30,12 +31,14 @@
       </span>
     </li>
   {%- endif -%}
-  <li class="reassurance-row__item">
-    <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
-    <span class="reassurance-row__text">
-      <span class="reassurance-row__title">{{ 'products.secure_payment' | t }}</span>
-    </span>
-  </li>
+  {%- unless hide_payment -%}
+    <li class="reassurance-row__item">
+      <span class="reassurance-row__icon" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
+      <span class="reassurance-row__text">
+        <span class="reassurance-row__title">{{ 'products.secure_payment' | t }}</span>
+      </span>
+    </li>
+  {%- endunless -%}
 </ul>
 
 {% stylesheet %}

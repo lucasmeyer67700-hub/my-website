@@ -308,9 +308,9 @@
                   <p class="product__secure">{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></p>
                 {%- endunless -%}
               {%- endif -%}
-              {%- comment -%} With the logos, the full secure-payment card says it all. {%- endcomment -%}
+              {%- comment -%} Right under the buy buttons: a light line and the logos of the enabled methods. {%- endcomment -%}
               {%- if block.settings.show_payment_icons -%}
-                {% render 'secure-payment', style: 'card' %}
+                {% render 'secure-payment', style: 'compact' %}
               {%- endif -%}
             </div>
 

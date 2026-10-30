@@ -52,16 +52,17 @@
     {{ 'cart.checkout' | t }}
   </button>
 
+  {%- comment -%} Right under the checkout button: secure payment and the enabled methods. {%- endcomment -%}
   {%- if compact -%}
     {% render 'secure-payment', style: 'compact' %}
   {%- else -%}
+    {% render 'secure-payment', style: 'card' %}
     {%- if additional_checkout_buttons and settings.cart_express_checkout -%}
       <div class="cart-summary__express">
         <p class="cart-summary__or"><span>{{ 'payment.express_label' | t }}</span></p>
         {{ content_for_additional_checkout_buttons }}
       </div>
     {%- endif -%}
-    {% render 'secure-payment', style: 'card' %}
   {%- endif -%}
 
   <p class="cart-summary__hint text-muted text-small">{{ 'cart.discount_hint' | t }}</p>

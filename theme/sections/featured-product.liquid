@@ -206,9 +206,13 @@
           {%- endform -%}
         </product-form>
 
+        {%- comment -%} Right under the buy buttons: secure payment and the logos of the enabled methods. {%- endcomment -%}
+        {%- if section.settings.show_secure_payment -%}
+          {% render 'secure-payment', style: 'compact' %}
+        {%- endif -%}
+
         {%- if section.settings.show_reassurance -%}
-          {% render 'reassurance-row' %}
-          {% render 'payment-icons', class: 'featured-product__payments' %}
+          {% render 'reassurance-row', hide_payment: section.settings.show_secure_payment %}
         {%- endif -%}
 
         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
@@ -289,12 +293,6 @@
   .featured-product__tagline {
     line-height: 1.65;
     text-wrap: pretty;
-  }
-
-  /* The enabled payment methods, under the "Paiement sécurisé" promise */
-  .featured-product__payments {
-    justify-content: center;
-    margin-block-start: calc(var(--space-2xs) * -1);
   }
 
   .featured-product__specs {
@@ -477,6 +475,13 @@
       "id": "show_reassurance",
       "label": "Afficher livraison, retours et paiement sécurisé",
       "info": "Textes des Paramètres du thème > Réassurance.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secure_payment",
+      "label": "Afficher « Paiement sécurisé » et les moyens de paiement sous les boutons",
+      "info": "Les logos des moyens activés dans Shopify Paiements. La rangée de réassurance ne répète alors pas le paiement.",
       "default": true
     },
     {
