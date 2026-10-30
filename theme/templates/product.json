@@ -139,8 +139,8 @@
       "settings": {
         "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
         "media_position": "left",
-        "eyebrow": "en vidéo",
-        "heading": "Sa douceur, <em>en vrai.</em>",
+        "eyebrow": "",
+        "heading": "<em>Simple, soulageant et pratique à l</em>’<em>utilisation&nbsp;</em>",
         "text": "<p>Regardez-la en situation, portée comme au quotidien.</p>",
         "button_label": "Choisir mon coloris",
         "button_link": "",
@@ -157,7 +157,7 @@
         "show_breakdown": true,
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
-        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
+        "about": "",
         "color_scheme": "scheme-2"
       }
     },
@@ -192,7 +192,7 @@
         "secure"
       ],
       "settings": {
-        "eyebrow": "Questions fréquentes",
+        "eyebrow": "",
         "heading": "Avant de <em>commander.</em>",
         "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
         "link_label": "Nous contacter",

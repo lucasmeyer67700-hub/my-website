@@ -6,10 +6,10 @@
         "layout": "full",
         "display_font": "playfair_display_n4",
         "show_drops": true,
-        "eyebrow": "Ceinture chauffante sans fil",
-        "heading": "Vos règles, <em>tout en douceur.</em>",
+        "eyebrow": "",
+        "heading": "<strong>Ces douleurs de règles, tu n’as plus à les subir.</strong>",
         "heading_tag": "h1",
-        "text": "Trois niveaux de chaleur, un massage par vibration et aucun fil : la ceinture VELEA vous suit partout, même sous un pull.",
+        "text": "Trois niveaux de chaleur, un massage par vibration et aucun fil : la ceinture Velea vous suit partout, même sous un pull.",
         "image": "shopify://shop_images/velea-hero-chambre.jpg",
         "photo_width": 70,
         "photo_crop_x": 75,
@@ -35,7 +35,7 @@
       "type": "featured-product",
       "settings": {
         "product": "ceinture-chauffante-regles",
-        "eyebrow": "La ceinture VELEA",
+        "eyebrow": "",
         "heading": "",
         "show_rating": true,
         "price_badge": "exclusif",
@@ -53,9 +53,10 @@
         "specs_limit": 3,
         "details_label": "Voir tous les détails",
         "media_layout": "composition",
-        "mosaic_image_2": "shopify://shop_images/velea-ceinture-01-essentiel.jpg",
-        "mosaic_image_3": "shopify://shop_images/velea-ceinture-02-chaleur.jpg",
-        "mosaic_image_4": "shopify://shop_images/velea-ceinture-06-coloris.jpg",
+        "mosaic_image_1": "shopify://shop_images/img-mvuu3sfa-8bd10afb.png",
+        "mosaic_image_2": "shopify://shop_images/img-mvuu3z98-c44fa76b.png",
+        "mosaic_image_3": "shopify://shop_images/img-mvuu3tzq-d8c31f46.png",
+        "mosaic_image_4": "shopify://shop_images/img-mvuu41i8-e3b16f32.png",
         "gallery_ratio": "1",
         "gallery_fit": "cover",
         "anchor": "offre",
@@ -149,7 +150,7 @@
         "video-2"
       ],
       "settings": {
-        "eyebrow": "En vidéo",
+        "eyebrow": "",
         "heading": "La ceinture, <em>en images.</em>",
         "text": "",
         "ratio": "9 / 16",
@@ -164,7 +165,7 @@
       "type": "reviews-marquee",
       "settings": {
         "product": "ceinture-chauffante-regles",
-        "eyebrow": "Avis clientes",
+        "eyebrow": "",
         "heading": "Elles en parlent",
         "limit": 10,
         "speed": 7,
@@ -240,7 +241,7 @@
         "precautions"
       ],
       "settings": {
-        "eyebrow": "Questions fréquentes",
+        "eyebrow": "",
         "heading": "Vos questions, <em>nos réponses.</em>",
         "text": "",
         "link_label": "Toutes les questions",
