@@ -99,15 +99,21 @@
         <button type="button" class="site-footer__cookies" data-cookie-preferences aria-haspopup="dialog" hidden>
           {{- 'cookies.manage' | t -}}
         </button>
-        {% render 'payment-icons' %}
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          <div class="site-footer__payments">
+            <p class="site-footer__secure">{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></p>
+            {% render 'payment-icons' %}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
 </footer>
 
 {% stylesheet %}
+  /* Room at the very bottom so the floating "Besoin d'aide ?" button never hides the payment logos */
   .site-footer {
-    padding-block: var(--space-2xl) var(--space-lg);
+    padding-block: var(--space-2xl) calc(var(--space-lg) + 4rem);
     font-size: var(--text-sm);
   }
 
@@ -226,6 +232,21 @@
     justify-content: space-between;
     gap: var(--space-sm);
     font-size: var(--text-xs);
+  }
+
+  .site-footer__payments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs) var(--space-sm);
+  }
+
+  .site-footer__secure {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: var(--font-body-weight-medium);
+    --icon-size: 0.9rem;
   }
 
   .site-footer__cookies {

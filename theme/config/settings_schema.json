@@ -306,6 +306,13 @@
         "default": false
       },
       {
+        "type": "checkbox",
+        "id": "cart_express_checkout",
+        "label": "Boutons de paiement express sur la page panier",
+        "info": "Shop Pay, Apple Pay… : seuls les moyens activés dans Shopify Paiements s'affichent.",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "Compléments dans le panier"
       },

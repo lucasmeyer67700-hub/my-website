@@ -1,0 +1,109 @@
+{% doc %}
+  The secure-payment promise, shown wherever the customer is about to pay
+  (product page, cart, FAQ): a lock seal, a short factual line and the logos
+  of the payment methods actually enabled on the store (from Shopify,
+  nothing hardcoded).
+
+  @param {string} [style] - 'card' (framed, with the explanation, default) or 'compact' (one line and the logos)
+  @param {string} [class] - Extra CSS classes
+
+  @example
+  {% render 'secure-payment', style: 'compact' %}
+{% enddoc %}
+{%- assign secure_style = style | default: 'card' -%}
+<div class="secure-payment secure-payment--{{ secure_style }}{% if class %} {{ class }}{% endif %}">
+  <p class="secure-payment__head">
+    <span class="secure-payment__seal" aria-hidden="true">{% render 'icon', icon: 'lock' %}</span>
+    <span class="secure-payment__title">{{ 'payment.secure_title' | t }}</span>
+  </p>
+  {%- if secure_style == 'card' -%}
+    <p class="secure-payment__text">{{ 'payment.secure_text' | t }}</p>
+  {%- endif -%}
+  {% render 'payment-icons', class: 'secure-payment__icons' %}
+</div>
+
+{% stylesheet %}
+  .secure-payment {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .secure-payment--card {
+    padding: 0.9rem 1rem 1rem;
+    border: 1px solid rgb(var(--rose-strong-rgb) / 0.2);
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.9) 0%, var(--palette-rose-light) 100%);
+  }
+
+  .secure-payment--compact {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .secure-payment__head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  /* The lock in a rose seal, crossed now and then by a soft light */
+  .secure-payment__seal {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    overflow: hidden;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(135deg, var(--rose-cta-light), var(--rose-cta));
+    box-shadow: 0 6px 14px -8px rgb(var(--rose-cta-rgb) / 0.8);
+    --icon-size: 0.95rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.55) 50%, transparent 65%);
+      translate: -120% 0;
+    }
+  }
+
+  .secure-payment--compact .secure-payment__seal {
+    width: 1.6rem;
+    height: 1.6rem;
+    --icon-size: 0.8rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .secure-payment__seal::after {
+      animation: secure-shine 5s ease-in-out 1.5s infinite;
+    }
+  }
+
+  @keyframes secure-shine {
+    0%,
+    70% {
+      translate: -120% 0;
+    }
+    100% {
+      translate: 120% 0;
+    }
+  }
+
+  .secure-payment__text {
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .secure-payment--compact .secure-payment__icons {
+    justify-content: center;
+  }
+{% endstylesheet %}

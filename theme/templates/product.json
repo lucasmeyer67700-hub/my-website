@@ -177,11 +177,19 @@
             "question": "Que contient le Duo ?",
             "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
           }
+        },
+        "secure": {
+          "type": "question",
+          "settings": {
+            "question": "Le paiement est-il sécurisé ?",
+            "answer": "<p>Oui. Vous payez sur la page de paiement sécurisée de Shopify, par une connexion chiffrée (HTTPS). Shopify est certifié PCI DSS de niveau 1, la norme de sécurité de référence pour les paiements par carte bancaire.</p><p>Vos coordonnées bancaires ne sont jamais transmises à VELEA : nous n'y avons pas accès. Selon votre banque, une validation 3D Secure (un code ou une confirmation dans votre application bancaire) peut vous être demandée.</p>"
+          }
         }
       },
       "block_order": [
         "pain",
-        "duo"
+        "duo",
+        "secure"
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",

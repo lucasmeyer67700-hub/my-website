@@ -315,6 +315,11 @@
     "from": "From",
     "view": "View product"
   },
+  "payment": {
+    "secure_title": "Secure, encrypted payment",
+    "secure_text": "You pay on Shopify's secure checkout page. Your card details are encrypted: VELEA never has access to them.",
+    "express_label": "Or pay in one click"
+  },
   "cookies": {
     "reject_all": "Reject all",
     "accept_all": "Accept all",

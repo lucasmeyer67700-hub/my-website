@@ -299,13 +299,18 @@
                 {%- if settings.warranty_info != blank -%}
                   <li>{% render 'icon', icon: 'shield' %}<span>{{ settings.warranty_info | escape }}</span></li>
                 {%- endif -%}
-                <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
+                {%- unless block.settings.show_payment_icons -%}
+                  <li>{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></li>
+                {%- endunless -%}
               </ul>
               {%- else -%}
-                <p class="product__secure">{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></p>
+                {%- unless block.settings.show_payment_icons -%}
+                  <p class="product__secure">{% render 'icon', icon: 'lock' %}<span>{{ 'products.secure_payment' | t }}</span></p>
+                {%- endunless -%}
               {%- endif -%}
+              {%- comment -%} With the logos, the full secure-payment card says it all. {%- endcomment -%}
               {%- if block.settings.show_payment_icons -%}
-                {% render 'payment-icons', class: 'product__payments' %}
+                {% render 'secure-payment', style: 'card' %}
               {%- endif -%}
             </div>
 
@@ -1426,7 +1431,8 @@
         {
           "type": "checkbox",
           "id": "show_payment_icons",
-          "label": "Afficher les moyens de paiement",
+          "label": "Afficher le bloc « Paiement sécurisé » et les moyens de paiement",
+          "info": "Les logos sont ceux des moyens activés dans Shopify Paiements.",
           "default": true
         }
       ]

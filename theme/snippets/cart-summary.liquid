@@ -1,11 +1,15 @@
 {% doc %}
   Cart totals, reassurance and checkout button, shared by the cart drawer
-  and the cart page. The checkout is Shopify's own secure checkout.
+  and the cart page. The checkout is Shopify's own secure checkout. Under the
+  button, the secure-payment promise with the enabled payment methods; the
+  cart page also offers the express buttons (Shop Pay, Apple Pay…) that are
+  enabled on the store.
 
   @param {string} form_id - id of the cart form the checkout button submits
+  @param {boolean} [compact] - Drawer: a one-line promise, no express buttons
 
   @example
-  {% render 'cart-summary', form_id: 'CartDrawerForm' %}
+  {% render 'cart-summary', form_id: 'CartDrawerForm', compact: true %}
 {% enddoc %}
 <div class="cart-summary">
   <p class="form-message form-message--error" role="alert" data-cart-error hidden></p>
@@ -48,9 +52,19 @@
     {{ 'cart.checkout' | t }}
   </button>
 
-  <p class="cart-summary__hint text-muted text-small">{{ 'cart.discount_hint' | t }}</p>
+  {%- if compact -%}
+    {% render 'secure-payment', style: 'compact' %}
+  {%- else -%}
+    {%- if additional_checkout_buttons and settings.cart_express_checkout -%}
+      <div class="cart-summary__express">
+        <p class="cart-summary__or"><span>{{ 'payment.express_label' | t }}</span></p>
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    {%- endif -%}
+    {% render 'secure-payment', style: 'card' %}
+  {%- endif -%}
 
-  {% render 'payment-icons', class: 'cart-summary__payments' %}
+  <p class="cart-summary__hint text-muted text-small">{{ 'cart.discount_hint' | t }}</p>
 </div>
 
 {% stylesheet %}
@@ -85,7 +99,27 @@
     text-align: center;
   }
 
-  .cart-summary__payments {
-    justify-content: center;
+  /* Express buttons from Shopify, under a fine "or" line */
+  .cart-summary__express {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .cart-summary__or {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--color-border);
+    }
   }
 {% endstylesheet %}

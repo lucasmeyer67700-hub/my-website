@@ -609,6 +609,10 @@
     color: var(--color-text-muted);
   }
 
+  .faq-item__payments {
+    margin-block-start: var(--space-sm);
+  }
+
   /* The answer unfolds (browsers that can animate details) and fades in */
   @media (prefers-reduced-motion: no-preference) {
     .faq-item {
@@ -847,6 +851,13 @@
           "id": "answer",
           "label": "Réponse",
           "default": "<p>Une réponse claire et vérifiée.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_icons",
+          "label": "Afficher les moyens de paiement sous la réponse",
+          "info": "Les logos des moyens activés dans Shopify Paiements.",
+          "default": false
         }
       ]
     }
