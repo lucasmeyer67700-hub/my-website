@@ -75,7 +75,7 @@ async function cartRequest(url, body) {
     headers: isFormData ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: isFormData ? body : JSON.stringify(body),
   });
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
   if (!response.ok || data.status) {
     const error = new Error(data.description || data.message || 'Cart error');
     error.data = data;
@@ -1394,20 +1394,53 @@ class ProductForm extends HTMLElement {
     // "Acheter maintenant" (theme button): straight to Shopify's checkout.
     const buyNow = event.submitter?.hasAttribute('data-buy-now-button');
 
+    let result;
     try {
       if (buyNow) {
         await this.#buyNow(formData, event.submitter.value);
         return;
       }
-      const result = await cartRequest(`${theme.routes.cartAdd}.js`, formData);
+      result = await cartRequest(`${theme.routes.cartAdd}.js`, formData);
+    } catch (error) {
+      // A refusal from Shopify (stock, limit…) is shown as it is. Anything else
+      // (network, unexpected answer) falls back to the plain form post, which
+      // Shopify always handles: the product still reaches the cart.
+      if (!error.data?.description) {
+        console.error('Ajout au panier : passage au formulaire classique', error);
+        this.#submitNatively(buyNow ? event.submitter.value : null);
+        return;
+      }
+      this.#showError(error.data.description);
+      announce(error.data.description);
+      this.#setBusy(false);
+      return;
+    }
+
+    // The product is in the cart: a display problem must never say otherwise.
+    try {
       renderCartSections(result.sections);
       document.querySelector('cart-drawer')?.open(event.submitter || this.submitButtons[0]);
     } catch (error) {
-      const message = error.data?.description || theme.strings.productError;
-      this.#showError(message);
-      announce(message);
+      console.error('Panier : affichage du tiroir impossible', error);
+      window.location.assign(theme.routes.cart);
+      return;
     }
     this.#setBusy(false);
+  }
+
+  /**
+   * Posts the form the classic way (no JavaScript involved on Shopify's side).
+   * @param {string | null} returnTo - "/checkout" for « Acheter maintenant »
+   */
+  #submitNatively(returnTo) {
+    if (returnTo) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'return_to';
+      input.value = returnTo;
+      this.form.append(input);
+    }
+    this.form.submit();
   }
 
   /**

@@ -53,17 +53,17 @@
         },
         cartType: {{ settings.cart_type | json }},
         strings: {
-          addToCart: {{ 'products.add_to_cart' | t | json }},
-          adding: {{ 'products.adding' | t | json }},
-          soldOut: {{ 'products.sold_out' | t | json }},
-          unavailable: {{ 'products.unavailable' | t | json }},
-          productError: {{ 'products.error_generic' | t | json }},
-          cartError: {{ 'cart.error' | t | json }},
-          cartUpdated: {{ 'cart.updated' | t | json }},
-          upsellChoose: {{ 'cart.upsell_choose_error' | t | json }},
-          upsellAdded: {{ 'cart.upsell_added' | t | json }},
-          copied: {{ 'gift_card.copied' | t | json }},
-          cookiesSaved: {{ 'cookies.saved' | t | json }}
+          addToCart: {{ 'products.add_to_cart' | t | replace: '&#39;', '’' | json }},
+          adding: {{ 'products.adding' | t | replace: '&#39;', '’' | json }},
+          soldOut: {{ 'products.sold_out' | t | replace: '&#39;', '’' | json }},
+          unavailable: {{ 'products.unavailable' | t | replace: '&#39;', '’' | json }},
+          productError: {{ 'products.error_generic' | t | replace: '&#39;', '’' | json }},
+          cartError: {{ 'cart.error' | t | replace: '&#39;', '’' | json }},
+          cartUpdated: {{ 'cart.updated' | t | replace: '&#39;', '’' | json }},
+          upsellChoose: {{ 'cart.upsell_choose_error' | t | replace: '&#39;', '’' | json }},
+          upsellAdded: {{ 'cart.upsell_added' | t | replace: '&#39;', '’' | json }},
+          copied: {{ 'gift_card.copied' | t | replace: '&#39;', '’' | json }},
+          cookiesSaved: {{ 'cookies.saved' | t | replace: '&#39;', '’' | json }}
         }
       };
     </script>
