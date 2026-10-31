@@ -60,7 +60,12 @@
         "gallery_ratio": "1",
         "gallery_fit": "cover",
         "anchor": "offre",
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "alt_color": "Blanc",
+        "alt_mosaic_image_1": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
+        "alt_mosaic_image_2": "shopify://shop_images/velea-ceinture-blanche-face.webp",
+        "alt_mosaic_image_3": "shopify://shop_images/velea-ceinture-blanche-dos.webp",
+        "alt_mosaic_image_4": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
       }
     },
     "journey": {

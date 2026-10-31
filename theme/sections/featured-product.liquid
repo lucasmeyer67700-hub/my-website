@@ -41,7 +41,35 @@
             Image 1 shows the product photo until one is chosen; an empty place
             stays a soft frame, never a stand-in photo.
           {%- endcomment -%}
-          <div class="offer-mosaic" style="--offer-mosaic-fit: {{ section.settings.gallery_fit }};">
+          {%- liquid
+            comment
+              Photos of another colour (e.g. Blanc): they replace the four images
+              while that colour is chosen in the variant picker.
+            endcomment
+            assign alt_color = section.settings.alt_color | handleize
+            assign alt_shown = false
+            if alt_color != blank
+              for option in product.options_with_values
+                assign option_handle = option.name | handleize
+                if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+                  assign current_color = current_variant.options[forloop.index0] | handleize
+                  if current_color == alt_color
+                    assign alt_shown = true
+                  endif
+                endif
+              endfor
+            endif
+          -%}
+          <div
+            class="offer-mosaic"
+            style="--offer-mosaic-fit: {{ section.settings.gallery_fit }};"
+            {% if alt_color != blank %}
+              data-alt-color="{{ alt_color }}"
+            {% endif %}
+            {% if alt_shown %}
+              data-alt-shown
+            {% endif %}
+          >
             {%- for i in (1..4) -%}
               {%- liquid
                 assign slot_key = 'mosaic_image_' | append: i
@@ -65,6 +93,13 @@
                     {% render 'responsive-image', image: slot_image, sizes: slot_sizes, alt: slot_alt, class: 'offer-mosaic__img' %}
                   {%- else -%}
                     {% render 'responsive-image', image: slot_image, sizes: slot_sizes, alt: slot_alt, class: 'offer-mosaic__img', widths: '240, 360, 540, 720' %}
+                  {%- endif -%}
+                  {%- liquid
+                    assign alt_key = 'alt_mosaic_image_' | append: i
+                    assign alt_image = section.settings[alt_key]
+                  -%}
+                  {%- if alt_color != blank and alt_image != blank -%}
+                    {% render 'responsive-image', image: alt_image, sizes: slot_sizes, class: 'offer-mosaic__img offer-mosaic__img--alt', widths: '240, 360, 540, 720, 1080, 1440' %}
                   {%- endif -%}
                 {%- else -%}
                   <span class="offer-mosaic__empty" aria-hidden="true">
@@ -369,6 +404,18 @@
       transform: scale(1.035);
     }
   }
+
+  /* The other colour's photo sits on top, shown while that colour is chosen */
+  .offer-mosaic__img--alt {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.45s var(--ease-out), transform 1.2s var(--ease-out);
+  }
+
+  .offer-mosaic[data-alt-shown] .offer-mosaic__img--alt {
+    opacity: 1;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -548,6 +595,37 @@
       "id": "mosaic_image_4",
       "label": "Image 4",
       "info": "Texte alternatif : renseignez-le dans Contenu > Fichiers pour chaque image.",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "text",
+      "id": "alt_color",
+      "label": "Autre coloris (photos)",
+      "info": "Ex. : Blanc. Ses 4 images remplacent les autres quand il est choisi.",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "alt_mosaic_image_1",
+      "label": "Autre coloris : image 1",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "alt_mosaic_image_2",
+      "label": "Autre coloris : image 2",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "alt_mosaic_image_3",
+      "label": "Autre coloris : image 3",
+      "visible_if": "{{ section.settings.media_layout == 'composition' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "alt_mosaic_image_4",
+      "label": "Autre coloris : image 4",
       "visible_if": "{{ section.settings.media_layout == 'composition' }}"
     },
     {

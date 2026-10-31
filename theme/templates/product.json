@@ -112,18 +112,32 @@
             "open": false
           }
         },
-        "color_photo_blanc": {
+        "color_photo_blanc_1": {
           "type": "color_photo",
           "settings": {
             "color": "Blanc",
-            "image": "shopify://shop_images/velea-produit-chambre-blanc.webp"
+            "image": "shopify://shop_images/velea-ceinture-blanche-portee.webp"
           }
         },
-        "color_photo_rose": {
+        "color_photo_blanc_2": {
           "type": "color_photo",
           "settings": {
-            "color": "Rose",
-            "image": "shopify://shop_images/velea-produit-chambre.webp"
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-face.webp"
+          }
+        },
+        "color_photo_blanc_3": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-dos.webp"
+          }
+        },
+        "color_photo_blanc_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
           }
         }
       },
@@ -139,8 +153,10 @@
         "usage",
         "box",
         "safety",
-        "color_photo_rose",
-        "color_photo_blanc"
+        "color_photo_blanc_1",
+        "color_photo_blanc_2",
+        "color_photo_blanc_3",
+        "color_photo_blanc_4"
       ],
       "settings": {
         "banner": "",

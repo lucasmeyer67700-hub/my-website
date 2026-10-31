@@ -1654,6 +1654,10 @@ class VariantPicker extends HTMLElement {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
+    // Homepage offer: the four images switch to the other colour's photos.
+    const mosaic = scope.querySelector('.offer-mosaic[data-alt-color]');
+    if (mosaic) mosaic.toggleAttribute('data-alt-shown', mosaic.dataset.altColor === handle);
+
     const gallery = /** @type {any} */ (scope.querySelector('media-gallery'));
     if (!gallery?.showColour) return;
     const slide = gallery.showColour(handle);

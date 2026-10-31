@@ -29,10 +29,14 @@
   {%- liquid
     comment
       Every card shows its first photo the same size: it fills the square
-      frame (centred), whatever the photo's own format.
+      frame (centred). A photo clearly wider than tall (e.g. 5 pads laid side
+      by side) is shown whole instead, a little set back, so nothing is cut.
     endcomment
     assign card_image = product.featured_media.preview_image
     assign card_contain = false
+    if card_image and card_image.aspect_ratio > 1.05
+      assign card_contain = true
+    endif
   -%}
   <div
     class="product-card__media media{% if second_media != blank %} product-card__media--swap{% endif %}{% if card_contain %} product-card__media--contain{% endif %}"
