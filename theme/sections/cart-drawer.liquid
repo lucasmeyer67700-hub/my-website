@@ -5,7 +5,7 @@
         <h2 class="drawer__title" id="CartDrawerTitle" tabindex="-1" data-cart-title>
           {{ 'cart.title' | t }}
           {%- if cart.item_count > 0 %}
-            <span class="cart-drawer__count">({{ 'cart.item_count' | t: count: cart.item_count }})</span>
+            <span class="cart-drawer__count">{{ 'cart.item_count' | t: count: cart.item_count }}</span>
           {%- endif -%}
         </h2>
         <button type="button" class="icon-button" data-drawer-close>
@@ -47,10 +47,139 @@
 </cart-drawer>
 
 {% stylesheet %}
+  /* Premium drawer: soft header, airy lines on light cards, a calm footer */
+  .cart-drawer .drawer__header {
+    padding-block: var(--space-md);
+    border-block-end: 0;
+  }
+
+  .cart-drawer .drawer__title {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    letter-spacing: -0.01em;
+  }
+
   .cart-drawer__count {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
     font-family: var(--font-body-family);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
     color: var(--color-text-muted);
+    background-color: rgb(var(--warm-rgb) / 0.1);
+  }
+
+  .cart-drawer .drawer__header .icon-button {
+    border-radius: 999px;
+    background-color: rgb(var(--warm-rgb) / 0.08);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgb(var(--warm-rgb) / 0.16);
+    }
+  }
+
+  .cart-drawer .drawer__body {
+    padding-block-start: var(--space-2xs);
+  }
+
+  .cart-drawer .cart-lines {
+    gap: var(--space-sm);
+  }
+
+  .cart-drawer .cart-line {
+    grid-template-columns: 5.25rem 1fr auto;
+    padding: 0.85rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    box-shadow: 0 1px 0 rgb(var(--warm-rgb) / 0.08), 0 10px 26px -18px rgb(var(--warm-rgb) / 0.45);
+  }
+
+  .cart-drawer .cart-line__media {
+    background-color: var(--gallery-bg);
+  }
+
+  .cart-drawer .cart-line__title {
+    font-family: var(--font-heading-family);
+    font-size: 1.125rem;
+    line-height: 1.2;
+  }
+
+  .cart-drawer .cart-line__price {
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .cart-drawer .cart-line .quantity {
+    --quantity-height: 2.4rem;
+
+    min-height: 2.4rem;
+    height: 2.4rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cart-drawer .cart-line {
+      grid-template-columns: 4.5rem 1fr auto;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+
+    .cart-drawer .cart-line__title {
+      font-size: 1.02rem;
+    }
+
+    .cart-drawer .cart-line__actions {
+      flex-wrap: nowrap;
+      gap: 0.6rem;
+    }
+
+    .cart-drawer .cart-line .quantity__input {
+      width: 2.1rem;
+    }
+
+    .cart-drawer .cart-line .quantity .icon-button {
+      width: 2.2rem;
+      min-width: 2.2rem;
+      height: 2.2rem;
+      min-height: 2.2rem;
+    }
+  }
+
+  .cart-drawer .cart-line .text-button {
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
+
+  .cart-drawer .drawer__footer {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--space-md) var(--space-sm);
+    border-block-start: 0;
+    background: linear-gradient(180deg, rgb(var(--warm-rgb) / 0.05), transparent 2.5rem), var(--color-surface);
+    box-shadow: 0 -14px 30px -24px rgb(var(--warm-rgb) / 0.55);
+  }
+
+  .cart-drawer .cart-summary__subtotal {
+    align-items: baseline;
+
+    & span:first-child {
+      font-size: var(--text-xs);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    & span:last-child {
+      font-family: var(--font-heading-family);
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+  }
+
+  .cart-drawer .cart-summary__hint {
+    font-size: var(--text-xs);
   }
 
   /* The title gets focus when the drawer opens (for screen readers): no ring on it. */

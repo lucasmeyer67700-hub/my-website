@@ -30,26 +30,9 @@
     <span>{{ cart.total_price | money }}</span>
   </p>
 
-  <p class="cart-summary__note text-muted text-small">
-    {%- if cart.taxes_included %}{{ 'cart.taxes_included' | t }} {% endif -%}
-    {{- 'cart.shipping_at_checkout' | t -}}
-  </p>
-
-  {%- if settings.shipping_info != blank -%}
-    <ul class="trust-list" role="list">
-      <li>
-        {% render 'icon', icon: 'truck' %}
-        <span>
-          {{- settings.shipping_info | escape -}}
-          {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
-        </span>
-      </li>
-    </ul>
-  {%- endif -%}
-
   <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout">
-    {% render 'icon', icon: 'lock' %}
     {{ 'cart.checkout' | t }}
+    {% render 'icon', icon: 'arrow-right' %}
   </button>
 
   {%- comment -%} Right under the checkout button: secure payment and the enabled methods. {%- endcomment -%}
@@ -92,8 +75,19 @@
     font-weight: var(--font-body-weight-medium);
   }
 
-  .cart-summary__checkout .icon {
-    --icon-size: 1.05rem;
+  .cart-summary__checkout {
+    gap: 0.6rem;
+    min-height: 3.5rem;
+    letter-spacing: 0.04em;
+
+    & .icon {
+      --icon-size: 1.05rem;
+      transition: transform var(--duration-base, 0.25s) var(--ease-out, ease-out);
+    }
+
+    &:hover .icon {
+      transform: translateX(3px);
+    }
   }
 
   .cart-summary__hint {
