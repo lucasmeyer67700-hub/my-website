@@ -162,6 +162,34 @@
             "color": "Rouge",
             "image": "shopify://shop_images/velea-culotte-rouge-dos-2.webp"
           }
+        },
+        "color_photo_beige_1": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Beige",
+            "image": "shopify://shop_images/velea-culotte-beige-face.webp"
+          }
+        },
+        "color_photo_beige_2": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Beige",
+            "image": "shopify://shop_images/velea-culotte-beige-dos.webp"
+          }
+        },
+        "color_photo_beige_3": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Beige",
+            "image": "shopify://shop_images/velea-culotte-beige-profil.webp"
+          }
+        },
+        "color_photo_beige_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Beige",
+            "image": "shopify://shop_images/velea-culotte-beige-dos-2.webp"
+          }
         }
       },
       "block_order": [
@@ -181,7 +209,11 @@
         "color_photo_rouge_1",
         "color_photo_rouge_2",
         "color_photo_rouge_3",
-        "color_photo_rouge_4"
+        "color_photo_rouge_4",
+        "color_photo_beige_1",
+        "color_photo_beige_2",
+        "color_photo_beige_3",
+        "color_photo_beige_4"
       ],
       "settings": {
         "banner": "",

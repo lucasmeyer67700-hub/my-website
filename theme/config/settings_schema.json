@@ -349,6 +349,13 @@
         "default": 2
       },
       {
+        "type": "textarea",
+        "id": "cart_colour_images",
+        "label": "Photo du panier par coloris",
+        "info": "Une ligne par coloris : produit | couleur | nom du fichier (Contenu > Fichiers). Sans ligne, la photo principale du produit est utilisée.",
+        "default": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-portee.webp\nculotte-menstruelle | Rouge | velea-culotte-rouge-face.webp\nculotte-menstruelle | Beige | velea-culotte-beige-face.webp"
+      },
+      {
         "type": "header",
         "content": "Panier vide"
       },
