@@ -319,6 +319,7 @@
     "view": "Voir le produit"
   },
   "payment": {
+    "secure_checkout": "Paiement sécurisé",
     "secure_title": "Paiement sécurisé et chiffré",
     "secure_text": "Vous payez sur la page de paiement sécurisée de Shopify. Vos coordonnées bancaires sont chiffrées : VELEA n'y a jamais accès.",
     "express_label": "Ou payez en un clic"

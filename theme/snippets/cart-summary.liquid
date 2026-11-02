@@ -30,15 +30,18 @@
     <span>{{ cart.total_price | money }}</span>
   </p>
 
-  <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout">
-    {{ 'cart.checkout' | t }}
-    {% render 'icon', icon: 'arrow-right' %}
-  </button>
-
-  {%- comment -%} Right under the checkout button: secure payment and the enabled methods. {%- endcomment -%}
   {%- if compact -%}
-    {% render 'secure-payment', style: 'compact' %}
+    {%- comment -%} Drawer: one button that says it all, the enabled methods under it. {%- endcomment -%}
+    <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout cart-summary__checkout--secure">
+      {% render 'icon', icon: 'lock' %}
+      {{ 'payment.secure_checkout' | t }}
+    </button>
+    {% render 'payment-icons', class: 'cart-summary__payments' %}
   {%- else -%}
+    <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout">
+      {{ 'cart.checkout' | t }}
+      {% render 'icon', icon: 'arrow-right' %}
+    </button>
     {% render 'secure-payment', style: 'card' %}
     {%- if additional_checkout_buttons and settings.cart_express_checkout -%}
       <div class="cart-summary__express">

@@ -1,13 +1,15 @@
 {% doc %}
-  Social profile links configured in theme settings. Empty profiles are
-  not rendered, so no dead icon ever appears.
+  Social profile links configured in theme settings. Instagram and TikTok
+  always show their logo (a link as soon as the profile address is filled
+  in); the other networks appear only once filled in.
 
   @example
   {% render 'social-links' %}
 {% enddoc %}
 {%- liquid
   assign networks = 'instagram,tiktok,facebook,pinterest,youtube' | split: ','
-  assign has_links = false
+  assign always_shown = 'instagram,tiktok'
+  assign has_links = true
   for network in networks
     assign key = 'social_' | append: network
     if settings[key] != blank
@@ -21,10 +23,16 @@
       {%- assign key = 'social_' | append: network -%}
       {%- if settings[key] != blank -%}
         <li>
-          <a class="icon-button" href="{{ settings[key] }}" target="_blank" rel="noopener">
+          <a class="icon-button social-links__link" href="{{ settings[key] }}" target="_blank" rel="noopener">
             {% render 'icon', icon: network %}
             <span class="visually-hidden">{{ network | capitalize }} ({{ 'general.new_window' | t }})</span>
           </a>
+        </li>
+      {%- elsif always_shown contains network -%}
+        <li>
+          <span class="icon-button social-links__link" role="img" aria-label="{{ network | capitalize }}">
+            {% render 'icon', icon: network %}
+          </span>
         </li>
       {%- endif -%}
     {%- endfor -%}
@@ -39,5 +47,16 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .social-links__link {
+    border: 1px solid rgb(var(--warm-rgb) / 0.3);
+    border-radius: 999px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      border-color: currentColor;
+      background-color: rgb(var(--warm-rgb) / 0.08);
+    }
   }
 {% endstylesheet %}

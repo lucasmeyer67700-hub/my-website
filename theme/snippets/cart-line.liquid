@@ -36,6 +36,11 @@
       {%- endif -%}
     {%- endfor -%}
 
+    {%- comment -%} The product's real rating, as on its page (nothing when it has no reviews). {%- endcomment -%}
+    <div class="cart-line__rating">
+      {% render 'product-rating', product: item.product, anchor: 'avis', url: item.url %}
+    </div>
+
     {%- for discount in item.line_level_discount_allocations -%}
       <p class="cart-line__meta cart-line__discount">
         {{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})
@@ -132,6 +137,31 @@
   .cart-line__meta {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
+  }
+
+  .cart-line__rating {
+    &:empty {
+      display: none;
+    }
+
+    & .product-rating {
+      display: block;
+    }
+
+    & .product-rating__proof {
+      display: none;
+    }
+
+    & .product-rating__summary {
+      gap: 0.35rem;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    & .stars {
+      --stars-size: 0.75rem;
+    }
   }
 
   .cart-line__discount {
