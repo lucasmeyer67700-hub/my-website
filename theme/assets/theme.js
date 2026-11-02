@@ -1810,6 +1810,9 @@ class MediaGallery extends HTMLElement {
   showColour(colour) {
     const slides = [...this.querySelectorAll('[data-gallery-slide]')];
     const thumbs = [...this.querySelectorAll('[data-gallery-thumb]')];
+    // A colour without its own photos falls back to the product's own photos' colour
+    const own = slides.find((slide) => slide.dataset.mediaColor && !slide.dataset.mediaId?.startsWith('color-'));
+    if (own && !slides.some((slide) => slide.dataset.mediaColor === colour)) colour = own.dataset.mediaColor;
     const hasPhotos = slides.some((slide) => slide.dataset.mediaColor === colour);
     for (const [i, slide] of slides.entries()) {
       const show = !hasPhotos || !slide.dataset.mediaColor || slide.dataset.mediaColor === colour;

@@ -134,6 +134,34 @@
             "show_returns_offer": true,
             "open": false
           }
+        },
+        "color_photo_rouge_1": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rouge",
+            "image": "shopify://shop_images/velea-culotte-rouge-face.webp"
+          }
+        },
+        "color_photo_rouge_2": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rouge",
+            "image": "shopify://shop_images/velea-culotte-rouge-dos.webp"
+          }
+        },
+        "color_photo_rouge_3": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rouge",
+            "image": "shopify://shop_images/velea-culotte-rouge-profil.webp"
+          }
+        },
+        "color_photo_rouge_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rouge",
+            "image": "shopify://shop_images/velea-culotte-rouge-dos-2.webp"
+          }
         }
       },
       "block_order": [
@@ -149,7 +177,11 @@
         "usage",
         "care",
         "box",
-        "safety"
+        "safety",
+        "color_photo_rouge_1",
+        "color_photo_rouge_2",
+        "color_photo_rouge_3",
+        "color_photo_rouge_4"
       ],
       "settings": {
         "banner": "",
@@ -158,7 +190,8 @@
         "gallery_fit": "cover",
         "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-2",
+        "media_color": "Noir"
       }
     },
     "reviews": {

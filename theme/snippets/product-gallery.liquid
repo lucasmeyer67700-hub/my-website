@@ -95,6 +95,11 @@
         endif
       endif
     endfor
+    # A colour without its own photos (e.g. Beige) shows the product's own photos only
+    if selected_has_photos == false and default_media_color != blank
+      assign selected_color = default_media_color
+      assign selected_has_photos = true
+    endif
   endif
   if initial_media == blank and current_color != blank
     for media in product.media
