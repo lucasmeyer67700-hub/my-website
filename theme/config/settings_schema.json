@@ -202,6 +202,13 @@
         "label": "Fond des photos produits",
         "info": "Mettez la couleur du fond de vos photos produits : les cases du catalogue, la galerie des fiches et l'offre de l'accueil prennent ce fond, et une photo plus large que sa case s'affiche en entier, fondue dans ce rose.",
         "default": "#ecbac7"
+      },
+      {
+        "type": "textarea",
+        "id": "card_photo_positions",
+        "label": "Cadrage des photos du catalogue",
+        "info": "Une ligne par produit : produit | position. Exemple : ceinture-chauffante-regles | 50% 38% (le 2e chiffre plus petit montre plus le haut de la photo).",
+        "default": "ceinture-chauffante-regles | 50% 38%"
       }
     ]
   },
@@ -353,7 +360,7 @@
         "id": "cart_colour_images",
         "label": "Photo du panier par coloris",
         "info": "Une ligne par coloris : produit | couleur | nom du fichier (Contenu > Fichiers). Sans ligne, la photo principale du produit est utilisée.",
-        "default": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-portee.webp\nculotte-menstruelle | Rouge | velea-culotte-rouge-face.webp\nculotte-menstruelle | Beige | velea-culotte-beige-face.webp"
+        "default": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-portee.webp\nculotte-menstruelle | Rouge | velea-culotte-rouge-face.webp\nculotte-menstruelle | Beige | velea-culotte-beige-face-hd.webp"
       },
       {
         "type": "header",

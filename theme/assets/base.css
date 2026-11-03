@@ -912,6 +912,11 @@ textarea.field__input {
   }
 }
 
+/* The first photo can be framed higher or lower (Theme settings > Photos produits) */
+.product-card__media > .product-card__image:first-child {
+  object-position: var(--card-position, 50% 50%);
+}
+
 .product-card__image--second {
   position: absolute;
   inset: 0;

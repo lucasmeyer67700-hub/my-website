@@ -37,11 +37,28 @@
     if card_image and card_image.aspect_ratio > 1.05
       assign card_contain = true
     endif
+    # Framing of the first photo: the image's focal point, or a line in
+    # Theme settings > Photos produits ("product | horizontal% vertical%")
+    assign card_position = card_image.presentation.focal_point | default: ''
+    if settings.card_photo_positions != blank
+      assign position_rows = settings.card_photo_positions | newline_to_br | split: '<br />'
+      for row in position_rows
+        assign row_parts = row | split: '|'
+        if row_parts.size == 2
+          assign row_handle = row_parts[0] | strip | handleize
+          if row_handle == product.handle
+            assign card_position = row_parts[1] | strip
+          endif
+        endif
+      endfor
+    endif
   -%}
   <div
     class="product-card__media media{% if second_media != blank %} product-card__media--swap{% endif %}{% if card_contain %} product-card__media--contain{% endif %}"
     {% if card_contain %}
       style="--image-ratio: {{ card_image.aspect_ratio }};"
+    {% elsif card_position != blank %}
+      style="--card-position: {{ card_position | escape }};"
     {% endif %}
   >
     {%- if product.featured_media -%}
