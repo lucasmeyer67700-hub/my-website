@@ -76,7 +76,14 @@
     "precautions_heading": "Précautions",
     "shipping_conditions": "Conditions de livraison",
     "media_slot_short": "Photo à ajouter",
-    "size_guide": "Guide des tailles"
+    "size_guide": "Guide des tailles",
+    "size_table": {
+      "caption": "Correspondance des tailles en centimètres",
+      "size": "Taille",
+      "waist": "Tour de taille",
+      "hips": "Tour de hanches",
+      "how_to": "Comment prendre vos mesures"
+    }
   },
   "cart": {
     "title": "Votre panier",

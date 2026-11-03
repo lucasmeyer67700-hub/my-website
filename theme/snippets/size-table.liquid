@@ -1,0 +1,74 @@
+{% doc %}
+  Size chart written out as a table (the text version of the size guide image).
+
+  @param {string} rows - One line per size: "size | waist (cm) | hips (cm)"
+
+  @example
+  {% render 'size-table', rows: block.settings.size_rows %}
+{% enddoc %}
+{%- assign size_lines = rows | newline_to_br | split: '<br />' -%}
+<div class="size-table">
+  <table class="size-table__table">
+    <caption class="visually-hidden">{{ 'products.size_table.caption' | t }}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{{ 'products.size_table.size' | t }}</th>
+        <th scope="col">{{ 'products.size_table.waist' | t }}</th>
+        <th scope="col">{{ 'products.size_table.hips' | t }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%- for line in size_lines -%}
+        {%- assign cells = line | split: '|' -%}
+        {%- if cells.size >= 3 -%}
+          <tr>
+            <th scope="row">{{ cells[0] | strip | escape }}</th>
+            <td>{{ cells[1] | strip | escape }} cm</td>
+            <td>{{ cells[2] | strip | escape }} cm</td>
+          </tr>
+        {%- endif -%}
+      {%- endfor -%}
+    </tbody>
+  </table>
+</div>
+
+{% stylesheet %}
+  .size-table {
+    margin-block-end: var(--space-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .size-table__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+
+    & thead th {
+      padding: 0.8rem 0.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background-color: rgb(var(--warm-rgb) / 0.05);
+    }
+
+    & tbody th,
+    & tbody td {
+      padding: 0.75rem 0.5rem;
+      border-block-start: 1px solid var(--color-border);
+    }
+
+    & tbody th {
+      font-family: var(--font-heading-family);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+  }
+{% endstylesheet %}

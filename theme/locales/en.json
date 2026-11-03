@@ -76,7 +76,14 @@
     "precautions_heading": "Precautions",
     "shipping_conditions": "Shipping conditions",
     "media_slot_short": "Photo to add",
-    "size_guide": "Size guide"
+    "size_guide": "Size guide",
+    "size_table": {
+      "caption": "Size chart in centimetres",
+      "size": "Size",
+      "waist": "Waist",
+      "hips": "Hips",
+      "how_to": "How to measure"
+    }
   },
   "cart": {
     "title": "Your cart",

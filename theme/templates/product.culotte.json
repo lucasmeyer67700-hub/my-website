@@ -88,7 +88,8 @@
             "source": "size_guide",
             "content": "",
             "show_returns_offer": false,
-            "open": false
+            "open": false,
+            "size_rows": "XS | 63–68 | 85–90\nS | 69–73 | 91–96\nM | 74–79 | 97–102\nL | 80–85 | 103–108\nXL | 86–91 | 109–114\nXXL | 92–97 | 115–120"
           }
         },
         "usage": {
@@ -201,6 +202,27 @@
             "show_returns_offer": false,
             "open": false
           }
+        },
+        "color_photo_guide_noir": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Noir",
+            "image": "shopify://shop_images/velea-guide-tailles-culotte.webp"
+          }
+        },
+        "color_photo_guide_beige": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Beige",
+            "image": "shopify://shop_images/velea-guide-tailles-culotte.webp"
+          }
+        },
+        "color_photo_guide_rouge": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Rouge",
+            "image": "shopify://shop_images/velea-guide-tailles-culotte.webp"
+          }
         }
       },
       "block_order": [
@@ -225,7 +247,10 @@
         "color_photo_beige_1",
         "color_photo_beige_2",
         "color_photo_beige_3",
-        "color_photo_beige_4"
+        "color_photo_beige_4",
+        "color_photo_guide_noir",
+        "color_photo_guide_beige",
+        "color_photo_guide_rouge"
       ],
       "settings": {
         "banner": "",

@@ -209,7 +209,7 @@
               assign block_alt = block.settings.image.alt | default: product.title | append: ' – ' | append: block.settings.color
             -%}
             <li
-              class="gallery__slide"
+              class="gallery__slide{% if block.settings.image.aspect_ratio > 1.05 %} gallery__slide--whole{% endif %}"
               data-gallery-slide
               data-media-id="color-{{ block.id }}"
               data-media-color="{{ block_color }}"
@@ -448,6 +448,20 @@
 
   .gallery--contain .gallery__slide img {
     object-fit: contain;
+  }
+
+  /* A wide picture (a size chart, for example) is shown whole, never cropped */
+  .gallery__slide--whole {
+    background-color: #fff;
+
+    & img,
+    & .gallery__zoom img {
+      object-fit: contain;
+    }
+
+    & .gallery__zoom {
+      background-color: #fff;
+    }
   }
 
   .gallery__zoom {

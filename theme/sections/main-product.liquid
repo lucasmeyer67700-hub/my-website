@@ -360,6 +360,12 @@
                   when 'care'
                     render 'metafield-lines', value: product.metafields.custom.entretien.value, ordered: false
                   when 'size_guide'
+                    if block.settings.size_rows != blank
+                      render 'size-table', rows: block.settings.size_rows
+                      echo '<h3 class="product__accordion-subtitle">'
+                      echo 'products.size_table.how_to' | t
+                      echo '</h3>'
+                    endif
                     render 'metafield-lines', value: product.metafields.custom.guide_tailles.value, ordered: false, plain: true
                   when 'precautions'
                     render 'metafield-lines', value: product.metafields.custom.precautions.value, ordered: false
@@ -1537,6 +1543,13 @@
           "id": "content",
           "label": "Texte personnalisé",
           "visible_if": "{{ block.settings.source == 'custom' }}"
+        },
+        {
+          "type": "textarea",
+          "id": "size_rows",
+          "label": "Tableau des tailles",
+          "info": "Une ligne par taille : taille | tour de taille (cm) | tour de hanches (cm). Exemple : M | 74–79 | 97–102",
+          "visible_if": "{{ block.settings.source == 'size_guide' }}"
         },
         {
           "type": "checkbox",
