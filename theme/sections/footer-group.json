@@ -112,7 +112,7 @@
           "settings": {
             "question": "Retours et garantie",
             "keywords": "retour, retourner, renvoyer, rembourser, remboursement, remboursee, rembourse, satisfaite, echange, echanger, garantie, defectueux, defaut, casse, abime, panne, ne marche pas, ne fonctionne pas, ne chauffe pas, retractation, changer d avis, annuler",
-            "answer": "<p>Vous avez 14 jours après réception pour changer d'avis. Pour la ceinture, notre garantie « Satisfaite ou remboursée » dure 30 jours. Colis abîmé ou produit défectueux : nous renvoyons ou remboursons, à nos frais.</p>",
+            "answer": "<p>Vous avez 14 jours après réception pour changer d'avis. Pour la ceinture, notre garantie « Satisfaite ou remboursée » dure 30 jours. Culottes et serviettes : reprises uniquement si leur emballage n'a pas été ouvert, pour des raisons d'hygiène. Colis abîmé ou produit défectueux : nous renvoyons ou remboursons, à nos frais.</p>",
             "product": "",
             "link_label": "Lire la politique de retour",
             "link": "shopify://pages/politique-de-retour"
@@ -170,7 +170,7 @@
         "catalogue": "tous-nos-produits",
         "answer_shipping": "La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés entre votre commande et la réception.",
         "answer_tracking": "Dès l'expédition, vous recevez par e-mail votre numéro de suivi et un lien pour suivre votre colis étape par étape. Pensez à regarder vos courriers indésirables. Vous retrouvez aussi l'état de votre commande dans votre compte.",
-        "answer_returns": "Vous avez 14 jours après réception pour changer d'avis, sans vous justifier : écrivez-nous avec votre numéro de commande. Une fois le produit retourné, nous vous remboursons sous 14 jours ; les frais de retour sont à votre charge.",
+        "answer_returns": "Vous avez 14 jours après réception pour changer d'avis, sans vous justifier : écrivez-nous avec votre numéro de commande. Une fois le produit retourné, nous vous remboursons sous 14 jours ; les frais de retour sont à votre charge. Pour des raisons d'hygiène, une culotte ou des serviettes menstruelles dont l'emballage a été ouvert ne peuvent pas être reprises.",
         "answer_guarantee": "Pour la ceinture chauffante, seule ou en duo, notre garantie « Satisfaite ou remboursée » dure 30 jours après réception. Contactez-nous avant tout envoi, et renvoyez-la complète et propre. Une demande par foyer et par produit ; les frais de retour restent à votre charge.",
         "answer_damaged": "Colis abîmé, perdu ou produit qui ne fonctionne pas correctement ? Écrivez-nous rapidement, avec une photo si possible : nous renvoyons le produit ou vous remboursons, frais à notre charge.",
         "answer_origin": "Nos produits sont fabriqués par des fournisseurs partenaires, puis expédiés jusqu'à chez vous.",
