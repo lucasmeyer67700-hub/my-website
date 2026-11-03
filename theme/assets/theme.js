@@ -99,7 +99,62 @@ function renderCartSections(sections = {}) {
   if (mainCart?.dataset.sectionId) {
     swapSection(sections[mainCart.dataset.sectionId], '[data-main-cart]');
   }
+  removeLoneOptions();
 }
+
+/**
+ * Sets an option (e.g. « Livraison express ») to 0 or 1 in the cart and
+ * redraws the cart.
+ * @param {number} variantId
+ * @param {boolean} wanted
+ * @returns {Promise<any>}
+ */
+async function setCartOption(variantId, wanted) {
+  const result = await cartRequest(`${theme.routes.cart}/update.js`, {
+    updates: { [variantId]: wanted ? 1 : 0 },
+    sections: getCartSectionIds().join(','),
+    sections_url: window.location.pathname,
+  });
+  renderCartSections(result.sections);
+  return result;
+}
+
+/** An option left alone in the cart (every product removed) is removed too. */
+function removeLoneOptions() {
+  const marker = document.querySelector('[data-cart-only-options]');
+  if (!marker || removeLoneOptions.busy) return;
+  removeLoneOptions.busy = true;
+  const updates = {};
+  for (const id of marker.dataset.cartOnlyOptions.split(',').filter(Boolean)) updates[id] = 0;
+  cartRequest(`${theme.routes.cart}/update.js`, {
+    updates,
+    sections: getCartSectionIds().join(','),
+    sections_url: window.location.pathname,
+  })
+    .then((result) => {
+      removeLoneOptions.busy = false;
+      renderCartSections(result.sections);
+    })
+    .catch(() => {
+      removeLoneOptions.busy = false;
+    });
+}
+
+// The « Livraison express » box in the cart (drawer or page) adds or removes it at once.
+document.addEventListener('change', async (event) => {
+  const box = event.target.closest?.('[data-express-toggle][data-express-context="cart"]');
+  if (!box) return;
+  const holder = box.closest('.cart-summary') || box;
+  holder.setAttribute('aria-busy', 'true');
+  try {
+    await setCartOption(Number(box.dataset.variantId), box.checked);
+  } catch (error) {
+    box.checked = !box.checked;
+    console.error('Livraison express : mise à jour impossible', error);
+  } finally {
+    holder.removeAttribute('aria-busy');
+  }
+});
 
 /* -------------------------------------------------------------------------- */
 /* Dialog-based drawers (mobile menu, cart, gallery zoom)                      */
@@ -1401,6 +1456,8 @@ class ProductForm extends HTMLElement {
         return;
       }
       result = await this.#add(formData);
+      const express = this.#expressVariant();
+      if (express) result = (await this.#addExpress(express, true)) || result;
     } catch (error) {
       // A refusal from Shopify (stock, limit…) is shown as it is. Anything else
       // falls back to the plain form post, which Shopify always handles.
@@ -1444,6 +1501,31 @@ class ProductForm extends HTMLElement {
       url.searchParams.set('sections', getCartSectionIds().join(','));
       const response = await fetch(url.toString());
       return { sections: response.ok ? await response.json().catch(() => ({})) : {} };
+    }
+  }
+
+  /** @returns {number | null} The « Livraison express » variant when its box is ticked */
+  #expressVariant() {
+    const box = this.querySelector('[data-express-toggle][data-express-context="product"]');
+    return box?.checked ? Number(box.dataset.variantId) : null;
+  }
+
+  /**
+   * Puts the « Livraison express » option in the cart (once, never doubled).
+   * @param {number} variantId
+   * @param {boolean} withSections - true to get the cart sections back
+   */
+  async #addExpress(variantId, withSections) {
+    const body = { updates: { [variantId]: 1 } };
+    if (withSections) {
+      body.sections = getCartSectionIds().join(',');
+      body.sections_url = window.location.pathname;
+    }
+    try {
+      return await cartRequest(`${theme.routes.cart}/update.js`, body);
+    } catch (error) {
+      console.error('Livraison express : ajout impossible', error);
+      return null;
     }
   }
 
@@ -1496,6 +1578,8 @@ class ProductForm extends HTMLElement {
     if (!cart.items.some((item) => item.variant_id === variantId)) {
       await cartRequest(`${theme.routes.cartAdd}.js`, formData);
     }
+    const express = this.#expressVariant();
+    if (express) await this.#addExpress(express, false);
     window.location.assign(checkoutUrl);
   }
 }

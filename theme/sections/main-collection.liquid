@@ -32,6 +32,7 @@
       {%- if collection.products.size > 0 or free_slots > 0 -%}
         <ul class="product-grid product-grid--catalogue" role="list">
           {%- for product in collection.products -%}
+            {%- if product.tags contains 'velea-option' -%}{%- continue -%}{%- endif -%}
             <li class="reveal">{% render 'product-card', product: product, heading_tag: 'h2' %}</li>
           {%- endfor -%}
           {%- if free_slots > 0 -%}

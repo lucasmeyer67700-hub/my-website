@@ -208,6 +208,8 @@
               {%- endunless -%}
             </noscript>
 
+            {% render 'express-option', context: 'product', key: form_id %}
+
             <div class="product-form__row">
               <button
                 id="{{ submit_id }}"

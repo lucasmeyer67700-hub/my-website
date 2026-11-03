@@ -9,6 +9,25 @@
   @example
   {% render 'cart-line', item: item, index: forloop.index, context: 'drawer' %}
 {% enddoc %}
+{%- if item.product.tags contains 'velea-option' -%}
+  {%- comment -%} An option (e.g. « Livraison express »): no photo, no quantity, just remove. {%- endcomment -%}
+  <li class="cart-line cart-line--option">
+    <span class="cart-line__media cart-line__option-icon" aria-hidden="true">{% render 'icon', icon: 'truck' %}</span>
+    <div class="cart-line__details">
+      <p class="cart-line__title">{{ item.product.title | escape }}</p>
+      {%- if settings.express_note != blank -%}
+        <p class="cart-line__meta">{{ settings.express_note | escape }}</p>
+      {%- endif -%}
+      <div class="cart-line__actions">
+        <a class="text-button" href="{{ item.url_to_remove }}" data-remove-line data-line="{{ index }}">
+          {{- 'cart.remove_short' | t -}}
+          <span class="visually-hidden"> – {{ item.product.title | escape }}</span>
+        </a>
+      </div>
+    </div>
+    <p class="cart-line__price"><span>{{ item.final_line_price | money }}</span></p>
+  </li>
+{%- else -%}
 <li class="cart-line">
   {%- liquid
     # The photo of the chosen colour (Paramètres du thème > Panier > Photo du panier par coloris)
@@ -121,6 +140,7 @@
     <span>{{ item.final_line_price | money }}</span>
   </p>
 </li>
+{%- endif -%}
 
 {% stylesheet %}
   [aria-busy='true'] .cart-lines {
@@ -204,6 +224,22 @@
     align-items: center;
     gap: var(--space-xs) var(--space-sm);
     margin-block-start: var(--space-2xs);
+  }
+
+  .cart-line__option-icon {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    color: var(--color-accent);
+    background-color: rgb(var(--warm-rgb) / 0.08);
+
+    & .icon {
+      --icon-size: 1.6rem;
+    }
+  }
+
+  .cart-line--option .cart-line__title {
+    margin: 0;
   }
 
   .cart-line__price {

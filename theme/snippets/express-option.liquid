@@ -1,0 +1,176 @@
+{% doc %}
+  The « Livraison express » box (+ its price): on the product page it is added
+  with the product, in the cart it adds or removes the option at once.
+  Theme settings > Livraison express (product « livraison-express »).
+
+  @param {string} context - 'product' or 'cart'
+  @param {string} key - Unique suffix for the checkbox id (the form id)
+
+  @example
+  {% render 'express-option', context: 'cart', key: form_id %}
+{% enddoc %}
+{%- liquid
+  assign show_express = false
+  assign express_product = settings.express_product
+  if settings.express_enabled and express_product != blank
+    assign express_variant = express_product.selected_or_first_available_variant
+    if express_variant != blank and express_variant.available
+      assign show_express = true
+    endif
+  endif
+  assign express_in_cart = false
+  assign express_has_other = false
+  if show_express
+    for item in cart.items
+      if item.variant_id == express_variant.id
+        assign express_in_cart = true
+      else
+        assign express_has_other = true
+      endif
+    endfor
+    if context == 'cart' and express_has_other == false
+      assign show_express = false
+    endif
+  endif
+  assign express_id = 'Express-' | append: context | append: '-' | append: key
+-%}
+{%- if show_express -%}
+<label class="express-option express-option--{{ context }}" for="{{ express_id }}">
+  <input
+    class="express-option__input"
+    type="checkbox"
+    id="{{ express_id }}"
+    data-express-toggle
+    data-express-context="{{ context }}"
+    data-variant-id="{{ express_variant.id }}"
+    {% if express_in_cart %}
+      checked
+    {% endif %}
+  >
+  <span class="express-option__box" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+  <span class="express-option__text">
+    <span class="express-option__title">
+      {% render 'icon', icon: 'truck' %}
+      {{ settings.express_label | escape }}
+    </span>
+    {%- if settings.express_note != blank -%}
+      <span class="express-option__note">{{ settings.express_note | escape }}</span>
+    {%- endif -%}
+  </span>
+  <span class="express-option__price">+{{ express_variant.price | money }}</span>
+</label>
+{%- endif -%}
+
+{% stylesheet %}
+  .express-option {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.95rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease;
+
+    &:hover {
+      border-color: rgb(var(--warm-rgb) / 0.55);
+    }
+
+    &:has(.express-option__input:checked) {
+      border-color: var(--color-button);
+      background-color: rgb(var(--warm-rgb) / 0.06);
+    }
+
+    &:has(.express-option__input:focus-visible) {
+      outline: 2px solid var(--color-button);
+      outline-offset: 2px;
+    }
+  }
+
+  .express-option__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .express-option__box {
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 1.5px solid rgb(var(--warm-rgb) / 0.6);
+    border-radius: 0.35rem;
+    background-color: var(--color-background);
+    color: var(--color-button-label);
+    transition: background-color var(--duration-fast) ease;
+
+    & .icon {
+      --icon-size: 0.85rem;
+      opacity: 0;
+    }
+
+    .express-option__input:checked + & {
+      border-color: var(--color-button);
+      background-color: var(--color-button);
+
+      & .icon {
+        opacity: 1;
+      }
+    }
+  }
+
+  .express-option__text {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .express-option__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+
+    & .icon {
+      --icon-size: 1rem;
+      color: var(--color-accent);
+    }
+  }
+
+  .express-option__note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  .express-option__price {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .express-option--product {
+    margin-block-end: var(--space-sm);
+  }
+
+  .express-option--cart {
+    padding: 0.65rem 0.8rem;
+
+    & .express-option__title {
+      font-size: 0.875rem;
+    }
+
+    & .express-option__note {
+      font-size: 0.75rem;
+    }
+  }
+
+  [aria-busy='true'] .express-option {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+{% endstylesheet %}

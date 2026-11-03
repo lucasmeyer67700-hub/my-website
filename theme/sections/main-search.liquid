@@ -33,6 +33,7 @@
         {%- if search.results_count > 0 -%}
           <ul class="product-grid" role="list">
             {%- for item in search.results -%}
+              {%- if item.object_type == 'product' and item.tags contains 'velea-option' -%}{%- continue -%}{%- endif -%}
               <li>
                 {%- case item.object_type -%}
                   {%- when 'product' -%}
