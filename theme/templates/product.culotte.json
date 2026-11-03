@@ -65,7 +65,7 @@
             "title_2": "Une matière souple",
             "text_2": "Viscose et élasthanne, avec un entrejambe en coton.",
             "icon_3": "check",
-            "title_3": "Du S au 4XL",
+            "title_3": "Du XS au XXL",
             "text_3": "Trois coloris : noir, beige et rouge."
           }
         },
@@ -312,7 +312,7 @@
           "type": "question",
           "settings": {
             "question": "Quels coloris et quelles tailles ?",
-            "answer": "<p>Noir, beige ou rouge, du S au 4XL.</p>"
+            "answer": "<p>Noir, beige ou rouge, du XS au XXL.</p>"
           }
         },
         "shipping": {

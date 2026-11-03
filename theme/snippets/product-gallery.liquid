@@ -452,15 +452,23 @@
 
   /* A wide picture (a size chart, for example) is shown whole, never cropped */
   .gallery__slide--whole {
-    background-color: #fff;
+    background-color: var(--gallery-bg);
+
+    & .gallery__zoom {
+      display: grid;
+      place-items: center;
+      padding: clamp(0.75rem, 5%, 2.5rem);
+      background-color: var(--gallery-bg);
+    }
 
     & img,
     & .gallery__zoom img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
       object-fit: contain;
-    }
-
-    & .gallery__zoom {
-      background-color: #fff;
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 32px -18px rgb(73 53 47 / 0.45);
     }
   }
 

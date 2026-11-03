@@ -50,7 +50,12 @@
         "title": "Cookies",
         "text": "Nous les utilisons pour mesurer l'audience et personnaliser nos offres.",
         "heading_font": "playfair_display_n4",
-        "policy_page": ""
+        "policy_page": "",
+        "background": "#2b201d",
+        "text_color": "#f7efe9",
+        "accent": "#d9a58f",
+        "button": "#f7efe9",
+        "button_label": "#2b201d"
       }
     },
     "welcome": {
@@ -118,7 +123,7 @@
           "settings": {
             "question": "Trouver ma taille",
             "keywords": "culotte, taille, tailles, guide des tailles, mesurer, mesure, tour de taille, hanches, xl, xxl, 3xl, 4xl, petite, grande taille",
-            "answer": "<p>La culotte menstruelle existe du S au 4XL. Mesurez votre tour de taille (à l'endroit le plus fin) et de hanches (à l'endroit le plus large). Entre deux tailles, choisissez la plus grande.</p>",
+            "answer": "<p>La culotte menstruelle existe du XS au XXL. Mesurez votre tour de taille (à l'endroit le plus fin) et de hanches (à l'endroit le plus large). Entre deux tailles, choisissez la plus grande.</p>",
             "product": "culotte-menstruelle",
             "link_label": "Voir la culotte",
             "link": ""
