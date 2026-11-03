@@ -57,6 +57,12 @@
       </p>
     {%- endunless -%}
 
+    {%- comment -%} With several pieces, the unit price sits with the details, under the size. {%- endcomment -%}
+    {%- if item.quantity > 1 -%}
+      {%- assign unit_price = item.final_price | money -%}
+      <p class="cart-line__meta cart-line__unit">{{ 'cart.unit_price' | t: price: unit_price }}</p>
+    {%- endif -%}
+
     {%- for property in item.properties -%}
       {%- assign first_char = property.first | slice: 0 -%}
       {%- if property.last != blank and first_char != '_' -%}
@@ -113,10 +119,6 @@
       <s class="price__compare">{{ item.original_line_price | money }}</s>
     {%- endif -%}
     <span>{{ item.final_line_price | money }}</span>
-    {%- if item.quantity > 1 -%}
-      {%- assign unit_price = item.final_price | money -%}
-      <span class="cart-line__unit">{{ 'cart.unit_price' | t: price: unit_price }}</span>
-    {%- endif -%}
   </p>
 </li>
 

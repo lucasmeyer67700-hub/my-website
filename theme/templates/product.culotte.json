@@ -190,6 +190,17 @@
             "color": "Beige",
             "image": "shopify://shop_images/velea-culotte-beige-dos-2.webp"
           }
+        },
+        "hygiene": {
+          "type": "accordion",
+          "settings": {
+            "title": "Hygiène et retours",
+            "icon": "none",
+            "source": "custom",
+            "content": "<p>Pour des raisons d'hygiène et de protection de la santé, une culotte dont l'emballage a été ouvert après la livraison ne peut être ni reprise ni échangée. Conformément à l'article L221-28, 5° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens descellés par le consommateur après la livraison et qui ne peuvent être renvoyés pour des raisons d'hygiène ou de protection de la santé.</p><p>Tant que l'emballage n'a pas été ouvert, vous disposez de 14 jours après la réception pour vous rétracter, selon notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour et de remboursement\">Politique de retour</a>.</p><p>Si votre culotte arrive abîmée, défectueuse ou ne correspond pas à votre commande, vous restez protégée par la garantie légale de conformité : écrivez-nous avec une photo.</p>",
+            "show_returns_offer": false,
+            "open": false
+          }
         }
       },
       "block_order": [
@@ -205,6 +216,7 @@
         "usage",
         "care",
         "box",
+        "hygiene",
         "safety",
         "color_photo_rouge_1",
         "color_photo_rouge_2",
