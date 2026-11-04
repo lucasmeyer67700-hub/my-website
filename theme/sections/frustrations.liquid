@@ -210,12 +210,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.1rem;
-    padding: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem) clamp(1.25rem, 1rem + 1vw, 2rem) clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
-    border: 1px solid var(--fr-line);
-    border-radius: var(--radius-lg);
+    gap: 1.25rem;
+    padding: clamp(2rem, 1.6rem + 1.4vw, 2.75rem) clamp(1.25rem, 1rem + 1vw, 2rem) clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
+    border: 0;
+    border-radius: calc(var(--radius-lg) + 6px);
     background-color: var(--fr-card-bg);
-    box-shadow: 0 1px 2px rgb(48 39 36 / 0.03);
+    box-shadow: 0 30px 60px -48px rgb(73 53 47 / 0.4);
     text-align: center;
     transition:
       translate 600ms var(--fr-ease),
@@ -236,14 +236,17 @@
   .frustrations__card-title {
     display: grid;
     place-items: center;
-    max-width: 22ch;
-    min-height: calc(2 * 1.22em);
+    max-width: 20ch;
+    min-height: calc(2 * 1.18em);
     margin: 0;
     font-family: var(--font-heading-family);
     font-style: var(--font-heading-style);
-    font-weight: var(--font-heading-weight);
-    font-size: clamp(1.25rem, 1.12rem + 0.5vw, 1.5rem);
-    line-height: 1.22;
+    font-weight: 400;
+    font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.65rem);
+    line-height: 1.18;
+    letter-spacing: -0.012em;
+    color: var(--color-text);
+    font-feature-settings: 'kern', 'liga';
     text-wrap: balance;
   }
 
@@ -253,7 +256,7 @@
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
-    border-radius: var(--radius-md);
+    border-radius: calc(var(--radius-md) + 2px);
     background-color: var(--gallery-bg);
 
     & .frustrations__image {
@@ -279,10 +282,10 @@
   }
 
   .frustrations__text {
-    max-width: 30ch;
-    margin: 0.15rem 0 0;
-    font-size: 0.9375rem;
-    line-height: 1.65;
+    max-width: 28ch;
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
     color: var(--color-text-muted);
     text-wrap: pretty;
   }
@@ -303,7 +306,7 @@
 
   .frustrations__thought-text {
     font-family: var(--font-heading-family);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     font-style: italic;
     line-height: 1.4;
     color: var(--color-accent);
@@ -372,7 +375,7 @@
   .frustrations__closing {
     display: grid;
     align-items: center;
-    gap: clamp(1.75rem, 1rem + 3vw, 4.5rem);
+    gap: clamp(2rem, 1rem + 3vw, 4.5rem);
     margin-block-start: clamp(4rem, 3rem + 5vw, 8rem);
 
     @media screen and (min-width: 750px) {
@@ -385,10 +388,6 @@
     max-width: 44rem;
     margin-inline: auto;
     text-align: center;
-
-    & .frustrations__actions {
-      justify-content: center;
-    }
   }
 
   .frustrations__closing-media {
@@ -400,9 +399,13 @@
     box-shadow: 0 30px 60px -40px rgb(73 53 47 / 0.45);
 
     @media screen and (max-width: 749px) {
-      --media-ratio: 4 / 3;
+      --media-ratio: 4 / 5;
 
+      width: min(100%, 19rem);
       max-width: none;
+      margin-inline: auto;
+      border-radius: calc(var(--radius-lg) + 6px);
+      box-shadow: 0 28px 50px -36px rgb(73 53 47 / 0.45);
     }
   }
 
@@ -415,6 +418,13 @@
     .frustrations__closing--text & {
       justify-items: center;
       max-width: none;
+    }
+
+    @media screen and (max-width: 749px) {
+      justify-items: center;
+      gap: 1.1rem;
+      max-width: none;
+      text-align: center;
     }
   }
 
@@ -431,24 +441,30 @@
       font-style: italic;
       color: var(--color-accent);
     }
+
+    @media screen and (max-width: 749px) {
+      font-size: 1.875rem;
+      line-height: 1.15;
+    }
   }
 
   .frustrations__closing-text {
+    max-width: 34rem;
     margin: 0;
-    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+    font-size: clamp(0.9375rem, 0.9rem + 0.3vw, 1.125rem);
     line-height: 1.7;
     color: var(--color-text-muted);
     text-wrap: pretty;
   }
 
   .frustrations__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-sm) var(--space-lg);
+    display: inline-grid;
+    justify-items: center;
+    gap: 0.9rem;
     margin-block-start: var(--space-2xs);
 
     @media screen and (max-width: 749px) {
+      display: grid;
       width: 100%;
 
       & .button {
