@@ -75,54 +75,48 @@
           "type": "frustration",
           "settings": {
             "title": "Faire comme si tout allait bien.",
-            "text": "Une journée de travail, des rendez-vous, les transports, les obligations… Même lorsque l'on ne se sent pas au mieux, la journée continue.",
-            "thought": "J'aimerais simplement pouvoir ralentir sans avoir à tout justifier.",
-            "image": ""
+            "text": "Travailler, sortir, sourire… même lorsque l'on aimerait simplement ralentir.",
+            "thought": "« J'aimerais pouvoir souffler un peu. »"
           }
         },
         "moment-2": {
           "type": "frustration",
           "settings": {
-            "title": "Toujours devoir trouver la bonne position.",
-            "text": "On change de position, on cherche un endroit confortable, on s'installe avec une bouillotte… Parfois, on aimerait simplement pouvoir bouger librement.",
-            "thought": "Pourquoi est-ce si compliqué de trouver un peu de confort ?",
-            "image": ""
+            "title": "Chercher sans cesse une position confortable.",
+            "text": "Changer de position, s'installer, recommencer… difficile de trouver son confort.",
+            "thought": "« J'aimerais simplement être bien. »"
           }
         },
         "moment-3": {
           "type": "frustration",
           "settings": {
-            "title": "Avoir besoin de rester près de sa bouillotte.",
-            "text": "La chaleur est agréable, mais une bouillotte traditionnelle peut vite devenir contraignante lorsqu'on souhaite travailler, se déplacer ou simplement faire autre chose.",
-            "thought": "J'aimerais pouvoir profiter de cette sensation de chaleur sans rester immobile.",
-            "image": ""
+            "title": "Ne pas pouvoir emmener sa bouillotte partout.",
+            "text": "La chaleur est agréable, mais rester près de sa bouillotte n'est pas toujours pratique.",
+            "thought": "« J'aimerais pouvoir bouger librement. »"
           }
         },
         "moment-4": {
           "type": "frustration",
           "settings": {
-            "title": "Avoir parfois l'impression que personne ne comprend.",
-            "text": "Chaque femme vit ses règles différemment. Pourtant, il arrive que notre inconfort soit minimisé ou simplement ignoré.",
-            "thought": "J'aimerais qu'on comprenne que ce n'est pas toujours facile.",
-            "image": ""
+            "title": "Ne pas toujours se sentir comprise.",
+            "text": "Parfois, notre inconfort est minimisé alors que chaque expérience est différente.",
+            "thought": "« J'aimerais qu'on comprenne. »"
           }
         },
         "moment-5": {
           "type": "frustration",
           "settings": {
-            "title": "Devoir adapter tous ses plans.",
-            "text": "Une sortie, une activité, une journée chargée… On aimerait pouvoir continuer à profiter de ses moments sans que cette période prenne toute la place.",
-            "thought": "J'aimerais ne pas avoir à tout prévoir autour de mes règles.",
-            "image": ""
+            "title": "Devoir revoir ses plans.",
+            "text": "Une sortie, une activité, un rendez-vous… On aimerait ne pas tout adapter.",
+            "thought": "« J'aimerais vivre sans tout prévoir. »"
           }
         },
         "moment-6": {
           "type": "frustration",
           "settings": {
-            "title": "Toujours faire passer le reste avant soi.",
-            "text": "Entre le travail, les études, la famille et les responsabilités, prendre un moment pour son propre confort passe parfois au second plan.",
-            "thought": "Moi aussi, j'ai le droit de prendre soin de moi.",
-            "image": ""
+            "title": "S'oublier au milieu de tout.",
+            "text": "Entre les responsabilités et le quotidien, prendre soin de soi passe parfois après.",
+            "thought": "« Moi aussi, je compte. »"
           }
         }
       },
@@ -136,10 +130,10 @@
       ],
       "settings": {
         "eyebrow": "Ce que vous vivez",
-        "heading": "Chaque mois, vous traversez bien plus que <em>quelques jours de règles.</em>",
+        "heading": "Vos règles. Votre quotidien. Vos émotions.",
         "subheading": "Les journées compliquées, les moments où l'on aimerait simplement être tranquille, les petits gestes pour trouver du confort… Nous savons que chaque femme vit cette période différemment.",
         "bridge": "Et si vous n'aviez plus besoin de faire comme si tout allait toujours bien ?",
-        "thought_label": "Ce que l'on se dit parfois",
+        "thought_label": "",
         "cards_label": "Six moments que beaucoup de femmes connaissent",
         "swipe_hint": "Faites glisser",
         "closing_heading": "Vous méritez aussi de <em>prendre soin de vous.</em>",
@@ -151,7 +145,7 @@
         "how_label": "Comment fonctionne VELEA ?",
         "how_anchor": "utilisation",
         "anchor": "ce-que-vous-vivez",
-        "color_scheme": "scheme-6"
+        "color_scheme": "scheme-2"
       }
     },
     "spotlight": {
