@@ -389,6 +389,8 @@
                 class="accordion product__accordion"
                 {% if block.settings.source == 'size_guide' %}
                   id="guide-tailles"
+                {% elsif block.settings.source == 'usage' or block.settings.source == 'usage_precautions' %}
+                  id="utilisation"
                 {% endif %}
                 {% if block.settings.open %}
                   open

@@ -1502,6 +1502,25 @@ class ProductForm extends HTMLElement {
 
 customElements.define('product-form', ProductForm);
 
+/**
+ * A link to a fold-out part of the page (e.g. /products/…#utilisation) opens
+ * it and brings it into view.
+ */
+function openDetailsFromHash() {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (!id) return;
+  const target = document.getElementById(id);
+  if (!(target instanceof HTMLDetailsElement)) return;
+  target.open = true;
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', openDetailsFromHash, { once: true });
+} else {
+  openDetailsFromHash();
+}
+window.addEventListener('hashchange', openDetailsFromHash);
+
 /* -------------------------------------------------------------------------- */
 /* Variant picker                                                              */
 /* -------------------------------------------------------------------------- */

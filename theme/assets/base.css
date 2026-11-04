@@ -1814,3 +1814,8 @@ body:has(dialog[open]) {
   transition: background-color 0.3s ease;
 }
 
+
+/* A fold-out part opened from a link stays clear of the sticky header */
+details[id] {
+  scroll-margin-top: 7rem;
+}

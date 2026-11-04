@@ -1,0 +1,668 @@
+{%- comment -%}
+  « Ce que vous vivez » : an emotional story in three parts.
+  A. An introduction (title, subtitle, a transition phrase).
+  B. Six moments many women recognise (number, title, short text and a
+     thought one may have — communication lines, never presented as
+     customer quotes). A photo per card is optional.
+  C. A gentle transition to the belt: a photo, a title, a text, one button
+     to the real product page and a link to its « Utilisation » part.
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | handleize
+  assign belt = section.settings.product
+  assign how_anchor = section.settings.how_anchor | handleize
+  assign card_count = section.blocks.size
+-%}
+
+<section
+  class="frustrations section color-{{ section.settings.color_scheme }}"
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  aria-labelledby="FrustrationsTitle-{{ section.id }}"
+>
+  <div class="page-width">
+    {%- comment -%} A. Introduction {%- endcomment -%}
+    <header class="frustrations__intro reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="frustrations__title" id="FrustrationsTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.subheading != blank -%}
+        <p class="frustrations__lead">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.bridge != blank -%}
+        <p class="frustrations__bridge">{{ section.settings.bridge | escape }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- comment -%} B. The moments {%- endcomment -%}
+    {%- if card_count > 0 -%}
+      <div class="frustrations__rail">
+        <ol class="frustrations__grid" role="list" tabindex="0" aria-label="{{ section.settings.cards_label | escape }}">
+          {%- for block in section.blocks -%}
+            {%- assign number = forloop.index | prepend: '0' | slice: -2, 2 -%}
+            <li class="frustrations__card reveal" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {%- assign card_alt = block.settings.image.alt | default: '' -%}
+                <div class="frustrations__media">
+                  {% render 'responsive-image',
+                    image: block.settings.image,
+                    sizes: '(min-width: 990px) 26rem, (min-width: 750px) 45vw, 80vw',
+                    widths: '360, 540, 720, 900',
+                    alt: card_alt,
+                    class: 'frustrations__image'
+                  %}
+                </div>
+              {%- endif -%}
+              <div class="frustrations__body">
+                <p class="frustrations__number" aria-hidden="true">{{ number }}</p>
+                <h3 class="frustrations__card-title">{{ block.settings.title | escape }}</h3>
+                {%- if block.settings.text != blank -%}
+                  <p class="frustrations__text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.thought != blank -%}
+                  <p class="frustrations__thought">
+                    {%- if section.settings.thought_label != blank -%}
+                      <span class="frustrations__thought-label">{{ section.settings.thought_label | escape }}</span>
+                    {%- endif -%}
+                    <span class="frustrations__thought-text">{{ block.settings.thought | escape }}</span>
+                  </p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+        {%- if card_count > 1 -%}
+          <p class="frustrations__swipe" aria-hidden="true">
+            <span>{{ section.settings.swipe_hint | escape }}</span>
+            {% render 'icon', icon: 'arrow-right' %}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} C. Transition to VELEA {%- endcomment -%}
+    {%- if section.settings.closing_heading != blank -%}
+      <div class="frustrations__closing{% if section.settings.closing_image == blank %} frustrations__closing--text{% endif %}">
+        {%- if section.settings.closing_image != blank -%}
+          {%- assign closing_alt = section.settings.closing_image_alt | default: section.settings.closing_image.alt -%}
+          <div class="frustrations__closing-media media reveal">
+            {% render 'responsive-image',
+              image: section.settings.closing_image,
+              sizes: '(min-width: 990px) 34rem, 90vw',
+              widths: '480, 720, 960, 1200',
+              alt: closing_alt,
+              class: 'frustrations__closing-image'
+            %}
+          </div>
+        {%- endif -%}
+        <div class="frustrations__closing-body reveal">
+          <h2 class="frustrations__closing-title">{{ section.settings.closing_heading }}</h2>
+          {%- if section.settings.closing_text != blank -%}
+            <p class="frustrations__closing-text">{{ section.settings.closing_text | escape }}</p>
+          {%- endif -%}
+          {%- if belt != blank -%}
+            <div class="frustrations__actions">
+              {%- if section.settings.button_label != blank -%}
+                <a class="button" href="{{ belt.url }}">{{ section.settings.button_label | escape }}</a>
+              {%- endif -%}
+              {%- if section.settings.how_label != blank -%}
+                <a class="link frustrations__how" href="{{ belt.url }}{% if how_anchor != blank %}#{{ how_anchor }}{% endif %}">
+                  {{- section.settings.how_label | escape -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .frustrations {
+    --fr-card-bg: rgb(255 255 255 / 0.72);
+    --fr-line: rgb(var(--warm-rgb) / 0.2);
+    --fr-ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+
+    overflow: hidden;
+  }
+
+  /* A. Introduction: one strong title, room to breathe */
+  .frustrations__intro {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-md);
+    max-width: 50rem;
+    margin-inline: auto;
+    margin-block-end: clamp(2.75rem, 2rem + 4vw, 5.5rem);
+    text-align: center;
+
+    & .eyebrow {
+      margin: 0;
+    }
+  }
+
+  .frustrations__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-style: var(--font-heading-style);
+    font-weight: var(--font-heading-weight);
+    font-size: calc(clamp(2.125rem, 1.5rem + 2.9vw, 3.875rem) * var(--font-heading-scale, 1));
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+
+    & em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+  }
+
+  .frustrations__lead {
+    max-width: 40rem;
+    margin: 0;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .frustrations__bridge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: var(--space-2xs) 0 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.4rem);
+    font-style: italic;
+    line-height: 1.4;
+    text-wrap: balance;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 0 0 clamp(1.25rem, 3vw, 2.5rem);
+      height: 1px;
+      background-color: currentColor;
+      opacity: 0.35;
+    }
+  }
+
+  /* B. The six moments */
+  .frustrations__grid {
+    display: grid;
+    gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-button);
+      outline-offset: 6px;
+      border-radius: var(--radius-lg);
+    }
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .frustrations__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--fr-line);
+    border-radius: var(--radius-lg);
+    background-color: var(--fr-card-bg);
+    box-shadow: 0 1px 2px rgb(48 39 36 / 0.04);
+    transition:
+      translate 520ms var(--fr-ease),
+      box-shadow 520ms var(--fr-ease),
+      border-color 520ms var(--fr-ease),
+      background-color 520ms var(--fr-ease);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        translate: 0 -4px;
+        border-color: rgb(var(--warm-rgb) / 0.32);
+        background-color: rgb(255 255 255 / 0.9);
+        box-shadow: 0 18px 40px -26px rgb(73 53 47 / 0.35);
+      }
+
+      &:hover .frustrations__number {
+        color: var(--color-accent);
+      }
+
+      &:hover .frustrations__number::after {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  .frustrations__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background-color: var(--gallery-bg);
+
+    & .frustrations__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .frustrations__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+  }
+
+  .frustrations__number {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.22em;
+    color: rgb(var(--warm-rgb) / 0.9);
+    transition: color 520ms var(--fr-ease);
+
+    &::after {
+      content: '';
+      width: 2.25rem;
+      height: 1px;
+      background-color: currentColor;
+      opacity: 0.5;
+      transform: scaleX(0.55);
+      transform-origin: left center;
+      transition: transform 520ms var(--fr-ease);
+    }
+  }
+
+  .frustrations__card-title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-style: var(--font-heading-style);
+    font-weight: var(--font-heading-weight);
+    font-size: clamp(1.3rem, 1.15rem + 0.55vw, 1.6rem);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .frustrations__text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  /* The inner thought: a quiet line, set apart, never a customer quote */
+  .frustrations__thought {
+    display: grid;
+    gap: 0.35rem;
+    margin: auto 0 0;
+    padding-block-start: 1.1rem;
+    border-block-start: 1px solid var(--fr-line);
+  }
+
+  .frustrations__thought-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(var(--warm-rgb) / 0.85);
+  }
+
+  .frustrations__thought-text {
+    font-family: var(--font-heading-family);
+    font-size: 1.0625rem;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--color-accent);
+    text-wrap: pretty;
+  }
+
+  .frustrations__swipe {
+    display: none;
+  }
+
+  /* Phones: a gentle carousel, one card and the next one peeking */
+  @media screen and (max-width: 749px) {
+    .frustrations__rail {
+      margin-inline: calc(var(--gutter) * -1);
+    }
+
+    .frustrations__rail .frustrations__grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 82%;
+      gap: 0.85rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      padding-inline: var(--gutter);
+      padding-block: 0.25rem 0.75rem;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .frustrations__card {
+      scroll-snap-align: start;
+    }
+
+    .frustrations__body {
+      gap: 0.7rem;
+      padding: 1.4rem 1.35rem 1.5rem;
+    }
+
+    .frustrations__media {
+      aspect-ratio: 16 / 10;
+    }
+
+    .frustrations__swipe {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin: var(--space-sm) 0 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+
+      & .icon {
+        --icon-size: 0.9rem;
+      }
+    }
+  }
+
+  /* C. Transition to VELEA */
+  .frustrations__closing {
+    display: grid;
+    align-items: center;
+    gap: clamp(1.75rem, 1rem + 3vw, 4.5rem);
+    margin-block-start: clamp(4rem, 3rem + 5vw, 8rem);
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+
+  .frustrations__closing--text {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 44rem;
+    margin-inline: auto;
+    text-align: center;
+
+    & .frustrations__actions {
+      justify-content: center;
+    }
+  }
+
+  .frustrations__closing-media {
+    --media-ratio: 4 / 5;
+
+    max-width: 30rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--gallery-bg);
+    box-shadow: 0 30px 60px -40px rgb(73 53 47 / 0.45);
+
+    @media screen and (max-width: 749px) {
+      --media-ratio: 4 / 3;
+
+      max-width: none;
+    }
+  }
+
+  .frustrations__closing-body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+    max-width: 32rem;
+
+    .frustrations__closing--text & {
+      justify-items: center;
+      max-width: none;
+    }
+  }
+
+  .frustrations__closing-title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-style: var(--font-heading-style);
+    font-weight: var(--font-heading-weight);
+    font-size: var(--heading-2);
+    line-height: var(--line-height-heading);
+    text-wrap: balance;
+
+    & em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+  }
+
+  .frustrations__closing-text {
+    margin: 0;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .frustrations__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-lg);
+    margin-block-start: var(--space-2xs);
+
+    @media screen and (max-width: 749px) {
+      width: 100%;
+
+      & .button {
+        width: 100%;
+      }
+    }
+  }
+
+  .frustrations__how {
+    font-size: var(--text-sm);
+    letter-spacing: 0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .frustrations__card,
+    .frustrations__number,
+    .frustrations__number::after {
+      transition: none;
+    }
+
+    .frustrations__card:hover {
+      translate: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ce que vous vivez",
+  "tag": "div",
+  "class": "section-frustrations",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Introduction"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Ce que vous vivez"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Chaque mois, vous traversez bien plus que quelques jours de règles."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Sous-titre",
+      "default": "Les journées compliquées, les moments où l'on aimerait simplement être tranquille, les petits gestes pour trouver du confort… Nous savons que chaque femme vit cette période différemment."
+    },
+    {
+      "type": "text",
+      "id": "bridge",
+      "label": "Phrase de transition",
+      "default": "Et si vous n'aviez plus besoin de faire comme si tout allait toujours bien ?"
+    },
+    {
+      "type": "header",
+      "content": "Cartes"
+    },
+    {
+      "type": "text",
+      "id": "thought_label",
+      "label": "Étiquette de la pensée",
+      "info": "Au-dessus de la phrase intérieure de chaque carte. Ce ne sont pas des avis de clientes.",
+      "default": "Ce que l'on se dit parfois"
+    },
+    {
+      "type": "text",
+      "id": "cards_label",
+      "label": "Nom de la liste (lecteurs d'écran)",
+      "default": "Six moments que beaucoup de femmes connaissent"
+    },
+    {
+      "type": "text",
+      "id": "swipe_hint",
+      "label": "Indication sur mobile",
+      "default": "Faites glisser"
+    },
+    {
+      "type": "header",
+      "content": "Transition vers VELEA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "closing_heading",
+      "label": "Titre",
+      "default": "Vous méritez aussi de <em>prendre soin de vous.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "closing_text",
+      "label": "Texte",
+      "default": "Chez VELEA, nous pensons que le confort ne devrait pas être un luxe pendant les règles. Nous avons imaginé un accessoire pensé pour vous accompagner avec douceur dans votre quotidien."
+    },
+    {
+      "type": "image_picker",
+      "id": "closing_image",
+      "label": "Photo de la ceinture"
+    },
+    {
+      "type": "text",
+      "id": "closing_image_alt",
+      "label": "Description de la photo"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Découvrir la ceinture VELEA"
+    },
+    {
+      "type": "text",
+      "id": "how_label",
+      "label": "Lien secondaire",
+      "default": "Comment fonctionne VELEA ?"
+    },
+    {
+      "type": "text",
+      "id": "how_anchor",
+      "label": "Ancre du lien secondaire",
+      "info": "Partie de la fiche produit à ouvrir (« utilisation » = Utilisation et précautions).",
+      "default": "utilisation"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre",
+      "default": "ce-que-vous-vivez"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-6"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "frustration",
+      "name": "Moment vécu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Faire comme si tout allait bien."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description"
+        },
+        {
+          "type": "textarea",
+          "id": "thought",
+          "label": "Phrase intérieure"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo (facultative)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "Ce que vous vivez",
+      "blocks": [
+        { "type": "frustration" },
+        { "type": "frustration" },
+        { "type": "frustration" }
+      ]
+    }
+  ]
+}
+{% endschema %}
