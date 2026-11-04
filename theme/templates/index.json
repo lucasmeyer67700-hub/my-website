@@ -79,36 +79,12 @@
             "thought": "« J'aimerais pouvoir souffler un peu. »"
           }
         },
-        "moment-2": {
-          "type": "frustration",
-          "settings": {
-            "title": "Chercher sans cesse une position confortable.",
-            "text": "Changer de position, s'installer, recommencer… difficile de trouver son confort.",
-            "thought": "« J'aimerais simplement être bien. »"
-          }
-        },
         "moment-3": {
           "type": "frustration",
           "settings": {
             "title": "Ne pas pouvoir emmener sa bouillotte partout.",
             "text": "La chaleur est agréable, mais rester près de sa bouillotte n'est pas toujours pratique.",
             "thought": "« J'aimerais pouvoir bouger librement. »"
-          }
-        },
-        "moment-4": {
-          "type": "frustration",
-          "settings": {
-            "title": "Ne pas toujours se sentir comprise.",
-            "text": "Parfois, notre inconfort est minimisé alors que chaque expérience est différente.",
-            "thought": "« J'aimerais qu'on comprenne. »"
-          }
-        },
-        "moment-5": {
-          "type": "frustration",
-          "settings": {
-            "title": "Devoir revoir ses plans.",
-            "text": "Une sortie, une activité, un rendez-vous… On aimerait ne pas tout adapter.",
-            "thought": "« J'aimerais vivre sans tout prévoir. »"
           }
         },
         "moment-6": {
@@ -122,10 +98,7 @@
       },
       "block_order": [
         "moment-1",
-        "moment-2",
         "moment-3",
-        "moment-4",
-        "moment-5",
         "moment-6"
       ],
       "settings": {
@@ -134,7 +107,7 @@
         "subheading": "Les journées compliquées, les moments où l'on aimerait simplement être tranquille, les petits gestes pour trouver du confort… Nous savons que chaque femme vit cette période différemment.",
         "bridge": "Et si vous n'aviez plus besoin de faire comme si tout allait toujours bien ?",
         "thought_label": "",
-        "cards_label": "Six moments que beaucoup de femmes connaissent",
+        "cards_label": "Trois moments que beaucoup de femmes connaissent",
         "swipe_hint": "Faites glisser",
         "closing_heading": "Vous méritez aussi de <em>prendre soin de vous.</em>",
         "closing_text": "Chez VELEA, nous pensons que le confort ne devrait pas être un luxe pendant les règles. Nous avons imaginé un accessoire pensé pour vous accompagner avec douceur dans votre quotidien.",
