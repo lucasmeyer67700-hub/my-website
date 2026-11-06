@@ -7,9 +7,9 @@
         "display_font": "playfair_display_n4",
         "show_drops": true,
         "eyebrow": "",
-        "heading": "Vos règles, enfin plus douces.",
+        "heading": "Vos règles, en douceur.",
         "heading_tag": "h1",
-        "text": "Trois niveaux de chaleur, un massage par vibration et aucun fil : la ceinture Velea vous suit partout, même sous un pull.",
+        "text": "3 niveaux de chaleur, un massage par vibration, aucun fil. La ceinture VELEA se glisse même sous un pull.",
         "image": "shopify://shop_images/img-mvvkvfnj-34de7c43.png",
         "photo_width": 70,
         "photo_crop_x": 75,
@@ -74,25 +74,25 @@
         "moment-1": {
           "type": "frustration",
           "settings": {
-            "title": "Faire comme si tout allait bien.",
-            "text": "Travailler, sortir, sourire… même lorsque l'on aimerait simplement ralentir.",
-            "thought": "« J'aimerais pouvoir souffler un peu. »"
+            "title": "Faire comme si de rien n'était.",
+            "text": "Le ventre qui tire en pleine réunion, et le sourire qu'on garde quand même.",
+            "thought": "« Vivement ce soir. »"
           }
         },
         "moment-3": {
           "type": "frustration",
           "settings": {
-            "title": "Ne pas pouvoir emmener sa bouillotte partout.",
-            "text": "La chaleur est agréable, mais rester près de sa bouillotte n'est pas toujours pratique.",
-            "thought": "« J'aimerais pouvoir bouger librement. »"
+            "title": "Rester collée à sa bouillotte.",
+            "text": "Elle fait du bien, mais dès qu'on se lève, elle reste sur le canapé.",
+            "thought": "« Et si elle venait avec moi ? »"
           }
         },
         "moment-6": {
           "type": "frustration",
           "settings": {
-            "title": "S'oublier au milieu de tout.",
-            "text": "Entre les responsabilités et le quotidien, prendre soin de soi passe parfois après.",
-            "thought": "« Moi aussi, je compte. »"
+            "title": "Passer après tout le monde.",
+            "text": "Le travail, la maison, les autres… et vous, vous attendez que ça passe.",
+            "thought": "« Ce mois-ci, je pense à moi. »"
           }
         }
       },
@@ -103,14 +103,14 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "Vos règles. Votre quotidien. Vos émotions.",
-        "subheading": "La bouillotte qui refroidit, le coussin qui vous garde près d’une prise… Nous avons voulu une chaleur plus simple, qui vous suit.",
-        "bridge": "Et si votre chaleur vous suivait, au lieu de l’inverse ?",
+        "heading": "Ce que vous vivez, chaque mois.",
+        "subheading": "La bouillotte qui refroidit trop vite, le coussin branché qui vous garde sur le canapé. On voulait une chaleur qui vous suit.",
+        "bridge": "Et si, pour une fois, la chaleur venait avec vous ?",
         "thought_label": "",
         "cards_label": "Trois moments que beaucoup de femmes connaissent",
         "swipe_hint": "Faites glisser",
-        "closing_heading": "Vous méritez aussi de <em>prendre soin de vous.</em>",
-        "closing_text": "Chez VELEA, nous pensons que le confort ne devrait pas être un luxe pendant les règles. Nous avons imaginé un accessoire pensé pour vous accompagner avec douceur dans votre quotidien.",
+        "closing_heading": "Et si, ce mois-ci, <em>vous pensiez à vous ?</em>",
+        "closing_text": "On a créé VELEA pour que la chaleur vienne avec vous, et pas l'inverse : une ceinture sans fil, qu'on recharge, qu'on attache et qu'on oublie sous un pull.",
         "closing_image": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
         "closing_image_alt": "Femme portant la ceinture chauffante VELEA sur le ventre",
         "product": "ceinture-chauffante-regles",
@@ -164,14 +164,14 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "La ceinture, <em>en images.</em>",
+        "heading": "La ceinture, <em>en vrai.</em>",
         "text": "",
         "ratio": "9 / 16",
         "autoplay": true,
         "button_label": "Choisir ma ceinture",
         "button_link": "/#offre",
         "anchor": "videos",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-3"
       }
     },
     "reviews": {
@@ -211,7 +211,7 @@
           "settings": {
             "icon": "chat",
             "title": "Une question ?",
-            "text": "Écrivez-nous : nous vous répondons par e-mail.",
+            "text": "Écrivez-nous, on vous répond par e-mail.",
             "link": "/pages/contact"
           }
         },
@@ -219,7 +219,7 @@
           "type": "question",
           "settings": {
             "question": "La ceinture soulage-t-elle les douleurs de règles ?",
-            "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
+            "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
           }
         },
         "clothes": {
@@ -255,7 +255,7 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "Vos questions, <em>nos réponses.</em>",
+        "heading": "Les questions qu'on <em>nous pose souvent.</em>",
         "text": "",
         "link_label": "Toutes les questions",
         "link": "/pages/faq",

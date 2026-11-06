@@ -8,7 +8,7 @@
           "settings": {
             "label": "Le constat",
             "title": "Des jours que l'on connaît <em>par cœur.</em>",
-            "text": "<p>Le ventre qui tire, le bas du dos qui proteste, l'envie de se rouler en boule. Pour beaucoup de femmes, les règles reviennent chaque mois avec leur lot d'inconfort.</p><p>Et souvent, on ressort la bouillotte. Elle réconforte, c'est vrai. Mais elle refroidit vite, il faut rester allongée, et elle ne suit pas une journée qui, elle, continue.</p>",
+            "text": "<p>Le ventre qui tire, le bas du dos qui proteste, l'envie de rester sous la couette. Chaque mois, ça revient.</p><p>Alors on ressort la bouillotte. Elle fait du bien, c'est vrai. Mais elle refroidit vite, il faut la remplir à nouveau, et dès qu'on se lève, elle reste sur le canapé. Pendant ce temps, la journée continue.</p>",
             "image": "shopify://shop_images/Inconfort_dans_une_chambre_chaleureuse.png",
             "image_alt": "Un moment d'inconfort pendant les règles, dans une chambre douce et chaleureuse"
           }
@@ -18,7 +18,7 @@
           "settings": {
             "label": "L'idée",
             "title": "Garder la chaleur, <em>sans s'arrêter.</em>",
-            "text": "<p>Nous voulions une chaleur qui se règle, qui tienne sur soi et qui ne retienne pas au bout d'un fil. C'est ce que nous avons cherché, et ce que nous proposons aujourd'hui avec la ceinture VELEA : rechargeable, sans fil, avec trois niveaux de chaleur et un massage par vibration.</p><p>Légère, elle se glisse sous un pull ample et s'allume d'un simple appui. Du canapé au bureau, elle vous suit.</p>",
+            "text": "<p>On a cherché une chaleur qu'on règle soi-même, qui tient sur le ventre et qui ne vous attache pas à une prise. C'est devenu la ceinture VELEA : rechargeable, sans fil, avec 3 niveaux de chaleur et un massage par vibration.</p><p>Elle s'allume d'un appui et se glisse sous un pull ample. Du canapé au bureau, elle vient avec vous.</p>",
             "image": "shopify://shop_images/Deballage_d_un_appareil_bien-etre_au_lit.png",
             "image_alt": "Le déballage de la ceinture chauffante VELEA, sur un lit"
           }
@@ -26,7 +26,7 @@
         "quote": {
           "type": "quote",
           "settings": {
-            "text": "Nous ne promettons pas de faire disparaître la douleur. Nous voulons rendre ces jours-là un peu plus doux.",
+            "text": "On ne vous promet pas de miracle. Juste des jours de règles un peu plus doux.",
             "attribution": "VELEA"
           }
         },
@@ -35,15 +35,15 @@
           "settings": {
             "label": "Notre parti pris",
             "title": "Dire les choses <em>telles qu'elles sont.</em>",
-            "text": "<p>La ceinture n'est pas un traitement, et nous ne la présenterons jamais comme tel : c'est un accessoire de confort, qui apporte une chaleur douce, comme une bouillotte.</p><p>Ses caractéristiques sont celles annoncées par le fabricant, sans retouche. Ses précautions d'emploi se lisent avant l'achat, pas seulement dans la boîte. Et si une question vous retient, écrivez-nous : nous vous répondons par e-mail.</p>"
+            "text": "<p>La ceinture n'est pas un traitement, et on ne vous la vendra jamais comme ça. C'est un accessoire de confort : une chaleur douce, comme une bouillotte, en plus pratique.</p><p>Les caractéristiques affichées sont celles du fabricant, sans les gonfler. Les précautions d'emploi se lisent avant l'achat, pas seulement dans la boîte. Et si vous hésitez, écrivez-nous : on vous répond par e-mail.</p>"
           }
         },
         "chapter-aujourdhui": {
           "type": "chapter",
           "settings": {
             "label": "Aujourd'hui",
-            "title": "Un essentiel aujourd'hui, <em>d'autres bientôt.</em>",
-            "text": "<p>VELEA est une jeune marque, installée en Alsace. Pour l'instant, elle tient en un objet : la ceinture chauffante, en rose ou en blanc.</p><p>La culotte menstruelle et les serviettes lavables arrivent bientôt, avec la même idée : du confort, des informations claires, et rien de superflu.</p>",
+            "title": "Une jeune marque, <em>trois essentiels.</em>",
+            "text": "<p>VELEA est une jeune marque installée en Alsace. On a commencé par la ceinture chauffante, en rose ou en blanc.</p><p>Depuis, la culotte menstruelle (du XS au XXL, en noir, beige ou rouge) et les serviettes lavables l'ont rejointe, avec la même idée : du confort, des informations claires, et pas de promesses en l'air.</p>",
             "image": "shopify://shop_images/velea-ceinture-06-coloris.jpg",
             "image_alt": "La ceinture chauffante VELEA dans ses deux coloris, rose et blanc"
           }
@@ -58,9 +58,9 @@
       ],
       "settings": {
         "eyebrow": "Notre histoire",
-        "heading": "Une marque née <em>d'un geste simple.</em>",
-        "lead": "Poser quelque chose de chaud sur son ventre quand les règles font mal. Beaucoup de femmes connaissent ce geste depuis l'adolescence. VELEA est née de l'envie de le rendre plus pratique, plus doux et plus libre.",
-        "signature": "Le confort menstruel, avec douceur.",
+        "heading": "Tout est parti <em>d'une bouillotte.</em>",
+        "lead": "Vous connaissez sûrement ce geste : poser quelque chose de chaud sur son ventre quand les règles font mal. Une bouillotte, un coussin, une main. VELEA est partie de là, avec une question simple : pourquoi faudrait-il rester allongée pour avoir chaud ?",
+        "signature": "VELEA, pour des règles un peu plus douces.",
         "image": "shopify://shop_images/Detente_chaleureuse_avec_ceinture_chauffante_rose.png",
         "image_alt": "Un moment de détente avec la ceinture chauffante VELEA rose",
         "image_badge": "Chaleur douce, sans fil",
@@ -78,7 +78,7 @@
           "settings": {
             "icon": "info",
             "title": "Des informations claires",
-            "text": "Nous affichons les caractéristiques annoncées par le fabricant, telles quelles, sans les embellir."
+            "text": "Les caractéristiques affichées sont celles du fabricant, telles quelles, sans les embellir."
           }
         },
         "safety": {
@@ -102,7 +102,7 @@
           "settings": {
             "icon": "chat",
             "title": "Une vraie écoute",
-            "text": "Une question avant ou après votre commande ? Écrivez-nous, nous vous répondons."
+            "text": "Une question avant ou après votre commande ? Écrivez-nous, on vous répond."
           }
         }
       },

@@ -101,7 +101,7 @@
           "type": "question",
           "settings": {
             "question": "La ceinture soulage-t-elle les douleurs de règles ?",
-            "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
+            "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
           }
         },
         "safe-use": {
@@ -255,7 +255,7 @@
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",
-        "heading": "Vos questions, <em>nos réponses.</em>",
+        "heading": "Les questions qu'on <em>nous pose souvent.</em>",
         "intro": "Tout ce qu'il faut savoir sur la ceinture, le paiement, la livraison et nos garanties. Tapez un mot ou choisissez un thème.",
         "show_search": true,
         "contact_heading": "Vous n'avez pas trouvé <em>votre réponse ?</em>",

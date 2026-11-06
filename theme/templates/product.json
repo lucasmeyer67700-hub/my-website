@@ -59,7 +59,7 @@
             "heading": "Au quotidien",
             "icon_1": "heat",
             "title_1": "Une chaleur que vous choisissez",
-            "text_1": "Commencez tout en douceur, puis ajustez selon votre ressenti.",
+            "text_1": "3 niveaux : on commence par le plus doux, puis on ajuste.",
             "icon_2": "feather",
             "title_2": "Libre de vos mouvements",
             "text_2": "Sans fil ni prise : elle vous suit du canapé au bureau.",
@@ -175,8 +175,8 @@
         "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
         "media_position": "left",
         "eyebrow": "",
-        "heading": "<em>Simple, soulageant et pratique à l</em>’<em>utilisation&nbsp;</em>",
-        "text": "<p>Regardez-la en situation, portée comme au quotidien.</p>",
+        "heading": "Simple, douce et pratique <em>au quotidien.</em>",
+        "text": "<p>On la charge, on l'attache, on choisit sa chaleur.</p>",
         "button_label": "Choisir mon coloris",
         "button_link": "",
         "color_scheme": "scheme-3"
@@ -203,14 +203,14 @@
           "type": "question",
           "settings": {
             "question": "La ceinture soulage-t-elle les douleurs de règles ?",
-            "answer": "<p>La ceinture est un accessoire de confort : elle apporte une chaleur douce, un geste souvent utilisé pendant les règles, comme la bouillotte. Ce n'est pas un dispositif médical et elle ne remplace pas un avis médical. Si vos douleurs sont intenses, inhabituelles ou persistantes, parlez-en à un professionnel de santé.</p>"
+            "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
           }
         },
         "duo": {
           "type": "question",
           "settings": {
             "question": "Que contient le Duo ?",
-            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 75 € au lieu de 89,80 € à l'unité. Choisissez deux roses, deux blanches, ou une de chaque.</p>"
+            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 74,99 € au lieu de 89,98 € à l'unité. Deux roses, deux blanches ou une de chaque : pratique pour en garder une au bureau, ou pour en offrir une.</p>"
           }
         },
         "secure": {
