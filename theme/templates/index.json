@@ -200,47 +200,37 @@
           "type": "video",
           "settings": {
             "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+            "tag": "",
             "title": "",
             "text": "",
-            "tag": "La ceinture VELEA",
-            "product": "ceinture-chauffante-regles"
+            "product": ""
           }
         },
         "video-2": {
           "type": "video",
           "settings": {
             "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4",
+            "tag": "",
             "title": "",
             "text": "",
-            "tag": "La ceinture VELEA",
-            "product": "ceinture-chauffante-regles"
+            "product": ""
           }
         },
         "video_cdRwKx": {
           "type": "video",
           "settings": {
             "video": "shopify://files/videos/hf_20261106_165940_843ec585-6a73-4e74-b3a8-07f4af55c96a.mp4",
-            "tag": "La ceinture VELEA",
-            "title": "",
-            "text": "",
-            "product": "ceinture-chauffante-regles"
-          }
-        },
-        "video-4": {
-          "type": "video",
-          "settings": {
             "tag": "",
             "title": "",
             "text": "",
-            "product": "ceinture-chauffante-regles"
+            "product": ""
           }
         }
       },
       "block_order": [
         "video-1",
         "video-2",
-        "video_cdRwKx",
-        "video-4"
+        "video_cdRwKx"
       ],
       "settings": {
         "eyebrow": "En situation",
