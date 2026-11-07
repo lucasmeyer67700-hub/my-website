@@ -186,59 +186,6 @@
         "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png"
       }
     },
-    "frustrations": {
-      "type": "frustrations",
-      "blocks": {
-        "moment-1": {
-          "type": "frustration",
-          "settings": {
-            "title": "Faire comme si de rien n'était.",
-            "text": "Le ventre qui tire en pleine réunion, et le sourire qu'on garde quand même.",
-            "thought": "« Vivement ce soir. »"
-          }
-        },
-        "moment-3": {
-          "type": "frustration",
-          "settings": {
-            "title": "Rester collée à sa bouillotte.",
-            "text": "Elle fait du bien, mais dès qu'on se lève, elle reste sur le canapé.",
-            "thought": "« Et si elle venait avec moi ? »"
-          }
-        },
-        "moment-6": {
-          "type": "frustration",
-          "settings": {
-            "title": "Passer après tout le monde.",
-            "text": "Le travail, la maison, les autres… et vous, vous attendez que ça passe.",
-            "thought": "« Ce mois-ci, je pense à moi. »"
-          }
-        }
-      },
-      "block_order": [
-        "moment-1",
-        "moment-3",
-        "moment-6"
-      ],
-      "settings": {
-        "eyebrow": "Vous n'êtes pas la seule",
-        "heading": "Ce que vous vivez, chaque mois.",
-        "subheading": "La bouillotte qui refroidit trop vite, le coussin branché qui vous garde sur le canapé. On voulait une chaleur qui vous suit.",
-        "bridge": "Et si, pour une fois, la chaleur venait avec vous ?",
-        "thought_label": "",
-        "cards_label": "Trois moments que beaucoup de femmes connaissent",
-        "swipe_hint": "Faites glisser",
-        "closing_heading": "Et si, ce mois-ci, <em>vous pensiez à vous ?</em>",
-        "closing_text": "On a créé VELEA pour que la chaleur vienne avec vous, et pas l'inverse : une ceinture sans fil, qu'on recharge, qu'on attache et qu'on oublie sous un pull.",
-        "closing_image": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
-        "closing_image_alt": "Femme portant la ceinture chauffante VELEA sur le ventre",
-        "product": "ceinture-chauffante-regles",
-        "button_label": "Je découvre la ceinture",
-        "how_label": "Comment fonctionne VELEA ?",
-        "how_anchor": "utilisation",
-        "anchor": "ce-que-vous-vivez",
-        "color_scheme": "scheme-2"
-      }
-    },
     "spotlight": {
       "type": "product-spotlight",
       "disabled": true,
@@ -296,7 +243,7 @@
         "video_cdRwKx"
       ],
       "settings": {
-        "eyebrow": "En situation",
+        "eyebrow": "",
         "heading": "Portée au quotidien, <em>en vrai.</em>",
         "text": "Faites défiler nos vidéos : la ceinture portée, et le lien pour la retrouver.",
         "ratio": "9 / 16",
@@ -402,7 +349,6 @@
     "ribbon",
     "pain",
     "offer",
-    "frustrations",
     "spotlight",
     "videos",
     "reviews",
