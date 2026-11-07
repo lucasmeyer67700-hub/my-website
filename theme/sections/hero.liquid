@@ -226,6 +226,18 @@
           if src_720 == blank
             assign src_720 = src_1080
           endif
+
+          assign src_phone = src_720
+          assign phone_video = section.settings.video_mobile
+          if phone_video != blank
+            assign phone_best = 0
+            for source in phone_video.sources
+              if source.format == 'mp4' and source.height > phone_best
+                assign phone_best = source.height
+                assign src_phone = source.url
+              endif
+            endfor
+          endif
         -%}
         <video-player class="hero__video-player" data-autoplay-always>
           <video
@@ -238,7 +250,7 @@
             disablepictureinpicture
             poster="{{ hero_video.preview_image | image_url: width: 1920 }}"
           >
-            <source src="{{ src_720 }}" type="video/mp4" media="(max-width: 749px)">
+            <source src="{{ src_phone }}" type="video/mp4" media="(max-width: 749px)">
             <source src="{{ src_1080 }}" type="video/mp4">
           </video>
         </video-player>
@@ -518,6 +530,24 @@
   @media (prefers-reduced-motion: no-preference) {
     .hero__video {
       animation: hero-settle 2.8s var(--ease-out) both;
+    }
+  }
+
+  /* Never show the browser's own play / pause buttons over the film (iPhone) */
+  .hero__video::-webkit-media-controls,
+  .hero__video::-webkit-media-controls-panel,
+  .hero__video::-webkit-media-controls-play-button,
+  .hero__video::-webkit-media-controls-start-playback-button,
+  .hero__video::-webkit-media-controls-overlay-play-button {
+    display: none !important; /* Safari draws these on top of muted autoplay films */
+    -webkit-appearance: none;
+  }
+
+  /* Phones: the square film, full width, product centred */
+  @media screen and (max-width: 749px) {
+    .hero--full.hero--stack-mobile.hero--video .hero__backdrop {
+      aspect-ratio: 1;
+      max-height: 64svh;
     }
   }
 
@@ -1367,6 +1397,13 @@
       "id": "video",
       "label": "Vidéo de fond (facultative)",
       "info": "Remplace l'image : lecture automatique, sans le son, en boucle continue.",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "Vidéo de fond mobile (facultative)",
+      "info": "Format carré ou portrait conseillé. Sans elle, la vidéo principale est recadrée au centre sur téléphone.",
       "visible_if": "{{ section.settings.layout == 'full' }}"
     },
     {

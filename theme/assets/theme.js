@@ -2607,6 +2607,18 @@ class VideoPlayer extends HTMLElement {
       { signal }
     );
 
+    // A film that must always loop: if the phone blocked autoplay (iPhone low
+    // power mode), start it on the first touch or click anywhere.
+    if ('autoplayAlways' in this.dataset) {
+      const kick = () => {
+        if (video.paused) video.play().catch(() => {});
+      };
+      video.addEventListener('loadeddata', kick, { signal });
+      for (const type of ['touchstart', 'click', 'scroll']) {
+        window.addEventListener(type, kick, { once: true, passive: true, signal });
+      }
+    }
+
     // No playback (or battery use) while the video is off screen.
     if ('IntersectionObserver' in window) {
       this.#observer = new IntersectionObserver(([entry]) => {
