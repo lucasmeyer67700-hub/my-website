@@ -1945,3 +1945,50 @@ details[id] {
     translate: 0 0.75rem;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Finishing (v55): calmer buying area. Two buttons of the same size, flat
+   colours, no glow and no sweeping light; quieter badges.
+   -------------------------------------------------------------------------- */
+
+.product__badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px rgb(var(--rose-strong-rgb) / 0.4);
+}
+
+.product-form__submit {
+  min-height: 3.5rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+}
+
+[data-buy-now] .product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
+  min-height: 3.5rem;
+}
+
+[data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button) {
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  background-image: none;
+  box-shadow: none;
+
+  &:hover:not([disabled]) {
+    background-color: #8e3f50;
+    box-shadow: none;
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.product-form__submit:not([disabled]), .welcome-popup__submit)::after {
+    display: none;
+  }
+}

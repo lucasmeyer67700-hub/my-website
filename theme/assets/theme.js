@@ -1538,8 +1538,15 @@ class VariantPicker extends HTMLElement {
    * Shows only the values that exist with the options chosen before them
    * (e.g. "Rose + Blanc" only for the Duo) and keeps a valid value checked.
    */
+  /** Fieldsets in option order (the colour can be shown above the offer). */
+  #fieldsets() {
+    return [...this.querySelectorAll('fieldset')].sort(
+      (a, b) => Number(a.dataset.optionIndex || 0) - Number(b.dataset.optionIndex || 0)
+    );
+  }
+
   #syncOptions() {
-    const fieldsets = [...this.querySelectorAll('fieldset')];
+    const fieldsets = this.#fieldsets();
     const selected = this.#selectedOptions();
     fieldsets.forEach((fieldset, index) => {
       if (index === 0) return;
@@ -1572,7 +1579,7 @@ class VariantPicker extends HTMLElement {
   }
 
   #selectedOptions() {
-    return [...this.querySelectorAll('fieldset')].map(
+    return this.#fieldsets().map(
       (fieldset) => fieldset.querySelector('input:checked')?.value
     );
   }
