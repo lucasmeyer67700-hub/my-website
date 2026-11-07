@@ -1,0 +1,211 @@
+{%- comment -%}
+  A slow ribbon of short phrases that scrolls across the page, between two
+  sections. The list is written twice so the loop never shows a gap; the copy
+  is hidden from screen readers, which read the first list only.
+{%- endcomment -%}
+{%- liquid
+  assign speed = section.settings.speed | default: 40
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  <div
+    class="marquee-band marquee-band--{{ section.settings.style }} color-{{ section.settings.color_scheme }}"
+    style="--marquee-duration: {{ speed }}s;"
+  >
+    <div class="marquee-band__track">
+      {%- for i in (1..2) -%}
+        <ul
+          class="marquee-band__list"
+          role="list"
+          {% if i == 2 %}
+            aria-hidden="true"
+          {% endif %}
+        >
+          {%- for block in section.blocks -%}
+            <li class="marquee-band__item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>
+              <span>{{ block.settings.text | escape }}</span>
+              <span class="marquee-band__sep" aria-hidden="true"></span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .marquee-band {
+    position: relative;
+    overflow: hidden;
+    padding-block: 1.1rem;
+    border-block: 1px solid var(--color-border);
+    color: var(--color-text);
+    background-color: var(--color-background);
+  }
+
+  .marquee-band__track {
+    display: flex;
+    width: max-content;
+  }
+
+  .marquee-band__list {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .marquee-band__item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .marquee-band__sep {
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-inline: 2rem;
+    border-radius: 50%;
+    background-color: var(--rose-strong);
+  }
+
+  /* Serif italic, larger: the ribbon reads like a line of a magazine */
+  .marquee-band--editorial .marquee-band__item {
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.15rem, 1rem + 0.8vw, 1.6rem);
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+
+  /* Small capitals, discreet */
+  .marquee-band--caps .marquee-band__item {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .marquee-band--caps .marquee-band__sep {
+    width: 0.3rem;
+    height: 0.3rem;
+    margin-inline: 1.5rem;
+  }
+
+  /* Soft fade on both edges */
+  .marquee-band::before,
+  .marquee-band::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    z-index: 1;
+    width: min(12vw, 8rem);
+    pointer-events: none;
+  }
+
+  .marquee-band::before {
+    inset-inline-start: 0;
+    background: linear-gradient(90deg, var(--color-background), transparent);
+  }
+
+  .marquee-band::after {
+    inset-inline-end: 0;
+    background: linear-gradient(-90deg, var(--color-background), transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee-band__track {
+      animation: marquee-band-scroll var(--marquee-duration, 40s) linear infinite;
+    }
+
+    .marquee-band:hover .marquee-band__track {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Without motion: one centred line that wraps, no copy */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-band__track {
+      justify-content: center;
+      width: auto;
+    }
+
+    .marquee-band__list {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.5rem;
+    }
+
+    .marquee-band__list[aria-hidden] {
+      display: none;
+    }
+  }
+
+  @keyframes marquee-band-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bandeau défilant",
+  "tag": "section",
+  "class": "section-marquee-band",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "editorial", "label": "Italique élégant" },
+        { "value": "caps", "label": "Petites capitales" }
+      ],
+      "default": "editorial"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Durée d'un tour",
+      "min": 15,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "default": 40
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Sans fil, sans prise"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Bandeau défilant",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Sans fil, sans prise" } },
+        { "type": "item", "settings": { "text": "3 niveaux de chaleur" } },
+        { "type": "item", "settings": { "text": "Massage par vibration" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

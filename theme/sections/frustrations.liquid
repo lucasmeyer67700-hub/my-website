@@ -85,7 +85,7 @@
       <div class="frustrations__closing{% if section.settings.closing_image == blank %} frustrations__closing--text{% endif %}">
         {%- if section.settings.closing_image != blank -%}
           {%- assign closing_alt = section.settings.closing_image_alt | default: section.settings.closing_image.alt -%}
-          <div class="frustrations__closing-media media reveal">
+          <div class="frustrations__closing-media media reveal parallax-media">
             {% render 'responsive-image',
               image: section.settings.closing_image,
               sizes: '(min-width: 990px) 34rem, 90vw',

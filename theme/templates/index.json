@@ -6,10 +6,10 @@
         "layout": "full",
         "display_font": "playfair_display_n4",
         "show_drops": true,
-        "eyebrow": "",
+        "eyebrow": "La ceinture chauffante sans fil",
         "heading": "Vos règles, en douceur.",
         "heading_tag": "h1",
-        "text": "3 niveaux de chaleur, un massage par vibration, aucun fil. La ceinture VELEA se glisse même sous un pull.",
+        "text": "3 niveaux de chaleur, un massage par vibration et zéro fil. Elle se glisse sous un pull et vous suit toute la journée.",
         "image": "shopify://shop_images/img-mvvkvfnj-34de7c43.png",
         "photo_width": 70,
         "photo_crop_x": 75,
@@ -24,11 +24,65 @@
         "product": "ceinture-chauffante-regles",
         "show_price": false,
         "fallback_media_position": 2,
-        "button_label": "Découvrir la ceinture",
+        "button_label": "Je découvre la ceinture",
         "button_link": "",
-        "secondary_label": "Voir nos essentiels",
+        "secondary_label": "Toute la collection",
         "secondary_link": "shopify://collections/tous-nos-produits",
         "color_scheme": "scheme-3"
+      }
+    },
+    "ribbon": {
+      "type": "marquee-band",
+      "blocks": {
+        "item-1": {
+          "type": "item",
+          "settings": {
+            "text": "Sans fil, sans prise"
+          }
+        },
+        "item-2": {
+          "type": "item",
+          "settings": {
+            "text": "3 niveaux de chaleur"
+          }
+        },
+        "item-3": {
+          "type": "item",
+          "settings": {
+            "text": "Massage par vibration"
+          }
+        },
+        "item-4": {
+          "type": "item",
+          "settings": {
+            "text": "Discrète sous un pull"
+          }
+        },
+        "item-5": {
+          "type": "item",
+          "settings": {
+            "text": "Livraison offerte en France"
+          }
+        },
+        "item-6": {
+          "type": "item",
+          "settings": {
+            "text": "Satisfaite ou remboursée 30 jours"
+          }
+        }
+      },
+      "block_order": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4",
+        "item-5",
+        "item-6"
+      ],
+      "settings": {
+        "style": "editorial",
+        "speed": 45,
+        "color_scheme": "scheme-1"
       }
     },
     "offer": {
@@ -42,10 +96,10 @@
         "show_tagline": true,
         "offer_heading": "",
         "unit_label": "la ceinture",
-        "offer_note_single": "L'essentiel, pour vous",
+        "offer_note_single": "Pour vous, tout simplement",
         "offer_note_multi": "Une pour vous, une à offrir",
         "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
-        "best_label": "Le plus avantageux",
+        "best_label": "Meilleure offre",
         "perks_multi": "Deux ensembles complets : câbles USB et notices",
         "show_dynamic_checkout": true,
         "show_reassurance": true,
@@ -102,7 +156,7 @@
         "moment-6"
       ],
       "settings": {
-        "eyebrow": "",
+        "eyebrow": "Vous n'êtes pas la seule",
         "heading": "Ce que vous vivez, chaque mois.",
         "subheading": "La bouillotte qui refroidit trop vite, le coussin branché qui vous garde sur le canapé. On voulait une chaleur qui vous suit.",
         "bridge": "Et si, pour une fois, la chaleur venait avec vous ?",
@@ -114,7 +168,7 @@
         "closing_image": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
         "closing_image_alt": "Femme portant la ceinture chauffante VELEA sur le ventre",
         "product": "ceinture-chauffante-regles",
-        "button_label": "Découvrir la ceinture VELEA",
+        "button_label": "Je découvre la ceinture",
         "how_label": "Comment fonctionne VELEA ?",
         "how_anchor": "utilisation",
         "anchor": "ce-que-vous-vivez",
@@ -163,12 +217,12 @@
         "video-2"
       ],
       "settings": {
-        "eyebrow": "",
-        "heading": "La ceinture, <em>en vrai.</em>",
+        "eyebrow": "En situation",
+        "heading": "Portée au quotidien, <em>en vrai.</em>",
         "text": "",
         "ratio": "9 / 16",
         "autoplay": true,
-        "button_label": "Choisir ma ceinture",
+        "button_label": "Je choisis ma couleur",
         "button_link": "/#offre",
         "anchor": "videos",
         "color_scheme": "scheme-3"
@@ -179,7 +233,7 @@
       "settings": {
         "product": "ceinture-chauffante-regles",
         "eyebrow": "",
-        "heading": "Elles en parlent",
+        "heading": "Ce qu'elles <em>en disent.</em>",
         "limit": 10,
         "speed": 7,
         "color_scheme": "scheme-2"
@@ -254,7 +308,7 @@
         "precautions"
       ],
       "settings": {
-        "eyebrow": "",
+        "eyebrow": "Questions fréquentes",
         "heading": "Les questions qu'on <em>nous pose souvent.</em>",
         "text": "",
         "link_label": "Toutes les questions",
@@ -266,6 +320,7 @@
   },
   "order": [
     "hero",
+    "ribbon",
     "offer",
     "frustrations",
     "spotlight",

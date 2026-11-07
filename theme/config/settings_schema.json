@@ -193,6 +193,13 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "section_curves",
+        "label": "Bandes roses arrondies",
+        "info": "Les sections aux couleurs roses commencent par une courbe douce.",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "Photos produits"
       },

@@ -8,7 +8,7 @@
         "shipping": {
           "type": "message",
           "settings": {
-            "text": "Livraison offerte en France",
+            "text": "Livraison offerte en France, suivi inclus",
             "link": ""
           }
         },
@@ -22,7 +22,7 @@
         "payment": {
           "type": "message",
           "settings": {
-            "text": "Paiement sécurisé",
+            "text": "Paiement 100 % sécurisé",
             "link": ""
           }
         }
