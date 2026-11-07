@@ -1388,6 +1388,18 @@ class ProductForm extends HTMLElement {
     this.#showError('');
 
     const formData = new FormData(this.form);
+    // Pack offer: this product and the second one go to the cart together.
+    const bundle = /** @type {HTMLInputElement | null} */ (this.form.querySelector('[data-bundle-input]:not([disabled])'));
+    if (bundle?.value) {
+      const id = String(formData.get('id'));
+      const quantity = String(formData.get('quantity') || '1');
+      formData.delete('id');
+      formData.delete('quantity');
+      formData.append('items[0][id]', id);
+      formData.append('items[0][quantity]', quantity);
+      formData.append('items[1][id]', bundle.value);
+      formData.append('items[1][quantity]', quantity);
+    }
     formData.append('sections', getCartSectionIds().join(','));
     formData.append('sections_url', window.location.pathname);
 
@@ -1436,9 +1448,7 @@ class ProductForm extends HTMLElement {
       return await cartRequest(`${theme.routes.cartAdd}.js`, formData);
     } catch (error) {
       if (error.data?.description) throw error;
-      const id = Number(formData.get('id'));
-      const quantity = Number(formData.get('quantity')) || 1;
-      await cartRequest(`${theme.routes.cartAdd}.js`, { items: [{ id, quantity }] });
+      await cartRequest(`${theme.routes.cartAdd}.js`, { items: ProductForm.#items(formData) });
       const url = new URL(window.location.href);
       url.search = '';
       url.searchParams.set('sections', getCartSectionIds().join(','));
@@ -1492,11 +1502,25 @@ class ProductForm extends HTMLElement {
   async #buyNow(formData, checkoutUrl) {
     const response = await fetch(`${theme.routes.cart}.js`, { headers: { Accept: 'application/json' } });
     const cart = response.ok ? await response.json() : { items: [] };
-    const variantId = Number(formData.get('id'));
-    if (!cart.items.some((item) => item.variant_id === variantId)) {
-      await cartRequest(`${theme.routes.cartAdd}.js`, formData);
-    }
+    const missing = ProductForm.#items(formData).filter(
+      (wanted) => !cart.items.some((item) => item.variant_id === wanted.id)
+    );
+    if (missing.length) await cartRequest(`${theme.routes.cartAdd}.js`, { items: missing });
     window.location.assign(checkoutUrl);
+  }
+
+  /**
+   * The items a form adds: one product, or the two of a pack.
+   * @param {FormData} formData
+   * @returns {{ id: number, quantity: number }[]}
+   */
+  static #items(formData) {
+    if (formData.has('items[0][id]')) {
+      return [0, 1]
+        .filter((i) => formData.has(`items[${i}][id]`))
+        .map((i) => ({ id: Number(formData.get(`items[${i}][id]`)), quantity: Number(formData.get(`items[${i}][quantity]`)) || 1 }));
+    }
+    return [{ id: Number(formData.get('id')), quantity: Number(formData.get('quantity')) || 1 }];
   }
 }
 
@@ -1532,6 +1556,51 @@ class VariantPicker extends HTMLElement {
     this.section = this.closest('[data-product-section]');
     this.addEventListener('change', this.#onChange.bind(this));
     this.#syncOptions();
+    this.#syncBundle();
+  }
+
+  /**
+   * Pack offer (bundle-offer snippet): while it is chosen, the add-to-cart
+   * forms of the section carry the second product's variant, and the price
+   * shows the pack price. Otherwise everything is as usual.
+   */
+  #syncBundle() {
+    const radio = /** @type {HTMLInputElement | null} */ (this.querySelector('input[value="__bundle__"]'));
+    if (!radio) return;
+    const scope = this.section || document;
+    const picker = this.querySelector('[data-bundle-picker]');
+    const active = radio.checked;
+    let bundleId = '';
+    if (active && picker) {
+      this.bundleVariants ||= JSON.parse(picker.querySelector('[data-bundle-variants]')?.textContent || '[]');
+      const chosen = [...picker.querySelectorAll('[data-bundle-option]')].map((select) => /** @type {HTMLSelectElement} */ (select).value);
+      const match = this.bundleVariants.find((variant) => variant.options.every((value, i) => value === chosen[i]));
+      bundleId = match?.available ? String(match.id) : '';
+      const error = picker.querySelector('[data-bundle-error]');
+      if (error) error.hidden = Boolean(bundleId);
+    }
+
+    for (const form of scope.querySelectorAll('product-form form')) {
+      let input = /** @type {HTMLInputElement | null} */ (form.querySelector('[data-bundle-input]'));
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'hidden';
+        input.dataset.bundleInput = '';
+        form.append(input);
+      }
+      input.value = bundleId;
+      input.disabled = !active || !bundleId;
+    }
+
+    if (!active) return;
+    for (const current of scope.querySelectorAll('[data-price-current]')) current.textContent = radio.dataset.bundlePrice || '';
+    for (const compare of scope.querySelectorAll('[data-price-compare]')) {
+      compare.textContent = radio.dataset.bundleReference || '';
+      compare.hidden = !radio.dataset.bundleReference;
+    }
+    if (!bundleId) {
+      for (const button of scope.querySelectorAll('[data-add-to-cart], [data-buy-now-button]')) button.setAttribute('disabled', '');
+    }
   }
 
   /**
@@ -1554,6 +1623,7 @@ class VariantPicker extends HTMLElement {
       let checkedIsValid = false;
       const inputs = [...fieldset.querySelectorAll('input[type="radio"]')];
       for (const input of inputs) {
+        if (input.value === '__bundle__') continue;
         const exists = this.variants.some(
           (variant) => before.every((value, i) => variant.options[i] === value) && variant.options[index] === input.value
         );
@@ -1579,9 +1649,11 @@ class VariantPicker extends HTMLElement {
   }
 
   #selectedOptions() {
-    return this.#fieldsets().map(
-      (fieldset) => fieldset.querySelector('input:checked')?.value
-    );
+    return this.#fieldsets().map((fieldset) => {
+      const input = /** @type {HTMLInputElement | null} */ (fieldset.querySelector('input:checked'));
+      // The pack card stands for its base offer (e.g. "1 ceinture").
+      return input?.value === '__bundle__' ? input.dataset.bundleBase : input?.value;
+    });
   }
 
   #onChange(event) {
@@ -1597,7 +1669,8 @@ class VariantPicker extends HTMLElement {
     this.#update(variant);
 
     const optionName = fieldset?.dataset.optionName;
-    if (optionName) announce(`${optionName} : ${event.target.value}`);
+    this.#syncBundle();
+    if (optionName) announce(`${optionName} : ${event.target.value === '__bundle__' ? '' : event.target.value}`);
     if (variant) track('theme:variant_selected', { variant_id: variant.id, variant_title: variant.title });
   }
 

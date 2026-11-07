@@ -1,0 +1,165 @@
+{%- comment -%}
+  "Vous aimerez aussi": the other products of the catalogue, under a product
+  page. The product of the page is left out; hidden when nothing else is left.
+{%- endcomment -%}
+{%- liquid
+  assign source = section.settings.collection
+  if source == blank
+    assign source = collections.all
+  endif
+  assign shown = 0
+-%}
+
+{%- capture cards -%}
+  {%- for item in source.products limit: 12 -%}
+    {%- if item.id == product.id or shown >= section.settings.limit -%}{%- continue -%}{%- endif -%}
+    {%- assign shown = shown | plus: 1 -%}
+    <li class="related__item reveal">
+      {% render 'product-card', product: item, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 45vw, 80vw' %}
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if shown > 0 -%}
+  <section class="related section color-{{ section.settings.color_scheme }}" aria-labelledby="RelatedTitle-{{ section.id }}">
+    <div class="page-width">
+      <div class="section-header section-header--center reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="h2" id="RelatedTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+
+      <ul class="related__list related__list--{{ shown | at_most: 3 }}" role="list">
+        {{ cards }}
+      </ul>
+
+      {%- if section.settings.link_label != blank -%}
+        <div class="related__actions reveal">
+          <a class="text-link related__link" href="{{ source.url | default: routes.all_products_collection_url }}">
+            {{- section.settings.link_label | escape -}}
+            {% render 'icon', icon: 'arrow-right' %}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  /* Cards side by side on computers, a row to swipe on phones */
+  .related .related__list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(15rem, 78%);
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0 0 var(--space-2xs);
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media screen and (min-width: 750px) {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(var(--related-columns, 3), minmax(0, 1fr));
+      gap: var(--space-xl) clamp(1rem, 2.5vw, 2rem);
+      overflow: visible;
+    }
+  }
+
+  .related .related__list--1 {
+    --related-columns: 1;
+    max-width: 24rem;
+    margin-inline: auto;
+  }
+
+  .related .related__list--2 {
+    --related-columns: 2;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  .related__item {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .related__actions {
+    display: flex;
+    justify-content: center;
+    margin-block-start: clamp(1.75rem, 1.4rem + 1.5vw, 2.75rem);
+  }
+
+  .related__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: var(--tap-target, 2.75rem);
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Vous aimerez aussi",
+  "tag": "div",
+  "class": "section-related-products",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Les autres articles du catalogue, sous la fiche produit. Le produit de la page n'y figure pas."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection affichée",
+      "info": "Sans choix : tous les produits."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Le catalogue VELEA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Vous aimerez <em>aussi.</em>"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Nombre de produits",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Lien vers le catalogue",
+      "default": "Voir tout le catalogue"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [{ "name": "Vous aimerez aussi" }]
+}
+{% endschema %}

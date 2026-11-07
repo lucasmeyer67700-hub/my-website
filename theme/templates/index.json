@@ -183,7 +183,12 @@
         "alt_mosaic_image_1": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
         "alt_mosaic_image_2": "shopify://shop_images/img-mw0g73f9-8c8e632e.png",
         "alt_mosaic_image_3": "shopify://shop_images/img-mw0g4gma-0697e216.png",
-        "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png"
+        "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
+        "hide_multi": true,
+        "bundle_product": "culotte-menstruelle",
+        "bundle_price": 64.99,
+        "bundle_title": "Ceinture + culotte menstruelle",
+        "bundle_note": "La chaleur et la protection, réunies."
       }
     },
     "spotlight": {
@@ -229,7 +234,7 @@
         "video_cdRwKx": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/hf_20261106_165940_843ec585-6a73-4e74-b3a8-07f4af55c96a.mp4",
+            "video": "shopify://files/videos/Sans son.mov",
             "tag": "",
             "title": "",
             "text": "",
@@ -347,8 +352,8 @@
   "order": [
     "hero",
     "ribbon",
-    "pain",
     "offer",
+    "pain",
     "spotlight",
     "videos",
     "reviews",

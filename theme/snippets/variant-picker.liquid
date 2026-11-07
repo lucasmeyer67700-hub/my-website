@@ -15,6 +15,11 @@
   @param {string} [best_label] - Tab on the multi-item offer with a real saving (e.g. "Le plus avantageux")
   @param {string} [perks_single] - Lines listed in the single-item offer card ("Text | Right text")
   @param {string} [perks_multi] - Lines listed in the multi-item offer cards ("Text | Right text")
+  @param {boolean} [hide_multi] - Hide the multi-item offers (e.g. the Duo); the variants stay in Shopify
+  @param {object} [bundle_product] - Product sold with this one as a pack (e.g. the period pants)
+  @param {number} [bundle_price] - Pack price in euros (an automatic discount must give this price)
+  @param {string} [bundle_title] - Title of the pack card
+  @param {string} [bundle_note] - Line under the pack title
 
   @example
   {% render 'variant-picker', product: product, section_id: section.id %}
@@ -109,6 +114,7 @@
           </legend>
         {%- endif -%}
 
+        {%- assign option_input_name = 'Option-' | append: section_id | append: '-' | append: option_position -%}
         <div class="variant-picker__values{% if is_offer %} variant-picker__values--offers{% endif %}">
           {%- for value in option.values -%}
             {%- liquid
@@ -165,6 +171,7 @@
                 assign offer_unit = offer_price | divided_by: offer_qty
               endif
             -%}
+            {%- if is_offer and hide_multi and offer_qty > 1 -%}{%- continue -%}{%- endif -%}
             {%- if is_offer -%}
               <span class="variant-picker__value" data-option-value>
                 <input
@@ -283,6 +290,21 @@
               </span>
             {%- endif -%}
           {%- endfor -%}
+
+          {%- if is_offer and bundle_product != blank and bundle_product.available -%}
+            {%- render 'bundle-offer',
+              product: product,
+              bundle_product: bundle_product,
+              bundle_price: bundle_price,
+              bundle_title: bundle_title,
+              bundle_note: bundle_note,
+              unit_price: unit_price,
+              base_value: first_offer,
+              best_label: best_label,
+              input_name: option_input_name,
+              section_id: section_id
+            -%}
+          {%- endif -%}
         </div>
 
         {%- if is_color and offer_index >= 0 and multi_hint != blank -%}

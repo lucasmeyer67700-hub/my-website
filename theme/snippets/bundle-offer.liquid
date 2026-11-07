@@ -1,0 +1,198 @@
+{% doc %}
+  Pack offer card inside the offer list: this product with another one (e.g.
+  the belt with the period pants). It is a radio of the offer group with the
+  value "__bundle__"; the script then adds both products to the cart, and an
+  automatic discount in Shopify gives the pack price. The second product's
+  colour and size are chosen right under the card.
+
+  @param {object} product - The product of the page
+  @param {object} bundle_product - The product added with it
+  @param {number} bundle_price - Pack price in euros
+  @param {string} [bundle_title] - Title of the card
+  @param {string} [bundle_note] - Line under the title
+  @param {number} unit_price - Price of one item of the page's product, in cents
+  @param {string} base_value - Offer value used for this product in the pack (e.g. "1 ceinture")
+  @param {string} [best_label] - Tab on the card when there is a saving
+  @param {string} input_name - Name of the offer radio group
+  @param {string} section_id - Section id, for unique element ids
+
+  @example
+  {% render 'bundle-offer', product: product, bundle_product: pants, bundle_price: 64.99, unit_price: 4499, base_value: '1 ceinture', input_name: 'Option-x-1', section_id: section.id %}
+{% enddoc %}
+{%- liquid
+  assign pack_cents = bundle_price | times: 100 | round
+  assign reference = unit_price | plus: bundle_product.price
+  if pack_cents <= 0
+    assign pack_cents = reference
+  endif
+  assign saving = reference | minus: pack_cents
+  assign input_id = 'Bundle-' | append: section_id
+  assign title = bundle_title | default: bundle_product.title
+-%}
+<span class="variant-picker__value variant-picker__value--bundle" data-option-value>
+  <input
+    class="offer-card__input"
+    type="radio"
+    id="{{ input_id }}"
+    name="{{ input_name }}"
+    value="__bundle__"
+    data-offer-qty="1"
+    data-bundle-base="{{ base_value | escape }}"
+    data-bundle-price="{{ pack_cents | money }}"
+    data-bundle-reference="{% if saving > 0 %}{{ reference | money }}{% endif %}"
+  >
+  <label class="offer-card offer-card--deal offer-card--bundle" for="{{ input_id }}">
+    {%- if saving > 0 and best_label != blank -%}
+      <span class="offer-card__tab">{{ best_label | escape }}</span>
+    {%- endif -%}
+    <span class="offer-card__radio" aria-hidden="true"></span>
+    <span class="offer-card__body">
+      <span class="offer-card__heading">
+        <span class="offer-card__title">{{ title | escape }}</span>
+        {%- if saving > 0 -%}
+          {%- assign saving_text = saving | money_without_trailing_zeros -%}
+          <span class="offer-card__saving">{{ 'products.offer_saving' | t: amount: saving_text }}</span>
+        {%- endif -%}
+      </span>
+      {%- if bundle_note != blank -%}
+        <span class="offer-card__sub">{{ bundle_note | escape }}</span>
+      {%- endif -%}
+      <span class="bundle-offer__duo" aria-hidden="true">
+        {%- if product.featured_image != blank -%}
+          {{ product.featured_image | image_url: width: 120, height: 120, crop: 'center' | image_tag: loading: 'lazy', alt: '', width: 60, height: 60 }}
+        {%- endif -%}
+        <span class="bundle-offer__plus">+</span>
+        {%- if bundle_product.featured_image != blank -%}
+          {{ bundle_product.featured_image | image_url: width: 120, height: 120, crop: 'center' | image_tag: loading: 'lazy', alt: '', width: 60, height: 60 }}
+        {%- endif -%}
+      </span>
+    </span>
+    <span class="offer-card__price">
+      <span class="offer-card__amount">{{ pack_cents | money_without_trailing_zeros }}</span>
+      {%- if saving > 0 -%}
+        <span class="offer-card__reference">
+          <span class="visually-hidden">{{ 'products.offer_reference_label' | t }}</span>
+          <s>{{ reference | money_without_trailing_zeros }}</s>
+        </span>
+      {%- endif -%}
+    </span>
+  </label>
+
+  <span class="bundle-picker" data-bundle-picker>
+    <span class="bundle-picker__title">{{ bundle_product.title | escape }}</span>
+    <span class="bundle-picker__options">
+      {%- for option in bundle_product.options_with_values -%}
+        {%- assign select_id = input_id | append: '-option-' | append: forloop.index -%}
+        <span class="bundle-picker__field">
+          <label class="bundle-picker__label" for="{{ select_id }}">{{ option.name | escape }}</label>
+          <select class="bundle-picker__select" id="{{ select_id }}" data-bundle-option="{{ forloop.index0 }}">
+            {%- for value in option.values -%}
+              <option value="{{ value | escape }}" {% if value.selected %}selected{% endif %}>{{ value | escape }}</option>
+            {%- endfor -%}
+          </select>
+        </span>
+      {%- endfor -%}
+    </span>
+    {%- if bundle_product.metafields.custom.guide_tailles != blank or bundle_product.template_suffix == 'culotte' -%}
+      <a class="bundle-picker__guide" href="{{ bundle_product.url }}#guide-tailles" target="_blank" rel="noopener">
+        {{- 'products.size_guide' | t -}}
+      </a>
+    {%- endif -%}
+    <span class="bundle-picker__error" data-bundle-error hidden>{{ 'products.unavailable' | t }}</span>
+    <script type="application/json" data-bundle-variants>
+      [
+        {%- for variant in bundle_product.variants -%}
+          { "id": {{ variant.id }}, "available": {{ variant.available | json }}, "options": {{ variant.options | json }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+  </span>
+</span>
+
+{% stylesheet %}
+  .variant-picker__value--bundle {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .bundle-offer__duo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-block-start: 0.35rem;
+
+    & img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: var(--gallery-bg);
+      box-shadow: 0 0 0 2px #fff;
+    }
+  }
+
+  .bundle-offer__plus {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* The pants' colour and size, only while the pack is chosen */
+  .bundle-picker {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: #fdf9f9;
+  }
+
+  .offer-card__input:not(:checked) ~ .bundle-picker {
+    display: none;
+  }
+
+  .bundle-picker__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+  }
+
+  .bundle-picker__options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .bundle-picker__field {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .bundle-picker__label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .bundle-picker__select {
+    min-height: var(--tap-target, 2.75rem);
+    padding: 0 0.85rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.2);
+    border-radius: 999px;
+    font: inherit;
+    color: var(--color-text);
+    background-color: #fff;
+  }
+
+  .bundle-picker__guide {
+    justify-self: start;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .bundle-picker__error {
+    font-size: var(--text-sm);
+    color: var(--color-error);
+  }
+{% endstylesheet %}

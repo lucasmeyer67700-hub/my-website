@@ -13,7 +13,12 @@
             "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
             "best_label": "Meilleure offre",
             "perks_single": "",
-            "perks_multi": "Deux ensembles complets : câbles USB et notices"
+            "perks_multi": "Deux ensembles complets : câbles USB et notices",
+            "hide_multi": true,
+            "bundle_product": "culotte-menstruelle",
+            "bundle_price": 64.99,
+            "bundle_title": "Ceinture + culotte menstruelle",
+            "bundle_note": "La chaleur et la protection, réunies."
           }
         },
         "inventory": {
@@ -206,11 +211,11 @@
             "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
           }
         },
-        "duo": {
+        "pack": {
           "type": "question",
           "settings": {
-            "question": "Que contient le Duo ?",
-            "answer": "<p>Deux ceintures complètes, chacune avec son câble de charge USB et sa notice, pour 74,99 € au lieu de 89,98 € à l'unité. Deux roses, deux blanches ou une de chaque : pratique pour en garder une au bureau, ou pour en offrir une.</p>"
+            "question": "Que contient le pack ceinture + culotte ?",
+            "answer": "<p>La ceinture chauffante, avec son câble de charge USB et sa notice, et une culotte menstruelle dans la couleur et la taille de votre choix. Le pack est à 64,99 € au lieu de 70,98 € pour les deux articles achetés séparément : la remise s'applique automatiquement dans le panier.</p>"
           }
         },
         "secure": {
@@ -223,7 +228,7 @@
       },
       "block_order": [
         "pain",
-        "duo",
+        "pack",
         "secure"
       ],
       "settings": {
@@ -235,12 +240,24 @@
         "anchor": "faq",
         "color_scheme": "scheme-3"
       }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "collection": "tous-nos-produits",
+        "eyebrow": "Le catalogue VELEA",
+        "heading": "Vous aimerez <em>aussi.</em>",
+        "limit": 3,
+        "link_label": "Voir tout le catalogue",
+        "color_scheme": "scheme-2"
+      }
     }
   },
   "order": [
     "main",
     "video",
     "reviews",
-    "faq"
+    "faq",
+    "related"
   ]
 }

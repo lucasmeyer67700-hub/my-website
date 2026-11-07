@@ -254,11 +254,23 @@
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "collection": "tous-nos-produits",
+        "eyebrow": "Le catalogue VELEA",
+        "heading": "Vous aimerez <em>aussi.</em>",
+        "limit": 3,
+        "link_label": "Voir tout le catalogue",
+        "color_scheme": "scheme-2"
+      }
     }
   },
   "order": [
     "main",
     "reviews",
-    "faq"
+    "faq",
+    "related"
   ]
 }

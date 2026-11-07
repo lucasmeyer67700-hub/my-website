@@ -160,7 +160,12 @@
           multi_hint: section.settings.multi_hint,
           unit_label: section.settings.unit_label,
           best_label: section.settings.best_label,
-          perks_multi: section.settings.perks_multi
+          perks_multi: section.settings.perks_multi,
+          hide_multi: section.settings.hide_multi,
+          bundle_product: section.settings.bundle_product,
+          bundle_price: section.settings.bundle_price,
+          bundle_title: section.settings.bundle_title,
+          bundle_note: section.settings.bundle_note
         %}
 
         <p
@@ -511,6 +516,37 @@
       "label": "Inclus dans les offres à plusieurs",
       "info": "Une ligne par avantage. Texte à droite après « | ».",
       "default": "Deux ensembles complets : câbles USB et notices"
+    },
+    {
+      "type": "header",
+      "content": "Offre « pack »"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_multi",
+      "label": "Masquer les offres à plusieurs (Duo)",
+      "default": false
+    },
+    {
+      "type": "product",
+      "id": "bundle_product",
+      "label": "Produit vendu en pack"
+    },
+    {
+      "type": "number",
+      "id": "bundle_price",
+      "label": "Prix du pack (€)",
+      "info": "Une réduction automatique Shopify doit donner ce prix quand les deux produits sont dans le panier."
+    },
+    {
+      "type": "text",
+      "id": "bundle_title",
+      "label": "Titre du pack"
+    },
+    {
+      "type": "text",
+      "id": "bundle_note",
+      "label": "Phrase sous le titre du pack"
     },
     {
       "type": "header",
