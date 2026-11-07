@@ -64,9 +64,9 @@
         "image": "shopify://shop_images/Detente_chaleureuse_avec_ceinture_chauffante_rose.png",
         "image_alt": "Un moment de détente avec la ceinture chauffante VELEA rose",
         "image_badge": "Chaleur douce, sans fil",
-        "gradient_start": "#f3dadd",
-        "gradient_middle": "#f8e9ea",
-        "gradient_end": "#fcf9f7",
+        "gradient_start": "#f9eeef",
+        "gradient_middle": "#fdf8f8",
+        "gradient_end": "#ffffff",
         "color_scheme": "scheme-6"
       }
     },

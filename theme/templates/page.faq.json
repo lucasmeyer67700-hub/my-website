@@ -263,8 +263,8 @@
         "contact_label": "Nous écrire",
         "contact_link": "/pages/contact",
         "aside_contact_label": "Une autre question ?",
-        "gradient_start": "#f3dadd",
-        "gradient_end": "#f8e9ea",
+        "gradient_start": "#f9eeef",
+        "gradient_end": "#ffffff",
         "color_scheme": "scheme-2"
       }
     }

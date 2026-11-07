@@ -34,7 +34,7 @@
       ],
       "settings": {
         "interval": 3,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-4"
       }
     },
     "header": {
@@ -51,12 +51,12 @@
         "editorial_link": "",
         "menu_heading_font": "playfair_display_n4",
         "menu_body_font": "inter_n4",
-        "menu_background": "#faf7f3",
-        "menu_text": "#49352f",
-        "menu_text_muted": "#80665e",
-        "menu_border": "#e8ded7",
-        "menu_button": "#49352f",
-        "menu_button_label": "#fffdfc",
+        "menu_background": "#ffffff",
+        "menu_text": "#2b2422",
+        "menu_text_muted": "#6f6461",
+        "menu_border": "#eee6e4",
+        "menu_button": "#2b2422",
+        "menu_button_label": "#ffffff",
         "show_account": true,
         "full_width": true,
         "logo_mark": "",

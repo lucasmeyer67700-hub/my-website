@@ -9,43 +9,43 @@
 :root {
   /* VELEA palette (brief). Components use the scheme variables; these are
      for brand details. Rose accent is for graphics only (2.6:1 on white). */
-  --palette-rose-powder: #f3dadd;
-  --palette-rose-light: #f8e9ea;
-  --palette-rose-accent: #d98d96;
+  --palette-rose-powder: #f6e6e8;
+  --palette-rose-light: #fbf4f4;
+  --palette-rose-accent: #c9727e;
   --palette-white: #ffffff;
-  --palette-warm-white: #fcf9f7;
-  --palette-ivory: #f7f1ef;
-  --palette-brown-soft: #896f61;
-  --palette-brown-deep: #49352f;
-  --palette-ink: #3a2a25;
-  --palette-warm-white-rgb: 252 249 247;
-  --palette-ink-rgb: 58 42 37;
+  --palette-warm-white: #ffffff;
+  --palette-ivory: #fbf7f6;
+  --palette-brown-soft: #7a6e6b;
+  --palette-brown-deep: #2b2422;
+  --palette-ink: #2b2422;
+  --palette-warm-white-rgb: 255 255 255;
+  --palette-ink-rgb: 43 36 34;
   --palette-scrim-rgb: 36 27 24;
-  --palette-rose-pale: #f8e9ea;
-  --palette-rose-deep: #d98d96;
+  --palette-rose-pale: #fbf4f4;
+  --palette-rose-deep: #c9727e;
 
   /* Rose for the interface: graphics (stars, radios, dots: 3.4:1 on white)
      and text (5.3:1 on white, 4.7:1 on rose clair). */
   --rose-strong: #c9727e;
   --rose-strong-rgb: 201 114 126;
-  --rose-text: #9c5261;
-  --rose-soft: #f8e9ea;
+  --rose-text: #a14a5c;
+  --rose-soft: #fbf4f4;
 
   /* Deep rose for filled buttons: white text passes 4.5:1 across the gradient */
-  --rose-cta: #a24c5d;
-  --rose-cta-light: #b4596a;
-  --rose-cta-rgb: 162 76 93;
+  --rose-cta: #a14a5c;
+  --rose-cta-light: #a8505f;
+  --rose-cta-rgb: 161 74 92;
 
   /* --gallery-bg, behind product photos, comes from the theme settings (css-variables). */
 
   /* Warm brown accents (eyebrows, ornaments, hairlines). Text brown passes
      4.5:1 on blanc cassé and on rose poudré; the light tints are for
      hairlines and decorative strokes only. */
-  --warm-text: #725a4e;
-  --warm: #896f61;
-  --warm-light: #c9b3a8;
-  --warm-rgb: 137 111 97;
-  --warm-gradient: linear-gradient(90deg, #896f61 0%, #c9b3a8 50%, #896f61 100%);
+  --warm-text: #6f6461;
+  --warm: #7a6e6b;
+  --warm-light: #d6c9c7;
+  --warm-rgb: 122 110 107;
+  --warm-gradient: linear-gradient(90deg, #c9727e 0%, #e9c3c9 50%, #c9727e 100%);
   --warm-hairline: rgb(var(--warm-rgb) / 0.35);
 
   /* Feedback */
