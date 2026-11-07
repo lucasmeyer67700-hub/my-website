@@ -2574,7 +2574,8 @@ class VideoPlayer extends HTMLElement {
 
     video.muted = true;
     video.playsInline = true;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // data-autoplay-always: a background film that always loops (no pause button).
+    if (!('autoplayAlways' in this.dataset) && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       this.#userPaused = true;
       video.removeAttribute('autoplay');
       video.pause();

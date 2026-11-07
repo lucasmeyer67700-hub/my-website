@@ -190,7 +190,7 @@
   -%}
   <section
     id="Hero-{{ section.id }}"
-    class="hero hero--full hero--tone-{{ tone }} hero--{{ section.settings.content_position }} hero--height-{{ section.settings.height }} color-{{ section.settings.color_scheme }}{% if hero_image == blank %} hero--no-image{% endif %}{% if section.settings.mobile_stack %} hero--stack-mobile{% endif %}"
+    class="hero hero--full hero--tone-{{ tone }} hero--{{ section.settings.content_position }} hero--height-{{ section.settings.height }} color-{{ section.settings.color_scheme }}{% if hero_image == blank %} hero--no-image{% endif %}{% if section.settings.mobile_stack %} hero--stack-mobile{% endif %}{% if hero_video != blank %} hero--video{% endif %}"
     style="--hero-overlay: {{ overlay }};"
     aria-labelledby="HeroTitle-{{ section.id }}"
   >
@@ -200,19 +200,47 @@
           Background film: muted, looping, inline; paused off screen and for
           visitors who ask for less motion (then its first image shows).
         {%- endcomment -%}
-        <video-player class="hero__video-player" data-controls-in=".hero">
-          {{
-            hero_video
-            | video_tag:
-              autoplay: true,
-              loop: true,
-              muted: true,
-              controls: false,
-              playsinline: true,
-              preload: 'auto',
-              image_size: '1920x',
-              class: 'hero__video'
-          }}
+        {%- comment -%}
+          Sharpest file for each screen: 1080p on computers, 720p on phones.
+          Shopify's own list can start with a small 480p file.
+        {%- endcomment -%}
+        {%- liquid
+          assign src_1080 = ''
+          assign src_720 = ''
+          for source in hero_video.sources
+            if source.format == 'mp4'
+              if source.height == 1080
+                assign src_1080 = source.url
+              elsif source.height == 720
+                assign src_720 = source.url
+              endif
+            endif
+          endfor
+          if src_1080 == blank
+            for source in hero_video.sources
+              if source.format == 'mp4'
+                assign src_1080 = source.url
+              endif
+            endfor
+          endif
+          if src_720 == blank
+            assign src_720 = src_1080
+          endif
+        -%}
+        <video-player class="hero__video-player" data-autoplay-always>
+          <video
+            class="hero__video"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+            disablepictureinpicture
+            poster="{{ hero_video.preview_image | image_url: width: 1920 }}"
+          >
+            <source src="{{ src_720 }}" type="video/mp4" media="(max-width: 749px)">
+            <source src="{{ src_1080 }}" type="video/mp4">
+          </video>
         </video-player>
       {%- elsif hero_image != blank -%}
         <picture>
@@ -277,18 +305,6 @@
     <div class="hero__inner page-width page-width--wide">
       {{ hero_content }}
     </div>
-    {%- if hero_video != blank -%}
-      <button
-        type="button"
-        class="hero__video-toggle"
-        data-video-toggle
-        aria-pressed="false"
-        aria-label="{{ 'sections.video_pause' | t }}"
-      >
-        <span class="video-showcase__icon video-showcase__icon--pause">{% render 'icon', icon: 'pause' %}</span>
-        <span class="video-showcase__icon video-showcase__icon--play">{% render 'icon', icon: 'play' %}</span>
-      </button>
-    {%- endif -%}
     <span class="hero__scroll-cue" aria-hidden="true"></span>
   </section>
 {%- else -%}
@@ -433,6 +449,57 @@
     opacity: 0.3;
   }
 
+  /* Film banner: a light, neutral veil only behind the text, so the film
+     keeps its true colours; the second action is a simple underlined link. */
+  @media screen and (min-width: 750px) {
+    .hero--full.hero--video::after {
+      background:
+        linear-gradient(to top, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.3) 30%, rgb(0 0 0 / 0.08) 50%, rgb(0 0 0 / 0) 62%);
+    }
+
+    /* No soft patch behind the text on the film: the even veil is enough */
+    .hero--video .hero__content::before {
+      display: none;
+    }
+
+    .hero--video.hero--tone-light {
+      & .hero__title,
+      & .hero__text {
+        text-shadow: 0 1px 18px rgb(0 0 0 / 0.18);
+      }
+
+      & .hero__text {
+        color: #fff;
+      }
+    }
+  }
+
+  .hero--video .hero__scroll-cue {
+    display: none;
+  }
+
+  .hero--video .hero__actions {
+    align-items: center;
+    column-gap: var(--space-lg);
+  }
+
+  .hero--video .hero__button.button--secondary {
+    min-height: var(--tap-target, 2.75rem);
+    padding-inline: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+
+    &:hover {
+      background: none;
+      text-decoration-thickness: 2px;
+    }
+  }
+
   /* Background film */
   .hero__video-player {
     display: block;
@@ -451,51 +518,6 @@
   @media (prefers-reduced-motion: no-preference) {
     .hero__video {
       animation: hero-settle 2.8s var(--ease-out) both;
-    }
-  }
-
-  /* Pause / play, required for a film that keeps moving */
-  .hero__video-toggle {
-    position: absolute;
-    inset-block-end: 1.25rem;
-    inset-inline-end: 1.25rem;
-    z-index: 3;
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 1px solid rgb(255 255 255 / 0.55);
-    border-radius: 50%;
-    color: #fff;
-    background-color: rgb(20 14 12 / 0.28);
-    backdrop-filter: blur(8px);
-    cursor: pointer;
-    transition: background-color var(--duration-fast) ease;
-
-    & .icon {
-      --icon-size: 0.9rem;
-    }
-
-    &:hover {
-      background-color: rgb(20 14 12 / 0.45);
-    }
-
-    &:focus-visible {
-      outline: 2px solid #fff;
-      outline-offset: 3px;
-    }
-
-    & .video-showcase__icon {
-      display: inline-flex;
-    }
-
-    & .video-showcase__icon--play,
-    &[aria-pressed='true'] .video-showcase__icon--pause {
-      display: none;
-    }
-
-    &[aria-pressed='true'] .video-showcase__icon--play {
-      display: inline-flex;
     }
   }
 
@@ -856,10 +878,6 @@
 
         -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%);
         mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%);
-      }
-
-      & .hero__video-toggle {
-        inset-block: 0.85rem auto;
       }
 
       & .hero__inner {
@@ -1348,7 +1366,7 @@
       "type": "video",
       "id": "video",
       "label": "Vidéo de fond (facultative)",
-      "info": "Remplace l'image : lecture automatique, sans le son, en boucle, avec un bouton pause. L'image reste utile comme secours.",
+      "info": "Remplace l'image : lecture automatique, sans le son, en boucle continue.",
       "visible_if": "{{ section.settings.layout == 'full' }}"
     },
     {
