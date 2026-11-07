@@ -2623,6 +2623,103 @@ class VideoPlayer extends HTMLElement {
 
 customElements.define('video-player', VideoPlayer);
 
+/**
+ * Video carousel: arrows, counter and progress line for a row of videos that
+ * scrolls sideways. The card most in view gets .is-active. When every card
+ * fits on screen, the controls stay hidden and the row is simply centred.
+ */
+class VideoCarousel extends HTMLElement {
+  #controller = null;
+  #frame = 0;
+
+  connectedCallback() {
+    this.track = this.querySelector('[data-carousel-track]');
+    this.slides = [...this.querySelectorAll('[data-carousel-slide]')];
+    if (!this.track || this.slides.length === 0) return;
+    this.nav = this.querySelector('[data-carousel-nav]');
+    this.progress = this.querySelector('[data-carousel-progress]');
+    this.bar = this.querySelector('[data-carousel-bar]');
+    this.current = this.querySelector('[data-carousel-current]');
+    this.prev = this.querySelector('[data-carousel-prev]');
+    this.next = this.querySelector('[data-carousel-next]');
+
+    this.#controller?.abort();
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
+    const update = () => {
+      cancelAnimationFrame(this.#frame);
+      this.#frame = requestAnimationFrame(() => this.#update());
+    };
+    this.track.addEventListener('scroll', update, { passive: true, signal });
+    window.addEventListener('resize', update, { signal });
+    this.prev?.addEventListener('click', () => this.#go(-1), { signal });
+    this.next?.addEventListener('click', () => this.#go(1), { signal });
+    this.track.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'ArrowRight') this.#go(1);
+        if (event.key === 'ArrowLeft') this.#go(-1);
+      },
+      { signal }
+    );
+    this.#update();
+  }
+
+  disconnectedCallback() {
+    this.#controller?.abort();
+    cancelAnimationFrame(this.#frame);
+  }
+
+  /** Index of the card whose centre is closest to the centre of the row. */
+  #activeIndex() {
+    const box = this.track.getBoundingClientRect();
+    const anchor = box.left + box.width / 2;
+    let best = 0;
+    let bestDistance = Infinity;
+    this.slides.forEach((slide, index) => {
+      const rect = slide.getBoundingClientRect();
+      const distance = Math.abs(rect.left + rect.width / 2 - anchor);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = index;
+      }
+    });
+    return best;
+  }
+
+  #update() {
+    const overflow = this.track.scrollWidth - this.track.clientWidth > 4;
+    this.toggleAttribute('data-overflow', overflow);
+    if (this.nav) this.nav.hidden = !overflow;
+    if (this.progress) this.progress.hidden = !overflow;
+
+    const index = this.#activeIndex();
+    this.slides.forEach((slide, i) => slide.classList.toggle('is-active', !overflow || i === index));
+    if (this.current) this.current.textContent = String(index + 1).padStart(2, '0');
+    if (this.prev) this.prev.disabled = index === 0;
+    if (this.next) this.next.disabled = index === this.slides.length - 1;
+
+    if (this.bar && overflow) {
+      const size = (this.track.clientWidth / this.track.scrollWidth) * 100;
+      const travel = this.track.scrollWidth - this.track.clientWidth;
+      const ratio = travel > 0 ? this.track.scrollLeft / travel : 0;
+      this.bar.style.setProperty('--progress-size', `${size}%`);
+      this.bar.style.setProperty('--progress-offset', `${(ratio * (100 - size) * 100) / size}%`);
+    }
+  }
+
+  /** @param {number} step */
+  #go(step) {
+    const index = Math.max(0, Math.min(this.slides.length - 1, this.#activeIndex() + step));
+    const target = this.slides[index];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const left = target.offsetLeft - (this.track.clientWidth - target.offsetWidth) / 2;
+    this.track.scrollTo({ left, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+}
+
+customElements.define('video-carousel', VideoCarousel);
+
 /* -------------------------------------------------------------------------- */
 /* Cookie consent: the theme's banner, recorded through Shopify's privacy API */
 /* -------------------------------------------------------------------------- */

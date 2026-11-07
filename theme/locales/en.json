@@ -207,7 +207,10 @@
     "faq_results_one": "1 answer found",
     "faq_results_other": "{{ count }} answers found",
     "faq_no_result": "No question matches your search.",
-    "faq_no_result_hint": "Try another word, or ask us your question directly below."
+    "faq_no_result_hint": "Try another word, or ask us your question directly below.",
+    "video_slide": "Video {{ number }} of {{ total }}",
+    "video_shop": "View product",
+    "video_carousel": "Videos"
   },
   "collections": {
     "coming_soon": "Coming soon",

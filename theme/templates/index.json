@@ -200,7 +200,9 @@
           "settings": {
             "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
             "title": "",
-            "text": ""
+            "text": "",
+            "tag": "La ceinture VELEA",
+            "product": "ceinture-chauffante-regles"
           }
         },
         "video-2": {
@@ -208,18 +210,40 @@
           "settings": {
             "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4",
             "title": "",
-            "text": ""
+            "text": "",
+            "tag": "La ceinture VELEA",
+            "product": "ceinture-chauffante-regles"
+          }
+        },
+        "video-3": {
+          "type": "video",
+          "settings": {
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": "ceinture-chauffante-regles"
+          }
+        },
+        "video-4": {
+          "type": "video",
+          "settings": {
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": "ceinture-chauffante-regles"
           }
         }
       },
       "block_order": [
         "video-1",
-        "video-2"
+        "video-2",
+        "video-3",
+        "video-4"
       ],
       "settings": {
         "eyebrow": "En situation",
         "heading": "Portée au quotidien, <em>en vrai.</em>",
-        "text": "",
+        "text": "Faites défiler nos vidéos : la ceinture portée, et le lien pour la retrouver.",
         "ratio": "9 / 16",
         "autoplay": true,
         "button_label": "Je choisis ma couleur",
