@@ -19,8 +19,9 @@
   assign heading_tag = section.settings.heading_tag | default: 'h1'
   assign layout = section.settings.layout | default: 'pink'
 
+  assign hero_video = section.settings.video
   assign tone = section.settings.text_tone
-  if hero_image == blank
+  if hero_image == blank and hero_video == blank
     assign tone = 'dark'
   endif
 
@@ -194,7 +195,26 @@
     aria-labelledby="HeroTitle-{{ section.id }}"
   >
     <div class="hero__backdrop">
-      {%- if hero_image != blank -%}
+      {%- if hero_video != blank -%}
+        {%- comment -%}
+          Background film: muted, looping, inline; paused off screen and for
+          visitors who ask for less motion (then its first image shows).
+        {%- endcomment -%}
+        <video-player class="hero__video-player" data-controls-in=".hero">
+          {{
+            hero_video
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              preload: 'auto',
+              image_size: '1920x',
+              class: 'hero__video'
+          }}
+        </video-player>
+      {%- elsif hero_image != blank -%}
         <picture>
           {%- if mobile_image != blank -%}
             {%- capture mobile_srcset -%}
@@ -257,6 +277,18 @@
     <div class="hero__inner page-width page-width--wide">
       {{ hero_content }}
     </div>
+    {%- if hero_video != blank -%}
+      <button
+        type="button"
+        class="hero__video-toggle"
+        data-video-toggle
+        aria-pressed="false"
+        aria-label="{{ 'sections.video_pause' | t }}"
+      >
+        <span class="video-showcase__icon video-showcase__icon--pause">{% render 'icon', icon: 'pause' %}</span>
+        <span class="video-showcase__icon video-showcase__icon--play">{% render 'icon', icon: 'play' %}</span>
+      </button>
+    {%- endif -%}
     <span class="hero__scroll-cue" aria-hidden="true"></span>
   </section>
 {%- else -%}
@@ -399,6 +431,72 @@
 
   .hero__placeholder {
     opacity: 0.3;
+  }
+
+  /* Background film */
+  .hero__video-player {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__video {
+      animation: hero-settle 2.8s var(--ease-out) both;
+    }
+  }
+
+  /* Pause / play, required for a film that keeps moving */
+  .hero__video-toggle {
+    position: absolute;
+    inset-block-end: 1.25rem;
+    inset-inline-end: 1.25rem;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgb(255 255 255 / 0.55);
+    border-radius: 50%;
+    color: #fff;
+    background-color: rgb(20 14 12 / 0.28);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) ease;
+
+    & .icon {
+      --icon-size: 0.9rem;
+    }
+
+    &:hover {
+      background-color: rgb(20 14 12 / 0.45);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+
+    & .video-showcase__icon {
+      display: inline-flex;
+    }
+
+    & .video-showcase__icon--play,
+    &[aria-pressed='true'] .video-showcase__icon--pause {
+      display: none;
+    }
+
+    &[aria-pressed='true'] .video-showcase__icon--play {
+      display: inline-flex;
+    }
   }
 
   /* Legibility veil: neutral and soft. Two crossed gradients darken the text
@@ -758,6 +856,10 @@
 
         -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%);
         mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%);
+      }
+
+      & .hero__video-toggle {
+        inset-block: 0.85rem auto;
       }
 
       & .hero__inner {
@@ -1241,6 +1343,13 @@
       "id": "image",
       "label": "Image",
       "info": "Photo fondue et plein écran : format paysage, 2400 px de large minimum. Rose épuré : format portrait (1200 × 1500 px), recadré en arche."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Vidéo de fond (facultative)",
+      "info": "Remplace l'image : lecture automatique, sans le son, en boucle, avec un bouton pause. L'image reste utile comme secours.",
+      "visible_if": "{{ section.settings.layout == 'full' }}"
     },
     {
       "type": "image_picker",

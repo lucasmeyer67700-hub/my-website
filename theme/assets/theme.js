@@ -2566,8 +2566,10 @@ class VideoPlayer extends HTMLElement {
     this.#controller?.abort();
     this.#controller = new AbortController();
     const { signal } = this.#controller;
-    const toggle = this.querySelector('[data-video-toggle]');
-    const sound = this.querySelector('[data-video-sound]');
+    // The buttons can live outside the player (e.g. over the whole banner).
+    const scope = (this.dataset.controlsIn && this.closest(this.dataset.controlsIn)) || this;
+    const toggle = scope.querySelector('[data-video-toggle]');
+    const sound = scope.querySelector('[data-video-sound]');
     const video = this.video;
 
     video.muted = true;
