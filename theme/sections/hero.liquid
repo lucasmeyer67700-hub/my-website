@@ -51,13 +51,20 @@
     <{{ heading_tag }}
       class="hero__title h1{% unless section.settings.heading contains '<' %} hero__title--words{% endunless %}"
       id="HeroTitle-{{ section.id }}"
+      {% unless section.settings.heading contains '<' %}
+        aria-label="{{ section.settings.heading | escape }}"
+      {% endunless %}
     >
       {%- if section.settings.heading contains '<' -%}
         {{- section.settings.heading -}}
       {%- else -%}
+        {%- comment -%}
+          The gap between words is a margin, not a space character: spaces
+          between the word boxes can be dropped when the page is minified.
+          The title is read whole through aria-label.
+        {%- endcomment -%}
         {%- for word in hero_words -%}
-          <span class="hero__word"><span style="--word: {{ forloop.index0 }};">{{ word }}</span></span>
-          {%- unless forloop.last %} {% endunless -%}
+          <span class="hero__word" aria-hidden="true"><span style="--word: {{ forloop.index0 }};">{{ word }}</span></span>
         {%- endfor -%}
       {%- endif -%}
     </{{ heading_tag }}>
@@ -497,6 +504,15 @@
       background: none;
       text-decoration-thickness: 2px;
     }
+  }
+
+  /* Word-by-word title: each word is its own box, kept apart by a margin */
+  .hero__title--words .hero__word {
+    display: inline-block;
+  }
+
+  .hero__title--words .hero__word:not(:last-child) {
+    margin-inline-end: 0.26em;
   }
 
   /* Background film */
