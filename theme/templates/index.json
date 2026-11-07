@@ -86,6 +86,69 @@
         "color_scheme": "scheme-1"
       }
     },
+    "pain": {
+      "type": "pain-points",
+      "blocks": {
+        "point-1": {
+          "type": "point",
+          "settings": {
+            "text": "Le ventre qui tire dès le réveil."
+          }
+        },
+        "point-2": {
+          "type": "point",
+          "settings": {
+            "text": "Le bas du dos qui lance toute la journée."
+          }
+        },
+        "point-3": {
+          "type": "point",
+          "settings": {
+            "text": "Serrer les dents en réunion ou en cours."
+          }
+        },
+        "point-4": {
+          "type": "point",
+          "settings": {
+            "text": "Annuler une sortie pour rester sous la couette."
+          }
+        },
+        "point-5": {
+          "type": "point",
+          "settings": {
+            "text": "La bouillotte qui refroidit trop vite."
+          }
+        },
+        "point-6": {
+          "type": "point",
+          "settings": {
+            "text": "Compter les heures jusqu'à ce soir."
+          }
+        }
+      },
+      "block_order": [
+        "point-1",
+        "point-2",
+        "point-3",
+        "point-4",
+        "point-5",
+        "point-6"
+      ],
+      "settings": {
+        "eyebrow": "Vous vous reconnaissez ?",
+        "heading": "Chaque mois, <em>le même scénario.</em>",
+        "text": "Cochez ce que vous vivez pendant vos règles. Juste pour vous, en toute honnêteté.",
+        "message_none": "Cochez ce qui vous ressemble.",
+        "message_few": "Vous n'êtes pas la seule à vivre ça.",
+        "message_some": "Ces jours-là reviennent chaque mois. Votre confort aussi devrait.",
+        "message_most": "Vous méritez mieux que de serrer les dents.",
+        "product": "ceinture-chauffante-regles",
+        "button_label": "Je veux ma ceinture",
+        "note": "Accessoire de confort, la ceinture ne remplace pas un avis médical.",
+        "anchor": "vous-vous-reconnaissez",
+        "color_scheme": "scheme-5"
+      }
+    },
     "offer": {
       "type": "featured-product",
       "settings": {
@@ -337,6 +400,7 @@
   "order": [
     "hero",
     "ribbon",
+    "pain",
     "offer",
     "frustrations",
     "spotlight",

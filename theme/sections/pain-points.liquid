@@ -1,0 +1,575 @@
+{%- comment -%}
+  "Vous vous reconnaissez ?" The visitor ticks the situations she lives every
+  month; a rose gauge fills and the message under it answers her, next to the
+  product and its button. Real experiences only: no figures, no medical promise.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign total = section.blocks.size
+  assign anchor = section.settings.anchor | handleize
+-%}
+
+{%- if total > 0 -%}
+  <section
+    class="pain section color-{{ section.settings.color_scheme }}"
+    {% if anchor != blank %}
+      id="{{ anchor }}"
+    {% endif %}
+    aria-labelledby="PainTitle-{{ section.id }}"
+  >
+    <pain-check class="pain__inner page-width" data-total="{{ total }}">
+      <header class="pain__intro reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="pain__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="pain__title" id="PainTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p class="pain__lead">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </header>
+
+      <ul class="pain__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="pain__item reveal" {{ block.shopify_attributes }}>
+            <button type="button" class="pain__point" aria-pressed="false" data-pain-point>
+              <span class="pain__number" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="pain__text">{{ block.settings.text | escape }}</span>
+              <span class="pain__check" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="pain__result reveal">
+        <div class="pain__verdict">
+          <p class="pain__score" aria-hidden="true">
+            <span data-pain-count>0</span>
+            <span class="pain__score-total">/ {{ total }}</span>
+          </p>
+          <div class="pain__gauge" aria-hidden="true">
+            <span class="pain__gauge-fill" data-pain-fill></span>
+          </div>
+          <p
+            class="pain__message"
+            aria-live="polite"
+            data-pain-message
+            data-message-0="{{ section.settings.message_none | escape }}"
+            data-message-1="{{ section.settings.message_few | escape }}"
+            data-message-2="{{ section.settings.message_some | escape }}"
+            data-message-3="{{ section.settings.message_most | escape }}"
+          >
+            {{- section.settings.message_none | escape -}}
+          </p>
+        </div>
+
+        {%- if product != blank -%}
+          <div class="pain__offer">
+            <a class="pain__product" href="{{ product.url }}">
+              {%- if product.featured_image != blank -%}
+                {{
+                  product.featured_image
+                  | image_url: width: 240, height: 240, crop: 'center'
+                  | image_tag: loading: 'lazy', alt: '', class: 'pain__product-image', width: 120, height: 120
+                }}
+              {%- endif -%}
+              <span class="pain__product-info">
+                <span class="pain__product-title">{{ product.title | escape }}</span>
+                <span class="pain__product-price">
+                  {%- if product.price_varies -%}
+                    {%- assign pain_price = product.price_min | money -%}
+                    {{ 'products.price_from' | t: price: pain_price }}
+                  {%- else -%}
+                    {{ product.price | money }}
+                  {%- endif -%}
+                </span>
+              </span>
+            </a>
+            <a class="button pain__button" href="{{ product.url }}">
+              {{- section.settings.button_label | escape -}}
+              {% render 'icon', icon: 'arrow-right' %}
+            </a>
+            <p class="pain__reassure">
+              {%- if settings.shipping_info != blank -%}
+                <span>{% render 'icon', icon: 'truck' %}{{ settings.shipping_info | escape }}</span>
+              {%- endif -%}
+              {%- if settings.returns_info != blank -%}
+                <span>{% render 'icon', icon: 'return' %}{{ settings.returns_info | escape }}</span>
+              {%- endif -%}
+            </p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.note != blank -%}
+        <p class="pain__note">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    </pain-check>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .pain {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    /* A soft rose glow in the dark, behind the title */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -20% auto auto -15%;
+      z-index: -1;
+      width: min(60rem, 90vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgb(var(--rose-strong-rgb) / 0.22), transparent);
+      pointer-events: none;
+    }
+  }
+
+  .pain__inner {
+    display: grid;
+    gap: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+      column-gap: clamp(3rem, 6vw, 6rem);
+    }
+  }
+
+  .pain__intro {
+    display: grid;
+    gap: var(--space-sm);
+
+    @media screen and (min-width: 990px) {
+      align-self: center;
+    }
+  }
+
+  .pain__eyebrow {
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .pain__title {
+    margin: 0;
+    font-size: calc(clamp(2.4rem, 1.5rem + 3.4vw, 4.5rem) * var(--font-heading-scale, 1));
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+
+    & em {
+      color: var(--color-accent);
+    }
+  }
+
+  .pain__lead {
+    max-width: 30rem;
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  /* The situations: large cards to tick */
+  .pain .pain__list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .pain__point {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 5.5rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.16);
+    border-radius: var(--radius-md, 14px);
+    font: inherit;
+    text-align: start;
+    color: var(--color-text);
+    background-color: rgb(var(--color-text-rgb) / 0.03);
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.3s var(--ease-out);
+
+    &:hover {
+      border-color: rgb(var(--color-text-rgb) / 0.4);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 3px;
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--color-accent);
+      background-color: rgb(var(--rose-strong-rgb) / 0.16);
+    }
+  }
+
+  .pain__number {
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+  }
+
+  .pain__text {
+    font-family: var(--font-heading-family);
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  .pain__check {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid rgb(var(--color-text-rgb) / 0.35);
+    border-radius: 50%;
+    color: transparent;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease,
+      scale 0.3s var(--ease-out);
+
+    & .icon {
+      --icon-size: 0.85rem;
+    }
+
+    [aria-pressed='true'] > & {
+      border-color: var(--color-accent);
+      color: var(--palette-ink);
+      background-color: var(--color-accent);
+      scale: 1.08;
+    }
+  }
+
+  /* The answer: score, gauge, message, then the belt */
+  .pain__result {
+    display: grid;
+    gap: var(--space-lg);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid rgb(var(--color-text-rgb) / 0.12);
+    border-radius: var(--radius-lg, 20px);
+    background-color: rgb(var(--color-text-rgb) / 0.04);
+
+    @media screen and (min-width: 990px) {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: clamp(2rem, 5vw, 5rem);
+    }
+  }
+
+  .pain__verdict {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .pain__score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(3rem, 2rem + 3vw, 4.5rem);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-accent);
+  }
+
+  .pain__score-total {
+    font-size: 0.4em;
+    color: var(--color-text-muted);
+  }
+
+  .pain__gauge {
+    position: relative;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: rgb(var(--color-text-rgb) / 0.14);
+  }
+
+  .pain__gauge-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-accent), #fff);
+    transform-origin: 0 50%;
+    scale: var(--pain-ratio, 0) 1;
+    transition: scale 0.6s var(--ease-reveal);
+  }
+
+  .pain__message {
+    min-height: 3.2em;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem);
+    line-height: 1.25;
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  .pain__offer {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .pain__product {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .pain__product-image {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    background-color: var(--gallery-bg);
+  }
+
+  .pain__product-info {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .pain__product-title {
+    font-family: var(--font-heading-family);
+    font-size: 1.25rem;
+  }
+
+  .pain__product-price {
+    color: var(--color-text-muted);
+  }
+
+  .pain__button {
+    width: 100%;
+    min-height: 3.5rem;
+    justify-content: center;
+  }
+
+  /* The button lights up once she has ticked something */
+  pain-check[data-count]:not([data-count='0']) .pain__button {
+    box-shadow: 0 0 0 4px rgb(var(--rose-strong-rgb) / 0.35);
+  }
+
+  .pain__reassure {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+
+    & span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    & .icon {
+      --icon-size: 1rem;
+      color: var(--color-accent);
+    }
+  }
+
+  .pain__note {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pain__point,
+    .pain__check,
+    .pain__gauge-fill {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('pain-check')) {
+    customElements.define(
+      'pain-check',
+      class PainCheck extends HTMLElement {
+        connectedCallback() {
+          this.points = [...this.querySelectorAll('[data-pain-point]')];
+          this.count = this.querySelector('[data-pain-count]');
+          this.fill = this.querySelector('[data-pain-fill]');
+          this.message = this.querySelector('[data-pain-message]');
+          for (const point of this.points) {
+            point.addEventListener('click', () => {
+              point.setAttribute('aria-pressed', String(point.getAttribute('aria-pressed') !== 'true'));
+              this.update();
+            });
+          }
+          this.update();
+        }
+
+        update() {
+          const total = this.points.length;
+          const ticked = this.points.filter((point) => point.getAttribute('aria-pressed') === 'true').length;
+          const ratio = total ? ticked / total : 0;
+          this.dataset.count = String(ticked);
+          if (this.count) this.count.textContent = String(ticked);
+          if (this.fill) this.fill.style.setProperty('--pain-ratio', String(ratio));
+          if (!this.message) return;
+          let level = 0;
+          if (ticked > 0) level = 1;
+          if (ratio >= 0.5) level = 2;
+          if (ratio >= 0.8) level = 3;
+          const text = this.message.getAttribute(`data-message-${level}`);
+          if (text && this.message.textContent !== text) this.message.textContent = text;
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Vous vous reconnaissez ?",
+  "tag": "div",
+  "class": "section-pain-points",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "La cliente coche les situations qu'elle vit ; la jauge et le message lui répondent, à côté du produit. N'écrivez que du vécu : aucun chiffre ni promesse médicale."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Vous vous reconnaissez ?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Chaque mois, <em>le même scénario.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction"
+    },
+    {
+      "type": "header",
+      "content": "Messages selon les cases cochées"
+    },
+    {
+      "type": "text",
+      "id": "message_none",
+      "label": "Aucune case",
+      "default": "Cochez ce qui vous ressemble."
+    },
+    {
+      "type": "text",
+      "id": "message_few",
+      "label": "Quelques cases",
+      "default": "Vous n'êtes pas la seule à vivre ça."
+    },
+    {
+      "type": "text",
+      "id": "message_some",
+      "label": "La moitié ou plus",
+      "default": "Ces jours-là reviennent chaque mois. Votre confort aussi devrait."
+    },
+    {
+      "type": "text",
+      "id": "message_most",
+      "label": "Presque toutes",
+      "default": "Vous méritez mieux que de serrer les dents."
+    },
+    {
+      "type": "header",
+      "content": "Produit"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Je veux ma ceinture"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Mention sous la section",
+      "default": "Accessoire de confort, la ceinture ne remplace pas un avis médical."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre (lien interne)",
+      "default": "vous-vous-reconnaissez"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Situation",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Le ventre qui tire dès le réveil."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Vous vous reconnaissez ?",
+      "blocks": [
+        { "type": "point", "settings": { "text": "Le ventre qui tire dès le réveil." } },
+        { "type": "point", "settings": { "text": "Le bas du dos qui lance toute la journée." } },
+        { "type": "point", "settings": { "text": "Serrer les dents en réunion ou en cours." } },
+        { "type": "point", "settings": { "text": "Annuler une sortie pour rester sous la couette." } },
+        { "type": "point", "settings": { "text": "La bouillotte qui refroidit trop vite." } },
+        { "type": "point", "settings": { "text": "Compter les heures jusqu'à ce soir." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
