@@ -6,7 +6,7 @@
         "layout": "full",
         "display_font": "playfair_display_n4",
         "show_drops": true,
-        "eyebrow": "La ceinture chauffante sans fil",
+        "eyebrow": "",
         "heading": "Vos règles, en douceur.",
         "heading_tag": "h1",
         "text": "3 niveaux de chaleur, un massage par vibration et zéro fil. Elle se glisse sous un pull et vous suit toute la journée.",
@@ -100,7 +100,7 @@
         "offer_note_multi": "Une pour vous, une à offrir",
         "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
         "best_label": "Meilleure offre",
-        "perks_multi": "Deux ensembles complets : câbles USB et notices",
+        "perks_multi": "",
         "show_dynamic_checkout": true,
         "show_reassurance": true,
         "show_specs": true,
@@ -215,10 +215,11 @@
             "product": "ceinture-chauffante-regles"
           }
         },
-        "video-3": {
+        "video_cdRwKx": {
           "type": "video",
           "settings": {
-            "tag": "",
+            "video": "shopify://files/videos/hf_20261106_165940_843ec585-6a73-4e74-b3a8-07f4af55c96a.mp4",
+            "tag": "La ceinture VELEA",
             "title": "",
             "text": "",
             "product": "ceinture-chauffante-regles"
@@ -237,7 +238,7 @@
       "block_order": [
         "video-1",
         "video-2",
-        "video-3",
+        "video_cdRwKx",
         "video-4"
       ],
       "settings": {
