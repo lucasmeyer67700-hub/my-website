@@ -461,28 +461,15 @@
     opacity: 0.3;
   }
 
-  /* Film banner: a light, neutral veil only behind the text, so the film
-     keeps its true colours; the second action is a simple underlined link. */
+  /* Film banner: no soft patch behind the text, white words, second action
+     as a simple underlined link. */
   @media screen and (min-width: 750px) {
-    .hero--full.hero--video::after {
-      background:
-        linear-gradient(to top, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.3) 30%, rgb(0 0 0 / 0.08) 50%, rgb(0 0 0 / 0) 62%);
-    }
-
-    /* No soft patch behind the text on the film: the even veil is enough */
     .hero--video .hero__content::before {
       display: none;
     }
 
-    .hero--video.hero--tone-light {
-      & .hero__title,
-      & .hero__text {
-        text-shadow: 0 1px 18px rgb(0 0 0 / 0.18);
-      }
-
-      & .hero__text {
-        color: #fff;
-      }
+    .hero--video.hero--tone-light .hero__title {
+      text-shadow: 0 1px 24px rgb(0 0 0 / 0.22);
     }
   }
 
@@ -541,6 +528,64 @@
   .hero__video::-webkit-media-controls-overlay-play-button {
     display: none !important; /* Safari draws these on top of muted autoplay films */
     -webkit-appearance: none;
+  }
+
+  /*
+    Computers: the banner takes the film's own 16:9 shape (up to the screen
+    height), so nothing of the image is cut. Title and buttons sit centred
+    at the bottom, over the reflection, never over the product.
+  */
+  @media screen and (min-width: 750px) {
+    .hero--full.hero--video:not(.hero--stack-mobile),
+    .hero--full.hero--video.hero--stack-mobile {
+      min-height: 0;
+      height: min(56.25vw, calc(100svh - var(--header-offset, 7rem)));
+    }
+
+    .hero--full.hero--video .hero__inner {
+      align-content: end;
+      justify-items: center;
+      padding-block-end: clamp(1.75rem, 3.5vw, 3.25rem);
+    }
+
+    .hero--full.hero--video .hero__content {
+      justify-items: center;
+      gap: clamp(1rem, 1.6vw, 1.5rem);
+      max-width: 48rem;
+      text-align: center;
+    }
+
+    .hero--full.hero--video .hero__title {
+      font-size: calc(clamp(2.4rem, 1.1rem + 2.7vw, 4.25rem) * var(--font-heading-scale, 1));
+    }
+
+    .hero--full.hero--video .hero__text {
+      display: none;
+    }
+
+    .hero--full.hero--video .hero__actions {
+      justify-content: center;
+    }
+
+    .hero--full.hero--video::after {
+      background: linear-gradient(to top, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0.2) 20%, rgb(0 0 0 / 0) 40%);
+    }
+  }
+
+  /* Tablets held upright (film on top, text below): the whole 16:9 film */
+  @media screen and (min-width: 750px) and (max-width: 1199px) and (max-aspect-ratio: 3 / 2) {
+    .hero--full.hero--video.hero--stack-mobile {
+      height: auto;
+
+      & .hero__backdrop {
+        aspect-ratio: 16 / 9;
+        max-height: none;
+      }
+
+      & .hero__text {
+        display: block;
+      }
+    }
   }
 
   /* Phones: the square film, full width, product centred */
