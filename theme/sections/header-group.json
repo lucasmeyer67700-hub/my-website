@@ -8,33 +8,17 @@
         "shipping": {
           "type": "message",
           "settings": {
-            "text": "Livraison offerte en France, suivi inclus",
-            "link": ""
-          }
-        },
-        "returns": {
-          "type": "message",
-          "settings": {
-            "text": "Satisfaite ou remboursée 30 jours",
-            "link": ""
-          }
-        },
-        "payment": {
-          "type": "message",
-          "settings": {
-            "text": "Paiement 100 % sécurisé",
+            "text": "Livraison offerte en France · Satisfaite ou remboursée 30 jours",
             "link": ""
           }
         }
       },
       "block_order": [
-        "shipping",
-        "returns",
-        "payment"
+        "shipping"
       ],
       "settings": {
         "interval": 3,
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-2"
       }
     },
     "header": {
@@ -65,7 +49,8 @@
         "wordmark_size": 36,
         "wordmark_spacing": 20,
         "wordmark_uppercase": true,
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "layout": "editorial"
       }
     }
   },

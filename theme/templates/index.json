@@ -1,35 +1,22 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "hero_editorial": {
+      "type": "hero-editorial",
       "settings": {
-        "layout": "full",
-        "display_font": "playfair_display_n4",
-        "show_drops": true,
-        "eyebrow": "",
-        "heading": "La chaleur d'une bouillotte. Sans le fil.",
-        "heading_tag": "h1",
-        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d'autonomie.",
-        "video": "shopify://files/videos/velea-hero-ceinture.mp4",
-        "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
-        "photo_width": 70,
-        "photo_crop_x": 75,
-        "image_alt": "La ceinture chauffante VELEA rose, filmée en studio",
-        "height": "large",
-        "image_focus_y": 100,
-        "mobile_stack": true,
-        "content_position": "bottom-left",
-        "text_tone": "light",
-        "overlay_opacity": 30,
-        "image_position": "right",
+        "kicker": "Ceinture chauffante sans fil",
+        "line_1": "La chaleur d’une",
+        "line_2": "bouillotte.",
+        "line_3": "Sans le fil.",
+        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d’autonomie.",
         "product": "ceinture-chauffante-regles",
-        "show_price": false,
-        "fallback_media_position": 2,
+        "show_price": true,
         "button_label": "Voir la ceinture",
         "button_link": "",
         "secondary_label": "Toute la collection",
         "secondary_link": "shopify://collections/tous-nos-produits",
-        "color_scheme": "scheme-3"
+        "video": "shopify://files/videos/velea-hero-ceinture.mp4",
+        "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
+        "caption": "Trois niveaux de chaleur · Quatre modes de vibration"
       }
     },
     "before_after": {
@@ -274,7 +261,7 @@
     }
   },
   "order": [
-    "hero",
+    "hero_editorial",
     "offer",
     "editorial",
     "before_after",

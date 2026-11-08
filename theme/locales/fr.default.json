@@ -30,7 +30,8 @@
     },
     "account": "Mon compte",
     "login": "Se connecter",
-    "greeting": "Bonjour, {{ name }}"
+    "greeting": "Bonjour, {{ name }}",
+    "account_short": "Compte"
   },
   "products": {
     "price_label": "Prix : {{ price }}",
@@ -83,7 +84,8 @@
       "waist": "Tour de taille",
       "hips": "Tour de hanches",
       "how_to": "Comment prendre vos mesures"
-    }
+    },
+    "price": "Prix"
   },
   "cart": {
     "title": "Votre panier",
@@ -211,7 +213,8 @@
     "video_slide": "Vidéo {{ number }} sur {{ total }}",
     "video_shop": "Voir le produit",
     "video_carousel": "Vidéos",
-    "before_after_slider": "Faire glisser pour comparer avant et après"
+    "before_after_slider": "Faire glisser pour comparer avant et après",
+    "hero_scroll": "Défiler"
   },
   "collections": {
     "coming_soon": "Bientôt",

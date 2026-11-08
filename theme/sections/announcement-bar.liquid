@@ -107,9 +107,12 @@
     justify-content: center;
     min-height: 2.5rem;
     padding-block: 0.45rem;
-    font-size: var(--text-sm);
-    letter-spacing: 0.03em;
+    font-size: clamp(0.5625rem, 2.3vw, 0.65rem);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: clamp(0.05em, 0.6vw, 0.1em);
+    text-transform: uppercase;
     text-align: center;
+    color: var(--color-text-muted);
     opacity: 0;
     visibility: hidden;
     transition:
