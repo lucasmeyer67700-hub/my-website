@@ -8,9 +8,9 @@
         "product": "ceinture-chauffante-regles",
         "show_price": true,
         "column_3": "Rose ou blanc.",
-        "line_1": "La chaleur d’une",
-        "line_2": "bouillotte.",
-        "line_3": "Sans le fil.",
+        "line_1": "Vos",
+        "line_2": "Règles,",
+        "line_3": "En douceur.",
         "button_label": "Voir la ceinture",
         "button_link": "",
         "secondary_label": "Toute la collection",
@@ -269,6 +269,7 @@
         "p3",
         "p4"
       ],
+      "disabled": true,
       "settings": {
         "image_main": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
         "caption_main": "Coloris blanc, porté sur le ventre.",
