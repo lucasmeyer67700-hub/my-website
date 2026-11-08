@@ -67,10 +67,18 @@
         "wordmark_uppercase": true,
         "color_scheme": "scheme-1"
       }
+    },
+    "dock": {
+      "type": "floating-dock",
+      "settings": {
+        "brand": "VELEA",
+        "menu": "menu-velea"
+      }
     }
   },
   "order": [
     "announcement",
-    "header"
+    "header",
+    "dock"
   ]
 }

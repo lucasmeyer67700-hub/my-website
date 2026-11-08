@@ -1,0 +1,531 @@
+{%- comment -%}
+  Opening film in the « Nuit rosée » style: the film fills the first screen,
+  a large title written in light dots sits at the top, a thin orbit circles
+  the product with three short labels around it, and a short line and the
+  buttons sit at the bottom.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign hero_video = section.settings.video
+  assign hero_image = section.settings.image
+  if hero_image == blank and hero_video == blank and product != blank
+    assign hero_image = product.featured_media.preview_image
+  endif
+
+  assign primary_link = section.settings.button_link
+  if primary_link == blank and product != blank
+    assign primary_link = product.url
+  endif
+  if primary_link == blank
+    assign primary_link = routes.all_products_collection_url
+  endif
+-%}
+
+<section
+  id="HeroOrbit-{{ section.id }}"
+  class="hero-orbit"
+  style="--hero-orbit-veil: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+  aria-labelledby="HeroOrbitTitle-{{ section.id }}"
+>
+  <div class="hero-orbit__media">
+    {%- if hero_video != blank -%}
+      {%- liquid
+        assign src_1080 = ''
+        assign src_720 = ''
+        for source in hero_video.sources
+          if source.format == 'mp4'
+            if source.height == 1080
+              assign src_1080 = source.url
+            elsif source.height == 720
+              assign src_720 = source.url
+            endif
+          endif
+        endfor
+        if src_1080 == blank
+          for source in hero_video.sources
+            if source.format == 'mp4'
+              assign src_1080 = source.url
+            endif
+          endfor
+        endif
+        if src_720 == blank
+          assign src_720 = src_1080
+        endif
+
+        assign src_phone = src_720
+        assign phone_video = section.settings.video_mobile
+        if phone_video != blank
+          assign phone_best = 0
+          for source in phone_video.sources
+            if source.format == 'mp4' and source.height > phone_best
+              assign phone_best = source.height
+              assign src_phone = source.url
+            endif
+          endfor
+        endif
+      -%}
+      <video-player class="hero-orbit__player" data-autoplay-always>
+        <video
+          class="hero-orbit__video"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          poster="{{ hero_video.preview_image | image_url: width: 1920 }}"
+        >
+          <source src="{{ src_phone }}" type="video/mp4" media="(max-width: 749px)">
+          <source src="{{ src_1080 }}" type="video/mp4">
+        </video>
+      </video-player>
+    {%- elsif hero_image != blank -%}
+      {% render 'responsive-image',
+        image: hero_image,
+        sizes: '100vw',
+        widths: '750, 1100, 1500, 1800, 2200, 2600',
+        eager: true,
+        alt: section.settings.image_alt,
+        class: 'hero-orbit__image'
+      %}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg hero-orbit__image' }}
+    {%- endif -%}
+  </div>
+
+  <div class="hero-orbit__veil" aria-hidden="true"></div>
+
+  <svg class="hero-orbit__ring" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
+    <circle class="hero-orbit__ring-line" cx="500" cy="500" r="496" pathLength="100"></circle>
+    <circle class="hero-orbit__ring-dot" cx="500" cy="4" r="5"></circle>
+  </svg>
+
+  <div class="hero-orbit__top">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="hero-orbit__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="hero-orbit__title nuit-title" id="HeroOrbitTitle-{{ section.id }}" data-scramble>
+      {{- section.settings.heading | escape -}}
+    </h1>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <ul class="hero-orbit__labels" role="list">
+      {%- for block in section.blocks -%}
+        <li class="hero-orbit__label hero-orbit__label--{{ forloop.index }}" style="--label-index: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+          {{- block.settings.text | escape -}}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <div class="hero-orbit__bottom">
+    {%- if section.settings.text != blank -%}
+      <p class="hero-orbit__text">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+    <div class="hero-orbit__actions">
+      {%- if section.settings.button_label != blank -%}
+        <a class="button hero-orbit__button" href="{{ primary_link }}">
+          {{- section.settings.button_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+        <a class="hero-orbit__link" href="{{ section.settings.secondary_link }}">
+          {{- section.settings.secondary_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <span class="hero-orbit__cue" aria-hidden="true"></span>
+</section>
+
+{% stylesheet %}
+  .hero-orbit {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: max(34rem, 100svh);
+    overflow: hidden;
+    isolation: isolate;
+    color: #fff;
+    background-color: #0d070a;
+  }
+
+  .hero-orbit__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero-orbit__player,
+  .hero-orbit__video,
+  .hero-orbit__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-orbit__video::-webkit-media-controls,
+  .hero-orbit__video::-webkit-media-controls-start-playback-button {
+    display: none !important; /* iPhone: no native play button over a background film */
+    -webkit-appearance: none;
+  }
+
+  /* Darker at the top and bottom so the title and buttons always read */
+  .hero-orbit__veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(10 5 8 / 0.78) 0%, rgb(10 5 8 / 0.15) 30%, rgb(10 5 8 / 0.1) 55%, rgb(10 5 8 / 0.82) 100%),
+      radial-gradient(120% 80% at 50% 45%, transparent 40%, rgb(10 5 8 / 0.5) 100%),
+      rgb(10 5 8 / var(--hero-orbit-veil, 0.15));
+    pointer-events: none;
+  }
+
+  /* The thin orbit around the product, drawn once then turning slowly */
+  .hero-orbit__ring {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    z-index: -1;
+    width: min(78vh, 86vw);
+    height: auto;
+    overflow: visible;
+    translate: -50% -46%;
+    pointer-events: none;
+  }
+
+  .hero-orbit__ring-line {
+    fill: none;
+    stroke: rgb(255 255 255 / 0.32);
+    stroke-width: 1.4;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .hero-orbit__ring-dot {
+    fill: #fff;
+    filter: drop-shadow(0 0 6px rgb(255 190 210 / 0.9));
+  }
+
+  .hero-orbit__top {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding-block-start: calc(var(--header-offset, 4.5rem) + clamp(0.75rem, 2vw, 1.75rem));
+    padding-inline: var(--gutter);
+    text-align: center;
+  }
+
+  .hero-orbit__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .hero-orbit__title {
+    max-width: 22ch;
+    margin: 0;
+    font-size: clamp(2.35rem, 1.2rem + 4.6vw, 5.6rem);
+    line-height: 1.04;
+    text-wrap: balance;
+
+    @media screen and (min-width: 990px) {
+      max-width: none;
+      white-space: nowrap;
+    }
+  }
+
+  .hero-orbit__labels {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+    gap: 1rem;
+    margin: 0;
+    padding-inline: var(--gutter);
+    list-style: none;
+  }
+
+  .hero-orbit__label {
+    padding: 0.45rem 0.85rem;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: 999px;
+    font-size: clamp(0.72rem, 0.66rem + 0.25vw, 0.88rem);
+    letter-spacing: 0.04em;
+    color: rgb(255 255 255 / 0.92);
+    background-color: rgb(20 10 15 / 0.32);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+  }
+
+  /* Phones: the three labels stack down the left edge, the product stays clear */
+  @media screen and (max-width: 749px) {
+    .hero-orbit__labels {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hero-orbit__label:nth-child(2) {
+      margin-inline-start: 1.25rem;
+    }
+  }
+
+  .hero-orbit__bottom {
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+    padding-inline: var(--gutter);
+    padding-block-end: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+  }
+
+  .hero-orbit__text {
+    max-width: 34rem;
+    margin: 0;
+    font-size: clamp(0.84rem, 0.8rem + 0.2vw, 0.98rem);
+    line-height: 1.55;
+    color: rgb(255 255 255 / 0.86);
+  }
+
+  .hero-orbit__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .hero-orbit__link {
+    padding-block: 0.6rem;
+    font-size: var(--text-sm);
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.4);
+    text-underline-offset: 0.35em;
+    transition: text-decoration-color var(--duration-base) ease;
+
+    &:hover {
+      text-decoration-color: #fff;
+    }
+  }
+
+  .hero-orbit__cue {
+    position: absolute;
+    inset-inline-end: var(--gutter);
+    inset-block-end: 6rem;
+    width: 1px;
+    height: 3.5rem;
+    background: linear-gradient(rgb(255 255 255 / 0), rgb(255 255 255 / 0.7));
+
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-orbit__ring-line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: hero-orbit-draw 2.4s var(--ease-reveal) 0.3s forwards;
+    }
+
+    .hero-orbit__ring {
+      animation: hero-orbit-turn 60s linear infinite;
+    }
+
+    .hero-orbit__ring-dot {
+      opacity: 0;
+      animation: hero-orbit-fade 1s ease 2.2s forwards;
+    }
+
+    .hero-orbit__label,
+    .hero-orbit__bottom > *,
+    .hero-orbit__eyebrow {
+      opacity: 0;
+      translate: 0 0.75rem;
+      filter: blur(8px);
+      animation: hero-orbit-rise 1.1s var(--ease-reveal) forwards;
+      animation-delay: calc(1s + var(--label-index, 0) * 0.15s);
+    }
+
+    .hero-orbit__eyebrow {
+      animation-delay: 0.2s;
+    }
+
+    .hero-orbit__bottom > * {
+      animation-delay: 1.5s;
+    }
+
+    .hero-orbit__bottom > * + * {
+      animation-delay: 1.7s;
+    }
+
+    .hero-orbit__cue {
+      transform-origin: top;
+      animation: hero-orbit-cue 2.4s var(--ease-out) 2.5s infinite;
+    }
+  }
+
+  @keyframes hero-orbit-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes hero-orbit-turn {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes hero-orbit-fade {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes hero-orbit-rise {
+    to {
+      opacity: 1;
+      translate: none;
+      filter: none;
+    }
+  }
+
+  @keyframes hero-orbit-cue {
+    0% {
+      scale: 1 0;
+    }
+
+    50% {
+      scale: 1 1;
+    }
+
+    100% {
+      scale: 1 1;
+      opacity: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accueil vidéo (orbite)",
+  "tag": "div",
+  "class": "section-hero-orbit",
+  "limit": 1,
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Court : il s'écrit en grandes lettres sur une seule ligne sur ordinateur.",
+      "default": "Vos règles, en douceur."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Phrase en bas"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Vidéo (ordinateur)"
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "Vidéo (téléphone)",
+      "info": "Format carré ou vertical conseillé."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo (si pas de vidéo)"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Description de la photo"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Voile sombre",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Je découvre la ceinture"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Sans lien : la fiche du produit choisi."
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Texte du lien secondaire"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Lien secondaire"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "label",
+      "name": "Étiquette",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Sans fil"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accueil vidéo (orbite)",
+      "blocks": [
+        { "type": "label", "settings": { "text": "3 niveaux de chaleur" } },
+        { "type": "label", "settings": { "text": "Sans fil" } },
+        { "type": "label", "settings": { "text": "4 modes de massage" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

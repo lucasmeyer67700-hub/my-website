@@ -20,7 +20,11 @@
     "loading": "Loading…",
     "required": "required",
     "menu": "Menu",
-    "help_title": "Need help?"
+    "help_title": "Need help?",
+    "dock_navigation": "Floating menu",
+    "dock_cart": "Bag",
+    "slider_previous": "Previous",
+    "slider_next": "Next"
   },
   "header": {
     "cart": "Cart",
@@ -211,7 +215,8 @@
     "video_slide": "Video {{ number }} of {{ total }}",
     "video_shop": "View product",
     "video_carousel": "Videos",
-    "before_after_slider": "Slide to compare before and after"
+    "before_after_slider": "Slide to compare before and after",
+    "rail_placeholder": "Your product"
   },
   "collections": {
     "coming_soon": "Coming soon",

@@ -201,6 +201,47 @@
       },
       {
         "type": "header",
+        "content": "Ambiance « Nuit rosée »"
+      },
+      {
+        "type": "checkbox",
+        "id": "nuit_rosee",
+        "label": "Activer l'ambiance Nuit rosée",
+        "info": "Fond sombre aux dégradés rose, pêche et mauve qui bougent au défilement, cartes en verre dépoli, titres animés et menu flottant en bas. Décochez pour revenir au style clair.",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "nuit_background",
+        "label": "Fond de la page",
+        "default": "#120a0f"
+      },
+      {
+        "type": "color",
+        "id": "nuit_glow_1",
+        "label": "Dégradé 1 (rose)",
+        "default": "#e0577f"
+      },
+      {
+        "type": "color",
+        "id": "nuit_glow_2",
+        "label": "Dégradé 2 (pêche)",
+        "default": "#f29a76"
+      },
+      {
+        "type": "color",
+        "id": "nuit_glow_3",
+        "label": "Dégradé 3 (mauve)",
+        "default": "#8a4fd1"
+      },
+      {
+        "type": "checkbox",
+        "id": "nuit_scramble",
+        "label": "Titres qui se dévoilent lettre par lettre",
+        "default": true
+      },
+      {
+        "type": "header",
         "content": "Photos produits"
       },
       {
@@ -280,9 +321,18 @@
         "id": "buy_now_style",
         "label": "Style du bouton « Acheter maintenant »",
         "options": [
-          { "value": "accent", "label": "Rose, mis en avant" },
-          { "value": "solid", "label": "Brun, comme « Ajouter au panier »" },
-          { "value": "outline", "label": "Contour, discret" }
+          {
+            "value": "accent",
+            "label": "Rose, mis en avant"
+          },
+          {
+            "value": "solid",
+            "label": "Brun, comme « Ajouter au panier »"
+          },
+          {
+            "value": "outline",
+            "label": "Contour, discret"
+          }
         ],
         "default": "accent"
       },
@@ -298,8 +348,14 @@
         "label": "Bouton « Acheter maintenant »",
         "info": "Celui du site mène au paiement, où Shop Pay et Apple Pay sont proposés.",
         "options": [
-          { "value": "theme", "label": "Aux couleurs du site" },
-          { "value": "shopify", "label": "Bouton express Shopify" }
+          {
+            "value": "theme",
+            "label": "Aux couleurs du site"
+          },
+          {
+            "value": "shopify",
+            "label": "Bouton express Shopify"
+          }
         ],
         "default": "theme"
       }

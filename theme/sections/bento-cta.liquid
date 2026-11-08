@@ -1,0 +1,366 @@
+{%- comment -%}
+  Bento grid in the « Nuit rosée » style: glass cards with short lines of
+  facts around a large round button to order.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign cta_link = section.settings.cta_link
+  if cta_link == blank and product != blank
+    assign cta_link = product.url
+  endif
+  if cta_link == blank
+    assign cta_link = routes.all_products_collection_url
+  endif
+-%}
+
+<section class="bento section" aria-labelledby="BentoTitle-{{ section.id }}">
+  <div class="page-width">
+    <div class="section-header bento__header reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2" id="BentoTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="lead bento__lead">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="bento__grid">
+      {%- for block in section.blocks -%}
+        <article class="bento__card bento__card--{{ forloop.index }} reveal" {{ block.shopify_attributes }}>
+          <h3 class="bento__card-title">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.text != blank -%}
+            <p class="bento__card-text">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+          {%- assign rows = block.settings.rows | newline_to_br | split: '<br />' -%}
+          {%- if block.settings.rows != blank -%}
+            <dl class="bento__rows">
+              {%- for row in rows -%}
+                {%- assign parts = row | split: '|' -%}
+                {%- assign row_label = parts[0] | strip -%}
+                {%- assign row_value = parts[1] | strip -%}
+                {%- if row_label != blank -%}
+                  <div class="bento__row">
+                    <dt>{{ row_label | escape }}</dt>
+                    <dd>{{ row_value | escape }}</dd>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </dl>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+
+      <div class="bento__cta reveal">
+        <a class="bento__circle" href="{{ cta_link }}">
+          <svg class="bento__circle-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <circle cx="100" cy="100" r="98"></circle>
+          </svg>
+          <span class="bento__circle-label">{{ section.settings.cta_label | escape }}</span>
+          {%- if section.settings.show_price and product != blank -%}
+            <span class="bento__circle-price">{{ product.price | money }}</span>
+          {%- endif -%}
+        </a>
+        {%- if section.settings.cta_note != blank -%}
+          <p class="bento__cta-note">{{ section.settings.cta_note | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .bento__header {
+    margin-block-end: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  }
+
+  .bento__lead {
+    max-width: 38rem;
+  }
+
+  .bento__grid {
+    display: grid;
+    gap: clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.9fr) minmax(0, 1fr);
+      grid-template-areas:
+        'a c b'
+        'a c d'
+        'e e e';
+    }
+  }
+
+  .bento__card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+    padding: clamp(1.35rem, 1rem + 1.2vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  @media screen and (min-width: 990px) {
+    .bento__card--1 {
+      grid-area: a;
+    }
+
+    .bento__card--2 {
+      grid-area: b;
+    }
+
+    .bento__card--3 {
+      grid-area: d;
+    }
+
+    .bento__card--4 {
+      grid-area: e;
+    }
+
+    .bento__cta {
+      grid-area: c;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .bento__cta {
+      order: 1;
+    }
+
+    .bento__card--1 {
+      order: 0;
+    }
+
+    .bento__card:not(.bento__card--1) {
+      order: 2;
+    }
+  }
+
+  .bento__card-title {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.45rem);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: -0.01em;
+  }
+
+  .bento__card-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .bento__rows {
+    display: grid;
+    margin: auto 0 0;
+  }
+
+  .bento__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-block-start: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+
+    & dt {
+      color: var(--color-text-muted);
+    }
+
+    & dd {
+      margin: 0;
+      text-align: end;
+    }
+  }
+
+  .bento__card--4 .bento__rows {
+    @media screen and (min-width: 750px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+  }
+
+  .bento__cta {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    min-height: 20rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .bento__circle {
+    position: relative;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.35rem;
+    width: clamp(12rem, 10rem + 6vw, 15.5rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background-color 0.5s var(--ease-reveal),
+      scale 0.5s var(--ease-reveal);
+
+    &:hover {
+      background-color: rgb(var(--color-text-rgb) / 0.06);
+      scale: 1.03;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 6px;
+    }
+  }
+
+  .bento__circle-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    & circle {
+      fill: none;
+      stroke: rgb(var(--color-text-rgb) / 0.32);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  .bento__circle-label {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+    letter-spacing: -0.01em;
+  }
+
+  .bento__circle-price {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .bento__cta-note {
+    max-width: 18rem;
+    margin: 0;
+    font-size: var(--text-xs);
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bento__circle-ring circle {
+      stroke-dasharray: 2 6;
+      animation: bento-ring 40s linear infinite;
+      transform-origin: center;
+    }
+
+    .bento__circle:hover .bento__circle-ring circle {
+      stroke: rgb(var(--color-text-rgb) / 0.7);
+    }
+  }
+
+  @keyframes bento-ring {
+    to {
+      rotate: 360deg;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Grille et bouton rond",
+  "tag": "div",
+  "class": "section-bento",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "En détail"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Tout ce qu'elle fait, <em>en un coup d'œil.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton rond",
+      "default": "Je commande"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien du bouton rond",
+      "info": "Sans lien : la fiche du produit choisi."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Afficher le prix sous le bouton",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "Mention sous le bouton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Carte",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Titre de la carte"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte"
+        },
+        {
+          "type": "textarea",
+          "id": "rows",
+          "label": "Lignes",
+          "info": "Une ligne par information : intitulé | valeur. Exemple : Autonomie | environ 2 h"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grille et bouton rond",
+      "blocks": [
+        { "type": "card", "settings": { "title": "La ceinture" } },
+        { "type": "card", "settings": { "title": "Livraison et retours" } },
+        { "type": "card", "settings": { "title": "Dans la boîte" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

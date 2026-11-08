@@ -58,8 +58,9 @@ function parseHTML(html) {
 function swapSection(html, selector) {
   if (!html) return;
   const source = parseHTML(html).querySelector(selector);
-  const target = document.querySelector(selector);
-  if (source && target) target.innerHTML = source.innerHTML;
+  if (!source) return;
+  // Every copy is refreshed (e.g. the bag in the header and in the floating menu).
+  for (const target of document.querySelectorAll(selector)) target.innerHTML = source.innerHTML;
 }
 
 /**

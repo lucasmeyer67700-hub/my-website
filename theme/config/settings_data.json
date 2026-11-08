@@ -168,7 +168,8 @@
       }
     },
     "product_photo_background": "#f7f0f0",
-    "section_curves": true
+    "section_curves": true,
+    "nuit_rosee": true
   },
   "presets": {
     "Douceur": {

@@ -20,7 +20,11 @@
     "loading": "Chargement…",
     "required": "obligatoire",
     "menu": "Menu",
-    "help_title": "Besoin d'aide ?"
+    "help_title": "Besoin d'aide ?",
+    "dock_navigation": "Menu flottant",
+    "dock_cart": "Panier",
+    "slider_previous": "Précédent",
+    "slider_next": "Suivant"
   },
   "header": {
     "cart": "Panier",
@@ -211,7 +215,8 @@
     "video_slide": "Vidéo {{ number }} sur {{ total }}",
     "video_shop": "Voir le produit",
     "video_carousel": "Vidéos",
-    "before_after_slider": "Faire glisser pour comparer avant et après"
+    "before_after_slider": "Faire glisser pour comparer avant et après",
+    "rail_placeholder": "Votre produit"
   },
   "collections": {
     "coming_soon": "Bientôt",

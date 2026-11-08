@@ -1,35 +1,45 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "hero_orbit": {
+      "type": "hero-orbit",
+      "blocks": {
+        "l1": {
+          "type": "label",
+          "settings": {
+            "text": "3 niveaux de chaleur"
+          }
+        },
+        "l2": {
+          "type": "label",
+          "settings": {
+            "text": "Sans fil"
+          }
+        },
+        "l3": {
+          "type": "label",
+          "settings": {
+            "text": "4 modes de massage"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3"
+      ],
       "settings": {
-        "layout": "full",
-        "display_font": "playfair_display_n4",
-        "show_drops": true,
-        "eyebrow": "",
+        "eyebrow": "Ceinture chauffante et massante",
         "heading": "Vos règles, en douceur.",
-        "heading_tag": "h1",
-        "text": "3 niveaux de chaleur, un massage par vibration et zéro fil. Elle se glisse sous un pull et vous suit toute la journée.",
+        "text": "Elle chauffe doucement le bas du ventre, masse par vibration et vous suit toute la journée, sous un pull.",
         "video": "shopify://files/videos/velea-hero-ceinture.mp4",
         "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
-        "photo_width": 70,
-        "photo_crop_x": 75,
         "image_alt": "La ceinture chauffante VELEA rose, filmée en studio",
-        "height": "large",
-        "image_focus_y": 100,
-        "mobile_stack": true,
-        "content_position": "bottom-left",
-        "text_tone": "light",
-        "overlay_opacity": 30,
-        "image_position": "right",
+        "overlay_opacity": 15,
         "product": "ceinture-chauffante-regles",
-        "show_price": false,
-        "fallback_media_position": 2,
         "button_label": "Je découvre la ceinture",
         "button_link": "",
         "secondary_label": "Toute la collection",
-        "secondary_link": "shopify://collections/tous-nos-produits",
-        "color_scheme": "scheme-3"
+        "secondary_link": "shopify://collections/tous-nos-produits"
       }
     },
     "ribbon": {
@@ -143,23 +153,6 @@
         "bundle_price": 65.0,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "La chaleur et la protection, réunies."
-      }
-    },
-    "spotlight": {
-      "type": "product-spotlight",
-      "disabled": true,
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "media_position": 1,
-        "eyebrow": "La ceinture VELEA",
-        "heading": "L'essentiel, <em>rien de superflu.</em>",
-        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
-        "show_specs": true,
-        "specs_limit": 3,
-        "show_box": false,
-        "button_label": "Découvrir la ceinture",
-        "anchor": "",
-        "color_scheme": "scheme-3"
       }
     },
     "videos": {
@@ -301,14 +294,68 @@
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
+    },
+    "bento": {
+      "type": "bento-cta",
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "title": "La ceinture VELEA",
+            "text": "La chaleur d'une bouillotte, sans rester sur le canapé. Elle chauffe le bas du ventre, masse par vibration et fonctionne sans fil.",
+            "rows": "Chaleur | 3 niveaux, de 50 à 60 °C\nMassage | 4 modes, avec ou sans chaleur\nAutonomie | environ 2 h, recharge USB\nSécurité | arrêt automatique à 30 min\nPoids | 142 g, sangle réglable"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "title": "Livraison et retours",
+            "rows": "Livraison | offerte en France, suivi inclus\nRetours | satisfaite ou remboursée 30 jours\nPaiement | 100 % sécurisé"
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "title": "Dans la boîte",
+            "rows": "Ceinture chauffante | 1\nCâble de charge USB | 1\nNotice d'utilisation | 1"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "eyebrow": "En détail",
+        "heading": "Tout ce qu'elle fait, <em>en un coup d'œil.</em>",
+        "text": "",
+        "product": "ceinture-chauffante-regles",
+        "cta_label": "Je commande",
+        "cta_link": "",
+        "show_price": true,
+        "cta_note": "Accessoire de confort, elle ne remplace pas un avis médical."
+      }
+    },
+    "rail": {
+      "type": "product-rail",
+      "settings": {
+        "eyebrow": "La collection",
+        "heading": "Explorez <em>nos essentiels.</em>",
+        "text": "La ceinture pour soulager, la culotte et les serviettes lavables pour remplacer une partie des protections jetables, à votre rythme.",
+        "collection": "tous-nos-produits",
+        "limit": 6,
+        "link_label": "Tout voir"
+      }
     }
   },
   "order": [
-    "hero",
+    "hero_orbit",
     "ribbon",
     "offer",
     "before_after",
-    "spotlight",
+    "bento",
+    "rail",
     "videos",
     "reviews",
     "faq"
