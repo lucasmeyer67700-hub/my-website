@@ -16,7 +16,7 @@
             "perks_multi": "Deux ensembles complets : câbles USB et notices",
             "hide_multi": true,
             "bundle_product": "culotte-menstruelle",
-            "bundle_price": 64.99,
+            "bundle_price": 65,
             "bundle_title": "Ceinture + culotte menstruelle",
             "bundle_note": "La chaleur et la protection, réunies."
           }
@@ -167,7 +167,7 @@
         "banner": "",
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
-        "gallery_fit": "cover",
+        "gallery_fit": "contain",
         "show_media_slots": true,
         "sticky_bar": true,
         "color_scheme": "scheme-3",
@@ -245,7 +245,7 @@
       "type": "related-products",
       "settings": {
         "collection": "tous-nos-produits",
-        "eyebrow": "Le catalogue VELEA",
+        "eyebrow": "",
         "heading": "Vous aimerez <em>aussi.</em>",
         "limit": 3,
         "link_label": "Voir tout le catalogue",
@@ -256,8 +256,8 @@
   "order": [
     "main",
     "video",
+    "related",
     "reviews",
-    "faq",
-    "related"
+    "faq"
   ]
 }

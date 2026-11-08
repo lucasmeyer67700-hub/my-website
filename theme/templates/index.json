@@ -125,8 +125,8 @@
         "specs_limit": 3,
         "details_label": "Voir tous les détails",
         "media_layout": "composition",
-        "mosaic_image_1": "shopify://shop_images/shopify-heating-belt-portrait-4k.png",
-        "mosaic_image_2": "shopify://shop_images/img-mw0fr92r-38a1bc04.png",
+        "mosaic_image_1": "shopify://shop_images/img-mw7nwm1f-dfebf7af.png",
+        "mosaic_image_2": "shopify://shop_images/img-mw7o6bvu-a199fa15.png",
         "mosaic_image_3": "shopify://shop_images/img-mw0foq7q-f78204a6.png",
         "mosaic_image_4": "shopify://shop_images/img-mw0fri01-86a95add.png",
         "gallery_ratio": "1",
@@ -140,7 +140,7 @@
         "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
         "hide_multi": true,
         "bundle_product": "culotte-menstruelle",
-        "bundle_price": 64.99,
+        "bundle_price": 65.0,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "La chaleur et la protection, réunies."
       }
@@ -188,7 +188,7 @@
         "video_cdRwKx": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/Sans son.mov",
+            "video": "shopify://files/videos/SaveDouyin.App_7697929120491064608_hd.mp4",
             "tag": "",
             "title": "",
             "text": "",
@@ -204,7 +204,7 @@
       "settings": {
         "eyebrow": "",
         "heading": "Portée au quotidien, <em>en vrai.</em>",
-        "text": "Faites défiler nos vidéos : la ceinture portée, et le lien pour la retrouver.",
+        "text": "",
         "ratio": "9 / 16",
         "autoplay": true,
         "button_label": "Je choisis ma couleur",
