@@ -6,10 +6,9 @@
         "chapter-constat": {
           "type": "chapter",
           "settings": {
-            "label": "Le constat",
-            "title": "Des jours que l'on connaît <em>par cœur.</em>",
-            "text": "<p>Le ventre qui tire, le bas du dos qui proteste, l'envie de rester sous la couette. Chaque mois, ça revient.</p><p>Alors on ressort la bouillotte. Elle fait du bien, c'est vrai. Mais elle refroidit vite, il faut la remplir à nouveau, et dès qu'on se lève, elle reste sur le canapé. Pendant ce temps, la journée continue.</p>",
-            "image": "shopify://shop_images/Inconfort_dans_une_chambre_chaleureuse.png",
+            "label": "",
+            "title": "",
+            "text": "<p>Nous sommes un groupe de filles qui avons décidé de ne plus subir nos règles en silence.</p><p></p>",
             "image_alt": "Un moment d'inconfort pendant les règles, dans une chambre douce et chaleureuse"
           }
         },
@@ -18,8 +17,7 @@
           "settings": {
             "label": "L'idée",
             "title": "Garder la chaleur, <em>sans s'arrêter.</em>",
-            "text": "<p>On a cherché une chaleur qu'on règle soi-même, qui tient sur le ventre et qui ne vous attache pas à une prise. C'est devenu la ceinture VELEA : rechargeable, sans fil, avec 3 niveaux de chaleur et un massage par vibration.</p><p>Elle s'allume d'un appui et se glisse sous un pull ample. Du canapé au bureau, elle vient avec vous.</p>",
-            "image": "shopify://shop_images/Deballage_d_un_appareil_bien-etre_au_lit.png",
+            "text": "<p>Pendant trop longtemps, les douleurs menstruelles ont été banalisées, les inconforts ignorés et les femmes contraintes de s'adapter à leur cycle. Nous avons décidé que cela devait changer.</p><p>Notre idée est simple : reprendre le contrôle de cette période du mois, briser les tabous et rendre les règles plus faciles à vivre.</p><p></p>",
             "image_alt": "Le déballage de la ceinture chauffante VELEA, sur un lit"
           }
         },
@@ -33,19 +31,10 @@
         "chapter-parti-pris": {
           "type": "chapter",
           "settings": {
-            "label": "Notre parti pris",
-            "title": "Dire les choses <em>telles qu'elles sont.</em>",
-            "text": "<p>La ceinture n'est pas un traitement, et on ne vous la vendra jamais comme ça. C'est un accessoire de confort : une chaleur douce, comme une bouillotte, en plus pratique.</p><p>Les caractéristiques affichées sont celles du fabricant, sans les gonfler. Les précautions d'emploi se lisent avant l'achat, pas seulement dans la boîte. Et si vous hésitez, écrivez-nous : on vous répond par e-mail.</p>"
-          }
-        },
-        "chapter-aujourdhui": {
-          "type": "chapter",
-          "settings": {
-            "label": "Aujourd'hui",
-            "title": "Une jeune marque, <em>trois essentiels.</em>",
-            "text": "<p>VELEA est une jeune marque installée en Alsace. On a commencé par la ceinture chauffante, en rose ou en blanc.</p><p>Depuis, la culotte menstruelle (du XS au XXL, en noir, beige ou rouge) et les serviettes lavables l'ont rejointe, avec la même idée : du confort, des informations claires, et pas de promesses en l'air.</p>",
-            "image": "shopify://shop_images/velea-ceinture-06-coloris.jpg",
-            "image_alt": "La ceinture chauffante VELEA dans ses deux coloris, rose et blanc"
+            "label": "",
+            "title": "",
+            "text": "<p>C'est ainsi qu'est né notre projet : une initiative pensée par des femmes, pour les femmes, avec une ambition commune : proposer des solutions concrètes pour mieux vivre ses règles au quotidien.</p><p>Parce que les règles sont naturelles, mais souffrir en silence ne devrait jamais l'être.</p><p><strong>Notre corps, nos règles, nos choix.</strong></p>",
+            "image_alt": ""
           }
         }
       },
@@ -53,15 +42,13 @@
         "chapter-constat",
         "chapter-idee",
         "quote",
-        "chapter-parti-pris",
-        "chapter-aujourdhui"
+        "chapter-parti-pris"
       ],
       "settings": {
         "eyebrow": "Notre histoire",
-        "heading": "Tout est parti <em>d'une bouillotte.</em>",
-        "lead": "Vous connaissez sûrement ce geste : poser quelque chose de chaud sur son ventre quand les règles font mal. Une bouillotte, un coussin, une main. VELEA est partie de là, avec une question simple : pourquoi faudrait-il rester allongée pour avoir chaud ?",
-        "signature": "VELEA, pour des règles un peu plus douces.",
-        "image": "shopify://shop_images/Detente_chaleureuse_avec_ceinture_chauffante_rose.png",
+        "heading": "<em>Qui sommes-nous ?</em>",
+        "lead": "",
+        "signature": "",
         "image_alt": "Un moment de détente avec la ceinture chauffante VELEA rose",
         "image_badge": "Chaleur douce, sans fil",
         "gradient_start": "#f9eeef",
@@ -72,49 +59,9 @@
     },
     "commitments": {
       "type": "benefits",
-      "blocks": {
-        "facts": {
-          "type": "benefit",
-          "settings": {
-            "icon": "info",
-            "title": "Des informations claires",
-            "text": "Les caractéristiques affichées sont celles du fabricant, telles quelles, sans les embellir."
-          }
-        },
-        "safety": {
-          "type": "benefit",
-          "settings": {
-            "icon": "shield",
-            "title": "Votre sécurité d'abord",
-            "text": "Mode d'emploi et précautions sont consultables avant l'achat, pas seulement dans la boîte."
-          }
-        },
-        "reviews": {
-          "type": "benefit",
-          "settings": {
-            "icon": "check",
-            "title": "Aucun faux avis",
-            "text": "Les avis publiés sur ce site viendront uniquement de vraies clientes."
-          }
-        },
-        "listening": {
-          "type": "benefit",
-          "settings": {
-            "icon": "chat",
-            "title": "Une vraie écoute",
-            "text": "Une question avant ou après votre commande ? Écrivez-nous, on vous répond."
-          }
-        }
-      },
-      "block_order": [
-        "facts",
-        "safety",
-        "reviews",
-        "listening"
-      ],
       "settings": {
-        "eyebrow": "Nos engagements",
-        "heading": "Ce qui nous guide",
+        "eyebrow": "",
+        "heading": "",
         "text": "",
         "style": "cards",
         "columns": 4,

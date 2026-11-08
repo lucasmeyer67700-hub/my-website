@@ -38,6 +38,8 @@
       "settings": {
         "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
         "text_tone": "dark",
+        "image_position": "top",
+        "text_side": "left",
         "eyebrow": "",
         "heading": "La chaleur et la protection, <em>ensemble.</em>",
         "product": "ceinture-chauffante-regles",
@@ -46,17 +48,6 @@
         "button_label": "Composer mon pack",
         "button_link": "",
         "show_price": false
-      }
-    },
-    "statement": {
-      "type": "brand-statement",
-      "settings": {
-        "eyebrow": "Qui sommes-nous ?",
-        "heading": "",
-        "text": "<p>Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement.</p>",
-        "image": "shopify://shop_images/equipevelea.png",
-        "button_label": "Notre histoire",
-        "button_link": "shopify://pages/notre-approche"
       }
     },
     "before_after": {
@@ -68,7 +59,7 @@
         "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
         "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
         "label_before": "Avant",
-        "label_after": "Avec VELEA",
+        "label_after": "Après",
         "ratio": "3 / 2",
         "start": 50,
         "product": "ceinture-chauffante-regles",
@@ -127,6 +118,17 @@
         "button_link": "shopify://products/ceinture-chauffante-regles",
         "anchor": "videos",
         "color_scheme": "scheme-3"
+      }
+    },
+    "statement": {
+      "type": "brand-statement",
+      "settings": {
+        "eyebrow": "Qui sommes-nous ?",
+        "heading": "",
+        "text": "<p>Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement.</p>",
+        "image": "shopify://shop_images/equipevelea.png",
+        "button_label": "Notre histoire",
+        "button_link": "shopify://pages/notre-approche"
       }
     },
     "reviews": {
@@ -327,9 +329,9 @@
     "hero_fluid",
     "shop_row",
     "pack_banner",
-    "statement",
     "before_after",
     "videos",
+    "statement",
     "reviews",
     "faq",
     "hero_editorial",

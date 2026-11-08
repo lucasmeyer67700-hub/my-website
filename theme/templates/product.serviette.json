@@ -29,7 +29,6 @@
         },
         "delivery": {
           "type": "delivery",
-          "disabled": true,
           "settings": {
             "right_text": "",
             "left_text": "",
@@ -123,32 +122,20 @@
             "show_returns_offer": true,
             "open": false
           }
-        },
-        "hygiene": {
-          "type": "accordion",
-          "settings": {
-            "title": "Hygiène et retours",
-            "icon": "none",
-            "source": "custom",
-            "content": "<p>Pour des raisons d'hygiène et de protection de la santé, des serviettes dont l'emballage a été ouvert après la livraison ne peuvent être ni reprises ni échangées. Conformément à l'article L221-28, 5° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens descellés par le consommateur après la livraison et qui ne peuvent être renvoyés pour des raisons d'hygiène ou de protection de la santé.</p><p>Tant que l'emballage n'a pas été ouvert, vous disposez de 14 jours après la réception pour vous rétracter, selon notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour et de remboursement\">Politique de retour</a>.</p><p>Si vos serviettes arrivent abîmées, défectueuses ou ne correspondent pas à votre commande, vous restez protégée par la garantie légale de conformité : écrivez-nous avec une photo.</p>",
-            "show_returns_offer": false,
-            "open": false
-          }
         }
       },
       "block_order": [
         "variant",
         "inventory",
         "buy",
-        "trust",
         "delivery",
+        "trust",
         "description",
         "benefits",
         "specs",
         "usage",
         "care",
         "box",
-        "hygiene",
         "safety"
       ],
       "settings": {
@@ -171,7 +158,7 @@
         "show_breakdown": true,
         "keywords": "chaleur\nconfort\nbatterie\nlivraison",
         "per_page": 5,
-        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
+        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. La mention « Évaluation vérifiée » signifie que nous avons retrouvé la commande correspondante sur notre boutique. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
         "color_scheme": "scheme-1"
       }
     },
@@ -247,30 +234,18 @@
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",
-        "heading": "Avant de commander",
+        "heading": "Avant de <em>commander.</em>",
         "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
         "link_label": "Nous contacter",
         "link": "/pages/contact",
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
-    },
-    "related": {
-      "type": "related-products",
-      "settings": {
-        "collection": "tous-nos-produits",
-        "eyebrow": "Le catalogue VELEA",
-        "heading": "Le reste de la collection",
-        "limit": 3,
-        "link_label": "Voir tout le catalogue",
-        "color_scheme": "scheme-2"
-      }
     }
   },
   "order": [
     "main",
     "reviews",
-    "faq",
-    "related"
+    "faq"
   ]
 }

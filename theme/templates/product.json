@@ -32,6 +32,13 @@
             "show_dynamic_checkout": true
           }
         },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_lines": false,
+            "show_payment_icons": true
+          }
+        },
         "guarantee": {
           "type": "guarantee",
           "disabled": true,
@@ -49,13 +56,6 @@
             "right_text": "",
             "left_text": "",
             "show_flag": true
-          }
-        },
-        "trust": {
-          "type": "trust",
-          "settings": {
-            "show_lines": false,
-            "show_payment_icons": true
           }
         },
         "benefits": {
@@ -80,6 +80,7 @@
             "icon": "none",
             "source": "specs",
             "content": "",
+            "size_rows": "",
             "show_returns_offer": true,
             "open": false
           }
@@ -91,6 +92,7 @@
             "icon": "none",
             "source": "usage_precautions",
             "content": "",
+            "size_rows": "",
             "show_returns_offer": true,
             "open": false
           }
@@ -102,6 +104,7 @@
             "icon": "none",
             "source": "box",
             "content": "",
+            "size_rows": "",
             "show_returns_offer": true,
             "open": false
           }
@@ -113,6 +116,7 @@
             "icon": "none",
             "source": "safety_info",
             "content": "",
+            "size_rows": "",
             "show_returns_offer": true,
             "open": false
           }
@@ -121,14 +125,14 @@
           "type": "color_photo",
           "settings": {
             "color": "Blanc",
-            "image": "shopify://shop_images/velea-ceinture-blanche-portee.webp"
+            "image": "shopify://shop_images/img-mw85unfu-9a525266.png"
           }
         },
         "color_photo_blanc_2": {
           "type": "color_photo",
           "settings": {
             "color": "Blanc",
-            "image": "shopify://shop_images/velea-ceinture-blanche-face.webp"
+            "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
           }
         },
         "color_photo_blanc_3": {
@@ -168,10 +172,10 @@
         "price_badge": "Nouveauté",
         "gallery_ratio": "1",
         "gallery_fit": "contain",
+        "media_color": "Rose",
         "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-3",
-        "media_color": "Rose"
+        "color_scheme": "scheme-3"
       }
     },
     "video": {
@@ -185,6 +189,17 @@
         "button_label": "Choisir mon coloris",
         "button_link": "",
         "color_scheme": "scheme-3"
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "collection": "tous-nos-produits",
+        "eyebrow": "",
+        "heading": "Le reste de la collection",
+        "limit": 3,
+        "link_label": "Voir tout le catalogue",
+        "color_scheme": "scheme-2"
       }
     },
     "reviews": {
@@ -239,17 +254,6 @@
         "link": "/pages/contact",
         "anchor": "faq",
         "color_scheme": "scheme-3"
-      }
-    },
-    "related": {
-      "type": "related-products",
-      "settings": {
-        "collection": "tous-nos-produits",
-        "eyebrow": "",
-        "heading": "Le reste de la collection",
-        "limit": 3,
-        "link_label": "Voir tout le catalogue",
-        "color_scheme": "scheme-2"
       }
     }
   },
