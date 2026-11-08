@@ -1,0 +1,232 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "variant": {
+          "type": "variant_picker",
+          "settings": {
+            "offer_heading": "",
+            "unit_label": "",
+            "offer_note_single": "",
+            "offer_note_multi": "",
+            "multi_hint": "",
+            "best_label": "",
+            "perks_single": "",
+            "perks_multi": ""
+          }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true
+          }
+        },
+        "delivery": {
+          "type": "delivery",
+          "disabled": true,
+          "settings": {
+            "right_text": "",
+            "left_text": "",
+            "show_flag": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_lines": false,
+            "show_payment_icons": true
+          }
+        },
+        "description": {
+          "type": "accordion",
+          "settings": {
+            "title": "Description",
+            "icon": "none",
+            "source": "description",
+            "content": "",
+            "show_returns_offer": false,
+            "open": true
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "heading": "Au quotidien",
+            "icon_1": "feather",
+            "title_1": "Au beurre de karité",
+            "text_1": "Une huile pour le corps, au parfum frais.",
+            "icon_2": "check",
+            "title_2": "Facile à appliquer",
+            "text_2": "Quelques gouttes, massées sur une peau propre.",
+            "icon_3": "box",
+            "title_3": "Flacon de 100 ml",
+            "text_3": "Un format à garder dans la salle de bain ou à emporter."
+          }
+        },
+        "specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "Caractéristiques",
+            "icon": "none",
+            "source": "specs",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "usage": {
+          "type": "accordion",
+          "settings": {
+            "title": "Comment l'utiliser",
+            "icon": "none",
+            "source": "usage_precautions",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "box": {
+          "type": "accordion",
+          "settings": {
+            "title": "Contenu du colis",
+            "icon": "none",
+            "source": "box",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "safety": {
+          "type": "accordion",
+          "settings": {
+            "title": "Informations fabricant et sécurité",
+            "icon": "none",
+            "source": "safety_info",
+            "content": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "hygiene": {
+          "type": "accordion",
+          "settings": {
+            "title": "Hygiène et retours",
+            "icon": "none",
+            "source": "custom",
+            "content": "<p>Pour des raisons d'hygiène et de protection de la santé, un produit cosmétique dont l'emballage a été ouvert après la livraison ne peut être ni repris ni échangé. Conformément à l'article L221-28, 5° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens descellés par le consommateur après la livraison et qui ne peuvent être renvoyés pour des raisons d'hygiène ou de protection de la santé.</p><p>Tant que l'emballage n'a pas été ouvert, vous disposez de 14 jours après la réception pour vous rétracter, selon notre <a href=\"/pages/politique-de-retour\" title=\"Politique de retour et de remboursement\">Politique de retour</a>.</p><p>Si votre flacon arrive abîmé, défectueux ou ne correspond pas à votre commande, vous restez protégée par la garantie légale de conformité : écrivez-nous avec une photo.</p>",
+            "show_returns_offer": false,
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "variant",
+        "inventory",
+        "buy",
+        "trust",
+        "delivery",
+        "description",
+        "benefits",
+        "specs",
+        "usage",
+        "box",
+        "hygiene",
+        "safety"
+      ],
+      "settings": {
+        "banner": "",
+        "price_badge": "Nouveauté",
+        "gallery_ratio": "1",
+        "gallery_fit": "contain",
+        "show_media_slots": true,
+        "sticky_bar": true,
+        "color_scheme": "scheme-3"
+      }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "heading": "Avis",
+        "layout": "carousel",
+        "band_limit": 10,
+        "band_speed": 7,
+        "show_breakdown": true,
+        "keywords": "",
+        "per_page": 5,
+        "about": "<p>Les avis sont publiés par des clientes VELEA, avec leur accord. Les avis ne font l'objet d'aucune contrepartie. Par défaut, ils sont classés du plus récent au plus ancien.</p>",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "use": {
+          "type": "question",
+          "settings": {
+            "question": "Comment utiliser l'huile ?",
+            "answer": "<p>Versez quelques gouttes dans le creux de la main et massez sur une peau propre, jusqu'à ce que l'huile soit absorbée.</p>"
+          }
+        },
+        "size": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle est la contenance du flacon ?",
+            "answer": "<p>Le flacon contient 100 ml (3,38 fl oz).</p>"
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "Puis-je la retourner ?",
+            "answer": "<p>Oui, tant que l'emballage n'a pas été ouvert : vous avez 14 jours après la réception. Un produit ouvert ne peut pas être repris, pour des raisons d'hygiène. Les détails sont dans notre <a href=\"/pages/politique-de-retour\">Politique de retour</a>.</p>"
+          }
+        },
+        "shipping": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les délais de livraison ?",
+            "answer": "<p>La livraison est offerte en France, en 7 à 14 jours ouvrés, avec un numéro de suivi.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "use",
+        "size",
+        "shipping",
+        "returns"
+      ],
+      "settings": {
+        "eyebrow": "Questions fréquentes",
+        "heading": "Avant de commander",
+        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
+        "link_label": "Nous contacter",
+        "link": "/pages/contact",
+        "anchor": "faq",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "collection": "tous-nos-produits",
+        "eyebrow": "Le catalogue VELEA",
+        "heading": "Le reste de la collection",
+        "limit": 3,
+        "link_label": "Voir tout le catalogue",
+        "color_scheme": "scheme-2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "faq",
+    "related"
+  ]
+}
