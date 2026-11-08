@@ -38,7 +38,7 @@
       "settings": {
         "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
         "text_tone": "dark",
-        "eyebrow": "Le pack",
+        "eyebrow": "",
         "heading": "La chaleur et la protection, <em>ensemble.</em>",
         "product": "ceinture-chauffante-regles",
         "card_title": "Ceinture + culotte menstruelle",
@@ -54,19 +54,19 @@
         "s1": {
           "type": "point",
           "settings": {
-            "text": "Une ceinture chauffante, sans fil ni prise"
+            "text": ""
           }
         },
         "s2": {
           "type": "point",
           "settings": {
-            "text": "Des protections lavables, à adopter à votre rythme"
+            "text": "Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement."
           }
         },
         "s3": {
           "type": "point",
           "settings": {
-            "text": "Livraison offerte en France, satisfaite ou remboursée 30 jours"
+            "text": ""
           }
         }
       },
@@ -76,9 +76,9 @@
         "s3"
       ],
       "settings": {
-        "eyebrow": "",
-        "heading": "Une jeune marque qui veut rendre les jours de règles <em>un peu plus simples</em>, avec des objets pensés pour le quotidien.",
-        "image": "shopify://shop_images/img-mvv1elwo-f7970a65.png",
+        "eyebrow": "Qui sommes-nous ?",
+        "heading": "",
+        "image": "shopify://shop_images/equipevelea.png",
         "button_label": "Notre histoire",
         "button_link": "shopify://pages/notre-approche"
       }
