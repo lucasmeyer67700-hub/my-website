@@ -14,7 +14,8 @@
 
   Photos can be replaced for the catalogue only (theme setting « Photos du
   catalogue »: product | colour | file in Content > Files; * for the main
-  photo). A colour photo shows when that colour tab is chosen.
+  photo). A colour photo shows when that colour tab is chosen; « survol »
+  sets the photo shown on hover.
 
   @example
   {% render 'product-tile', product: product %}
@@ -59,9 +60,10 @@
 
   # Catalogue photo overrides (theme setting), never the product itself
   assign card_image = product.featured_media.preview_image
+  assign hover_image = product.media[1].preview_image
   assign photo_list = settings.card_photos
   if photo_list == nil
-    assign photo_list = 'ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-fond-rose.jpg ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg'
+    assign photo_list = 'ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-seule.jpg ; ceinture-chauffante-regles | survol | velea-ceinture-rose-seule.jpg ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; culotte-menstruelle | survol | velea-culotte-details.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg ; serviettes-menstruelles-lavables | survol | velea-serviette-details.jpg'
   endif
   assign photo_lines = photo_list | newline_to_br | replace: ';', '<br />' | split: '<br />'
   assign color_photo_count = 0
@@ -82,6 +84,8 @@
     endif
     if line_color == '*'
       assign card_image = line_image
+    elsif line_color == 'survol'
+      assign hover_image = line_image
     else
       assign color_photo_count = color_photo_count | plus: 1
     endif
@@ -108,17 +112,23 @@
         alt: '',
         class: 'tile__image'
       %}
-      {%- if product.media.size > 1 -%}
-        {% render 'responsive-image',
-          image: product.media[1].preview_image,
-          sizes: image_sizes,
-          widths: '360, 540, 720, 900, 1080',
-          decorative: true,
-          class: 'tile__image tile__image--second'
-        %}
-      {%- endif -%}
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg tile__image' }}
+    {%- endif -%}
+    {%- if hover_image -%}
+      {%- liquid
+        assign hover_class = 'tile__image tile__image--second'
+        if hover_image.aspect_ratio > 1.05
+          assign hover_class = hover_class | append: ' tile__image--whole'
+        endif
+      -%}
+      {% render 'responsive-image',
+        image: hover_image,
+        sizes: image_sizes,
+        widths: '360, 540, 720, 900, 1080',
+        decorative: true,
+        class: hover_class
+      %}
     {%- endif -%}
     {%- comment -%} One photo per colour that has its own (shown by the colour tabs) {%- endcomment -%}
     {%- if color_photo_count > 0 -%}
@@ -128,16 +138,22 @@
         {%- assign line_handle = parts[0] | strip -%}
         {%- assign line_color = parts[1] | strip -%}
         {%- assign line_file = parts[2] | strip -%}
-        {%- if line_handle != product.handle or line_color == '*' -%}{%- continue -%}{%- endif -%}
+        {%- if line_handle != product.handle or line_color == '*' or line_color == 'survol' -%}{%- continue -%}{%- endif -%}
         {%- assign line_image = images[line_file] -%}
         {%- if line_image == blank -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign color_class = 'tile__image'
+          if line_image.aspect_ratio > 1.05
+            assign color_class = 'tile__image tile__image--whole'
+          endif
+        -%}
         <span class="tile__color-photo{% if line_color == first.options[color_index] %} is-shown{% endif %}" data-color-photo="{{ line_color | escape }}">
           {% render 'responsive-image',
             image: line_image,
             sizes: image_sizes,
             widths: '360, 540, 720, 900, 1080',
             decorative: true,
-            class: 'tile__image'
+            class: color_class
           %}
         </span>
       {%- endfor -%}
@@ -258,9 +274,14 @@
     }
   }
 
-  /* With colour photos, no second photo on hover (it would show the other colour) */
-  .tile--color-photos .tile__image--second {
+  /* While a colour's own photo shows, no hover photo (it is of the other colour) */
+  .tile:has(.tile__color-photo.is-shown) .tile__image--second {
     display: none;
+  }
+
+  /* A wide product photo (belt laid flat) shown whole on its pink ground */
+  .tile__image.tile__image--whole {
+    object-fit: contain;
   }
 
   .tile__media--contain .tile__image:not(.tile__image--second) {
