@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="{% if settings.nuit_rosee %}{{ settings.nuit_background }}{% else %}#F3DFE2{% endif %}">
+    <meta name="theme-color" content="#F3DFE2">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
@@ -41,19 +41,6 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
-    {%- if settings.nuit_rosee -%}
-      {{ 'nuit.css' | asset_url | stylesheet_tag }}
-      <script src="{{ 'nuit.js' | asset_url }}" defer="defer"></script>
-      {% style %}
-        :root {
-          --nuit-bg: {{ settings.nuit_background }};
-          --nuit-bg-rgb: {{ settings.nuit_background.rgb }};
-          --nuit-glow-1: {{ settings.nuit_glow_1 }};
-          --nuit-glow-2: {{ settings.nuit_glow_2 }};
-          --nuit-glow-3: {{ settings.nuit_glow_3 }};
-        }
-      {% endstyle %}
-    {%- endif -%}
 
     <script>
       document.documentElement.classList.replace('no-js', 'js');
@@ -100,25 +87,10 @@
     {% if settings.animations_reveal %}
       data-reveal-enabled
     {% endif %}
-    {% if settings.section_curves and settings.nuit_rosee == false %}
+    {% if settings.section_curves %}
       data-section-curves
     {% endif %}
-    {% if settings.nuit_rosee %}
-      data-nuit
-      {% if settings.nuit_scramble %}
-        data-scramble-titles
-      {% endif %}
-    {% endif %}
   >
-    {%- if settings.nuit_rosee -%}
-      <div class="nuit-ambient" aria-hidden="true">
-        <span class="nuit-ambient__glow nuit-ambient__glow--1"></span>
-        <span class="nuit-ambient__glow nuit-ambient__glow--2"></span>
-        <span class="nuit-ambient__glow nuit-ambient__glow--3"></span>
-        <span class="nuit-ambient__glow nuit-ambient__glow--4"></span>
-        <span class="nuit-ambient__grain"></span>
-      </div>
-    {%- endif -%}
     <a class="skip-link" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
 
     {% sections 'header-group' %}
