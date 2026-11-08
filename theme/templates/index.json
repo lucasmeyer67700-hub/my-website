@@ -3,11 +3,11 @@
     "hero_fluid": {
       "type": "hero-fluid",
       "settings": {
-        "column_1": "VELEA\nCeinture chauffante\net massante, sans fil.",
-        "column_2": "Trois niveaux de chaleur,\nquatre modes de vibration,\nenviron deux heures d’autonomie.",
+        "column_1": "VELEA",
+        "column_2": "",
         "product": "ceinture-chauffante-regles",
-        "show_price": true,
-        "column_3": "Rose ou blanc.",
+        "show_price": false,
+        "column_3": "",
         "line_1": "Vos",
         "line_2": "Règles,",
         "line_3": "En douceur.",
