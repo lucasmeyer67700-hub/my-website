@@ -50,34 +50,12 @@
     },
     "statement": {
       "type": "brand-statement",
-      "blocks": {
-        "s1": {
-          "type": "point",
-          "settings": {
-            "text": ""
-          }
-        },
-        "s2": {
-          "type": "point",
-          "settings": {
-            "text": "Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement."
-          }
-        },
-        "s3": {
-          "type": "point",
-          "settings": {
-            "text": ""
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
         "eyebrow": "Qui sommes-nous ?",
         "heading": "",
+        "text": "<p>Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement.</p>",
         "image": "shopify://shop_images/equipevelea.png",
         "button_label": "Notre histoire",
         "button_link": "shopify://pages/notre-approche"
