@@ -19,7 +19,8 @@
         "color_2": "#f2c3cc",
         "color_3": "#f1b29e",
         "color_4": "#d98da6",
-        "color_5": "#c9727e"
+        "color_5": "#c9727e",
+        "explode": true
       }
     },
     "hero_editorial": {

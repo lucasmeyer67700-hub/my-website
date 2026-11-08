@@ -92,8 +92,10 @@
       this.time = performance.now();
       this.visible = true;
 
-      // A first breath of ink, so the page is alive before anyone moves.
-      this.burst(3);
+      // Arrival: a burst of colour from the centre of the page (theme
+      // setting), otherwise a first breath of ink.
+      if (this.hasAttribute('data-explode')) this.explode();
+      else this.burst(3);
 
       this.observer = new IntersectionObserver(([entry]) => {
         this.visible = entry.isIntersecting;
@@ -395,6 +397,36 @@
       gl.uniform3f(splat.uniforms.color, color[0], color[1], color[2]);
       this.blit(this.dye.write);
       this.dye.swap();
+    }
+
+    /**
+     * Colour bursting out from one point, in three quick waves: every rose
+     * of the palette shoots outwards, then curls and settles.
+     */
+    explode() {
+      const cx = 0.62;
+      const cy = 0.55;
+      const waves = [
+        { delay: 120, count: 14, speed: 3600, strength: 0.75, spread: 0.02 },
+        { delay: 360, count: 10, speed: 2600, strength: 0.55, spread: 0.06 },
+        { delay: 640, count: 8, speed: 1700, strength: 0.4, spread: 0.1 },
+      ];
+      for (const wave of waves) {
+        setTimeout(() => {
+          if (!this.gl) return;
+          for (let i = 0; i < wave.count; i++) {
+            const angle = (i / wave.count) * Math.PI * 2 + Math.random() * 0.5;
+            const reach = wave.spread * (0.5 + Math.random());
+            const x = cx + Math.cos(angle) * reach;
+            const y = cy + Math.sin(angle) * reach * (this.canvas.width / this.canvas.height);
+            const speed = wave.speed * (0.75 + Math.random() * 0.5);
+            this.colorIndex = (i / wave.count) * this.palette.length;
+            this.splat(x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, this.nextColor(wave.strength));
+          }
+        }, wave.delay);
+      }
+      // Keep the drifting ribbon away until the burst has settled.
+      this.lastInput = performance.now() + 2500;
     }
 
     burst(count) {

@@ -33,6 +33,9 @@
 
 <hero-fluid
   class="hero-fl"
+  {% if section.settings.explode %}
+    data-explode
+  {% endif %}
   id="HeroFluid-{{ section.id }}"
   style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }};"
 >
@@ -496,6 +499,12 @@
     {
       "type": "header",
       "content": "Couleurs de l'encre"
+    },
+    {
+      "type": "checkbox",
+      "id": "explode",
+      "label": "Explosion de couleur à l'arrivée",
+      "default": true
     },
     {
       "type": "color",
