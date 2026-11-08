@@ -89,9 +89,11 @@
     "before_after": {
       "type": "before-after",
       "settings": {
-        "eyebrow": "Avant / après",
+        "eyebrow": "",
         "heading": "Faites glisser, <em>sentez la différence.</em>",
         "text": "",
+        "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
+        "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
         "label_before": "Avant",
         "label_after": "Avec VELEA",
         "ratio": "3 / 2",
@@ -99,7 +101,7 @@
         "product": "ceinture-chauffante-regles",
         "button_label": "Je découvre la ceinture",
         "button_link": "",
-        "note": "Accessoire de confort, la ceinture ne remplace pas un avis médical.",
+        "note": "",
         "color_scheme": "scheme-2"
       }
     },
@@ -140,7 +142,7 @@
         "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
         "hide_multi": true,
         "bundle_product": "culotte-menstruelle",
-        "bundle_price": 65.0,
+        "bundle_price": 65,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "La chaleur et la protection, réunies."
       }
