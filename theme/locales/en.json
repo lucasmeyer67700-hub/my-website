@@ -20,7 +20,9 @@
     "loading": "Loading…",
     "required": "required",
     "menu": "Menu",
-    "help_title": "Need help?"
+    "help_title": "Need help?",
+    "slider_previous": "Previous",
+    "slider_next": "Next"
   },
   "header": {
     "cart": "Cart",
@@ -85,7 +87,11 @@
       "hips": "Hips",
       "how_to": "How to measure"
     },
-    "price": "Price"
+    "price": "Price",
+    "tile_save": "Save {{ amount }}",
+    "tile_new": "New",
+    "tile_add": "Add to bag",
+    "tile_choose": "Choose"
   },
   "cart": {
     "title": "Your cart",

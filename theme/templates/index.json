@@ -47,7 +47,7 @@
       "type": "before-after",
       "settings": {
         "eyebrow": "",
-        "heading": "Avant, après.",
+        "heading": "Avant, <em>après.</em>",
         "text": "Faites glisser pour comparer.",
         "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
         "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
@@ -102,7 +102,8 @@
         "bundle_price": 65,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix."
-      }
+      },
+      "disabled": true
     },
     "spotlight": {
       "type": "product-spotlight",
@@ -162,12 +163,12 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "En vidéo",
+        "heading": "La ceinture, <em>en vrai.</em>",
         "text": "Sous un pull, au bureau, sur le canapé : la ceinture en situation.",
         "ratio": "9 / 16",
         "autoplay": true,
         "button_label": "Choisir ma couleur",
-        "button_link": "/#offre",
+        "button_link": "shopify://products/ceinture-chauffante-regles",
         "anchor": "videos",
         "color_scheme": "scheme-3"
       }
@@ -177,7 +178,7 @@
       "settings": {
         "product": "ceinture-chauffante-regles",
         "eyebrow": "",
-        "heading": "Avis clientes",
+        "heading": "Ce qu'elles <em>en disent.</em>",
         "limit": 10,
         "speed": 7,
         "color_scheme": "scheme-2"
@@ -223,7 +224,7 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "Questions fréquentes",
+        "heading": "Vos <em>questions.</em>",
         "text": "",
         "link_label": "Toutes les questions",
         "link": "/pages/faq",
@@ -283,17 +284,80 @@
         "button_link": "shopify://products/ceinture-chauffante-regles",
         "color_scheme": "scheme-1"
       }
+    },
+    "shop_row": {
+      "type": "shop-carousel",
+      "settings": {
+        "heading": "Prendre soin de soi, <em>même ces jours-là.</em>",
+        "collection": "tous-nos-produits",
+        "limit": 8,
+        "link_label": "Tout voir",
+        "link": ""
+      }
+    },
+    "pack_banner": {
+      "type": "feature-banner",
+      "settings": {
+        "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
+        "eyebrow": "Le pack",
+        "heading": "La chaleur et la protection, <em>ensemble.</em>",
+        "product": "ceinture-chauffante-regles",
+        "card_title": "Ceinture + culotte menstruelle",
+        "card_text": "La ceinture chauffante et une culotte menstruelle au choix. La remise du pack s'applique dans le panier.",
+        "button_label": "Composer mon pack",
+        "button_link": "",
+        "show_price": false,
+        "text_tone": "dark"
+      }
+    },
+    "statement": {
+      "type": "brand-statement",
+      "blocks": {
+        "s1": {
+          "type": "point",
+          "settings": {
+            "text": "Une ceinture chauffante, sans fil ni prise"
+          }
+        },
+        "s2": {
+          "type": "point",
+          "settings": {
+            "text": "Des protections lavables, à adopter à votre rythme"
+          }
+        },
+        "s3": {
+          "type": "point",
+          "settings": {
+            "text": "Livraison offerte en France, satisfaite ou remboursée 30 jours"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "eyebrow": "Nous sommes VELEA",
+        "heading": "Une jeune marque qui veut rendre les jours de règles <em>un peu plus simples</em>, avec des objets pensés pour le quotidien.",
+        "image": "shopify://shop_images/img-mvv1elwo-f7970a65.png",
+        "button_label": "Notre histoire",
+        "button_link": "shopify://pages/notre-approche"
+      }
     }
   },
   "order": [
     "hero_fluid",
+    "shop_row",
+    "pack_banner",
+    "statement",
+    "before_after",
+    "videos",
+    "reviews",
+    "faq",
     "hero_editorial",
     "offer",
     "editorial",
-    "before_after",
-    "spotlight",
-    "videos",
-    "reviews",
-    "faq"
+    "spotlight"
   ]
 }

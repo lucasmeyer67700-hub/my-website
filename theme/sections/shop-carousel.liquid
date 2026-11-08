@@ -1,0 +1,262 @@
+{%- comment -%}
+  Products in a row that slides: a title on the left with « Tout voir » on the
+  right, the tiles (snippets/product-tile.liquid) with arrows over the
+  photos, and a thin line under the row that shows where you are.
+{%- endcomment -%}
+{%- liquid
+  assign collection = section.settings.collection
+  assign products = collection.products
+  if collection == blank
+    assign products = collections.all.products
+  endif
+  assign all_link = section.settings.link | default: collection.url | default: routes.all_products_collection_url
+-%}
+
+<section class="shop-row section" aria-labelledby="ShopRowTitle-{{ section.id }}">
+  <div class="shop-row__head page-width page-width--wide">
+    <h2 class="shop-row__title" id="ShopRowTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+    {%- if section.settings.link_label != blank -%}
+      <a class="shop-row__all" href="{{ all_link }}">{{ section.settings.link_label | escape }}</a>
+    {%- endif -%}
+  </div>
+
+  <shop-row class="shop-row__body page-width page-width--wide">
+    <ul class="shop-row__track" role="list" data-track>
+      {%- for product in products limit: section.settings.limit -%}
+        <li class="shop-row__item">
+          {% render 'product-tile', product: product, eager: forloop.first, scope: section.id %}
+        </li>
+      {%- endfor -%}
+    </ul>
+    <button type="button" class="shop-row__arrow shop-row__arrow--prev" data-prev aria-label="{{ 'general.slider_previous' | t }}">
+      {% render 'icon', icon: 'chevron-left' %}
+    </button>
+    <button type="button" class="shop-row__arrow shop-row__arrow--next" data-next aria-label="{{ 'general.slider_next' | t }}">
+      {% render 'icon', icon: 'chevron-right' %}
+    </button>
+    <div class="shop-row__progress" aria-hidden="true"><span data-progress></span></div>
+  </shop-row>
+</section>
+
+{% stylesheet %}
+  .shop-row__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin-block-end: clamp(1.25rem, 1rem + 1vw, 2rem);
+  }
+
+  .shop-row__title {
+    margin: 0;
+  }
+
+  .shop-row__all {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 1.1rem;
+    border: 1px solid var(--color-text);
+    border-radius: 2px;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      background-color var(--duration-base) ease,
+      color var(--duration-base) ease;
+
+    &:hover {
+      color: #fff;
+      background-color: var(--color-text);
+    }
+  }
+
+  .shop-row__body {
+    position: relative;
+    display: block;
+  }
+
+  .shop-row__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 20rem);
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    list-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media screen and (min-width: 750px) {
+      grid-auto-columns: calc((100% - 2 * 0.75rem) / 3);
+    }
+
+    @media screen and (min-width: 1100px) {
+      grid-auto-columns: calc((100% - 3 * 0.75rem) / 4);
+    }
+  }
+
+  ul.shop-row__track[role='list'] {
+    padding: 0;
+  }
+
+  .shop-row__item {
+    scroll-snap-align: start;
+  }
+
+  .shop-row__arrow {
+    position: absolute;
+    inset-block-start: calc(var(--row-media-h, 18rem) / 2);
+    z-index: 2;
+    display: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 2px;
+    color: var(--color-text);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    translate: 0 -50%;
+
+    & .icon {
+      --icon-size: 0.9rem;
+    }
+
+    &[disabled] {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (hover: hover) {
+      display: grid;
+    }
+  }
+
+  .shop-row__arrow--prev {
+    inset-inline-start: calc(var(--page-gutter, 1rem) + 0.75rem);
+  }
+
+  .shop-row__arrow--next {
+    inset-inline-end: calc(var(--page-gutter, 1rem) + 0.75rem);
+  }
+
+  .shop-row__body:has(.shop-row__arrow) {
+    --page-gutter: var(--gutter-wide);
+  }
+
+  .shop-row__body.is-static :is(.shop-row__progress, .shop-row__arrow) {
+    display: none;
+  }
+
+  .shop-row__progress {
+    position: relative;
+    height: 2px;
+    margin-block-start: 1.5rem;
+    overflow: hidden;
+    background: var(--palette-rose-powder);
+
+    & span {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: var(--row-size, 30%);
+      background: var(--color-text);
+      translate: var(--row-pos, 0%) 0;
+      transition: translate 0.25s ease;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('shop-row')) {
+    customElements.define(
+      'shop-row',
+      class ShopRow extends HTMLElement {
+        connectedCallback() {
+          this.track = this.querySelector('[data-track]');
+          this.prev = this.querySelector('[data-prev]');
+          this.next = this.querySelector('[data-next]');
+          this.bar = this.querySelector('[data-progress]');
+          if (!this.track) return;
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const step = () => {
+            const item = this.track.querySelector('li');
+            return item ? item.getBoundingClientRect().width + 12 : 300;
+          };
+          this.prev?.addEventListener('click', () => this.track.scrollBy({ left: -step(), behavior: reduce ? 'auto' : 'smooth' }));
+          this.next?.addEventListener('click', () => this.track.scrollBy({ left: step(), behavior: reduce ? 'auto' : 'smooth' }));
+          const sync = () => {
+            const max = this.track.scrollWidth - this.track.clientWidth;
+            const size = this.track.scrollWidth ? this.track.clientWidth / this.track.scrollWidth : 1;
+            const pos = max > 0 ? this.track.scrollLeft / max : 0;
+            this.style.setProperty('--row-size', `${Math.min(100, size * 100)}%`);
+            this.style.setProperty('--row-pos', `${pos * ((1 - size) / size) * 100}%`);
+            // Every product already in view: no arrows, no progress line.
+            this.classList.toggle('is-static', max <= 2);
+            if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
+            if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
+            const media = this.track.querySelector('.tile__media');
+            if (media) this.style.setProperty('--row-media-h', `${media.offsetHeight}px`);
+          };
+          this.track.addEventListener('scroll', sync, { passive: true });
+          window.addEventListener('resize', sync);
+          sync();
+          window.addEventListener('load', sync);
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Rangée de produits",
+  "tag": "div",
+  "class": "section-shop-row",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "info": "Mettez un mot en italique pour l'écrire dans la police à empattements.",
+      "default": "Prendre soin de soi, <em>même ces jours-là.</em>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Nombre de produits",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texte du bouton",
+      "default": "Tout voir"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Lien du bouton",
+      "info": "Sans lien : la collection choisie."
+    }
+  ],
+  "presets": [{ "name": "Rangée de produits" }]
+}
+{% endschema %}

@@ -1,0 +1,328 @@
+{%- comment -%}
+  A full-width photo with a small label and a title in its top-left corner,
+  and a floating card at the bottom-left: a small photo of the product, its
+  name, two lines and the dark bar to go to it.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign link = section.settings.button_link
+  if link == blank and product != blank
+    assign link = product.url
+  endif
+  assign card_image = section.settings.card_image
+  if card_image == blank and product != blank
+    assign card_image = product.featured_media.preview_image
+  endif
+-%}
+
+<section class="feature-banner feature-banner--{{ section.settings.text_tone | default: 'dark' }}" aria-labelledby="FeatureTitle-{{ section.id }}">
+  <div class="feature-banner__media">
+    {%- if section.settings.image != blank -%}
+      {% render 'responsive-image',
+        image: section.settings.image,
+        sizes: '100vw',
+        widths: '750, 1100, 1500, 1920, 2400, 3000',
+        alt: section.settings.image.alt,
+        class: 'feature-banner__image'
+      %}
+      {%- if section.settings.image_mobile != blank -%}
+        {% render 'responsive-image',
+          image: section.settings.image_mobile,
+          sizes: '100vw',
+          widths: '600, 900, 1200',
+          alt: section.settings.image_mobile.alt,
+          class: 'feature-banner__image feature-banner__image--mobile'
+        %}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg feature-banner__image' }}
+    {%- endif -%}
+  </div>
+
+  <div class="feature-banner__inner page-width page-width--wide">
+    <div class="feature-banner__head reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="feature-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="feature-banner__title" id="FeatureTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="feature-banner__card reveal">
+      <div class="feature-banner__thumb">
+        {%- if card_image != blank -%}
+          {% render 'responsive-image', image: card_image, sizes: '160px', widths: '160, 240, 320', alt: '', class: 'feature-banner__thumb-image' %}
+        {%- endif -%}
+      </div>
+      <div class="feature-banner__card-body">
+        <h3 class="feature-banner__card-title">{{ section.settings.card_title | escape }}</h3>
+        {%- if section.settings.card_text != blank -%}
+          <p class="feature-banner__card-text">{{ section.settings.card_text | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank and link != blank -%}
+          <a class="tile__bar feature-banner__bar" href="{{ link }}">
+            <span>{{ section.settings.button_label | escape }}</span>
+            {%- if section.settings.show_price and product != blank -%}
+              <span class="tile__bar-price">{{ product.price | money }}</span>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .feature-banner {
+    position: relative;
+    display: grid;
+    min-height: clamp(34rem, 70vw, 50rem);
+    isolation: isolate;
+    color: #fff;
+  }
+
+  .feature-banner__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--palette-rose-powder);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgb(20 12 14 / 0.4) 0%, rgb(20 12 14 / 0) 40%);
+    }
+  }
+
+  .feature-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .feature-banner__image--mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .feature-banner__media:has(.feature-banner__image--mobile) .feature-banner__image:not(.feature-banner__image--mobile) {
+      display: none;
+    }
+
+    .feature-banner__image--mobile {
+      display: block;
+    }
+  }
+
+  .feature-banner__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-block: clamp(1.25rem, 1rem + 1.5vw, 2.25rem);
+  }
+
+  /* Phones: the title on white above the photo, the card over its foot */
+  @media screen and (max-width: 749px) {
+    .feature-banner {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      color: var(--palette-ink);
+    }
+
+    .feature-banner .feature-banner__inner {
+      display: contents;
+    }
+
+    .feature-banner .feature-banner__head {
+      order: 1;
+      padding: 2rem var(--gutter) 1.25rem;
+    }
+
+    .feature-banner .feature-banner__media {
+      position: relative;
+      z-index: 0;
+      order: 2;
+      aspect-ratio: 4 / 5;
+
+      &::after {
+        content: none;
+      }
+    }
+
+    .feature-banner .feature-banner__card {
+      position: relative;
+      z-index: 1;
+      order: 3;
+      box-sizing: border-box;
+      width: calc(100% - 2 * var(--gutter));
+      margin: -5.5rem auto 0;
+    }
+  }
+
+  .feature-banner__eyebrow {
+    margin: 0 0 0.4rem;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .feature-banner__title {
+    max-width: 22ch;
+    margin: 0;
+    color: inherit;
+  }
+
+  /* Dark words on a light photo (default): no shade over the picture */
+  .feature-banner--dark {
+    color: var(--palette-ink);
+
+    & .feature-banner__media::after {
+      content: none;
+    }
+  }
+
+  .feature-banner--light .feature-banner__title {
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.2);
+  }
+
+  .feature-banner__card {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 1rem;
+    width: min(100%, 30rem);
+    padding: 0.75rem;
+    border-radius: 2px;
+    color: var(--palette-ink);
+    background: rgb(255 255 255 / 0.94);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+    }
+  }
+
+  .feature-banner__thumb {
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #f6f1f1;
+  }
+
+  .feature-banner__thumb-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .feature-banner__card-body {
+    display: grid;
+    align-content: start;
+    gap: 0.35rem;
+  }
+
+  .feature-banner__card-title {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .feature-banner__card-text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .feature-banner__bar {
+    margin-block-start: 0.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Grande photo + carte",
+  "tag": "div",
+  "class": "section-feature-banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Photo (téléphone, facultative)"
+    },
+    {
+      "type": "select",
+      "id": "text_tone",
+      "label": "Couleur du texte sur la photo",
+      "options": [
+        { "value": "dark", "label": "Foncé (photo claire)" },
+        { "value": "light", "label": "Blanc (photo sombre)" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petite ligne",
+      "default": "Le pack"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "La chaleur et la protection, <em>ensemble.</em>"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Petite photo de la carte",
+      "info": "Sans photo : celle du produit."
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "Titre de la carte",
+      "default": "Ceinture + culotte menstruelle"
+    },
+    {
+      "type": "textarea",
+      "id": "card_text",
+      "label": "Texte de la carte"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte de la barre",
+      "default": "Composer mon pack"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien",
+      "info": "Sans lien : la fiche du produit choisi."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Prix du produit dans la barre",
+      "default": false
+    }
+  ],
+  "presets": [{ "name": "Grande photo + carte" }]
+}
+{% endschema %}

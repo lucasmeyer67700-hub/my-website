@@ -58,7 +58,7 @@
     {%- if product != blank -%}
       <aside class="not-found__product" aria-labelledby="NotFoundProduct-{{ section.id }}">
         <p class="eyebrow" id="NotFoundProduct-{{ section.id }}">{{ 'templates.not_found_product' | t }}</p>
-        {% render 'product-card', product: product, heading_tag: 'h2', sizes: '(min-width: 990px) 24rem, 90vw' %}
+        {% render 'product-tile', product: product, heading_tag: 'h2', sizes: '(min-width: 990px) 24rem, 90vw', scope: 'notfound' %}
       </aside>
     {%- endif -%}
   </div>

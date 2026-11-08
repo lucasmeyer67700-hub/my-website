@@ -32,7 +32,7 @@
       {%- if collection.products.size > 0 or free_slots > 0 -%}
         <ul class="product-grid product-grid--catalogue" role="list">
           {%- for product in collection.products -%}
-            <li class="reveal">{% render 'product-card', product: product, heading_tag: 'h2' %}</li>
+            <li class="reveal">{% render 'product-tile', product: product, heading_tag: 'h2', scope: 'grid' %}</li>
           {%- endfor -%}
           {%- if free_slots > 0 -%}
             {%- assign soon_shown = 0 -%}

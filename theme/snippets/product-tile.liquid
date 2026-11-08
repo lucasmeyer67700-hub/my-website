@@ -1,0 +1,399 @@
+{% doc %}
+  Product tile (home carousel, catalogue, « Le reste de la collection »):
+  the photo on a pale ground with a small badge, colour tabs laid on the
+  photo when the product can go straight to the bag, the name and a short
+  line, then one dark bar « Ajouter au panier · price ». Products that need
+  a choice the tile cannot offer (e.g. a size) get « Choisir » instead,
+  leading to their page.
+
+  @param {object} product - Product object
+  @param {string} [heading_tag] - Heading element for the name (default h3)
+  @param {string} [sizes] - sizes attribute for the image
+  @param {boolean} [eager] - Load the photo at once (first tiles on screen)
+  @param {string} [scope] - Unique word when the same product can show twice on a page (form ids)
+
+  @example
+  {% render 'product-tile', product: product %}
+{% enddoc %}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign image_sizes = sizes | default: '(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 80vw'
+  assign first = product.selected_or_first_available_variant
+
+  # The colour option, if any
+  assign color_index = -1
+  for option in product.options_with_values
+    assign option_handle = option.name | handleize
+    if option_handle == 'couleur' or option_handle == 'coloris' or option_handle == 'color' or option_handle == 'colour'
+      assign color_index = forloop.index0
+    endif
+  endfor
+
+  # Straight to the bag when every other option has at most two values (the
+  # first variant's value is kept for those), no size grid to choose from.
+  assign quick_add = true
+  for option in product.options_with_values
+    if forloop.index0 != color_index and option.values.size > 2
+      assign quick_add = false
+    endif
+  endfor
+  if product.available == false
+    assign quick_add = false
+  endif
+
+  assign tagline = product.metafields.custom.accroche.value
+
+  assign badge = ''
+  if first.compare_at_price > first.price
+    assign saving = first.compare_at_price | minus: first.price | money_without_trailing_zeros
+    assign badge = 'products.tile_save' | t: amount: saving
+  elsif product.tags contains 'nouveau' or product.tags contains 'Nouveau'
+    assign badge = 'products.tile_new' | t
+  endif
+
+  assign tile_scope = scope | default: 'tile'
+  assign tile_id = 'Tile-' | append: product.id | append: '-' | append: tile_scope
+-%}
+<product-tile class="tile" data-color-index="{{ color_index }}">
+  <div class="tile__visual">
+  {%- liquid
+    # A photo clearly wider than tall (a belt laid flat, five pads side by
+    # side) is shown whole, set back on the pale ground, never cropped.
+    assign tile_contain = false
+    if product.featured_media.preview_image.aspect_ratio > 1.05
+      assign tile_contain = true
+    endif
+  -%}
+  <a class="tile__media{% if tile_contain %} tile__media--contain{% endif %}" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_media -%}
+      {% render 'responsive-image',
+        image: product.featured_media.preview_image,
+        sizes: image_sizes,
+        widths: '360, 540, 720, 900, 1080',
+        eager: eager,
+        alt: '',
+        class: 'tile__image'
+      %}
+      {%- if product.media.size > 1 -%}
+        {% render 'responsive-image',
+          image: product.media[1].preview_image,
+          sizes: image_sizes,
+          widths: '360, 540, 720, 900, 1080',
+          decorative: true,
+          class: 'tile__image tile__image--second'
+        %}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg tile__image' }}
+    {%- endif -%}
+    {%- if badge != blank -%}
+      <span class="tile__badge">{{ badge }}</span>
+    {%- endif -%}
+  </a>
+
+  {%- if quick_add and color_index >= 0 and product.variants.size > 1 -%}
+    {%- liquid
+      assign color_option = product.options_with_values[color_index]
+    -%}
+    <div class="tile__tabs" role="group" aria-label="{{ color_option.name | escape }}">
+      {%- for value in color_option.values -%}
+        {%- if value.name contains '+' -%}{%- continue -%}{%- endif -%}
+        <button
+          type="button"
+          class="tile__tab"
+          data-value="{{ value.name | escape }}"
+          aria-pressed="{% if value.name == first.options[color_index] %}true{% else %}false{% endif %}"
+        >
+          {{- value.name | escape -}}
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+  </div>
+
+  <div class="tile__body">
+    <{{ tag }} class="tile__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></{{ tag }}>
+    {%- if tagline != blank -%}
+      <p class="tile__line">{{ tagline | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if quick_add -%}
+    <product-form class="tile__form">
+      {%- form 'product', product, id: tile_id, class: 'tile__form-inner', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ first.id }}" data-tile-variant>
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="tile__bar" name="add">
+          <span class="tile__bar-label" data-add-to-cart-label>{{ 'products.tile_add' | t }}</span>
+          <span class="tile__bar-price" data-tile-price>
+            {{- first.price | money -}}
+            {%- if first.compare_at_price > first.price -%}
+              <s>{{ first.compare_at_price | money }}</s>
+            {%- endif -%}
+          </span>
+        </button>
+        <p class="tile__error" data-product-error hidden><span data-error-message></span></p>
+      {%- endform -%}
+    </product-form>
+    <script type="application/json" data-tile-variants>
+      [
+        {%- for variant in product.variants -%}
+          {"id":{{ variant.id }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | money | json }},"compare":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+  {%- else -%}
+    {%- assign min_price = product.price_min | money -%}
+    <a class="tile__bar tile__bar--link" href="{{ product.url }}">
+      <span class="tile__bar-label">
+        {%- if product.available -%}{{ 'products.tile_choose' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+      </span>
+      <span class="tile__bar-price">
+        {%- if product.price_varies -%}{{ 'products.price_from' | t: price: min_price }}{%- else -%}{{ min_price }}{%- endif -%}
+      </span>
+    </a>
+  {%- endif -%}
+</product-tile>
+
+{% stylesheet %}
+  .tile {
+    --tile-bg: #f6f1f1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    color: var(--color-text);
+  }
+
+  .tile__media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: var(--tile-bg);
+  }
+
+  .tile__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      opacity 0.6s ease,
+      scale 1.2s var(--ease-reveal);
+  }
+
+  .tile__image--second {
+    opacity: 0;
+  }
+
+  .tile__media--contain .tile__image:not(.tile__image--second) {
+    padding: 8%;
+    object-fit: contain;
+  }
+
+  @media (hover: hover) {
+    .tile:hover .tile__image--second {
+      opacity: 1;
+    }
+
+    .tile:hover .tile__image {
+      scale: 1.03;
+    }
+  }
+
+  .tile__badge {
+    position: absolute;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: var(--rose-cta);
+  }
+
+  .tile__visual {
+    position: relative;
+  }
+
+  /* Colour tabs laid on the bottom of the photo */
+  .tile__tabs {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    z-index: 1;
+    display: flex;
+    background: #fff;
+  }
+
+  .tile__tab {
+    min-height: 2.1rem;
+    padding: 0 0.85rem;
+    border: 0;
+    border-block-end: 1px solid transparent;
+    font: inherit;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    background: none;
+    cursor: pointer;
+
+    &[aria-pressed='true'] {
+      border-block-end-color: var(--color-text);
+      color: var(--color-text);
+    }
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  .tile__body {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.85rem 0.9rem;
+  }
+
+  .tile__title {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0;
+
+    & a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    & a:hover {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  .tile__line {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .tile__form {
+    display: block;
+    margin-block-start: auto;
+  }
+
+  /* The dark bar: action on the left, price on the right */
+  .tile__bar {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 2.875rem;
+    margin-block-start: auto;
+    padding: 0 1rem;
+    overflow: hidden;
+    border: 0;
+    border-radius: 2px;
+    font: inherit;
+    font-size: 0.875rem;
+    color: #fff;
+    text-decoration: none;
+    background-color: #1f1a19;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--rose-cta);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.45s var(--ease-reveal);
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+      transform: scaleY(1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--rose-cta);
+      outline-offset: 2px;
+    }
+
+    &[aria-busy='true'] {
+      opacity: 0.7;
+    }
+  }
+
+  .tile__bar-price {
+    display: inline-flex;
+    gap: 0.4rem;
+    white-space: nowrap;
+
+    & s {
+      color: rgb(255 255 255 / 0.6);
+    }
+  }
+
+  .tile__error {
+    margin: 0.4rem 0 0;
+    font-size: var(--text-xs);
+    color: var(--color-error);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('product-tile')) {
+    customElements.define(
+      'product-tile',
+      class ProductTile extends HTMLElement {
+        connectedCallback() {
+          const data = this.querySelector('[data-tile-variants]');
+          const input = this.querySelector('[data-tile-variant]');
+          const price = this.querySelector('[data-tile-price]');
+          const colorIndex = Number(this.dataset.colorIndex);
+          if (!data || !input || colorIndex < 0) return;
+          let variants = [];
+          try {
+            variants = JSON.parse(data.textContent);
+          } catch (error) {
+            return;
+          }
+          const current = () => variants.find((v) => String(v.id) === input.value) || variants[0];
+          for (const tab of this.querySelectorAll('.tile__tab')) {
+            tab.addEventListener('click', () => {
+              const base = current();
+              const match =
+                variants.find((v) => v.options[colorIndex] === tab.dataset.value && v.options.every((o, i) => i === colorIndex || o === base.options[i]) && v.available) ||
+                variants.find((v) => v.options[colorIndex] === tab.dataset.value && v.available);
+              if (!match) return;
+              input.value = String(match.id);
+              if (price) {
+                price.textContent = match.price;
+                if (match.compare) {
+                  const s = document.createElement('s');
+                  s.textContent = match.compare;
+                  price.append(s);
+                }
+              }
+              for (const other of this.querySelectorAll('.tile__tab')) other.setAttribute('aria-pressed', String(other === tab));
+            });
+          }
+        }
+      }
+    );
+  }
+{% endjavascript %}

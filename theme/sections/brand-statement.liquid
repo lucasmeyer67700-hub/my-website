@@ -1,0 +1,144 @@
+{%- comment -%}
+  Who we are: a small label, one long sentence set large, three short lines
+  and a button on the left; a large photo on the right.
+{%- endcomment -%}
+<section class="brand-statement section" aria-labelledby="StatementTitle-{{ section.id }}">
+  <div class="brand-statement__grid page-width page-width--wide">
+    <div class="brand-statement__copy reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="brand-statement__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="brand-statement__title" id="StatementTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.blocks.size > 0 -%}
+        <ul class="brand-statement__points" role="list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a class="shop-row__all brand-statement__button" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+    <div class="brand-statement__media media reveal">
+      {%- if section.settings.image != blank -%}
+        {% render 'responsive-image',
+          image: section.settings.image,
+          sizes: '(min-width: 990px) 50vw, 100vw',
+          widths: '600, 900, 1200, 1600, 2000',
+          alt: section.settings.image.alt
+        %}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .brand-statement__grid {
+    display: grid;
+    gap: 2rem;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 5rem);
+      align-items: start;
+    }
+  }
+
+  .brand-statement__eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .brand-statement__title {
+    max-width: 24ch;
+    margin: 0;
+  }
+
+  .brand-statement__points {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.75rem 0 0;
+    padding: 0 0 0 1.25rem;
+    list-style: none;
+    font-size: var(--text-md);
+    line-height: 1.45;
+  }
+
+  ul.brand-statement__points[role='list'] {
+    margin-block-start: 1.75rem;
+    padding-inline-start: 1.25rem;
+  }
+
+  .brand-statement__button {
+    margin-block-start: 1.75rem;
+  }
+
+  .brand-statement__media {
+    --media-ratio: 4 / 5;
+    border-radius: 2px;
+
+    @media screen and (min-width: 990px) {
+      --media-ratio: 1;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Qui nous sommes",
+  "tag": "div",
+  "class": "section-brand-statement",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petite ligne",
+      "default": "Nous sommes VELEA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Phrase principale"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Notre histoire"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Ligne",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Une phrase courte"
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Qui nous sommes" }]
+}
+{% endschema %}

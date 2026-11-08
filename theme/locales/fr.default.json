@@ -20,7 +20,9 @@
     "loading": "Chargement…",
     "required": "obligatoire",
     "menu": "Menu",
-    "help_title": "Besoin d'aide ?"
+    "help_title": "Besoin d'aide ?",
+    "slider_previous": "Précédent",
+    "slider_next": "Suivant"
   },
   "header": {
     "cart": "Panier",
@@ -85,7 +87,11 @@
       "hips": "Tour de hanches",
       "how_to": "Comment prendre vos mesures"
     },
-    "price": "Prix"
+    "price": "Prix",
+    "tile_save": "Économisez {{ amount }}",
+    "tile_new": "Nouveau",
+    "tile_add": "Ajouter au panier",
+    "tile_choose": "Choisir"
   },
   "cart": {
     "title": "Votre panier",

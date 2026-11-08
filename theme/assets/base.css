@@ -2146,11 +2146,60 @@ h2 {
 }
 
 /* Product page « Au quotidien »: plain lines separated by hairlines, no icons */
-.product-benefits__icon {
+body .product-benefits__icon {
   display: none;
 }
 
-.product-benefits__item {
+body .product-benefits__item {
   padding-block-start: 0.85rem;
   border-block-start: 1px solid rgb(var(--warm-rgb) / 0.18);
+}
+
+
+/* ==========================================================================
+   Topicals-inspired system (v70)
+   Titles in the clean sans of the brand with one italic word in the serif;
+   squared buttons; product tiles with a dark bar; calmer spacing. The home
+   opening (encre rose) keeps its own large serif title.
+   ========================================================================== */
+
+h2,
+.h2,
+h3,
+.h3,
+.product__title,
+.main-page__title,
+h1.h2 {
+  font-family: var(--font-body-family);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+
+  & em {
+    font-family: var(--font-heading-family);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+h2,
+.h2,
+h1.h2 {
+  font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.625rem);
+  line-height: 1.12;
+}
+
+.product__title {
+  line-height: 1.12;
+}
+
+/* Squared, quieter buttons */
+.button {
+  border-radius: 2px;
+  letter-spacing: 0.01em;
+}
+
+/* A little less air between sections, as on a shop that goes straight to the products */
+:root {
+  --section-space: clamp(3rem, 2rem + 4vw, 5.5rem);
 }

@@ -15,7 +15,7 @@
     {%- if item.id == product.id or shown >= section.settings.limit -%}{%- continue -%}{%- endif -%}
     {%- assign shown = shown | plus: 1 -%}
     <li class="related__item reveal">
-      {% render 'product-card', product: item, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 45vw, 80vw' %}
+      {% render 'product-tile', product: item, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 45vw, 80vw', scope: 'related' %}
     </li>
   {%- endfor -%}
 {%- endcapture -%}

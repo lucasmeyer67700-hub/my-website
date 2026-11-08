@@ -86,6 +86,10 @@
       {%- endfor -%}
     </div>
 
+    {%- if section.settings.show_wordmark -%}
+      <p class="site-footer__wordmark" aria-hidden="true">{{ shop.name | escape }}</p>
+    {%- endif -%}
+
     <div class="site-footer__bottom">
       {%- if settings.health_notice != blank -%}
         <p class="site-footer__notice">
@@ -265,6 +269,21 @@
       color: var(--color-text);
     }
   }
+
+  /* The shop name set across the whole width, like a signature */
+  .site-footer__wordmark {
+    margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+    font-family: var(--font-body-family);
+    font-size: clamp(4.5rem, 21vw, 19rem);
+    font-weight: var(--font-body-weight-bold);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--color-text);
+    user-select: none;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -275,6 +294,12 @@
   "enabled_on": { "groups": ["footer"] },
   "max_blocks": 6,
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_wordmark",
+      "label": "Grand nom de la marque en bas",
+      "default": true
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",

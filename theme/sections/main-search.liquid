@@ -36,7 +36,7 @@
               <li>
                 {%- case item.object_type -%}
                   {%- when 'product' -%}
-                    {% render 'product-card', product: item, heading_tag: 'h2' %}
+                    {% render 'product-tile', product: item, heading_tag: 'h2', scope: 'search' %}
                   {%- else -%}
                     <article class="search__result">
                       <h2 class="h4"><a class="link" href="{{ item.url }}">{{ item.title | escape }}</a></h2>
