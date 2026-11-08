@@ -11,6 +11,11 @@
   Falls back to a still rose wash (CSS) without WebGL, without the needed
   texture formats, or for visitors who ask for less motion. Pauses off
   screen and in background tabs.
+
+  With data-trail (layout/theme.liquid) the same ink runs on every page: a
+  fixed layer laid over the content in multiply mode, so only the ink shows.
+  It starts at the first movement, follows the pointer anywhere outside the
+  opening, never paints on its own, and sleeps once the ink has faded.
 */
 (() => {
   class HeroFluid extends HTMLElement {
@@ -19,7 +24,34 @@
       this.started = true;
       this.canvas = this.querySelector('canvas');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.trail = this.hasAttribute('data-trail');
+      if (this.trail) return this.waitForTrail(reduce);
       if (!this.canvas || reduce) return this.fallback();
+      this.start();
+    }
+
+    /** Site-wide ink: nothing is set up until the visitor first moves. */
+    waitForTrail(reduce) {
+      this.touch = this.hasAttribute('data-touch');
+      if (!this.canvas || reduce) return;
+      const wait = new AbortController();
+      const begin = (event) => {
+        if (event.pointerType === 'touch' && !this.touch) return;
+        if (this.inOpening(event.target)) return;
+        wait.abort();
+        this.start();
+      };
+      window.addEventListener('pointermove', begin, { passive: true, signal: wait.signal });
+      if (this.touch) window.addEventListener('touchmove', (e) => e.touches[0] && begin(e.touches[0]), { passive: true, signal: wait.signal });
+      this.waiting = wait;
+    }
+
+    /** The home page opening keeps its own ink. */
+    inOpening(target) {
+      return !!(target && target.closest && target.closest('hero-fluid:not([data-trail])'));
+    }
+
+    start() {
       try {
         if (!this.init()) return this.fallback();
       } catch (error) {
@@ -29,6 +61,7 @@
     }
 
     disconnectedCallback() {
+      this.waiting?.abort();
       cancelAnimationFrame(this.frame);
       this.observer?.disconnect();
       this.abort?.abort();
@@ -91,6 +124,12 @@
       this.lastAmbient = 0;
       this.time = performance.now();
       this.visible = true;
+
+      // Site-wide layer: start white (clear), wait for the pointer.
+      if (this.trail) {
+        this.render();
+        return true;
+      }
 
       // Arrival: a burst of colour from the centre of the page (theme
       // setting), otherwise a first breath of ink.
@@ -345,6 +384,13 @@
       const { signal } = this.abort;
       this.pointer = { x: 0, y: 0, moved: false, down: false, dx: 0, dy: 0 };
       const move = (event) => {
+        if (this.trail) {
+          if (event.pointerType === 'touch' && !this.touch) return;
+          if (this.inOpening(event.target)) {
+            this.pointer.down = false;
+            return;
+          }
+        }
         const box = this.canvas.getBoundingClientRect();
         if (!box.width) return;
         const x = (event.clientX - box.left) / box.width;
@@ -363,7 +409,20 @@
         p.y = y;
         p.moved = Math.abs(p.dx) + Math.abs(p.dy) > 0;
         this.lastInput = performance.now();
+        if (this.trail) this.loop();
       };
+      if (this.trail) {
+        const lift = () => (this.pointer.down = false);
+        window.addEventListener('pointermove', move, { passive: true, signal });
+        document.documentElement.addEventListener('mouseleave', lift, { signal });
+        if (this.touch) {
+          window.addEventListener('touchmove', (e) => e.touches[0] && move(e.touches[0]), { passive: true, signal });
+          window.addEventListener('touchend', lift, { passive: true, signal });
+        }
+        window.addEventListener('resize', () => (this.needsResize = true), { signal });
+        this.canvas.addEventListener('webglcontextlost', () => this.classList.remove('is-live'), { signal });
+        return;
+      }
       this.addEventListener('pointermove', move, { passive: true, signal });
       this.addEventListener('pointerdown', move, { passive: true, signal });
       this.addEventListener('pointerleave', () => (this.pointer.down = false), { signal });
@@ -441,9 +500,20 @@
     loop() {
       if (this.running) return;
       this.running = true;
+      if (this.trail) {
+        clearTimeout(this.sleepTimer);
+        this.classList.add('is-live');
+      }
       const tick = (now) => {
         if (!this.visible || document.hidden) {
           this.running = false;
+          return;
+        }
+        // Site-wide layer: once the ink has mostly faded, the layer fades out,
+        // the last traces are wiped, and it sleeps until the next move.
+        if (this.trail && now - this.lastInput > 3000) {
+          this.running = false;
+          this.sleep();
           return;
         }
         const dt = Math.min((now - this.time) / 1000, 0.016666);
@@ -461,14 +531,31 @@
       this.frame = requestAnimationFrame(tick);
     }
 
+    sleep() {
+      this.classList.remove('is-live');
+      clearTimeout(this.sleepTimer);
+      this.sleepTimer = setTimeout(() => {
+        if (this.running || !this.gl) return;
+        const { clear } = this.programs;
+        this.gl.useProgram(clear.program);
+        this.gl.uniform1f(clear.uniforms.value, 0);
+        for (const field of [this.dye, this.velocity]) {
+          this.gl.uniform1i(clear.uniforms.uTexture, field.read.attach(0));
+          this.blit(field.write);
+          field.swap();
+        }
+        this.render();
+      }, 450);
+    }
+
     input(now) {
       const p = this.pointer;
       if (p.moved) {
         p.moved = false;
         this.splat(p.x, p.y, p.dx * this.config.splatForce, p.dy * this.config.splatForce, this.nextColor(0.2));
       }
-      // Nobody moving: a slow ribbon of ink drifts by on its own.
-      if (now - this.lastInput > 2600 && now - this.lastAmbient > 90) {
+      // Nobody moving: a slow ribbon of ink drifts by on its own (opening only).
+      if (!this.trail && now - this.lastInput > 2600 && now - this.lastAmbient > 90) {
         this.lastAmbient = now;
         const t = now / 1000;
         const x = 0.62 + Math.cos(t * 0.37) * 0.26;

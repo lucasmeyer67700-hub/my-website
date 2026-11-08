@@ -200,6 +200,19 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "ink_trail",
+        "label": "Encre rose sur tout le site",
+        "info": "L'encre de l'ouverture de l'accueil suit aussi la souris sur toutes les pages, puis s'efface. Coupée pour les visiteurs qui ont demandé moins d'animations.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "ink_trail_touch",
+        "label": "Aussi au doigt sur téléphone",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "Photos produits"
       },

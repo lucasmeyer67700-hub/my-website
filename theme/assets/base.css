@@ -2203,3 +2203,35 @@ h1.h2 {
 :root {
   --section-space: clamp(3rem, 2rem + 4vw, 5.5rem);
 }
+
+/* Rose ink on every page (layout/theme.liquid, assets/hero-fluid.js): a
+   fixed layer over the content, below the header and drawers. Multiply
+   leaves white untouched, so only the ink shows. */
+.ink-trail {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: calc(var(--z-header) - 5);
+  display: block;
+  height: 100vh;
+  height: 100lvh;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  & canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ink-trail.is-live {
+  opacity: 1;
+}
+
+@media print {
+  .ink-trail {
+    display: none;
+  }
+}

@@ -101,6 +101,22 @@
 
     {% sections 'footer-group' %}
 
+    {%- comment -%} The rose ink of the home opening, on every page (assets/hero-fluid.js) {%- endcomment -%}
+    {%- unless settings.ink_trail == false -%}
+      <script src="{{ 'hero-fluid.js' | asset_url }}" defer="defer"></script>
+      <hero-fluid
+        class="ink-trail"
+        data-trail
+        {% unless settings.ink_trail_touch == false %}
+          data-touch
+        {% endunless %}
+        aria-hidden="true"
+        style="--fluid-colors: #e8a0b0,#f2c3cc,#f1b29e,#d98da6,#c9727e;"
+      >
+        <canvas></canvas>
+      </hero-fluid>
+    {%- endunless -%}
+
     {%- if settings.cart_type == 'drawer' and request.page_type != 'cart' -%}
       {% section 'cart-drawer' %}
     {%- endif -%}
