@@ -15,39 +15,79 @@
         "button_link": "",
         "secondary_label": "Toute la collection",
         "secondary_link": "shopify://collections/tous-nos-produits",
+        "explode": true,
         "color_1": "#e8a0b0",
         "color_2": "#f2c3cc",
         "color_3": "#f1b29e",
         "color_4": "#d98da6",
-        "color_5": "#c9727e",
-        "explode": true
+        "color_5": "#c9727e"
       }
     },
-    "hero_editorial": {
-      "type": "hero-editorial",
+    "shop_row": {
+      "type": "shop-carousel",
       "settings": {
-        "kicker": "Ceinture chauffante sans fil",
-        "line_1": "La chaleur d’une",
-        "line_2": "bouillotte.",
-        "line_3": "Sans le fil.",
-        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d’autonomie.",
+        "heading": "Prendre soin de soi, <em>même ces jours-là.</em>",
+        "collection": "tous-nos-produits",
+        "limit": 8,
+        "link_label": "Tout voir",
+        "link": ""
+      }
+    },
+    "pack_banner": {
+      "type": "feature-banner",
+      "settings": {
+        "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
+        "text_tone": "dark",
+        "eyebrow": "Le pack",
+        "heading": "La chaleur et la protection, <em>ensemble.</em>",
         "product": "ceinture-chauffante-regles",
-        "show_price": true,
-        "button_label": "Voir la ceinture",
+        "card_title": "Ceinture + culotte menstruelle",
+        "card_text": "La ceinture chauffante et une culotte menstruelle au choix. La remise du pack s'applique dans le panier.",
+        "button_label": "Composer mon pack",
         "button_link": "",
-        "secondary_label": "Toute la collection",
-        "secondary_link": "shopify://collections/tous-nos-produits",
-        "video": "shopify://files/videos/velea-hero-ceinture.mp4",
-        "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
-        "caption": "Trois niveaux de chaleur · Quatre modes de vibration"
+        "show_price": false
+      }
+    },
+    "statement": {
+      "type": "brand-statement",
+      "blocks": {
+        "s1": {
+          "type": "point",
+          "settings": {
+            "text": "Une ceinture chauffante, sans fil ni prise"
+          }
+        },
+        "s2": {
+          "type": "point",
+          "settings": {
+            "text": "Des protections lavables, à adopter à votre rythme"
+          }
+        },
+        "s3": {
+          "type": "point",
+          "settings": {
+            "text": "Livraison offerte en France, satisfaite ou remboursée 30 jours"
+          }
+        }
       },
-      "disabled": true
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Une jeune marque qui veut rendre les jours de règles <em>un peu plus simples</em>, avec des objets pensés pour le quotidien.",
+        "image": "shopify://shop_images/img-mvv1elwo-f7970a65.png",
+        "button_label": "Notre histoire",
+        "button_link": "shopify://pages/notre-approche"
+      }
     },
     "before_after": {
       "type": "before-after",
       "settings": {
         "eyebrow": "",
-        "heading": "Avant, <em>après.</em>",
+        "heading": "<em>Pendant les règles </em><em><strong>sans </strong></em><em>Velea. Pendant les règles</em><em><strong> avec</strong></em><em> Velea&nbsp;</em>",
         "text": "Faites glisser pour comparer.",
         "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
         "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
@@ -60,66 +100,6 @@
         "button_link": "",
         "note": "",
         "color_scheme": "scheme-2"
-      }
-    },
-    "offer": {
-      "type": "featured-product",
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "eyebrow": "",
-        "heading": "",
-        "show_rating": true,
-        "price_badge": "exclusif",
-        "show_tagline": true,
-        "offer_heading": "",
-        "unit_label": "la ceinture",
-        "offer_note_single": "Avec son câble USB et sa notice",
-        "offer_note_multi": "Une pour vous, une à offrir",
-        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
-        "best_label": "Meilleure offre",
-        "perks_multi": "",
-        "show_dynamic_checkout": true,
-        "show_reassurance": true,
-        "show_specs": true,
-        "specs_limit": 3,
-        "details_label": "Voir tous les détails",
-        "media_layout": "composition",
-        "mosaic_image_1": "shopify://shop_images/img-mw7nwm1f-dfebf7af.png",
-        "mosaic_image_2": "shopify://shop_images/img-mw7o6bvu-a199fa15.png",
-        "mosaic_image_3": "shopify://shop_images/img-mw0foq7q-f78204a6.png",
-        "mosaic_image_4": "shopify://shop_images/img-mw0fri01-86a95add.png",
-        "gallery_ratio": "1",
-        "gallery_fit": "cover",
-        "anchor": "offre",
-        "color_scheme": "scheme-3",
-        "alt_color": "Blanc",
-        "alt_mosaic_image_1": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
-        "alt_mosaic_image_2": "shopify://shop_images/img-mw0g73f9-8c8e632e.png",
-        "alt_mosaic_image_3": "shopify://shop_images/img-mw0g4gma-0697e216.png",
-        "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
-        "hide_multi": true,
-        "bundle_product": "culotte-menstruelle",
-        "bundle_price": 65,
-        "bundle_title": "Ceinture + culotte menstruelle",
-        "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix."
-      },
-      "disabled": true
-    },
-    "spotlight": {
-      "type": "product-spotlight",
-      "disabled": true,
-      "settings": {
-        "product": "ceinture-chauffante-regles",
-        "media_position": 1,
-        "eyebrow": "La ceinture VELEA",
-        "heading": "L'essentiel, rien de superflu.",
-        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
-        "show_specs": true,
-        "specs_limit": 3,
-        "show_box": false,
-        "button_label": "Découvrir la ceinture",
-        "anchor": "",
-        "color_scheme": "scheme-3"
       }
     },
     "videos": {
@@ -232,6 +212,70 @@
         "color_scheme": "scheme-1"
       }
     },
+    "hero_editorial": {
+      "type": "hero-editorial",
+      "disabled": true,
+      "settings": {
+        "kicker": "Ceinture chauffante sans fil",
+        "line_1": "La chaleur d’une",
+        "line_2": "bouillotte.",
+        "line_3": "Sans le fil.",
+        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d’autonomie.",
+        "product": "ceinture-chauffante-regles",
+        "show_price": true,
+        "button_label": "Voir la ceinture",
+        "button_link": "",
+        "secondary_label": "Toute la collection",
+        "secondary_link": "shopify://collections/tous-nos-produits",
+        "video": "shopify://files/videos/velea-hero-ceinture.mp4",
+        "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
+        "caption": "Trois niveaux de chaleur · Quatre modes de vibration"
+      }
+    },
+    "offer": {
+      "type": "featured-product",
+      "disabled": true,
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "",
+        "heading": "",
+        "show_rating": true,
+        "price_badge": "exclusif",
+        "show_tagline": true,
+        "offer_heading": "",
+        "unit_label": "la ceinture",
+        "offer_note_single": "Avec son câble USB et sa notice",
+        "offer_note_multi": "Une pour vous, une à offrir",
+        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
+        "best_label": "Meilleure offre",
+        "perks_multi": "",
+        "hide_multi": true,
+        "bundle_product": "culotte-menstruelle",
+        "bundle_price": 65,
+        "bundle_title": "Ceinture + culotte menstruelle",
+        "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
+        "show_dynamic_checkout": true,
+        "show_reassurance": true,
+        "show_secure_payment": true,
+        "show_specs": true,
+        "specs_limit": 3,
+        "details_label": "Voir tous les détails",
+        "media_layout": "composition",
+        "mosaic_image_1": "shopify://shop_images/img-mw7nwm1f-dfebf7af.png",
+        "mosaic_image_2": "shopify://shop_images/img-mw7o6bvu-a199fa15.png",
+        "mosaic_image_3": "shopify://shop_images/img-mw0foq7q-f78204a6.png",
+        "mosaic_image_4": "shopify://shop_images/img-mw0fri01-86a95add.png",
+        "alt_color": "Blanc",
+        "alt_mosaic_image_1": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
+        "alt_mosaic_image_2": "shopify://shop_images/img-mw0g73f9-8c8e632e.png",
+        "alt_mosaic_image_3": "shopify://shop_images/img-mw0g4gma-0697e216.png",
+        "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
+        "gallery_ratio": "1",
+        "gallery_fit": "cover",
+        "anchor": "offre",
+        "color_scheme": "scheme-3"
+      }
+    },
     "editorial": {
       "type": "editorial-feature",
       "blocks": {
@@ -285,64 +329,21 @@
         "color_scheme": "scheme-1"
       }
     },
-    "shop_row": {
-      "type": "shop-carousel",
+    "spotlight": {
+      "type": "product-spotlight",
+      "disabled": true,
       "settings": {
-        "heading": "Prendre soin de soi, <em>même ces jours-là.</em>",
-        "collection": "tous-nos-produits",
-        "limit": 8,
-        "link_label": "Tout voir",
-        "link": ""
-      }
-    },
-    "pack_banner": {
-      "type": "feature-banner",
-      "settings": {
-        "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
-        "eyebrow": "Le pack",
-        "heading": "La chaleur et la protection, <em>ensemble.</em>",
         "product": "ceinture-chauffante-regles",
-        "card_title": "Ceinture + culotte menstruelle",
-        "card_text": "La ceinture chauffante et une culotte menstruelle au choix. La remise du pack s'applique dans le panier.",
-        "button_label": "Composer mon pack",
-        "button_link": "",
-        "show_price": false,
-        "text_tone": "dark"
-      }
-    },
-    "statement": {
-      "type": "brand-statement",
-      "blocks": {
-        "s1": {
-          "type": "point",
-          "settings": {
-            "text": "Une ceinture chauffante, sans fil ni prise"
-          }
-        },
-        "s2": {
-          "type": "point",
-          "settings": {
-            "text": "Des protections lavables, à adopter à votre rythme"
-          }
-        },
-        "s3": {
-          "type": "point",
-          "settings": {
-            "text": "Livraison offerte en France, satisfaite ou remboursée 30 jours"
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3"
-      ],
-      "settings": {
-        "eyebrow": "Nous sommes VELEA",
-        "heading": "Une jeune marque qui veut rendre les jours de règles <em>un peu plus simples</em>, avec des objets pensés pour le quotidien.",
-        "image": "shopify://shop_images/img-mvv1elwo-f7970a65.png",
-        "button_label": "Notre histoire",
-        "button_link": "shopify://pages/notre-approche"
+        "media_position": 1,
+        "eyebrow": "La ceinture VELEA",
+        "heading": "L'essentiel, rien de superflu.",
+        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
+        "show_specs": true,
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
+        "anchor": "",
+        "color_scheme": "scheme-3"
       }
     }
   },
