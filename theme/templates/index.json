@@ -99,7 +99,7 @@
     "before_after": {
       "type": "before-after",
       "settings": {
-        "eyebrow": "Avant / après",
+        "eyebrow": "",
         "heading": "Faites glisser, <em>sentez la différence.</em>",
         "text": "",
         "label_before": "Avant",
@@ -109,8 +109,10 @@
         "product": "ceinture-chauffante-regles",
         "button_label": "Je découvre la ceinture",
         "button_link": "",
-        "note": "Accessoire de confort, la ceinture ne remplace pas un avis médical.",
-        "color_scheme": "scheme-2"
+        "note": "",
+        "color_scheme": "scheme-2",
+        "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
+        "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png"
       }
     },
     "offer": {
@@ -347,6 +349,23 @@
         "limit": 6,
         "link_label": "Tout voir"
       }
+    },
+    "spotlight": {
+      "type": "product-spotlight",
+      "disabled": true,
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "media_position": 1,
+        "eyebrow": "La ceinture VELEA",
+        "heading": "L'essentiel, <em>rien de superflu.</em>",
+        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
+        "show_specs": true,
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
+        "anchor": "",
+        "color_scheme": "scheme-3"
+      }
     }
   },
   "order": [
@@ -355,6 +374,7 @@
     "offer",
     "before_after",
     "bento",
+    "spotlight",
     "rail",
     "videos",
     "reviews",
