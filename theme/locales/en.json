@@ -210,7 +210,8 @@
     "faq_no_result_hint": "Try another word, or ask us your question directly below.",
     "video_slide": "Video {{ number }} of {{ total }}",
     "video_shop": "View product",
-    "video_carousel": "Videos"
+    "video_carousel": "Videos",
+    "before_after_slider": "Slide to compare before and after"
   },
   "collections": {
     "coming_soon": "Coming soon",

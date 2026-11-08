@@ -1,0 +1,360 @@
+{%- comment -%}
+  Before / after: two photos stacked, a handle to slide between them (mouse,
+  finger or keyboard). The "after" photo is revealed from the right.
+{%- endcomment -%}
+{%- liquid
+  assign before = section.settings.image_before
+  assign after = section.settings.image_after
+  assign product = section.settings.product
+  assign start = section.settings.start | default: 50
+  assign link = section.settings.button_link
+  if link == blank and product != blank
+    assign link = product.url
+  endif
+-%}
+
+{%- comment -%} Without both photos the section only shows in the theme editor. {%- endcomment -%}
+{%- liquid
+  assign show_section = request.design_mode
+  if before != blank and after != blank
+    assign show_section = true
+  endif
+-%}
+{%- if show_section -%}
+<section class="before-after section color-{{ section.settings.color_scheme }}" aria-labelledby="BeforeAfterTitle-{{ section.id }}">
+  <div class="page-width">
+    <div class="section-header section-header--center reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2" id="BeforeAfterTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="lead">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <before-after class="before-after__frame reveal" style="--ba-position: {{ start }}%; --ba-ratio: {{ section.settings.ratio }};">
+      <div class="before-after__layer before-after__layer--before">
+        {%- if before != blank -%}
+          {% render 'responsive-image', image: before, sizes: '(min-width: 990px) 1100px, 100vw', class: 'before-after__image', alt: section.settings.label_before %}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg before-after__image' }}
+        {%- endif -%}
+        {%- if section.settings.label_before != blank -%}
+          <span class="before-after__label before-after__label--before">{{ section.settings.label_before | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="before-after__layer before-after__layer--after" aria-hidden="false">
+        {%- if after != blank -%}
+          {% render 'responsive-image', image: after, sizes: '(min-width: 990px) 1100px, 100vw', class: 'before-after__image', alt: section.settings.label_after %}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg before-after__image' }}
+        {%- endif -%}
+        {%- if section.settings.label_after != blank -%}
+          <span class="before-after__label before-after__label--after">{{ section.settings.label_after | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="before-after__handle" aria-hidden="true">
+        <span class="before-after__knob">
+          {% render 'icon', icon: 'chevron-left' %}
+          {% render 'icon', icon: 'chevron-right' %}
+        </span>
+      </div>
+
+      <input
+        class="before-after__range"
+        type="range"
+        min="0"
+        max="100"
+        value="{{ start }}"
+        aria-label="{{ 'sections.before_after_slider' | t }}"
+        data-before-after-range
+      >
+    </before-after>
+
+    {%- if section.settings.button_label != blank and link != blank -%}
+      <div class="before-after__actions reveal">
+        <a class="button" href="{{ link }}">
+          {{- section.settings.button_label | escape -}}
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+        {%- if section.settings.note != blank -%}
+          <p class="before-after__note">{{ section.settings.note | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+  .before-after__frame {
+    position: relative;
+    display: block;
+    max-width: 68rem;
+    margin-inline: auto;
+    overflow: hidden;
+    aspect-ratio: var(--ba-ratio, 3 / 2);
+    border-radius: var(--radius-lg, 22px);
+    background-color: var(--color-surface);
+    box-shadow: 0 30px 60px -40px rgb(43 36 34 / 0.55);
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .before-after__layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* The "after" photo shows from the handle to the right */
+  .before-after__layer--after {
+    clip-path: inset(0 0 0 var(--ba-position, 50%));
+  }
+
+  .before-after__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .before-after__label {
+    position: absolute;
+    inset-block-start: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+
+  .before-after__label--before {
+    inset-inline-start: 1rem;
+    color: #fff;
+    background-color: rgb(20 14 12 / 0.45);
+  }
+
+  .before-after__label--after {
+    inset-inline-end: 1rem;
+    color: var(--palette-ink);
+    background-color: rgb(255 255 255 / 0.88);
+  }
+
+  .before-after__handle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--ba-position, 50%);
+    width: 2px;
+    background-color: #fff;
+    box-shadow: 0 0 12px rgb(0 0 0 / 0.25);
+    translate: -50% 0;
+    pointer-events: none;
+  }
+
+  .before-after__knob {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    color: var(--palette-ink);
+    background-color: #fff;
+    box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.45);
+    translate: -50% -50%;
+
+    & .icon {
+      --icon-size: 0.85rem;
+    }
+  }
+
+  /* The real control: an invisible range over the whole photo */
+  .before-after__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  before-after:has(.before-after__range:focus-visible) .before-after__knob {
+    outline: 2px solid var(--rose-cta);
+    outline-offset: 3px;
+  }
+
+  /* A gentle hint that it moves, once it comes into view */
+  @media (prefers-reduced-motion: no-preference) {
+    before-after.is-hinting :is(.before-after__layer--after, .before-after__handle) {
+      transition:
+        clip-path 0.9s var(--ease-reveal),
+        inset-inline-start 0.9s var(--ease-reveal);
+    }
+  }
+
+  .before-after__actions {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-xs);
+    margin-block-start: clamp(1.75rem, 1.4rem + 1.5vw, 2.75rem);
+    text-align: center;
+  }
+
+  .before-after__note {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('before-after')) {
+    customElements.define(
+      'before-after',
+      class BeforeAfter extends HTMLElement {
+        connectedCallback() {
+          this.range = this.querySelector('[data-before-after-range]');
+          if (!this.range) return;
+          const update = () => this.style.setProperty('--ba-position', `${this.range.value}%`);
+          this.range.addEventListener('input', () => {
+            this.classList.remove('is-hinting');
+            update();
+          });
+          update();
+
+          // Shows once that the photo can be slid: a small move and back.
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+          const start = Number(this.range.value);
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry.isIntersecting) return;
+              observer.disconnect();
+              this.classList.add('is-hinting');
+              this.style.setProperty('--ba-position', `${Math.max(start - 18, 10)}%`);
+              setTimeout(() => this.style.setProperty('--ba-position', `${Math.min(start + 14, 90)}%`), 900);
+              setTimeout(() => {
+                this.style.setProperty('--ba-position', `${start}%`);
+                setTimeout(() => this.classList.remove('is-hinting'), 950);
+              }, 1800);
+            },
+            { threshold: 0.6 }
+          );
+          observer.observe(this);
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Avant / après",
+  "tag": "div",
+  "class": "section-before-after",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Avant / après"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Faites glisser, <em>sentez la différence.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_before",
+      "label": "Photo « avant »"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_after",
+      "label": "Photo « après »"
+    },
+    {
+      "type": "text",
+      "id": "label_before",
+      "label": "Étiquette avant",
+      "default": "Avant"
+    },
+    {
+      "type": "text",
+      "id": "label_after",
+      "label": "Étiquette après",
+      "default": "Avec VELEA"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Format",
+      "options": [
+        { "value": "3 / 2", "label": "Paysage (3:2)" },
+        { "value": "16 / 9", "label": "Large (16:9)" },
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "1", "label": "Carré" }
+      ],
+      "default": "3 / 2"
+    },
+    {
+      "type": "range",
+      "id": "start",
+      "label": "Position de départ",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Je découvre la ceinture"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Sans lien : la fiche du produit choisi."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Mention sous le bouton",
+      "default": "Accessoire de confort, la ceinture ne remplace pas un avis médical."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [{ "name": "Avant / après" }]
+}
+{% endschema %}
