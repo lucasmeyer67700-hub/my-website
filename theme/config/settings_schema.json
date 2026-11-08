@@ -229,6 +229,13 @@
         "label": "Cadrage des photos du catalogue",
         "info": "Une ligne par produit : produit | position. Exemple : ceinture-chauffante-regles | 50% 38% (le 2e chiffre plus petit montre plus le haut de la photo).",
         "default": "ceinture-chauffante-regles | 50% 38%"
+      },
+      {
+        "type": "textarea",
+        "id": "card_photos",
+        "label": "Photos du catalogue",
+        "info": "Remplace la photo d'un produit dans les cases du catalogue et de l'accueil, sans toucher au produit. Une ligne par photo : produit | couleur | nom du fichier (Contenu > Fichiers). Mettez * à la place de la couleur pour la photo principale ; une couleur (ex. Blanc) s'affiche quand on clique sur son onglet.",
+        "default": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-fond-rose.jpg\nculotte-menstruelle | * | velea-culotte-fond-rose.jpg\nserviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg"
       }
     ]
   },

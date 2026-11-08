@@ -17,6 +17,8 @@
         "shipping"
       ],
       "settings": {
+        "mode": "marquee",
+        "speed": 45,
         "interval": 3,
         "color_scheme": "scheme-2"
       }

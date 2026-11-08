@@ -1070,6 +1070,47 @@
       transform: translateY(0.5rem);
     }
   }
+  /* « Éditorial »: the cart shown as a bag with a small rose count, and a
+     straight divider after « Compte » (no rounded corners bending it). */
+  .site-header--editorial .site-header__account {
+    border-radius: 0;
+  }
+
+  .site-header--editorial .site-header__cart .site-header__text-label {
+    display: none;
+  }
+
+  .site-header--editorial .site-header__cart .site-header__cart-icon {
+    position: relative;
+    display: inline-flex;
+    padding: 0.35rem;
+  }
+
+  .site-header--editorial .site-header__cart .site-header__cart-icon .icon {
+    --icon-size: 1.3rem;
+    display: block;
+  }
+
+  .site-header--editorial .site-header__cart .cart-count {
+    position: absolute;
+    inset-block-start: -0.1rem;
+    inset-inline-end: -0.25rem;
+    display: grid;
+    place-items: center;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding-inline: 0.25rem;
+    border-radius: 999px;
+    font-size: 0.625rem;
+    letter-spacing: 0;
+    color: #fff;
+    background-color: var(--rose-cta);
+
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

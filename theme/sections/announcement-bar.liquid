@@ -32,7 +32,45 @@
   endcapture
 -%}
 
-{%- if message_count > 0 -%}
+{%- if message_count > 0 and section.settings.mode == 'marquee' -%}
+  {%- comment -%}
+    Continuous strip: the messages run from right to left in a loop (two
+    identical halves, the track slides by one half). Paused on hover; a
+    still, centred line for visitors who ask for less motion. Screen
+    readers get the plain text once.
+  {%- endcomment -%}
+  <div class="announcement-bar announcement-bar--marquee color-{{ section.settings.color_scheme }}">
+    <p class="visually-hidden">{{ summary }}</p>
+    <div class="announcement-marquee" aria-hidden="true" style="--marquee-duration: {{ section.settings.speed | default: 45 }}s;">
+      <div class="announcement-marquee__track">
+        {%- for half in (1..2) -%}
+          <div class="announcement-marquee__group">
+            {%- for repeat in (1..6) -%}
+              {%- for block in messages -%}
+                {%- if block.settings.text == blank -%}{%- continue -%}{%- endif -%}
+                {%- if block.settings.link != blank -%}
+                  <a class="announcement-marquee__item" href="{{ block.settings.link }}" tabindex="-1">{{ block.settings.text | escape }}</a>
+                {%- else -%}
+                  <span class="announcement-marquee__item">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      <p class="announcement-marquee__still">{{ summary }}</p>
+    </div>
+    {%- if has_links -%}
+      <ul class="visually-hidden" role="list">
+        {%- for block in messages -%}
+          {%- if block.settings.link != blank and block.settings.text != blank -%}
+            <li><a href="{{ block.settings.link }}">{{ block.settings.text | escape }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+{%- elsif message_count > 0 -%}
   <div class="announcement-bar color-{{ section.settings.color_scheme }}">
     <announcement-rotator
       class="announcement-bar__inner page-width page-width--wide"
@@ -141,6 +179,83 @@
       text-underline-offset: 0.2em;
     }
   }
+
+  /* Continuous strip */
+  .announcement-marquee {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  }
+
+  .announcement-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: announcement-marquee var(--marquee-duration, 45s) linear infinite;
+  }
+
+  .announcement-marquee:hover .announcement-marquee__track {
+    animation-play-state: paused;
+  }
+
+  .announcement-marquee__group {
+    display: flex;
+    flex: none;
+  }
+
+  .announcement-marquee__item,
+  .announcement-marquee__still {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    margin: 0;
+    font-size: clamp(0.5625rem, 2.3vw, 0.65rem);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  /* A small rose dot between two messages */
+  .announcement-marquee__item::after {
+    content: '';
+    width: 0.25rem;
+    height: 0.25rem;
+    margin-inline: 2.25rem;
+    border-radius: 50%;
+    background-color: var(--rose-cta);
+  }
+
+  .announcement-marquee__still {
+    display: none;
+    justify-content: center;
+    padding-inline: var(--gutter);
+    white-space: normal;
+    text-align: center;
+  }
+
+  @keyframes announcement-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .announcement-marquee__track {
+      display: none;
+    }
+
+    .announcement-marquee__still {
+      display: flex;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -153,12 +268,33 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Des messages courts et vérifiés, qui s'enchaînent en fondu en continu."
+      "content": "Des messages courts et vérifiés, qui défilent en continu ou s'enchaînent en fondu."
+    },
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "Animation",
+      "options": [
+        { "value": "marquee", "label": "Défilement continu" },
+        { "value": "fade", "label": "Messages en fondu" }
+      ],
+      "default": "marquee"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Durée d'un tour du défilement",
+      "info": "Plus le nombre est petit, plus le texte défile vite.",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "default": 45
     },
     {
       "type": "range",
       "id": "interval",
-      "label": "Durée d'affichage de chaque message",
+      "label": "Durée d'affichage de chaque message (fondu)",
       "min": 2,
       "max": 10,
       "step": 1,

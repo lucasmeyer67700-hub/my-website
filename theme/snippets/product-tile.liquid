@@ -12,6 +12,10 @@
   @param {boolean} [eager] - Load the photo at once (first tiles on screen)
   @param {string} [scope] - Unique word when the same product can show twice on a page (form ids)
 
+  Photos can be replaced for the catalogue only (theme setting « Photos du
+  catalogue »: product | colour | file in Content > Files; * for the main
+  photo). A colour photo shows when that colour tab is chosen.
+
   @example
   {% render 'product-tile', product: product %}
 {% enddoc %}
@@ -52,22 +56,52 @@
   endif
 
   assign tile_scope = scope | default: 'tile'
+
+  # Catalogue photo overrides (theme setting), never the product itself
+  assign card_image = product.featured_media.preview_image
+  assign photo_list = settings.card_photos
+  if photo_list == nil
+    assign photo_list = 'ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-fond-rose.jpg ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg'
+  endif
+  assign photo_lines = photo_list | newline_to_br | replace: ';', '<br />' | split: '<br />'
+  assign color_photo_count = 0
+  for line in photo_lines
+    assign parts = line | split: '|'
+    if parts.size < 3
+      continue
+    endif
+    assign line_handle = parts[0] | strip
+    assign line_color = parts[1] | strip
+    assign line_file = parts[2] | strip
+    if line_handle != product.handle or line_file == blank
+      continue
+    endif
+    assign line_image = images[line_file]
+    if line_image == blank
+      continue
+    endif
+    if line_color == '*'
+      assign card_image = line_image
+    else
+      assign color_photo_count = color_photo_count | plus: 1
+    endif
+  endfor
   assign tile_id = 'Tile-' | append: product.id | append: '-' | append: tile_scope
 -%}
-<product-tile class="tile" data-color-index="{{ color_index }}">
+<product-tile class="tile{% if color_photo_count > 0 %} tile--color-photos{% endif %}" data-color-index="{{ color_index }}">
   <div class="tile__visual">
   {%- liquid
     # A photo clearly wider than tall (a belt laid flat, five pads side by
     # side) is shown whole, set back on the pale ground, never cropped.
     assign tile_contain = false
-    if product.featured_media.preview_image.aspect_ratio > 1.05
+    if card_image.aspect_ratio > 1.05
       assign tile_contain = true
     endif
   -%}
   <a class="tile__media{% if tile_contain %} tile__media--contain{% endif %}" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
-    {%- if product.featured_media -%}
+    {%- if card_image -%}
       {% render 'responsive-image',
-        image: product.featured_media.preview_image,
+        image: card_image,
         sizes: image_sizes,
         widths: '360, 540, 720, 900, 1080',
         eager: eager,
@@ -85,6 +119,28 @@
       {%- endif -%}
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg tile__image' }}
+    {%- endif -%}
+    {%- comment -%} One photo per colour that has its own (shown by the colour tabs) {%- endcomment -%}
+    {%- if color_photo_count > 0 -%}
+      {%- for line in photo_lines -%}
+        {%- assign parts = line | split: '|' -%}
+        {%- if parts.size < 3 -%}{%- continue -%}{%- endif -%}
+        {%- assign line_handle = parts[0] | strip -%}
+        {%- assign line_color = parts[1] | strip -%}
+        {%- assign line_file = parts[2] | strip -%}
+        {%- if line_handle != product.handle or line_color == '*' -%}{%- continue -%}{%- endif -%}
+        {%- assign line_image = images[line_file] -%}
+        {%- if line_image == blank -%}{%- continue -%}{%- endif -%}
+        <span class="tile__color-photo{% if line_color == first.options[color_index] %} is-shown{% endif %}" data-color-photo="{{ line_color | escape }}">
+          {% render 'responsive-image',
+            image: line_image,
+            sizes: image_sizes,
+            widths: '360, 540, 720, 900, 1080',
+            decorative: true,
+            class: 'tile__image'
+          %}
+        </span>
+      {%- endfor -%}
     {%- endif -%}
     {%- if badge != blank -%}
       <span class="tile__badge">{{ badge }}</span>
@@ -189,6 +245,24 @@
     opacity: 0;
   }
 
+  /* A colour's own photo, laid over the main one when its tab is chosen */
+  .tile__color-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+
+    &.is-shown {
+      opacity: 1;
+    }
+  }
+
+  /* With colour photos, no second photo on hover (it would show the other colour) */
+  .tile--color-photos .tile__image--second {
+    display: none;
+  }
+
   .tile__media--contain .tile__image:not(.tile__image--second) {
     padding: 8%;
     object-fit: contain;
@@ -206,6 +280,7 @@
 
   .tile__badge {
     position: absolute;
+    z-index: 2;
     inset-block-start: 0.75rem;
     inset-inline-start: 0.75rem;
     padding: 0.3rem 0.55rem;
@@ -390,6 +465,7 @@
                 }
               }
               for (const other of this.querySelectorAll('.tile__tab')) other.setAttribute('aria-pressed', String(other === tab));
+              for (const photo of this.querySelectorAll('[data-color-photo]')) photo.classList.toggle('is-shown', photo.dataset.colorPhoto === tab.dataset.value);
             });
           }
         }
