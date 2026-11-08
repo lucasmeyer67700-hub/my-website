@@ -214,7 +214,9 @@
     "video_shop": "Voir le produit",
     "video_carousel": "Vidéos",
     "before_after_slider": "Faire glisser pour comparer avant et après",
-    "hero_scroll": "Défiler"
+    "hero_scroll": "Défiler",
+    "fluid_hint_mouse": "Bougez la souris.",
+    "fluid_hint_touch": "Glissez le doigt."
   },
   "collections": {
     "coming_soon": "Bientôt",
