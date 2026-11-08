@@ -50,8 +50,6 @@
     },
     "statement": {
       "type": "brand-statement",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "eyebrow": "Qui sommes-nous ?",
         "heading": "",
