@@ -1,0 +1,303 @@
+{%- comment -%}
+  Magazine spread: a large photo with its caption, a smaller one set off to
+  the side, and a short text in numbered paragraphs. No icons, no badges.
+{%- endcomment -%}
+<section
+  class="editorial section color-{{ section.settings.color_scheme }}{% if section.settings.flip %} editorial--flip{% endif %}"
+  aria-labelledby="EditorialTitle-{{ section.id }}"
+>
+  <div class="page-width editorial__grid">
+    <figure class="editorial__figure editorial__figure--main">
+      <div class="editorial__frame media reveal">
+        {%- if section.settings.image_main != blank -%}
+          {% render 'responsive-image',
+            image: section.settings.image_main,
+            sizes: '(min-width: 990px) 55vw, 100vw',
+            alt: section.settings.image_main.alt
+          %}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      {%- if section.settings.caption_main != blank -%}
+        <figcaption class="editorial__caption">{{ section.settings.caption_main | escape }}</figcaption>
+      {%- endif -%}
+    </figure>
+
+    <div class="editorial__body reveal">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="h2 editorial__title" id="EditorialTitle-{{ section.id }}" data-split-lines>{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <div class="editorial__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ol class="editorial__points" role="list">
+          {%- for block in section.blocks -%}
+            <li class="editorial__point" {{ block.shopify_attributes }}>
+              <span class="editorial__number" aria-hidden="true">{{ forloop.index | prepend: '0' }}</span>
+              <div>
+                <h3 class="editorial__point-title">{{ block.settings.title | escape }}</h3>
+                {%- if block.settings.text != blank -%}
+                  <p class="editorial__point-text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a class="editorial__link" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.image_secondary != blank -%}
+      <figure class="editorial__figure editorial__figure--aside">
+        <div class="editorial__frame media reveal">
+          {% render 'responsive-image',
+            image: section.settings.image_secondary,
+            sizes: '(min-width: 990px) 22vw, 50vw',
+            alt: section.settings.image_secondary.alt
+          %}
+        </div>
+        {%- if section.settings.caption_secondary != blank -%}
+          <figcaption class="editorial__caption">{{ section.settings.caption_secondary | escape }}</figcaption>
+        {%- endif -%}
+      </figure>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .editorial__grid {
+    display: grid;
+    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      column-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+      row-gap: 0;
+      align-items: start;
+    }
+  }
+
+  .editorial__figure {
+    margin: 0;
+  }
+
+  .editorial__frame {
+    --media-ratio: 4 / 5;
+    border-radius: 2px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .editorial__figure--main {
+      grid-column: 1 / span 7;
+      grid-row: 1 / span 2;
+    }
+
+    .editorial__body {
+      grid-column: 9 / span 4;
+      grid-row: 1;
+      padding-block-start: clamp(1rem, 4vw, 4rem);
+    }
+
+    .editorial__figure--aside {
+      grid-column: 9 / span 3;
+      grid-row: 2;
+      margin-block-start: clamp(2rem, 4vw, 4rem);
+    }
+
+    .editorial--flip {
+      & .editorial__figure--main {
+        grid-column: 6 / span 7;
+      }
+
+      & .editorial__body {
+        grid-column: 1 / span 4;
+      }
+
+      & .editorial__figure--aside {
+        grid-column: 2 / span 3;
+      }
+    }
+  }
+
+  /* Phones: the small photo sits half over the big one's edge */
+  @media screen and (max-width: 989px) {
+    .editorial__figure--aside {
+      width: 55%;
+      margin-inline-start: auto;
+    }
+  }
+
+  .editorial__caption {
+    margin-block-start: 0.6rem;
+    font-size: var(--text-xs);
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .editorial__body {
+    display: grid;
+    align-content: start;
+    gap: var(--space-sm);
+  }
+
+  .editorial__title {
+    margin: 0;
+  }
+
+  .editorial__text {
+    color: var(--color-text-muted);
+  }
+
+  .editorial__points {
+    display: grid;
+    gap: 1.25rem;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .editorial__point {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    padding-block-start: 1rem;
+    border-block-start: 1px solid rgb(var(--warm-rgb) / 0.2);
+  }
+
+  .editorial__number {
+    font-family: var(--font-heading-family);
+    font-size: var(--text-sm);
+    color: var(--rose-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .editorial__point-title {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-body-family);
+    font-size: var(--text-base);
+    font-weight: var(--font-body-weight-medium);
+    letter-spacing: 0;
+  }
+
+  .editorial__point-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .editorial__link {
+    justify-self: start;
+    margin-block-start: var(--space-xs);
+    padding-block: 0.4rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--rose-strong-rgb) / 0.6);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    transition: text-decoration-color var(--duration-base) ease;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Double page",
+  "tag": "div",
+  "class": "section-editorial",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_main",
+      "label": "Grande photo"
+    },
+    {
+      "type": "text",
+      "id": "caption_main",
+      "label": "Légende de la grande photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_secondary",
+      "label": "Petite photo"
+    },
+    {
+      "type": "text",
+      "id": "caption_secondary",
+      "label": "Légende de la petite photo"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "Grande photo à droite",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Comment elle se porte"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du lien"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Couleurs",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Paragraphe numéroté",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Titre"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte"
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Double page" }]
+}
+{% endschema %}

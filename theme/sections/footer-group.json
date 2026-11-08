@@ -28,8 +28,8 @@
         "newsletter": {
           "type": "newsletter",
           "settings": {
-            "heading": "Rejoignez le cercle VELEA",
-            "text": "Nos conseils confort et nos nouveautés, directement dans votre boîte mail."
+            "heading": "La lettre VELEA",
+            "text": "Un e-mail de temps en temps : nouveautés et offres. Désinscription en un clic."
           }
         }
       },
@@ -153,7 +153,7 @@
         "use_chat": false,
         "replace_inbox": true,
         "launcher_label": "Besoin d'aide ?",
-        "show_nudge": true,
+        "show_nudge": false,
         "nudge": "Une question ? Je vous guide en quelques secondes.",
         "title": "Assistante VELEA",
         "avatar": "shopify://shop_images/velea-monogramme.png",

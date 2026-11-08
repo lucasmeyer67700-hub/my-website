@@ -2474,6 +2474,18 @@ class SiteHeader extends HTMLElement {
     });
     this.observer.observe(sentinel);
 
+    // Reading down: the header steps aside; scrolling up brings it back.
+    this.lastY = window.scrollY;
+    this.onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - this.lastY;
+      if (Math.abs(delta) < 6) return;
+      const busy = document.querySelector('dialog[open]') || this.contains(document.activeElement);
+      document.documentElement.classList.toggle('is-header-hidden', delta > 0 && y > 320 && !busy);
+      this.lastY = y;
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+
     // Expose the height of the announcement bar + header so a full-screen
     // banner can fill exactly the rest of the first screen.
     this.abort = new AbortController();
@@ -2497,6 +2509,8 @@ class SiteHeader extends HTMLElement {
   }
 
   disconnectedCallback() {
+    window.removeEventListener('scroll', this.onScroll);
+    document.documentElement.classList.remove('is-header-hidden');
     this.observer?.disconnect();
     this.resizeObserver?.disconnect();
     this.abort?.abort();
@@ -3443,6 +3457,68 @@ function initCardGlow() {
   );
 }
 
+/**
+ * Section titles are cut into words so they can rise line by line when
+ * their block comes into view (see .split-lines in base.css). Inline
+ * elements (italics, line breaks) are kept; the title reads the same.
+ */
+function splitTitles(root = document) {
+  if (!document.body.hasAttribute('data-reveal-enabled') || !fullMotion.matches) return;
+  const titles = root.querySelectorAll('h2.h2:not(.split-lines), .section-header > h1:not(.split-lines), [data-split-lines]:not(.split-lines)');
+  for (const title of titles) {
+    if (!title.closest('.reveal') && !title.classList.contains('reveal')) continue;
+    const wrap = (node) => {
+      for (const child of [...node.childNodes]) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const parts = child.textContent.split(/(\s+)/);
+          const fragment = document.createDocumentFragment();
+          for (const part of parts) {
+            if (!part) continue;
+            if (/^\s+$/.test(part)) {
+              fragment.append(document.createTextNode(' '));
+              continue;
+            }
+            const outer = document.createElement('span');
+            outer.className = 'split-word';
+            const inner = document.createElement('span');
+            inner.textContent = part;
+            outer.append(inner);
+            fragment.append(outer);
+          }
+          child.replaceWith(fragment);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR') {
+          wrap(child);
+        }
+      }
+    };
+    wrap(title);
+    title.classList.add('split-lines');
+    numberLines(title);
+  }
+}
+
+/** Gives each word the number of its line, so a whole line moves together. */
+function numberLines(title) {
+  let line = -1;
+  let lastTop = null;
+  for (const word of title.querySelectorAll('.split-word')) {
+    const top = Math.round(word.offsetTop);
+    if (lastTop === null || Math.abs(top - lastTop) > 4) {
+      line += 1;
+      lastTop = top;
+    }
+    word.style.setProperty('--line', String(line));
+  }
+}
+
+let resizeFrame = 0;
+window.addEventListener('resize', () => {
+  cancelAnimationFrame(resizeFrame);
+  resizeFrame = requestAnimationFrame(() => {
+    for (const title of document.querySelectorAll('.split-lines')) numberLines(title);
+  });
+});
+
 // Option pills: the one just chosen answers with a small press, its colour dot with a little bloom.
 document.addEventListener('change', (event) => {
   const input = event.target;
@@ -3455,14 +3531,22 @@ document.addEventListener('change', (event) => {
   pill.querySelector('.variant-pill__swatch')?.animate([{ scale: 0.55 }, { scale: 1 }], { duration: 520, easing });
 });
 
+document.fonts?.ready.then(() => {
+  for (const title of document.querySelectorAll('.split-lines')) numberLines(title);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+  splitTitles();
   initReveal();
   initNewsletterTracking();
   initCardGlow();
 });
 
 // Re-run reveal when a section is (re)loaded in the theme editor.
-document.addEventListener('shopify:section:load', initReveal);
+document.addEventListener('shopify:section:load', (event) => {
+  splitTitles(event.target);
+  initReveal();
+});
 
 // A link to a closed <details> (e.g. "Guide des tailles" next to the sizes) opens it before scrolling to it.
 document.addEventListener('click', (event) => {

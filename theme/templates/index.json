@@ -7,9 +7,9 @@
         "display_font": "playfair_display_n4",
         "show_drops": true,
         "eyebrow": "",
-        "heading": "Vos règles, en douceur.",
+        "heading": "La chaleur d'une bouillotte. Sans le fil.",
         "heading_tag": "h1",
-        "text": "3 niveaux de chaleur, un massage par vibration et zéro fil. Elle se glisse sous un pull et vous suit toute la journée.",
+        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d'autonomie.",
         "video": "shopify://files/videos/velea-hero-ceinture.mp4",
         "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
         "photo_width": 70,
@@ -25,73 +25,19 @@
         "product": "ceinture-chauffante-regles",
         "show_price": false,
         "fallback_media_position": 2,
-        "button_label": "Je découvre la ceinture",
+        "button_label": "Voir la ceinture",
         "button_link": "",
         "secondary_label": "Toute la collection",
         "secondary_link": "shopify://collections/tous-nos-produits",
         "color_scheme": "scheme-3"
       }
     },
-    "ribbon": {
-      "type": "marquee-band",
-      "blocks": {
-        "item-1": {
-          "type": "item",
-          "settings": {
-            "text": "Sans fil, sans prise"
-          }
-        },
-        "item-2": {
-          "type": "item",
-          "settings": {
-            "text": "3 niveaux de chaleur"
-          }
-        },
-        "item-3": {
-          "type": "item",
-          "settings": {
-            "text": "Massage par vibration"
-          }
-        },
-        "item-4": {
-          "type": "item",
-          "settings": {
-            "text": "Discrète sous un pull"
-          }
-        },
-        "item-5": {
-          "type": "item",
-          "settings": {
-            "text": "Livraison offerte en France"
-          }
-        },
-        "item-6": {
-          "type": "item",
-          "settings": {
-            "text": "Satisfaite ou remboursée 30 jours"
-          }
-        }
-      },
-      "block_order": [
-        "item-1",
-        "item-2",
-        "item-3",
-        "item-4",
-        "item-5",
-        "item-6"
-      ],
-      "settings": {
-        "style": "editorial",
-        "speed": 45,
-        "color_scheme": "scheme-1"
-      }
-    },
     "before_after": {
       "type": "before-after",
       "settings": {
         "eyebrow": "",
-        "heading": "Faites glisser, <em>sentez la différence.</em>",
-        "text": "",
+        "heading": "Avant, après.",
+        "text": "Faites glisser pour comparer.",
         "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
         "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
         "label_before": "Avant",
@@ -99,7 +45,7 @@
         "ratio": "3 / 2",
         "start": 50,
         "product": "ceinture-chauffante-regles",
-        "button_label": "Je découvre la ceinture",
+        "button_label": "Voir la ceinture",
         "button_link": "",
         "note": "",
         "color_scheme": "scheme-2"
@@ -116,7 +62,7 @@
         "show_tagline": true,
         "offer_heading": "",
         "unit_label": "la ceinture",
-        "offer_note_single": "Pour vous, tout simplement",
+        "offer_note_single": "Avec son câble USB et sa notice",
         "offer_note_multi": "Une pour vous, une à offrir",
         "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
         "best_label": "Meilleure offre",
@@ -144,7 +90,7 @@
         "bundle_product": "culotte-menstruelle",
         "bundle_price": 65,
         "bundle_title": "Ceinture + culotte menstruelle",
-        "bundle_note": "La chaleur et la protection, réunies."
+        "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix."
       }
     },
     "spotlight": {
@@ -154,7 +100,7 @@
         "product": "ceinture-chauffante-regles",
         "media_position": 1,
         "eyebrow": "La ceinture VELEA",
-        "heading": "L'essentiel, <em>rien de superflu.</em>",
+        "heading": "L'essentiel, rien de superflu.",
         "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
         "show_specs": true,
         "specs_limit": 3,
@@ -205,11 +151,11 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "Portée au quotidien, <em>en vrai.</em>",
-        "text": "",
+        "heading": "En vidéo",
+        "text": "Sous un pull, au bureau, sur le canapé : la ceinture en situation.",
         "ratio": "9 / 16",
         "autoplay": true,
-        "button_label": "Je choisis ma couleur",
+        "button_label": "Choisir ma couleur",
         "button_link": "/#offre",
         "anchor": "videos",
         "color_scheme": "scheme-3"
@@ -220,7 +166,7 @@
       "settings": {
         "product": "ceinture-chauffante-regles",
         "eyebrow": "",
-        "heading": "Ce qu'elles <em>en disent.</em>",
+        "heading": "Avis clientes",
         "limit": 10,
         "speed": 7,
         "color_scheme": "scheme-2"
@@ -229,33 +175,6 @@
     "faq": {
       "type": "faq",
       "blocks": {
-        "reassure-shipping": {
-          "type": "reassurance",
-          "settings": {
-            "icon": "truck",
-            "title": "Livraison offerte en France",
-            "text": "En 7 à 14 jours ouvrés, avec un numéro de suivi.",
-            "link": "/pages/livraison-et-retours"
-          }
-        },
-        "reassure-returns": {
-          "type": "reassurance",
-          "settings": {
-            "icon": "return",
-            "title": "Satisfaite ou remboursée 30 jours",
-            "text": "Le temps de l'essayer chez vous, en plus de vos droits légaux.",
-            "link": "/pages/politique-de-retour"
-          }
-        },
-        "reassure-contact": {
-          "type": "reassurance",
-          "settings": {
-            "icon": "chat",
-            "title": "Une question ?",
-            "text": "Écrivez-nous, on vous répond par e-mail.",
-            "link": "/pages/contact"
-          }
-        },
         "pain": {
           "type": "question",
           "settings": {
@@ -286,29 +205,78 @@
         }
       },
       "block_order": [
-        "reassure-shipping",
-        "reassure-returns",
-        "reassure-contact",
         "pain",
         "clothes",
         "battery",
         "precautions"
       ],
       "settings": {
-        "eyebrow": "Questions fréquentes",
-        "heading": "Les questions qu'on <em>nous pose souvent.</em>",
+        "eyebrow": "",
+        "heading": "Questions fréquentes",
         "text": "",
         "link_label": "Toutes les questions",
         "link": "/pages/faq",
         "anchor": "faq",
         "color_scheme": "scheme-1"
       }
+    },
+    "editorial": {
+      "type": "editorial-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Allumer",
+            "text": "Un appui long sur le bouton marche/arrêt."
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Choisir sa chaleur",
+            "text": "50, 55 ou 60 °C selon le fabricant. On commence toujours par la plus douce."
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Ajouter le massage",
+            "text": "Quatre modes de vibration, avec ou sans la chaleur."
+          }
+        },
+        "p4": {
+          "type": "point",
+          "settings": {
+            "title": "Recharger",
+            "text": "Par câble USB. Environ deux heures d'autonomie, et un arrêt automatique au bout de 30 minutes."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "image_main": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
+        "caption_main": "Coloris blanc, porté sur le ventre.",
+        "image_secondary": "shopify://shop_images/velea-ceinture-blanche-dos.webp",
+        "caption_secondary": "La face intérieure, côté vêtement.",
+        "flip": false,
+        "eyebrow": "Mode d'emploi",
+        "heading": "Comment elle se porte",
+        "text": "<p>On la place sur le bas du ventre, par-dessus un vêtement fin, puis on ajuste la sangle à sa taille.</p>",
+        "button_label": "Voir la fiche de la ceinture",
+        "button_link": "shopify://products/ceinture-chauffante-regles",
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "hero",
-    "ribbon",
     "offer",
+    "editorial",
     "before_after",
     "spotlight",
     "videos",

@@ -247,7 +247,7 @@
       ],
       "settings": {
         "eyebrow": "Questions fréquentes",
-        "heading": "Avant de <em>commander.</em>",
+        "heading": "Avant de commander",
         "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
         "link_label": "Nous contacter",
         "link": "/pages/contact",
@@ -260,7 +260,7 @@
       "settings": {
         "collection": "tous-nos-produits",
         "eyebrow": "Le catalogue VELEA",
-        "heading": "Vous aimerez <em>aussi.</em>",
+        "heading": "Le reste de la collection",
         "limit": 3,
         "link_label": "Voir tout le catalogue",
         "color_scheme": "scheme-2"

@@ -245,7 +245,6 @@ h3 {
 
   & em {
     font-style: italic;
-    color: var(--color-heading-accent, var(--rose-text));
   }
 }
 
@@ -1742,30 +1741,6 @@ body:has(dialog[open]) {
     animation: title-unveil 1.2s var(--ease-reveal) calc(var(--reveal-delay, 0ms) + 0.15s) backwards;
   }
 
-  /* The main buttons catch a soft light every few seconds */
-  :is(.hero__button:not(.button--secondary), .product-form__submit:not([disabled]), .welcome-popup__submit) {
-    overflow: hidden;
-    isolation: isolate;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.2) 50%, transparent 70%);
-      transform: translateX(-120%);
-      animation: button-shine 7s var(--ease-out) 2.4s infinite;
-      pointer-events: none;
-    }
-  }
-
-  [data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button)::after {
-    animation: button-shine 7s var(--ease-out) 3.6s infinite;
-  }
-
-  [data-buy-now='accent'] .product-form__express :is(.shopify-payment-button__button--unbranded, .buy-now-button):hover::after {
-    animation: none;
-  }
 }
 
 @keyframes title-unveil {
@@ -1780,16 +1755,6 @@ body:has(dialog[open]) {
   }
 }
 
-@keyframes button-shine {
-  0% {
-    transform: translateX(-120%);
-  }
-
-  20%,
-  100% {
-    transform: translateX(120%);
-  }
-}
 
 /* Product photos: a soft light follows the pointer (position set by the script) */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -1856,18 +1821,6 @@ details[id] {
     filter: none;
   }
 
-  /* The italic words of a title get a rose line that draws itself */
-  .js [data-reveal-enabled] .reveal :is(h2, .h2) em {
-    background-image: linear-gradient(rgb(var(--rose-strong-rgb) / 0.45), rgb(var(--rose-strong-rgb) / 0.45));
-    background-position: 0 92%;
-    background-repeat: no-repeat;
-    background-size: 0% 0.06em;
-    transition: background-size 1.2s var(--ease-reveal) calc(var(--reveal-delay, 0ms) + 0.6s);
-  }
-
-  .js [data-reveal-enabled] .reveal.is-visible :is(h2, .h2) em {
-    background-size: 100% 0.06em;
-  }
 }
 
 /* Scroll-linked effects, in browsers that can tie an animation to scrolling */
@@ -1991,4 +1944,213 @@ details[id] {
   :is(.product-form__submit:not([disabled]), .welcome-popup__submit)::after {
     display: none;
   }
+}
+
+
+/* ==========================================================================
+   Editorial finish (v66)
+   Fewer devices, more typography: titles set like a magazine, small labels
+   without ornaments, buttons without arrows, calm and precise motion.
+   ========================================================================== */
+
+h1,
+h2,
+.h1,
+.h2 {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.h2,
+h2 {
+  line-height: 1.04;
+}
+
+/* Small labels: spaced capitals, no little lines around them */
+.eyebrow {
+  gap: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--rose-text);
+
+  &::before,
+  &::after {
+    content: none;
+  }
+}
+
+.section-header--center .eyebrow::after,
+.eyebrow--center::after {
+  content: none;
+}
+
+/* Section titles start on the left, like the page of a magazine */
+.section-header.section-header--center {
+  margin-inline: 0;
+  text-align: start;
+  justify-items: start;
+}
+
+.section-header {
+  max-width: 52rem;
+}
+
+.section-header .lead {
+  max-width: 34rem;
+  font-size: var(--text-md);
+}
+
+/* Buttons speak for themselves: no arrow, a fill that slides in on hover */
+.button > .icon--arrow-right {
+  display: none;
+}
+
+.button:not(.button--secondary):not([disabled]) {
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--rose-cta);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.5s var(--ease-reveal);
+  }
+
+  &:hover {
+    border-color: var(--rose-cta);
+    color: #fff;
+    box-shadow: none;
+    translate: none;
+  }
+
+  &:hover::before {
+    transform: scaleY(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Titles rise line by line from behind their baseline (words split by the script) */
+  .js [data-reveal-enabled] .split-lines .split-word {
+    display: inline-block;
+    overflow: hidden;
+    padding-block-end: 0.12em;
+    margin-block-end: -0.12em;
+    vertical-align: top;
+  }
+
+  .js [data-reveal-enabled] .split-lines .split-word > span {
+    display: inline-block;
+    transform: translateY(105%);
+    transition: transform 1.1s var(--ease-reveal);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--line, 0) * 110ms + 80ms);
+  }
+
+  .js [data-reveal-enabled] .is-visible .split-lines .split-word > span,
+  .js [data-reveal-enabled] .split-lines.is-visible .split-word > span {
+    transform: none;
+  }
+
+  /* With the words moving, the title block itself no longer needs to */
+  .js [data-reveal-enabled] .reveal.is-visible > .h2.split-lines {
+    animation: none;
+  }
+
+  .js [data-reveal-enabled] .section-header.reveal:has(.split-lines) {
+    filter: none;
+  }
+
+  /* Photos open like a curtain, then settle */
+  .js [data-reveal-enabled] .reveal :is(.media, .featured-product__media, .before-after__frame, .product-video__media) {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1.3s var(--ease-reveal);
+    transition-delay: calc(var(--reveal-delay, 0ms) + 0.1s);
+  }
+
+  .js [data-reveal-enabled] .reveal.is-visible :is(.media, .featured-product__media, .before-after__frame, .product-video__media),
+  .js [data-reveal-enabled] .reveal:is(.media, .featured-product__media, .before-after__frame, .product-video__media).is-visible {
+    clip-path: inset(0);
+  }
+
+  .js [data-reveal-enabled] .reveal:is(.media, .before-after__frame) {
+    clip-path: inset(0 0 100% 0);
+    opacity: 1;
+    transform: none;
+    transition: clip-path 1.3s var(--ease-reveal);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal-enabled] .reveal:is(.media, .before-after__frame).is-visible {
+    clip-path: inset(0);
+  }
+
+  /* FAQ answers unfold instead of jumping */
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+
+    details::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 0.45s var(--ease-reveal),
+        content-visibility 0.45s allow-discrete;
+    }
+
+    details[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  /* The header steps aside while reading down, comes back when going up */
+  .section-header-wrapper {
+    transition: transform 0.45s var(--ease-reveal);
+  }
+
+  html.is-header-hidden .section-header-wrapper {
+    transform: translateY(-100%);
+  }
+
+  /* Product photos: a slow zoom on hover */
+  @media (hover: hover) {
+    :is(.product-card__media, .rail__media) img {
+      transition: scale 1.4s var(--ease-reveal);
+    }
+
+    .product-card:hover .product-card__media img {
+      scale: 1.04;
+    }
+  }
+
+  /* Page to page: the old page fades, the new one rises a little */
+  ::view-transition-old(root) {
+    animation: page-fade-out 0.25s ease both;
+  }
+
+  ::view-transition-new(root) {
+    animation: page-fade-in 0.6s var(--ease-reveal) both;
+  }
+}
+
+/* The light that followed the pointer over product photos is retired */
+.product-card__media::after {
+  content: none;
+}
+
+/* Product page « Au quotidien »: plain lines separated by hairlines, no icons */
+.product-benefits__icon {
+  display: none;
+}
+
+.product-benefits__item {
+  padding-block-start: 0.85rem;
+  border-block-start: 1px solid rgb(var(--warm-rgb) / 0.18);
 }

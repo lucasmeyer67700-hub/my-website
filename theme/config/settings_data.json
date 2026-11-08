@@ -2,10 +2,10 @@
   "current": {
     "logo_width": 120,
     "favicon": "shopify://shop_images/velea-favicon-v.png",
-    "brand_tagline": "Le confort menstruel, avec douceur.",
+    "brand_tagline": "Ceinture chauffante sans fil, pensée pour les jours de règles.",
     "seo_home_title": "Ceinture chauffante pour les règles",
     "seo_description": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France.",
-    "type_heading_font": "serif",
+    "type_heading_font": "playfair_display_n4",
     "type_body_font": "dm_sans_n4",
     "heading_scale": 100,
     "page_width": 1280,
@@ -22,7 +22,7 @@
     "cart_type": "drawer",
     "cart_note": false,
     "cart_upsell_collection": "tous-nos-produits",
-    "cart_upsell_heading": "Pour compléter votre rituel",
+    "cart_upsell_heading": "À ajouter à votre commande",
     "cart_upsell_limit": 2,
     "card_photo_positions": "ceinture-chauffante-regles | 50% 38%",
     "cart_colour_images": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-portee.webp\nculotte-menstruelle | Rouge | velea-culotte-rouge-face.webp\nculotte-menstruelle | Beige | velea-culotte-beige-face-hd.webp",
@@ -168,7 +168,7 @@
       }
     },
     "product_photo_background": "#f7f0f0",
-    "section_curves": true
+    "section_curves": false
   },
   "presets": {
     "Douceur": {
