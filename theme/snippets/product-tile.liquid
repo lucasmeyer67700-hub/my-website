@@ -63,7 +63,7 @@
   assign hover_image = product.media[1].preview_image
   assign photo_list = settings.card_photos
   if photo_list == nil
-    assign photo_list = 'ceinture-chauffante-regles | survol | velea-ceinture-survol-fond-rose.jpg ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; culotte-menstruelle | survol | velea-culotte-details.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg ; serviettes-menstruelles-lavables | survol | velea-serviette-details.jpg ; huile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg'
+    assign photo_list = 'ceinture-chauffante-regles | survol | velea-ceinture-survol-fond-rose.jpg ; ceinture-chauffante-regles | Blanc | img-mw7vy7yy-8eb97d1c.png ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; culotte-menstruelle | survol | velea-culotte-details.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg ; serviettes-menstruelles-lavables | survol | velea-serviette-details.jpg ; huile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg'
   endif
   assign photo_lines = photo_list | newline_to_br | replace: ';', '<br />' | split: '<br />'
   assign color_photo_count = 0
@@ -487,6 +487,13 @@
               }
               for (const other of this.querySelectorAll('.tile__tab')) other.setAttribute('aria-pressed', String(other === tab));
               for (const photo of this.querySelectorAll('[data-color-photo]')) photo.classList.toggle('is-shown', photo.dataset.colorPhoto === tab.dataset.value);
+              // The card's links open the product in the chosen colour.
+              for (const link of this.querySelectorAll('.tile__media, .tile__title a, .tile__bar--link')) {
+                if (!link.dataset.baseHref) link.dataset.baseHref = link.getAttribute('href');
+                const url = new URL(link.dataset.baseHref, location.href);
+                url.searchParams.set('variant', String(match.id));
+                link.setAttribute('href', url.pathname + url.search);
+              }
             });
           }
         }
