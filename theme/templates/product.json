@@ -168,7 +168,10 @@
         "show_media_slots": true,
         "sticky_bar": true,
         "color_scheme": "scheme-3",
-        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
+        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+        "klarna_show": true,
+        "klarna_count": 4,
+        "klarna_text": "Payez en [n] fois sans frais :"
       }
     },
     "related": {

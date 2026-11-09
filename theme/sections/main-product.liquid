@@ -465,6 +465,19 @@
           <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
           {{ form | payment_terms }}
         {%- endform -%}
+        {%- if section.settings.klarna_show and section.settings.klarna_count > 1 -%}
+          {%- liquid
+            assign klarna_count = section.settings.klarna_count
+            assign klarna_part = current_variant.price | times: 1.0 | divided_by: klarna_count | round
+            assign klarna_text = section.settings.klarna_text | replace: '[n]', klarna_count
+          -%}
+          <p class="product__klarna" data-klarna data-klarna-count="{{ klarna_count }}">
+            <span>{{ klarna_text | escape }}</span>
+            <span class="product__klarna-amount">{{ klarna_count }} × <strong data-klarna-amount>{{ klarna_part | money }}</strong></span>
+            <span>{{ 'products.klarna_with' | t }}</span>
+            <span class="product__klarna-badge">Klarna.</span>
+          </p>
+        {%- endif -%}
         {%- if tagline != blank -%}
           <p class="product__tagline">{{ tagline | escape }}</p>
         {%- endif -%}
@@ -631,6 +644,33 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-xs);
+  }
+
+  .product__klarna {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.4rem;
+    margin: 0;
+    font-size: var(--text-sm, 0.9rem);
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .product__klarna-amount strong {
+    font-weight: 600;
+  }
+
+  .product__klarna-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    border-radius: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #17120f;
+    background-color: #ffb3c7;
   }
 
   .product__tagline {
@@ -956,6 +996,28 @@
       "label": "Pastille à côté du prix",
       "info": "Une information vraie (ex. : Nouveauté). Laissez vide pour la masquer.",
       "default": "Nouveauté"
+    },
+    {
+      "type": "checkbox",
+      "id": "klarna_show",
+      "label": "Paiement en plusieurs fois avec Klarna",
+      "info": "N'affichez que les conditions que Klarna propose vraiment dans votre compte (Paramètres > Paiements > Klarna).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "klarna_count",
+      "label": "Nombre de fois",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "klarna_text",
+      "label": "Texte (le chiffre remplace [n])",
+      "default": "Payez en [n] fois sans frais :"
     },
     {
       "type": "select",

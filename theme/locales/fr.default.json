@@ -93,7 +93,8 @@
     "tile_add": "Ajouter au panier",
     "tile_choose": "Choisir",
     "video_sound": "Activer ou couper le son de la vidéo",
-    "view_video": "Afficher la vidéo"
+    "view_video": "Afficher la vidéo",
+    "klarna_with": "avec"
   },
   "cart": {
     "title": "Votre panier",

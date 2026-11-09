@@ -3672,3 +3672,23 @@ document.addEventListener('click', (event) => {
   const target = document.getElementById(decodeURIComponent(link.getAttribute('href').slice(1)));
   if (target instanceof HTMLDetailsElement) target.open = true;
 });
+
+/* Klarna line under the price: the amount of each payment follows the price shown
+   (colour, pack or Duo chosen). */
+function initKlarna() {
+  for (const line of document.querySelectorAll('[data-klarna]')) {
+    const count = Number(line.dataset.klarnaCount) || 1;
+    const amount = line.querySelector('[data-klarna-amount]');
+    const price = line.closest('section, .shopify-section')?.querySelector('[data-price-current]');
+    if (!amount || !price) continue;
+    const update = () => {
+      const value = parseFloat(price.textContent.replace(/[^\d,.]/g, '').replace(/\.(?=\d{3})/g, '').replace(',', '.'));
+      if (!Number.isFinite(value) || value <= 0) return;
+      amount.textContent = `${(Math.round((value / count) * 100) / 100).toFixed(2).replace('.', ',')}€`;
+    };
+    new MutationObserver(update).observe(price, { childList: true, characterData: true, subtree: true });
+    update();
+  }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initKlarna);
+else initKlarna();
