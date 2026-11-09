@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero_fluid": {
@@ -33,6 +42,23 @@
         "link": ""
       }
     },
+    "empathy": {
+      "type": "empathy-band",
+      "settings": {
+        "eyebrow": "Les jours de règles",
+        "heading": "On connaît ces jours-là, <em>et on vous comprend.</em>",
+        "text": "<p>Ce tiraillement qui revient chaque mois, souvent au mauvais moment. On ralentit, on serre les dents, on attend que ça passe.</p>",
+        "subheading": "Une chaleur douce, qui vous suit.",
+        "subtext": "La ceinture Velea se fixe à la taille et diffuse une chaleur réglable sur le bas du ventre, sans fil : à la maison, au bureau ou en déplacement.",
+        "button_label": "Découvrir la ceinture",
+        "product": "ceinture-chauffante-regles",
+        "button_link": "",
+        "image": "shopify://shop_images/Gemini_Generated_Image_ophsqkophsqkophs_jpg.webp",
+        "image_side": "right",
+        "accent": "#6b3a4d",
+        "show_heart": true
+      }
+    },
     "pack_banner": {
       "type": "feature-banner",
       "settings": {
@@ -63,7 +89,7 @@
         "ratio": "3 / 2",
         "start": 50,
         "product": "ceinture-chauffante-regles",
-        "button_label": "Voir la ceinture",
+        "button_label": "",
         "button_link": "",
         "note": "",
         "color_scheme": "scheme-2"
@@ -229,7 +255,7 @@
         "perks_multi": "",
         "hide_multi": true,
         "bundle_product": "culotte-menstruelle",
-        "bundle_price": 53.99,
+        "bundle_price": 54.0,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
         "show_dynamic_checkout": true,
@@ -322,23 +348,6 @@
         "button_label": "Découvrir la ceinture",
         "anchor": "",
         "color_scheme": "scheme-3"
-      }
-    },
-    "empathy": {
-      "type": "empathy-band",
-      "settings": {
-        "eyebrow": "Les jours de règles",
-        "heading": "On connaît ces jours-là, <em>et on vous comprend.</em>",
-        "text": "<p>Ce tiraillement qui revient chaque mois, souvent au mauvais moment. On ralentit, on serre les dents, on attend que ça passe.</p>",
-        "subheading": "Une chaleur douce, qui vous suit.",
-        "subtext": "La ceinture VELEA se fixe à la taille et diffuse une chaleur réglable sur le bas du ventre, sans fil : à la maison, au bureau ou en déplacement.",
-        "button_label": "Découvrir la ceinture",
-        "product": "ceinture-chauffante-regles",
-        "button_link": "",
-        "image": "shopify://shop_images/img-mw7n44vx-61fda88e.png",
-        "image_side": "right",
-        "accent": "#6b3a4d",
-        "show_heart": true
       }
     }
   },

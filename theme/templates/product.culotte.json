@@ -319,7 +319,7 @@
           "type": "question",
           "settings": {
             "question": "Quels sont les délais de livraison ?",
-            "answer": "<p>La livraison est offerte en France, en 7 à 14 jours ouvrés, avec un numéro de suivi.</p>"
+            "answer": "<p>La livraison est offerte en France, en 7 jours ouvrés, avec un numéro de suivi.</p>"
           }
         }
       },

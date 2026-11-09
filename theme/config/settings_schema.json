@@ -270,7 +270,7 @@
         "type": "text",
         "id": "shipping_delay",
         "label": "Délai de livraison",
-        "info": "Laissez vide tant que le délai n'est pas confirmé par votre fournisseur. Exemple : 7 à 14 jours ouvrés."
+        "info": "Laissez vide tant que le délai n'est pas confirmé par votre fournisseur. Exemple : 7 jours ouvrés."
       },
       {
         "type": "text",

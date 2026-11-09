@@ -2337,7 +2337,7 @@
       }
       if (this.answers.tracking) ctx.reply.text(firstSentence(this.answers.tracking));
       if (/noel|anniversaire|fete|date|avant le|pour le/.test(fold(ctx.raw))) {
-        ctx.reply.text('Pour une date importante, commandez au moins 14 jours ouvrés avant, et écrivez-nous si besoin : notre équipe vous répond.');
+        ctx.reply.text('Pour une date importante, commandez au moins 7 jours ouvrés avant, et écrivez-nous si besoin : notre équipe vous répond.');
       }
       ctx.reply.link('Livraison et retours en détail', this.urls.shipping);
       ctx.reply.chip(CHIP.tracking, CHIP.returns, CHIP.catalogue);

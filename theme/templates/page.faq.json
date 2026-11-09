@@ -144,7 +144,7 @@
           "type": "question",
           "settings": {
             "question": "Quel est le délai de livraison ?",
-            "answer": "<p>Comptez 7 à 14 jours ouvrés entre la commande et la réception. Un numéro de suivi vous est envoyé par e-mail dès l'expédition.</p>"
+            "answer": "<p>Comptez 7 jours ouvrés entre la commande et la réception. Un numéro de suivi vous est envoyé par e-mail dès l'expédition.</p>"
           }
         },
         "tracking": {
