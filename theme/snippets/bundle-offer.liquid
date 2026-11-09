@@ -17,7 +17,7 @@
   @param {string} section_id - Section id, for unique element ids
 
   @example
-  {% render 'bundle-offer', product: product, bundle_product: pants, bundle_price: 64.99, unit_price: 4499, base_value: '1 ceinture', input_name: 'Option-x-1', section_id: section.id %}
+  {% render 'bundle-offer', product: product, bundle_product: pants, bundle_price: 53.99, unit_price: 4499, base_value: '1 ceinture', input_name: 'Option-x-1', section_id: section.id %}
 {% enddoc %}
 {%- liquid
   assign pack_cents = bundle_price | times: 100 | round

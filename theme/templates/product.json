@@ -16,7 +16,7 @@
             "perks_multi": "Deux ensembles complets : câbles USB et notices",
             "hide_multi": true,
             "bundle_product": "culotte-menstruelle",
-            "bundle_price": 65,
+            "bundle_price": 53.99,
             "bundle_title": "Ceinture + culotte menstruelle",
             "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix."
           }
@@ -230,7 +230,7 @@
           "type": "question",
           "settings": {
             "question": "Que contient le pack ceinture + culotte ?",
-            "answer": "<p>La ceinture chauffante, avec son câble de charge USB et sa notice, et une culotte menstruelle dans la couleur et la taille de votre choix. Le pack est à 64,99 € au lieu de 70,98 € pour les deux articles achetés séparément : la remise s'applique automatiquement dans le panier.</p>"
+            "answer": "<p>La ceinture chauffante, avec son câble de charge USB et sa notice, et une culotte menstruelle dans la couleur et la taille de votre choix. Le pack est à 53,99 € au lieu de 59,98 € pour les deux articles achetés séparément : la remise s'applique automatiquement dans le panier.</p>"
           }
         },
         "secure": {
