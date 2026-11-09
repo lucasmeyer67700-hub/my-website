@@ -37,8 +37,27 @@
     data-explode
   {% endif %}
   id="HeroFluid-{{ section.id }}"
-  style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }};"
+  style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }}; --fl-drop: {{ section.settings.drop_color }};"
 >
+  {%- if section.settings.intro -%}
+    {%- comment -%}
+      Decided before the first paint, so the title is never seen twice: the
+      drop on the first visit of the session, the usual arrival afterwards.
+      Nothing for visitors who ask for less motion.
+    {%- endcomment -%}
+    <script>
+      (function (el) {
+        if (!el || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var mode = 'full';
+        try {
+          if (sessionStorage.getItem('velea-intro')) mode = 'short';
+        } catch (e) {
+          mode = 'short';
+        }
+        el.setAttribute('data-intro', mode);
+      })(document.getElementById('HeroFluid-{{ section.id }}'));
+    </script>
+  {%- endif -%}
   <section class="hero-fl__inner" aria-labelledby="HeroFluidTitle-{{ section.id }}">
     <canvas class="hero-fl__canvas" aria-hidden="true"></canvas>
 
@@ -398,6 +417,124 @@
     }
   }
 
+  /* The drop (first visit of the session): the title waits for the splash */
+  .hero-fl[data-intro='full'] .hero-fl__line,
+  .hero-fl.is-playful .hero-fl__line {
+    clip-path: none;
+  }
+
+  .hero-fl[data-intro='full'] .hero-fl__line-inner {
+    animation: none;
+  }
+
+  /* If the script never comes, the page still shows itself */
+  .hero-fl[data-intro='full']:not([data-intro-run]) .hero-fl__title {
+    animation: hero-fl-wait 0.6s ease 3.2s both;
+  }
+
+  .hero-fl[data-intro='full']:not([data-intro-run]) .hero-fl__inner::before {
+    animation: hero-fl-wait 1.2s ease 3.2s both;
+  }
+
+  /* White paper until the splash; without WebGL the rose wash blooms then */
+  .hero-fl[data-intro-run]:not(.is-splashed) .hero-fl__inner::before {
+    opacity: 0;
+    transition: none;
+  }
+
+  .hero-fl[data-intro='full'] .hero-fl__canvas {
+    transition-duration: 0.5s;
+    transition-delay: 0s;
+  }
+
+  .hero-fl__word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .hero-fl__char {
+    display: inline-block;
+    transform-origin: 50% 50%;
+  }
+
+  .hero-fl[data-intro='full'] .hero-fl__char {
+    transition: color 0.9s ease 0.05s;
+  }
+
+  .hero-fl__char.is-wet {
+    color: var(--fl-drop, #a3304a);
+  }
+
+  .hero-fl__char.is-moving {
+    will-change: transform;
+  }
+
+  .hero-fl.is-playful .hero-fl__char {
+    pointer-events: auto;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero-fl.is-playful .hero-fl__char {
+      cursor: grab;
+    }
+  }
+
+  .hero-fl.is-grabbing,
+  .hero-fl.is-grabbing .hero-fl__char {
+    cursor: grabbing;
+  }
+
+  .hero-fl__drop,
+  .hero-fl__spl,
+  .hero-fl__ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .hero-fl__drop {
+    z-index: 3;
+    display: block;
+    color: var(--fl-drop, #a3304a);
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+
+  .hero-fl__drop svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero-fl__spl {
+    z-index: 3;
+    display: block;
+    border-radius: 50%;
+    background: var(--fl-drop, #a3304a);
+    transform-origin: 50% 50%;
+    will-change: transform, opacity;
+  }
+
+  .hero-fl__ring {
+    z-index: 0;
+    box-sizing: border-box;
+    border: 2px solid var(--fl-drop, #a3304a);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  @keyframes hero-fl-wait {
+    from {
+      opacity: 0;
+    }
+  }
+
   @keyframes hero-fl-up {
     from {
       opacity: 0;
@@ -492,6 +629,23 @@
       "type": "url",
       "id": "secondary_link",
       "label": "Lien discret"
+    },
+    {
+      "type": "header",
+      "content": "Entrée"
+    },
+    {
+      "type": "checkbox",
+      "id": "intro",
+      "label": "Goutte d'entrée et lettres animées",
+      "info": "Première visite de la session : une goutte tombe et éclate, les lettres du titre jaillissent de l'éclaboussure. Ensuite, les lettres s'attrapent à la souris et sautent au toucher.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "drop_color",
+      "label": "Couleur de la goutte",
+      "default": "#a3304a"
     },
     {
       "type": "header",
