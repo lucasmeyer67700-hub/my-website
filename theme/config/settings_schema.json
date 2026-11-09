@@ -249,7 +249,7 @@
         "id": "card_photos",
         "label": "Photos du catalogue",
         "info": "Remplace la photo d'un produit dans les cases du catalogue et de l'accueil, sans toucher au produit. Une ligne par photo : produit | couleur | nom du fichier (Contenu > Fichiers). Mettez * à la place de la couleur pour la photo principale ; une couleur (ex. Blanc) s'affiche quand on clique sur son onglet ; « survol » donne la photo affichée au passage de la souris.",
-        "default": "ceinture-chauffante-regles | Blanc | velea-ceinture-blanche-seule.jpg\nceinture-chauffante-regles | survol | velea-ceinture-rose-seule.jpg\nculotte-menstruelle | * | velea-culotte-fond-rose.jpg\nculotte-menstruelle | survol | velea-culotte-details.jpg\nserviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg\nserviettes-menstruelles-lavables | survol | velea-serviette-details.jpg\nhuile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg"
+        "default": "culotte-menstruelle | * | velea-culotte-fond-rose.jpg\nculotte-menstruelle | survol | velea-culotte-details.jpg\nserviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg\nserviettes-menstruelles-lavables | survol | velea-serviette-details.jpg\nhuile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg"
       }
     ]
   },
