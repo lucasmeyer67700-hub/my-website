@@ -128,13 +128,6 @@
             "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
           }
         },
-        "color_photo_blanc_2": {
-          "type": "color_photo",
-          "settings": {
-            "color": "Blanc",
-            "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
-          }
-        },
         "color_photo_blanc_3": {
           "type": "color_photo",
           "settings": {
@@ -163,7 +156,6 @@
         "box",
         "safety",
         "color_photo_blanc_1",
-        "color_photo_blanc_2",
         "color_photo_blanc_3",
         "color_photo_blanc_4"
       ],

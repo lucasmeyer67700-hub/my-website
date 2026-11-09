@@ -106,6 +106,7 @@
       capture media_color
         render 'media-color', media: media, colors: color_list
       endcapture
+      assign media_color = media_color | strip
       if media_color == current_color
         assign initial_media = media
         break
@@ -160,6 +161,7 @@
               capture media_color
                 render 'media-color', media: media, colors: color_list
               endcapture
+              assign media_color = media_color | strip
             endif
             if media_color == blank
               assign media_color = default_media_color
@@ -335,6 +337,7 @@
             capture thumb_color
               render 'media-color', media: media, colors: color_list
             endcapture
+            assign thumb_color = thumb_color | strip
           endif
           if thumb_color == blank
             assign thumb_color = default_media_color
