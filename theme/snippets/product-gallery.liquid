@@ -215,42 +215,20 @@
             {%- endcase -%}
           </li>
           {%- if forloop.first and video != blank -%}
-            <li
-              class="gallery__slide gallery__slide--video"
-              data-gallery-slide
-              data-media-id="gallery-video"
-              {% if default_media_color != blank %}
-                data-media-color="{{ default_media_color }}"
-              {% endif %}
-              {% if video_hidden %}
-                hidden
-              {% endif %}
-            >
-              {{
-                video
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  playsinline: true,
-                  preload: 'metadata',
-                  image_size: '1200x',
-                  class: 'gallery__video'
-              }}
-              <button type="button" class="gallery__sound" data-gallery-sound aria-pressed="false">
-                <span class="gallery__sound-icon gallery__sound-icon--off">{% render 'icon', icon: 'volume-off' %}</span>
-                <span class="gallery__sound-icon gallery__sound-icon--on">{% render 'icon', icon: 'volume' %}</span>
-                <span class="visually-hidden">{{ 'products.video_sound' | t }}</span>
-              </button>
-            </li>
+            {% render 'gallery-video', video: video, color: default_media_color, hidden: video_hidden %}
           {%- endif -%}
         {%- endfor -%}
+        {%- assign video_colors = ',' | append: default_media_color | append: ',' -%}
         {%- for block in overlays -%}
           {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
             {%- liquid
               assign block_color = block.settings.color | handleize
               assign block_alt = block.settings.image.alt | default: product.title | append: ' – ' | append: block.settings.color
+              assign color_key = ',' | append: block_color | append: ','
+              assign block_hidden = false
+              if selected_has_photos and block_color != selected_color
+                assign block_hidden = true
+              endif
             -%}
             <li
               class="gallery__slide{% if block.settings.image.aspect_ratio > 1.05 %} gallery__slide--whole{% endif %}"
@@ -273,6 +251,11 @@
                 <span class="visually-hidden">{{ 'products.zoom' | t }}</span>
               </button>
             </li>
+            {%- comment -%} The video also comes second among each other colour's photos {%- endcomment -%}
+            {%- unless video == blank or video_colors contains color_key -%}
+              {%- assign video_colors = video_colors | append: block_color | append: ',' -%}
+              {% render 'gallery-video', video: video, color: block_color, hidden: block_hidden %}
+            {%- endunless -%}
           {%- endif -%}
         {%- endfor -%}
       </ul>
@@ -405,34 +388,30 @@
           </button>
         </li>
         {%- if forloop.first and video != blank -%}
-          <li
-            {% if video_hidden %}
-              hidden
-            {% endif %}
-          >
-            <button type="button" class="gallery__thumb gallery__thumb--video" data-gallery-thumb>
-              {%- if video.preview_image -%}
-                {% render 'responsive-image', image: video.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
-              {%- endif -%}
-              <span class="gallery__thumb-play" aria-hidden="true">{% render 'icon', icon: 'play' %}</span>
-              <span class="visually-hidden">{{ 'products.view_video' | t }}</span>
-            </button>
-          </li>
+          {% render 'gallery-video', video: video, thumb: true, hidden: video_hidden %}
         {%- endif -%}
       {%- endfor -%}
+      {%- assign video_colors = ',' | append: default_media_color | append: ',' -%}
       {%- for block in overlays -%}
         {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
-          {%- assign block_color = block.settings.color | handleize -%}
-          <li
-            {% if selected_has_photos and block_color != selected_color %}
-              hidden
-            {% endif %}
-          >
+          {%- liquid
+            assign block_color = block.settings.color | handleize
+            assign color_key = ',' | append: block_color | append: ','
+            assign block_hidden = false
+            if selected_has_photos and block_color != selected_color
+              assign block_hidden = true
+            endif
+          -%}
+          <li {% if block_hidden %}hidden{% endif %}>
             <button type="button" class="gallery__thumb" data-gallery-thumb>
               {% render 'responsive-image', image: block.settings.image, sizes: '96px', widths: '96, 192, 288', alt: block.settings.color %}
               <span class="visually-hidden">{{ block.settings.color | escape }}</span>
             </button>
           </li>
+          {%- unless video == blank or video_colors contains color_key -%}
+            {%- assign video_colors = video_colors | append: block_color | append: ',' -%}
+            {% render 'gallery-video', video: video, thumb: true, hidden: block_hidden %}
+          {%- endunless -%}
         {%- endif -%}
       {%- endfor -%}
       {%- for i in (1..free_slots) -%}

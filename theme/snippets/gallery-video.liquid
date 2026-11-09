@@ -1,0 +1,53 @@
+{% doc %}
+  The product video inside the photo gallery: as a slide (muted, looping,
+  played by the gallery while it is the one on show, with a sound button) or
+  as its thumbnail with a play sign. It is shown with one colour's photos.
+
+  @param {object} video - The video
+  @param {string} [color] - Colour handle of the photos it goes with
+  @param {boolean} [hidden] - Hidden at first (another colour is chosen)
+  @param {boolean} [thumb] - Render the thumbnail instead of the slide
+
+  @example
+  {% render 'gallery-video', video: video, color: 'rose', hidden: false %}
+{% enddoc %}
+{%- if thumb -%}
+  <li {% if hidden %}hidden{% endif %}>
+    <button type="button" class="gallery__thumb gallery__thumb--video" data-gallery-thumb>
+      {%- if video.preview_image -%}
+        {% render 'responsive-image', image: video.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
+      {%- endif -%}
+      <span class="gallery__thumb-play" aria-hidden="true">{% render 'icon', icon: 'play' %}</span>
+      <span class="visually-hidden">{{ 'products.view_video' | t }}</span>
+    </button>
+  </li>
+{%- else -%}
+  <li
+    class="gallery__slide gallery__slide--video"
+    data-gallery-slide
+    data-media-id="gallery-video-{{ color | default: 'all' }}"
+    {% if color != blank %}
+      data-media-color="{{ color }}"
+    {% endif %}
+    {% if hidden %}
+      hidden
+    {% endif %}
+  >
+    {{
+      video
+      | video_tag:
+        loop: true,
+        muted: true,
+        controls: false,
+        playsinline: true,
+        preload: 'metadata',
+        image_size: '1200x',
+        class: 'gallery__video'
+    }}
+    <button type="button" class="gallery__sound" data-gallery-sound aria-pressed="false">
+      <span class="gallery__sound-icon gallery__sound-icon--off">{% render 'icon', icon: 'volume-off' %}</span>
+      <span class="gallery__sound-icon gallery__sound-icon--on">{% render 'icon', icon: 'volume' %}</span>
+      <span class="visually-hidden">{{ 'products.video_sound' | t }}</span>
+    </button>
+  </li>
+{%- endif -%}
