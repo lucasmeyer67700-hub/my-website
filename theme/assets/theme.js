@@ -1807,12 +1807,20 @@ class MediaGallery extends HTMLElement {
     });
 
     this.addEventListener('click', (event) => {
+      // A swipe in full screen ends with a click: it must not close the view.
+      if (this.swiped) {
+        this.swiped = false;
+        return;
+      }
       const zoom = event.target.closest('[data-gallery-zoom]');
       if (zoom) this.#openLightbox(zoom);
       if (event.target.closest('[data-lightbox-close]') || event.target === this.lightbox) {
         this.lightbox?.close();
       }
+      if (event.target.closest('[data-lightbox-prev]')) this.#stepLightbox(-1);
+      if (event.target.closest('[data-lightbox-next]')) this.#stepLightbox(1);
     });
+    this.#initLightboxSwipe();
 
     // Start on the selected variant's image (e.g. when arriving with ?variant=).
     const initialIndex = this.slides.findIndex((slide) => slide.dataset.mediaId === this.dataset.initialMedia);
@@ -1903,18 +1911,6 @@ class MediaGallery extends HTMLElement {
     const strip = this.querySelector('.gallery__thumbs');
     if (strip) strip.hidden = !multiple;
     this.toggleAttribute('data-single', !multiple);
-    // Large screens: the first photo, and a last one alone on its row, take the full width.
-    for (const slide of slides) {
-      slide.removeAttribute('data-wide');
-      slide.removeAttribute('data-lead');
-    }
-    const [lead] = this.slides;
-    if (lead) {
-      lead.setAttribute('data-wide', '');
-      lead.setAttribute('data-lead', '');
-    }
-    if (this.slides.length > 1 && this.slides.length % 2 === 0) this.slides.at(-1).setAttribute('data-wide', '');
-    this.setAttribute('data-ready', '');
     // Phones: one dot per photo, to see how many there are and jump to one.
     const dots = this.querySelector('[data-gallery-dots]');
     if (dots) {
@@ -1963,13 +1959,86 @@ class MediaGallery extends HTMLElement {
     if (index >= 0) this.goTo(index);
   }
 
+  /** The photos on show (the chosen colour's) that open full screen. */
+  #zoomTriggers() {
+    return this.slides.map((slide) => slide.querySelector('[data-gallery-zoom]')).filter(Boolean);
+  }
+
   /** @param {HTMLElement} trigger */
   #openLightbox(trigger) {
     if (!this.lightbox) return;
+    const triggers = this.#zoomTriggers();
+    this.lightboxIndex = Math.max(0, triggers.indexOf(trigger));
+    this.#showLightboxImage(trigger);
+    this.lightbox.showModal();
+  }
+
+  /** @param {HTMLElement} trigger */
+  #showLightboxImage(trigger) {
     const image = this.lightbox.querySelector('[data-lightbox-image]');
     image.src = trigger.dataset.zoomSrc;
     image.alt = trigger.dataset.zoomAlt || '';
-    this.lightbox.showModal();
+    const total = this.#zoomTriggers().length;
+    const count = this.lightbox.querySelector('[data-lightbox-count]');
+    if (count) count.textContent = total > 1 ? `${this.lightboxIndex + 1} / ${total}` : '';
+    for (const button of this.lightbox.querySelectorAll('[data-lightbox-prev], [data-lightbox-next]')) button.hidden = total < 2;
+  }
+
+  /**
+   * Next or previous photo in full screen (it loops), and the large photo
+   * behind follows, so closing lands on the photo last seen.
+   * @param {number} step - 1 or -1
+   */
+  #stepLightbox(step) {
+    const triggers = this.#zoomTriggers();
+    if (triggers.length < 2 || !this.lightbox?.open) return;
+    this.lightboxIndex = (this.lightboxIndex + step + triggers.length) % triggers.length;
+    const trigger = triggers[this.lightboxIndex];
+    const image = this.lightbox.querySelector('[data-lightbox-image]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      this.#showLightboxImage(trigger);
+    } else {
+      const leaving = step > 0 ? 'is-leaving-next' : 'is-leaving-prev';
+      image.classList.add(leaving);
+      setTimeout(() => {
+        this.#showLightboxImage(trigger);
+        image.classList.remove(leaving);
+      }, 180);
+    }
+    this.goTo(this.lightboxIndex);
+  }
+
+  /** Arrow keys and a finger swipe move between the photos in full screen. */
+  #initLightboxSwipe() {
+    if (!this.lightbox) return;
+    this.lightbox.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') this.#stepLightbox(1);
+      if (event.key === 'ArrowLeft') this.#stepLightbox(-1);
+    });
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    this.lightbox.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('button')) return;
+      this.swiped = false;
+      tracking = true;
+      startX = event.clientX;
+      startY = event.clientY;
+    });
+    this.lightbox.addEventListener('pointerup', (event) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        this.swiped = true;
+        this.#stepLightbox(dx < 0 ? 1 : -1);
+      }
+    });
+    this.lightbox.addEventListener('pointercancel', () => {
+      tracking = false;
+    });
   }
 }
 
