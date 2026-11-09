@@ -19,7 +19,7 @@
 -%}
 
 <section class="feature-banner feature-banner--{{ section.settings.text_tone | default: 'dark' }} feature-banner--{{ section.settings.text_side | default: 'left' }}" aria-labelledby="FeatureTitle-{{ section.id }}">
-  <div class="feature-banner__media feature-banner__media--{{ section.settings.image_position | default: 'top' }}">
+  <div class="feature-banner__media feature-banner__media--{{ section.settings.image_position | default: 'top' }}" data-grow data-parallax="5">
     {%- if section.settings.image != blank -%}
       {% render 'responsive-image',
         image: section.settings.image,

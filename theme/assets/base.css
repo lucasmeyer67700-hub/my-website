@@ -102,6 +102,11 @@
   /* Motion */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  /* GSAP curves used by the reference site's motion */
+  --ease-power2-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-power3-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-power3-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-power4-in-out: cubic-bezier(0.76, 0, 0.24, 1);
   --duration-fast: 150ms;
   --duration-base: 260ms;
   --duration-slow: 600ms;
@@ -1436,10 +1441,7 @@ body:has(dialog[open]) {
 */
 .js [data-reveal-enabled] .reveal {
   opacity: 0;
-  transform: translateY(1.75rem);
-  transition:
-    opacity 0.9s var(--ease-reveal),
-    transform 1.1s var(--ease-reveal);
+  transition: opacity 1s var(--ease-power3-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
@@ -2048,9 +2050,9 @@ h2 {
 
   .js [data-reveal-enabled] .split-lines .split-word > span {
     display: inline-block;
-    transform: translateY(105%);
-    transition: transform 1.1s var(--ease-reveal);
-    transition-delay: calc(var(--reveal-delay, 0ms) + var(--line, 0) * 110ms + 80ms);
+    transform: translateY(100%);
+    transition: transform 1s var(--ease-power4-in-out);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--line, 0) * 50ms);
   }
 
   .js [data-reveal-enabled] .is-visible .split-lines .split-word > span,
@@ -2069,9 +2071,9 @@ h2 {
 
   /* Photos open like a curtain, then settle */
   .js [data-reveal-enabled] .reveal :is(.media, .featured-product__media, .before-after__frame, .product-video__media) {
-    clip-path: inset(0 0 100% 0);
-    transition: clip-path 1.3s var(--ease-reveal);
-    transition-delay: calc(var(--reveal-delay, 0ms) + 0.1s);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.2s var(--ease-power3-in-out);
+    transition-delay: var(--reveal-delay, 0ms);
   }
 
   .js [data-reveal-enabled] .reveal.is-visible :is(.media, .featured-product__media, .before-after__frame, .product-video__media),
@@ -2080,10 +2082,10 @@ h2 {
   }
 
   .js [data-reveal-enabled] .reveal:is(.media, .before-after__frame) {
-    clip-path: inset(0 0 100% 0);
+    clip-path: inset(100% 0 0 0);
     opacity: 1;
     transform: none;
-    transition: clip-path 1.3s var(--ease-reveal);
+    transition: clip-path 1.2s var(--ease-power3-in-out);
     transition-delay: var(--reveal-delay, 0ms);
   }
 
@@ -2233,5 +2235,81 @@ h1.h2 {
 @media print {
   .ink-trail {
     display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll and page motion (assets/motion.js), after noth.in
+   -------------------------------------------------------------------------- */
+
+/* The script glides the wheel itself: the browser must not smooth it again */
+html.has-smooth-scroll {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Large photos drift a little slower than the page */
+  .has-parallax {
+    overflow: hidden;
+  }
+
+  .has-parallax img,
+  .js [data-reveal-enabled] .has-parallax.has-parallax.has-parallax img {
+    scale: 1.14;
+    translate: 0 var(--parallax-y, 0%);
+    transition: none;
+    will-change: translate;
+  }
+
+  /* A framed photo that opens to full size while its section scrolls in */
+  .has-grow {
+    clip-path: inset(
+      calc((1 - var(--grow, 1)) * 7%) calc((1 - var(--grow, 1)) * 9%)
+      round calc((1 - var(--grow, 1)) * 14px)
+    );
+  }
+
+  /* Product photos open from alternating corners (1 s, power4.inOut) */
+  .tile__media.has-curtain {
+    clip-path: var(--curtain-from, inset(100% 0% 0% 0%));
+    transition: clip-path 1s var(--ease-power4-in-out);
+  }
+
+  .tile__media.has-curtain.is-open {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+
+  /* Letters rise one after the other (1.2 s, power4.inOut) */
+  [data-letters].has-letters .letter-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+
+  [data-letters].has-letters .letter-child {
+    display: inline-block;
+    transform: translateY(100%);
+    transition: transform 1.2s var(--ease-power4-in-out);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  [data-letters].is-in .letter-child {
+    transform: none;
+  }
+
+  /* Pages fade in, and fade out when a link is followed (0.5 s, power2.inOut) */
+  html.has-page-transitions :is(#MainContent, .shopify-section-group-footer-group) {
+    animation: page-in 0.5s var(--ease-power2-in-out) both;
+  }
+
+  html.has-page-transitions.is-leaving :is(#MainContent, .shopify-section-group-footer-group) {
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-power2-in-out);
+  }
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+    }
   }
 }

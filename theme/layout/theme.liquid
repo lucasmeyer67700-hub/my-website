@@ -41,6 +41,15 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    {%- unless settings.smooth_scroll == false and settings.page_transitions == false -%}
+      <script src="{{ 'motion.js' | asset_url }}" defer="defer"></script>
+    {%- endunless -%}
+    {%- unless settings.page_transitions == false or request.design_mode -%}
+      {%- comment -%} Set before the first paint, so the page fades in instead of flashing {%- endcomment -%}
+      <script>
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('has-page-transitions');
+      </script>
+    {%- endunless -%}
 
     <script>
       document.documentElement.classList.replace('no-js', 'js');
@@ -87,6 +96,12 @@
     {% if settings.animations_reveal %}
       data-reveal-enabled
     {% endif %}
+    {% unless settings.smooth_scroll == false or request.design_mode %}
+      data-smooth-scroll
+    {% endunless %}
+    {% unless settings.page_transitions == false or request.design_mode %}
+      data-page-transitions
+    {% endunless %}
     {% if settings.section_curves %}
       data-section-curves
     {% endif %}

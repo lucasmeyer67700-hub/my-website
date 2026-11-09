@@ -213,6 +213,20 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "smooth_scroll",
+        "label": "Défilement fluide à la molette",
+        "info": "Sur ordinateur, la page glisse jusqu'à sa place (1,2 s). Les téléphones gardent leur défilement naturel.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "page_transitions",
+        "label": "Fondu entre les pages",
+        "info": "La page s'efface puis la suivante apparaît (0,5 s).",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "Photos produits"
       },

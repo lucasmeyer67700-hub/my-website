@@ -8,7 +8,7 @@
 >
   <div class="page-width editorial__grid">
     <figure class="editorial__figure editorial__figure--main">
-      <div class="editorial__frame media reveal">
+      <div class="editorial__frame media reveal" data-parallax="6">
         {%- if section.settings.image_main != blank -%}
           {% render 'responsive-image',
             image: section.settings.image_main,
@@ -56,7 +56,7 @@
 
     {%- if section.settings.image_secondary != blank -%}
       <figure class="editorial__figure editorial__figure--aside">
-        <div class="editorial__frame media reveal">
+        <div class="editorial__frame media reveal" data-parallax="6">
           {% render 'responsive-image',
             image: section.settings.image_secondary,
             sizes: '(min-width: 990px) 22vw, 50vw',

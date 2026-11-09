@@ -3424,7 +3424,7 @@ function initReveal() {
         if (index > 0) setTimeout(() => item.style.removeProperty('--reveal-delay'), 2200);
       });
     },
-    { rootMargin: '0px 0px -8% 0px' }
+    { rootMargin: '0px 0px -5% 0px' }
   );
   for (const item of items) observer.observe(item);
 }
