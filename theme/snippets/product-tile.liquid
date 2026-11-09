@@ -63,7 +63,7 @@
   assign hover_image = product.media[1].preview_image
   assign photo_list = settings.card_photos
   if photo_list == nil
-    assign photo_list = 'ceinture-chauffante-regles | survol | velea-ceinture-survol-fond-rose.jpg ; ceinture-chauffante-regles | Blanc | img-mw7vy7yy-8eb97d1c.png ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; culotte-menstruelle | survol | velea-culotte-details.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg ; serviettes-menstruelles-lavables | survol | velea-serviette-details.jpg ; huile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg'
+    assign photo_list = 'ceinture-chauffante-regles | Blanc | img-mw7vy7yy-8eb97d1c.png ; culotte-menstruelle | * | velea-culotte-fond-rose.jpg ; culotte-menstruelle | survol | velea-culotte-details.jpg ; serviettes-menstruelles-lavables | * | velea-serviettes-fond-rose.jpg ; serviettes-menstruelles-lavables | survol | velea-serviette-details.jpg ; huile-corporelle-beurre-de-karite | survol | velea-huile-karite-application.jpg'
   endif
   assign photo_lines = photo_list | newline_to_br | replace: ';', '<br />' | split: '<br />'
   assign color_photo_count = 0

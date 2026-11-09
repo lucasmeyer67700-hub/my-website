@@ -1874,6 +1874,10 @@ class MediaGallery extends HTMLElement {
       else thumb.removeAttribute('aria-current');
     }
     if (this.counter) this.counter.textContent = `${index + 1} / ${this.slides.length}`;
+    for (const [i, dot] of (this.dots || []).entries()) {
+      if (i === index) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    }
     if (this.prev) this.prev.disabled = index === 0;
     if (this.next) this.next.disabled = index === this.slides.length - 1;
   }
@@ -1898,6 +1902,33 @@ class MediaGallery extends HTMLElement {
     if (this.next) this.next.hidden = !multiple;
     const strip = this.querySelector('.gallery__thumbs');
     if (strip) strip.hidden = !multiple;
+    this.toggleAttribute('data-single', !multiple);
+    // Large screens: the first photo, and a last one alone on its row, take the full width.
+    for (const slide of slides) {
+      slide.removeAttribute('data-wide');
+      slide.removeAttribute('data-lead');
+    }
+    const [lead] = this.slides;
+    if (lead) {
+      lead.setAttribute('data-wide', '');
+      lead.setAttribute('data-lead', '');
+    }
+    if (this.slides.length > 1 && this.slides.length % 2 === 0) this.slides.at(-1).setAttribute('data-wide', '');
+    this.setAttribute('data-ready', '');
+    // Phones: one dot per photo, to see how many there are and jump to one.
+    const dots = this.querySelector('[data-gallery-dots]');
+    if (dots) {
+      dots.replaceChildren();
+      this.dots = this.slides.map((slide, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'gallery__dot';
+        dot.setAttribute('aria-label', `${i + 1} / ${this.slides.length}`);
+        dot.addEventListener('click', () => this.goTo(i));
+        dots.append(dot);
+        return dot;
+      });
+    }
   }
 
   /**
