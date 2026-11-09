@@ -1812,6 +1812,16 @@ class MediaGallery extends HTMLElement {
         this.swiped = false;
         return;
       }
+      const sound = event.target.closest('[data-gallery-sound]');
+      if (sound) {
+        const video = sound.closest('[data-gallery-slide]')?.querySelector('video');
+        if (video) {
+          video.muted = !video.muted;
+          if (!video.muted) video.play().catch(() => {});
+          sound.setAttribute('aria-pressed', String(!video.muted));
+        }
+        return;
+      }
       const zoom = event.target.closest('[data-gallery-zoom]');
       if (zoom) this.#openLightbox(zoom);
       if (event.target.closest('[data-lightbox-close]') || event.target === this.lightbox) {
@@ -1882,6 +1892,13 @@ class MediaGallery extends HTMLElement {
       else thumb.removeAttribute('aria-current');
     }
     if (this.counter) this.counter.textContent = `${index + 1} / ${this.slides.length}`;
+    // The video plays while it is the photo on show, and pauses otherwise.
+    for (const [i, slide] of this.slides.entries()) {
+      const video = slide.querySelector('video');
+      if (!video) continue;
+      if (i === index) video.play().catch(() => {});
+      else video.pause();
+    }
     for (const [i, dot] of (this.dots || []).entries()) {
       if (i === index) dot.setAttribute('aria-current', 'true');
       else dot.removeAttribute('aria-current');
@@ -2006,7 +2023,7 @@ class MediaGallery extends HTMLElement {
         image.classList.remove(leaving);
       }, 180);
     }
-    this.goTo(this.lightboxIndex);
+    this.goTo(this.slides.indexOf(trigger.closest('[data-gallery-slide]')));
   }
 
   /** Arrow keys and a finger swipe move between the photos in full screen. */

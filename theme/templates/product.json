@@ -167,20 +167,8 @@
         "media_color": "Rose",
         "show_media_slots": true,
         "sticky_bar": true,
-        "color_scheme": "scheme-3"
-      }
-    },
-    "video": {
-      "type": "product-video",
-      "settings": {
-        "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
-        "media_position": "left",
-        "eyebrow": "",
-        "heading": "On la charge, on l'attache, on choisit sa chaleur.",
-        "text": "<p>Elle tient avec une sangle réglable et se porte par-dessus un vêtement fin.</p>",
-        "button_label": "Choisir mon coloris",
-        "button_link": "",
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
       }
     },
     "related": {
@@ -251,7 +239,6 @@
   },
   "order": [
     "main",
-    "video",
     "related",
     "reviews",
     "faq"

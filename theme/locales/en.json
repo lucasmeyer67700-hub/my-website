@@ -91,7 +91,9 @@
     "tile_save": "Save {{ amount }}",
     "tile_new": "New",
     "tile_add": "Add to bag",
-    "tile_choose": "Choose"
+    "tile_choose": "Choose",
+    "video_sound": "Turn the video sound on or off",
+    "view_video": "Show the video"
   },
   "cart": {
     "title": "Your cart",

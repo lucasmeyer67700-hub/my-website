@@ -17,6 +17,7 @@
   @param {object} [overlays] - The section's blocks (gallery_card and gallery_badge are used)
   @param {boolean} [slots] - Keep 5 places (main photo + 4) and show the free ones as photo slots
   @param {string} [media_color] - Colour shown by the product's own photos (e.g. "Rose")
+  @param {object} [video] - A video shown second among the photos (plays muted, in a loop)
 
   Photos of a colour can also come from "color_photo" blocks (colour + photo)
   in overlays. When the chosen colour has photos, only its photos show; a
@@ -27,6 +28,9 @@
 {% enddoc %}
 {%- liquid
   assign media_count = product.media.size
+  if video != blank and product.media.size > 0
+    assign media_count = media_count | plus: 1
+  endif
   for block in overlays
     if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank
       assign media_count = media_count | plus: 1
@@ -203,6 +207,27 @@
                 {% render 'responsive-image', image: media.preview_image, sizes: '(min-width: 990px) 55vw, 100vw', alt: media_alt %}
             {%- endcase -%}
           </li>
+          {%- if forloop.first and video != blank -%}
+            <li class="gallery__slide gallery__slide--video" data-gallery-slide data-media-id="gallery-video">
+              {{
+                video
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  preload: 'metadata',
+                  image_size: '1200x',
+                  class: 'gallery__video'
+              }}
+              <button type="button" class="gallery__sound" data-gallery-sound aria-pressed="false">
+                <span class="gallery__sound-icon gallery__sound-icon--off">{% render 'icon', icon: 'volume-off' %}</span>
+                <span class="gallery__sound-icon gallery__sound-icon--on">{% render 'icon', icon: 'volume' %}</span>
+                <span class="visually-hidden">{{ 'products.video_sound' | t }}</span>
+              </button>
+            </li>
+          {%- endif -%}
         {%- endfor -%}
         {%- for block in overlays -%}
           {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
@@ -362,6 +387,17 @@
             <span class="visually-hidden">{{ 'products.view_media' | t: index: forloop.index }}</span>
           </button>
         </li>
+        {%- if forloop.first and video != blank -%}
+          <li>
+            <button type="button" class="gallery__thumb gallery__thumb--video" data-gallery-thumb>
+              {%- if video.preview_image -%}
+                {% render 'responsive-image', image: video.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
+              {%- endif -%}
+              <span class="gallery__thumb-play" aria-hidden="true">{% render 'icon', icon: 'play' %}</span>
+              <span class="visually-hidden">{{ 'products.view_video' | t }}</span>
+            </button>
+          </li>
+        {%- endif -%}
       {%- endfor -%}
       {%- for block in overlays -%}
         {%- if block.type == 'color_photo' and block.settings.image != blank and block.settings.color != blank -%}
@@ -1146,6 +1182,70 @@
   @media (prefers-reduced-motion: reduce) {
     .gallery__lightbox-image {
       transition: none;
+    }
+  }
+
+  /* The video, second among the photos: it fills its frame and plays muted */
+  .gallery .gallery__slide--video {
+    background-color: #1f1a19;
+
+    & .gallery__video,
+    & video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .gallery__sound {
+    position: absolute;
+    z-index: 2;
+    inset-block-end: 0.85rem;
+    inset-inline-end: 0.85rem;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--color-text);
+    background-color: rgb(255 255 255 / 0.85);
+    cursor: pointer;
+
+    & .icon {
+      width: 1.05rem;
+      height: 1.05rem;
+    }
+  }
+
+  .gallery__sound-icon--on,
+  .gallery__sound[aria-pressed='true'] .gallery__sound-icon--off {
+    display: none;
+  }
+
+  .gallery__sound[aria-pressed='true'] .gallery__sound-icon--on {
+    display: inline-flex;
+  }
+
+  .gallery__thumb--video {
+    position: relative;
+    background-color: #1f1a19;
+  }
+
+  .gallery__thumb-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background-color: rgb(0 0 0 / 0.25);
+
+    & .icon {
+      width: 1.1rem;
+      height: 1.1rem;
     }
   }
 {% endstylesheet %}

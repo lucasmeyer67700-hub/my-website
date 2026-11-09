@@ -442,7 +442,8 @@
         ratio: section.settings.gallery_ratio,
         overlays: section.blocks,
         slots: section.settings.show_media_slots,
-        media_color: section.settings.media_color
+        media_color: section.settings.media_color,
+        video: section.settings.gallery_video
       %}
     </div>
 
@@ -981,6 +982,12 @@
       "id": "media_color",
       "label": "Les photos du produit montrent le coloris",
       "info": "Ex. : Rose. Avec les blocs « Photo d'un coloris », chaque couleur montre ses photos."
+    },
+    {
+      "type": "video",
+      "id": "gallery_video",
+      "label": "Vidéo parmi les photos",
+      "info": "Elle s'affiche en 2e position, en lecture automatique sans le son (un bouton remet le son)."
     },
     {
       "type": "checkbox",
