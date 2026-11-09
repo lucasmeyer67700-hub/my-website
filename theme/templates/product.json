@@ -141,6 +141,20 @@
             "color": "Blanc",
             "image": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
           }
+        },
+        "color_photo_blanc_5": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-sans-pause.jpg"
+          }
+        },
+        "color_photo_blanc_6": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-details.jpg"
+          }
         }
       },
       "block_order": [
@@ -157,7 +171,9 @@
         "safety",
         "color_photo_blanc_1",
         "color_photo_blanc_3",
-        "color_photo_blanc_4"
+        "color_photo_blanc_4",
+        "color_photo_blanc_5",
+        "color_photo_blanc_6"
       ],
       "settings": {
         "banner": "",

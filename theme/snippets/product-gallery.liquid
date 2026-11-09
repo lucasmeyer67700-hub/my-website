@@ -130,6 +130,13 @@
     assign free_slots = slot_total | minus: media_count
   endif
 -%}
+{%- liquid
+  # The video shows the product's own colour: hidden while another colour with its own photos is chosen
+  assign video_hidden = false
+  if selected_has_photos and default_media_color != blank and default_media_color != selected_color
+    assign video_hidden = true
+  endif
+-%}
 <media-gallery
   class="gallery gallery--{{ slide_fit }}"
   style="--gallery-ratio: {{ slide_ratio }};"
@@ -208,7 +215,17 @@
             {%- endcase -%}
           </li>
           {%- if forloop.first and video != blank -%}
-            <li class="gallery__slide gallery__slide--video" data-gallery-slide data-media-id="gallery-video">
+            <li
+              class="gallery__slide gallery__slide--video"
+              data-gallery-slide
+              data-media-id="gallery-video"
+              {% if default_media_color != blank %}
+                data-media-color="{{ default_media_color }}"
+              {% endif %}
+              {% if video_hidden %}
+                hidden
+              {% endif %}
+            >
               {{
                 video
                 | video_tag:
@@ -388,7 +405,11 @@
           </button>
         </li>
         {%- if forloop.first and video != blank -%}
-          <li>
+          <li
+            {% if video_hidden %}
+              hidden
+            {% endif %}
+          >
             <button type="button" class="gallery__thumb gallery__thumb--video" data-gallery-thumb>
               {%- if video.preview_image -%}
                 {% render 'responsive-image', image: video.preview_image, sizes: '96px', widths: '96, 192, 288', decorative: true %}
