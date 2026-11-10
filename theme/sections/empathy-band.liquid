@@ -246,11 +246,6 @@
   }
 
   .empathy-band__frame {
-      aspect-ratio: 5 / 4;
-    }
-  }
-
-  .empathy-band__frame {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
@@ -281,7 +276,12 @@
       inset: 1rem -1rem -1rem 1rem;
     }
 
-    /* Entrance, in turn: heart drawn, title lines rise, lines fade up, rule draws,
+    .empathy-band__frame {
+      aspect-ratio: 5 / 4;
+    }
+  }
+
+  /* Entrance, in turn: heart drawn, title lines rise, lines fade up, rule draws,
      photo opens, block slides into place. */
   @media (prefers-reduced-motion: no-preference) {
     .js [data-reveal-enabled] .empathy-band__copy.reveal,
