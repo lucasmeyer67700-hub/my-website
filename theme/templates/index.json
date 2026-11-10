@@ -340,6 +340,10 @@
         "anchor": "",
         "color_scheme": "scheme-3"
       }
+    },
+    "thread_nav": {
+      "type": "thread-nav",
+      "settings": {}
     }
   },
   "order": [
@@ -352,6 +356,7 @@
     "statement",
     "reviews",
     "faq",
+    "thread_nav",
     "hero_editorial",
     "offer",
     "editorial",
