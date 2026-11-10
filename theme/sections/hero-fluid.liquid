@@ -37,7 +37,7 @@
     data-explode
   {% endif %}
   id="HeroFluid-{{ section.id }}"
-  style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }}; --fl-drop: {{ section.settings.drop_color }};"
+  style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }}; --fl-c4: {{ section.settings.color_4 }}; --fl-c5: {{ section.settings.color_5 }}; --fl-drop: {{ section.settings.drop_color }};"
 >
   {%- if section.settings.intro -%}
     {%- comment -%}
@@ -60,6 +60,14 @@
   {%- endif -%}
   <section class="hero-fl__inner" aria-labelledby="HeroFluidTitle-{{ section.id }}">
     <canvas class="hero-fl__canvas" aria-hidden="true"></canvas>
+    {%- if section.settings.clouds -%}
+      <div class="hero-fl__clouds" aria-hidden="true">
+        <span class="hero-fl__cloud hero-fl__cloud--1"></span>
+        <span class="hero-fl__cloud hero-fl__cloud--2"></span>
+        <span class="hero-fl__cloud hero-fl__cloud--3"></span>
+        <span class="hero-fl__cloud hero-fl__cloud--4"></span>
+      </div>
+    {%- endif -%}
 
     <div class="hero-fl__columns">
       <p class="hero-fl__col hero-fl__col--1">{{ section.settings.column_1 | escape | newline_to_br }}</p>
@@ -417,6 +425,98 @@
     }
   }
 
+  /* Clouds of ink in the colours of the burst: they gather once the opening
+     has played, then drift slowly for as long as the page is open. Only
+     transform moves (no blur filter), so the work stays on the compositor. */
+  .hero-fl__clouds {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 2.8s ease;
+  }
+
+  .hero-fl:not([data-intro]) .hero-fl__clouds,
+  .hero-fl.is-playful .hero-fl__clouds {
+    opacity: 1;
+  }
+
+  .hero-fl__cloud {
+    --cloud: var(--fl-c1, #e8a0b0);
+    position: absolute;
+    width: 62vmax;
+    aspect-ratio: 1.7;
+    background:
+      radial-gradient(38% 52% at 32% 56%, color-mix(in srgb, var(--cloud) 85%, transparent) 0%, transparent 72%),
+      radial-gradient(34% 48% at 63% 44%, color-mix(in srgb, var(--cloud) 78%, transparent) 0%, transparent 72%),
+      radial-gradient(28% 40% at 50% 68%, color-mix(in srgb, var(--cloud) 68%, transparent) 0%, transparent 74%);
+    will-change: transform;
+    animation: hero-fl-drift-a 46s ease-in-out infinite alternate;
+  }
+
+  .hero-fl__cloud--1 {
+    inset-block-start: -12%;
+    inset-inline-start: -18%;
+  }
+
+  .hero-fl__cloud--2 {
+    --cloud: var(--fl-c2, #f2c3cc);
+    inset-block-start: 22%;
+    inset-inline-start: 38%;
+    width: 70vmax;
+    animation-name: hero-fl-drift-b;
+    animation-duration: 58s;
+    animation-delay: -20s;
+  }
+
+  .hero-fl__cloud--3 {
+    --cloud: var(--fl-c3, #f1b29e);
+    inset-block-end: -28%;
+    inset-inline-start: 4%;
+    width: 52vmax;
+    animation-duration: 64s;
+    animation-delay: -34s;
+  }
+
+  .hero-fl__cloud--4 {
+    --cloud: var(--fl-c4, #d98da6);
+    inset-block-start: -20%;
+    inset-inline-end: -22%;
+    width: 46vmax;
+    animation-name: hero-fl-drift-b;
+    animation-duration: 52s;
+    animation-delay: -12s;
+  }
+
+  @keyframes hero-fl-drift-a {
+    from {
+      transform: translate3d(-6%, 2%, 0) scale(1);
+    }
+
+    to {
+      transform: translate3d(14%, -6%, 0) scale(1.12);
+    }
+  }
+
+  @keyframes hero-fl-drift-b {
+    from {
+      transform: translate3d(8%, -3%, 0) scale(1.08);
+    }
+
+    to {
+      transform: translate3d(-12%, 7%, 0) scale(0.96);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fl__cloud {
+      animation: none;
+    }
+  }
+
   /* The drop (first visit of the session): the title waits for the splash */
   .hero-fl[data-intro='full'] .hero-fl__line,
   .hero-fl.is-playful .hero-fl__line {
@@ -646,6 +746,13 @@
       "id": "drop_color",
       "label": "Couleur de la goutte",
       "default": "#a3304a"
+    },
+    {
+      "type": "checkbox",
+      "id": "clouds",
+      "label": "Nuages d'encre en fond",
+      "info": "Des nuages aux couleurs de l'encre apparaissent après l'animation d'entrée et dérivent lentement.",
+      "default": true
     },
     {
       "type": "header",
