@@ -158,6 +158,8 @@
       this.skip?.abort();
       this.gesture?.abort();
       clearTimeout(this.timer);
+      clearTimeout(this.hintTimer);
+      clearInterval(this.hintLoop);
       cancelAnimationFrame(this.frame);
       this.clearFx();
     }
@@ -580,6 +582,25 @@
       this.clearFx();
       this.stale = true;
       this.host.classList.add('is-playful');
+      // An invitation to play: now and then the letters hop one after the
+      // other, like a wave, so visitors see they can be moved.
+      this.hintTimer = setTimeout(() => this.wave(), 1600);
+      this.hintLoop = setInterval(() => this.wave(), 7000);
+    }
+
+    wave() {
+      if (document.hidden || this.drag) return;
+      if (performance.now() - (this.touched || -1e9) < 5000) return;
+      const box = this.inner.getBoundingClientRect();
+      if (box.bottom < box.height * 0.35 || box.top > window.innerHeight * 0.65) return;
+      if (this.stale) this.measure();
+      this.bodies.forEach((b, i) => {
+        setTimeout(() => {
+          if (b.state !== 'rest' || this.drag) return;
+          this.launch(b, 0.38, Math.max(b.h * 0.24, 10), 0);
+          this.wake();
+        }, i * 55);
+      });
     }
 
     /* ------------------------------------------------------------ hands */
@@ -591,6 +612,7 @@
 
     down(event) {
       if (!this.playful || this.drag) return;
+      this.touched = performance.now();
       const el = event.target.closest?.('.hero-fl__char');
       const b = el && this.byEl.get(el);
       if (!b) return;
