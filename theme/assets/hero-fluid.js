@@ -728,7 +728,9 @@
       this.trail = this.hasAttribute('data-trail');
       if (this.trail) return this.waitForTrail(reduce);
       this.intro = reduce ? '' : this.dataset.intro || '';
-      if (!this.canvas || reduce) this.fallback();
+      // Data saver: no live ink, the still rose wash instead.
+      const saveData = !!(navigator.connection && navigator.connection.saveData);
+      if (!this.canvas || reduce || saveData) this.fallback();
       else this.start();
       if (this.intro) {
         try {
@@ -838,13 +840,15 @@
       this.formats = { rgba, rg, r, type: halfFloat };
 
       const small = window.matchMedia('(max-width: 749px)').matches;
+      // Modest devices (few cores or little memory) get a lighter simulation.
+      const modest = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
       this.config = {
-        simRes: small ? 96 : 128,
-        dyeRes: small ? 512 : 1024,
+        simRes: modest ? 64 : small ? 96 : 128,
+        dyeRes: modest ? 384 : small ? 512 : 1024,
         densityDissipation: 1.7,
         velocityDissipation: 0.35,
         pressure: 0.8,
-        pressureIterations: 18,
+        pressureIterations: modest ? 12 : 18,
         curl: 22,
         splatRadius: small ? 0.26 : 0.18,
         splatForce: 5200,
@@ -859,6 +863,7 @@
       this.lastInput = 0;
       this.lastAmbient = 0;
       this.time = performance.now();
+      this.born = this.time;
       this.visible = true;
 
       // Site-wide layer: start white (clear), wait for the pointer.
@@ -1234,7 +1239,7 @@
     /* ------------------------------------------------------------ loop */
 
     loop() {
-      if (this.running) return;
+      if (this.running || !this.gl) return;
       this.running = true;
       if (this.trail) {
         clearTimeout(this.sleepTimer);
@@ -1252,8 +1257,12 @@
           this.sleep();
           return;
         }
-        const dt = Math.min((now - this.time) / 1000, 0.016666);
+        const spent = now - this.time;
+        const dt = Math.min(spent / 1000, 0.016666);
         this.time = now;
+        // A device that cannot keep up gets the still wash instead (opening
+        // only, checked once the arrival has settled).
+        if (!this.trail && this.watch(now, spent)) return;
         if (this.needsResize) {
           this.needsResize = false;
           this.resize();
@@ -1265,6 +1274,24 @@
       };
       this.time = performance.now();
       this.frame = requestAnimationFrame(tick);
+    }
+
+    watch(now, spent) {
+      if (this.watched || now - this.born < 6000 || document.hidden) return false;
+      this.samples = this.samples || [];
+      if (spent > 0 && spent < 250) this.samples.push(spent);
+      if (this.samples.length < 90) return false;
+      this.watched = true;
+      const sorted = this.samples.slice().sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)];
+      if (median <= 42) return false;
+      this.running = false;
+      cancelAnimationFrame(this.frame);
+      this.observer?.disconnect();
+      this.gl = null;
+      this.classList.remove('is-live');
+      this.fallback();
+      return true;
     }
 
     sleep() {

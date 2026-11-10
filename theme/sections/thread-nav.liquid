@@ -69,6 +69,7 @@
     inset-block: 0.45rem;
     inset-inline-start: 50%;
     width: 1px;
+    background: rgb(163 48 74 / 0.22);
     background: color-mix(in srgb, var(--vthread-drop) 22%, transparent);
     transform: translateX(-50%);
   }
@@ -103,6 +104,7 @@
       content: '';
       width: 0.5rem;
       height: 0.5rem;
+      border: 1.5px solid var(--vthread-drop);
       border: 1.5px solid color-mix(in srgb, var(--vthread-drop) 70%, transparent);
       border-radius: 50%;
       background: #fff;
@@ -114,6 +116,7 @@
 
     &.is-passed::before {
       border-color: var(--vthread-drop);
+      background: #e2b6c0;
       background: color-mix(in srgb, var(--vthread-drop) 35%, #fff);
     }
 
@@ -192,6 +195,7 @@
     height: 9rem;
     margin: -4.5rem 0 0 -4.5rem;
     border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(163 48 74 / 0.45), transparent);
     background: radial-gradient(closest-side, color-mix(in srgb, var(--vthread-drop, #a3304a) 45%, transparent), transparent);
     pointer-events: none;
   }
