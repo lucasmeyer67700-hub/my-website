@@ -3,8 +3,7 @@
   opening becomes the guide of the page.
 
   - Finds the home sections named in the section setting ("key: Name"),
-    builds one small drop per section on a thread (computer) and a short
-    list behind a pill (phone).
+    builds one small drop per section on a thread (computer and phone).
   - A drop slides along the thread as the page is read; the section being
     read is marked, and its name shows for a moment when it changes.
   - A click glides to the section (and moves focus there for keyboards).
@@ -292,7 +291,7 @@
       item.waiting = false;
       const box = section.getBoundingClientRect();
       const wide = window.matchMedia('(min-width: 990px)').matches;
-      const x = wide ? box.width - 34 : box.width / 2;
+      const x = box.width - (wide ? 34 : 18);
       const fromTop = box.top < 0;
       const y = fromTop ? box.height : 0;
       const radius = Math.hypot(Math.max(x, box.width - x), box.height) + 40;

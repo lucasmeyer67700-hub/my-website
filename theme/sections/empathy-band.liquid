@@ -246,6 +246,11 @@
   }
 
   .empathy-band__frame {
+      aspect-ratio: 5 / 4;
+    }
+  }
+
+  .empathy-band__frame {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
@@ -258,7 +263,25 @@
     }
   }
 
-  /* Entrance, in turn: heart drawn, title lines rise, lines fade up, rule draws,
+  /* Phone: the photo comes first, wider and shorter, so it is seen at once */
+  @media screen and (max-width: 989px) {
+    .empathy-band__grid {
+      gap: 2.75rem;
+    }
+
+    .empathy-band__visual {
+      order: -1;
+      width: calc(100% - 1rem);
+      justify-self: start;
+      margin-inline-end: 1rem;
+      margin-block-end: 0;
+    }
+
+    .empathy-band__block {
+      inset: 1rem -1rem -1rem 1rem;
+    }
+
+    /* Entrance, in turn: heart drawn, title lines rise, lines fade up, rule draws,
      photo opens, block slides into place. */
   @media (prefers-reduced-motion: no-preference) {
     .js [data-reveal-enabled] .empathy-band__copy.reveal,

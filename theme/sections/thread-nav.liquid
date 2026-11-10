@@ -1,11 +1,10 @@
 {%- comment -%}
   "Le fil de la goutte": the drop of the opening becomes the guide of the
   home page (assets/thread-nav.js).
-  - Computer: a thin rose thread on the right, one small drop per section;
+  - Computer and phone: a thin rose thread on the right, one small drop per section;
     a drop slides along it as the page is read. Hover shows the name, a
     click glides to the section.
-  - Phone: a small pill at the bottom left shows the section being read;
-    a tap opens a short list to jump to any section.
+  - Phone: the same thread, nearer the edge, with drops easy to tap.
   - Each section opens with a stain of ink spreading from the thread
     (setting). Visitors who ask for less motion keep the navigation only.
   The sections are named in the setting below, by their key in the home
@@ -30,24 +29,6 @@
     </span>
     <ol class="vthread__list" role="list" data-thread-rail></ol>
   </nav>
-
-  <div class="vthread__mobile">
-    <div class="vthread__sheet" id="ThreadSheet-{{ section.id }}" data-thread-sheet hidden>
-      <p class="vthread__sheet-title">{{ section.settings.menu_title | escape }}</p>
-      <ol class="vthread__sheet-list" role="list" data-thread-sheet-list></ol>
-    </div>
-    <button
-      class="vthread__pill"
-      type="button"
-      aria-expanded="false"
-      aria-controls="ThreadSheet-{{ section.id }}"
-      data-thread-pill
-    >
-      <span class="vthread__pill-drop" aria-hidden="true"></span>
-      <span class="vthread__pill-label" data-thread-current></span>
-      <svg class="vthread__pill-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M3 7.5 6 4.5l3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
 </velea-thread>
 
 {% stylesheet %}
@@ -67,7 +48,7 @@
     inset-block-start: 50%;
     inset-inline-end: max(1.4rem, env(safe-area-inset-right));
     z-index: calc(var(--z-sticky-bar) + 1);
-    display: none;
+    display: block;
     width: 1.5rem;
     opacity: 0;
     transform: translate(0.6rem, -50%);
@@ -81,12 +62,6 @@
     opacity: 1;
     transform: translate(0, -50%);
     pointer-events: auto;
-  }
-
-  @media screen and (min-width: 990px) {
-    .vthread__rail {
-      display: block;
-    }
   }
 
   .vthread__line {
@@ -209,157 +184,6 @@
     }
   }
 
-  /* ------------------------------------------------------------- phone */
-  .vthread__mobile {
-    position: fixed;
-    inset-block-end: max(1rem, env(safe-area-inset-bottom));
-    inset-inline-start: max(1rem, env(safe-area-inset-left));
-    z-index: calc(var(--z-sticky-bar) + 1);
-    display: grid;
-    justify-items: start;
-    gap: 0.5rem;
-    max-width: min(16rem, calc(100vw - 13rem));
-    opacity: 0;
-    transform: translateY(0.8rem);
-    pointer-events: none;
-    transition:
-      opacity 0.45s var(--vthread-ease),
-      transform 0.45s var(--vthread-ease);
-  }
-
-  .vthread.is-shown .vthread__mobile {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-
-  @media screen and (min-width: 990px) {
-    .vthread__mobile {
-      display: none;
-    }
-  }
-
-  .vthread__pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    max-width: 100%;
-    min-height: 2.75rem;
-    padding: 0 0.95rem 0 0.8rem;
-    border: 1px solid color-mix(in srgb, var(--vthread-drop) 22%, transparent);
-    border-radius: 999px;
-    font: inherit;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: #2b2422;
-    background: rgb(255 255 255 / 0.92);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 26px -14px rgb(43 36 34 / 0.45);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-
-    &:focus-visible {
-      outline: 2px solid var(--vthread-drop);
-      outline-offset: 2px;
-    }
-  }
-
-  .vthread__pill-drop {
-    flex: none;
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50% 50% 50% 0;
-    background: var(--vthread-drop);
-    transform: rotate(-45deg);
-  }
-
-  .vthread__pill-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .vthread__pill-label.is-changing {
-    animation: vthread-label 0.45s var(--vthread-ease);
-  }
-
-  .vthread__pill-chevron {
-    flex: none;
-    width: 0.75rem;
-    height: 0.75rem;
-    transition: transform 0.3s var(--vthread-ease);
-  }
-
-  .vthread__pill[aria-expanded='true'] .vthread__pill-chevron {
-    transform: rotate(180deg);
-  }
-
-  .vthread__sheet {
-    width: min(16rem, calc(100vw - 2rem));
-    padding: 0.9rem 0.5rem 0.5rem;
-    border-radius: 1.1rem;
-    background: #fff;
-    box-shadow: 0 22px 50px -18px rgb(43 36 34 / 0.45);
-    transform-origin: bottom left;
-    animation: vthread-sheet 0.35s var(--vthread-ease);
-  }
-
-  .vthread__sheet[hidden] {
-    display: none;
-  }
-
-  .vthread__sheet-title {
-    margin: 0 0 0.35rem;
-    padding-inline: 0.75rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #6f6461;
-  }
-
-  .vthread__sheet-list {
-    display: grid;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .vthread__sheet-link {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    min-height: 2.75rem;
-    padding: 0 0.75rem;
-    border-radius: 0.7rem;
-    font-size: 0.95rem;
-    text-decoration: none;
-    color: #2b2422;
-
-    &::before {
-      content: '';
-      flex: none;
-      width: 0.45rem;
-      height: 0.45rem;
-      border: 1.5px solid var(--vthread-drop);
-      border-radius: 50%;
-    }
-
-    &[aria-current='true'] {
-      background: color-mix(in srgb, var(--vthread-drop) 8%, #fff);
-
-      &::before {
-        background: var(--vthread-drop);
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--vthread-drop);
-      outline-offset: -2px;
-    }
-  }
-
   /* The ink that spreads where a section opens */
   .vthread-splat {
     position: fixed;
@@ -372,25 +196,27 @@
     pointer-events: none;
   }
 
-  @keyframes vthread-sheet {
-    from {
-      opacity: 0;
-      transform: translateY(0.5rem) scale(0.96);
+  /* Phone: the same thread, closer to the edge, with drops easy to tap */
+  @media screen and (max-width: 989px) {
+    .vthread__rail {
+      inset-inline-end: max(0.35rem, env(safe-area-inset-right));
     }
-  }
 
-  @keyframes vthread-label {
-    from {
-      opacity: 0;
-      transform: translateY(0.35rem);
+    .vthread__list {
+      gap: 0.1rem;
+    }
+
+    .vthread__link {
+      height: 1.55rem;
+    }
+
+    .vthread__name {
+      font-size: 0.66rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vthread__rail,
-    .vthread__mobile,
-    .vthread__sheet,
-    .vthread__pill-label.is-changing {
+    .vthread__rail {
       transition: none;
       animation: none;
     }
@@ -406,7 +232,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Sur ordinateur, un fil rose à droite avec une goutte par section ; sur téléphone, une pastille en bas à gauche. Elle apparaît après l'ouverture et disparaît au pied de page."
+      "content": "Un fil rose à droite, sur ordinateur comme sur téléphone, avec une goutte par section. Il apparaît après l'ouverture et disparaît au pied de page."
     },
     {
       "type": "text",
