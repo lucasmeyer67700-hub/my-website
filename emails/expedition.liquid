@@ -1,0 +1,192 @@
+{%- comment -%}
+  VELEA — e-mail « Confirmation d'expédition »
+  À coller dans Shopify : Paramètres > Notifications > Notifications client >
+  Confirmation d'expédition > Modifier le code (remplacer tout le contenu).
+  Objet conseillé : Votre colis VELEA est en route ✿ commande {{ order_name }}
+{%- endcomment -%}
+{%- assign rose = '#a14a5c' -%}
+{%- assign ink = '#2b2422' -%}
+{%- assign muted = '#6f6461' -%}
+{%- assign blush = '#fbf4f4' -%}
+{%- assign line_color = '#f0e2e2' -%}
+{%- assign tracking_url = fulfillment.tracking_urls | first -%}
+{%- assign tracking_number = fulfillment.tracking_numbers | first -%}
+{%- assign has_belt = false -%}
+{%- for line in fulfillment.fulfillment_line_items -%}
+  {%- assign t = line.line_item.title | downcase -%}
+  {%- if t contains 'ceinture' -%}{%- assign has_belt = true -%}{%- endif -%}
+{%- endfor -%}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Votre colis VELEA est en route</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 0; background: {{ blush }}; }
+    a { color: {{ rose }}; }
+    @media (max-width: 600px) {
+      .wrap { width: 100% !important; }
+      .pad { padding-left: 22px !important; padding-right: 22px !important; }
+      .title { font-size: 30px !important; }
+      .btn a { display: block !important; }
+      .step { font-size: 11px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background:{{ blush }};">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Bonne nouvelle : votre commande {{ order_name }} vient de partir. Voici de quoi suivre votre colis.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};">
+    <tr>
+      <td align="center" style="padding:28px 12px;">
+        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;">
+
+          <tr>
+            <td align="center" class="pad" style="padding:34px 40px 10px;">
+              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};">
+                {%- if shop.email_logo_url -%}
+                  <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width | default: 120 }}" style="display:block;border:0;max-width:180px;height:auto;">
+                {%- else -%}
+                  <span style="font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:20px;letter-spacing:0.5em;color:{{ ink }};">VELEA</span>
+                {%- endif -%}
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" class="pad" style="padding:22px 40px 0;">
+              <div style="width:12px;height:12px;margin:0 auto 18px;background:{{ rose }};border-radius:50%;line-height:12px;font-size:1px;">&nbsp;</div>
+              <p style="margin:0 0 10px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
+              <h1 class="title" style="margin:0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
+                Votre colis<br><em style="color:{{ rose }};">est en route.</em>
+              </h1>
+              <p style="margin:18px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
+                {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} commande vient de partir. Vous pouvez suivre son trajet jusqu'à chez vous avec le lien ci-dessous.
+              </p>
+            </td>
+          </tr>
+
+          {%- comment -%} Les étapes : commande, expédition (en cours), livraison {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:28px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+                <tr>
+                  <td width="33%" align="center" valign="top">
+                    <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:{{ rose }};font-size:1px;line-height:14px;">&nbsp;</div>
+                    <p class="step" style="margin:8px 0 0;font-size:12px;color:{{ ink }};">Commandée</p>
+                  </td>
+                  <td width="34%" align="center" valign="top">
+                    <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:{{ rose }};font-size:1px;line-height:14px;">&nbsp;</div>
+                    <p class="step" style="margin:8px 0 0;font-size:12px;font-weight:500;color:{{ rose }};">Expédiée</p>
+                  </td>
+                  <td width="33%" align="center" valign="top">
+                    <div style="width:10px;height:10px;margin:2px auto;border-radius:50%;border:2px solid {{ line_color }};background:#ffffff;font-size:1px;line-height:10px;">&nbsp;</div>
+                    <p class="step" style="margin:8px 0 0;font-size:12px;color:{{ muted }};">Chez vous</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Suivi du colis {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:26px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};border-radius:14px;">
+                <tr>
+                  <td style="padding:20px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:{{ ink }};">
+                    <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Suivi du colis</p>
+                    {%- if fulfillment.tracking_company != blank -%}
+                      <p style="margin:0;">Transporteur : <strong>{{ fulfillment.tracking_company }}</strong></p>
+                    {%- endif -%}
+                    {%- if tracking_number != blank -%}
+                      <p style="margin:4px 0 0;">Numéro de suivi : <strong>{{ tracking_number }}</strong></p>
+                    {%- endif -%}
+                    <p style="margin:10px 0 0;color:{{ muted }};">Comptez 7 jours ouvrés entre votre commande et la réception. Le suivi peut mettre un peu de temps à s'afficher après l'expédition.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" class="pad btn" style="padding:24px 40px 8px;">
+              {%- if tracking_url != blank -%}
+                <a href="{{ tracking_url }}" style="display:inline-block;padding:15px 30px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Suivre mon colis</a>
+              {%- else -%}
+                <a href="{{ order_status_url }}" style="display:inline-block;padding:15px 30px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Voir ma commande</a>
+              {%- endif -%}
+            </td>
+          </tr>
+
+          {%- comment -%} Les articles de ce colis {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:28px 40px 0;">
+              <p style="margin:0 0 14px;font-family:'Playfair Display',Georgia,serif;font-size:21px;color:{{ ink }};">Dans ce colis</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                {%- for line in fulfillment.fulfillment_line_items -%}
+                  <tr>
+                    <td width="72" valign="top" style="padding:14px 0;border-top:1px solid {{ line_color }};">
+                      {%- if line.line_item.image -%}
+                        <img src="{{ line.line_item | img_url: 'compact_cropped' }}" alt="" width="60" height="60" style="display:block;width:60px;height:60px;border-radius:12px;background:#f7f0f0;object-fit:cover;border:0;">
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" style="padding:14px 10px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+                      <p style="margin:0;font-size:15px;line-height:1.4;color:{{ ink }};">{{ line.line_item.title }}</p>
+                      {%- if line.line_item.variant.title != 'Default Title' and line.line_item.variant.title != blank -%}
+                        <p style="margin:4px 0 0;font-size:13px;color:{{ muted }};">{{ line.line_item.variant.title }}</p>
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" align="right" style="padding:14px 0;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;color:{{ muted }};white-space:nowrap;">× {{ line.quantity }}</td>
+                  </tr>
+                {%- endfor -%}
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Conseils de première utilisation (notice du fabricant), seulement avec une ceinture {%- endcomment -%}
+          {%- if has_belt -%}
+            <tr>
+              <td class="pad" style="padding:26px 40px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid {{ line_color }};border-radius:14px;">
+                  <tr>
+                    <td style="padding:20px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:{{ ink }};">
+                      <p style="margin:0 0 8px;font-family:'Playfair Display',Georgia,serif;font-size:18px;">En attendant, pour bien commencer</p>
+                      <p style="margin:0;color:{{ muted }};">
+                        ✿ Elle se recharge avec le câble USB fourni (elle ne fonctionne pas pendant la charge).<br>
+                        ✿ Portez-la par-dessus un vêtement fin et commencez par la chaleur la plus douce.<br>
+                        ✿ Ne l'utilisez pas en dormant, et prenez le temps de lire la notice.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          {%- endif -%}
+
+          <tr>
+            <td align="center" class="pad" style="padding:30px 40px 34px;">
+              <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
+              <p style="margin:12px auto 0;max-width:420px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:{{ muted }};">
+                Un souci avec la livraison ? Répondez à cet e-mail ou écrivez-nous via la <a href="{{ shop.url }}/pages/contact" style="color:{{ rose }};">page contact</a>, avec votre numéro de commande.
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
+          <tr>
+            <td align="center" style="padding:22px 20px 8px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:{{ muted }};">
+              <a href="{{ shop.url }}" style="color:{{ muted }};text-decoration:none;letter-spacing:0.3em;">VELEA</a>
+              &nbsp;·&nbsp; <a href="https://www.instagram.com/_maisonvelea/" style="color:{{ muted }};">Instagram</a>
+              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/suivi-de-commande" style="color:{{ muted }};">Suivi de commande</a>
+              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/livraison-et-retours" style="color:{{ muted }};">Livraison et retours</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

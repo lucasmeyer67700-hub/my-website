@@ -1,0 +1,186 @@
+{%- comment -%}
+  VELEA — e-mail « Confirmation de commande »
+  À coller dans Shopify : Paramètres > Notifications > Notifications client >
+  Confirmation de commande > Modifier le code (remplacer tout le contenu).
+  Objet conseillé : Merci {{ customer.first_name | default: "à vous" }} ✿ votre commande {{ order_name }} est confirmée
+{%- endcomment -%}
+{%- assign rose = '#a14a5c' -%}
+{%- assign ink = '#2b2422' -%}
+{%- assign muted = '#6f6461' -%}
+{%- assign blush = '#fbf4f4' -%}
+{%- assign line_color = '#f0e2e2' -%}
+{%- assign has_belt = false -%}
+{%- for line in subtotal_line_items -%}
+  {%- assign t = line.title | downcase -%}
+  {%- if t contains 'ceinture' -%}{%- assign has_belt = true -%}{%- endif -%}
+{%- endfor -%}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Votre commande {{ order_name }} est confirmée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 0; background: {{ blush }}; }
+    a { color: {{ rose }}; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; }
+    .sans { font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    @media (max-width: 600px) {
+      .wrap { width: 100% !important; }
+      .pad { padding-left: 22px !important; padding-right: 22px !important; }
+      .title { font-size: 30px !important; }
+      .btn a { display: block !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background:{{ blush }};">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Merci pour votre commande {{ order_name }}. On s'occupe de tout, et on vous écrit dès que votre colis part.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};">
+    <tr>
+      <td align="center" style="padding:28px 12px;">
+        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;">
+
+          {%- comment -%} En-tête : logo ou VELEA en lettres espacées {%- endcomment -%}
+          <tr>
+            <td align="center" class="pad" style="padding:34px 40px 10px;">
+              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};">
+                {%- if shop.email_logo_url -%}
+                  <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width | default: 120 }}" style="display:block;border:0;max-width:180px;height:auto;">
+                {%- else -%}
+                  <span class="sans" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:20px;letter-spacing:0.5em;color:{{ ink }};">VELEA</span>
+                {%- endif -%}
+              </a>
+            </td>
+          </tr>
+
+          {%- comment -%} La goutte de la marque, puis le titre {%- endcomment -%}
+          <tr>
+            <td align="center" class="pad" style="padding:22px 40px 0;">
+              <div style="width:12px;height:12px;margin:0 auto 18px;background:{{ rose }};border-radius:50%;line-height:12px;font-size:1px;">&nbsp;</div>
+              <p class="sans" style="margin:0 0 10px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
+              <h1 class="serif title" style="margin:0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
+                Merci{% if customer.first_name %} {{ customer.first_name }}{% endif %},<br><em style="color:{{ rose }};">c'est confirmé.</em>
+              </h1>
+              <p class="sans" style="margin:18px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
+                Votre commande est bien enregistrée. On la prépare avec soin et on vous écrit dès que votre colis part, avec son numéro de suivi.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" class="pad btn" style="padding:26px 40px 8px;">
+              <a href="{{ order_status_url }}" style="display:inline-block;padding:15px 30px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Suivre ma commande</a>
+            </td>
+          </tr>
+
+          {%- comment -%} Les articles {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:30px 40px 0;">
+              <p class="serif" style="margin:0 0 14px;font-family:'Playfair Display',Georgia,serif;font-size:21px;color:{{ ink }};">Votre commande</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                {%- for line in subtotal_line_items -%}
+                  <tr>
+                    <td width="72" valign="top" style="padding:14px 0;border-top:1px solid {{ line_color }};">
+                      {%- if line.image -%}
+                        <img src="{{ line | img_url: 'compact_cropped' }}" alt="" width="60" height="60" style="display:block;width:60px;height:60px;border-radius:12px;background:#f7f0f0;object-fit:cover;border:0;">
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" style="padding:14px 10px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+                      <p style="margin:0;font-size:15px;line-height:1.4;color:{{ ink }};">{{ line.title }}{% if line.quantity > 1 %} <span style="color:{{ muted }};">× {{ line.quantity }}</span>{% endif %}</p>
+                      {%- if line.variant.title != 'Default Title' and line.variant.title != blank -%}
+                        <p style="margin:4px 0 0;font-size:13px;color:{{ muted }};">{{ line.variant.title }}</p>
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" align="right" style="padding:14px 0;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;color:{{ ink }};white-space:nowrap;">
+                      {%- if line.original_line_price != line.final_line_price -%}
+                        <s style="color:{{ muted }};font-size:13px;">{{ line.original_line_price | money }}</s><br>
+                      {%- endif -%}
+                      {{ line.final_line_price | money }}
+                    </td>
+                  </tr>
+                {%- endfor -%}
+              </table>
+
+              {%- comment -%} Totaux {%- endcomment -%}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;color:{{ muted }};">
+                <tr><td style="padding:14px 0 4px;">Sous-total</td><td align="right" style="padding:14px 0 4px;color:{{ ink }};">{{ subtotal_price | money }}</td></tr>
+                {%- for discount_application in discount_applications -%}
+                  {%- if discount_application.target_selection == 'all' or discount_application.target_type == 'line_item' -%}
+                    <tr><td style="padding:4px 0;">Remise{% if discount_application.title != blank %} · {{ discount_application.title }}{% endif %}</td><td align="right" style="padding:4px 0;color:{{ rose }};">−{{ discount_application.total_allocated_amount | money }}</td></tr>
+                  {%- endif -%}
+                {%- endfor -%}
+                <tr><td style="padding:4px 0;">Livraison</td><td align="right" style="padding:4px 0;color:{{ ink }};">{% if shipping_price == 0 %}Offerte{% else %}{{ shipping_price | money }}{% endif %}</td></tr>
+                {%- if total_tax > 0 -%}
+                  <tr><td style="padding:4px 0;font-size:12px;">Dont TVA</td><td align="right" style="padding:4px 0;font-size:12px;">{{ total_tax | money }}</td></tr>
+                {%- endif -%}
+                <tr>
+                  <td style="padding:14px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:19px;color:{{ ink }};">Total</td>
+                  <td align="right" style="padding:14px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:19px;color:{{ ink }};">{{ total_price | money }}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Livraison et adresse {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:30px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};border-radius:14px;">
+                <tr>
+                  <td style="padding:20px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:{{ ink }};">
+                    <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Livraison</p>
+                    <p style="margin:0;">Livraison offerte en France métropolitaine. Comptez <strong>7 jours ouvrés</strong> entre votre commande et la réception.</p>
+                    {%- if shipping_address -%}
+                      <p style="margin:12px 0 0;color:{{ muted }};">
+                        {{ shipping_address.name }}<br>
+                        {{ shipping_address.address1 }}{% if shipping_address.address2 != blank %}, {{ shipping_address.address2 }}{% endif %}<br>
+                        {{ shipping_address.zip }} {{ shipping_address.city }}{% if shipping_address.country != blank %}, {{ shipping_address.country }}{% endif %}
+                      </p>
+                    {%- endif -%}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Réassurance VELEA (informations exactes du site) {%- endcomment -%}
+          <tr>
+            <td class="pad" style="padding:26px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:{{ muted }};">
+                <tr>
+                  <td width="33%" align="center" valign="top" style="padding:0 6px;"><span style="color:{{ rose }};font-size:16px;">✿</span><br>Livraison offerte</td>
+                  <td width="34%" align="center" valign="top" style="padding:0 6px;"><span style="color:{{ rose }};font-size:16px;">✿</span><br>{% if has_belt %}Ceinture : satisfaite ou remboursée 30 jours{% else %}Garantie légale de 2 ans{% endif %}</td>
+                  <td width="33%" align="center" valign="top" style="padding:0 6px;"><span style="color:{{ rose }};font-size:16px;">✿</span><br>Paiement sécurisé</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Mot de la fin {%- endcomment -%}
+          <tr>
+            <td align="center" class="pad" style="padding:30px 40px 34px;">
+              <p class="serif" style="margin:0;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
+              <p class="sans" style="margin:12px auto 0;max-width:420px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:{{ muted }};">
+                Une question sur votre commande ? Répondez simplement à cet e-mail ou écrivez-nous via la <a href="{{ shop.url }}/pages/contact" style="color:{{ rose }};">page contact</a>.
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        {%- comment -%} Pied de page {%- endcomment -%}
+        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
+          <tr>
+            <td align="center" style="padding:22px 20px 8px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:{{ muted }};">
+              <a href="{{ shop.url }}" style="color:{{ muted }};text-decoration:none;letter-spacing:0.3em;">VELEA</a>
+              &nbsp;·&nbsp; <a href="https://www.instagram.com/_maisonvelea/" style="color:{{ muted }};">Instagram</a>
+              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/faq" style="color:{{ muted }};">Questions fréquentes</a>
+              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/livraison-et-retours" style="color:{{ muted }};">Livraison et retours</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
