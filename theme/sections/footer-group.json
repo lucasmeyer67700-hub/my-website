@@ -51,11 +51,11 @@
         "text": "Nous les utilisons pour mesurer l'audience et personnaliser nos offres.",
         "heading_font": "playfair_display_n4",
         "policy_page": "",
-        "background": "#2b201d",
-        "text_color": "#f7efe9",
-        "accent": "#d9a58f",
-        "button": "#f7efe9",
-        "button_label": "#2b201d"
+        "background": "#ffffff",
+        "text_color": "#2b2422",
+        "accent": "#a14a5c",
+        "button": "#a14a5c",
+        "button_label": "#ffffff"
       }
     },
     "welcome": {
