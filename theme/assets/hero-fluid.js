@@ -209,7 +209,7 @@
       this.iy = box.height * 0.45;
       this.makeDrop();
       this.stepDrop();
-      this.at(0.8, () => this.splash());
+      this.at(1.6, () => this.splash());
 
       // Scrolling on: no need to wait for the letters.
       this.skip = new AbortController();
@@ -230,7 +230,7 @@
       sat.style.width = sat.style.height = `${s}px`;
       this.inner.append(el, sat);
       this.fx.push(el, sat);
-      this.drop = { el, sat, w: size, h: size * 1.5, s, start: 0.22, end: 0.8, y0: -size * 2.2 };
+      this.drop = { el, sat, w: size, h: size * 1.5, s, start: 0.3, end: 1.6, y0: -size * 2.2 };
     }
 
     stepDrop() {
@@ -244,7 +244,7 @@
         d.el.style.transform = `translate3d(${this.ix - d.w / 2}px, ${y - d.h}px, 0) scale(${1 - 0.12 * p}, ${1 + 0.38 * p})`;
       }
       // A small second drop follows the first, as real drops do.
-      const { p: q, y: ys } = fall(0.09);
+      const { p: q, y: ys } = fall(0.16);
       d.sat.style.transform = `translate3d(${this.ix - d.s / 2}px, ${ys - d.s * 1.2}px, 0) scale(0.85, ${1 + 0.4 * q})`;
       if (q >= 1) {
         d.sat.remove();
