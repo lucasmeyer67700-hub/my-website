@@ -2315,6 +2315,8 @@ class ReviewsLoop extends HTMLElement {
   #setWidth = 0;
   #width = 0;
   #visible = false;
+  #measured = false;
+  #near = null;
   #focused = false;
   #photos = [];
   #allCards = [];
@@ -2334,6 +2336,7 @@ class ReviewsLoop extends HTMLElement {
     this.#pace = 0;
     this.#width = 0;
     this.#visible = false;
+    this.#measured = false;
     this.#focused = false;
 
     this.#controller = new AbortController();
@@ -2368,22 +2371,45 @@ class ReviewsLoop extends HTMLElement {
       document.addEventListener('visibilitychange', () => this.#run(), { signal });
     }
 
-    if ('ResizeObserver' in window) {
-      this.#resizeObserver = new ResizeObserver(() => this.#layout());
-      this.#resizeObserver.observe(this.viewport);
+    // The band is copied and measured only when it comes near the screen, not while the page opens.
+    const watchSize = () => {
+      if ('ResizeObserver' in window) {
+        this.#resizeObserver = new ResizeObserver(() => this.#layout());
+        this.#resizeObserver.observe(this.viewport);
+      } else {
+        this.#layout();
+      }
+    };
+    if ('IntersectionObserver' in window) {
+      this.#near = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        this.#near?.disconnect();
+        this.#near = null;
+        this.#layout();
+        watchSize();
+      }, { rootMargin: '600px 0px' });
+      this.#near.observe(this);
+    } else {
+      watchSize();
     }
-    this.#layout();
 
     if ('IntersectionObserver' in window) {
       this.#observer = new IntersectionObserver(([entry]) => {
         this.#visible = entry.isIntersecting;
-        if (entry.isIntersecting) this.classList.add('is-in');
+        if (entry.isIntersecting) {
+          this.classList.add('is-in');
+          if (!this.#measured) {
+            this.#measured = true;
+            this.#measureTexts();
+          }
+        }
         this.#run();
       }, { threshold: 0 });
       this.#observer.observe(this);
     } else {
       this.classList.add('is-in');
       this.#visible = true;
+      this.#measureTexts();
       this.#run();
     }
   }
@@ -2392,6 +2418,7 @@ class ReviewsLoop extends HTMLElement {
     this.#controller?.abort();
     this.#observer?.disconnect();
     this.#resizeObserver?.disconnect();
+    this.#near?.disconnect();
     cancelAnimationFrame(this.#frame);
     this.#frame = 0;
   }
@@ -2421,7 +2448,8 @@ class ReviewsLoop extends HTMLElement {
       this.#focusValues = [];
       this.#moveBy(0);
     }
-    this.#measureTexts();
+    // "Lire la suite" is measured once the band is on screen, not while the page opens.
+    if (this.#visible) this.#measureTexts();
   }
 
   /** @param {number} distance Pixels to move the cards to the left. */
@@ -2850,6 +2878,7 @@ customElements.define('video-player', VideoPlayer);
 class VideoCarousel extends HTMLElement {
   #controller = null;
   #frame = 0;
+  #near = null;
 
   connectedCallback() {
     this.track = this.querySelector('[data-carousel-track]');
@@ -2881,11 +2910,23 @@ class VideoCarousel extends HTMLElement {
       },
       { signal }
     );
-    this.#update();
+    // Measured only when the row comes near the screen, not while the page opens.
+    if ('IntersectionObserver' in window) {
+      this.#near = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        this.#near?.disconnect();
+        this.#near = null;
+        update();
+      }, { rootMargin: '400px 0px' });
+      this.#near.observe(this);
+    } else {
+      this.#update();
+    }
   }
 
   disconnectedCallback() {
     this.#controller?.abort();
+    this.#near?.disconnect();
     cancelAnimationFrame(this.#frame);
   }
 
@@ -3514,7 +3555,8 @@ function initReveal() {
     },
     { rootMargin: '0px 0px -5% 0px' }
   );
-  for (const item of items) observer.observe(item);
+  // Those of the first screen were already shown by the small script at the end of the page.
+  for (const item of items) if (!item.classList.contains('is-visible')) observer.observe(item);
 }
 
 function initNewsletterTracking() {
@@ -3587,16 +3629,20 @@ function splitTitles(root = document) {
 
 /** Gives each word the number of its line, so a whole line moves together. */
 function numberLines(title) {
+  // All positions are read first, then written: mixing the two would redo the layout for every word.
+  const words = [...title.querySelectorAll('.split-word')];
+  const tops = words.map((word) => Math.round(word.offsetTop));
   let line = -1;
   let lastTop = null;
-  for (const word of title.querySelectorAll('.split-word')) {
-    const top = Math.round(word.offsetTop);
+  words.forEach((word, index) => {
+    const top = tops[index];
     if (lastTop === null || Math.abs(top - lastTop) > 4) {
       line += 1;
       lastTop = top;
     }
-    word.style.setProperty('--line', String(line));
-  }
+    const value = String(line);
+    if (word.style.getPropertyValue('--line') !== value) word.style.setProperty('--line', value);
+  });
 }
 
 let resizeFrame = 0;

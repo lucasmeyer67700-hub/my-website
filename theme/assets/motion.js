@@ -122,16 +122,23 @@
     const dt = Math.min(0.1, (now - lastTime) / 1000);
     lastTime = now;
     let moving = false;
-    for (const item of scrubbed) {
+    // Every position is read first, then every style written: mixing the two would redo the layout for each item.
+    const vh = window.innerHeight;
+    const goals = scrubbed.map((item) => {
       const box = item.el.getBoundingClientRect();
-      if (box.bottom < -200 || box.top > window.innerHeight + 200) continue;
-      const goal = item.measure();
+      if (box.bottom < -200 || box.top > vh + 200) return null;
+      return item.measure();
+    });
+    scrubbed.forEach((item, index) => {
+      const goal = goals[index];
+      if (goal === null) return;
+      if (item.value === null) item.value = goal;
       // GSAP "scrub: n": the value catches up with the scroll in about n seconds.
       const k = 1 - Math.exp(-dt / (item.scrub / 4));
       item.value += (goal - item.value) * k;
       if (Math.abs(goal - item.value) > 0.0005) moving = true;
       item.apply(item.value);
-    }
+    });
     loopFrame = moving ? requestAnimationFrame(loop) : 0;
   }
 
@@ -142,10 +149,9 @@
     }
   };
 
+  /** The first value is set by the next frame, with all the others (no layout read while the page opens). */
   function addScrub(el, scrub, measure, apply) {
-    const item = { el, scrub, measure, apply, value: measure() };
-    apply(item.value);
-    scrubbed.push(item);
+    scrubbed.push({ el, scrub, measure, apply, value: null });
   }
 
   function initParallax() {

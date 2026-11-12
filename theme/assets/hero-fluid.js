@@ -751,8 +751,9 @@
     /** Ink from the letters and drops of the opening (pixels of the opening). */
     inkAt(x, y, vx, vy, strength) {
       if (!this.gl || this.gl.isContextLost()) return;
-      const w = this.canvas.clientWidth;
-      const h = this.canvas.clientHeight;
+      // Size kept from the last resize: reading it here would force a layout every frame.
+      const w = this.cssW || this.canvas.clientWidth;
+      const h = this.cssH || this.canvas.clientHeight;
       if (!w || !h) return;
       const k = 60 / h;
       this.splat(x / w, 1 - y / h, vx * k, -vy * k, this.nextColor(strength));
@@ -761,8 +762,8 @@
 
     explodeAt(x, y) {
       if (!this.gl || this.gl.isContextLost()) return;
-      const w = this.canvas.clientWidth;
-      const h = this.canvas.clientHeight;
+      const w = this.cssW || this.canvas.clientWidth;
+      const h = this.cssH || this.canvas.clientHeight;
       if (!w || !h) return;
       this.explode(x / w, 1 - y / h);
     }
@@ -1105,8 +1106,10 @@
 
     resize() {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-      const width = Math.max(1, Math.floor(this.canvas.clientWidth * ratio));
-      const height = Math.max(1, Math.floor(this.canvas.clientHeight * ratio));
+      this.cssW = this.canvas.clientWidth;
+      this.cssH = this.canvas.clientHeight;
+      const width = Math.max(1, Math.floor(this.cssW * ratio));
+      const height = Math.max(1, Math.floor(this.cssH * ratio));
       if (this.canvas.width === width && this.canvas.height === height && this.dye) return;
       this.canvas.width = width;
       this.canvas.height = height;

@@ -137,5 +137,29 @@
     {%- endif -%}
 
     <div class="visually-hidden" aria-live="polite" aria-atomic="true" data-live-region></div>
+
+    {%- comment -%}
+      Blocks already on the first screen start their entrance as soon as the page is read,
+      without waiting for the scripts (assets/theme.js handles the rest of the page).
+    {%- endcomment -%}
+    <script>
+      (function () {
+        if (!document.body.hasAttribute('data-reveal-enabled') || !('IntersectionObserver' in window)) return;
+        var limit = window.innerHeight * 0.95;
+        var shown = [];
+        var items = document.querySelectorAll('.reveal');
+        for (var i = 0; i < items.length; i++) {
+          var box = items[i].getBoundingClientRect();
+          if (box.height > 0 && box.top < limit && box.bottom > 0) shown.push(items[i]);
+        }
+        shown.forEach(function (item, index) {
+          if (index > 0) item.style.setProperty('--reveal-delay', Math.min(index, 5) * 110 + 'ms');
+          item.classList.add('is-visible');
+        });
+        setTimeout(function () {
+          shown.forEach(function (item) { item.style.removeProperty('--reveal-delay'); });
+        }, 2200);
+      })();
+    </script>
   </body>
 </html>
