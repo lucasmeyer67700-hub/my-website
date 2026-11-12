@@ -17,6 +17,17 @@
   endif
 
   assign share_image = page_image | default: settings.share_image
+  comment
+    Pages without their own photo show the brand image chosen in the theme,
+    never an older image from the Shopify preferences.
+  endcomment
+  case request.page_type
+    when 'product', 'article', 'collection'
+    else
+      if settings.share_image
+        assign share_image = settings.share_image
+      endif
+  endcase
 -%}
 <meta property="og:site_name" content="{{ shop.name | escape }}">
 <meta property="og:url" content="{{ og_url }}">

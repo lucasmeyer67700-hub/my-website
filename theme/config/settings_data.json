@@ -1,7 +1,8 @@
 {
   "current": {
     "logo_width": 120,
-    "favicon": "shopify://shop_images/pdpsitevelea.png",
+    "favicon": "shopify://shop_images/velea-icone-2026.png",
+    "share_image": "shopify://shop_images/velea-partage-2026.png",
     "brand_tagline": "Ceinture chauffante sans fil, pensée pour les jours de règles.",
     "seo_home_title": "Ceinture chauffante pour les règles",
     "seo_description": "VELEA, la ceinture chauffante sans fil pour vos jours de règles : une chaleur douce et réglable. Livraison offerte en France.",
@@ -35,7 +36,7 @@
     "cart_empty_heading": "Nos essentiels",
     "cart_empty_limit": 3,
     "social_instagram": "https://www.instagram.com/_maisonvelea/",
-    "social_tiktok": "https://www.tiktok.com/@nonoxcash",
+    "social_tiktok": "https://www.tiktok.com/@maisonvelea",
     "social_facebook": "",
     "social_pinterest": "",
     "social_youtube": "",

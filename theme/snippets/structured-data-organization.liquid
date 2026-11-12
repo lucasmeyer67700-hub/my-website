@@ -28,8 +28,9 @@
         "@type": "Organization",
         "name": {{ shop.name | json }},
         "url": {{ request.origin | append: routes.root_url | json }}
-        {%- if settings.logo -%},
-          "logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+        {%- assign brand_logo = settings.logo | default: settings.favicon -%}
+        {%- if brand_logo -%},
+          "logo": {{ brand_logo | image_url: width: 600 | prepend: 'https:' | json }}
         {%- endif -%}
         {%- if profiles.size > 0 -%},
           "sameAs": {{ profiles | json }}
