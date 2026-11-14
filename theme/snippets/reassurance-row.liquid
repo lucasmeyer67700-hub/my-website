@@ -6,6 +6,8 @@
 
   @param {string} [class] - Extra CSS classes
   @param {boolean} [hide_payment] - Leave out "Paiement sécurisé" (already shown under the buy buttons)
+  @param {object} [product] - The product sold: the 30-day guarantee is only for the belt; period pants and
+    pads (templates "culotte" and "serviette") follow the hygiene rule. Return costs are always stated.
 
   @example
   {% render 'reassurance-row' %}
@@ -17,8 +19,30 @@
       {%- if settings.shipping_delay != blank %}, <span class="reassurance-row__detail">{{ settings.shipping_delay | escape }}</span>{% endif -%}
     </li>
   {%- endif -%}
-  {%- if settings.returns_info != blank -%}
-    <li class="reassurance-row__item">{{ settings.returns_info | escape }}</li>
+  {%- liquid
+    assign hygiene = false
+    if product.template_suffix == 'culotte' or product.template_suffix == 'serviette'
+      assign hygiene = true
+    endif
+  -%}
+  {%- if hygiene -%}
+    <li class="reassurance-row__item">
+      {%- if settings.returns_page != blank -%}
+        <a class="reassurance-row__link" href="{{ settings.returns_page.url }}">{{ 'products.returns_hygiene' | t }}</a>
+      {%- else -%}
+        {{ 'products.returns_hygiene' | t }}
+      {%- endif -%}
+      , <span class="reassurance-row__detail">{{ 'products.returns_cost' | t }}</span>
+    </li>
+  {%- elsif settings.returns_info != blank -%}
+    <li class="reassurance-row__item">
+      {%- if settings.returns_page != blank -%}
+        <a class="reassurance-row__link" href="{{ settings.returns_page.url }}">{{ settings.returns_info | escape }}</a>
+      {%- else -%}
+        {{ settings.returns_info | escape }}
+      {%- endif -%}
+      , <span class="reassurance-row__detail">{{ 'products.returns_cost' | t }}</span>
+    </li>
   {%- endif -%}
   {%- if hide_payment -%}
     {%- if settings.warranty_info != blank -%}
@@ -55,6 +79,13 @@
       height: 1px;
       background-color: var(--rose-strong);
     }
+  }
+
+  .reassurance-row__link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--rose-strong-rgb) / 0.45);
+    text-underline-offset: 0.18em;
   }
 
   .reassurance-row__detail {

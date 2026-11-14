@@ -258,7 +258,7 @@
         {%- endif -%}
 
         {%- if section.settings.show_reassurance -%}
-          {% render 'reassurance-row', hide_payment: section.settings.show_secure_payment %}
+          {% render 'reassurance-row', hide_payment: section.settings.show_secure_payment, product: product %}
         {%- endif -%}
 
         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
@@ -515,7 +515,7 @@
       "id": "perks_multi",
       "label": "Inclus dans les offres à plusieurs",
       "info": "Une ligne par avantage. Texte à droite après « | ».",
-      "default": "Deux ensembles complets : câbles USB et notices"
+      "default": "Deux ensembles complets : câbles USB-C et notices"
     },
     {
       "type": "header",

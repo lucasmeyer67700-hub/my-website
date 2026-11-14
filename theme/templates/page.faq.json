@@ -50,7 +50,7 @@
           "type": "question",
           "settings": {
             "question": "Que contient le colis ?",
-            "answer": "<p>Une ceinture, un câble USB et une notice. Le Duo contient deux ensembles complets.</p>"
+            "answer": "<p>Une ceinture, un câble USB-C et une notice. Le Duo contient deux ensembles complets.</p>"
           }
         },
         "topic-utilisation": {
@@ -72,14 +72,14 @@
           "type": "question",
           "settings": {
             "question": "Comment la recharger ?",
-            "answer": "<p>Avec le câble USB fourni (5 V / 1 A). Le voyant est rouge pendant la charge, puis vert lorsque la ceinture est prête.</p>"
+            "answer": "<p>Avec le câble USB-C fourni (5 V / 1 A). Le voyant est rouge pendant la charge, puis vert lorsque la ceinture est prête.</p>"
           }
         },
         "battery": {
           "type": "question",
           "settings": {
             "question": "Combien de temps tient la batterie ?",
-            "answer": "<p>Environ 2 heures selon le fabricant, en fonction des réglages utilisés. La ceinture s'arrête automatiquement au bout de 30 minutes d'utilisation. Si vous l'utilisez rarement, rechargez-la au moins tous les deux mois.</p>"
+            "answer": "<p>Environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité). Si vous l'utilisez rarement, rechargez-la au moins tous les deux mois.</p>"
           }
         },
         "charging": {

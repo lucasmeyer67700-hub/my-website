@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero_fluid": {
@@ -15,6 +24,9 @@
         "button_link": "",
         "secondary_label": "Toute la collection",
         "secondary_link": "shopify://collections/tous-nos-produits",
+        "intro": true,
+        "drop_color": "#a3304a",
+        "clouds": true,
         "explode": true,
         "color_1": "#e8a0b0",
         "color_2": "#f2c3cc",
@@ -112,7 +124,7 @@
         "video_cdRwKx": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/SaveDouyin.App_7697929120491064608_hd.mp4",
+            "video": "shopify://files/videos/copy_C3F8BA91-2694-496E-B183-23CA6047168B.mov",
             "tag": "",
             "title": "",
             "text": "",
@@ -180,7 +192,7 @@
           "type": "question",
           "settings": {
             "question": "Combien de temps tient la batterie ?",
-            "answer": "<p>Environ 2 heures selon le fabricant, en fonction des réglages utilisés. Par sécurité, la ceinture s'arrête automatiquement au bout de 30 minutes et ne fonctionne pas pendant la charge.</p>"
+            "answer": "<p>Environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité). La ceinture ne fonctionne pas pendant la charge.</p>"
           }
         },
         "precautions": {
@@ -207,6 +219,15 @@
         "color_scheme": "scheme-1"
       }
     },
+    "thread_nav": {
+      "type": "thread-nav",
+      "settings": {
+        "menu_title": "Sur cette page",
+        "labels": "shop_row: La boutique\nempathy: On vous comprend\npack_banner: Le pack\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
+        "ink": true,
+        "drop_color": "#a3304a"
+      }
+    },
     "hero_editorial": {
       "type": "hero-editorial",
       "disabled": true,
@@ -215,7 +236,7 @@
         "line_1": "La chaleur d’une",
         "line_2": "bouillotte.",
         "line_3": "Sans le fil.",
-        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ deux heures d’autonomie.",
+        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ 2 h d’autonomie en séances de 30 min.",
         "product": "ceinture-chauffante-regles",
         "show_price": true,
         "button_label": "Voir la ceinture",
@@ -239,14 +260,14 @@
         "show_tagline": true,
         "offer_heading": "",
         "unit_label": "la ceinture",
-        "offer_note_single": "Avec son câble USB et sa notice",
+        "offer_note_single": "Avec son câble USB-C et sa notice",
         "offer_note_multi": "Une pour vous, une à offrir",
         "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
         "best_label": "Meilleure offre",
         "perks_multi": "",
         "hide_multi": true,
         "bundle_product": "culotte-menstruelle",
-        "bundle_price": 54.0,
+        "bundle_price": 54,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
         "show_dynamic_checkout": true,
@@ -299,7 +320,7 @@
           "type": "point",
           "settings": {
             "title": "Recharger",
-            "text": "Par câble USB. Environ deux heures d'autonomie, et un arrêt automatique au bout de 30 minutes."
+            "text": "Par câble USB-C. Environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité)."
           }
         }
       },
@@ -340,10 +361,6 @@
         "anchor": "",
         "color_scheme": "scheme-3"
       }
-    },
-    "thread_nav": {
-      "type": "thread-nav",
-      "settings": {}
     }
   },
   "order": [

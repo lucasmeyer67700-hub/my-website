@@ -98,7 +98,7 @@
         {{- 'products.size_guide' | t -}}
       </a>
     {%- endif -%}
-    <span class="bundle-picker__error" data-bundle-error hidden>{{ 'products.unavailable' | t }}</span>
+    <span class="bundle-picker__error" data-bundle-error role="status" hidden>{{ 'products.bundle_unavailable' | t }}</span>
     <script type="application/json" data-bundle-variants>
       [
         {%- for variant in bundle_product.variants -%}

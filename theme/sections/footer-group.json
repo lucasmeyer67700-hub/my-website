@@ -90,7 +90,7 @@
           "settings": {
             "question": "Choisir ma ceinture",
             "keywords": "choisir, prix, combien coute, combien ca coute, coute, tarif, duo, deux ceintures, offrir, cadeau, coloris, couleur, rose, blanc, blanche, chaleur, chauffe, chauffant, temperature, degres, niveaux, vibration, massage, modes, batterie, autonomie, recharger, recharge, charge, usb, sans fil, poids, boitier",
-            "answer": "<p>Une ceinture pour vous, ou le Duo pour en avoir une d'avance ou l'offrir. Trois niveaux de chaleur (50, 55 ou 60 °C), un massage par vibration à 4 modes, et aucun fil : environ 2 h d'autonomie selon le fabricant.</p>",
+            "answer": "<p>Une ceinture pour vous, ou le Duo pour en avoir une d'avance ou l'offrir. Trois niveaux de chaleur (50, 55 ou 60 °C), un massage par vibration à 4 modes, et aucun fil : environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité).</p>",
             "product": "ceinture-chauffante-regles",
             "link_label": "Voir la ceinture",
             "link": ""
