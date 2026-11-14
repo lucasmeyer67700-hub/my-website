@@ -110,6 +110,11 @@
     "remove_short": "Remove",
     "note": "Anything we should know about your order?",
     "discount_hint": "Have a discount code? You can enter it at checkout.",
+    "view_cart": "View my cart",
+    "duo_title": "One pink and one white?",
+    "duo_text": "Take the Duo: {{ duo }} instead of {{ separate }}, a saving of {{ saving }}.",
+    "duo_button": "Switch to the Duo",
+    "duo_error": "The Duo could not be added. Please try again.",
     "item_count": {
       "one": "{{ count }} item",
       "other": "{{ count }} items"

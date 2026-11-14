@@ -320,6 +320,64 @@
       font-size: 0.6875rem;
     }
   }
+
+  /* "Ajouté au panier ✓ · Voir mon panier": a small band at the top after an add */
+  .added-toast {
+    position: fixed;
+    inset-block-start: calc(0.75rem + env(safe-area-inset-top));
+    inset-inline: 50% auto;
+    z-index: calc(var(--z-drawer) - 1);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    max-width: calc(100vw - 1.5rem);
+    padding: 0.55rem 0.55rem 0.55rem 1.1rem;
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    color: #fff;
+    background-color: #2b2422;
+    box-shadow: 0 14px 34px -14px rgb(43 36 34 / 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -1rem);
+    transition:
+      opacity 0.3s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .added-toast__text {
+    white-space: nowrap;
+  }
+
+  .added-toast__button {
+    min-height: 2.5rem;
+    padding: 0.35rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: var(--font-body-weight-medium);
+    white-space: nowrap;
+    color: #2b2422;
+    background-color: #fff;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .added-toast {
+      transition: opacity 0.2s ease;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

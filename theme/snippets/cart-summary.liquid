@@ -25,16 +25,92 @@
     </ul>
   {%- endif -%}
 
+  {%- comment -%}
+    One pink and one white belt bought one by one cost more than the Duo
+    (which is exactly one of each): the cart offers to switch, in one click.
+  {%- endcomment -%}
+  {%- liquid
+    assign duo_rose_qty = 0
+    assign duo_blanc_qty = 0
+    assign duo_variant = blank
+    for item in cart.items
+      if item.variant.option1 == '1 ceinture'
+        if item.variant.option2 == 'Rose'
+          assign duo_rose_qty = duo_rose_qty | plus: item.quantity
+          assign duo_rose_id = item.variant.id
+          assign duo_rose_price = item.variant.price
+        elsif item.variant.option2 == 'Blanc'
+          assign duo_blanc_qty = duo_blanc_qty | plus: item.quantity
+          assign duo_blanc_id = item.variant.id
+          assign duo_blanc_price = item.variant.price
+        endif
+        for variant in item.product.variants
+          if variant.option1 contains 'Duo' and variant.available
+            assign duo_variant = variant
+          endif
+        endfor
+      endif
+    endfor
+    assign duo_pairs = duo_rose_qty | at_most: duo_blanc_qty
+    assign duo_in_cart = 0
+    if duo_variant != blank
+      for item in cart.items
+        if item.variant.id == duo_variant.id
+          assign duo_in_cart = duo_in_cart | plus: item.quantity
+        endif
+      endfor
+      assign duo_separate = duo_rose_price | plus: duo_blanc_price | times: duo_pairs
+      assign duo_total = duo_variant.price | times: duo_pairs
+      assign duo_saving = duo_separate | minus: duo_total
+    endif
+  -%}
+  {%- if duo_variant != blank and duo_pairs > 0 and duo_saving > 0 -%}
+    <div class="cart-duo" data-duo-offer>
+      <p class="cart-duo__text">
+        <strong>{{ 'cart.duo_title' | t }}</strong>
+        {%- liquid
+          assign duo_total_text = duo_total | money
+          assign duo_separate_text = duo_separate | money
+          assign duo_saving_text = duo_saving | money
+        -%}
+        {{ 'cart.duo_text' | t: duo: duo_total_text, separate: duo_separate_text, saving: duo_saving_text }}
+      </p>
+      <button
+        type="button"
+        class="cart-duo__button"
+        data-duo-swap
+        data-rose-id="{{ duo_rose_id }}"
+        data-rose-qty="{{ duo_rose_qty | minus: duo_pairs }}"
+        data-blanc-id="{{ duo_blanc_id }}"
+        data-blanc-qty="{{ duo_blanc_qty | minus: duo_pairs }}"
+        data-duo-id="{{ duo_variant.id }}"
+        data-duo-qty="{{ duo_in_cart | plus: duo_pairs }}"
+      >
+        {{- 'cart.duo_button' | t -}}
+      </button>
+    </div>
+  {%- endif -%}
+
   <p class="cart-summary__row cart-summary__subtotal">
     <span>{{ 'cart.subtotal' | t }}</span>
     <span>{{ cart.total_price | money }}</span>
   </p>
 
+  {%- if settings.shipping_info != blank -%}
+    <p class="cart-summary__shipping">
+      {% render 'icon', icon: 'truck' %}
+      <span>
+        {{- settings.shipping_info | escape -}}
+        {%- if settings.shipping_delay != blank %} · {{ settings.shipping_delay | escape }}{% endif -%}
+      </span>
+    </p>
+  {%- endif -%}
+
   {%- if compact -%}
     {%- comment -%} Drawer: one button that says it all, the enabled methods under it. {%- endcomment -%}
     <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full cart-summary__checkout cart-summary__checkout--secure">
       {% render 'icon', icon: 'lock' %}
-      {{ 'payment.secure_checkout' | t }}
+      {{ 'cart.checkout' | t }}
     </button>
     {% render 'payment-icons', class: 'cart-summary__payments' %}
   {%- else -%}
@@ -90,6 +166,66 @@
 
     &:hover .icon {
       transform: translateX(3px);
+    }
+  }
+
+  .cart-summary__shipping {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -0.25rem 0 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 1.05rem;
+      flex: none;
+      color: var(--rose-strong);
+    }
+  }
+
+  /* The Duo suggestion: a soft rose card right above the total */
+  .cart-duo {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgb(var(--rose-strong-rgb) / 0.25);
+    border-radius: var(--radius-md, 0.75rem);
+    background-color: #fbf1f3;
+  }
+
+  .cart-duo__text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+
+    & strong {
+      display: block;
+      font-weight: var(--font-body-weight-medium);
+    }
+  }
+
+  .cart-duo__button {
+    justify-self: start;
+    min-height: 2.5rem;
+    padding: 0.4rem 1.1rem;
+    border: 1px solid #a14a5c;
+    border-radius: 999px;
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight-medium);
+    color: #fff;
+    background-color: #a14a5c;
+    cursor: pointer;
+
+    &[aria-busy='true'] {
+      opacity: 0.6;
+      cursor: progress;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--rose-strong);
+      outline-offset: 3px;
     }
   }
 

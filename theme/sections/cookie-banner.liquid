@@ -558,6 +558,45 @@
     grid-column: 1 / -1;
   }
 
+  /* Phones: a compact card (about half the height), so the page stays visible.
+     Placed after the base rules so it wins over them. */
+  @media screen and (max-width: 749px) {
+    .cookie-banner {
+      inset-inline: 0.5rem;
+      inset-block-end: calc(0.5rem + env(safe-area-inset-bottom));
+      gap: 0.55rem;
+      padding: 0.85rem 1rem 0.35rem;
+      border-radius: 1rem;
+    }
+
+    .cookie-banner__copy {
+      gap: 0.2rem;
+    }
+
+    .cookie-banner__title {
+      font-size: 1.05rem;
+    }
+
+    .cookie-banner__text {
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .cookie-banner__actions {
+      gap: 0.4rem 0.5rem;
+    }
+
+    .cookie-banner__button {
+      min-height: 2.5rem;
+      padding: 0.35rem 0.75rem;
+    }
+
+    .cookie-banner__customize {
+      min-height: 2.25rem;
+      font-size: 0.75rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cookie-banner,
     .cookie-banner__button,

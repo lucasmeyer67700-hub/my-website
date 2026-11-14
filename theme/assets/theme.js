@@ -101,6 +101,72 @@ function renderCartSections(sections = {}) {
   }
 }
 
+/**
+ * After an add to cart the visitor stays on the page; a small band at the top
+ * confirms it and offers to open the cart. It leaves by itself after a while.
+ */
+function showAddedToast() {
+  const drawer = document.querySelector('cart-drawer');
+  if (!drawer) return;
+  let toast = /** @type {HTMLElement | null} */ (document.querySelector('[data-added-toast]'));
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'added-toast';
+    toast.dataset.addedToast = '';
+    const text = document.createElement('span');
+    text.className = 'added-toast__text';
+    text.textContent = theme.strings.added;
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.className = 'added-toast__button';
+    open.textContent = theme.strings.viewCart || 'Voir mon panier';
+    open.addEventListener('click', () => {
+      toast?.classList.remove('is-visible');
+      /** @type {any} */ (drawer).open?.(open);
+    });
+    toast.append(text, open);
+    document.body.append(toast);
+  }
+  const shown = toast;
+  requestAnimationFrame(() => shown.classList.add('is-visible'));
+  clearTimeout(Number(shown.dataset.timer));
+  shown.dataset.timer = String(setTimeout(() => shown.classList.remove('is-visible'), 5000));
+}
+
+/**
+ * Cart suggestion (cart-summary snippet): one pink and one white belt become
+ * the Duo, in one request, and the cart is drawn again.
+ */
+document.addEventListener('click', async (event) => {
+  const button = /** @type {HTMLElement | null} */ (
+    event.target instanceof Element ? event.target.closest('[data-duo-swap]') : null
+  );
+  if (!button || button.getAttribute('aria-busy') === 'true') return;
+  const data = button.dataset;
+  const updates = {
+    [String(data.roseId)]: Number(data.roseQty),
+    [String(data.blancId)]: Number(data.blancQty),
+    [String(data.duoId)]: Number(data.duoQty),
+  };
+  button.setAttribute('aria-busy', 'true');
+  try {
+    const result = await cartRequest(`${theme.routes.cart}/update.js`, {
+      updates,
+      sections: getCartSectionIds().join(','),
+      sections_url: window.location.pathname,
+    });
+    renderCartSections(result.sections);
+    announce(theme.strings.cartUpdated);
+  } catch (error) {
+    button.removeAttribute('aria-busy');
+    const box = button.closest('.cart-summary')?.querySelector('[data-cart-error]');
+    if (box) {
+      box.textContent = theme.strings.duoError || error.message;
+      box.hidden = false;
+    }
+  }
+});
+
 /* -------------------------------------------------------------------------- */
 /* Dialog-based drawers (mobile menu, cart, gallery zoom)                      */
 /* -------------------------------------------------------------------------- */
@@ -1464,6 +1530,7 @@ class ProductForm extends HTMLElement {
   #confirmAdded(button) {
     const label = button?.querySelector('[data-add-to-cart-label]');
     announce(theme.strings.added);
+    showAddedToast();
     document.querySelector('[data-cart-icon]')?.classList.add('is-bumped');
     setTimeout(() => document.querySelector('[data-cart-icon]')?.classList.remove('is-bumped'), 700);
     if (!label) return;
