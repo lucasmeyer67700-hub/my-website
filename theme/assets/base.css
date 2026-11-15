@@ -2350,3 +2350,78 @@ html.has-smooth-scroll {
     filter: blur(6px);
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Liquid buttons (assets/liquid-button.js): a drop of ink follows the pointer */
+/* and fills the button; a ring spreads on click. Main buttons take the brand  */
+/* rose behind their white label; outline buttons take the text colour and    */
+/* their label turns to the background colour under the ink.                  */
+/* -------------------------------------------------------------------------- */
+.button.is-liquid {
+  --liquid-fill: var(--rose-cta);
+  --liquid-ring: #fff;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out),
+    scale 0.12s ease-out;
+
+  /* The ink replaces the fill that slid up from the bottom */
+  &::before {
+    content: none;
+  }
+
+  &.is-pressed {
+    scale: 0.97;
+  }
+}
+
+.button.is-liquid-outline {
+  --liquid-fill: var(--color-text);
+  --liquid-ring: var(--color-background, #fff);
+}
+
+.liquid-button__ink {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.liquid-button__blob {
+  fill: var(--liquid-fill);
+}
+
+.liquid-button__ring {
+  fill: none;
+  stroke: var(--liquid-ring);
+}
+
+.liquid-button__inverted {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  padding: inherit;
+  color: var(--color-background, #fff);
+  pointer-events: none;
+
+  & [data-liquid-text]::before {
+    content: attr(data-liquid-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button.is-liquid.is-pressed {
+    scale: none;
+  }
+}

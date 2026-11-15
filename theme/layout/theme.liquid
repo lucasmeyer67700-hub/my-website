@@ -41,6 +41,7 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'liquid-button.js' | asset_url }}" defer="defer"></script>
     {%- unless settings.smooth_scroll == false and settings.page_transitions == false -%}
       <script src="{{ 'motion.js' | asset_url }}" defer="defer"></script>
     {%- endunless -%}
