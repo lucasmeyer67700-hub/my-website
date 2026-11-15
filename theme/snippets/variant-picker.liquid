@@ -115,6 +115,46 @@
         {%- endif -%}
 
         {%- assign option_input_name = 'Option-' | append: section_id | append: '-' | append: option_position -%}
+        {%- comment -%}
+          « Meilleure offre » goes on one card only: the one that saves the most
+          (a multi-item offer such as the Duo, or the pack with another product).
+        {%- endcomment -%}
+        {%- liquid
+          assign best_multi_saving = 0
+          assign bundle_saving = 0
+          if is_offer
+            for candidate in option.values
+              assign candidate_qty = 1
+              if candidate.name contains '2'
+                assign candidate_qty = 2
+              elsif candidate.name contains '3'
+                assign candidate_qty = 3
+              endif
+              if candidate_qty > 1 and hide_multi != true
+                assign candidate_price = 0
+                for variant in product.variants
+                  if variant.options[offer_index] == candidate.name
+                    if candidate_price == 0 or variant.price < candidate_price
+                      assign candidate_price = variant.price
+                    endif
+                  endif
+                endfor
+                assign candidate_saving = unit_price | times: candidate_qty | minus: candidate_price
+                if candidate_saving > best_multi_saving
+                  assign best_multi_saving = candidate_saving
+                endif
+              endif
+            endfor
+            if bundle_product != blank and bundle_product.available
+              assign bundle_cents = bundle_price | times: 100 | round
+              assign bundle_saving = unit_price | plus: bundle_product.price | minus: bundle_cents
+            endif
+          endif
+          assign bundle_best_label = ''
+          if bundle_saving > best_multi_saving
+            assign bundle_best_label = best_label
+          endif
+        -%}
         <div class="variant-picker__values{% if is_offer %} variant-picker__values--offers{% endif %}">
           {%- for value in option.values -%}
             {%- liquid
@@ -172,6 +212,22 @@
               endif
             -%}
             {%- if is_offer and hide_multi and offer_qty > 1 -%}{%- continue -%}{%- endif -%}
+            {%- comment -%}
+              Struck out only when no variant with this value can be bought. Shopify's own
+              value.available also depends on the offer selected first, which would strike
+              out « Rose + Blanc » (the Duo's colour) while « 1 ceinture » is selected,
+              and call the Duo itself sold out while « Rose » is selected.
+            {%- endcomment -%}
+            {%- liquid
+              assign value_buyable = false
+              assign value_option_index = option_position | minus: 1
+              for variant in product.variants
+                if variant.available and variant.options[value_option_index] == value.name
+                  assign value_buyable = true
+                  break
+                endif
+              endfor
+            -%}
             {%- if is_offer -%}
               <span class="variant-picker__value" data-option-value>
                 <input
@@ -194,7 +250,7 @@
                   assign perk_lines = perks | newline_to_br | split: '<br />'
                 -%}
                 <label class="offer-card{% if offer_saving > 0 %} offer-card--deal{% endif %}" for="{{ input_id }}">
-                  {%- if offer_saving > 0 and best_label != blank -%}
+                  {%- if offer_saving > 0 and offer_saving >= bundle_saving and best_label != blank -%}
                     <span class="offer-card__tab">{{ best_label | escape }}</span>
                   {%- endif -%}
                   <span class="offer-card__radio" aria-hidden="true"></span>
@@ -274,7 +330,7 @@
                     disabled
                   {% endunless %}
                 >
-                <label class="variant-pill{% unless value.available %} variant-pill--unavailable{% endunless %}" for="{{ input_id }}">
+                <label class="variant-pill{% unless value_buyable %} variant-pill--unavailable{% endunless %}" for="{{ input_id }}">
                   {%- if swatch_color != blank -%}
                     <span
                       class="variant-pill__swatch"
@@ -283,7 +339,7 @@
                     ></span>
                   {%- endif -%}
                   <span>{{ value | escape }}</span>
-                  {%- unless value.available -%}
+                  {%- unless value_buyable -%}
                     <span class="visually-hidden">({{ 'products.sold_out' | t }})</span>
                   {%- endunless -%}
                 </label>
@@ -300,7 +356,7 @@
               bundle_note: bundle_note,
               unit_price: unit_price,
               base_value: first_offer,
-              best_label: best_label,
+              best_label: bundle_best_label,
               input_name: option_input_name,
               section_id: section_id
             -%}

@@ -112,7 +112,7 @@
     "discount_hint": "Vous avez un code promo ? Vous pourrez le saisir à l'étape du paiement.",
     "view_cart": "Voir mon panier",
     "duo_title": "Une rose et une blanche ?",
-    "duo_text": "Prenez le Duo : {{ duo }} au lieu de {{ separate }}, soit {{ saving }} d’économie.",
+    "duo_text": "Prenez le Duo, la 2e ceinture à −33 % : {{ duo }} au lieu de {{ separate }}, soit {{ saving }} d’économie.",
     "duo_button": "Passer au Duo",
     "duo_error": "Le Duo n’a pas pu être ajouté. Réessayez dans un instant.",
     "item_count": {

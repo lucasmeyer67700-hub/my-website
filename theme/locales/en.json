@@ -112,7 +112,7 @@
     "discount_hint": "Have a discount code? You can enter it at checkout.",
     "view_cart": "View my cart",
     "duo_title": "One pink and one white?",
-    "duo_text": "Take the Duo: {{ duo }} instead of {{ separate }}, a saving of {{ saving }}.",
+    "duo_text": "Take the Duo, the 2nd belt at −33%: {{ duo }} instead of {{ separate }}, a saving of {{ saving }}.",
     "duo_button": "Switch to the Duo",
     "duo_error": "The Duo could not be added. Please try again.",
     "item_count": {
