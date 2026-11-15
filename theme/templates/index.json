@@ -70,12 +70,12 @@
         "image_position": "top",
         "text_side": "left",
         "eyebrow": "",
-        "heading": "La chaleur et la protection, <em>ensemble.</em>",
+        "heading": "Deux ceintures, <em>la 2e à −33 %.</em>",
         "product": "ceinture-chauffante-regles",
-        "card_title": "Ceinture + culotte menstruelle",
-        "card_text": "La ceinture chauffante et une culotte menstruelle au choix. La remise du pack s'applique dans le panier.",
-        "button_label": "Composer mon pack",
-        "button_link": "",
+        "card_title": "Duo · 2 ceintures",
+        "card_text": "Une rose et une blanche : la 2e ceinture à −33 %, soit 74,99 € au lieu de 89,98 €.",
+        "button_label": "Choisir le Duo",
+        "button_link": "/products/ceinture-chauffante-regles?variant=59937532838233",
         "show_price": false
       }
     },
@@ -223,7 +223,7 @@
       "type": "thread-nav",
       "settings": {
         "menu_title": "Sur cette page",
-        "labels": "shop_row: La boutique\nempathy: On vous comprend\npack_banner: Le pack\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
+        "labels": "shop_row: La boutique\nempathy: On vous comprend\npack_banner: Le Duo\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
         "ink": true,
         "drop_color": "#a3304a"
       }
@@ -266,7 +266,7 @@
         "best_label": "Meilleure offre",
         "perks_multi": "",
         "hide_multi": true,
-        "bundle_product": "culotte-menstruelle",
+        "bundle_product": "",
         "bundle_price": 54,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
