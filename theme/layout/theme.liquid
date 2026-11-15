@@ -163,5 +163,53 @@
         }, 2200);
       })();
     </script>
+
+    {%- comment -%}
+      Blur highlight (styles at the end of assets/base.css): each italic word of a title
+      comes into focus, with its rose band, when it reaches the screen. Marked here,
+      before the first paint, so it is never seen sharp then blurred.
+    {%- endcomment -%}
+    <script>
+      (function () {
+        if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var words = document.querySelectorAll('h1 em, h2 em, h3 em, .h1 em, .h2 em, .h3 em');
+        if (!words.length) return;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-lit');
+            observer.unobserve(entry.target);
+          });
+        }, { rootMargin: '0px 0px -10% 0px' });
+        var pending = [];
+        for (var i = 0; i < words.length; i++) {
+          if (words[i].closest('hero-fluid, .cookie-banner, dialog')) continue;
+          words[i].setAttribute('data-blur-hl', '');
+          observer.observe(words[i]);
+          pending.push(words[i]);
+        }
+        // Safety net for a fast scroll: a title already reached is never left blurred.
+        var frame = 0;
+        function sweep() {
+          frame = 0;
+          var limit = window.innerHeight * 0.9;
+          pending = pending.filter(function (word) {
+            if (word.classList.contains('is-lit')) return false;
+            var box = word.getBoundingClientRect();
+            if (box.height > 0 && box.top < limit) {
+              word.classList.add('is-lit');
+              observer.unobserve(word);
+              return false;
+            }
+            return true;
+          });
+          if (!pending.length) window.removeEventListener('scroll', onScroll);
+        }
+        function onScroll() {
+          if (!frame) frame = requestAnimationFrame(sweep);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script>
   </body>
 </html>
