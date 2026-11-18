@@ -2385,6 +2385,8 @@ class ReviewsLoop extends HTMLElement {
   #measured = false;
   #near = null;
   #focused = false;
+  #dragging = false;
+  #dragEnd = 0;
   #photos = [];
   #allCards = [];
   #centers = [];
@@ -2436,6 +2438,7 @@ class ReviewsLoop extends HTMLElement {
         this.#moveBy(shift);
       }, { signal, passive: true });
       document.addEventListener('visibilitychange', () => this.#run(), { signal });
+      this.#listenDrag(signal);
     }
 
     // The band is copied and measured only when it comes near the screen, not while the page opens.
@@ -2542,7 +2545,48 @@ class ReviewsLoop extends HTMLElement {
   }
 
   get #shouldMove() {
-    return this.seconds > 0 && this.#visible && !document.hidden && !this.#focused;
+    return this.seconds > 0 && this.#visible && !document.hidden && !this.#focused && !this.#dragging;
+  }
+
+  /**
+   * A finger can push the moving band left or right; a vertical swipe still
+   * scrolls the page (touch-action: pan-y). The glide picks up again after.
+   * @param {AbortSignal} signal
+   */
+  #listenDrag(signal) {
+    let drag = null;
+    this.viewport.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' || !event.isPrimary) return;
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY, last: event.clientX, active: false };
+    }, { signal, passive: true });
+    this.viewport.addEventListener('pointermove', (event) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      if (!drag.active) {
+        if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+          drag = null;
+          return;
+        }
+        if (Math.abs(dx) < 8) return;
+        drag.active = true;
+        this.#dragging = true;
+        this.#pace = 0;
+      }
+      this.#moveBy(drag.last - event.clientX);
+      drag.last = event.clientX;
+    }, { signal, passive: true });
+    const end = (event) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      const wasActive = drag.active;
+      drag = null;
+      if (!wasActive) return;
+      this.#dragging = false;
+      this.#dragEnd = performance.now();
+      this.#run();
+    };
+    this.viewport.addEventListener('pointerup', end, { signal });
+    this.viewport.addEventListener('pointercancel', end, { signal });
   }
 
   /** Starts the glide, or lets it ease to a stop when it is out of sight. */
@@ -2574,6 +2618,8 @@ class ReviewsLoop extends HTMLElement {
   /** @param {MouseEvent} event */
   #onClick(event) {
     if (this.dialog?.contains(event.target)) return;
+    // The tap that ends a swipe does not open a review.
+    if (performance.now() - this.#dragEnd < 350) return;
     const card = event.target.closest('[data-loop-card]');
     if (!card) return;
     const photo = event.target.closest('[data-review-photo]');

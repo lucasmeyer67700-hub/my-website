@@ -33,6 +33,7 @@
     }
 
     disconnectedCallback() {
+      clearTimeout(this.idleTimer);
       this.abort?.abort();
       this.observer?.disconnect();
       cancelAnimationFrame(this.frame);
@@ -108,6 +109,19 @@
         });
       };
       window.addEventListener('scroll', schedule, { passive: true, signal });
+      // Phones: the thread shows while the page moves, then steps aside so it
+      // never sits over photos and text (CSS: .vthread.is-scrolling).
+      const phone = window.matchMedia('(max-width: 749px)');
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (!phone.matches) return;
+          this.classList.add('is-scrolling');
+          clearTimeout(this.idleTimer);
+          this.idleTimer = setTimeout(() => this.classList.remove('is-scrolling'), 1800);
+        },
+        { passive: true, signal }
+      );
       window.addEventListener('resize', schedule, { passive: true, signal });
 
       this.addEventListener(

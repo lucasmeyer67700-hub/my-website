@@ -508,11 +508,12 @@
         <div class="sticky-buy-bar__info">
           <p class="sticky-buy-bar__title">{{ product.title | escape }}</p>
           <p class="sticky-buy-bar__meta">
-            {%- unless product.has_only_default_variant -%}
-              <span data-variant-title>{{ current_variant.title | escape }}</span>
-              <span aria-hidden="true"> · </span>
-            {%- endunless -%}
+            {%- comment -%} The price first, so a narrow screen never cuts it off. {%- endcomment -%}
             <span class="sticky-buy-bar__price" data-price-current>{{ current_variant.price | money }}</span>
+            {%- unless product.has_only_default_variant -%}
+              <span aria-hidden="true"> · </span>
+              <span data-variant-title>{{ current_variant.title | escape }}</span>
+            {%- endunless -%}
           </p>
           <p class="sticky-buy-bar__error" role="alert" data-product-error-for="{{ form_id }}" hidden></p>
         </div>

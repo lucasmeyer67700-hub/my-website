@@ -1024,6 +1024,7 @@
     }
 
     .gallery__dot {
+      position: relative;
       width: 0.5rem;
       height: 0.5rem;
       padding: 0;
@@ -1038,6 +1039,13 @@
       &[aria-current='true'] {
         width: 1.25rem;
         background-color: var(--color-text);
+      }
+
+      /* A larger, invisible area to tap around each small dot */
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -0.9rem -0.2rem;
       }
     }
 

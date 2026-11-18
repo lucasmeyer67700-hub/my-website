@@ -2425,3 +2425,32 @@ html.has-smooth-scroll {
     scale: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Phones: slightly smaller buttons (46–48 px instead of 52–56 px), still
+   comfortable to tap (44 px minimum).
+   -------------------------------------------------------------------------- */
+.product__reassurance {
+  margin-block-start: var(--space-xs);
+}
+
+@media screen and (max-width: 749px) {
+  .button {
+    min-height: 2.875rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.9375rem;
+  }
+
+  .button--small {
+    min-height: var(--tap-target);
+    padding: 0.55rem 1.05rem;
+    font-size: var(--text-sm);
+  }
+
+  .product-form__submit,
+  .product-form__quantity .quantity,
+  [data-buy-now] .product-form__express :is(.shopify-payment-button__button, .buy-now-button),
+  [data-buy-now-large] .product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
+    min-height: 3rem;
+  }
+}

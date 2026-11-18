@@ -219,6 +219,15 @@
     }
   }
 
+  /* Phones: out of the way once the page stops moving (assets/thread-nav.js) */
+  @media screen and (max-width: 749px) {
+    .vthread.is-shown:not(.is-scrolling):not(:focus-within) .vthread__rail {
+      opacity: 0;
+      transform: translate(0.6rem, -50%);
+      pointer-events: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .vthread__rail {
       transition: none;
