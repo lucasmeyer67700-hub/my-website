@@ -1169,10 +1169,13 @@
         this.canvas.addEventListener('webglcontextlost', () => this.classList.remove('is-live'), { signal });
         return;
       }
-      this.addEventListener('pointermove', move, { passive: true, signal });
-      this.addEventListener('pointerdown', move, { passive: true, signal });
-      this.addEventListener('pointerleave', () => (this.pointer.down = false), { signal });
-      this.addEventListener('touchmove', (e) => e.touches[0] && move(e.touches[0]), { passive: true, signal });
+      // The ink follows the pointer only when the section asks for it (setting « Encre qui suit la souris »).
+      if (this.hasAttribute('data-follow')) {
+        this.addEventListener('pointermove', move, { passive: true, signal });
+        this.addEventListener('pointerdown', move, { passive: true, signal });
+        this.addEventListener('pointerleave', () => (this.pointer.down = false), { signal });
+        this.addEventListener('touchmove', (e) => e.touches[0] && move(e.touches[0]), { passive: true, signal });
+      }
       window.addEventListener('resize', () => (this.needsResize = true), { signal });
       document.addEventListener('visibilitychange', () => !document.hidden && this.loop(), { signal });
     }

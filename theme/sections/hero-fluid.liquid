@@ -36,6 +36,9 @@
   {% if section.settings.explode %}
     data-explode
   {% endif %}
+  {% if section.settings.follow_pointer %}
+    data-follow
+  {% endif %}
   id="HeroFluid-{{ section.id }}"
   style="--fluid-colors: {{ colors }}; --fl-c1: {{ section.settings.color_1 }}; --fl-c2: {{ section.settings.color_2 }}; --fl-c3: {{ section.settings.color_3 }}; --fl-c4: {{ section.settings.color_4 }}; --fl-c5: {{ section.settings.color_5 }}; --fl-drop: {{ section.settings.drop_color }};"
 >
@@ -771,6 +774,13 @@
       "id": "explode",
       "label": "Explosion de couleur à l'arrivée",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "follow_pointer",
+      "label": "Encre qui suit la souris",
+      "info": "L'encre se dessine sous la souris ou le doigt dans l'ouverture. Décochée, seule l'animation d'arrivée colore l'ouverture.",
+      "default": false
     },
     {
       "type": "color",

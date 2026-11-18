@@ -3740,7 +3740,7 @@ document.addEventListener('DOMContentLoaded', () => {
   splitTitles();
   initReveal();
   initNewsletterTracking();
-  initCardGlow();
+  // initCardGlow(); (light following the pointer on product photos: removed at the merchant's request)
 });
 
 // Re-run reveal when a section is (re)loaded in the theme editor.
