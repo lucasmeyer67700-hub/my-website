@@ -209,7 +209,7 @@
       this.iy = box.height * 0.45;
       this.makeDrop();
       this.stepDrop();
-      this.at(1.6, () => this.splash());
+      this.at(1.25, () => this.splash());
 
       // Scrolling on: no need to wait for the letters.
       this.skip = new AbortController();
@@ -230,7 +230,8 @@
       sat.style.width = sat.style.height = `${s}px`;
       this.inner.append(el, sat);
       this.fx.push(el, sat);
-      this.drop = { el, sat, w: size, h: size * 1.5, s, start: 0.3, end: 1.6, y0: -size * 2.2 };
+      // Seen from the very first frame, just under the top edge, then it falls.
+      this.drop = { el, sat, w: size, h: size * 1.5, s, start: 0, end: 1.25, y0: size * 1.5 + 6 };
     }
 
     stepDrop() {
@@ -876,7 +877,7 @@
       // Arrival: with the drop, the ink waits for the splash. Otherwise a
       // burst of colour from the centre of the page (theme setting), or a
       // first breath of ink.
-      if (this.intro === 'full') this.lastInput = performance.now() + 1500;
+      if (this.intro === 'full') this.lastInput = performance.now() + 1250;
       else if (this.hasAttribute('data-explode')) this.explode();
       else this.burst(3);
 

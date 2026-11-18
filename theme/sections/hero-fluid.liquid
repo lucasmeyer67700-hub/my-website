@@ -29,8 +29,6 @@
   assign colors = section.settings.color_1 | append: ',' | append: section.settings.color_2 | append: ',' | append: section.settings.color_3 | append: ',' | append: section.settings.color_4 | append: ',' | append: section.settings.color_5
 -%}
 
-<script src="{{ 'hero-fluid.js' | asset_url }}" defer="defer"></script>
-
 <hero-fluid
   class="hero-fl"
   {% if section.settings.explode %}
@@ -108,6 +106,11 @@
     </div>
   </section>
 </hero-fluid>
+{%- comment -%}
+  Loaded right after the opening, without waiting for the rest of the page,
+  so the drop falls as soon as the page shows.
+{%- endcomment -%}
+<script src="{{ 'hero-fluid.js' | asset_url }}" async></script>
 
 {% stylesheet %}
   .hero-fl {
