@@ -2453,4 +2453,8 @@ html.has-smooth-scroll {
   [data-buy-now-large] .product-form__express :is(.shopify-payment-button__button, .buy-now-button) {
     min-height: 3rem;
   }
+
+  .product-form__submit {
+    font-size: 0.8125rem;
+  }
 }
