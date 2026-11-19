@@ -116,7 +116,10 @@
           {% render 'product-gallery',
             product: product,
             fit: section.settings.gallery_fit,
-            ratio: section.settings.gallery_ratio
+            ratio: section.settings.gallery_ratio,
+            overlays: section.blocks,
+            media_color: section.settings.media_color,
+            video: section.settings.gallery_video
           %}
         {%- endif -%}
       </div>
@@ -734,6 +737,19 @@
     },
     {
       "type": "text",
+      "id": "media_color",
+      "label": "Coloris des photos du produit (galerie)",
+      "info": "Comme sur la fiche produit, par exemple « Rose ». Les photos des autres coloris s'ajoutent avec les blocs « Photo d'un coloris ».",
+      "visible_if": "{{ section.settings.media_layout == 'gallery' }}"
+    },
+    {
+      "type": "video",
+      "id": "gallery_video",
+      "label": "Vidéo parmi les photos (galerie)",
+      "visible_if": "{{ section.settings.media_layout == 'gallery' }}"
+    },
+    {
+      "type": "text",
       "id": "anchor",
       "label": "Ancre (lien interne)",
       "default": "offre"
@@ -748,6 +764,25 @@
   "presets": [
     {
       "name": "Offre produit"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "color_photo",
+      "name": "Photo d'un coloris",
+      "settings": [
+        {
+          "type": "text",
+          "id": "color",
+          "label": "Coloris",
+          "info": "Exactement comme dans Shopify, par exemple « Blanc »."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        }
+      ]
     }
   ]
 }

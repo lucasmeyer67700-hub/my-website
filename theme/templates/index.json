@@ -275,7 +275,7 @@
         "show_specs": false,
         "specs_limit": 3,
         "details_label": "Voir tous les détails",
-        "media_layout": "composition",
+        "media_layout": "gallery",
         "mosaic_image_1": "shopify://shop_images/img-mw7nwm1f-dfebf7af.png",
         "mosaic_image_2": "shopify://shop_images/img-mw7o6bvu-a199fa15.png",
         "mosaic_image_3": "shopify://shop_images/img-mw0foq7q-f78204a6.png",
@@ -286,12 +286,58 @@
         "alt_mosaic_image_3": "shopify://shop_images/img-mw0g4gma-0697e216.png",
         "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
         "gallery_ratio": "1",
-        "gallery_fit": "cover",
+        "gallery_fit": "contain",
         "anchor": "offre",
         "color_scheme": "scheme-3",
         "highlights": "heat | Chaleur réglable | 3 niveaux, 50, 55 ou 60 °C\nvibration | Massage doux | vibration, 4 modes, avec ou sans chaleur\nbattery | Sans fil | rechargeable en USB-C, environ 2 h d'autonomie\nfeather | Discrète | se porte sous un vêtement ample",
-        "guarantee_text": "Pas convaincue ? Renvoyez-la complète sous 30 jours après réception : on vous rembourse son prix. Frais de retour à votre charge."
-      }
+        "guarantee_text": "Pas convaincue ? Renvoyez-la complète sous 30 jours après réception : on vous rembourse son prix. Frais de retour à votre charge.",
+        "media_color": "Rose",
+        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
+      },
+      "blocks": {
+        "color_photo_blanc_1": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
+          }
+        },
+        "color_photo_blanc_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
+          }
+        },
+        "color_photo_blanc_5": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-sans-pause.jpg"
+          }
+        },
+        "color_photo_blanc_6": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-details.jpg"
+          }
+        },
+        "color_photo_blanc_7": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-vs-bouillotte.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "color_photo_blanc_1",
+        "color_photo_blanc_4",
+        "color_photo_blanc_5",
+        "color_photo_blanc_6",
+        "color_photo_blanc_7"
+      ]
     },
     "editorial": {
       "type": "editorial-feature",
