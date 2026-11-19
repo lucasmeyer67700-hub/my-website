@@ -1,0 +1,540 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "variant": {
+          "type": "variant_picker",
+          "settings": {
+            "offer_heading": "",
+            "unit_label": "la ceinture",
+            "offer_note_single": "Avec son câble USB-C et sa notice",
+            "offer_note_multi": "La 2e ceinture à −33 %, une rose et une blanche",
+            "multi_hint": "Duo : une ceinture rose et une blanche.",
+            "best_label": "Meilleure offre",
+            "perks_single": "",
+            "perks_multi": "Deux ensembles complets : câbles USB-C et notices",
+            "hide_multi": false,
+            "bundle_product": "",
+            "bundle_price": 53.99,
+            "bundle_title": "Ceinture + culotte menstruelle",
+            "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix."
+          }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": false
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "show_lines": false,
+            "show_payment_icons": true
+          }
+        },
+        "guarantee": {
+          "type": "guarantee",
+          "disabled": true,
+          "settings": {
+            "icon": "return",
+            "title": "",
+            "text": "Essayez-la chez vous | Garantie légale de 2 ans",
+            "link": ""
+          }
+        },
+        "delivery": {
+          "type": "delivery",
+          "disabled": true,
+          "settings": {
+            "right_text": "",
+            "left_text": "",
+            "show_flag": true
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "heading": "Au quotidien",
+            "icon_1": "heat",
+            "title_1": "Une chaleur que vous choisissez",
+            "text_1": "3 niveaux : on commence par le plus doux, puis on ajuste.",
+            "icon_2": "feather",
+            "title_2": "Libre de vos mouvements",
+            "text_2": "Sans fil ni prise : elle vous suit du canapé au bureau.",
+            "icon_3": "home",
+            "title_3": "Discrète sous un vêtement ample",
+            "text_3": "Portée sur un vêtement fin, elle se glisse sous un pull ou une chemise."
+          },
+          "disabled": true
+        },
+        "specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "Caractéristiques",
+            "icon": "none",
+            "source": "specs",
+            "content": "",
+            "size_rows": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "usage": {
+          "type": "accordion",
+          "settings": {
+            "title": "Utilisation et précautions",
+            "icon": "none",
+            "source": "usage_precautions",
+            "content": "",
+            "size_rows": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "box": {
+          "type": "accordion",
+          "settings": {
+            "title": "Contenu du colis",
+            "icon": "none",
+            "source": "box",
+            "content": "",
+            "size_rows": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "safety": {
+          "type": "accordion",
+          "settings": {
+            "title": "Informations fabricant et sécurité",
+            "icon": "none",
+            "source": "safety_info",
+            "content": "",
+            "size_rows": "",
+            "show_returns_offer": true,
+            "open": false
+          }
+        },
+        "color_photo_blanc_1": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
+          }
+        },
+        "color_photo_blanc_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
+          }
+        },
+        "color_photo_blanc_5": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-sans-pause.jpg"
+          }
+        },
+        "color_photo_blanc_6": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-details.jpg"
+          }
+        },
+        "color_photo_blanc_7": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-vs-bouillotte.jpg"
+          }
+        },
+        "highlights": {
+          "type": "highlights",
+          "settings": {
+            "lines": "heat | Chaleur réglable | 3 niveaux, 50, 55 ou 60 °C\nvibration | Massage doux | vibration, 4 modes, avec ou sans chaleur\nbattery | Sans fil | rechargeable en USB-C, environ 2 h d'autonomie\nfeather | Discrète | se porte sous un vêtement ample"
+          }
+        },
+        "guarantee_box": {
+          "type": "guarantee_box",
+          "settings": {
+            "title": "",
+            "text": "Pas convaincue ? Renvoyez-la complète sous 30 jours après réception : on vous rembourse son prix. Frais de retour à votre charge."
+          }
+        },
+        "reviews": {
+          "type": "reviews_highlight",
+          "settings": {
+            "heading": "",
+            "limit": 5,
+            "interval": 6
+          }
+        },
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "heading": "Vos questions avant de commander",
+            "question": "Est-ce que ça chauffe trop ?",
+            "answer": "<p>C'est vous qui choisissez : 3 niveaux, 50, 55 ou 60 °C. Commencez toujours par le plus doux, portez-la par-dessus un vêtement fin et surveillez votre peau.</p>"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "heading": "",
+            "question": "Combien de temps tient la batterie ?",
+            "answer": "<p>Environ 2 h par charge, utilisables en plusieurs séances de 30 min selon les réglages. Elle s'arrête seule au bout de 30 min, par sécurité, et se recharge avec le câble USB-C fourni.</p>"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "heading": "",
+            "question": "Est-ce qu'elle se voit sous les vêtements ?",
+            "answer": "<p>Le boîtier est fin (2,5 cm d'épaisseur, 142 g) : portée sur un vêtement fin, la ceinture se glisse sous un vêtement ample, un pull ou une chemise.</p>"
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "heading": "",
+            "question": "Quand vais-je la recevoir ?",
+            "answer": "<p>La livraison est offerte en France métropolitaine. Comptez 7 à 14 jours ouvrés ; vous recevez un numéro de suivi par e-mail dès l'expédition.</p>"
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "heading": "",
+            "question": "Et si elle ne me convient pas ?",
+            "answer": "<p>Vous avez 30 jours après réception pour nous la renvoyer complète et propre : on vous rembourse le prix de la ceinture, les frais de retour restant à votre charge. Vous gardez aussi votre droit de rétractation de 14 jours et la garantie légale de 2 ans.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "highlights",
+        "variant",
+        "inventory",
+        "buy",
+        "trust",
+        "guarantee_box",
+        "reviews",
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "guarantee",
+        "delivery",
+        "benefits",
+        "specs",
+        "usage",
+        "box",
+        "safety",
+        "color_photo_blanc_1",
+        "color_photo_blanc_4",
+        "color_photo_blanc_5",
+        "color_photo_blanc_6",
+        "color_photo_blanc_7"
+      ],
+      "settings": {
+        "banner": "",
+        "price_badge": "Nouveauté",
+        "gallery_ratio": "1",
+        "gallery_fit": "contain",
+        "media_color": "Rose",
+        "show_media_slots": true,
+        "sticky_bar": true,
+        "color_scheme": "scheme-3",
+        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+        "klarna_show": true,
+        "klarna_count": 4,
+        "klarna_text": "Payez en [n] fois sans frais :"
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "collection": "tous-nos-produits",
+        "eyebrow": "",
+        "heading": "Le reste de la collection",
+        "limit": 3,
+        "link_label": "Voir tout le catalogue",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "heading": "Avis",
+        "layout": "carousel",
+        "band_limit": 10,
+        "band_speed": 7,
+        "show_breakdown": true,
+        "keywords": "chaleur\nconfort\nbatterie\nlivraison",
+        "per_page": 5,
+        "about": "",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "pain": {
+          "type": "question",
+          "settings": {
+            "question": "La ceinture soulage-t-elle les douleurs de règles ?",
+            "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
+          }
+        },
+        "pack": {
+          "type": "question",
+          "settings": {
+            "question": "Que contient le Duo ?",
+            "answer": "<p>Deux ceintures chauffantes, une rose et une blanche, chacune avec son câble de charge USB-C et sa notice. Le Duo est à 74,99 € au lieu de 89,98 € pour deux ceintures achetées séparément : la 2e ceinture est à −33 %.</p>"
+          }
+        },
+        "secure": {
+          "type": "question",
+          "settings": {
+            "question": "Le paiement est-il sécurisé ?",
+            "answer": "<p>Oui. Vous payez sur la page de paiement sécurisée de Shopify, par une connexion chiffrée (HTTPS). Shopify est certifié PCI DSS de niveau 1, la norme de sécurité de référence pour les paiements par carte bancaire.</p><p>Vos coordonnées bancaires ne sont jamais transmises à VELEA : nous n'y avons pas accès. Selon votre banque, une validation 3D Secure (un code ou une confirmation dans votre application bancaire) peut vous être demandée.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "pain",
+        "pack",
+        "secure"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Avant de commander",
+        "text": "Une autre question ? Écrivez-nous, nous vous répondons.",
+        "link_label": "Nous contacter",
+        "link": "/pages/contact",
+        "anchor": "faq",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "videos": {
+      "type": "video-showcase",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        },
+        "video_cdRwKx": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/copy_C3F8BA91-2694-496E-B183-23CA6047168B.mov",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2",
+        "video_cdRwKx"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "La ceinture, <em>en vrai.</em>",
+        "text": "Sous un pull, au bureau, sur le canapé : la ceinture en situation.",
+        "ratio": "9 / 16",
+        "autoplay": true,
+        "button_label": "",
+        "button_link": "",
+        "anchor": "videos",
+        "color_scheme": "scheme-3",
+        "cta_label": "Je la veux",
+        "cta_link": "",
+        "cta_note": "Sans risque : satisfaite ou remboursée 30 jours"
+      }
+    },
+    "steps": {
+      "type": "steps",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Chargez-la",
+            "text": "Avec le câble USB-C fourni : le voyant passe du rouge au vert quand elle est prête."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Placez-la, choisissez la chaleur",
+            "text": "Sur le bas du ventre, par-dessus un vêtement fin. Commencez à 50 °C puis ajustez ; ajoutez la vibration si vous le souhaitez."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Vivez votre journée",
+            "text": "Sans fil, elle vous suit du canapé au bureau. Elle s'arrête seule après 30 min : faites une pause avant de la relancer."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "eyebrow": "Comment ça marche",
+        "heading": "Trois gestes, <em>et c'est parti.</em>",
+        "text": "",
+        "image": "",
+        "note": "",
+        "cta_label": "Je choisis ma ceinture",
+        "cta_link": "",
+        "cta_note": "Sans risque : satisfaite ou remboursée 30 jours",
+        "anchor": "comment",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Se porte en bougeant",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "oui"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Chaleur réglable",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Massage par vibration",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Arrêt automatique",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "non"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Pas d'eau à faire chauffer",
+            "value_1": "oui",
+            "value_2": "non",
+            "value_3": "oui"
+          }
+        },
+        "row_6": {
+          "type": "row",
+          "settings": {
+            "label": "Réutilisable",
+            "value_1": "oui",
+            "value_2": "oui",
+            "value_3": "non"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "row_6"
+      ],
+      "settings": {
+        "eyebrow": "Comparez",
+        "heading": "Pourquoi la ceinture, <em>plutôt qu'une bouillotte.</em>",
+        "text": "",
+        "column_1": "VELEA",
+        "column_2": "Bouillotte",
+        "column_3": "Patch jetable",
+        "note": "",
+        "cta_label": "Je passe à la ceinture",
+        "cta_link": "",
+        "cta_note": "Sans risque : satisfaite ou remboursée 30 jours",
+        "anchor": "comparer",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "demo_press": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "press",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "demo_testimonials": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "testimonials",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "demo_timeline": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "timeline",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "demo_press",
+    "videos",
+    "demo_testimonials",
+    "steps",
+    "demo_timeline",
+    "comparison",
+    "reviews",
+    "faq",
+    "related"
+  ]
+}

@@ -1,0 +1,453 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_fluid": {
+      "type": "hero-fluid",
+      "settings": {
+        "column_1": "VELEA",
+        "column_2": "",
+        "product": "ceinture-chauffante-regles",
+        "show_price": false,
+        "column_3": "",
+        "line_1": "Vos",
+        "line_2": "Règles,",
+        "line_3": "En douceur.",
+        "button_label": "Voir la ceinture",
+        "button_link": "",
+        "secondary_label": "Toute la collection",
+        "secondary_link": "shopify://collections/tous-nos-produits",
+        "intro": true,
+        "drop_color": "#a3304a",
+        "clouds": true,
+        "explode": true,
+        "color_1": "#e8a0b0",
+        "color_2": "#f2c3cc",
+        "color_3": "#f1b29e",
+        "color_4": "#d98da6",
+        "color_5": "#c9727e"
+      }
+    },
+    "shop_row": {
+      "type": "shop-carousel",
+      "settings": {
+        "heading": "Prendre soin de soi, <em>même ces jours-là.</em>",
+        "collection": "tous-nos-produits",
+        "limit": 8,
+        "link_label": "Tout voir",
+        "link": ""
+      }
+    },
+    "empathy": {
+      "type": "empathy-band",
+      "settings": {
+        "eyebrow": "Les jours de règles",
+        "heading": "On connaît ces jours-là, <em>et on vous comprend.</em>",
+        "text": "<p>Ce tiraillement qui revient chaque mois, souvent au mauvais moment. On ralentit, on serre les dents, on attend que ça passe.</p>",
+        "subheading": "Une chaleur douce, qui vous suit.",
+        "subtext": "La ceinture Velea se fixe à la taille et diffuse une chaleur réglable sur le bas du ventre, sans fil : à la maison, au bureau ou en déplacement.",
+        "button_label": "Découvrir la ceinture",
+        "product": "ceinture-chauffante-regles",
+        "button_link": "",
+        "image": "shopify://shop_images/Gemini_Generated_Image_ophsqkophsqkophs_jpg.webp",
+        "image_side": "right",
+        "accent": "#6b3a4d",
+        "show_heart": true
+      }
+    },
+    "pack_banner": {
+      "type": "feature-banner",
+      "settings": {
+        "image": "shopify://shop_images/shopify-heating-belt-landscape-4k.png",
+        "text_tone": "dark",
+        "image_position": "top",
+        "text_side": "left",
+        "eyebrow": "",
+        "heading": "Deux ceintures, <em>la 2e à −33 %.</em>",
+        "product": "ceinture-chauffante-regles",
+        "card_title": "Duo · 2 ceintures",
+        "card_text": "Une rose et une blanche : la 2e ceinture à −33 %, soit 74,99 € au lieu de 89,98 €.",
+        "button_label": "Choisir le Duo",
+        "button_link": "/products/ceinture-chauffante-regles?variant=59937532838233",
+        "show_price": false
+      }
+    },
+    "before_after": {
+      "type": "before-after",
+      "settings": {
+        "eyebrow": "",
+        "heading": "<em>Pendant les règles </em><em><strong>sans </strong></em><em>Velea. Pendant les règles</em><em><strong> avec</strong></em><em> Velea&nbsp;</em>",
+        "text": "Faites glisser pour comparer.",
+        "image_before": "shopify://shop_images/femme-douleurs-menstruelles-paysage.png",
+        "image_after": "shopify://shop_images/femme-ceinture-chauffante-relaxee-1200x1200.png",
+        "label_before": "Avant",
+        "label_after": "Après",
+        "ratio": "3 / 2",
+        "start": 50,
+        "product": "ceinture-chauffante-regles",
+        "button_label": "",
+        "button_link": "",
+        "note": "",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "videos": {
+      "type": "video-showcase",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/SaveDouyin.App_7603105205634256150_hd.mp4",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        },
+        "video_cdRwKx": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/copy_C3F8BA91-2694-496E-B183-23CA6047168B.mov",
+            "tag": "",
+            "title": "",
+            "text": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2",
+        "video_cdRwKx"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "La ceinture, <em>en vrai.</em>",
+        "text": "Sous un pull, au bureau, sur le canapé : la ceinture en situation.",
+        "ratio": "9 / 16",
+        "autoplay": true,
+        "button_label": "Choisir ma couleur",
+        "button_link": "shopify://products/ceinture-chauffante-regles",
+        "anchor": "videos",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "statement": {
+      "type": "brand-statement",
+      "settings": {
+        "eyebrow": "Qui sommes-nous ?",
+        "heading": "",
+        "text": "<p>Nous sommes un groupe de filles qui avons décidé de nous révolter contre les règles douloureuses et les tabous qui les entourent. Fatiguées de devoir subir chaque mois, nous avons décidé de prendre les choses en main en imaginant des solutions pensées par les femmes, pour les femmes. Notre mission c’est de changer les règles du jeu et permettre à chacune de vivre son cycle autrement.</p>",
+        "image": "shopify://shop_images/imagequipevele.png",
+        "button_label": "Notre histoire",
+        "button_link": "shopify://pages/notre-approche"
+      }
+    },
+    "reviews": {
+      "type": "reviews-marquee",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "",
+        "heading": "Ce qu'elles <em>en disent.</em>",
+        "limit": 10,
+        "speed": 7,
+        "color_scheme": "scheme-2"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "pain": {
+          "type": "question",
+          "settings": {
+            "question": "La ceinture soulage-t-elle les douleurs de règles ?",
+            "answer": "<p>On préfère être honnêtes : c'est un accessoire de confort, pas un traitement. Elle apporte une chaleur douce sur le bas du ventre, comme une bouillotte, mais sans fil. Elle ne remplace pas un avis médical : si vos douleurs sont fortes, inhabituelles ou durent, parlez-en à un médecin ou à une sage-femme.</p>"
+          }
+        },
+        "clothes": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-on la porter sous ses vêtements ?",
+            "answer": "<p>Oui, sous un vêtement ample (pull, sweat, chemise). Portez-la par-dessus un vêtement fin et surveillez votre peau pendant l'utilisation.</p>"
+          }
+        },
+        "battery": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps tient la batterie ?",
+            "answer": "<p>Environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité). La ceinture ne fonctionne pas pendant la charge.</p>"
+          }
+        },
+        "precautions": {
+          "type": "question",
+          "settings": {
+            "question": "Y a-t-il des précautions d'utilisation ?",
+            "answer": "<p>Oui. Ne l'utilisez pas pendant votre sommeil, commencez toujours par la chaleur la plus douce et surveillez votre peau. Elle est déconseillée dans certaines situations, par exemple pendant la grossesse. Toutes les précautions du fabricant sont sur la <a href=\"/products/ceinture-chauffante-regles\" title=\"Ceinture chauffante menstruelle\">fiche de la ceinture</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "pain",
+        "clothes",
+        "battery",
+        "precautions"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Vos <em>questions.</em>",
+        "text": "",
+        "link_label": "Toutes les questions",
+        "link": "/pages/faq",
+        "anchor": "faq",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "thread_nav": {
+      "type": "thread-nav",
+      "settings": {
+        "menu_title": "Sur cette page",
+        "labels": "shop_row: La boutique\nempathy: On vous comprend\noffer: Commander\npack_banner: Le Duo\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
+        "ink": true,
+        "drop_color": "#a3304a"
+      }
+    },
+    "hero_editorial": {
+      "type": "hero-editorial",
+      "disabled": true,
+      "settings": {
+        "kicker": "Ceinture chauffante sans fil",
+        "line_1": "La chaleur d’une",
+        "line_2": "bouillotte.",
+        "line_3": "Sans le fil.",
+        "text": "Une ceinture chauffante et massante, rechargeable. Trois niveaux de chaleur, quatre modes de vibration, environ 2 h d’autonomie en séances de 30 min.",
+        "product": "ceinture-chauffante-regles",
+        "show_price": true,
+        "button_label": "Voir la ceinture",
+        "button_link": "",
+        "secondary_label": "Toute la collection",
+        "secondary_link": "shopify://collections/tous-nos-produits",
+        "video": "shopify://files/videos/velea-hero-ceinture.mp4",
+        "video_mobile": "shopify://files/videos/velea-hero-ceinture-mobile.mp4",
+        "caption": "Trois niveaux de chaleur · Quatre modes de vibration"
+      }
+    },
+    "offer": {
+      "type": "featured-product",
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "eyebrow": "",
+        "heading": "",
+        "show_rating": true,
+        "price_badge": "Nouveauté",
+        "show_tagline": true,
+        "offer_heading": "",
+        "unit_label": "la ceinture",
+        "offer_note_single": "Avec son câble USB-C et sa notice",
+        "offer_note_multi": "La 2e ceinture à −33 %, une rose et une blanche",
+        "multi_hint": "Duo : une ceinture rose et une blanche.",
+        "best_label": "Meilleure offre",
+        "perks_multi": "Deux ensembles complets : câbles USB-C et notices",
+        "hide_multi": false,
+        "bundle_product": "",
+        "bundle_price": 54,
+        "bundle_title": "Ceinture + culotte menstruelle",
+        "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
+        "show_dynamic_checkout": false,
+        "show_reassurance": true,
+        "show_secure_payment": true,
+        "show_specs": false,
+        "specs_limit": 3,
+        "details_label": "Voir tous les détails",
+        "media_layout": "gallery",
+        "mosaic_image_1": "shopify://shop_images/img-mw7nwm1f-dfebf7af.png",
+        "mosaic_image_2": "shopify://shop_images/img-mw7o6bvu-a199fa15.png",
+        "mosaic_image_3": "shopify://shop_images/img-mw0foq7q-f78204a6.png",
+        "mosaic_image_4": "shopify://shop_images/img-mw0fri01-86a95add.png",
+        "alt_color": "Blanc",
+        "alt_mosaic_image_1": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
+        "alt_mosaic_image_2": "shopify://shop_images/img-mw0g73f9-8c8e632e.png",
+        "alt_mosaic_image_3": "shopify://shop_images/img-mw0g4gma-0697e216.png",
+        "alt_mosaic_image_4": "shopify://shop_images/img-mw0g9xao-9192e655.png",
+        "gallery_ratio": "1",
+        "gallery_fit": "contain",
+        "anchor": "offre",
+        "color_scheme": "scheme-3",
+        "highlights": "heat | Chaleur réglable | 3 niveaux, 50, 55 ou 60 °C\nvibration | Massage doux | vibration, 4 modes, avec ou sans chaleur\nbattery | Sans fil | rechargeable en USB-C, environ 2 h d'autonomie\nfeather | Discrète | se porte sous un vêtement ample",
+        "guarantee_text": "Pas convaincue ? Renvoyez-la complète sous 30 jours après réception : on vous rembourse son prix. Frais de retour à votre charge.",
+        "media_color": "Rose",
+        "gallery_video": "shopify://files/videos/SaveDouyin.App_7541414060659674390_hd.mp4"
+      },
+      "blocks": {
+        "color_photo_blanc_1": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/img-mw7vy7yy-8eb97d1c.png"
+          }
+        },
+        "color_photo_blanc_4": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-profil.webp"
+          }
+        },
+        "color_photo_blanc_5": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-sans-pause.jpg"
+          }
+        },
+        "color_photo_blanc_6": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-details.jpg"
+          }
+        },
+        "color_photo_blanc_7": {
+          "type": "color_photo",
+          "settings": {
+            "color": "Blanc",
+            "image": "shopify://shop_images/velea-ceinture-blanche-vs-bouillotte.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "color_photo_blanc_1",
+        "color_photo_blanc_4",
+        "color_photo_blanc_5",
+        "color_photo_blanc_6",
+        "color_photo_blanc_7"
+      ]
+    },
+    "editorial": {
+      "type": "editorial-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Allumer",
+            "text": "Un appui long sur le bouton marche/arrêt."
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Choisir sa chaleur",
+            "text": "50, 55 ou 60 °C selon le fabricant. On commence toujours par la plus douce."
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Ajouter le massage",
+            "text": "Quatre modes de vibration, avec ou sans la chaleur."
+          }
+        },
+        "p4": {
+          "type": "point",
+          "settings": {
+            "title": "Recharger",
+            "text": "Par câble USB-C. Environ 2 h d'autonomie par charge, utilisables en plusieurs séances de 30 min (arrêt automatique par sécurité)."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "disabled": true,
+      "settings": {
+        "image_main": "shopify://shop_images/velea-ceinture-blanche-portee.webp",
+        "caption_main": "Coloris blanc, porté sur le ventre.",
+        "image_secondary": "shopify://shop_images/velea-ceinture-blanche-dos.webp",
+        "caption_secondary": "La face intérieure, côté vêtement.",
+        "flip": false,
+        "eyebrow": "Mode d'emploi",
+        "heading": "Comment elle se porte",
+        "text": "<p>On la place sur le bas du ventre, par-dessus un vêtement fin, puis on ajuste la sangle à sa taille.</p>",
+        "button_label": "Voir la fiche de la ceinture",
+        "button_link": "shopify://products/ceinture-chauffante-regles",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "spotlight": {
+      "type": "product-spotlight",
+      "disabled": true,
+      "settings": {
+        "product": "ceinture-chauffante-regles",
+        "media_position": 1,
+        "eyebrow": "La ceinture VELEA",
+        "heading": "L'essentiel, rien de superflu.",
+        "text": "Une ceinture pensée pour un usage simple : on la charge, on l'attache, on choisit sa chaleur.",
+        "show_specs": true,
+        "specs_limit": 3,
+        "show_box": false,
+        "button_label": "Découvrir la ceinture",
+        "anchor": "",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "demo_press": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "press",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "demo_testimonials": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "testimonials",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "demo_timeline": {
+      "type": "demo-elements",
+      "settings": {
+        "part": "timeline",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "hero_fluid",
+    "demo_press",
+    "shop_row",
+    "empathy",
+    "offer",
+    "demo_testimonials",
+    "pack_banner",
+    "before_after",
+    "demo_timeline",
+    "videos",
+    "statement",
+    "reviews",
+    "faq",
+    "thread_nav",
+    "hero_editorial",
+    "editorial",
+    "spotlight"
+  ]
+}

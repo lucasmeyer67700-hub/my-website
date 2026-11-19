@@ -1,0 +1,180 @@
+{% doc %}
+  DÉMO PRIVÉE, jamais publiée : montre à quoi ressembleraient un compte à
+  rebours promo, un compteur de stock et un compteur de clientes. Bandeau
+  « contenu fictif » sur chaque page. Voir demo/README.md.
+{% enddoc %}
+<div class="demo-promo">
+  <span class="demo-promo__pill">ACCÈS VIP ANTICIPÉ</span>
+  <p class="demo-promo__title">Black Friday</p>
+  <p class="demo-promo__text">Jusqu'à <span class="demo-hole">[−xx %]</span> sur la ceinture</p>
+  <p class="demo-promo__label">FIN DE L'OFFRE DANS</p>
+  <div class="demo-promo__timer" data-demo-timer>
+    <span><b data-h>00</b><small>HEURES</small></span><i>:</i>
+    <span><b data-m>00</b><small>MINUTES</small></span><i>:</i>
+    <span><b data-s>00</b><small>SECONDES</small></span>
+  </div>
+  <p class="demo-promo__stock"><span class="demo-dot"></span> Stock limité · offre réservée aux membres VIP</p>
+</div>
+
+<style>
+  .demo-promo {
+    padding: 1rem 1rem 1.1rem;
+    text-align: center;
+    color: #fff;
+    background: #141012;
+    font-family: var(--font-body-family);
+  }
+
+  .demo-promo p {
+    margin: 0;
+  }
+
+  .demo-promo__pill {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #2b2422;
+    background: #f6dfe4;
+  }
+
+  .demo-promo__title {
+    margin-block-start: 0.35rem !important;
+    font-family: var(--font-heading-family);
+    font-size: 1.9rem;
+    line-height: 1.1;
+  }
+
+  .demo-promo__text {
+    font-size: 0.95rem;
+  }
+
+  .demo-promo__label {
+    margin-block-start: 0.6rem !important;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    opacity: 0.85;
+  }
+
+  .demo-promo__timer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-block: 0.25rem 0.35rem;
+
+    & span {
+      display: grid;
+      min-width: 3.4rem;
+    }
+
+    & b {
+      font-size: 1.7rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    & small {
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      opacity: 0.8;
+    }
+
+    & i {
+      font-style: normal;
+      font-size: 1.5rem;
+      line-height: 1.3;
+    }
+  }
+
+  .demo-promo__stock,
+  .demo-stock {
+    font-size: 0.8rem;
+  }
+
+  .demo-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-inline-end: 0.25rem;
+    border-radius: 50%;
+    background: #2ecc71;
+    vertical-align: 0.05em;
+  }
+
+  .demo-stock {
+    margin: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text);
+
+    & b {
+      color: #c0182f;
+    }
+
+    & .demo-dot {
+      background: #c0182f;
+      animation: demo-blink 1.4s ease-in-out infinite;
+    }
+  }
+
+  .demo-adopted {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .demo-hole {
+    font-style: normal;
+    opacity: 0.6;
+  }
+
+  @keyframes demo-blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    // Countdown to midnight (demo only).
+    var timer = document.querySelector('[data-demo-timer]');
+    if (timer) {
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+      var tick = function () {
+        var now = new Date();
+        var end = new Date(now);
+        end.setHours(24, 0, 0, 0);
+        var left = Math.max(0, Math.floor((end - now) / 1000));
+        timer.querySelector('[data-h]').textContent = pad(Math.floor(left / 3600));
+        timer.querySelector('[data-m]').textContent = pad(Math.floor((left % 3600) / 60));
+        timer.querySelector('[data-s]').textContent = pad(left % 60);
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    var add = function () {
+      // "Stock limité : 5 restants" above every add-to-cart row (demo value).
+      document.querySelectorAll('.product-form__row').forEach(function (row) {
+        if (row.previousElementSibling && row.previousElementSibling.classList.contains('demo-stock')) return;
+        var p = document.createElement('p');
+        p.className = 'demo-stock';
+        p.innerHTML = '<span class="demo-dot"></span> Stock limité : <b>5 restants</b>';
+        row.parentNode.insertBefore(p, row);
+      });
+      // "Déjà adoptée par +[nombre] femmes" under the rating of the buy boxes.
+      document.querySelectorAll('.product__header .product-rating, .featured-product__header .product-rating').forEach(function (rating) {
+        if (rating.nextElementSibling && rating.nextElementSibling.classList.contains('demo-adopted')) return;
+        var p = document.createElement('p');
+        p.className = 'demo-adopted';
+        p.innerHTML = 'Déjà adoptée par <span class="demo-hole">+[nombre réel]</span> femmes';
+        rating.insertAdjacentElement('afterend', p);
+      });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
+    else add();
+  })();
+</script>
