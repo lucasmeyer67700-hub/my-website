@@ -25,7 +25,19 @@
         aria-labelledby="ComparisonTitle-{{ section.id }}"
         tabindex="0"
       >
-        <table class="comparison__table">
+        {%- liquid
+          assign checks_only = true
+          for block in section.blocks
+            assign values = block.settings.value_1 | append: '§' | append: block.settings.value_2 | append: '§' | append: block.settings.value_3 | downcase | split: '§'
+            for v in values
+              assign cell = v | strip
+              unless cell == 'oui' or cell == 'non' or cell == ''
+                assign checks_only = false
+              endunless
+            endfor
+          endfor
+        -%}
+        <table class="comparison__table{% if checks_only %} comparison__table--checks{% endif %}">
           <caption class="visually-hidden">{{ section.settings.heading | strip_html }}</caption>
           <thead>
             <tr>
@@ -41,16 +53,18 @@
             {%- for block in section.blocks -%}
               <tr {{ block.shopify_attributes }}>
                 <th scope="row">{{ block.settings.label | escape }}</th>
-                <td class="comparison__highlight">{{ block.settings.value_1 | escape }}</td>
-                <td>{{ block.settings.value_2 | escape }}</td>
+                <td class="comparison__highlight">{% render 'comparison-value', value: block.settings.value_1 %}</td>
+                <td>{% render 'comparison-value', value: block.settings.value_2 %}</td>
                 {%- if section.settings.column_3 != blank -%}
-                  <td>{{ block.settings.value_3 | escape }}</td>
+                  <td>{% render 'comparison-value', value: block.settings.value_3 %}</td>
                 {%- endif -%}
               </tr>
             {%- endfor -%}
           </tbody>
         </table>
       </div>
+
+      {% render 'section-cta', label: section.settings.cta_label, link: section.settings.cta_link, note: section.settings.cta_note %}
 
       {%- if section.settings.note != blank -%}
         <p class="comparison__note text-muted text-small">{{ section.settings.note | escape }}</p>
@@ -60,7 +74,51 @@
 {%- endif -%}
 
 {% stylesheet %}
+  /* Only "oui" / "non": ticks and crosses, narrow enough for a phone */
+  .comparison__table.comparison__table--checks {
+    min-width: 0;
+
+    & th,
+    & td {
+      padding: 0.85rem 0.6rem;
+    }
+
+    & td,
+    & thead th:not(:first-child) {
+      text-align: center;
+    }
+
+    & tbody th {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .comparison__yes,
+  .comparison__no {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+
+    & .icon {
+      --icon-size: 0.95rem;
+    }
+  }
+
+  .comparison__yes {
+    color: #fff;
+    background-color: var(--rose-cta, #a14a5c);
+  }
+
+  .comparison__no {
+    color: var(--color-text-muted);
+    background-color: rgb(var(--color-text-rgb) / 0.07);
+  }
+
   .comparison__scroller {
+    position: relative;
     overflow-x: auto;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
@@ -173,6 +231,27 @@
       "label": "Note sous le tableau"
     },
     {
+      "type": "header",
+      "content": "Bouton d'achat"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "info": "Vide : pas de bouton. Sur une fiche produit, il ramène au bouton d'achat."
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien (hors fiche produit)"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "Phrase sous le bouton",
+      "info": "Par exemple votre garantie, telle qu'écrite dans votre politique de remboursement."
+    },
+    {
       "type": "text",
       "id": "anchor",
       "label": "Ancre (lien interne)"
@@ -189,17 +268,44 @@
       "type": "row",
       "name": "Ligne",
       "settings": [
-        { "type": "text", "id": "label", "label": "Critère", "default": "Critère" },
-        { "type": "text", "id": "value_1", "label": "Colonne 1" },
-        { "type": "text", "id": "value_2", "label": "Colonne 2" },
-        { "type": "text", "id": "value_3", "label": "Colonne 3" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Critère",
+          "default": "Critère"
+        },
+        {
+          "type": "text",
+          "id": "value_1",
+          "label": "Colonne 1"
+        },
+        {
+          "type": "text",
+          "id": "value_2",
+          "label": "Colonne 2"
+        },
+        {
+          "type": "text",
+          "id": "value_3",
+          "label": "Colonne 3"
+        }
       ]
     }
   ],
   "presets": [
     {
       "name": "Comparatif",
-      "blocks": [{ "type": "row" }, { "type": "row" }, { "type": "row" }]
+      "blocks": [
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        }
+      ]
     }
   ]
 }

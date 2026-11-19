@@ -33,6 +33,8 @@
         {%- endfor -%}
       </ol>
 
+      {% render 'section-cta', label: section.settings.cta_label, link: section.settings.cta_link, note: section.settings.cta_note %}
+
       {%- if section.settings.note != blank -%}
         <p class="steps__note reveal">
           {% render 'icon', icon: 'info' %}
@@ -154,6 +156,27 @@
       "label": "Note de sécurité ou conseil"
     },
     {
+      "type": "header",
+      "content": "Bouton d'achat"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "info": "Vide : pas de bouton. Sur une fiche produit, il ramène au bouton d'achat."
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien (hors fiche produit)"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "Phrase sous le bouton",
+      "info": "Par exemple votre garantie, telle qu'écrite dans votre politique de remboursement."
+    },
+    {
       "type": "text",
       "id": "anchor",
       "label": "Ancre (lien interne)",
@@ -188,7 +211,17 @@
   "presets": [
     {
       "name": "Étapes",
-      "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }]
+      "blocks": [
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        }
+      ]
     }
   ]
 }

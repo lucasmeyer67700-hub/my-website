@@ -1,0 +1,92 @@
+{% doc %}
+  The product's main promises, one short line each with an icon, right under
+  the title and price: what a visitor needs to know before choosing.
+  One line per promise, written "icon | Label | text" (the icon and the text
+  can be left out, e.g. "heat | Chaleur réglable | 3 niveaux : 50, 55 ou 60 °C").
+  Icons: any name of snippets/icon (heat, vibration, battery, feather, shield…).
+
+  @param {string} lines - The promises, one per line
+  @param {string} [class] - Extra CSS classes
+  @param {string} [attributes] - Theme editor attributes of the block
+
+  @example
+  {% render 'buy-highlights', lines: block.settings.lines %}
+{% enddoc %}
+{%- assign rows = lines | newline_to_br | split: '<br />' -%}
+{%- capture items -%}
+  {%- for row in rows -%}
+    {%- assign parts = row | strip | split: '|' -%}
+    {%- liquid
+      assign icon_name = ''
+      assign label = ''
+      assign text = ''
+      case parts.size
+        when 1
+          assign text = parts[0] | strip
+        when 2
+          assign label = parts[0] | strip
+          assign text = parts[1] | strip
+        else
+          assign icon_name = parts[0] | strip
+          assign label = parts[1] | strip
+          assign text = parts[2] | strip
+      endcase
+    -%}
+    {%- if label != blank or text != blank -%}
+      <li class="buy-highlights__item">
+        {%- if icon_name == blank -%}{%- assign icon_name = 'check' -%}{%- endif -%}
+        <span class="buy-highlights__icon" aria-hidden="true">{% render 'icon', icon: icon_name %}</span>
+        <span class="buy-highlights__body">
+          {%- if label != blank -%}<strong class="buy-highlights__label">{{ label | escape }}</strong>{% if text != blank %} : {% endif %}{%- endif -%}
+          {{- text | escape -}}
+        </span>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if items != blank -%}
+  <ul class="buy-highlights{% if class %} {{ class }}{% endif %}" role="list" {{ attributes }}>{{ items }}</ul>
+{%- endif -%}
+
+{% stylesheet %}
+  .buy-highlights {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-base);
+    line-height: 1.45;
+  }
+
+  .buy-highlights__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .buy-highlights__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    margin-block-start: -0.15rem;
+    border-radius: 50%;
+    color: var(--rose-cta, #a14a5c);
+    background-color: rgb(var(--rose-cta-rgb, 161 74 92) / 0.08);
+
+    & .icon {
+      --icon-size: 1rem;
+    }
+  }
+
+  .buy-highlights__label {
+    font-weight: var(--font-body-weight-medium, 500);
+    color: var(--color-text);
+  }
+
+  .buy-highlights__body {
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}

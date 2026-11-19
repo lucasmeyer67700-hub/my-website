@@ -1,0 +1,74 @@
+{% doc %}
+  The commercial guarantee in a framed box right under the buy button, so the
+  promise is seen at the moment of choosing. Wording comes from the section
+  (it must match the refund policy: 30 days, product refunded, return costs
+  paid by the customer). Links to the returns page from the theme settings.
+
+  @param {string} title - The promise, e.g. "Satisfaite ou remboursée 30 jours"
+  @param {string} [text] - The conditions in one sentence
+  @param {string} [attributes] - Theme editor attributes of the block
+
+  @example
+  {% render 'guarantee-box', title: settings.returns_info, text: block.settings.text %}
+{% enddoc %}
+{%- if title != blank -%}
+  <div class="guarantee-box" {{ attributes }}>
+    <span class="guarantee-box__icon" aria-hidden="true">{% render 'icon', icon: 'shield' %}</span>
+    <p class="guarantee-box__body">
+      <strong class="guarantee-box__title">{{ title | escape }}</strong>
+      {%- if text != blank %} {{ text | escape }}{% endif -%}
+      {%- if settings.returns_page != blank %}
+        <a class="guarantee-box__link" href="{{ settings.returns_page.url }}">{{ 'products.guarantee_conditions' | t }}</a>
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .guarantee-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1.5px solid rgb(var(--rose-cta-rgb, 161 74 92) / 0.55);
+    border-radius: var(--radius-md, 0.75rem);
+    background-color: rgb(var(--rose-cta-rgb, 161 74 92) / 0.04);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .guarantee-box__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    color: #fff;
+    background-color: var(--rose-cta, #a14a5c);
+
+    & .icon {
+      --icon-size: 0.95rem;
+    }
+  }
+
+  .guarantee-box__body {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .guarantee-box__title {
+    display: block;
+    font-size: var(--text-base);
+    font-weight: var(--font-body-weight-medium, 500);
+    color: var(--color-text);
+  }
+
+  .guarantee-box__link {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--rose-cta-rgb, 161 74 92) / 0.5);
+    text-underline-offset: 0.18em;
+    white-space: nowrap;
+  }
+{% endstylesheet %}

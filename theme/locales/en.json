@@ -22,7 +22,9 @@
     "menu": "Menu",
     "help_title": "Need help?",
     "slider_previous": "Previous",
-    "slider_next": "Next"
+    "slider_next": "Next",
+    "yes": "Yes",
+    "no": "No"
   },
   "header": {
     "cart": "Cart",
@@ -97,7 +99,8 @@
     "tile_choose": "Choose",
     "video_sound": "Turn the video sound on or off",
     "view_video": "Show the video",
-    "klarna_with": "with"
+    "klarna_with": "with",
+    "guarantee_conditions": "See the conditions"
   },
   "cart": {
     "title": "Your cart",

@@ -1,0 +1,64 @@
+{% doc %}
+  A buy button repeated at the end of a section, with a short "no risk" line
+  under it. On a product page it leads back up to the buy box of the same
+  page; elsewhere it goes to the link given (a product page, the shop…).
+
+  @param {string} label - Button label; nothing is shown when empty
+  @param {string} [link] - Where it leads outside product pages
+  @param {string} [note] - The line under the button, e.g. the guarantee
+
+  @example
+  {% render 'section-cta', label: section.settings.cta_label, link: section.settings.cta_link, note: section.settings.cta_note %}
+{% enddoc %}
+{%- liquid
+  assign cta_href = link | default: routes.all_products_collection_url
+  if template.name == 'product'
+    assign cta_href = '#ProductInfo'
+  endif
+-%}
+{%- if label != blank -%}
+  <div class="section-cta reveal">
+    <a class="button section-cta__button" href="{{ cta_href }}">
+      {{- label | escape -}}
+      {% render 'icon', icon: 'arrow-right' %}
+    </a>
+    {%- if note != blank -%}
+      <p class="section-cta__note">{% render 'icon', icon: 'shield' %}<span>{{ note | escape }}</span></p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .section-cta {
+    display: grid;
+    justify-items: center;
+    gap: 0.7rem;
+    margin-block-start: clamp(1.75rem, 4vw, 2.5rem);
+    text-align: center;
+  }
+
+  .section-cta__button {
+    border-color: var(--rose-cta, #a14a5c);
+    color: #fff;
+    background-color: var(--rose-cta, #a14a5c);
+
+    &:hover {
+      background-color: var(--rose-cta, #a14a5c);
+    }
+  }
+
+  .section-cta__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+
+    & .icon {
+      --icon-size: 0.95rem;
+
+      color: var(--rose-cta, #a14a5c);
+    }
+  }
+{% endstylesheet %}

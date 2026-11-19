@@ -1,0 +1,18 @@
+{% doc %}
+  One cell of the comparison table: "oui" becomes a tick, "non" a cross
+  (with words for screen readers); any other text is shown as written.
+
+  @param {string} value - The text of the cell
+
+  @example
+  {% render 'comparison-value', value: block.settings.value_1 %}
+{% enddoc %}
+{%- assign answer = value | strip | downcase -%}
+{%- case answer -%}
+  {%- when 'oui' -%}
+    <span class="comparison__yes">{% render 'icon', icon: 'check' %}<span class="visually-hidden">{{ 'general.yes' | t }}</span></span>
+  {%- when 'non' -%}
+    <span class="comparison__no">{% render 'icon', icon: 'close' %}<span class="visually-hidden">{{ 'general.no' | t }}</span></span>
+  {%- else -%}
+    {{ value | escape }}
+{%- endcase -%}

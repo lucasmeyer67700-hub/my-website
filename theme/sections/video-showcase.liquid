@@ -176,6 +176,8 @@
           <span class="video-showcase__progress-bar" data-carousel-bar></span>
         </div>
 
+        {% render 'section-cta', label: section.settings.cta_label, link: section.settings.cta_link, note: section.settings.cta_note %}
+
         {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
           <div class="video-showcase__actions reveal">
             <a class="button" href="{{ section.settings.button_link }}">
@@ -644,10 +646,22 @@
       "id": "ratio",
       "label": "Format des vidéos",
       "options": [
-        { "value": "9 / 16", "label": "Vertical (9:16)" },
-        { "value": "4 / 5", "label": "Portrait (4:5)" },
-        { "value": "1", "label": "Carré" },
-        { "value": "16 / 9", "label": "Horizontal (16:9)" }
+        {
+          "value": "9 / 16",
+          "label": "Vertical (9:16)"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1",
+          "label": "Carré"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Horizontal (16:9)"
+        }
       ],
       "default": "9 / 16"
     },
@@ -667,6 +681,27 @@
       "type": "url",
       "id": "button_link",
       "label": "Lien du bouton"
+    },
+    {
+      "type": "header",
+      "content": "Bouton d'achat"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "info": "Vide : pas de bouton. Sur une fiche produit, il ramène au bouton d'achat."
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien (hors fiche produit)"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "Phrase sous le bouton",
+      "info": "Par exemple votre garantie, telle qu'écrite dans votre politique de remboursement."
     },
     {
       "type": "text",
@@ -719,7 +754,14 @@
   "presets": [
     {
       "name": "Vidéos du produit",
-      "blocks": [{ "type": "video" }, { "type": "video" }]
+      "blocks": [
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        }
+      ]
     }
   ]
 }

@@ -223,7 +223,7 @@
       "type": "thread-nav",
       "settings": {
         "menu_title": "Sur cette page",
-        "labels": "shop_row: La boutique\nempathy: On vous comprend\npack_banner: Le Duo\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
+        "labels": "shop_row: La boutique\nempathy: On vous comprend\noffer: Commander\npack_banner: Le Duo\nbefore_after: Avant / après\nvideos: En vidéo\nstatement: Qui sommes-nous\nreviews: Les avis\nfaq: Vos questions",
         "ink": true,
         "drop_color": "#a3304a"
       }
@@ -250,30 +250,29 @@
     },
     "offer": {
       "type": "featured-product",
-      "disabled": true,
       "settings": {
         "product": "ceinture-chauffante-regles",
         "eyebrow": "",
         "heading": "",
         "show_rating": true,
-        "price_badge": "exclusif",
+        "price_badge": "Nouveauté",
         "show_tagline": true,
         "offer_heading": "",
         "unit_label": "la ceinture",
         "offer_note_single": "Avec son câble USB-C et sa notice",
-        "offer_note_multi": "Une pour vous, une à offrir",
-        "multi_hint": "Duo : deux roses, deux blanches, ou une de chaque.",
+        "offer_note_multi": "La 2e ceinture à −33 %, une rose et une blanche",
+        "multi_hint": "Duo : une ceinture rose et une blanche.",
         "best_label": "Meilleure offre",
-        "perks_multi": "",
-        "hide_multi": true,
+        "perks_multi": "Deux ensembles complets : câbles USB-C et notices",
+        "hide_multi": false,
         "bundle_product": "",
         "bundle_price": 54,
         "bundle_title": "Ceinture + culotte menstruelle",
         "bundle_note": "Avec une culotte menstruelle, couleur et taille au choix.",
-        "show_dynamic_checkout": true,
+        "show_dynamic_checkout": false,
         "show_reassurance": true,
         "show_secure_payment": true,
-        "show_specs": true,
+        "show_specs": false,
         "specs_limit": 3,
         "details_label": "Voir tous les détails",
         "media_layout": "composition",
@@ -289,7 +288,9 @@
         "gallery_ratio": "1",
         "gallery_fit": "cover",
         "anchor": "offre",
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "highlights": "heat | Chaleur réglable | 3 niveaux, 50, 55 ou 60 °C\nvibration | Massage doux | vibration, 4 modes, avec ou sans chaleur\nbattery | Sans fil | rechargeable en USB-C, environ 2 h d'autonomie\nfeather | Discrète | se porte sous un vêtement ample",
+        "guarantee_text": "Pas convaincue ? Renvoyez-la complète sous 30 jours après réception : on vous rembourse son prix. Frais de retour à votre charge."
       }
     },
     "editorial": {
@@ -367,6 +368,7 @@
     "hero_fluid",
     "shop_row",
     "empathy",
+    "offer",
     "pack_banner",
     "before_after",
     "videos",
@@ -375,7 +377,6 @@
     "faq",
     "thread_nav",
     "hero_editorial",
-    "offer",
     "editorial",
     "spotlight"
   ]

@@ -6,6 +6,7 @@
 
   @param {string} [class] - Extra CSS classes
   @param {boolean} [hide_payment] - Leave out "Paiement sécurisé" (already shown under the buy buttons)
+  @param {boolean} [hide_returns] - Leave out the returns line (a guarantee box already says it)
   @param {object} [product] - The product sold: the 30-day guarantee is only for the belt; period pants and
     pads (templates "culotte" and "serviette") follow the hygiene rule. Return costs are always stated.
 
@@ -25,7 +26,9 @@
       assign hygiene = true
     endif
   -%}
-  {%- if hygiene -%}
+  {%- if hide_returns -%}
+    {%- comment -%} Said in the guarantee box right above. {%- endcomment -%}
+  {%- elsif hygiene -%}
     <li class="reassurance-row__item">
       {%- if settings.returns_page != blank -%}
         <a class="reassurance-row__link" href="{{ settings.returns_page.url }}">{{ 'products.returns_hygiene' | t }}</a>

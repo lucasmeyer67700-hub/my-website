@@ -2458,3 +2458,44 @@ html.has-smooth-scroll {
     font-size: 0.8125rem;
   }
 }
+
+/* --------------------------------------------------------------------------
+   One clear buy button (v110): when "Acheter maintenant" is hidden, "Ajouter
+   au panier" takes the rose of the brand, with an arrow, like the buttons
+   repeated down the page (snippets/section-cta).
+   -------------------------------------------------------------------------- */
+.product-form__submit--accent:not([disabled]) {
+  border-color: var(--rose-cta);
+  color: #fff;
+  background-color: var(--rose-cta);
+  background-image: linear-gradient(135deg, var(--rose-cta-light) 0%, var(--rose-cta) 100%);
+  box-shadow: 0 16px 30px -16px rgb(var(--rose-cta-rgb) / 0.75);
+
+  &:hover {
+    color: #fff;
+    background-color: var(--rose-cta);
+  }
+}
+
+.product-form__submit-arrow {
+  --icon-size: 1rem;
+
+  flex: none;
+}
+
+/* Questions right under the buy button */
+.product__faq-heading {
+  margin-block: var(--space-sm) 0;
+  font-family: var(--font-body-family);
+  font-size: var(--text-base);
+  font-weight: var(--font-body-weight-medium);
+  letter-spacing: 0;
+}
+
+.product__faq + .product__faq {
+  margin-block-start: 0;
+}
+
+#ProductInfo {
+  scroll-margin-top: 5.5rem;
+}

@@ -151,6 +151,8 @@
           {%- endif -%}
         </div>
 
+        {% render 'buy-highlights', lines: section.settings.highlights, class: 'featured-product__highlights' %}
+
         {% render 'variant-picker',
           product: product,
           section_id: section.id,
@@ -218,7 +220,7 @@
                 id="{{ submit_id }}"
                 type="submit"
                 name="add"
-                class="button product-form__submit"
+                class="button product-form__submit{% unless section.settings.show_dynamic_checkout %} product-form__submit--accent{% endunless %}"
                 data-add-to-cart
                 {% unless current_variant.available %}
                   disabled
@@ -231,6 +233,9 @@
                     {{ 'products.sold_out' | t }}
                   {%- endif -%}
                 </span>
+                {%- unless section.settings.show_dynamic_checkout -%}
+                  {% render 'icon', icon: 'arrow-right', class: 'product-form__submit-arrow' %}
+                {%- endunless -%}
                 <span class="button__spinner" aria-hidden="true"></span>
               </button>
             </div>
@@ -257,9 +262,21 @@
           {% render 'secure-payment', style: 'compact' %}
         {%- endif -%}
 
+        {%- liquid
+          assign box_title = ''
+          if section.settings.guarantee_text != blank
+            assign box_title = settings.returns_info
+          endif
+          assign has_box = false
+          if box_title != blank
+            assign has_box = true
+          endif
+        -%}
         {%- if section.settings.show_reassurance -%}
-          {% render 'reassurance-row', hide_payment: section.settings.show_secure_payment, product: product %}
+          {% render 'reassurance-row', hide_payment: section.settings.show_secure_payment, hide_returns: has_box, product: product %}
         {%- endif -%}
+
+        {% render 'guarantee-box', title: box_title, text: section.settings.guarantee_text %}
 
         {%- if section.settings.show_specs and product.metafields.custom.caracteristiques.value != blank -%}
           <div class="featured-product__specs">
@@ -475,6 +492,12 @@
       "content": "Offres"
     },
     {
+      "type": "textarea",
+      "id": "highlights",
+      "label": "Bénéfices sous le prix",
+      "info": "Un par ligne : icône | Titre | texte. Icônes : heat, vibration, battery, feather, shield, clock, power, check."
+    },
+    {
       "type": "text",
       "id": "offer_heading",
       "label": "Titre des offres"
@@ -573,6 +596,12 @@
       "default": true
     },
     {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Encadré garantie : conditions en une phrase",
+      "info": "Vide : pas d'encadré. Le titre est le texte « Retours » des réglages du thème."
+    },
+    {
       "type": "checkbox",
       "id": "show_specs",
       "label": "Afficher les caractéristiques",
@@ -602,8 +631,14 @@
       "id": "media_layout",
       "label": "Présentation",
       "options": [
-        { "value": "composition", "label": "Composition : 4 images" },
-        { "value": "gallery", "label": "Galerie des photos du produit" }
+        {
+          "value": "composition",
+          "label": "Composition : 4 images"
+        },
+        {
+          "value": "gallery",
+          "label": "Galerie des photos du produit"
+        }
       ],
       "default": "composition"
     },
@@ -670,8 +705,14 @@
       "label": "Format des photos (galerie)",
       "visible_if": "{{ section.settings.media_layout == 'gallery' }}",
       "options": [
-        { "value": "1", "label": "Carré" },
-        { "value": "4 / 5", "label": "Portrait" }
+        {
+          "value": "1",
+          "label": "Carré"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        }
       ],
       "default": "1"
     },
@@ -680,8 +721,14 @@
       "id": "gallery_fit",
       "label": "Cadrage des photos",
       "options": [
-        { "value": "contain", "label": "Photo entière" },
-        { "value": "cover", "label": "Remplir le cadre" }
+        {
+          "value": "contain",
+          "label": "Photo entière"
+        },
+        {
+          "value": "cover",
+          "label": "Remplir le cadre"
+        }
       ],
       "default": "cover"
     },

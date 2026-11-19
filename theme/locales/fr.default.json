@@ -22,7 +22,9 @@
     "menu": "Menu",
     "help_title": "Besoin d'aide ?",
     "slider_previous": "Précédent",
-    "slider_next": "Suivant"
+    "slider_next": "Suivant",
+    "yes": "Oui",
+    "no": "Non"
   },
   "header": {
     "cart": "Panier",
@@ -97,7 +99,8 @@
     "tile_choose": "Choisir",
     "video_sound": "Activer ou couper le son de la vidéo",
     "view_video": "Afficher la vidéo",
-    "klarna_with": "avec"
+    "klarna_with": "avec",
+    "guarantee_conditions": "Voir les conditions"
   },
   "cart": {
     "title": "Votre panier",
