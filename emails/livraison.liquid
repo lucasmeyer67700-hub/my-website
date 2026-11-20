@@ -8,13 +8,13 @@
   d'expédition » : nom, point de la marque, titre, étapes, puis l'avis et
   le récapitulatif de la commande.
 
-  review_url : la page « Donner mon avis » du site (un lien qui marche partout,
-  contrairement à un lien qui ouvre la messagerie). Vide = e-mail vers review_email.
+  review_url : vide = « Donner mon avis » ouvre directement un nouvel e-mail
+  vers review_email (objet rempli) ; sinon, l'adresse d'une page d'avis.
   merci_code : le code doit exister dans Shopify > Réductions (vide = pas
   d'encadré). Offert que la cliente laisse un avis ou non : une réduction en
   échange d'un avis est interdite.
 {%- endcomment -%}
-{%- assign review_url = shop.url | append: '/pages/donner-mon-avis' -%}
+{%- assign review_url = '' -%}
 {%- assign review_email = 'maisonvelea@gmail.com' -%}
 {%- assign merci_code = 'VELEA20' -%}
 {%- assign merci_text = '−20 % sur votre prochaine commande' -%}
