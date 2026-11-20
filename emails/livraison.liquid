@@ -4,28 +4,31 @@
   Livraison effectuée (« Livrée ») > Modifier le code (remplacer tout le contenu).
   Objet conseillé : Votre colis VELEA est arrivé ✿ commande {{ order_name }}
 
-  merci_code : le code doit exister dans Shopify > Réductions (laisser vide
-  pour ne pas afficher l'encadré cadeau). Il est offert que la cliente laisse
-  un avis ou non : une réduction en échange d'un avis est interdite.
+  Même présentation que « Confirmation de commande » et « Confirmation
+  d'expédition » : nom, point de la marque, titre, étapes, puis l'avis et
+  le récapitulatif de la commande.
+
+  review_url : laisser vide pour que « Donner mon avis » ouvre un e-mail vers
+  review_email ; mettre l'adresse d'une page d'avis pour l'envoyer là.
+  merci_code : le code doit exister dans Shopify > Réductions (vide = pas
+  d'encadré). Offert que la cliente laisse un avis ou non : une réduction en
+  échange d'un avis est interdite.
 {%- endcomment -%}
+{%- assign review_url = '' -%}
+{%- assign review_email = 'maisonvelea@gmail.com' -%}
 {%- assign merci_code = 'VELEA20' -%}
 {%- assign merci_text = '−20 % sur votre prochaine commande' -%}
-{%- assign merci_until = '' -%}
-{%- assign review_email = 'maisonvelea@gmail.com' -%}
 {%- assign rose = '#a14a5c' -%}
 {%- assign ink = '#2b2422' -%}
 {%- assign muted = '#6f6461' -%}
 {%- assign blush = '#fbf4f4' -%}
-{%- assign line_color = '#efe3e3' -%}
-{%- assign font = "'DM Sans',Helvetica,Arial,sans-serif" -%}
-{%- assign serif = "'Playfair Display',Georgia,serif" -%}
+{%- assign line_color = '#f0e2e2' -%}
 {%- capture review_subject -%}Mon avis VELEA – commande {{ order_name }}{%- endcapture -%}
-{%- capture review_body -%}Ma note (sur 5) :
-Mon avis :
-
-(Vous pouvez ajouter vos photos ou une courte vidéo en pièce jointe.)
-{%- endcapture -%}
-{%- capture review_href -%}mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}&body={{ review_body | url_encode | replace: '+', '%20' }}{%- endcapture -%}
+{%- if review_url == blank -%}
+  {%- capture review_href -%}mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}{%- endcapture -%}
+{%- else -%}
+  {%- assign review_href = review_url -%}
+{%- endif -%}
 <!DOCTYPE html>
 <html lang="fr" style="color-scheme:light only;">
 <head>
@@ -43,70 +46,50 @@ Mon avis :
     @media (max-width: 600px) {
       .wrap { width: 100% !important; }
       .pad { padding-left: 22px !important; padding-right: 22px !important; }
-      .title { font-size: 31px !important; }
+      .title { font-size: 30px !important; }
       .btn a { display: block !important; }
       .step { font-size: 11px !important; }
     }
   </style>
-  <style>
-    /* Confettis : uniquement des formes en code, aucune image. Invisibles là où les animations ne sont pas prises en charge. */
-    @supports (animation-name: vpop) {
-      .vburst{display:block !important;max-height:none !important;overflow:hidden !important;position:absolute !important;left:0;top:0;width:100%;height:560px;z-index:5;pointer-events:none;}
-    }
-    .vpop{animation:vpop .55s cubic-bezier(.2,1.6,.4,1) .05s 1 both;}
-    @keyframes vpop{0%{transform:scale(.2);opacity:0;}100%{transform:scale(1);opacity:1;}}
-    .vc{position:absolute;left:50%;top:118px;display:block;margin:-4px 0 0 -5px;opacity:0;animation-name:vb;animation-timing-function:cubic-bezier(.12,.75,.3,1);animation-iteration-count:1;animation-fill-mode:both;}
-    @keyframes vb{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.3);}8%{opacity:1;}55%{opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1);}100%{opacity:0;transform:translate(var(--x2),var(--y2)) rotate(var(--r2)) scale(1);}}
-    @media (prefers-reduced-motion: reduce){.vc,.vpop{animation:none !important;}}
-  </style>
 </head>
 <body style="margin:0;padding:0;background:#ffffff;">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre colis est bien arrivé. Un cadeau et une petite question pour vous.</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre commande {{ order_name }} est bien arrivée chez vous. Merci pour votre confiance.</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;">
     <tr>
-      <td align="center" style="padding:0 12px;">
+      <td align="center" style="padding:20px 12px;">
         <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:600px;max-width:600px;background:#ffffff;">
 
-          {%- comment -%} Le nom {%- endcomment -%}
+          {%- comment -%} En-tête : logo ou VELEA en lettres espacées {%- endcomment -%}
           <tr>
-            <td align="center" style="padding:30px 20px 0;">
-              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};font-family:{{ font }};font-size:20px;letter-spacing:0.5em;">VELEA</a>
+            <td align="center" class="pad" style="padding:34px 40px 10px;">
+              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};">
+                {%- if shop.email_logo_url -%}
+                  <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width | default: 120 }}" style="display:block;border:0;max-width:180px;height:auto;">
+                {%- else -%}
+                  <span style="font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:20px;letter-spacing:0.5em;color:{{ ink }};">VELEA</span>
+                {%- endif -%}
+              </a>
             </td>
           </tr>
 
-          {%- comment -%}
-            L'explosion : un rond coché, et des confettis dessinés en code (aucune
-            image, rien à télécharger). Ils jaillissent du centre pendant environ
-            3 secondes puis disparaissent, dans les messageries qui savent animer
-            (Mail sur iPhone et Mac…) ; ailleurs, seul le rond s'affiche.
-          {%- endcomment -%}
+          {%- comment -%} Le point de la marque, puis le titre {%- endcomment -%}
           <tr>
-            <td align="center" valign="middle" height="236" style="position:relative;height:236px;padding:0;">
-              <div class="vburst" aria-hidden="true" style="display:none;max-height:0;overflow:hidden;"><i class="vc" style="width:15px;height:4px;background:#a14a5c;border-radius:2px;--x:-123px;--y:50px;--x2:-138px;--y2:357px;--r:40deg;--r2:246deg;animation-duration:2.65s;animation-delay:0.17s;"></i><i class="vc" style="width:8px;height:8px;background:#e896a8;border-radius:50%;--x:188px;--y:-67px;--x2:211px;--y2:207px;--r:-419deg;--r2:-657deg;animation-duration:2.36s;animation-delay:0.23s;"></i><i class="vc" style="width:18px;height:4px;background:#7a3446;border-radius:2px;--x:196px;--y:118px;--x2:220px;--y2:425px;--r:-176deg;--r2:-482deg;animation-duration:2.79s;animation-delay:0.17s;"></i><i class="vc" style="width:7px;height:7px;background:#d6a85c;border-radius:50%;--x:106px;--y:-162px;--x2:118px;--y2:108px;--r:293deg;--r2:-45deg;animation-duration:2.41s;animation-delay:0.26s;"></i><i class="vc" style="width:7px;height:7px;background:#d6a85c;border-radius:50%;--x:-198px;--y:63px;--x2:-222px;--y2:237px;--r:-511deg;--r2:-201deg;animation-duration:2.87s;animation-delay:0.34s;"></i><i class="vc" style="width:13px;height:8px;background:#e896a8;border-radius:2px;--x:210px;--y:-207px;--x2:235px;--y2:63px;--r:-279deg;--r2:-216deg;animation-duration:3.07s;animation-delay:0.19s;"></i><i class="vc" style="width:15px;height:4px;background:#7a3446;border-radius:2px;--x:-147px;--y:56px;--x2:-164px;--y2:344px;--r:-371deg;--r2:-47deg;animation-duration:2.6s;animation-delay:0.33s;"></i><i class="vc" style="width:8px;height:8px;background:#a14a5c;border-radius:50%;--x:182px;--y:-167px;--x2:204px;--y2:116px;--r:-375deg;--r2:-516deg;animation-duration:2.44s;animation-delay:0.32s;"></i><i class="vc" style="width:8px;height:8px;background:#c9727e;border-radius:50%;--x:246px;--y:-89px;--x2:276px;--y2:155px;--r:-291deg;--r2:-418deg;animation-duration:2.74s;animation-delay:0.27s;"></i><i class="vc" style="width:13px;height:6px;background:#d6a85c;border-radius:2px;--x:248px;--y:-188px;--x2:277px;--y2:70px;--r:-225deg;--r2:68deg;animation-duration:2.33s;animation-delay:0.32s;"></i><i class="vc" style="width:11px;height:8px;background:#c9727e;border-radius:2px;--x:-168px;--y:85px;--x2:-188px;--y2:391px;--r:90deg;--r2:20deg;animation-duration:2.96s;animation-delay:0.38s;"></i><i class="vc" style="width:10px;height:10px;background:#a14a5c;border-radius:50%;--x:-155px;--y:-177px;--x2:-173px;--y2:67px;--r:-51deg;--r2:-312deg;animation-duration:2.45s;animation-delay:0.26s;"></i><i class="vc" style="width:12px;height:8px;background:#a14a5c;border-radius:2px;--x:4px;--y:112px;--x2:5px;--y2:339px;--r:-486deg;--r2:-201deg;animation-duration:2.76s;animation-delay:0.25s;"></i><i class="vc" style="width:11px;height:5px;background:#f0c4cd;border-radius:2px;--x:58px;--y:192px;--x2:65px;--y2:385px;--r:228deg;--r2:-105deg;animation-duration:2.61s;animation-delay:0.18s;"></i><i class="vc" style="width:17px;height:4px;background:#7a3446;border-radius:2px;--x:-111px;--y:125px;--x2:-124px;--y2:305px;--r:-458deg;--r2:-624deg;animation-duration:2.9s;animation-delay:0.36s;"></i><i class="vc" style="width:18px;height:4px;background:#c9727e;border-radius:2px;--x:71px;--y:-123px;--x2:79px;--y2:92px;--r:-404deg;--r2:-207deg;animation-duration:2.37s;animation-delay:0.23s;"></i><i class="vc" style="width:16px;height:4px;background:#7a3446;border-radius:2px;--x:120px;--y:103px;--x2:134px;--y2:410px;--r:-407deg;--r2:-753deg;animation-duration:2.46s;animation-delay:0.39s;"></i><i class="vc" style="width:17px;height:4px;background:#d6a85c;border-radius:2px;--x:204px;--y:-249px;--x2:229px;--y2:58px;--r:24deg;--r2:202deg;animation-duration:2.69s;animation-delay:0.2s;"></i><i class="vc" style="width:15px;height:4px;background:#7a3446;border-radius:2px;--x:-212px;--y:-223px;--x2:-237px;--y2:-29px;--r:-37deg;--r2:-371deg;animation-duration:2.53s;animation-delay:0.2s;"></i><i class="vc" style="width:8px;height:8px;background:#f0c4cd;border-radius:50%;--x:-48px;--y:105px;--x2:-53px;--y2:315px;--r:85deg;--r2:-116deg;animation-duration:2.6s;animation-delay:0.36s;"></i><i class="vc" style="width:14px;height:4px;background:#f0c4cd;border-radius:2px;--x:209px;--y:-137px;--x2:234px;--y2:39px;--r:-125deg;--r2:-423deg;animation-duration:2.7s;animation-delay:0.33s;"></i><i class="vc" style="width:7px;height:7px;background:#7a3446;border-radius:50%;--x:-321px;--y:-203px;--x2:-359px;--y2:60px;--r:-295deg;--r2:-6deg;animation-duration:2.95s;animation-delay:0.41s;"></i><i class="vc" style="width:7px;height:7px;background:#7a3446;border-radius:50%;--x:14px;--y:-187px;--x2:16px;--y2:68px;--r:385deg;--r2:466deg;animation-duration:3.04s;animation-delay:0.36s;"></i><i class="vc" style="width:13px;height:6px;background:#c9727e;border-radius:2px;--x:161px;--y:-204px;--x2:181px;--y2:37px;--r:218deg;--r2:459deg;animation-duration:2.45s;animation-delay:0.42s;"></i><i class="vc" style="width:9px;height:5px;background:#a14a5c;border-radius:2px;--x:70px;--y:-258px;--x2:78px;--y2:-51px;--r:-83deg;--r2:-279deg;animation-duration:2.94s;animation-delay:0.41s;"></i><i class="vc" style="width:9px;height:5px;background:#c9727e;border-radius:2px;--x:119px;--y:58px;--x2:134px;--y2:316px;--r:471deg;--r2:194deg;animation-duration:2.37s;animation-delay:0.42s;"></i><i class="vc" style="width:12px;height:6px;background:#a14a5c;border-radius:2px;--x:6px;--y:11px;--x2:6px;--y2:194px;--r:-210deg;--r2:-501deg;animation-duration:2.5s;animation-delay:0.19s;"></i><i class="vc" style="width:7px;height:7px;background:#e896a8;border-radius:50%;--x:-186px;--y:145px;--x2:-208px;--y2:382px;--r:169deg;--r2:204deg;animation-duration:2.66s;animation-delay:0.21s;"></i><i class="vc" style="width:11px;height:5px;background:#c9727e;border-radius:2px;--x:-143px;--y:-33px;--x2:-160px;--y2:278px;--r:113deg;--r2:-11deg;animation-duration:2.53s;animation-delay:0.38s;"></i><i class="vc" style="width:10px;height:10px;background:#e896a8;border-radius:50%;--x:25px;--y:12px;--x2:28px;--y2:275px;--r:404deg;--r2:730deg;animation-duration:2.48s;animation-delay:0.15s;"></i><i class="vc" style="width:10px;height:8px;background:#e896a8;border-radius:2px;--x:152px;--y:110px;--x2:171px;--y2:294px;--r:363deg;--r2:611deg;animation-duration:2.49s;animation-delay:0.24s;"></i><i class="vc" style="width:14px;height:4px;background:#d6a85c;border-radius:2px;--x:-52px;--y:102px;--x2:-59px;--y2:397px;--r:81deg;--r2:-74deg;animation-duration:2.76s;animation-delay:0.41s;"></i><i class="vc" style="width:13px;height:8px;background:#7a3446;border-radius:2px;--x:213px;--y:-4px;--x2:239px;--y2:237px;--r:322deg;--r2:247deg;animation-duration:2.64s;animation-delay:0.15s;"></i><i class="vc" style="width:18px;height:4px;background:#7a3446;border-radius:2px;--x:-298px;--y:-9px;--x2:-334px;--y2:183px;--r:-436deg;--r2:-737deg;animation-duration:3.1s;animation-delay:0.41s;"></i><i class="vc" style="width:12px;height:8px;background:#a14a5c;border-radius:2px;--x:-0px;--y:116px;--x2:-0px;--y2:297px;--r:-121deg;--r2:-457deg;animation-duration:2.86s;animation-delay:0.26s;"></i><i class="vc" style="width:8px;height:8px;background:#a14a5c;border-radius:50%;--x:-256px;--y:-137px;--x2:-287px;--y2:110px;--r:-217deg;--r2:-74deg;animation-duration:2.67s;animation-delay:0.18s;"></i><i class="vc" style="width:9px;height:5px;background:#c9727e;border-radius:2px;--x:-62px;--y:-194px;--x2:-70px;--y2:117px;--r:254deg;--r2:32deg;animation-duration:2.73s;animation-delay:0.16s;"></i><i class="vc" style="width:17px;height:4px;background:#a14a5c;border-radius:2px;--x:307px;--y:36px;--x2:344px;--y2:245px;--r:-160deg;--r2:-162deg;animation-duration:2.58s;animation-delay:0.21s;"></i><i class="vc" style="width:7px;height:7px;background:#f0c4cd;border-radius:50%;--x:200px;--y:-3px;--x2:224px;--y2:294px;--r:503deg;--r2:676deg;animation-duration:2.81s;animation-delay:0.4s;"></i><i class="vc" style="width:11px;height:6px;background:#a14a5c;border-radius:2px;--x:-27px;--y:160px;--x2:-30px;--y2:426px;--r:385deg;--r2:662deg;animation-duration:2.82s;animation-delay:0.35s;"></i><i class="vc" style="width:12px;height:5px;background:#a14a5c;border-radius:2px;--x:-230px;--y:-41px;--x2:-258px;--y2:139px;--r:9deg;--r2:-195deg;animation-duration:2.84s;animation-delay:0.19s;"></i><i class="vc" style="width:10px;height:10px;background:#d6a85c;border-radius:50%;--x:-149px;--y:-62px;--x2:-167px;--y2:205px;--r:369deg;--r2:319deg;animation-duration:2.71s;animation-delay:0.32s;"></i><i class="vc" style="width:9px;height:9px;background:#e896a8;border-radius:50%;--x:10px;--y:-287px;--x2:11px;--y2:10px;--r:16deg;--r2:-335deg;animation-duration:2.31s;animation-delay:0.38s;"></i><i class="vc" style="width:11px;height:6px;background:#7a3446;border-radius:2px;--x:-110px;--y:-271px;--x2:-123px;--y2:-10px;--r:-153deg;--r2:-171deg;animation-duration:2.93s;animation-delay:0.38s;"></i><i class="vc" style="width:11px;height:6px;background:#7a3446;border-radius:2px;--x:-145px;--y:-136px;--x2:-162px;--y2:135px;--r:5deg;--r2:-26deg;animation-duration:2.53s;animation-delay:0.27s;"></i><i class="vc" style="width:12px;height:8px;background:#a14a5c;border-radius:2px;--x:-17px;--y:-147px;--x2:-19px;--y2:30px;--r:218deg;--r2:397deg;animation-duration:2.78s;animation-delay:0.37s;"></i><i class="vc" style="width:9px;height:7px;background:#d6a85c;border-radius:2px;--x:-198px;--y:-125px;--x2:-222px;--y2:61px;--r:60deg;--r2:-233deg;animation-duration:3.05s;animation-delay:0.18s;"></i><i class="vc" style="width:10px;height:8px;background:#f0c4cd;border-radius:2px;--x:-60px;--y:-219px;--x2:-67px;--y2:86px;--r:34deg;--r2:-93deg;animation-duration:2.45s;animation-delay:0.23s;"></i><i class="vc" style="width:16px;height:4px;background:#d6a85c;border-radius:2px;--x:79px;--y:10px;--x2:88px;--y2:267px;--r:-93deg;--r2:147deg;animation-duration:2.86s;animation-delay:0.37s;"></i><i class="vc" style="width:8px;height:8px;background:#a14a5c;border-radius:50%;--x:98px;--y:-178px;--x2:110px;--y2:89px;--r:-461deg;--r2:-219deg;animation-duration:3.02s;animation-delay:0.29s;"></i><i class="vc" style="width:9px;height:9px;background:#a14a5c;border-radius:50%;--x:102px;--y:-339px;--x2:114px;--y2:-84px;--r:237deg;--r2:75deg;animation-duration:2.9s;animation-delay:0.12s;"></i><i class="vc" style="width:9px;height:9px;background:#7a3446;border-radius:50%;--x:-188px;--y:31px;--x2:-210px;--y2:257px;--r:363deg;--r2:238deg;animation-duration:2.36s;animation-delay:0.37s;"></i><i class="vc" style="width:11px;height:7px;background:#7a3446;border-radius:2px;--x:144px;--y:138px;--x2:162px;--y2:327px;--r:-349deg;--r2:10deg;animation-duration:3.09s;animation-delay:0.23s;"></i><i class="vc" style="width:16px;height:4px;background:#d6a85c;border-radius:2px;--x:-181px;--y:-281px;--x2:-202px;--y2:-107px;--r:3deg;--r2:-136deg;animation-duration:2.49s;animation-delay:0.41s;"></i><i class="vc" style="width:12px;height:8px;background:#7a3446;border-radius:2px;--x:-76px;--y:243px;--x2:-85px;--y2:447px;--r:-128deg;--r2:-356deg;animation-duration:2.44s;animation-delay:0.36s;"></i><i class="vc" style="width:9px;height:5px;background:#7a3446;border-radius:2px;--x:97px;--y:76px;--x2:108px;--y2:317px;--r:-252deg;--r2:-20deg;animation-duration:3.04s;animation-delay:0.34s;"></i><i class="vc" style="width:10px;height:10px;background:#f0c4cd;border-radius:50%;--x:-152px;--y:-315px;--x2:-171px;--y2:-87px;--r:-285deg;--r2:-417deg;animation-duration:2.35s;animation-delay:0.31s;"></i><i class="vc" style="width:10px;height:10px;background:#7a3446;border-radius:50%;--x:-260px;--y:-77px;--x2:-291px;--y2:240px;--r:514deg;--r2:623deg;animation-duration:2.48s;animation-delay:0.3s;"></i><i class="vc" style="width:9px;height:9px;background:#d6a85c;border-radius:50%;--x:73px;--y:-301px;--x2:82px;--y2:4px;--r:-531deg;--r2:-292deg;animation-duration:2.39s;animation-delay:0.19s;"></i><i class="vc" style="width:11px;height:7px;background:#e896a8;border-radius:2px;--x:-300px;--y:-169px;--x2:-336px;--y2:52px;--r:-330deg;--r2:-522deg;animation-duration:2.6s;animation-delay:0.34s;"></i><i class="vc" style="width:10px;height:10px;background:#e896a8;border-radius:50%;--x:147px;--y:-140px;--x2:165px;--y2:128px;--r:49deg;--r2:-97deg;animation-duration:2.75s;animation-delay:0.2s;"></i><i class="vc" style="width:9px;height:5px;background:#a14a5c;border-radius:2px;--x:224px;--y:-54px;--x2:251px;--y2:235px;--r:-16deg;--r2:-287deg;animation-duration:2.48s;animation-delay:0.36s;"></i><i class="vc" style="width:7px;height:7px;background:#a14a5c;border-radius:50%;--x:1px;--y:31px;--x2:2px;--y2:240px;--r:-291deg;--r2:-11deg;animation-duration:2.93s;animation-delay:0.27s;"></i><i class="vc" style="width:9px;height:9px;background:#c9727e;border-radius:50%;--x:-100px;--y:64px;--x2:-112px;--y2:382px;--r:-157deg;--r2:-216deg;animation-duration:3.01s;animation-delay:0.35s;"></i><i class="vc" style="width:12px;height:7px;background:#a14a5c;border-radius:2px;--x:-96px;--y:-127px;--x2:-108px;--y2:177px;--r:-468deg;--r2:-124deg;animation-duration:2.57s;animation-delay:0.13s;"></i><i class="vc" style="width:9px;height:7px;background:#a14a5c;border-radius:2px;--x:-235px;--y:16px;--x2:-263px;--y2:198px;--r:-19deg;--r2:-191deg;animation-duration:2.33s;animation-delay:0.14s;"></i><i class="vc" style="width:11px;height:6px;background:#a14a5c;border-radius:2px;--x:86px;--y:-285px;--x2:96px;--y2:29px;--r:-382deg;--r2:-396deg;animation-duration:2.9s;animation-delay:0.15s;"></i><i class="vc" style="width:7px;height:7px;background:#d6a85c;border-radius:50%;--x:-337px;--y:-151px;--x2:-377px;--y2:159px;--r:-199deg;--r2:-307deg;animation-duration:2.73s;animation-delay:0.42s;"></i><i class="vc" style="width:8px;height:8px;background:#f0c4cd;border-radius:50%;--x:-302px;--y:-15px;--x2:-338px;--y2:188px;--r:468deg;--r2:664deg;animation-duration:2.94s;animation-delay:0.38s;"></i><i class="vc" style="width:10px;height:6px;background:#d6a85c;border-radius:2px;--x:201px;--y:1px;--x2:225px;--y2:241px;--r:-19deg;--r2:171deg;animation-duration:2.51s;animation-delay:0.32s;"></i><i class="vc" style="width:11px;height:7px;background:#f0c4cd;border-radius:2px;--x:-272px;--y:64px;--x2:-305px;--y2:374px;--r:-288deg;--r2:-209deg;animation-duration:2.71s;animation-delay:0.28s;"></i><i class="vc" style="width:18px;height:4px;background:#7a3446;border-radius:2px;--x:-132px;--y:-186px;--x2:-148px;--y2:92px;--r:418deg;--r2:173deg;animation-duration:2.57s;animation-delay:0.23s;"></i><i class="vc" style="width:15px;height:4px;background:#a14a5c;border-radius:2px;--x:12px;--y:66px;--x2:14px;--y2:280px;--r:-370deg;--r2:-425deg;animation-duration:2.78s;animation-delay:0.28s;"></i><i class="vc" style="width:17px;height:4px;background:#e896a8;border-radius:2px;--x:150px;--y:-240px;--x2:168px;--y2:1px;--r:-234deg;--r2:-410deg;animation-duration:2.38s;animation-delay:0.17s;"></i><i class="vc" style="width:9px;height:9px;background:#a14a5c;border-radius:50%;--x:192px;--y:99px;--x2:214px;--y2:273px;--r:286deg;--r2:126deg;animation-duration:2.45s;animation-delay:0.36s;"></i><i class="vc" style="width:9px;height:9px;background:#a14a5c;border-radius:50%;--x:-148px;--y:148px;--x2:-166px;--y2:398px;--r:83deg;--r2:141deg;animation-duration:2.85s;animation-delay:0.32s;"></i><i class="vc" style="width:9px;height:8px;background:#a14a5c;border-radius:2px;--x:157px;--y:-37px;--x2:175px;--y2:143px;--r:348deg;--r2:544deg;animation-duration:2.49s;animation-delay:0.14s;"></i><i class="vc" style="width:11px;height:6px;background:#7a3446;border-radius:2px;--x:77px;--y:36px;--x2:86px;--y2:293px;--r:-304deg;--r2:-506deg;animation-duration:2.48s;animation-delay:0.18s;"></i><i class="vc" style="width:10px;height:10px;background:#a14a5c;border-radius:50%;--x:217px;--y:70px;--x2:243px;--y2:255px;--r:234deg;--r2:9deg;animation-duration:2.67s;animation-delay:0.23s;"></i><i class="vc" style="width:10px;height:10px;background:#d6a85c;border-radius:50%;--x:67px;--y:-288px;--x2:75px;--y2:-38px;--r:-408deg;--r2:-351deg;animation-duration:3.04s;animation-delay:0.2s;"></i></div>
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" class="vpop" style="margin:0 auto;">
-                <tr>
-                  <td align="center" valign="middle" width="76" height="76" bgcolor="{{ rose }}" style="width:76px;height:76px;border-radius:50%;background:{{ rose }};color:#ffffff;font-family:Arial,sans-serif;font-size:36px;line-height:76px;">&#10003;</td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <td align="center" class="pad" style="padding:0 40px;">
-              <p style="margin:0 0 10px;font-family:{{ font }};font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
-              <h1 class="title" style="margin:0;font-family:{{ serif }};font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
+            <td align="center" class="pad" style="padding:22px 40px 0;">
+              <div style="width:12px;height:12px;margin:0 auto 18px;background:{{ rose }};border-radius:50%;line-height:12px;font-size:1px;">&nbsp;</div>
+              <p style="margin:0 0 10px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
+              <h1 class="title" style="margin:0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
                 Votre colis<br><em style="color:{{ rose }};">est arrivé.</em>
               </h1>
-              <p style="margin:16px auto 0;max-width:420px;font-family:{{ font }};font-size:15px;line-height:1.7;color:{{ muted }};">
-                {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} colis est bien arrivé chez vous. Merci pour votre confiance&nbsp;!
+              <p style="margin:18px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
+                {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} commande est bien arrivée chez vous. Merci pour votre confiance.
               </p>
             </td>
           </tr>
 
-          {%- comment -%} Les étapes, comme dans les e-mails de commande et d'expédition {%- endcomment -%}
+          {%- comment -%} Les étapes : les trois sont faites {%- endcomment -%}
           <tr>
-            <td class="pad" style="padding:26px 60px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:{{ font }};">
+            <td class="pad" style="padding:28px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;">
                 <tr>
                   <td width="33%" align="center" valign="top">
                     <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:{{ rose }};font-size:1px;line-height:14px;">&nbsp;</div>
@@ -117,51 +100,29 @@ Mon avis :
                     <p class="step" style="margin:8px 0 0;font-size:12px;color:{{ ink }};">Expédiée</p>
                   </td>
                   <td width="33%" align="center" valign="top">
-                    <div style="width:20px;height:20px;margin:-3px auto 0;border-radius:50%;background:{{ rose }};color:#ffffff;font-size:12px;line-height:20px;font-weight:500;">&#10003;</div>
-                    <p class="step" style="margin:5px 0 0;font-size:12px;font-weight:500;color:{{ rose }};">Chez vous</p>
+                    <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:{{ rose }};font-size:1px;line-height:14px;">&nbsp;</div>
+                    <p class="step" style="margin:8px 0 0;font-size:12px;font-weight:500;color:{{ rose }};">Chez vous</p>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          {%- comment -%} 1. Le cadeau {%- endcomment -%}
-          {%- if merci_code != blank -%}
-            <tr>
-              <td class="pad" style="padding:34px 40px 0;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="{{ blush }}" style="background:{{ blush }};border-radius:16px;">
-                  <tr>
-                    <td align="center" style="padding:26px 22px;font-family:{{ font }};color:{{ ink }};">
-                      <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Un cadeau pour vous</p>
-                      <p style="margin:0;font-family:{{ serif }};font-size:22px;line-height:1.3;color:{{ ink }};">{{ merci_text }}</p>
-                      <p style="display:inline-block;margin:16px 0 0;padding:11px 26px;border:1.5px dashed {{ rose }};border-radius:10px;font-size:20px;font-weight:500;letter-spacing:0.22em;color:{{ rose }};background:#ffffff;">{{ merci_code }}</p>
-                      <p style="margin:12px 0 0;font-size:12px;line-height:1.6;color:{{ muted }};">À saisir au moment du paiement{% if merci_until != blank %}, jusqu'au {{ merci_until }}{% endif %}.</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          {%- endif -%}
-
-          {%- comment -%} 2. L'avis et les photos : un encadré, un bouton {%- endcomment -%}
+          {%- comment -%} Votre avis {%- endcomment -%}
           <tr>
-            <td class="pad" style="padding:20px 40px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;border:1.5px solid {{ rose }};border-radius:16px;">
+            <td class="pad" style="padding:34px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="{{ blush }}" style="background:{{ blush }};border-radius:16px;">
                 <tr>
-                  <td align="center" style="padding:28px 24px;font-family:{{ font }};">
-                    <p style="margin:0 0 10px;font-size:22px;line-height:1;letter-spacing:0.14em;">
-                      {%- for i in (1..5) -%}
-                        <a href="mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}&body={{ 'Ma note : ' | append: i | append: '/5' | url_encode | replace: '+', '%20' }}%0A{{ 'Mon avis : ' | url_encode | replace: '+', '%20' }}%0A%0A{{ '(Vous pouvez ajouter vos photos ou une courte vidéo en pièce jointe.)' | url_encode | replace: '+', '%20' }}" style="color:{{ rose }};text-decoration:none;">&#9733;</a>
-                      {%- endfor -%}
+                  <td align="center" style="padding:30px 26px;font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+                    <p style="margin:0 0 10px;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Elle vous plaît ?</p>
+                    <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;line-height:1.2;color:{{ ink }};">Votre avis compte<br><em style="color:{{ rose }};">beaucoup.</em></p>
+                    <p style="margin:14px auto 0;max-width:400px;font-size:14px;line-height:1.7;color:{{ muted }};">
+                      Après quelques jours avec votre ceinture, dites-nous ce que vous en pensez. Une photo ou une courte vidéo est la bienvenue&nbsp;: avec votre accord, nous la partagerons sur notre site.
                     </p>
-                    <p style="margin:0;font-family:{{ serif }};font-size:24px;line-height:1.25;color:{{ ink }};">Votre avis compte <em style="color:{{ rose }};">beaucoup.</em></p>
-                    <p style="margin:12px auto 0;max-width:400px;font-size:14px;line-height:1.7;color:{{ muted }};">
-                      Un mot, une photo ou une courte vidéo de votre ceinture&nbsp;: en un clic, votre message s'ouvre, il ne reste qu'à écrire et ajouter vos photos.
-                    </p>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin:20px auto 0;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin:22px auto 0;">
                       <tr>
                         <td align="center" bgcolor="{{ rose }}" style="border-radius:999px;background:{{ rose }};">
-                          <a href="{{ review_href }}" style="display:inline-block;padding:15px 36px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:{{ font }};font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;">Donner mon avis</a>
+                          <a href="{{ review_href }}" style="display:inline-block;padding:15px 34px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Donner mon avis</a>
                         </td>
                       </tr>
                     </table>
@@ -171,19 +132,64 @@ Mon avis :
             </td>
           </tr>
 
-          {%- comment -%} 3. La fin : une phrase, les mentions {%- endcomment -%}
+          {%- comment -%} Votre commande : les articles de ce colis {%- endcomment -%}
           <tr>
-            <td align="center" class="pad" style="padding:34px 40px 10px;">
-              <p style="margin:0;font-family:{{ serif }};font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
-              <p style="margin:12px auto 0;max-width:420px;font-family:{{ font }};font-size:11px;line-height:1.6;color:{{ muted }};">
+            <td class="pad" style="padding:34px 40px 0;">
+              <p style="margin:0 0 14px;font-family:'Playfair Display',Georgia,serif;font-size:21px;color:{{ ink }};">Votre commande</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                {%- for line in fulfillment.fulfillment_line_items -%}
+                  <tr>
+                    <td width="72" valign="top" style="padding:14px 0;border-top:1px solid {{ line_color }};">
+                      {%- if line.line_item.image -%}
+                        <img src="{{ line.line_item | img_url: 'compact_cropped' }}" alt="" width="60" height="60" style="display:block;width:60px;height:60px;border-radius:12px;background:#f7f0f0;object-fit:cover;border:0;">
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" style="padding:14px 10px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+                      <p style="margin:0;font-size:15px;line-height:1.4;color:{{ ink }};">{{ line.line_item.title }}{% if line.quantity > 1 %} <span style="color:{{ muted }};">× {{ line.quantity }}</span>{% endif %}</p>
+                      {%- if line.line_item.variant.title != 'Default Title' and line.line_item.variant.title != blank -%}
+                        <p style="margin:4px 0 0;font-size:13px;color:{{ muted }};">{{ line.line_item.variant.title }}</p>
+                      {%- endif -%}
+                    </td>
+                    <td valign="top" align="right" style="padding:14px 0;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;color:{{ ink }};white-space:nowrap;">
+                      {%- if line.line_item.original_line_price != line.line_item.final_line_price -%}
+                        <s style="color:{{ muted }};font-size:13px;">{{ line.line_item.original_line_price | money }}</s><br>
+                      {%- endif -%}
+                      {{ line.line_item.final_line_price | money }}
+                    </td>
+                  </tr>
+                {%- endfor -%}
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} Le cadeau : seulement si un code est rempli en haut du modèle {%- endcomment -%}
+          {%- if merci_code != blank -%}
+            <tr>
+              <td class="pad" style="padding:22px 40px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px dashed {{ rose }};border-radius:14px;">
+                  <tr>
+                    <td align="center" style="padding:16px 18px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:{{ ink }};">
+                      Un cadeau pour vous&nbsp;: {{ merci_text }} avec le code <strong style="color:{{ rose }};letter-spacing:0.12em;">{{ merci_code }}</strong>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          {%- endif -%}
+
+          <tr>
+            <td align="center" class="pad" style="padding:34px 40px 34px;">
+              <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
+              <p style="margin:12px auto 0;max-width:430px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:{{ muted }};">
                 {% if merci_code != blank %}Code offert, que vous laissiez un avis ou non. {% endif %}En nous envoyant un avis ou des photos, vous acceptez que nous les publiions sur notre site avec votre prénom uniquement&nbsp;; vous pouvez changer d'avis à tout moment. Une question&nbsp;? Répondez à cet e-mail.
               </p>
             </td>
           </tr>
           <tr>
-            <td align="center" style="padding:18px 20px 30px;border-top:1px solid {{ line_color }};font-family:{{ font }};font-size:12px;line-height:1.7;color:{{ muted }};">
+            <td align="center" style="padding:18px 20px 30px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:{{ muted }};">
               <a href="{{ shop.url }}" style="color:{{ muted }};text-decoration:none;letter-spacing:0.3em;">VELEA</a>
               &nbsp;·&nbsp; <a href="https://www.instagram.com/_maisonvelea/" style="color:{{ muted }};">Instagram</a>
+              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/suivi-de-commande" style="color:{{ muted }};">Suivi de commande</a>
               &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/livraison-et-retours" style="color:{{ muted }};">Livraison et retours</a>
             </td>
           </tr>
