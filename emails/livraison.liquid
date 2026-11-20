@@ -8,10 +8,10 @@
   doit exister dans Shopify > Réductions. Il est offert que la cliente laisse
   un avis ou non (une réduction en échange d'un avis est interdite).
 {%- endcomment -%}
-{%- assign merci_code = '' -%}
+{%- assign merci_code = 'VELEA20' -%}
 {%- assign merci_text = '−20 % sur votre prochaine commande' -%}
 {%- assign merci_until = '' -%}
-{%- assign confetti_url = 'https://cdn.shopify.com/s/files/1/1068/3334/6905/files/confettis-velea.gif?v=1795191999' -%}
+{%- assign confetti_url = 'https://cdn.shopify.com/s/files/1/1068/3334/6905/files/confettis-velea-3s.gif?v=1795192475' -%}
 {%- assign review_email = 'maisonvelea@gmail.com' -%}
 {%- assign rose = '#a14a5c' -%}
 {%- assign ink = '#2b2422' -%}
@@ -45,7 +45,7 @@
   </style>
 </head>
 <body style="margin:0;padding:0;background:{{ blush }};">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre colis {{ order_name }} est bien arrivé chez vous. Merci, et à très vite !</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre colis est bien arrivé. Un petit cadeau et une question pour vous.</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};">
     <tr>
       <td align="center" style="padding:28px 12px;">
@@ -54,7 +54,7 @@
           {%- comment -%} Des confettis qui tombent (image animée, fixe sur les messageries qui ne l'animent pas) {%- endcomment -%}
           <tr>
             <td style="padding:0;line-height:0;font-size:0;">
-              <img src="{{ confetti_url }}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
+              <img src="{{ confetti_url }}" alt="" width="600" height="150" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
             </td>
           </tr>
 
@@ -78,14 +78,14 @@
                 Votre colis<br><em style="color:{{ rose }};">est arrivé.</em>
               </h1>
               <p style="margin:18px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
-                {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} colis est bien arrivé chez vous. Merci de votre confiance&nbsp;: on espère que VELEA vous accompagnera en douceur, dès vos prochaines règles.
+                {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} colis est bien arrivé chez vous. Merci pour votre confiance&nbsp;!
               </p>
             </td>
           </tr>
 
           {%- comment -%} Les étapes : tout est fait, « Chez vous » en avant {%- endcomment -%}
           <tr>
-            <td class="pad" style="padding:28px 40px 0;">
+            <td class="pad" style="padding:26px 40px 0;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;">
                 <tr>
                   <td width="33%" align="center" valign="top">
@@ -105,20 +105,17 @@
             </td>
           </tr>
 
-          {%- comment -%} Conseils de première utilisation (notice du fabricant), seulement avec une ceinture {%- endcomment -%}
-          {%- if has_belt -%}
+          {%- comment -%} 1. Le cadeau : seulement si un code est rempli en haut du modèle {%- endcomment -%}
+          {%- if merci_code != blank -%}
             <tr>
-              <td class="pad" style="padding:28px 40px 0;">
+              <td class="pad" style="padding:30px 40px 0;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};border-radius:14px;">
                   <tr>
-                    <td style="padding:20px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:{{ ink }};">
-                      <p style="margin:0 0 8px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Pour bien commencer</p>
-                      <p style="margin:0;color:{{ muted }};">
-                        ✿ Chargez-la complètement avec le câble fourni : voyant rouge pendant la charge, vert quand elle est prête.<br>
-                        ✿ Portez-la sur le bas du ventre, par-dessus un vêtement fin, en commençant par la chaleur la plus douce.<br>
-                        ✿ Elle s'arrête seule au bout de 30 minutes, par sécurité : faites une pause avant de la relancer.<br>
-                        ✿ Ne l'utilisez pas en dormant, et prenez le temps de lire la notice.
-                      </p>
+                    <td align="center" style="padding:24px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;color:{{ ink }};">
+                      <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Un cadeau pour vous</p>
+                      <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;line-height:1.3;">{{ merci_text }}</p>
+                      <p style="display:inline-block;margin:14px 0 0;padding:10px 24px;border:1.5px dashed {{ rose }};border-radius:10px;font-size:20px;font-weight:500;letter-spacing:0.2em;color:{{ rose }};background:#ffffff;">{{ merci_code }}</p>
+                      <p style="margin:12px 0 0;font-size:12px;line-height:1.6;color:{{ muted }};">À saisir au moment du paiement{% if merci_until != blank %}, jusqu'au {{ merci_until }}{% endif %}.</p>
                     </td>
                   </tr>
                 </table>
@@ -126,59 +123,39 @@
             </tr>
           {%- endif -%}
 
-          {%- comment -%} L'avis et les photos {%- endcomment -%}
+          {%- comment -%} 2. L'avis et les photos {%- endcomment -%}
           <tr>
             <td align="center" class="pad" style="padding:34px 40px 0;">
-              <p style="margin:0 0 6px;font-size:22px;line-height:1;letter-spacing:0.12em;color:{{ rose }};">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p style="margin:0 0 8px;font-size:20px;line-height:1;letter-spacing:0.12em;color:{{ rose }};">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
               <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:24px;line-height:1.25;color:{{ ink }};">Votre avis compte <em style="color:{{ rose }};">beaucoup.</em></p>
-              <p style="margin:14px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
-                Dans quelques jours, quand vous l'aurez essayée, dites-nous ce que vous en pensez&nbsp;: ce qui vous plaît, ce qui pourrait être mieux. Votre retour aide d'autres femmes à choisir, et nous aide à progresser.
+              <p style="margin:14px auto 0;max-width:430px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
+                Après quelques jours, dites-nous ce que vous en pensez. Et si vous le souhaitez, joignez une photo ou une courte vidéo de votre ceinture portée&nbsp;: avec votre accord, nous la partagerons sur notre site.
               </p>
             </td>
           </tr>
           <tr>
-            <td class="pad" style="padding:20px 40px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid {{ line_color }};border-radius:14px;">
-                <tr>
-                  <td style="padding:18px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:{{ ink }};">
-                    <p style="margin:0 0 4px;font-family:'Playfair Display',Georgia,serif;font-size:18px;">Une photo ou une petite vidéo&nbsp;?</p>
-                    <p style="margin:0;color:{{ muted }};">Si vous le souhaitez, envoyez-nous une photo ou une courte vidéo de votre ceinture portée (par-dessus un vêtement, c'est parfait). Avec votre accord, nous pourrons la partager sur notre site.</p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td align="center" class="pad btn" style="padding:24px 40px 0;">
-              <a href="mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}" style="display:inline-block;padding:15px 30px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Donner mon avis</a>
-              <p style="margin:12px auto 0;max-width:420px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:{{ muted }};">Ou répondez simplement à cet e-mail, avec vos photos en pièce jointe.</p>
+            <td align="center" class="pad btn" style="padding:22px 40px 0;">
+              <a href="mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}" style="display:inline-block;padding:15px 34px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Donner mon avis</a>
+              <p style="margin:12px 0 0;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;color:{{ muted }};">ou répondez simplement à cet e-mail</p>
             </td>
           </tr>
 
-          {%- comment -%} Le merci : seulement si un code est rempli en haut du modèle {%- endcomment -%}
-          {%- if merci_code != blank -%}
+          {%- comment -%} 3. Un seul conseil, avec une ceinture {%- endcomment -%}
+          {%- if has_belt -%}
             <tr>
-              <td class="pad" style="padding:28px 40px 0;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};border-radius:14px;">
-                  <tr>
-                    <td align="center" style="padding:22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:{{ ink }};">
-                      <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Un merci de notre part</p>
-                      <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:20px;">{{ merci_text }}</p>
-                      <p style="display:inline-block;margin:14px 0 0;padding:10px 22px;border:1.5px dashed {{ rose }};border-radius:10px;font-size:18px;font-weight:500;letter-spacing:0.18em;color:{{ rose }};background:#ffffff;">{{ merci_code }}</p>
-                      <p style="margin:12px 0 0;font-size:12px;color:{{ muted }};">À saisir au moment du paiement{% if merci_until != blank %}, valable jusqu'au {{ merci_until }}{% endif %}. Offert que vous laissiez un avis ou non.</p>
-                    </td>
-                  </tr>
-                </table>
+              <td class="pad" style="padding:30px 40px 0;">
+                <p style="margin:0;padding-top:22px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:{{ muted }};text-align:center;">
+                  <strong style="color:{{ ink }};font-weight:500;">Pour bien commencer&nbsp;:</strong> chargez-la complètement, portez-la par-dessus un vêtement fin et commencez par la chaleur la plus douce.
+                </p>
               </td>
             </tr>
           {%- endif -%}
 
           <tr>
-            <td align="center" class="pad" style="padding:32px 40px 34px;">
+            <td align="center" class="pad" style="padding:28px 40px 34px;">
               <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
-              <p style="margin:12px auto 0;max-width:420px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:{{ muted }};">
-                En nous envoyant un avis, une photo ou une vidéo, vous acceptez que nous les publiions sur maisonvelea.fr et nos réseaux, avec votre prénom uniquement. Vous pouvez changer d'avis à tout moment en nous écrivant.<br><br>
-                Une question ou un souci&nbsp;? Répondez à cet e-mail ou écrivez-nous via la <a href="{{ shop.url }}/pages/contact" style="color:{{ rose }};">page contact</a>. Si la ceinture ne vous convient pas, vous avez 30 jours après réception pour nous la retourner (<a href="{{ shop.url }}/policies/refund-policy" style="color:{{ rose }};">conditions</a>).
+              <p style="margin:12px auto 0;max-width:430px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:{{ muted }};">
+                {% if merci_code != blank %}Code offert, que vous laissiez un avis ou non. {% endif %}En nous envoyant un avis ou des photos, vous acceptez que nous les publiions avec votre prénom uniquement&nbsp;; vous pouvez changer d'avis à tout moment. Une question&nbsp;? Répondez à cet e-mail.
               </p>
             </td>
           </tr>
