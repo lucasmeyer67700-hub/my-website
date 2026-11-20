@@ -4,89 +4,89 @@
   Livraison effectuée (« Livrée ») > Modifier le code (remplacer tout le contenu).
   Objet conseillé : Votre colis VELEA est arrivé ✿ commande {{ order_name }}
 
-  Code merci : laisser vide pour ne rien afficher. S'il est rempli, le code
-  doit exister dans Shopify > Réductions. Il est offert que la cliente laisse
-  un avis ou non (une réduction en échange d'un avis est interdite).
+  merci_code : le code doit exister dans Shopify > Réductions (laisser vide
+  pour ne pas afficher l'encadré cadeau). Il est offert que la cliente laisse
+  un avis ou non : une réduction en échange d'un avis est interdite.
 {%- endcomment -%}
 {%- assign merci_code = 'VELEA20' -%}
 {%- assign merci_text = '−20 % sur votre prochaine commande' -%}
 {%- assign merci_until = '' -%}
-{%- assign confetti_url = 'https://cdn.shopify.com/s/files/1/1068/3334/6905/files/confettis-velea-3s.gif?v=1795192475' -%}
+{%- assign burst_url = 'https://cdn.shopify.com/s/files/1/1068/3334/6905/files/confettis-velea-burst.gif?v=1795192912' -%}
 {%- assign review_email = 'maisonvelea@gmail.com' -%}
 {%- assign rose = '#a14a5c' -%}
 {%- assign ink = '#2b2422' -%}
 {%- assign muted = '#6f6461' -%}
 {%- assign blush = '#fbf4f4' -%}
-{%- assign line_color = '#f0e2e2' -%}
-{%- assign has_belt = false -%}
-{%- for line in fulfillment.fulfillment_line_items -%}
-  {%- assign t = line.line_item.title | downcase -%}
-  {%- if t contains 'ceinture' -%}{%- assign has_belt = true -%}{%- endif -%}
-{%- endfor -%}
+{%- assign line_color = '#efe3e3' -%}
+{%- assign font = "'DM Sans',Helvetica,Arial,sans-serif" -%}
+{%- assign serif = "'Playfair Display',Georgia,serif" -%}
 {%- capture review_subject -%}Mon avis VELEA – commande {{ order_name }}{%- endcapture -%}
+{%- capture review_body -%}Ma note (sur 5) :
+Mon avis :
+
+(Vous pouvez ajouter vos photos ou une courte vidéo en pièce jointe.)
+{%- endcapture -%}
+{%- capture review_href -%}mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}&body={{ review_body | url_encode | replace: '+', '%20' }}{%- endcapture -%}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" style="color-scheme:light only;">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
   <title>Votre colis VELEA est arrivé</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; padding: 0; background: {{ blush }}; }
+    :root { color-scheme: light only; supported-color-schemes: light only; }
+    body { margin: 0; padding: 0; background: #ffffff; }
     a { color: {{ rose }}; }
     @media (max-width: 600px) {
       .wrap { width: 100% !important; }
       .pad { padding-left: 22px !important; padding-right: 22px !important; }
-      .title { font-size: 30px !important; }
+      .title { font-size: 31px !important; }
       .btn a { display: block !important; }
       .step { font-size: 11px !important; }
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background:{{ blush }};">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre colis est bien arrivé. Un petit cadeau et une question pour vous.</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};">
+<body style="margin:0;padding:0;background:#ffffff;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Votre colis est bien arrivé. Un cadeau et une petite question pour vous.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;">
     <tr>
-      <td align="center" style="padding:28px 12px;">
-        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;">
+      <td align="center" style="padding:0 12px;">
+        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:600px;max-width:600px;background:#ffffff;">
 
-          {%- comment -%} Des confettis qui tombent (image animée, fixe sur les messageries qui ne l'animent pas) {%- endcomment -%}
+          {%- comment -%} Le nom {%- endcomment -%}
           <tr>
-            <td style="padding:0;line-height:0;font-size:0;">
-              <img src="{{ confetti_url }}" alt="" width="600" height="150" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
+            <td align="center" style="padding:30px 20px 0;">
+              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};font-family:{{ font }};font-size:20px;letter-spacing:0.5em;">VELEA</a>
+            </td>
+          </tr>
+
+          {%- comment -%} L'explosion de confettis (image animée, environ 3 secondes, une seule fois) {%- endcomment -%}
+          <tr>
+            <td align="center" style="padding:6px 0 0;line-height:0;font-size:0;">
+              <img src="{{ burst_url }}" alt="Colis livré" width="600" height="300" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
             </td>
           </tr>
 
           <tr>
-            <td align="center" class="pad" style="padding:0 40px 10px;">
-              <a href="{{ shop.url }}" style="text-decoration:none;color:{{ ink }};">
-                {%- if shop.email_logo_url -%}
-                  <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width | default: 120 }}" style="display:block;border:0;max-width:180px;height:auto;">
-                {%- else -%}
-                  <span style="font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:20px;letter-spacing:0.5em;color:{{ ink }};">VELEA</span>
-                {%- endif -%}
-              </a>
-            </td>
-          </tr>
-
-          <tr>
-            <td align="center" class="pad" style="padding:22px 40px 0;">
-              <div style="width:12px;height:12px;margin:0 auto 18px;background:{{ rose }};border-radius:50%;line-height:12px;font-size:1px;">&nbsp;</div>
-              <p style="margin:0 0 10px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
-              <h1 class="title" style="margin:0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
+            <td align="center" class="pad" style="padding:0 40px;">
+              <p style="margin:0 0 10px;font-family:{{ font }};font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ rose }};">Commande {{ order_name }}</p>
+              <h1 class="title" style="margin:0;font-family:{{ serif }};font-weight:400;font-size:36px;line-height:1.1;color:{{ ink }};">
                 Votre colis<br><em style="color:{{ rose }};">est arrivé.</em>
               </h1>
-              <p style="margin:18px auto 0;max-width:440px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
+              <p style="margin:16px auto 0;max-width:420px;font-family:{{ font }};font-size:15px;line-height:1.7;color:{{ muted }};">
                 {% if customer.first_name %}{{ customer.first_name }}, votre{% else %}Votre{% endif %} colis est bien arrivé chez vous. Merci pour votre confiance&nbsp;!
               </p>
             </td>
           </tr>
 
-          {%- comment -%} Les étapes : tout est fait, « Chez vous » en avant {%- endcomment -%}
+          {%- comment -%} Les étapes, comme dans les e-mails de commande et d'expédition {%- endcomment -%}
           <tr>
-            <td class="pad" style="padding:26px 40px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Helvetica,Arial,sans-serif;">
+            <td class="pad" style="padding:26px 60px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:{{ font }};">
                 <tr>
                   <td width="33%" align="center" valign="top">
                     <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:{{ rose }};font-size:1px;line-height:14px;">&nbsp;</div>
@@ -105,16 +105,16 @@
             </td>
           </tr>
 
-          {%- comment -%} 1. Le cadeau : seulement si un code est rempli en haut du modèle {%- endcomment -%}
+          {%- comment -%} 1. Le cadeau {%- endcomment -%}
           {%- if merci_code != blank -%}
             <tr>
-              <td class="pad" style="padding:30px 40px 0;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ blush }};border-radius:14px;">
+              <td class="pad" style="padding:34px 40px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="{{ blush }}" style="background:{{ blush }};border-radius:16px;">
                   <tr>
-                    <td align="center" style="padding:24px 22px;font-family:'DM Sans',Helvetica,Arial,sans-serif;color:{{ ink }};">
+                    <td align="center" style="padding:26px 22px;font-family:{{ font }};color:{{ ink }};">
                       <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:{{ rose }};">Un cadeau pour vous</p>
-                      <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;line-height:1.3;">{{ merci_text }}</p>
-                      <p style="display:inline-block;margin:14px 0 0;padding:10px 24px;border:1.5px dashed {{ rose }};border-radius:10px;font-size:20px;font-weight:500;letter-spacing:0.2em;color:{{ rose }};background:#ffffff;">{{ merci_code }}</p>
+                      <p style="margin:0;font-family:{{ serif }};font-size:22px;line-height:1.3;color:{{ ink }};">{{ merci_text }}</p>
+                      <p style="display:inline-block;margin:16px 0 0;padding:11px 26px;border:1.5px dashed {{ rose }};border-radius:10px;font-size:20px;font-weight:500;letter-spacing:0.22em;color:{{ rose }};background:#ffffff;">{{ merci_code }}</p>
                       <p style="margin:12px 0 0;font-size:12px;line-height:1.6;color:{{ muted }};">À saisir au moment du paiement{% if merci_until != blank %}, jusqu'au {{ merci_until }}{% endif %}.</p>
                     </td>
                   </tr>
@@ -123,50 +123,47 @@
             </tr>
           {%- endif -%}
 
-          {%- comment -%} 2. L'avis et les photos {%- endcomment -%}
+          {%- comment -%} 2. L'avis et les photos : un encadré, un bouton {%- endcomment -%}
           <tr>
-            <td align="center" class="pad" style="padding:34px 40px 0;">
-              <p style="margin:0 0 8px;font-size:20px;line-height:1;letter-spacing:0.12em;color:{{ rose }};">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
-              <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:24px;line-height:1.25;color:{{ ink }};">Votre avis compte <em style="color:{{ rose }};">beaucoup.</em></p>
-              <p style="margin:14px auto 0;max-width:430px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:{{ muted }};">
-                Après quelques jours, dites-nous ce que vous en pensez. Et si vous le souhaitez, joignez une photo ou une courte vidéo de votre ceinture portée&nbsp;: avec votre accord, nous la partagerons sur notre site.
+            <td class="pad" style="padding:20px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;border:1.5px solid {{ rose }};border-radius:16px;">
+                <tr>
+                  <td align="center" style="padding:28px 24px;font-family:{{ font }};">
+                    <p style="margin:0 0 10px;font-size:22px;line-height:1;letter-spacing:0.14em;">
+                      {%- for i in (1..5) -%}
+                        <a href="mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}&body={{ 'Ma note : ' | append: i | append: '/5' | url_encode | replace: '+', '%20' }}%0A{{ 'Mon avis : ' | url_encode | replace: '+', '%20' }}%0A%0A{{ '(Vous pouvez ajouter vos photos ou une courte vidéo en pièce jointe.)' | url_encode | replace: '+', '%20' }}" style="color:{{ rose }};text-decoration:none;">&#9733;</a>
+                      {%- endfor -%}
+                    </p>
+                    <p style="margin:0;font-family:{{ serif }};font-size:24px;line-height:1.25;color:{{ ink }};">Votre avis compte <em style="color:{{ rose }};">beaucoup.</em></p>
+                    <p style="margin:12px auto 0;max-width:400px;font-size:14px;line-height:1.7;color:{{ muted }};">
+                      Un mot, une photo ou une courte vidéo de votre ceinture&nbsp;: en un clic, votre message s'ouvre, il ne reste qu'à écrire et ajouter vos photos.
+                    </p>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin:20px auto 0;">
+                      <tr>
+                        <td align="center" bgcolor="{{ rose }}" style="border-radius:999px;background:{{ rose }};">
+                          <a href="{{ review_href }}" style="display:inline-block;padding:15px 36px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:{{ font }};font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;">Donner mon avis</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          {%- comment -%} 3. La fin : une phrase, les mentions {%- endcomment -%}
+          <tr>
+            <td align="center" class="pad" style="padding:34px 40px 10px;">
+              <p style="margin:0;font-family:{{ serif }};font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
+              <p style="margin:12px auto 0;max-width:420px;font-family:{{ font }};font-size:11px;line-height:1.6;color:{{ muted }};">
+                {% if merci_code != blank %}Code offert, que vous laissiez un avis ou non. {% endif %}En nous envoyant un avis ou des photos, vous acceptez que nous les publiions sur notre site avec votre prénom uniquement&nbsp;; vous pouvez changer d'avis à tout moment. Une question&nbsp;? Répondez à cet e-mail.
               </p>
             </td>
           </tr>
           <tr>
-            <td align="center" class="pad btn" style="padding:22px 40px 0;">
-              <a href="mailto:{{ review_email }}?subject={{ review_subject | url_encode | replace: '+', '%20' }}" style="display:inline-block;padding:15px 34px;border-radius:999px;background:{{ rose }};color:#ffffff;text-decoration:none;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;">Donner mon avis</a>
-              <p style="margin:12px 0 0;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;color:{{ muted }};">ou répondez simplement à cet e-mail</p>
-            </td>
-          </tr>
-
-          {%- comment -%} 3. Un seul conseil, avec une ceinture {%- endcomment -%}
-          {%- if has_belt -%}
-            <tr>
-              <td class="pad" style="padding:30px 40px 0;">
-                <p style="margin:0;padding-top:22px;border-top:1px solid {{ line_color }};font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:{{ muted }};text-align:center;">
-                  <strong style="color:{{ ink }};font-weight:500;">Pour bien commencer&nbsp;:</strong> chargez-la complètement, portez-la par-dessus un vêtement fin et commencez par la chaleur la plus douce.
-                </p>
-              </td>
-            </tr>
-          {%- endif -%}
-
-          <tr>
-            <td align="center" class="pad" style="padding:28px 40px 34px;">
-              <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:{{ ink }};">Vos règles, en douceur.</p>
-              <p style="margin:12px auto 0;max-width:430px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:{{ muted }};">
-                {% if merci_code != blank %}Code offert, que vous laissiez un avis ou non. {% endif %}En nous envoyant un avis ou des photos, vous acceptez que nous les publiions avec votre prénom uniquement&nbsp;; vous pouvez changer d'avis à tout moment. Une question&nbsp;? Répondez à cet e-mail.
-              </p>
-            </td>
-          </tr>
-        </table>
-
-        <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
-          <tr>
-            <td align="center" style="padding:22px 20px 8px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:{{ muted }};">
+            <td align="center" style="padding:18px 20px 30px;border-top:1px solid {{ line_color }};font-family:{{ font }};font-size:12px;line-height:1.7;color:{{ muted }};">
               <a href="{{ shop.url }}" style="color:{{ muted }};text-decoration:none;letter-spacing:0.3em;">VELEA</a>
               &nbsp;·&nbsp; <a href="https://www.instagram.com/_maisonvelea/" style="color:{{ muted }};">Instagram</a>
-              &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/suivi-de-commande" style="color:{{ muted }};">Suivi de commande</a>
               &nbsp;·&nbsp; <a href="{{ shop.url }}/pages/livraison-et-retours" style="color:{{ muted }};">Livraison et retours</a>
             </td>
           </tr>
