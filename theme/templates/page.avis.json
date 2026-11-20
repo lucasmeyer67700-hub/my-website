@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "eyebrow": "Votre avis",
+        "intro": "Votre ceinture vous plaît ? Dites-nous ce que vous en pensez : ce qui vous plaît, ce qui pourrait être mieux. Pour une photo ou une courte vidéo, répondez simplement à l'e-mail de livraison.",
+        "show_content": false,
+        "center": false,
+        "compact": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Votre avis",
+        "subjects": "Mon avis sur la ceinture\nMon avis sur un autre produit\nAutre demande",
+        "color_scheme": "scheme-1",
+        "menu": "pied-de-page-aide",
+        "privacy_page": "confidentialite-et-cookies",
+        "aside_heading": "Besoin d'aide ?",
+        "aside_text": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "form"
+  ]
+}
